@@ -40,9 +40,6 @@ final class TaskServiceTypeTest extends TypeTestCase
         }
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testFormViewSimpleWidget(): void
     {
         $data = [
@@ -60,9 +57,6 @@ final class TaskServiceTypeTest extends TypeTestCase
         self::assertSame((string) $data['quantity'], $children['quantity']->vars['value']);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testSubmitValidData(): void
     {
         $task = $this->getTask();
@@ -79,9 +73,6 @@ final class TaskServiceTypeTest extends TypeTestCase
         self::assertTrue($form->isSynchronized());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     #[\Override]
     protected function getPreloadedExtensions(): array
     {

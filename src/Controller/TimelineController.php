@@ -36,9 +36,6 @@ class TimelineController extends AbstractController
     private const KEY_DATE = 'timeline_date';
     private const KEY_INTERVAL = 'timeline_interval';
 
-    /**
-     * @throws \Exception
-     */
     #[GetRoute(path: '/content', name: 'content')]
     public function content(
         TimelineService $service,
@@ -52,9 +49,6 @@ class TimelineController extends AbstractController
         return $this->renderContent($parameters);
     }
 
-    /**
-     * @throws \Exception
-     */
     #[GetRoute(path: '/first', name: 'first')]
     public function first(
         TimelineService $service,
@@ -66,9 +60,6 @@ class TimelineController extends AbstractController
         return $this->renderContent($parameters);
     }
 
-    /**
-     * @throws \Exception
-     */
     #[IndexRoute]
     public function index(
         TimelineService $service,
@@ -86,9 +77,6 @@ class TimelineController extends AbstractController
         return $this->render('test/timeline.html.twig', $parameters);
     }
 
-    /**
-     * @throws \Exception
-     */
     #[GetRoute(path: '/last', name: 'last')]
     public function last(
         TimelineService $service,
@@ -100,9 +88,6 @@ class TimelineController extends AbstractController
         return $this->renderContent($parameters);
     }
 
-    /**
-     * @throws \Exception
-     */
     #[GetRoute(path: '/today', name: 'today')]
     public function today(
         TimelineService $service,

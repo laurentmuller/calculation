@@ -45,7 +45,7 @@ class Month extends AbstractCalendarItem implements \Stringable
     #[\Override]
     public function __toString(): string
     {
-        $name = $this->getShortName();
+        $name = parent::getShortName();
         $first = (string) FormatUtils::formatDate($this->getFirstDate());
         $last = (string) FormatUtils::formatDate($this->getLastDate());
 
@@ -88,7 +88,7 @@ class Month extends AbstractCalendarItem implements \Stringable
     #[\Override]
     public function getShortName(): string
     {
-        $names = $this->calendar->getMonthShortNames();
+        $names = $this->calendar->getShortMonthNames();
 
         return $names[$this->getNumber()];
     }

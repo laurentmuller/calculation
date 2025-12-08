@@ -35,17 +35,11 @@ abstract class EntityTableTestCase extends TestCase
 {
     use IdTrait;
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testWithDefaultDataQuery(): void
     {
         $this->processDataQuery(new DataQuery());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testWithSelection(): void
     {
         $query = new DataQuery();
@@ -117,9 +111,6 @@ abstract class EntityTableTestCase extends TestCase
      */
     abstract protected function createTable(MockObject&AbstractRepository $repository): AbstractEntityTable;
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function processDataQuery(DataQuery $dataQuery): void
     {
         $entities = $this->updateIds($this->createEntities());
@@ -137,8 +128,6 @@ abstract class EntityTableTestCase extends TestCase
      * @phpstan-param TEntity[]|array[] $entities
      *
      * @phpstan-return TEntity[]|array[]
-     *
-     * @throws \ReflectionException
      */
     protected function updateIds(array $entities): array
     {

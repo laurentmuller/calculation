@@ -109,7 +109,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
      *
      * @return ?string the image encoded with base 64 or null if the image cannot be created
      *
-     * @throws \Exception
+     * @throws \Exception if generating image fail
      */
     public function generateImage(bool $force = false, int $length = 6, int $width = 150, int $height = 30): ?string
     {

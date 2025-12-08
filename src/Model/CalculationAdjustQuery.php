@@ -15,17 +15,13 @@ namespace App\Model;
 
 /**
  * Contains parameters to update the overall total or the user margin of calculations.
- *
- * @phpstan-type QueryGroupType = array{id: int, total: float}
  */
 readonly class CalculationAdjustQuery
 {
     /**
-     * @param bool  $adjust     true to adjust the user's margin to reach the minimum margin
-     * @param float $userMargin the user margin
-     * @param array $groups     the groups containing each the identifier and the total
-     *
-     * @phpstan-param QueryGroupType[] $groups
+     * @param bool             $adjust     true to adjust the user's margin to reach the minimum margin
+     * @param float            $userMargin the user margin
+     * @param QueryGroupType[] $groups     groups containing each the identifier and the total
      */
     public function __construct(
         public bool $adjust = false,

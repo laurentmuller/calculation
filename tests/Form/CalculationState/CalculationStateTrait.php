@@ -33,17 +33,11 @@ trait CalculationStateTrait
     private ?CalculationState $editableState = null;
     private ?CalculationState $notEditableState = null;
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function getCalculationStateEntityType(): EntityType
     {
         return new EntityType($this->getCalculationStateRegistry());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function getCalculationStateRegistry(): MockObject&ManagerRegistry
     {
         $results = [
@@ -59,9 +53,6 @@ trait CalculationStateTrait
         );
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function getEditableState(): CalculationState
     {
         if (!$this->editableState instanceof CalculationState) {
@@ -75,9 +66,6 @@ trait CalculationStateTrait
         return $this->editableState;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function getNotEditableState(): CalculationState
     {
         if (!$this->notEditableState instanceof CalculationState) {

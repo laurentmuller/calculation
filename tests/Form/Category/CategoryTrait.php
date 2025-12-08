@@ -34,9 +34,6 @@ trait CategoryTrait
 
     private ?Category $category = null;
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function getCategory(): Category
     {
         if (!$this->category instanceof Category) {
@@ -50,17 +47,11 @@ trait CategoryTrait
         return $this->category;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function getCategoryEntityType(): EntityType
     {
         return new EntityType($this->getCategoryRegistry());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function getCategoryRegistry(): MockObject&ManagerRegistry
     {
         return $this->createManagerRegistry(

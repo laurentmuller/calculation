@@ -24,9 +24,6 @@ final class UserListTypeTest extends TypeTestCase
     use PreloadedExtensionsTrait;
     use UserTrait;
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testFormView(): void
     {
         $user = $this->getUser();
@@ -41,9 +38,6 @@ final class UserListTypeTest extends TypeTestCase
         self::assertEqualsCanonicalizing($formData, $view->vars['value']);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testSubmitValidData(): void
     {
         $user = $this->getUser();
@@ -60,9 +54,6 @@ final class UserListTypeTest extends TypeTestCase
         self::assertEqualsCanonicalizing($expected, $model);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     #[\Override]
     protected function getPreloadedExtensions(): array
     {

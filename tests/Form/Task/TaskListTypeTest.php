@@ -24,9 +24,6 @@ final class TaskListTypeTest extends TypeTestCase
     use PreloadedExtensionsTrait;
     use TaskTrait;
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testFormView(): void
     {
         $task = $this->getTask();
@@ -41,9 +38,6 @@ final class TaskListTypeTest extends TypeTestCase
         self::assertEqualsCanonicalizing($formData, $view->vars['value']);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testSubmitValidData(): void
     {
         $task = $this->getTask();
@@ -60,9 +54,6 @@ final class TaskListTypeTest extends TypeTestCase
         self::assertEqualsCanonicalizing($expected, $model);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     #[\Override]
     protected function getPreloadedExtensions(): array
     {

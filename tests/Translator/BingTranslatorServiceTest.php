@@ -22,13 +22,9 @@ use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
 use Symfony\Contracts\Cache\CacheInterface;
-use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
 final class BingTranslatorServiceTest extends TestCase
 {
-    /**
-     * @throws ExceptionInterface
-     */
     public function testDetectFalse(): void
     {
         $response = new JsonMockResponse(
@@ -44,9 +40,6 @@ final class BingTranslatorServiceTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function testDetectNotString(): void
     {
         $response = new JsonMockResponse(
@@ -59,9 +52,6 @@ final class BingTranslatorServiceTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function testDetectSuccess(): void
     {
         $response1 = new JsonMockResponse(
@@ -215,9 +205,6 @@ final class BingTranslatorServiceTest extends TestCase
         self::assertSame('Bing', $actual);
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function testTranslateFalse(): void
     {
         $response = new JsonMockResponse(
@@ -234,9 +221,6 @@ final class BingTranslatorServiceTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function testTranslateNotString(): void
     {
         $response = new JsonMockResponse(
@@ -250,9 +234,6 @@ final class BingTranslatorServiceTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function testTranslateSuccess(): void
     {
         $response = new JsonMockResponse(

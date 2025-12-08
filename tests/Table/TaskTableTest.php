@@ -41,9 +41,6 @@ final class TaskTableTest extends EntityTableTestCase
         $this->groupId = 0;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testWithCategoryId(): void
     {
         $parameters = ['categoryId' => 10];
@@ -52,9 +49,6 @@ final class TaskTableTest extends EntityTableTestCase
         $this->processDataQuery($dataQuery);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testWithFindCategoryId(): void
     {
         $this->categoryId = 10;
@@ -64,9 +58,6 @@ final class TaskTableTest extends EntityTableTestCase
         $this->processDataQuery($dataQuery);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testWithFindGroupId(): void
     {
         $this->groupId = 10;
@@ -76,9 +67,6 @@ final class TaskTableTest extends EntityTableTestCase
         $this->processDataQuery($dataQuery);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testWithGroupId(): void
     {
         $parameters = ['groupId' => 10];
@@ -116,8 +104,6 @@ final class TaskTableTest extends EntityTableTestCase
 
     /**
      * @phpstan-param TaskRepository $repository
-     *
-     * @throws \ReflectionException
      */
     #[\Override]
     protected function createTable(AbstractRepository $repository): TaskTable

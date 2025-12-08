@@ -42,9 +42,6 @@ final class GroupTest extends EntityValidatorTestCase
         self::assertSame(0, $group->countCategories());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testClone(): void
     {
         $group = new Group();

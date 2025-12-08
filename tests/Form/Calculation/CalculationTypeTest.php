@@ -60,9 +60,6 @@ final class CalculationTypeTest extends EntityTypeTestCase
         return CalculationType::class;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     #[\Override]
     protected function getPreloadedExtensions(): array
     {

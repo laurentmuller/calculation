@@ -23,9 +23,6 @@ final class CalculationsDocumentTest extends TestCase
 {
     use IdTrait;
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testRender(): void
     {
         $calculation = new Calculation();

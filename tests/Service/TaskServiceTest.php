@@ -27,9 +27,6 @@ final class TaskServiceTest extends TestCase
 {
     use IdTrait;
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testComputeQueryEmpty(): void
     {
         $quantity = 2.0;
@@ -59,9 +56,6 @@ final class TaskServiceTest extends TestCase
         self::assertNull($actual);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testComputeQueryOneItem(): void
     {
         $quantity = 2.0;
@@ -78,9 +72,6 @@ final class TaskServiceTest extends TestCase
         self::assertSame($task->getId(), $actual->getTask()->getId());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testGetSortedTasks(): void
     {
         $task = $this->createTask();
@@ -92,9 +83,6 @@ final class TaskServiceTest extends TestCase
         self::assertSame($task->getName(), $actual->getName());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testResultSerialize(): void
     {
         $task = $this->createTask();
@@ -125,9 +113,6 @@ final class TaskServiceTest extends TestCase
         return $repository;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function createTask(): Task
     {
         $task = new Task();
@@ -140,9 +125,6 @@ final class TaskServiceTest extends TestCase
         return self::setId($task);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function createTaskItem(Task $task): TaskItem
     {
         $item = new TaskItem();

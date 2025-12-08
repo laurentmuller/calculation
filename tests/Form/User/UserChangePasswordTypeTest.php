@@ -178,9 +178,6 @@ final class UserChangePasswordTypeTest extends EntityTypeTestCase
         return User::class;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     #[\Override]
     protected function getExtensions(): array
     {

@@ -38,9 +38,6 @@ final class EmailVerifierTest extends TestCase
     use IdTrait;
     use TranslatorMockTrait;
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testHandleEmail(): void
     {
         $helper = $this->createVerifyEmailHelper();
@@ -57,7 +54,6 @@ final class EmailVerifierTest extends TestCase
 
     /**
      * @throws TransportExceptionInterface
-     * @throws \ReflectionException
      */
     public function testSendEmail(): void
     {
@@ -84,9 +80,6 @@ final class EmailVerifierTest extends TestCase
         return $helper;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function createUser(): User
     {
         $user = new User();

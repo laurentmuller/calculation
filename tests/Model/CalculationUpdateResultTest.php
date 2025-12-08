@@ -32,9 +32,6 @@ final class CalculationUpdateResultTest extends TestCase
         self::assertFalse($result->isValid());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testOne(): void
     {
         $state = new CalculationState();

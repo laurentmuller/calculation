@@ -24,9 +24,6 @@ final class GroupListTypeTest extends TypeTestCase
     use GroupTrait;
     use PreloadedExtensionsTrait;
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testFormView(): void
     {
         $group = $this->getGroup();
@@ -41,9 +38,6 @@ final class GroupListTypeTest extends TypeTestCase
         self::assertEqualsCanonicalizing($formData, $view->vars['value']);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testSubmitValidData(): void
     {
         $group = $this->getGroup();
@@ -60,9 +54,6 @@ final class GroupListTypeTest extends TypeTestCase
         self::assertEqualsCanonicalizing($expected, $model);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     #[\Override]
     protected function getPreloadedExtensions(): array
     {

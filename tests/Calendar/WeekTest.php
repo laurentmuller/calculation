@@ -64,6 +64,7 @@ final class WeekTest extends CalendarTestCase
     public function testInvalidNumber(): void
     {
         self::expectException(CalendarException::class);
+        self::expectExceptionMessage('The week number 0 is not between 1 and 53 inclusive.');
         $calendar = $this->createCalendar();
         new Week($calendar, 0);
     }

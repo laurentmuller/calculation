@@ -99,17 +99,23 @@ final class DateUtils
      * @param string         $datetime a date/time string
      * @param ?\DateTimeZone $timezone the timezone or null to use the current timezone
      */
-    public static function createDate(string $datetime = 'now', ?\DateTimeZone $timezone = null): DatePoint
+    public static function createDate(string $datetime = 'today', ?\DateTimeZone $timezone = null): DatePoint
     {
         return self::removeTime(self::createDatePoint($datetime, $timezone));
     }
 
     /**
      * Create a date interval.
+     *
+     * @throw \InvalidArgumentException if the given duration cannot be parsed as an interval
      */
-    public static function createDateInterval(string $interval): \DateInterval
+    public static function createDateInterval(string $duration): \DateInterval
     {
-        return new \DateInterval($interval);
+        try {
+            return new \DateInterval($duration);
+        } catch (\Exception $e) {
+            throw new \InvalidArgumentException(\sprintf('Invalid duration: "%s".', $duration), $e->getCode(), $e);
+        }
     }
 
     /**

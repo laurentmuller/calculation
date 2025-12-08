@@ -291,9 +291,6 @@ final class StringUtilsTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testPrivateInstance(): void
     {
         self::assertPrivateInstance(StringUtils::class);

@@ -19,23 +19,20 @@ use App\Entity\Group;
 use App\Interfaces\ConstantsInterface;
 use App\Interfaces\EntityInterface;
 use App\Model\CalculationAdjustQuery;
+use App\Model\GroupType;
+use App\Model\QueryGroupType;
 use App\Parameter\ApplicationParameters;
 use App\Repository\GlobalMarginRepository;
 use App\Repository\GroupMarginRepository;
 use App\Repository\GroupRepository;
 use App\Traits\MathTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Service to create total groups and update user margin to meet the minimum overall margin.
  *
- * @phpstan-type GroupType = array{
- *     id: int,
- *     description: string,
- *     amount: float,
- *     margin_percent: float,
- *     margin_amount: float,
- *     total: float}
  * @phpstan-type ParametersType = array{
  *     result: bool,
  *     overall_below: bool,
@@ -43,9 +40,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *     overall_total: float,
  *     min_margin: float,
  *     user_margin: float,
- *     groups: GroupType[]}
- *
- * @phpstan-import-type QueryGroupType from CalculationAdjustQuery
+ *     groups: Collection<int, GroupType>}
  */
 class CalculationGroupService implements ConstantsInterface
 {
@@ -116,25 +111,23 @@ class CalculationGroupService implements ConstantsInterface
     /**
      * Creates the total groups, used to render the total view, from the given calculation.
      *
-     * @phpstan-return non-empty-array<GroupType>
+     * @return Collection<int, GroupType>
      */
-    public function createGroups(Calculation $calculation): array
+    public function createGroups(Calculation $calculation): Collection
     {
         if ($calculation->isEmpty()) {
-            return [$this->createEmptyGroup()];
+            return $this->createEmptyGroups();
         }
 
-        $groups = \array_map(
-            fn (CalculationGroup $group): array => $this->createGroup(
+        $groups = $calculation->getGroups()
+            ->map(fn (CalculationGroup $group): GroupType => $this->createGroupType(
                 id: self::ROW_GROUP,
                 entityOrId: $group,
-                margin_percent: $group->getMargin(),
-                margin_amount: $group->getMarginAmount(),
+                marginPercent: $group->getMargin(),
+                marginAmount: $group->getMarginAmount(),
                 amount: $group->getAmount(),
                 total: $group->getTotal(),
-            ),
-            $calculation->getGroups()->toArray()
-        );
+            ));
 
         return $this->createTotalGroups($groups, $calculation->getUserMargin(), $calculation->getGlobalMargin());
     }
@@ -151,20 +144,20 @@ class CalculationGroupService implements ConstantsInterface
         }
 
         $groups = $this->convertQueryGroups($query->groups);
-        if ([] === $groups) {
+        if ($groups->isEmpty()) {
             return $this->createEmptyParameters();
         }
 
         $user_margin = $query->userMargin;
         $groups = $this->createTotalGroups($groups, $user_margin);
-        $overall_group = $groups[self::ROW_OVERALL_TOTAL];
-        $overall_total = $overall_group['total'];
-        $overall_margin = $overall_group['margin_percent'];
+        $overall_group = $this->getGroupType($groups, self::ROW_OVERALL_TOTAL);
+        $overall_total = $overall_group->total;
+        $overall_margin = $overall_group->marginPercent;
         $overall_below = $this->parameters->isMarginBelow($overall_margin);
 
         if ($query->adjust && $overall_below) {
             $groups = $this->adjustUserMargin($groups);
-            $user_margin = $groups[self::ROW_USER_MARGIN]['margin_percent'];
+            $user_margin = $this->getGroupType($groups, self::ROW_USER_MARGIN)->marginPercent;
             $overall_below = false;
         }
 
@@ -182,65 +175,64 @@ class CalculationGroupService implements ConstantsInterface
     /**
      * Adjust the user margin to have the desired overall minimum margin.
      *
-     * @phpstan-param GroupType[] $groups
+     * @param Collection<int, GroupType> $groups
      *
-     * @phpstan-return GroupType[]
+     * @return Collection<int, GroupType>
      */
-    private function adjustUserMargin(array $groups): array
+    private function adjustUserMargin(Collection $groups): Collection
     {
-        $total_net = $groups[self::ROW_TOTAL_NET]['total'];
-        $total_group = $groups[self::ROW_TOTAL_GROUP]['amount'];
+        $totalNet = $this->getGroupType($groups, self::ROW_TOTAL_NET)->total;
+        $totalGroup = $this->getGroupType($groups, self::ROW_TOTAL_GROUP)->amount;
 
-        $user_margin = $this->ceil((($total_group * $this->getMinMargin()) - $total_net) / $total_net);
-        $user_total = $this->round($total_net * $user_margin);
-        $user_margin_group = &$groups[self::ROW_USER_MARGIN];
-        $user_margin_group['margin_percent'] = $user_margin;
-        $user_margin_group['total'] = $user_total;
+        $userMargin = $this->ceil((($totalGroup * $this->getMinMargin()) - $totalNet) / $totalNet);
+        $userTotal = $this->round($totalNet * $userMargin);
+        $userMarginGroup = $this->getGroupType($groups, self::ROW_USER_MARGIN);
+        $userMarginGroup->marginPercent = $userMargin;
+        $userMarginGroup->total = $userTotal;
 
-        $overall_total = $total_net + $user_total;
-        $overall_total_group = &$groups[self::ROW_OVERALL_TOTAL];
-        $overall_total_group['margin_percent'] = $this->floor($overall_total / $total_group);
-        $overall_total_group['margin_amount'] = $overall_total - $total_group;
-        $overall_total_group['total'] = $overall_total;
+        $overallTotal = $totalNet + $userTotal;
+        $overallTotalGroup = $this->getGroupType($groups, self::ROW_OVERALL_TOTAL);
+        $overallTotalGroup->marginPercent = $this->floor($overallTotal / $totalGroup);
+        $overallTotalGroup->marginAmount = $overallTotal - $totalGroup;
+        $overallTotalGroup->total = $overallTotal;
 
         return $groups;
     }
 
     /**
-     * @phpstan-param QueryGroupType[] $queryGroups
+     * @param QueryGroupType[] $queryGroups
      *
-     * @phpstan-return GroupType[]
+     * @return Collection<int, GroupType>
      */
-    private function convertQueryGroups(array $queryGroups): array
+    private function convertQueryGroups(array $queryGroups): Collection
     {
-        $groups = [];
+        $groups = new ArrayCollection();
         foreach ($queryGroups as $queryGroup) {
-            if ($this->isFloatZero($queryGroup['total'])) {
+            $queryTotal = $queryGroup->total;
+            if ($this->isFloatZero($queryTotal)) {
                 continue;
             }
 
-            $id = $queryGroup['id'];
-            $group = $this->findGroup($id);
+            $queryId = $queryGroup->id;
+            $group = $this->findGroup($queryId);
             if (!$group instanceof Group) {
                 continue;
             }
 
-            if (!\array_key_exists($id, $groups)) {
-                $groups[$id] = $this->createGroup(self::ROW_GROUP, $group);
+            if (!$groups->containsKey($queryId)) {
+                $groups->set($queryId, $this->createGroupType(self::ROW_GROUP, $group));
             }
 
-            $current = &$groups[$id];
-            $amount = $current['amount'] + $queryGroup['total'];
-            $margin_percent = $this->getGroupMargin($group, $amount);
-            $total = $this->round($margin_percent * $amount);
-            $margin_amount = $total - $amount;
+            $current = $this->getGroupType($groups, $queryId);
+            $amount = $current->amount + $queryTotal;
+            $marginPercent = $this->getGroupMargin($group, $amount);
+            $total = $this->round($marginPercent * $amount);
+            $marginAmount = $total - $amount;
 
-            $current = \array_merge($current, [
-                'margin_percent' => $margin_percent,
-                'margin_amount' => $margin_amount,
-                'amount' => $amount,
-                'total' => $total,
-            ]);
+            $current->marginPercent = $marginPercent;
+            $current->marginAmount = $marginAmount;
+            $current->amount = $amount;
+            $current->total = $total;
         }
 
         return $groups;
@@ -249,11 +241,13 @@ class CalculationGroupService implements ConstantsInterface
     /**
      * Creates the group when no data is present.
      *
-     * @phpstan-return GroupType
+     * @return Collection<int, GroupType>
      */
-    private function createEmptyGroup(): array
+    private function createEmptyGroups(): Collection
     {
-        return $this->createGroup(self::ROW_EMPTY, 'calculation.edit.empty');
+        return new ArrayCollection(
+            [$this->createGroupType(self::ROW_EMPTY, 'calculation.edit.empty')]
+        );
     }
 
     /**
@@ -268,96 +262,94 @@ class CalculationGroupService implements ConstantsInterface
             'overall_total' => 0.0,
             'user_margin' => 0.0,
             'min_margin' => $this->getMinMargin(),
-            'groups' => [$this->createEmptyGroup()],
+            'groups' => $this->createEmptyGroups(),
         ];
     }
 
-    /**
-     * @phpstan-return GroupType
-     */
-    private function createGroup(
+    private function createGroupType(
         int $id,
         EntityInterface|string $entityOrId,
-        float $margin_percent = 0.0,
-        float $margin_amount = 0.0,
+        float $marginPercent = 0.0,
+        float $marginAmount = 0.0,
         float $amount = 0.0,
         float $total = 0.0
-    ): array {
-        return [
-            'id' => $id,
-            'description' => $this->getGroupDescription($entityOrId),
-            'margin_percent' => $margin_percent,
-            'margin_amount' => $margin_amount,
-            'amount' => $amount,
-            'total' => $total,
-        ];
+    ): GroupType {
+        return new GroupType(
+            id: $id,
+            description: $this->getGroupDescription($entityOrId),
+            marginPercent: $marginPercent,
+            marginAmount: $marginAmount,
+            amount: $amount,
+            total: $total,
+        );
     }
 
     /**
      * Creates calculation's total groups.
      *
-     * @phpstan-param GroupType[] $groups   the group types
-     * @phpstan-param float $user_margin    the user margin
-     * @phpstan-param ?float $global_margin the global margin or null to compute the new global margin
+     * @param Collection<int, GroupType> $groups       the group types
+     * @param float                      $userMargin   the user margin in percent
+     * @param ?float                     $globalMargin the global margin, in percent, or null to compute
+     *                                                 the new global margin
      *
-     * @phpstan-return non-empty-array<GroupType>
+     * @return Collection<int, GroupType> the computed groups
      */
     private function createTotalGroups(
-        array $groups,
-        float $user_margin,
-        ?float $global_margin = null
-    ): array {
-        $groups_amount = $this->getGroupsAmount($groups);
-        $groups_margin = $this->getGroupsMargin($groups);
-        $total_net = $groups_amount + $groups_margin;
-        $groups[self::ROW_TOTAL_GROUP] = $this->createGroup(
+        Collection $groups,
+        float $userMargin,
+        ?float $globalMargin = null
+    ): Collection {
+        $groupTypesAmount = $this->getGroupTypesAmount($groups);
+        $groupTypesMargin = $this->getGroupTypesMargin($groups);
+        $totalNet = $groupTypesAmount + $groupTypesMargin;
+        $groups->set(self::ROW_TOTAL_GROUP, $this->createGroupType(
             id: self::ROW_TOTAL_GROUP,
             entityOrId: 'calculation.fields.marginTotal',
-            margin_percent: 1.0 + $this->round($this->safeDivide($groups_margin, $groups_amount)),
-            margin_amount: $groups_margin,
-            amount: $groups_amount,
-            total: $total_net
-        );
+            marginPercent: 1.0 + $this->round($this->safeDivide($groupTypesMargin, $groupTypesAmount)),
+            marginAmount: $groupTypesMargin,
+            amount: $groupTypesAmount,
+            total: $totalNet
+        ));
 
-        $global_margin ??= $this->getGlobalMargin($total_net);
-        $global_amount = $this->round($total_net * ($global_margin - 1.0));
-        $groups[self::ROW_GLOBAL_MARGIN] = $this->createGroup(
+        $globalMargin ??= $this->getGlobalMargin($totalNet);
+        $globalAmount = $this->round($totalNet * ($globalMargin - 1.0));
+        $groups->set(self::ROW_GLOBAL_MARGIN, $this->createGroupType(
             id: self::ROW_GLOBAL_MARGIN,
             entityOrId: 'calculation.fields.globalMargin',
-            margin_percent: $global_margin,
-            amount: $global_margin,
-            total: $global_amount
-        );
+            marginPercent: $globalMargin,
+            amount: $globalMargin,
+            total: $globalAmount
+        ));
 
-        $total_net += $global_amount;
-        $groups[self::ROW_TOTAL_NET] = $this->createGroup(
+        $totalNet += $globalAmount;
+        $groups->set(self::ROW_TOTAL_NET, $this->createGroupType(
             id: self::ROW_TOTAL_NET,
             entityOrId: 'calculation.fields.totalNet',
-            amount: $total_net,
-            total: $total_net
-        );
+            amount: $totalNet,
+            total: $totalNet
+        ));
 
-        $user_amount = $this->round($total_net * $user_margin);
-        $groups[self::ROW_USER_MARGIN] = $this->createGroup(
+        $userAmount = $this->round($totalNet * $userMargin);
+        $groups->set(self::ROW_USER_MARGIN, $this->createGroupType(
             id: self::ROW_USER_MARGIN,
             entityOrId: 'calculation.fields.userMargin',
-            margin_percent: $user_margin,
-            amount: $user_margin,
-            total: $user_amount
-        );
+            marginPercent: $userMargin,
+            amount: $userMargin,
+            total: $userAmount
+        ));
 
-        $overall_total = $total_net + $user_amount;
-        $overall_amount = $overall_total - $groups_amount;
-        $overall_margin = $this->safeDivide($overall_amount, $groups_amount);
-        $overall_margin = $this->floor(1.0 + $overall_margin);
-        $groups[self::ROW_OVERALL_TOTAL] = $this->createGroup(
+        $overallTotal = $totalNet + $userAmount;
+        $overallAmount = $overallTotal - $groupTypesAmount;
+        $overallMargin = $this->safeDivide($overallAmount, $groupTypesAmount);
+        $overallMargin = $this->floor(1.0 + $overallMargin);
+        $groups->set(self::ROW_OVERALL_TOTAL, $this->createGroupType(
             id: self::ROW_OVERALL_TOTAL,
             entityOrId: 'calculation.fields.overallTotal',
-            margin_percent: $overall_margin,
-            margin_amount: $overall_amount,
-            amount: $groups_amount,
-            total: $overall_total
-        );
+            marginPercent: $overallMargin,
+            marginAmount: $overallAmount,
+            amount: $groupTypesAmount,
+            total: $overallTotal
+        ));
 
         return $groups;
     }
@@ -397,23 +389,28 @@ class CalculationGroupService implements ConstantsInterface
     }
 
     /**
-     * Gets the sum of the group's amount.
-     *
-     * @phpstan-param GroupType[] $groups
+     * @param Collection<int, GroupType> $groups
      */
-    private function getGroupsAmount(array $groups): float
+    private function getGroupType(Collection $groups, int $index): GroupType
     {
-        return $this->round(\array_sum(\array_column($groups, 'amount')));
+        /** @phpstan-var GroupType */
+        return $groups->get($index);
     }
 
     /**
-     * Gets the sum of the group's margin amount.
-     *
-     * @phpstan-param GroupType[] $groups
+     * @param Collection<int, GroupType> $groups
      */
-    private function getGroupsMargin(array $groups): float
+    private function getGroupTypesAmount(Collection $groups): float
     {
-        return $this->round(\array_sum(\array_column($groups, 'margin_amount')));
+        return $groups->reduce(static fn (float $carry, GroupType $group): float => $carry + $group->amount, 0.0);
+    }
+
+    /**
+     * @param Collection<int, GroupType> $groups
+     */
+    private function getGroupTypesMargin(Collection $groups): float
+    {
+        return $groups->reduce(static fn (float $carry, GroupType $group): float => $carry + $group->marginAmount, 0.0);
     }
 
     /**

@@ -26,9 +26,6 @@ final class CalculationStateListTypeTest extends TypeTestCase
     use PreloadedExtensionsTrait;
     use TranslatorMockTrait;
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testFormView(): void
     {
         $state = $this->getNotEditableState();
@@ -43,9 +40,6 @@ final class CalculationStateListTypeTest extends TypeTestCase
         self::assertEqualsCanonicalizing($formData, $view->vars['value']);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testSubmitValidData(): void
     {
         $state = $this->getNotEditableState();
@@ -62,9 +56,6 @@ final class CalculationStateListTypeTest extends TypeTestCase
         self::assertEqualsCanonicalizing($expected, $model);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     #[\Override]
     protected function getPreloadedExtensions(): array
     {

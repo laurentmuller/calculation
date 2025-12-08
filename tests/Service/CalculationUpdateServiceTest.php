@@ -42,9 +42,6 @@ final class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         parent::tearDown();
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testCreateQuery(): void
     {
         $service = $this->getService(CalculationUpdateService::class);
@@ -66,9 +63,6 @@ final class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testSaveQuery(): void
     {
         $this->loginUsername(self::ROLE_ADMIN);
@@ -95,9 +89,6 @@ final class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testUpdateEmptyState(): void
     {
         $this->loginUsername(self::ROLE_ADMIN);
@@ -109,9 +100,6 @@ final class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         self::assertFalse($result->isValid());
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testUpdateNoCalculation(): void
     {
         $this->getCalculationState();
@@ -125,9 +113,6 @@ final class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         self::assertFalse($result->isValid());
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testUpdateOne(): void
     {
         $date = $this->getDate();
@@ -149,9 +134,6 @@ final class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         self::assertTrue($result->isValid());
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testUpdateOneCalculationNoState(): void
     {
         $date = $this->getDate();
@@ -171,9 +153,6 @@ final class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         self::assertFalse($result->isValid());
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testUpdateOneNoSimulate(): void
     {
         $date = $this->getDate();
@@ -194,9 +173,6 @@ final class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         self::assertTrue($result->isValid());
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testUpdateTotalNotEmpty(): void
     {
         $group = new Group();
@@ -240,9 +216,6 @@ final class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         return DateUtils::createDate();
     }
 
-    /**
-     * @throws \Exception
-     */
     private function getDateFrom(): DatePoint
     {
         return DateUtils::sub(DateUtils::createDate(), $this->getInterval());

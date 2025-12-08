@@ -108,9 +108,6 @@ final class CalculationTest extends EntityValidatorTestCase
         self::assertCount(0, $entity);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testClone(): void
     {
         $calculation = new Calculation();
@@ -188,9 +185,6 @@ final class CalculationTest extends EntityValidatorTestCase
         self::assertSame(-1, $actual);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testDisplay(): void
     {
         $calculation = new Calculation();

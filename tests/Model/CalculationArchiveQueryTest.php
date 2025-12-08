@@ -37,9 +37,6 @@ final class CalculationArchiveQueryTest extends TestCase
         self::assertNull($query->getTargetCode());
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testDate(): void
     {
         $date = DateUtils::sub(DateUtils::createDate(), 'P6M');
@@ -62,9 +59,6 @@ final class CalculationArchiveQueryTest extends TestCase
         self::assertFalse($query->isSimulate());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testSources(): void
     {
         $query = new CalculationArchiveQuery();
@@ -78,9 +72,6 @@ final class CalculationArchiveQueryTest extends TestCase
         self::assertSame('code1, code2', $query->getSourcesCode());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testTarget(): void
     {
         $query = new CalculationArchiveQuery();
@@ -92,9 +83,6 @@ final class CalculationArchiveQueryTest extends TestCase
         self::assertSame($target->getCode(), $query->getTargetCode());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function createState(int $id, string $code, bool $editable): CalculationState
     {
         $state = new CalculationState();

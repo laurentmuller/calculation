@@ -23,9 +23,6 @@ final class TaskItemTest extends EntityValidatorTestCase
 {
     use IdTrait;
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testClone(): void
     {
         $item = new TaskItem();

@@ -89,9 +89,6 @@ final class FormatUtilsTest extends TestCase
         yield [self::TIME_STAMP, 'Février', null, 'MMMM'];
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function getDateTimes(): \Generator
     {
         $date = self::createDate();
@@ -399,9 +396,6 @@ final class FormatUtilsTest extends TestCase
         self::assertSame(self::PERCENT_SYMBOL, FormatUtils::PERCENT_SYMBOL);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testPrivateInstance(): void
     {
         self::assertPrivateInstance(FormatUtils::class);

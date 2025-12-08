@@ -61,9 +61,6 @@ final class SpreadsheetDocumentTest extends TestCase
         self::assertSame($sheet, $actual);
     }
 
-    /**
-     * @throws \PHPUnit\Framework\MockObject\Exception
-     */
     public function testCreateSheetAndTitle(): void
     {
         $controller = $this->createMock(AbstractController::class);
@@ -87,9 +84,6 @@ final class SpreadsheetDocumentTest extends TestCase
         $doc->getSheetByNameOrThrow('Fake');
     }
 
-    /**
-     * @throws \PHPUnit\Framework\MockObject\Exception
-     */
     public function testInitialize(): void
     {
         $expected = 'Active Title';
@@ -126,9 +120,6 @@ final class SpreadsheetDocumentTest extends TestCase
         self::assertSame('Fake', $actual->getTitle());
     }
 
-    /**
-     * @throws \PHPUnit\Framework\MockObject\Exception
-     */
     public function testSetActiveTitle(): void
     {
         $expected = 'Active Title';

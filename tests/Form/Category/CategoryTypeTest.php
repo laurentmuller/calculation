@@ -48,9 +48,6 @@ final class CategoryTypeTest extends EntityTypeTestCase
         return CategoryType::class;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     #[\Override]
     protected function getPreloadedExtensions(): array
     {

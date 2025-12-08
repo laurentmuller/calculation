@@ -57,7 +57,7 @@ class CalculationsState implements \Countable
             0.0
         );
 
-        foreach ($this->items as &$item) {
+        foreach ($this->items as $item) {
             $item->calculationsPercent = $this->round($this->safeDivide($item->count, $count), 4);
             $item->totalPercent = $this->round($this->safeDivide($item->total, $total), 4);
         }

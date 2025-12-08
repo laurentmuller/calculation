@@ -63,9 +63,6 @@ final class EntityTransformerTest extends EntityTransformerTestCase
         $transformer->reverseTransform($value);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testReverseTransformGroup(): void
     {
         $group = $this->createGroup();
@@ -77,8 +74,6 @@ final class EntityTransformerTest extends EntityTransformerTestCase
 
     /**
      * @phpstan-param string|int|null $value
-     *
-     * @throws \ReflectionException
      */
     #[DataProvider('getReverseValid')]
     public function testReverseValid(mixed $value, mixed $expected): void
@@ -89,9 +84,6 @@ final class EntityTransformerTest extends EntityTransformerTestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testTransformGroup(): void
     {
         $group = $this->createGroup();
@@ -114,8 +106,6 @@ final class EntityTransformerTest extends EntityTransformerTestCase
 
     /**
      * @phpstan-param EntityInterface|null $value
-     *
-     * @throws \ReflectionException
      */
     #[DataProvider('getTransformValid')]
     public function testTransformValid(mixed $value, mixed $expected): void

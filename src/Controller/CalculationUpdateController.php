@@ -33,20 +33,18 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(path: '/admin', name: 'admin_')]
 class CalculationUpdateController extends AbstractController
 {
-    /**
-     * @throws \Exception
-     */
     #[GetPostRoute(path: '/update', name: 'update')]
     public function update(Request $request, CalculationUpdateService $service): Response
     {
         $query = $service->createQuery();
         $application = $this->getApplicationParameters();
+        $datesParameter = $application->getDates();
         $form = $this->createQueryForm($query);
         if ($this->handleRequestForm($request, $form)) {
             $service->saveQuery($query);
             $result = $service->update($query);
             if (!$query->isSimulate() && $result->isValid()) {
-                $application->getDates()->setUpdateCalculations();
+                $datesParameter->setUpdateCalculations();
                 $application->save();
             }
 
@@ -57,15 +55,13 @@ class CalculationUpdateController extends AbstractController
         }
 
         return $this->render('admin/update_query.html.twig', [
-            'last_update' => $application->getDates()->getUpdateCalculations(),
+            'last_update' => $datesParameter->getUpdateCalculations(),
             'form' => $form,
         ]);
     }
 
     /**
      * @return FormInterface<mixed>
-     *
-     * @throws \Exception
      */
     private function createQueryForm(CalculationUpdateQuery $query): FormInterface
     {

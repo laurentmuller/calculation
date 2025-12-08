@@ -24,9 +24,6 @@ final class TaskComputeResultTest extends TestCase
 {
     use IdTrait;
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testAddItem(): void
     {
         $task = $this->createTask();
@@ -41,9 +38,6 @@ final class TaskComputeResultTest extends TestCase
         self::assertSame(10.0, $result->getOverall());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testConstruct(): void
     {
         $task = $this->createTask();
@@ -52,9 +46,6 @@ final class TaskComputeResultTest extends TestCase
         self::assertSame(1.0, $result->getQuantity());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testGetResults(): void
     {
         $task = $this->createTask();
@@ -76,9 +67,6 @@ final class TaskComputeResultTest extends TestCase
         self::assertSame([$expected], $actual);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testJsonSerialize(): void
     {
         $task = $this->createTask();
@@ -95,9 +83,6 @@ final class TaskComputeResultTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function createTask(): Task
     {
         $task = new Task();
@@ -106,9 +91,6 @@ final class TaskComputeResultTest extends TestCase
         return self::setId($task);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function createTaskItem(?Task $task = null): TaskItem
     {
         $item = new TaskItem();

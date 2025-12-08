@@ -28,9 +28,6 @@ trait UserTrait
 
     private ?User $user = null;
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function getUser(): User
     {
         if (!$this->user instanceof User) {
@@ -45,17 +42,11 @@ trait UserTrait
         return $this->user;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function getUserEntityType(): EntityType
     {
         return new EntityType($this->getUserRegistry());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function getUserRegistry(): MockObject&ManagerRegistry
     {
         return $this->createManagerRegistry(

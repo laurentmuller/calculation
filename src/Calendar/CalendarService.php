@@ -40,8 +40,6 @@ class CalendarService
      * @param ?int $year the year to generate the calendar for or null for the current year
      *
      * @return Calendar the generated calendar
-     *
-     * @throws CalendarException
      */
     public function generate(?int $year = null): Calendar
     {

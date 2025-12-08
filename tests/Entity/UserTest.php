@@ -221,9 +221,6 @@ final class UserTest extends EntityValidatorTestCase
         $this->validatePaths($results, 'username');
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testIsExpired(): void
     {
         $user = new User();

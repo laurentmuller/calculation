@@ -28,17 +28,11 @@ trait ProductTrait
 
     private ?Product $product = null;
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function getProductEntityType(): EntityType
     {
         return new EntityType($this->getProductRegistry());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function getProductRegistry(): MockObject&ManagerRegistry
     {
         return $this->createManagerRegistry(
@@ -49,9 +43,6 @@ trait ProductTrait
         );
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function getProduct(): Product
     {
         if (!$this->product instanceof Product) {

@@ -32,9 +32,6 @@ class CalculationArchiveQuery extends AbstractSimulateQuery
 
     private ?CalculationState $target = null;
 
-    /**
-     * @throws \Exception
-     */
     public function __construct()
     {
         $this->date = DateUtils::sub(DateUtils::createDate(), 'P6M');

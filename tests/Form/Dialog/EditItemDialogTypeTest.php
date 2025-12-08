@@ -43,9 +43,6 @@ final class EditItemDialogTypeTest extends TypeTestCase
         }
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testSubmitValidData(): void
     {
         $category = $this->getCategory();
@@ -68,9 +65,6 @@ final class EditItemDialogTypeTest extends TypeTestCase
         self::assertTrue($form->isSynchronized());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     #[\Override]
     protected function getPreloadedExtensions(): array
     {

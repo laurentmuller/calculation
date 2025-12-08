@@ -19,9 +19,6 @@ use PHPUnit\Framework\TestCase;
 
 final class HtmlDocumentTest extends TestCase
 {
-    /**
-     * @throws \PhpOffice\PhpWord\Exception\Exception
-     */
     public function testEmptyContent(): void
     {
         $controller = $this->createMock(AbstractController::class);
@@ -30,9 +27,6 @@ final class HtmlDocumentTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @throws \PhpOffice\PhpWord\Exception\Exception
-     */
     public function testWithoutTitle(): void
     {
         $content = <<<XML
@@ -45,9 +39,6 @@ final class HtmlDocumentTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws \PhpOffice\PhpWord\Exception\Exception
-     */
     public function testWithPrintAddress(): void
     {
         $content = <<<XML
@@ -61,9 +52,6 @@ final class HtmlDocumentTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws \PhpOffice\PhpWord\Exception\Exception
-     */
     public function testWithTitle(): void
     {
         $content = <<<XML

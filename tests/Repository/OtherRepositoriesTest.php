@@ -31,9 +31,6 @@ final class OtherRepositoriesTest extends KernelServiceTestCase
     use DatabaseTrait;
     use IdTrait;
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testCountCategoryReferences(): void
     {
         $category = new Category();
@@ -43,9 +40,6 @@ final class OtherRepositoriesTest extends KernelServiceTestCase
         self::assertSame(0, $actual);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testCountGroupReferences(): void
     {
         $group = new Group();

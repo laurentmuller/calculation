@@ -78,9 +78,6 @@ final class ApplicationParametersTest extends TestCase
         self::assertFalse($info->isPrintAddress());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testGetDefaultCategoryNotNull(): void
     {
         $id = 10;
@@ -103,9 +100,6 @@ final class ApplicationParametersTest extends TestCase
         self::assertNull($actual);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testGetDefaultProductNotNull(): void
     {
         $id = 10;
@@ -128,9 +122,6 @@ final class ApplicationParametersTest extends TestCase
         self::assertNull($actual);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testGetDefaultStateNotNull(): void
     {
         $id = 10;
@@ -236,9 +227,6 @@ final class ApplicationParametersTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testWithEntity(): void
     {
         $category = new Category();

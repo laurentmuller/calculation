@@ -91,9 +91,6 @@ final class ResetPasswordServiceTest extends TestCase
         self::expectNotToPerformAssertions();
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testSendEmailWithMailerException(): void
     {
         $mailer = $this->createMock(MailerInterface::class);
@@ -107,9 +104,6 @@ final class ResetPasswordServiceTest extends TestCase
         self::assertNull($actual);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testSendEmailWithTokenException(): void
     {
         $helper = $this->createMock(ResetPasswordHelperInterface::class);
@@ -122,9 +116,6 @@ final class ResetPasswordServiceTest extends TestCase
         self::assertNull($actual);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testSendEmailWithUserNameFound(): void
     {
         $helper = $this->createResetPasswordHelper();
@@ -198,9 +189,6 @@ final class ResetPasswordServiceTest extends TestCase
         );
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function createUser(): User
     {
         $user = new User();

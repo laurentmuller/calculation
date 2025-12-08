@@ -40,7 +40,7 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
     #[\Override]
     public function __toString(): string
     {
-        $name = $this->getShortName();
+        $name = parent::getShortName();
         $date = FormatUtils::formatDate($this->date);
 
         return \sprintf('%s(%s)', $name, $date);
@@ -103,7 +103,7 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
     #[\Override]
     public function getShortName(): string
     {
-        $names = $this->calendar->getWeekShortNames();
+        $names = $this->calendar->getShortWeekNames();
 
         return $names[$this->getWeekDay()];
     }

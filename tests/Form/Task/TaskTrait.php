@@ -34,9 +34,6 @@ trait TaskTrait
 
     private ?Task $task = null;
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function getTask(): Task
     {
         if (!$this->task instanceof Task) {
@@ -50,17 +47,11 @@ trait TaskTrait
         return $this->task;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function getTaskEntityType(): EntityType
     {
         return new EntityType($this->getTaskRegistry());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function getTaskRegistry(): MockObject&ManagerRegistry
     {
         return $this->createManagerRegistry(

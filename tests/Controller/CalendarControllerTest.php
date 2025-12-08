@@ -24,18 +24,18 @@ final class CalendarControllerTest extends ControllerTestCase
     #[\Override]
     public static function getRoutes(): \Generator
     {
-        yield ['/calendar/month', self::ROLE_USER];
-        yield ['/calendar/month', self::ROLE_ADMIN];
-        yield ['/calendar/month', self::ROLE_SUPER_ADMIN];
-        yield ['/calendar/week', self::ROLE_USER];
-        yield ['/calendar/week', self::ROLE_ADMIN];
-        yield ['/calendar/week', self::ROLE_SUPER_ADMIN];
-        yield ['/calendar/year', self::ROLE_USER];
-        yield ['/calendar/year', self::ROLE_ADMIN];
-        yield ['/calendar/year', self::ROLE_SUPER_ADMIN];
+        // valid
+        foreach (['week', 'month', 'year'] as $suffix) {
+            foreach ([self::ROLE_USER, self::ROLE_ADMIN, self::ROLE_SUPER_ADMIN] as $role) {
+                yield ['/calendar/' . $suffix, $role];
+            }
+        }
 
-        yield ['/calendar/month/2024/100', self::ROLE_ADMIN, Response::HTTP_NOT_FOUND];
+        // invalid week
         yield ['/calendar/week/2024/100', self::ROLE_ADMIN, Response::HTTP_NOT_FOUND];
+
+        // invalid month
+        yield ['/calendar/month/2024/100', self::ROLE_ADMIN, Response::HTTP_NOT_FOUND];
     }
 
     public function testTwoCalculations(): void
@@ -45,8 +45,8 @@ final class CalendarControllerTest extends ControllerTestCase
         $this->addEntity($calculation1);
         $this->addEntity($calculation2);
 
-        $this->checkRoute('/calendar/month', self::ROLE_ADMIN);
         $this->checkRoute('/calendar/week', self::ROLE_ADMIN);
+        $this->checkRoute('/calendar/month', self::ROLE_ADMIN);
         $this->checkRoute('/calendar/year', self::ROLE_ADMIN);
 
         $this->deleteEntitiesByClass(Calculation::class);

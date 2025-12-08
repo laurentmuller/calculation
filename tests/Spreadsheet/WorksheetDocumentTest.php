@@ -76,9 +76,6 @@ final class WorksheetDocumentTest extends TestCase
         $sheet->rebindParent($doc2);
     }
 
-    /**
-     * @throws \PHPUnit\Framework\MockObject\Exception
-     */
     public function testSetActiveTitle(): void
     {
         $controller = $this->createMock(AbstractController::class);

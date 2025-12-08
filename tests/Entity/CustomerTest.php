@@ -26,9 +26,6 @@ final class CustomerTest extends ConstraintValidatorTestCase
 {
     use IdTrait;
 
-    /**
-     * @throws \Exception
-     */
     public function testAge(): void
     {
         $customer = new Customer();
@@ -70,9 +67,6 @@ final class CustomerTest extends ConstraintValidatorTestCase
         self::assertNull($customer->getZipCode());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testDisplay(): void
     {
         $customer = new Customer();
@@ -106,9 +100,6 @@ final class CustomerTest extends ConstraintValidatorTestCase
         self::assertSame('Doe John', $customer->getFullName());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testId(): void
     {
         $customer = new Customer();

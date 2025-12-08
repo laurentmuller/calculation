@@ -50,9 +50,6 @@ final class ProductUpdateQueryTest extends TestCase
         self::assertSame('1.00', $query->getFormattedValue());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testGetCategory(): void
     {
         $query = new ProductUpdateQuery();
@@ -70,9 +67,6 @@ final class ProductUpdateQueryTest extends TestCase
         self::assertSame('group', $query->getGroupCode());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testGetProducts(): void
     {
         $query = new ProductUpdateQuery();
@@ -118,9 +112,6 @@ final class ProductUpdateQueryTest extends TestCase
         self::assertSame(ProductUpdateQuery::UPDATE_FIXED, $query->getType());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function createCategory(): Category
     {
         $group = new Group();
@@ -134,9 +125,6 @@ final class ProductUpdateQueryTest extends TestCase
         return self::setId($category);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function createProduct(): Product
     {
         $product = new Product();

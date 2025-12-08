@@ -186,6 +186,6 @@ final class DayTest extends CalendarTestCase
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
         $day = $this->createDay();
         $actual = (string) $day;
-        self::assertSame('Lun.(01.01.2024)', $actual);
+        self::assertSame('Day(01.01.2024)', $actual);
     }
 }

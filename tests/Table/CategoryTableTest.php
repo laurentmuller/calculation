@@ -55,9 +55,6 @@ final class CategoryTableTest extends EntityTableTestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testWithCallback(): void
     {
         $parameters = ['groupId' => 10];
@@ -67,9 +64,6 @@ final class CategoryTableTest extends EntityTableTestCase
         $this->processDataQuery($dataQuery);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testWithGroupId(): void
     {
         $parameters = ['groupId' => 10];

@@ -215,9 +215,6 @@ final class DateUtilsTest extends TestCase
         }
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testAddByInterval(): void
     {
         $date = new DatePoint('2020-01-10');
@@ -226,9 +223,6 @@ final class DateUtilsTest extends TestCase
         self::assertSame('2020-01-17', $add->format('Y-m-d'));
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testAddByString(): void
     {
         $date = new DatePoint('2020-01-10');
@@ -255,6 +249,34 @@ final class DateUtilsTest extends TestCase
         $expected = new DatePoint('2020-01-10');
         $actual = DateUtils::createDate('2020-01-10 10:10:10');
         self::assertTimestampEquals($expected, $actual);
+
+        $expected = new DatePoint('today');
+        $actual = DateUtils::createDate();
+        self::assertTimestampEquals($expected, $actual);
+    }
+
+    public function testCreateDatePoint(): void
+    {
+        $expected = new DatePoint('2020-01-10 10:10:10');
+        $actual = DateUtils::createDatePoint('2020-01-10 10:10:10');
+        self::assertTimestampEquals($expected, $actual);
+
+        $expected = new DatePoint('now');
+        $actual = DateUtils::createDatePoint();
+        self::assertTimestampEquals($expected, $actual);
+    }
+
+    public function testDateIntervalInvalid(): void
+    {
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage('Invalid duration: "fake".');
+        DateUtils::createDateInterval('fake');
+    }
+
+    public function testDateIntervalValid(): void
+    {
+        $actual = DateUtils::createDateInterval('P7D');
+        self::assertSame(7, $actual->d);
     }
 
     #[DataProvider('getFormatFormDate')]
@@ -344,9 +366,6 @@ final class DateUtilsTest extends TestCase
         self::assertCount(12, $values);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testPrivateInstance(): void
     {
         self::assertPrivateInstance(DateUtils::class);
@@ -389,9 +408,6 @@ final class DateUtilsTest extends TestCase
         self::assertCount(7, $values);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testSubByInterval(): void
     {
         $date = new DatePoint('2020-01-10');
@@ -400,9 +416,6 @@ final class DateUtilsTest extends TestCase
         self::assertSame('2020-01-03', $add->format('Y-m-d'));
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testSubByString(): void
     {
         $date = new DatePoint('2020-01-10');

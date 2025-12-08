@@ -40,9 +40,6 @@ final class CalculationBelowTableTest extends EntityTableTestCase
         $this->countItemsBelow = 10;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testWithCountItemsBelow(): void
     {
         $this->processCountItemsBelow(10, null);
@@ -122,9 +119,6 @@ final class CalculationBelowTableTest extends EntityTableTestCase
         return new CalculationBelowTable($repository, $stateRepository, $twig, $parameters);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function processCountItemsBelow(int $count, mixed $expected): void
     {
         $this->countItemsBelow = $count;

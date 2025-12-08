@@ -295,9 +295,6 @@ final class FileUtilsTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testPrivateInstance(): void
     {
         self::assertPrivateInstance(FileUtils::class);

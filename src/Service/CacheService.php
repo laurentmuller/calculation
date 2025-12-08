@@ -59,7 +59,7 @@ readonly class CacheService
     /**
      * @return array<string, string[]>
      *
-     * @throws \Exception
+     * @throws \Exception if loading command fail
      */
     private function loadContent(bool &$save): array
     {

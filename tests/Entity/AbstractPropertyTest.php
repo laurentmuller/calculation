@@ -26,9 +26,6 @@ final class AbstractPropertyTest extends TestCase
     use DateAssertTrait;
     use IdTrait;
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testArray(): void
     {
         $entity = $this->getEntity();
@@ -44,9 +41,6 @@ final class AbstractPropertyTest extends TestCase
         self::assertNull($entity->getArray());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testBoolean(): void
     {
         $entity = $this->getEntity();
@@ -55,9 +49,6 @@ final class AbstractPropertyTest extends TestCase
         self::assertTrue($entity->getBoolean());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testConstructor(): void
     {
         $entity = $this->getEntity();
@@ -74,9 +65,6 @@ final class AbstractPropertyTest extends TestCase
         self::assertSame('name', $entity->getName());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testDate(): void
     {
         $date = new DatePoint();
@@ -88,9 +76,6 @@ final class AbstractPropertyTest extends TestCase
         self::assertTimestampEquals($date, $actual);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testFloat(): void
     {
         $entity = $this->getEntity();
@@ -99,9 +84,6 @@ final class AbstractPropertyTest extends TestCase
         self::assertSame(1.0, $entity->getFloat());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testInteger(): void
     {
         $entity = $this->getEntity();
@@ -110,9 +92,6 @@ final class AbstractPropertyTest extends TestCase
         self::assertSame(1, $entity->getInteger());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testString(): void
     {
         $entity = $this->getEntity();
@@ -123,9 +102,6 @@ final class AbstractPropertyTest extends TestCase
         self::assertNull($entity->getValue());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testValue(): void
     {
         $entity = $this->getEntity();
@@ -163,9 +139,6 @@ final class AbstractPropertyTest extends TestCase
         self::assertSame('', $entity->getValue());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function getEntity(?int $id = null): AbstractProperty
     {
         $entity = new class extends AbstractProperty {};

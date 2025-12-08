@@ -46,8 +46,6 @@ class CalendarController extends AbstractController
      *
      * @param ?int $year  the year to search for or <code>null</code> for the current year
      * @param ?int $month the month to search for or <code>null</code> for the current month
-     *
-     * @throws \App\Calendar\CalendarException
      */
     #[GetRoute(path: '/month/{year}/{month}', name: 'month', requirements: ['year' => Requirement::POSITIVE_INT, 'month' => Requirement::POSITIVE_INT])]
     public function month(?int $year = null, ?int $month = null): Response
@@ -82,8 +80,6 @@ class CalendarController extends AbstractController
      *
      * @param ?int $year the year to search for or <code>null</code> for the current year
      * @param ?int $week the week to search for or <code>null</code> for the current week
-     *
-     * @throws \App\Calendar\CalendarException
      */
     #[GetRoute(path: '/week/{year}/{week}', name: 'week', requirements: ['year' => Requirement::POSITIVE_INT, 'week' => Requirement::POSITIVE_INT])]
     public function week(?int $year = null, ?int $week = null): Response
@@ -121,8 +117,6 @@ class CalendarController extends AbstractController
      * Display a calendar.
      *
      * @param ?int $year the year to search for or <code>null</code> for the current year
-     *
-     * @throws \App\Calendar\CalendarException
      */
     #[GetRoute(path: '/year/{year}', name: 'year', requirements: ['year' => Requirement::POSITIVE_INT])]
     public function year(?int $year = null): Response
@@ -154,8 +148,6 @@ class CalendarController extends AbstractController
      * Generate a calendar for the given year.
      *
      * @param int $year the year to generate
-     *
-     * @throws \App\Calendar\CalendarException
      */
     private function generate(int $year): Calendar
     {

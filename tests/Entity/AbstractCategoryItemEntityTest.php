@@ -22,9 +22,6 @@ final class AbstractCategoryItemEntityTest extends TestCase
 {
     use IdTrait;
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testCategoryAndGroup(): void
     {
         $entity = $this->getEntity();
@@ -51,9 +48,6 @@ final class AbstractCategoryItemEntityTest extends TestCase
         self::assertSame('group', $entity->getGroupCode());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testFields(): void
     {
         $entity = $this->getEntity();
@@ -66,9 +60,6 @@ final class AbstractCategoryItemEntityTest extends TestCase
         self::assertSame('supplier', $entity->getSupplier());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function getEntity(?int $id = null): AbstractCategoryItemEntity
     {
         $entity = new class extends AbstractCategoryItemEntity {};

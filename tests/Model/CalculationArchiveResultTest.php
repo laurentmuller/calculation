@@ -23,9 +23,6 @@ final class CalculationArchiveResultTest extends TestCase
 {
     use IdTrait;
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testAddCalculationAndReset(): void
     {
         $result = new CalculationArchiveResult();
@@ -63,9 +60,6 @@ final class CalculationArchiveResultTest extends TestCase
         self::assertFalse($result->isValid());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function createCalculation(CalculationState $state): Calculation
     {
         $calculation = new Calculation();
@@ -74,9 +68,6 @@ final class CalculationArchiveResultTest extends TestCase
         return self::setId($calculation);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function createState(int $id, string $code, bool $editable): CalculationState
     {
         $state = new CalculationState();

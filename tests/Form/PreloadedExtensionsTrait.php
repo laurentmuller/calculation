@@ -25,8 +25,6 @@ trait PreloadedExtensionsTrait
 {
     /**
      * @return FormExtensionInterface[]
-     *
-     * @throws \ReflectionException
      */
     protected function getExtensions(): array
     {

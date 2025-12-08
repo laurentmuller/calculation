@@ -20,9 +20,6 @@ final class AbstractEntityTest extends TestCase
 {
     use IdTrait;
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testClone(): void
     {
         $entity = $this->getEntity(1);
@@ -32,9 +29,6 @@ final class AbstractEntityTest extends TestCase
         self::assertNull($clone->getId());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testDisplay(): void
     {
         $entity = $this->getEntity();
@@ -46,9 +40,6 @@ final class AbstractEntityTest extends TestCase
         self::assertSame('10', $entity->__toString());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testIsNew(): void
     {
         $entity = $this->getEntity();
@@ -61,9 +52,6 @@ final class AbstractEntityTest extends TestCase
         self::assertFalse($entity->isNew());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function getEntity(?int $id = null): AbstractEntity
     {
         $entity = new class extends AbstractEntity {};

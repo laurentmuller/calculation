@@ -37,9 +37,6 @@ final class LogsDocumentTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testRender(): void
     {
         $controller = $this->createMock(AbstractController::class);

@@ -27,9 +27,6 @@ abstract class EntityTransformerTestCase extends TestCase
 {
     use IdTrait;
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function createGroup(): Group
     {
         return self::setId(new Group());

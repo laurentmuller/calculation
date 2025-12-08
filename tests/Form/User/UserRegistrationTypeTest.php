@@ -69,9 +69,6 @@ final class UserRegistrationTypeTest extends TypeTestCase
         self::assertTrue($form->isValid());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     #[\Override]
     protected function getExtensions(): array
     {

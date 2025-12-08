@@ -41,13 +41,6 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     final public const DEFAULT_WEEK_MODEL = Week::class;
 
     /**
-     * The full month names.
-     *
-     * @var array<int, string>
-     */
-    private ?array $monthNames = null;
-
-    /**
      * Array with instances of Month objects.
      *
      * @var Month[]
@@ -55,23 +48,9 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     private array $months = [];
 
     /**
-     * The short month names.
-     *
-     * @var array<int, string>
-     */
-    private ?array $monthShortNames = null;
-
-    /**
      * The today day.
      */
     private ?Day $today = null;
-
-    /**
-     * The full name of the week days.
-     *
-     * @var array<int, string>
-     */
-    private ?array $weekNames = null;
 
     /**
      * Array with instances of Week objects.
@@ -81,27 +60,16 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     private array $weeks = [];
 
     /**
-     * The short name of the week days.
-     *
-     * @var array<int, string>
-     */
-    private ?array $weekShortNames = null;
-
-    /**
      * Year for the calendar.
      */
     private ?int $year = null;
 
     /**
      * @param ?int $year the year to generate
-     *
-     * @throws CalendarException
      */
     public function __construct(?int $year = null)
     {
         parent::__construct($this, (string) ($year ?? 0));
-
-        // generate if applicable
         if (null !== $year) {
             $this->generate($year);
         }
@@ -111,7 +79,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     public function __toString(): string
     {
         $year = (int) $this->year;
-        $name = $this->getShortName();
+        $name = parent::getShortName();
         $firstDate = DateUtils::createDate(\sprintf('%d-01-01', $year));
         $lastDate = DateUtils::createDate(\sprintf('%d-12-31', $year));
         $first = FormatUtils::formatDate($firstDate);
@@ -124,8 +92,6 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
      * Generates months, weeks and days for the given year.
      *
      * @param int $year the year to generate
-     *
-     * @throws CalendarException
      */
     public function generate(int $year): self
     {
@@ -200,7 +166,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
      */
     public function getMonthNames(): array
     {
-        return $this->monthNames ??= DateUtils::getMonths();
+        return DateUtils::getMonths();
     }
 
     /**
@@ -214,16 +180,6 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     }
 
     /**
-     * Gets the short name of the months.
-     *
-     * @return array<int, string>
-     */
-    public function getMonthShortNames(): array
-    {
-        return $this->monthShortNames ??= DateUtils::getShortMonths();
-    }
-
-    /**
      * This implementation returns the generated year.
      */
     #[\Override]
@@ -232,17 +188,37 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
         return $this->getYear();
     }
 
+    /**
+     * Gets the short name of the months.
+     *
+     * @return array<int, string>
+     */
+    public function getShortMonthNames(): array
+    {
+        return DateUtils::getShortMonths();
+    }
+
+    /**
+     * Gets the short name of the week days.
+     *
+     * @return array<int, string>
+     */
+    public function getShortWeekNames(): array
+    {
+        return DateUtils::getShortWeekdays();
+    }
+
     #[\Override]
     public function getToday(): Day
     {
-        return $this->today ??= new Day($this, DateUtils::createDate('today'));
+        return $this->today ??= new Day($this, DateUtils::createDate());
     }
 
     /**
      * Gets the week for the given key.
      *
      * @param DatePoint|int|string $key the week key. Can be an integer (1-53), a date time interface
-     *                                  or a formatted date ('Y.W').
+     *                                  or a formatted date with the 'Y.W' format.
      *
      * @return Week|null the week, if found, null otherwise
      *
@@ -269,7 +245,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
      */
     public function getWeekNames(): array
     {
-        return $this->weekNames ??= DateUtils::getWeekdays();
+        return DateUtils::getWeekdays();
     }
 
     /**
@@ -280,16 +256,6 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     public function getWeeks(): array
     {
         return $this->weeks;
-    }
-
-    /**
-     * Gets the short name of the week days.
-     *
-     * @return array<int, string>
-     */
-    public function getWeekShortNames(): array
-    {
-        return $this->weekShortNames ??= DateUtils::getShortWeekdays();
     }
 
     #[\Override]

@@ -30,9 +30,6 @@ class CalculationUpdateQuery extends AbstractSimulateQuery
     #[Assert\Count(min: 1)]
     private array $states = [];
 
-    /**
-     * @throws \Exception
-     */
     public function __construct()
     {
         $this->date = DateUtils::createDate();
@@ -43,9 +40,6 @@ class CalculationUpdateQuery extends AbstractSimulateQuery
         return $this->date;
     }
 
-    /**
-     * @throws \Exception
-     */
     public function getDateFrom(): DatePoint
     {
         return DateUtils::sub($this->date, $this->interval);
@@ -104,9 +98,6 @@ class CalculationUpdateQuery extends AbstractSimulateQuery
         return $this;
     }
 
-    /**
-     * @throws \Exception
-     */
     #[Assert\Callback]
     public function validate(ExecutionContextInterface $context): void
     {

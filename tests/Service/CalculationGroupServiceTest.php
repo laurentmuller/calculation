@@ -21,6 +21,8 @@ use App\Entity\GroupMargin;
 use App\Entity\Product;
 use App\Interfaces\EntityInterface;
 use App\Model\CalculationAdjustQuery;
+use App\Model\GroupType;
+use App\Model\QueryGroupType;
 use App\Parameter\ApplicationParameters;
 use App\Repository\AbstractRepository;
 use App\Repository\GlobalMarginRepository;
@@ -45,16 +47,13 @@ final class CalculationGroupServiceTest extends KernelServiceTestCase
     private const PRODUCT_PRICE = 100.0;
     private const QUANTITY = 10.0;
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testAdjustUserMargin(): void
     {
         $query = new CalculationAdjustQuery(
             adjust: true,
             userMargin: -0.99,
             groups: [
-                ['id' => 1, 'total' => 100.0],
+                new QueryGroupType(id: 1, total: 100.0),
             ]
         );
 
@@ -76,27 +75,27 @@ final class CalculationGroupServiceTest extends KernelServiceTestCase
         $calculation = new Calculation();
 
         $service = $this->createCalculationService();
-        $actual = $service->createGroups($calculation);
-        self::assertCount(1, $actual);
-        self::assertArrayHasKey(0, $actual);
+        $groups = $service->createGroups($calculation);
+        self::assertCount(1, $groups);
 
-        $row = $actual[0];
-        self::assertSame(-1, $row['id']);
-        self::assertSame(0.0, $row['amount']);
-        self::assertSame(0.0, $row['margin_percent']);
-        self::assertSame(0.0, $row['margin_amount']);
-        self::assertSame(0.0, $row['total']);
+        $group = $groups->first();
+        self::assertInstanceOf(GroupType::class, $group);
+        self::assertSame(-1, $group->id);
+        self::assertSame(0.0, $group->amount);
+        self::assertSame(0.0, $group->marginPercent);
+        self::assertSame(0.0, $group->marginAmount);
+        self::assertSame(0.0, $group->total);
 
         $calculation = new Calculation();
         $calculation->addProduct($product, self::QUANTITY);
-        $actual = $service->createGroups($calculation);
-        self::assertCount(6, $actual);
+        $groups = $service->createGroups($calculation);
+        self::assertCount(6, $groups);
 
         $calculation = new Calculation();
         $calculation->addProduct($product, self::QUANTITY)
             ->setUserMargin(self::MARGIN_USER);
-        $actual = $service->createGroups($calculation);
-        self::assertCount(6, $actual);
+        $groups = $service->createGroups($calculation);
+        self::assertCount(6, $groups);
     }
 
     public function testCreateGroupsFromDataEmpty(): void
@@ -108,16 +107,13 @@ final class CalculationGroupServiceTest extends KernelServiceTestCase
         self::assertCount(1, $actual['groups']);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testCreateGroupsFromQuery(): void
     {
         $query = new CalculationAdjustQuery(
             adjust: false,
             userMargin: 0.05,
             groups: [
-                ['id' => 1, 'total' => 2.5],
+                new QueryGroupType(id: 1, total: 2.5),
             ]
         );
 
@@ -128,9 +124,6 @@ final class CalculationGroupServiceTest extends KernelServiceTestCase
         self::assertCount(6, $actual['groups']);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testCreateGroupsFromQueryEmpty(): void
     {
         $query = new CalculationAdjustQuery(
@@ -152,7 +145,7 @@ final class CalculationGroupServiceTest extends KernelServiceTestCase
             adjust: false,
             userMargin: 0.05,
             groups: [
-                ['id' => 10, 'total' => 10.0],
+                new QueryGroupType(id: 10, total: 10.0),
             ]
         );
 
@@ -162,16 +155,13 @@ final class CalculationGroupServiceTest extends KernelServiceTestCase
         self::assertCount(1, $actual['groups']);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testCreateGroupsFromQueryGroupTotalZero(): void
     {
         $query = new CalculationAdjustQuery(
             adjust: false,
             userMargin: 0.05,
             groups: [
-                ['id' => 1, 'total' => 0.0],
+                new QueryGroupType(id: 1, total: 0.0),
             ]
         );
 
@@ -236,9 +226,6 @@ final class CalculationGroupServiceTest extends KernelServiceTestCase
         return $repository;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function createGroup(): Group
     {
         $group = new Group();

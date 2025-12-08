@@ -73,9 +73,6 @@ final class CalculationRepositoryTest extends AbstractRepositoryTestCase
         self::assertSame(0, $actual);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testCountStateReferences(): void
     {
         $state = new CalculationState();
@@ -99,9 +96,6 @@ final class CalculationRepositoryTest extends AbstractRepositoryTestCase
         self::assertEmpty($actual);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testGetByMonth(): void
     {
         $actual = $this->repository->getByMonth();
@@ -186,9 +180,6 @@ final class CalculationRepositoryTest extends AbstractRepositoryTestCase
         self::assertCount(1, $actual);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testGetLastCalculations(): void
     {
         $actual = $this->repository->getLastCalculations(6);
@@ -205,9 +196,6 @@ final class CalculationRepositoryTest extends AbstractRepositoryTestCase
         self::assertCount(1, $actual);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testGetMinMaxDates(): void
     {
         $actual = $this->repository->getMinMaxDates();

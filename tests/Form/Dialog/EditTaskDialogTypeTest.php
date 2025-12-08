@@ -25,9 +25,6 @@ final class EditTaskDialogTypeTest extends TypeTestCase
     use PreloadedExtensionsTrait;
     use TaskTrait;
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testSubmitValidData(): void
     {
         $task = $this->getTask();
@@ -49,9 +46,6 @@ final class EditTaskDialogTypeTest extends TypeTestCase
         self::assertTrue($form->isSynchronized());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     #[\Override]
     protected function getPreloadedExtensions(): array
     {

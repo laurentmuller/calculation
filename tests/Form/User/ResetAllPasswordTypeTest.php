@@ -29,9 +29,6 @@ final class ResetAllPasswordTypeTest extends TypeTestCase
 
     private User $user;
 
-    /**
-     * @throws \ReflectionException
-     */
     #[\Override]
     protected function setUp(): void
     {

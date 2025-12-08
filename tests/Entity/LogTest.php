@@ -95,9 +95,6 @@ final class LogTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testCompare(): void
     {
         $date = new DatePoint();

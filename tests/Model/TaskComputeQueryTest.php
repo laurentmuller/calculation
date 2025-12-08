@@ -35,9 +35,6 @@ final class TaskComputeQueryTest extends TestCase
         self::assertSame([1, 2, 3], $query->items);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testInstance(): void
     {
         $task = $this->createTask();
@@ -47,9 +44,6 @@ final class TaskComputeQueryTest extends TestCase
         self::assertSame([], $query->items);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function createTask(): Task
     {
         $task = new Task();

@@ -26,15 +26,17 @@ trait IdTrait
      * @phpstan-param T $entity
      *
      * @phpstan-return  T
-     *
-     * @throws \ReflectionException
      */
     protected static function setId(EntityInterface $entity, int $id = 1): EntityInterface
     {
-        $class = new \ReflectionClass($entity::class);
-        $property = $class->getProperty('id');
-        $property->setValue($entity, $id);
+        try {
+            $class = new \ReflectionClass($entity::class);
+            $property = $class->getProperty('id');
+            $property->setValue($entity, $id);
 
-        return $entity;
+            return $entity;
+        } catch (\ReflectionException $e) {
+            self::fail($e->getMessage());
+        }
     }
 }

@@ -38,9 +38,6 @@ final class GlobalMarginTableTest extends EntityTableTestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testSearch(): void
     {
         $query = new DataQuery();

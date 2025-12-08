@@ -32,9 +32,6 @@ trait GroupTrait
 
     private ?Group $group = null;
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function getGroup(): Group
     {
         if (!$this->group instanceof Group) {
@@ -47,17 +44,11 @@ trait GroupTrait
         return $this->group;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function getGroupEntityType(): EntityType
     {
         return new EntityType($this->getGroupRegistry());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function getGroupRegistry(): MockObject&ManagerRegistry
     {
         return $this->createManagerRegistry(

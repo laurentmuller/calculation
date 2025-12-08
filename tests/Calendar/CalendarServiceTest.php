@@ -20,9 +20,6 @@ use PHPUnit\Framework\TestCase;
 
 final class CalendarServiceTest extends TestCase
 {
-    /**
-     * @throws CalendarException
-     */
     public function testGenerate(): void
     {
         $service = new CalendarService();
@@ -41,14 +38,11 @@ final class CalendarServiceTest extends TestCase
     public function testNotExistClass(): void
     {
         self::expectException(CalendarException::class);
-        self::expectExceptionMessage("Class 'fake' not found.");
+        self::expectExceptionMessage('Model class "fake" not found.');
         $service = new CalendarService();
         $service->setCalendarModel('fake'); // @phpstan-ignore argument.type
     }
 
-    /**
-     * @throws CalendarException
-     */
     public function testSetCalendarModel(): void
     {
         $service = new CalendarService();

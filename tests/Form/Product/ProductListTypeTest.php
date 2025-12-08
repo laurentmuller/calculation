@@ -24,9 +24,6 @@ final class ProductListTypeTest extends TypeTestCase
     use PreloadedExtensionsTrait;
     use ProductTrait;
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testFormView(): void
     {
         $product = $this->getProduct();
@@ -41,9 +38,6 @@ final class ProductListTypeTest extends TypeTestCase
         self::assertEqualsCanonicalizing($formData, $view->vars['value']);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testSubmitValidData(): void
     {
         $product = $this->getProduct();
@@ -60,9 +54,6 @@ final class ProductListTypeTest extends TypeTestCase
         self::assertEqualsCanonicalizing($expected, $model);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     #[\Override]
     protected function getPreloadedExtensions(): array
     {

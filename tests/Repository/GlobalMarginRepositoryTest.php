@@ -17,7 +17,6 @@ use App\Entity\GlobalMargin;
 use App\Repository\GlobalMarginRepository;
 use App\Tests\EntityTrait\GlobalMarginTrait;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\Mapping\MappingException;
 
 /**
  * @extends AbstractRepositoryTestCase<GlobalMargin, GlobalMarginRepository>
@@ -105,9 +104,6 @@ final class GlobalMarginRepositoryTest extends AbstractRepositoryTestCase
         self::expectNotToPerformAssertions();
     }
 
-    /**
-     * @throws MappingException
-     */
     public function testGetSingleIdentifierFieldName(): void
     {
         $actual = $this->repository->getSingleIdentifierFieldName();

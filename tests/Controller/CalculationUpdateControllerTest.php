@@ -29,9 +29,6 @@ final class CalculationUpdateControllerTest extends ControllerTestCase
         yield ['/admin/update', self::ROLE_ADMIN];
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testUpdate(): void
     {
         $calculation = $this->getCalculation();

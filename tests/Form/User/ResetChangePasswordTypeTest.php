@@ -36,9 +36,6 @@ final class ResetChangePasswordTypeTest extends TypeTestCase
 
     private User $user;
 
-    /**
-     * @throws \ReflectionException
-     */
     #[\Override]
     protected function setUp(): void
     {
@@ -57,9 +54,6 @@ final class ResetChangePasswordTypeTest extends TypeTestCase
         self::assertTrue($form->isValid());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     #[\Override]
     protected function getExtensions(): array
     {

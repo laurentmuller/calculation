@@ -72,9 +72,6 @@ class CalculationUpdateService implements ServiceSubscriberInterface
         ]);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function update(CalculationUpdateQuery $query): CalculationUpdateResult
     {
         $result = new CalculationUpdateResult();
@@ -120,8 +117,7 @@ class CalculationUpdateService implements ServiceSubscriberInterface
         // 1. update each group and compute item and overall total
         $items_total = 0.0;
         $overall_total = 0.0;
-        $groups = $calculation->getGroups();
-        foreach ($groups as $group) {
+        foreach ($calculation->getGroups() as $group) {
             $group->update();
             $items_total += $group->getAmount();
             $overall_total += $group->getTotal();
@@ -151,8 +147,6 @@ class CalculationUpdateService implements ServiceSubscriberInterface
 
     /**
      * @phpstan-return Calculation[]
-     *
-     * @throws \Exception
      */
     private function getCalculations(CalculationUpdateQuery $query): array
     {
@@ -209,9 +203,6 @@ class CalculationUpdateService implements ServiceSubscriberInterface
         return $sources;
     }
 
-    /**
-     * @throws \Exception
-     */
     private function logResult(CalculationUpdateQuery $query, CalculationUpdateResult $result): void
     {
         $context = [

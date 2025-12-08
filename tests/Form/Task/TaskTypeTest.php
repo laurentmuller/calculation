@@ -50,9 +50,6 @@ final class TaskTypeTest extends EntityTypeTestCase
         return TaskType::class;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     #[\Override]
     protected function getPreloadedExtensions(): array
     {

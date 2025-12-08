@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Calendar;
 
 use App\Calendar\Calendar;
-use App\Calendar\CalendarException;
 use App\Calendar\Month;
 use App\Calendar\Week;
 use App\Utils\FormatUtils;
@@ -30,9 +29,6 @@ final class CalendarTest extends CalendarTestCase
         self::assertEmpty($calendar->getMonths());
     }
 
-    /**
-     * @throws CalendarException
-     */
     public function testGenerate(): void
     {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
@@ -103,19 +99,27 @@ final class CalendarTest extends CalendarTestCase
         self::assertCount(12, $actual);
     }
 
-    public function testGetMonthShortNames(): void
-    {
-        \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
-        $calendar = $this->createCalendar();
-        $actual = $calendar->getMonthShortNames();
-        self::assertCount(12, $actual);
-    }
-
     public function testGetNumber(): void
     {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
         $calendar = $this->createCalendar();
         self::assertSame(2024, $calendar->getNumber());
+    }
+
+    public function testGetShortMonthNames(): void
+    {
+        \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
+        $calendar = $this->createCalendar();
+        $actual = $calendar->getShortMonthNames();
+        self::assertCount(12, $actual);
+    }
+
+    public function testGetShortWeekNames(): void
+    {
+        \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
+        $calendar = $this->createCalendar();
+        $actual = $calendar->getShortWeekNames();
+        self::assertCount(7, $actual);
     }
 
     public function testGetToday(): void
@@ -153,14 +157,6 @@ final class CalendarTest extends CalendarTestCase
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
         $calendar = $this->createCalendar();
         $actual = $calendar->getWeekNames();
-        self::assertCount(7, $actual);
-    }
-
-    public function testGetWeekShortNames(): void
-    {
-        \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
-        $calendar = $this->createCalendar();
-        $actual = $calendar->getWeekShortNames();
         self::assertCount(7, $actual);
     }
 

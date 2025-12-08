@@ -101,18 +101,12 @@ final class UserTableTest extends EntityTableTestCase
         self::assertSame('role', $actual);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testWithoutTokenNoUser(): void
     {
         $this->state = self::TOKEN_NO_USER;
         $this->processDataQuery(new DataQuery());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testWithTokenUser(): void
     {
         $this->state = self::TOKEN_USER;

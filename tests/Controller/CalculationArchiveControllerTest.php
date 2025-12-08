@@ -75,9 +75,6 @@ final class CalculationArchiveControllerTest extends ControllerTestCase
         );
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testArchiveSuccess(): void
     {
         $this->addEntities();

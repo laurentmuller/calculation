@@ -22,7 +22,6 @@ use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Contracts\Cache\CacheInterface;
-use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
 final class DeeplTranslatorServiceTest extends TestCase
 {
@@ -110,9 +109,6 @@ final class DeeplTranslatorServiceTest extends TestCase
         self::assertCount(2, $actual);
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function testTranslateEmptyBody(): void
     {
         $response = new MockResponse(
@@ -125,9 +121,6 @@ final class DeeplTranslatorServiceTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function testTranslateFalseWithMessage(): void
     {
         $response = new JsonMockResponse(
@@ -145,9 +138,6 @@ final class DeeplTranslatorServiceTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function testTranslateFalseWithoutMessage(): void
     {
         $response = new JsonMockResponse(
@@ -163,9 +153,6 @@ final class DeeplTranslatorServiceTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function testTranslateNotString(): void
     {
         $response = new JsonMockResponse(
@@ -183,9 +170,6 @@ final class DeeplTranslatorServiceTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function testTranslateSuccess(): void
     {
         $response = $this->getLanguagesResponse();

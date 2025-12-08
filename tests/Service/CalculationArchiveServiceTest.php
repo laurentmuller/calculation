@@ -87,9 +87,6 @@ final class CalculationArchiveServiceTest extends TestCase
         self::assertDateEquals($expected, $actual);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testCreateQueryWithSessionSources(): void
     {
         $expected = new CalculationState();
@@ -106,9 +103,6 @@ final class CalculationArchiveServiceTest extends TestCase
         self::assertSame($expected, $actual->getSources()[0]);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testCreateQueryWithSessionTarget(): void
     {
         $expected = new CalculationState();

@@ -26,7 +26,6 @@ use Symfony\Component\HttpClient\Response\JsonMockResponse;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
 final class AkismetServiceTest extends TestCase
 {
@@ -44,9 +43,6 @@ final class AkismetServiceTest extends TestCase
         $this->requestStack = $this->createMock(RequestStack::class);
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function testActivityException(): void
     {
         $client = new MockHttpClient();
@@ -57,9 +53,6 @@ final class AkismetServiceTest extends TestCase
         self::assertInstanceOf(HttpClientError::class, $service->getLastError());
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function testActivityInvalidCode(): void
     {
         $client = new MockHttpClient([$this->getInvalidCodeResponse()]);
@@ -69,9 +62,6 @@ final class AkismetServiceTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function testActivityLastError(): void
     {
         $client = new MockHttpClient([$this->getLastErrorResponse()]);
@@ -85,9 +75,6 @@ final class AkismetServiceTest extends TestCase
         self::assertSame(self::ERROR_MESSAGE, $actual->getMessage());
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function testActivitySuccess(): void
     {
         $response = new JsonMockResponse(
@@ -135,9 +122,6 @@ final class AkismetServiceTest extends TestCase
         );
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function testIsSpamInvalidCode(): void
     {
         $request = new Request();
@@ -151,9 +135,6 @@ final class AkismetServiceTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function testIsSpamNoRequest(): void
     {
         $this->requestStack->method('getCurrentRequest')
@@ -164,9 +145,6 @@ final class AkismetServiceTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function testIsSpamSuccess(): void
     {
         $request = new Request();
@@ -232,9 +210,6 @@ final class AkismetServiceTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function testUsageException(): void
     {
         $client = new MockHttpClient();
@@ -245,9 +220,6 @@ final class AkismetServiceTest extends TestCase
         self::assertInstanceOf(HttpClientError::class, $service->getLastError());
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function testUsageInvalidCode(): void
     {
         $client = new MockHttpClient([$this->getInvalidCodeResponse()]);
@@ -257,9 +229,6 @@ final class AkismetServiceTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function testUsageLastError(): void
     {
         $client = new MockHttpClient([$this->getLastErrorResponse()]);
@@ -273,9 +242,6 @@ final class AkismetServiceTest extends TestCase
         self::assertSame(self::ERROR_MESSAGE, $actual->getMessage());
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function testUsageSuccess(): void
     {
         $response = new JsonMockResponse(
@@ -294,9 +260,6 @@ final class AkismetServiceTest extends TestCase
         self::assertIsArray($actual);
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function testVerifyLastError(): void
     {
         $request = new Request();

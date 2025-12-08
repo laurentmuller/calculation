@@ -75,9 +75,6 @@ final class CalculationEditStateTypeTest extends EntityTypeTestCase
         return CalculationEditStateType::class;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     #[\Override]
     protected function getPreloadedExtensions(): array
     {

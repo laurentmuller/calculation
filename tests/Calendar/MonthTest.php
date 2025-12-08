@@ -79,6 +79,7 @@ final class MonthTest extends CalendarTestCase
     public function testInvalidNumber(): void
     {
         self::expectException(CalendarException::class);
+        self::expectExceptionMessage('The month number 0 is not between 1 and 12 inclusive.');
         $calendar = $this->createCalendar();
         new Month($calendar, 0);
     }
@@ -128,7 +129,7 @@ final class MonthTest extends CalendarTestCase
         $month = $this->createMonth();
 
         $actual = (string) $month;
-        self::assertSame('Janv.(1.2024, 01.01.2024 - 31.01.2024)', $actual);
+        self::assertSame('Month(1.2024, 01.01.2024 - 31.01.2024)', $actual);
     }
 
     #[\Override]

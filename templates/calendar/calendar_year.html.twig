@@ -50,7 +50,7 @@
             </tr>
             <tr>
                 <th class="border bg-secondary">&nbsp;</th>
-                {% for name in month.calendar.weekShortNames %}
+                {% for name in month.calendar.shortWeekNames %}
                     {%- set class = 'border text-center fw-normal' -%}
                     {% if loop.index in [6, 7] %}{%- set class = class ~ ' text-body-secondary' -%}{% endif %}
                     <th class="{{ class }}">{{ name }}</th>

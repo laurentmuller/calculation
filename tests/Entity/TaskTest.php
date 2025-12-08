@@ -65,9 +65,6 @@ final class TaskTest extends EntityValidatorTestCase
         }
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testGetIdentifiers(): void
     {
         $task = new Task();

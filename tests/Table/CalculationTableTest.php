@@ -62,9 +62,6 @@ final class CalculationTableTest extends EntityTableTestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testWithCallback(): void
     {
         $parameters = ['stateId' => 10];
@@ -74,9 +71,6 @@ final class CalculationTableTest extends EntityTableTestCase
         $this->processDataQuery($dataQuery);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testWithFindStateId(): void
     {
         $this->stateId = 10;
@@ -86,9 +80,6 @@ final class CalculationTableTest extends EntityTableTestCase
         $this->processDataQuery($dataQuery);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testWithSelectionFound(): void
     {
         $this->id = 3;
@@ -98,9 +89,6 @@ final class CalculationTableTest extends EntityTableTestCase
         $this->processDataQuery($dataQuery);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testWithSelectionNotFound(): void
     {
         $dataQuery = new DataQuery();
@@ -108,9 +96,6 @@ final class CalculationTableTest extends EntityTableTestCase
         $this->processDataQuery($dataQuery);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testWithStateEditable(): void
     {
         $parameters = ['stateEditable' => 1];
@@ -119,9 +104,6 @@ final class CalculationTableTest extends EntityTableTestCase
         $this->processDataQuery($dataQuery);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testWithStateId(): void
     {
         $parameters = ['stateId' => 10];
@@ -184,8 +166,6 @@ final class CalculationTableTest extends EntityTableTestCase
 
     /**
      * @phpstan-param CalculationRepository $repository
-     *
-     * @throws \ReflectionException
      */
     #[\Override]
     protected function createTable(AbstractRepository $repository): CalculationTable
@@ -196,9 +176,6 @@ final class CalculationTableTest extends EntityTableTestCase
         return new CalculationTable($repository, $stateRepository, $twig);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function createMockCalculationStateRepository(): MockObject&CalculationStateRepository
     {
         $repository = $this->createMock(CalculationStateRepository::class);

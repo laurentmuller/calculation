@@ -22,9 +22,6 @@ use Symfony\Component\Clock\DatePoint;
 
 final class TimelineServiceTest extends TestCase
 {
-    /**
-     * @throws \Exception
-     */
     public function testCurrent(): void
     {
         $repository = $this->createMockRepository();
@@ -34,9 +31,6 @@ final class TimelineServiceTest extends TestCase
         self::assertSame(0, $actual['count']);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testCurrentWithDates(): void
     {
         $calculation = new Calculation();
@@ -47,9 +41,6 @@ final class TimelineServiceTest extends TestCase
         self::assertSame(1, $actual['count']);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testFirst(): void
     {
         $repository = $this->createMockRepository();
@@ -59,9 +50,6 @@ final class TimelineServiceTest extends TestCase
         self::assertSame(0, $actual['count']);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testLast(): void
     {
         $repository = $this->createMockRepository();

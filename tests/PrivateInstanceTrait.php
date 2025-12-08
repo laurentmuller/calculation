@@ -24,17 +24,19 @@ trait PrivateInstanceTrait
 {
     /**
      * @param class-string $class
-     *
-     * @throws \ReflectionException
      */
     public static function assertPrivateInstance(string $class): void
     {
-        $reflectionClass = new \ReflectionClass($class);
-        $constructor = $reflectionClass->getConstructor();
-        self::assertNotNull($constructor);
-        self::assertTrue($constructor->isPrivate());
-        $object = $reflectionClass->newInstanceWithoutConstructor();
-        $constructor->invoke($object);
-        self::assertInstanceOf($class, $object);
+        try {
+            $reflectionClass = new \ReflectionClass($class);
+            $constructor = $reflectionClass->getConstructor();
+            self::assertNotNull($constructor);
+            self::assertTrue($constructor->isPrivate());
+            $object = $reflectionClass->newInstanceWithoutConstructor();
+            $constructor->invoke($object);
+            self::assertInstanceOf($class, $object);
+        } catch (\ReflectionException $exception) {
+            self::fail($exception->getMessage());
+        }
     }
 }

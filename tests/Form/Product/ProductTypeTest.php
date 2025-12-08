@@ -49,9 +49,6 @@ final class ProductTypeTest extends EntityTypeTestCase
         return ProductType::class;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     #[\Override]
     protected function getPreloadedExtensions(): array
     {

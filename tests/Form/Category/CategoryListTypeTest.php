@@ -24,9 +24,6 @@ final class CategoryListTypeTest extends TypeTestCase
     use CategoryTrait;
     use PreloadedExtensionsTrait;
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testFormView(): void
     {
         $category = $this->getCategory();
@@ -41,9 +38,6 @@ final class CategoryListTypeTest extends TypeTestCase
         self::assertEqualsCanonicalizing($formData, $view->vars['value']);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testSubmitValidData(): void
     {
         $category = $this->getCategory();
@@ -60,9 +54,6 @@ final class CategoryListTypeTest extends TypeTestCase
         self::assertEqualsCanonicalizing($expected, $model);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     #[\Override]
     protected function getPreloadedExtensions(): array
     {

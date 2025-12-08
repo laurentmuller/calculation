@@ -55,8 +55,6 @@ readonly class TimelineService
      * Gets the calculations for the given date and period.
      *
      * @phpstan-return ParametersType
-     *
-     * @throws \Exception
      */
     public function current(?string $date = null, ?string $interval = null): array
     {
@@ -72,8 +70,6 @@ readonly class TimelineService
      * Gets the first calculations for the given period.
      *
      * @phpstan-return ParametersType
-     *
-     * @throws \Exception
      */
     public function first(?string $interval = null): array
     {
@@ -89,8 +85,6 @@ readonly class TimelineService
      * Gets the last calculations for the given period.
      *
      * @phpstan-return ParametersType
-     *
-     * @throws \Exception
      */
     public function last(?string $interval = null): array
     {
@@ -124,12 +118,10 @@ readonly class TimelineService
 
     /**
      * @return array{0: DatePoint|null, 1: DatePoint, 2: DatePoint}
-     *
-     * @throws \Exception
      */
     private function getDates(): array
     {
-        $today = DateUtils::createDatePoint('today');
+        $today = DateUtils::createDate('today');
         [$min_date, $max_date] = $this->getMinMaxDates($today);
         if ($today < $min_date || $today > $max_date) {
             $today = null;
@@ -140,8 +132,6 @@ readonly class TimelineService
 
     /**
      * @return array{0: DatePoint, 1: DatePoint}
-     *
-     * @throws \Exception
      */
     private function getMinMaxDates(DatePoint $default): array
     {
@@ -150,9 +140,6 @@ readonly class TimelineService
         return [$min_date ?? $default, $max_date ?? $default];
     }
 
-    /**
-     * @throws \Exception
-     */
     private function getNextDate(
         DatePoint $date,
         string $interval,
@@ -165,8 +152,6 @@ readonly class TimelineService
 
     /**
      * @phpstan-return ParametersType
-     *
-     * @throws \Exception
      */
     private function getParameters(
         ?DatePoint $today,
@@ -198,9 +183,6 @@ readonly class TimelineService
         ];
     }
 
-    /**
-     * @throws \Exception
-     */
     private function getPreviousDate(
         DatePoint $date,
         string $interval,

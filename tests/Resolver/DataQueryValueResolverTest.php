@@ -72,6 +72,9 @@ final class DataQueryValueResolverTest extends TestCase
         self::assertSame('', $query->getStringParameter(SearchTable::PARAM_ENTITY));
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function testGetCookiePath(): void
     {
         $resolver = $this->createResolver();

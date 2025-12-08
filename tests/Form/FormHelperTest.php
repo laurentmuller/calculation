@@ -866,9 +866,6 @@ final class FormHelperTest extends TypeTestCase
         self::assertContains($transformer, $transformers);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     #[\Override]
     protected function getExtensions(): array
     {

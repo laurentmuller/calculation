@@ -29,9 +29,6 @@ final class CalculationUpdateQueryTest extends TestCase
     use DateAssertTrait;
     use IdTrait;
 
-    /**
-     * @throws \Exception
-     */
     public function testConstruct(): void
     {
         $query = new CalculationUpdateQuery();
@@ -51,9 +48,6 @@ final class CalculationUpdateQueryTest extends TestCase
         self::assertTimestampEquals($expected, $actual);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testSetDates(): void
     {
         $query = new CalculationUpdateQuery();
@@ -72,9 +66,6 @@ final class CalculationUpdateQueryTest extends TestCase
         self::assertTimestampEquals($expected, $actual);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testStates(): void
     {
         $query = new CalculationUpdateQuery();
@@ -90,9 +81,6 @@ final class CalculationUpdateQueryTest extends TestCase
         self::assertSame('code', $query->getStatesCode());
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testValidationInvalidDate(): void
     {
         $date = DateUtils::add(DateUtils::createDate(), 'P1D');
@@ -103,9 +91,6 @@ final class CalculationUpdateQueryTest extends TestCase
         $query->validate($context);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testValidationSuccess(): void
     {
         $query = new CalculationUpdateQuery();
@@ -143,9 +128,6 @@ final class CalculationUpdateQueryTest extends TestCase
         return DateUtils::createDate();
     }
 
-    /**
-     * @throws \Exception
-     */
     private function getDateFrom(): DatePoint
     {
         return DateUtils::sub(DateUtils::createDate(), $this->getInterval());
@@ -156,9 +138,6 @@ final class CalculationUpdateQueryTest extends TestCase
         return 'P1M';
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function getState(): CalculationState
     {
         $state = new CalculationState();

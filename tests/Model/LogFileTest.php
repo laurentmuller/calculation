@@ -31,9 +31,6 @@ final class LogFileTest extends TestCase
         $this->file = new LogFile(__DIR__ . '/file.log');
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testAddLog(): void
     {
         self::assertCount(0, $this->file);
@@ -54,9 +51,6 @@ final class LogFileTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testGetLog(): void
     {
         $log = $this->createLog();
@@ -67,9 +61,6 @@ final class LogFileTest extends TestCase
         self::assertSame($log, $actual);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testGetLogs(): void
     {
         $log = $this->createLog();
@@ -79,9 +70,6 @@ final class LogFileTest extends TestCase
         self::assertSame([1 => $log], $actual);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testIsEmpty(): void
     {
         self::assertTrue($this->file->isEmpty());
@@ -89,9 +77,6 @@ final class LogFileTest extends TestCase
         self::assertFalse($this->file->isEmpty());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testSort(): void
     {
         $this->file->addLog($this->createLog());
@@ -99,9 +84,6 @@ final class LogFileTest extends TestCase
         self::assertFalse($this->file->isEmpty());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function createLog(): Log
     {
         $log = new Log();

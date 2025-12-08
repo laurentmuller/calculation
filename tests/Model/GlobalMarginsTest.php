@@ -22,9 +22,6 @@ final class GlobalMarginsTest extends TestCase
 {
     use IdTrait;
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testAddMargin(): void
     {
         $margins = GlobalMargins::instance();
@@ -37,9 +34,6 @@ final class GlobalMarginsTest extends TestCase
         self::assertCount(1, $margins);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testConstruct(): void
     {
         $margins = GlobalMargins::instance();
@@ -55,9 +49,6 @@ final class GlobalMarginsTest extends TestCase
         self::assertCount(0, $margins);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testGetMargins(): void
     {
         $margins = GlobalMargins::instance();
@@ -68,9 +59,6 @@ final class GlobalMarginsTest extends TestCase
         self::assertCount(1, $actual);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testRemoveMargin(): void
     {
         $margins = GlobalMargins::instance();
@@ -84,9 +72,6 @@ final class GlobalMarginsTest extends TestCase
         self::assertCount(0, $margins);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function createMargin(): GlobalMargin
     {
         $margin = new GlobalMargin();

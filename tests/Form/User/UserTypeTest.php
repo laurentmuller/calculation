@@ -50,9 +50,6 @@ final class UserTypeTest extends EntityTypeTestCase
         return User::class;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     #[\Override]
     protected function getExtensions(): array
     {

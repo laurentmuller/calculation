@@ -44,9 +44,6 @@ final class ProductUpdateServiceTest extends TestCase
     private Session $session;
     private User $user;
 
-    /**
-     * @throws \ReflectionException
-     */
     #[\Override]
     protected function setUp(): void
     {

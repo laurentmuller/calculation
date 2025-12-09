@@ -43,6 +43,16 @@ final class GroupRepositoryTest extends AbstractRepositoryTestCase
         self::assertCount(1, $actual);
     }
 
+    public function testFindGroupCode(): void
+    {
+        $actual = $this->repository->findGroupCode(0);
+        self::assertNull($actual);
+
+        $group = $this->getGroup();
+        $actual = $this->repository->findGroupCode((int) $group->getId());
+        self::assertNotNull($actual);
+    }
+
     public function testGetDropDown(): void
     {
         $actual = $this->repository->getDropDown();

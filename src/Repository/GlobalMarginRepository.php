@@ -56,6 +56,6 @@ class GlobalMarginRepository extends AbstractRepository
             ->setParameter('amount', $amount, Types::FLOAT)
             ->getQuery();
 
-        return (float) $query->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR);
+        return $query->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR) ?? 0.0;
     }
 }

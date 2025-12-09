@@ -488,7 +488,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     }
 
     /**
-     * Sets the last login date to now.
+     * Sets the last login date as now.
      */
     public function updateLastLogin(): self
     {

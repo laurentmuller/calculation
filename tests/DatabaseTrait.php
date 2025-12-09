@@ -82,7 +82,7 @@ trait DatabaseTrait
     /**
      * Delete an entity from the database.
      *
-     * @return null this function returns always null
+     * @return null this function always returns null
      */
     protected function deleteEntity(?EntityInterface $entity): null
     {

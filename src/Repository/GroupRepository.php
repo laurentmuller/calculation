@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Group;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -56,6 +58,19 @@ class GroupRepository extends AbstractRepository
     public function findByCode(): array
     {
         return $this->findBy([], ['code' => self::SORT_ASC]);
+    }
+
+    /**
+     * Find the group code.
+     */
+    public function findGroupCode(int $id): ?string
+    {
+        return $this->createQueryBuilder('e')
+            ->select('e.code')
+            ->where('e.id = :id')
+            ->setParameter('id', $id, Types::INTEGER)
+            ->getQuery()
+            ->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR);
     }
 
     /**

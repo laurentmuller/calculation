@@ -24,11 +24,17 @@ final class GroupMarginRepositoryTest extends AbstractRepositoryTestCase
 {
     use GroupTrait;
 
-    public function testGetMargin(): void
+    public function testGetGroupMargin(): void
     {
         $group = $this->getGroup();
-        $actual = $this->repository->getMargin($group, 0.0);
+        $actual = $this->repository->getGroupMargin($group, 0.0);
         self::assertSame(1.1, $actual);
+    }
+
+    public function testGetMarginNotFound(): void
+    {
+        $actual = $this->repository->getGroupMargin(0, 1000.0);
+        self::assertSame(0.0, $actual);
     }
 
     #[\Override]

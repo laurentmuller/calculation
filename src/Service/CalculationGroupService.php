@@ -15,7 +15,6 @@ namespace App\Service;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationGroup;
-use App\Entity\Group;
 use App\Interfaces\ConstantsInterface;
 use App\Interfaces\EntityInterface;
 use App\Model\CalculationAdjustQuery;
@@ -26,6 +25,7 @@ use App\Repository\GlobalMarginRepository;
 use App\Repository\GroupMarginRepository;
 use App\Repository\GroupRepository;
 use App\Traits\MathTrait;
+use App\Utils\StringUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -148,25 +148,25 @@ class CalculationGroupService implements ConstantsInterface
             return $this->createEmptyParameters();
         }
 
-        $user_margin = $query->userMargin;
-        $groups = $this->createTotalGroups($groups, $user_margin);
-        $overall_group = $this->getGroupType($groups, self::ROW_OVERALL_TOTAL);
-        $overall_total = $overall_group->total;
-        $overall_margin = $overall_group->marginPercent;
-        $overall_below = $this->parameters->isMarginBelow($overall_margin);
+        $userMargin = $query->userMargin;
+        $groups = $this->createTotalGroups($groups, $userMargin);
+        $overallGroup = $this->getGroupType($groups, self::ROW_OVERALL_TOTAL);
+        $overallTotal = $overallGroup->total;
+        $overallMargin = $overallGroup->marginPercent;
+        $overallBelow = $this->parameters->isMarginBelow($overallMargin);
 
-        if ($query->adjust && $overall_below) {
+        if ($query->adjust && $overallBelow) {
             $groups = $this->adjustUserMargin($groups);
-            $user_margin = $this->getGroupType($groups, self::ROW_USER_MARGIN)->marginPercent;
-            $overall_below = false;
+            $userMargin = $this->getGroupType($groups, self::ROW_USER_MARGIN)->marginPercent;
+            $overallBelow = false;
         }
 
         return [
             'result' => true,
-            'overall_margin' => $overall_margin,
-            'overall_total' => $overall_total,
-            'overall_below' => $overall_below,
-            'user_margin' => $user_margin,
+            'overall_margin' => $overallMargin,
+            'overall_total' => $overallTotal,
+            'overall_below' => $overallBelow,
+            'user_margin' => $userMargin,
             'min_margin' => $this->getMinMargin(),
             'groups' => $groups,
         ];
@@ -214,25 +214,25 @@ class CalculationGroupService implements ConstantsInterface
             }
 
             $queryId = $queryGroup->id;
-            $group = $this->findGroup($queryId);
-            if (!$group instanceof Group) {
+            $code = $this->findGroupCode($queryId);
+            if (!StringUtils::isString($code)) {
                 continue;
             }
 
             if (!$groups->containsKey($queryId)) {
-                $groups->set($queryId, $this->createGroupType(self::ROW_GROUP, $group));
+                $groups->set($queryId, $this->createGroupType(self::ROW_GROUP, $code));
             }
 
-            $current = $this->getGroupType($groups, $queryId);
-            $amount = $current->amount + $queryTotal;
-            $marginPercent = $this->getGroupMargin($group, $amount);
+            $group = $this->getGroupType($groups, $queryId);
+            $amount = $group->amount + $queryTotal;
+            $marginPercent = $this->getGroupMargin($queryId, $amount);
             $total = $this->round($marginPercent * $amount);
             $marginAmount = $total - $amount;
 
-            $current->marginPercent = $marginPercent;
-            $current->marginAmount = $marginAmount;
-            $current->amount = $amount;
-            $current->total = $total;
+            $group->marginPercent = $marginPercent;
+            $group->marginAmount = $marginAmount;
+            $group->amount = $amount;
+            $group->total = $total;
         }
 
         return $groups;
@@ -357,9 +357,9 @@ class CalculationGroupService implements ConstantsInterface
     /**
      * Find a group for the given identifier.
      */
-    private function findGroup(int $id): ?Group
+    private function findGroupCode(int $id): ?string
     {
-        return $this->groupRepository->find($id);
+        return $this->groupRepository->findGroupCode($id);
     }
 
     /**
@@ -381,11 +381,11 @@ class CalculationGroupService implements ConstantsInterface
     }
 
     /**
-     * Gets the margin, in percent, for the given group and amount.
+     * Gets the margin, in percent, for the given group identifier and amount.
      */
-    private function getGroupMargin(Group $group, float $amount): float
+    private function getGroupMargin(int $id, float $amount): float
     {
-        return $this->groupMarginRepository->getMargin($group, $amount);
+        return $this->groupMarginRepository->getGroupMargin($id, $amount);
     }
 
     /**

@@ -19,14 +19,11 @@ namespace App\Model;
 readonly class CalculationAdjustQuery
 {
     /**
-     * @param bool             $adjust     true to adjust the user's margin to reach the minimum margin
-     * @param float            $userMargin the user margin
-     * @param QueryGroupType[] $groups     groups containing each the identifier and the total
+     * @param bool                    $adjust     true to adjust the user's margin to reach the minimum margin
+     * @param float                   $userMargin the user margin
+     * @param CalculationQueryGroup[] $groups     groups containing each the identifier and the total
      */
-    public function __construct(
-        public bool $adjust = false,
-        public float $userMargin = 0.0,
-        public array $groups = []
-    ) {
+    public function __construct(public bool $adjust = false, public float $userMargin = 0.0, public array $groups = [])
+    {
     }
 }

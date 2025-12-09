@@ -265,8 +265,8 @@
             const groups = [];
             $('#data-table-edit thead').each(function () {
                 let total = 0.0;
-                const $bodies = $(this).nextUntil('thead');
-                $bodies.each(function () {
+                const $this = $(this);
+                $this.nextUntil('thead').each(function () {
                     $(this).find('tr.item').each(function () {
                         const $row = $(this);
                         const price = $row.findNamedInput('price').floatVal();
@@ -274,7 +274,7 @@
                         total += price * quantity;
                     });
                 });
-                const id = $(this).find('input[name$="[group]"]').intVal();
+                const id = $this.find('input[name$="[group]"]').intVal();
                 groups.push({
                     id: id,
                     total: total
@@ -339,8 +339,8 @@
              * @param {boolean} response.adjust
              * @param {string} response.message
              * @param {string} response.view
-             * @param {number} response.user_margin
-             * @param {boolean} response.overall_below
+             * @param {number} response.userMargin
+             * @param {boolean} response.overallBelow
              */
             that.jqXHR = $.post({
                 url: $form.data('update'),
@@ -365,12 +365,12 @@
                     } else {
                         $totalPanel.fadeOut();
                     }
-                    if (response.adjust && !$.isUndefined(response.user_margin) && !isNaN(response.user_margin)) {
-                        const value = Math.round(response.user_margin * 100);
+                    if (response.adjust) {
+                        const value = Math.round(response.userMargin * 100);
                         $('#calculation_userMargin').data('value', value)
                             .intVal(value).selectFocus();
                     }
-                    if (response.overall_below) {
+                    if (response.overallBelow) {
                         $buttonAdjust.toggleDisabled(false).removeClass('cursor-default');
                     } else {
                         $buttonAdjust.toggleDisabled(true).addClass('cursor-default');

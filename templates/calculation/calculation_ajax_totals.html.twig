@@ -30,8 +30,8 @@
         {% case ROW_OVERALL_TOTAL %}
             <td class="text-total text-cell fw-bold">{{ group.description }}</td>
             <td class="text-currency fw-bold">{{ group.amount|amount }}</td>
-            {%- if overall_below -%}
-                {%- set overall_title = 'calculation.list.margin_below'|trans({'%margin%': group.marginPercent|percent, '%minimum%': min_margin|percent}) -%}
+            {%- if overallBelow -%}
+                {%- set overall_title = 'calculation.list.margin_below'|trans({'%margin%': group.marginPercent|percent, '%minimum%': minMargin|percent}) -%}
                 <td class="text-currency text-danger fw-bold has-tooltip"
                     title="{{ overall_title }}">{{ group.marginPercent|percent }}</td>
             {%- else -%}

@@ -16,7 +16,8 @@ namespace App\Controller;
 use App\Attribute\ForUser;
 use App\Attribute\PostRoute;
 use App\Model\CalculationAdjustQuery;
-use App\Service\CalculationGroupService;
+use App\Model\CalculationAdjustResult;
+use App\Service\CalculationService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -31,20 +32,14 @@ class AjaxCalculationController extends AbstractController
 {
     #[PostRoute(path: '/update', name: 'update')]
     public function update(
-        CalculationGroupService $service,
+        CalculationService $service,
         LoggerInterface $logger,
         #[MapRequestPayload]
         CalculationAdjustQuery $query = new CalculationAdjustQuery()
     ): JsonResponse {
         try {
             $parameters = $service->createParameters($query);
-            if ($parameters['result']) {
-                $view = $this->renderView('calculation/calculation_ajax_totals.html.twig', $parameters);
-                $parameters = \array_merge($parameters, [
-                    'adjust' => $query->adjust,
-                    'view' => $view,
-                ]);
-            }
+            $parameters->view = $this->renderTotalView($parameters);
 
             return $this->json($parameters);
         } catch (\Exception $e) {
@@ -54,5 +49,10 @@ class AjaxCalculationController extends AbstractController
 
             return $this->jsonException($e, $message);
         }
+    }
+
+    private function renderTotalView(CalculationAdjustResult $parameters): string
+    {
+        return $this->renderView('calculation/calculation_ajax_totals.html.twig', $parameters->toArray());
     }
 }

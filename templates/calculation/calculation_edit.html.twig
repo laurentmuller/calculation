@@ -7,8 +7,8 @@
         {%- if not disabled -%}
             {% from 'macros/_attributes.html.twig' import attributes %}
             {%- set label = 'calculation.edit.adjust_label'|trans -%}
-            {%- set title = 'calculation.edit.adjust_title'|trans({'%minimum%': min_margin|percent}) -%}
-            {%- set class_name = 'btn btn-adjust btn-outline-secondary px-2 d-print-none' ~ (overall_below ? '' : ' cursor-default') -%}
+            {%- set title = 'calculation.edit.adjust_title'|trans({'%minimum%': minMargin|percent}) -%}
+            {%- set class_name = 'btn btn-adjust btn-outline-secondary px-2 d-print-none' ~ (overallBelow ? '' : ' cursor-default') -%}
             {%- set attrs = {
                 type: 'button',
                 id: 'btn-adjust',
@@ -20,7 +20,7 @@
                 'data-bs-toggle': 'tooltip',
                 'data-bs-custom-class': 'tooltip-success',
             } -%}
-            <button{{ attributes(attrs) }}{% if not overall_below %} disabled{% endif %}>
+            <button{{ attributes(attrs) }}{% if not overallBelow %} disabled{% endif %}>
                 <i class="fa-solid fa-wand-magic-sparkles"></i>
             </button>
         {%- endif -%}

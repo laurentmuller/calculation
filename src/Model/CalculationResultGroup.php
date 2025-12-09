@@ -14,12 +14,16 @@ declare(strict_types=1);
 namespace App\Model;
 
 /**
- * Contains the group identifier and the total.
+ * Contains a computed calculation group.
  */
-class QueryGroupType
+class CalculationResultGroup
 {
     public function __construct(
         public int $id,
+        public string $description,
+        public float $marginPercent,
+        public float $marginAmount,
+        public float $amount,
         public float $total
     ) {
     }

@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Service\CalculationGroupService;
+use App\Model\CalculationAdjustResult;
+use App\Service\CalculationService;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Utils\StringUtils;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -63,19 +65,19 @@ final class AjaxCalculationControllerTest extends ControllerTestCase
 
     public function testUpdateWithAdjust(): void
     {
-        $data = [
-            'result' => true,
-            'overall_below' => true,
-            'overall_margin' => 0.0,
-            'overall_total' => 0.0,
-            'min_margin' => 1.1,
-            'user_margin' => 0.0,
-            'groups' => [],
-        ];
-        $service = $this->createMock(CalculationGroupService::class);
+        $data = new CalculationAdjustResult(
+            overallBelow: true,
+            overallMargin: 0.0,
+            overallTotal: 0.0,
+            userMargin: 0.0,
+            minMargin: 1.1,
+            groups: new ArrayCollection([]),
+            adjust: true
+        );
+        $service = $this->createMock(CalculationService::class);
         $service->method('createParameters')
             ->willReturn($data);
-        $this->setService(CalculationGroupService::class, $service);
+        $this->setService(CalculationService::class, $service);
 
         $parameters = [
             'adjust' => true,
@@ -93,10 +95,10 @@ final class AjaxCalculationControllerTest extends ControllerTestCase
 
     public function testUpdateWithException(): void
     {
-        $service = $this->createMock(CalculationGroupService::class);
+        $service = $this->createMock(CalculationService::class);
         $service->method('createParameters')
             ->willThrowException(new \Exception('Fake Message'));
-        $this->setService(CalculationGroupService::class, $service);
+        $this->setService(CalculationService::class, $service);
         $this->checkRoute(
             url: self::UPDATE_ROUTE_NAME,
             username: self::ROLE_USER,
@@ -107,13 +109,21 @@ final class AjaxCalculationControllerTest extends ControllerTestCase
 
     public function testUpdateWithResultFalse(): void
     {
-        $data = [
-            'result' => false,
-        ];
-        $service = $this->createMock(CalculationGroupService::class);
+        $data = new CalculationAdjustResult(
+            overallBelow: true,
+            overallMargin: 0.0,
+            overallTotal: 0.0,
+            userMargin: 0.0,
+            minMargin: 0.0,
+            groups: new ArrayCollection([]),
+            adjust: true,
+            result: false,
+        );
+
+        $service = $this->createMock(CalculationService::class);
         $service->method('createParameters')
             ->willReturn($data);
-        $this->setService(CalculationGroupService::class, $service);
+        $this->setService(CalculationService::class, $service);
 
         $this->checkRoute(
             url: self::UPDATE_ROUTE_NAME,

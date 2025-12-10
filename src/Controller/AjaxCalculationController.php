@@ -53,6 +53,6 @@ class AjaxCalculationController extends AbstractController
 
     private function renderTotalView(CalculationAdjustResult $parameters): string
     {
-        return $this->renderView('calculation/calculation_ajax_totals.html.twig', $parameters->toArray());
+        return $this->renderView('calculation/calculation_ajax_totals.html.twig', (array) $parameters);
     }
 }

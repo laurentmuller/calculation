@@ -233,6 +233,10 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function getCategoriesCount(): int
     {
+        if ($this->isEmpty()) {
+            return 0;
+        }
+
         return $this->reduceGroups(
             static fn (int $carry, CalculationGroup $group): int => $carry + $group->count(),
             0
@@ -438,18 +442,14 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Gets the items total.
-     */
-    public function getItemsTotal(): float
-    {
-        return $this->itemsTotal;
-    }
-
-    /**
      * Gets the number of item lines.
      */
-    public function getLinesCount(): int
+    public function getItemsCount(): int
     {
+        if ($this->isEmpty()) {
+            return 0;
+        }
+
         $count = 0;
         foreach ($this->groups as $group) {
             foreach ($group->getCategories() as $category) {
@@ -458,6 +458,14 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         }
 
         return $count;
+    }
+
+    /**
+     * Gets the items total.
+     */
+    public function getItemsTotal(): float
+    {
+        return $this->itemsTotal;
     }
 
     /**
@@ -616,7 +624,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function isEditable(): bool
     {
-        return $this->isNew() || ($this->state instanceof CalculationState && $this->state->isEditable());
+        return $this->isNew() || ($this->state?->isEditable() ?? false);
     }
 
     /**
@@ -857,7 +865,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Update the position of groups, categories and items.
+     * Update the position of groups, categories, and items.
      */
     public function updatePositions(): self
     {

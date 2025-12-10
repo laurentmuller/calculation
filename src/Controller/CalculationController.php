@@ -214,14 +214,14 @@ class CalculationController extends AbstractEntityController
     {
         $parameters['minMargin'] = $this->getMinMargin();
         $parameters['overallBelow'] = $this->isMarginBelow($item);
-        $parameters['empty_items'] = $item->hasEmptyItems();
-        $parameters['duplicate_items'] = $item->hasDuplicateItems();
+        $parameters['emptyItems'] = $item->hasEmptyItems();
+        $parameters['duplicateItems'] = $item->hasDuplicateItems();
         $parameters['groups'] = $this->calculationService->createGroups($item);
         $parameters['editable'] = $item->isEditable();
         if ($item->isEditable()) {
-            $parameters['group_index'] = $item->getGroupsCount();
-            $parameters['category_index'] = $item->getCategoriesCount();
-            $parameters['item_index'] = $item->getLinesCount();
+            $parameters['groupIndex'] = $item->getGroupsCount();
+            $parameters['categoryIndex'] = $item->getCategoriesCount();
+            $parameters['itemIndex'] = $item->getItemsCount();
         }
 
         return parent::editEntity($request, $item, $parameters);

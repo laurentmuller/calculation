@@ -36,9 +36,4 @@ class CalculationAdjustResult
         public readonly bool $result = true
     ) {
     }
-
-    public function toArray(): array
-    {
-        return (array) $this;
-    }
 }

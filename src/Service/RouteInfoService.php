@@ -43,7 +43,7 @@ readonly class RouteInfoService
      */
     public function getDebugRoutes(): array
     {
-        return \array_filter($this->getRoutes(), static fn (array $route): bool => $route['debug']);
+        return $this->filterRoutes(true);
     }
 
     /**
@@ -61,7 +61,15 @@ readonly class RouteInfoService
      */
     public function getRuntimeRoutes(): array
     {
-        return \array_filter($this->getRoutes(), static fn (array $route): bool => !$route['debug']);
+        return $this->filterRoutes(false);
+    }
+
+    /**
+     * @return array<string, RouteType>
+     */
+    private function filterRoutes(bool $debug): array
+    {
+        return \array_filter($this->getRoutes(), static fn (array $route): bool => $debug === $route['debug']);
     }
 
     private function isDebugRoute(string $name): bool
@@ -79,6 +87,7 @@ readonly class RouteInfoService
         foreach ($routes as $name => $route) {
             $result[$name] = $this->parseRoute($name, $route);
         }
+        \ksort($result);
 
         return $result;
     }

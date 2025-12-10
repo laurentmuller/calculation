@@ -61,10 +61,10 @@ readonly class BundleInfoService
         $bundles = [];
         $projectDir = $this->projectDir;
         $vendorDir = FileUtils::buildPath($projectDir, 'vendor');
-        foreach ($this->kernel->getBundles() as $key => $bundleObject) {
+        foreach ($this->kernel->getBundles() as $name => $bundleObject) {
             $path = $bundleObject->getPath();
-            $bundles[$key] = [
-                'name' => $key,
+            $bundles[$name] = [
+                'name' => $name,
                 'namespace' => $bundleObject->getNamespace(),
                 'path' => $this->makePathRelative($path),
                 'package' => $this->makePathRelative($path, $vendorDir),

@@ -64,7 +64,7 @@ readonly class PackageInfoService
      */
     public function getDebugPackages(): array
     {
-        return \array_filter($this->getPackages(), static fn (array $package): bool => $package['debug']);
+        return $this->filterPackages(true);
     }
 
     /**
@@ -92,7 +92,15 @@ readonly class PackageInfoService
      */
     public function getRuntimePackages(): array
     {
-        return \array_filter($this->getPackages(), static fn (array $package): bool => !$package['debug']);
+        return $this->filterPackages(false);
+    }
+
+    /**
+     * @phpstan-return array<string, PackageType>
+     */
+    private function filterPackages(bool $debug): array
+    {
+        return \array_filter($this->getPackages(), static fn (array $package): bool => $debug === $package['debug']);
     }
 
     private function getJsonFile(): string
@@ -192,6 +200,7 @@ readonly class PackageInfoService
                 'development' => $this->parseDevelopment($package),
             ];
         }
+        \ksort($packages);
 
         return $packages;
     }

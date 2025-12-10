@@ -211,7 +211,7 @@ readonly class PackageInfoService
      */
     private function parseTime(array $package): string
     {
-        return FormatUtils::formatDateTime(new DatePoint($package['time']));
+        return FormatUtils::formatDate(new DatePoint($package['time']));
     }
 
     /**

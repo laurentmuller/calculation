@@ -26,7 +26,6 @@ use Rector\PHPUnit\CodeQuality\Rector\Class_\SingleMockPropertyTypeRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\TwigSetList;
-use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromCreateMockAssignRector;
 
 $paths = [
     __DIR__ . '/config',
@@ -38,8 +37,8 @@ $paths = [
 $skip = [
     // allow self::functions for PHP unit
     PreferPHPUnitThisCallRector::class,
+    // allow both object and mock classes
     SingleMockPropertyTypeRector::class,
-    TypedPropertyFromCreateMockAssignRector::class,
     // not convert class-string to class
     StringClassNameToClassConstantRector::class => [
         __DIR__ . '/tests/Traits/CheckSubClassTraitTest.php',
@@ -48,11 +47,12 @@ $skip = [
     MakeInheritedMethodVisibilitySameAsParentRector::class => [
         __DIR__ . '/tests/Fixture/*.php',
     ],
-    // coding style set
+    // not space before or after statements
     NewlineAfterStatementRector::class,
     NewlineBeforeNewAssignSetRector::class,
+    // don't rename exception
     CatchExceptionNameMatchingTypeRector::class,
-    // don't separate traits
+    // don't separate constants
     NewlineBetweenClassLikeStmtsRector::class,
 ];
 

@@ -19,6 +19,7 @@ use App\Parameter\ApplicationParameters;
 use App\Parameter\SecurityParameter;
 use App\Service\PasswordTooltipService;
 use App\Tests\TranslatorMockTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -28,7 +29,7 @@ final class PasswordTooltipServiceTest extends TestCase
 
     private bool $compromisedPassword = false;
     private StrengthLevel $level;
-    private ApplicationParameters $parameters;
+    private MockObject&ApplicationParameters $parameters;
     private Password $password;
     private TranslatorInterface $translator;
 

@@ -1,51 +1,65 @@
 {# imports #}
 {% from 'macros/_icons.html.twig' import icon %}
 {% from 'calculation/_macro_groups.html.twig' import outputGroupRow %}
+{% from 'macros/_attributes.html.twig' import attributes %}
 {# panel #}
 <div id='items-panel' class="card mb-3">
     <div class="card-header">
-    {% if editable %}
-        <div class="d-flex-wrap-center">
-            <h1 class="card-title me-auto">{{ icon(ICON_PRODUCT, 'calculation.edit.panel_items') }}</h1>
-            <div class="d-print-none">
-                <div class="btn-group btn-group-sm" role="group" aria-label="{{ 'common.actions'|trans }}">
-                    <button type="button" class="btn btn-secondary btn-add-item" title="{{ 'calculation.edit.add_item'|trans }}">
-                        {{- icon(ICON_PRODUCT) -}}
-                    </button>
-                    <button type="button" class="btn btn-secondary btn-add-task" title="{{ 'calculation.edit.add_task'|trans }}">
-                        {{- icon(ICON_TASK) -}}
-                    </button>
-                    <button type="button" class="btn btn-secondary btn-sort-items" title="{{ 'calculation.edit.sort_item'|trans }}"{% if not item.sortable %} disabled{% endif %}>
-                        {{- icon('sort-alpha-up') -}}
-                    </button>
+        {% if editable %}
+            <div class="d-flex-wrap-center">
+                <h1 class="card-title me-auto">{{ icon(ICON_PRODUCT, 'calculation.edit.panel_items') }}</h1>
+                <div class="d-print-none">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="{{ 'common.actions'|trans }}">
+                        <button type="button" class="btn btn-secondary btn-add-item"
+                                title="{{ 'calculation.edit.add_item'|trans }}">
+                            {{- icon(ICON_PRODUCT) -}}
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-add-task"
+                                title="{{ 'calculation.edit.add_task'|trans }}">
+                            {{- icon(ICON_TASK) -}}
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-sort-items"
+                                title="{{ 'calculation.edit.sort_item'|trans }}"{% if not item.sortable %} disabled{% endif %}>
+                            {{- icon('sort-alpha-up') -}}
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-    {% else %}
-        <h1 class="card-title">{{ icon(ICON_PRODUCT, 'calculation.edit.panel_items') }}</h1>
-    {% endif %}
+        {% else %}
+            <h1 class="card-title">{{ icon(ICON_PRODUCT, 'calculation.edit.panel_items') }}</h1>
+        {% endif %}
     </div>
     <div class="card-body px-2 pt-2 pb-1">
         <div class="table-responsive">
-            <table id="data-table-edit" class="table table-edit table-list{{ editable ? ' table-hover' : '' -}}"{% if editable %} data-group-index="{{ groupIndex }}" data-category-index="{{ categoryIndex }}" data-item-index="{{ itemIndex }}" data-prototype="{{ outputGroupRow(form.groups.vars.prototype, editable)|e('html_attr') }}"{% endif -%}>
-            {% for group in form.groups %}
-                {{ outputGroupRow(group, editable, loop.first, loop.last) }}
-            {% endfor %}
+            {%- set table_attributes = {id: 'data-table-edit', class: 'table table-edit table-list table-hover'} -%}
+            {%- if editable -%}
+                {%- set table_attributes = table_attributes|merge({
+                    'data-group-index': groupIndex,
+                    'data-category-index': categoryIndex,
+                    'data-item-index': itemIndex,
+                    'data-prototype': outputGroupRow(form.groups.vars.prototype, editable),
+                }) -%}
+            {%- endif -%}
+            <table{{ attributes(table_attributes) }}>
+                {% for group in form.groups %}
+                    {{ outputGroupRow(group, editable, loop.first, loop.last) }}
+                {% endfor %}
             </table>
         </div>
         {{ form_errors(form.groups) }}
-        <div id="empty-items" class="{% if item.groups|length > 0 %} d-none{% endif %}">
-            <p class="mb-0 text-body-secondary text-center small">{{ 'calculation.edit.empty_items'|trans }}</p>
+        <div id="empty-items" class="my-1 text-body-secondary text-center small{% if not item.empty %} d-none{% endif %}">
+            {{- 'calculation.edit.empty_items'|trans -}}
         </div>
     </div>
     {# errors #}
-    {%- set class_error = (emptyItems or duplicateItems) ? 'card-footer' : 'card-footer d-none' -%}
-    {%- set class_duplicate = duplicateItems ? 'ms-1' : 'ms-1 d-none' -%}
-    {%- set class_empty = emptyItems ? 'ms-1' : 'ms-1 d-none' -%}
-    <div id="error-all" class="{{ class_error }}">
-        <p class="mb-0 text-end">
-            <span id="error-duplicate" class="{{ class_duplicate }}"><span class="duplicate-footer"></span>{{ 'duplicate.title'|trans }}</span>
-            <span id="error-empty" class="{{ class_empty }}"><span class="empty-footer"></span>{{ 'empty.title'|trans }}</span>
-        </p>
+    <div id="error-all" class="card-footer{% if not emptyItems and not duplicateItems %} d-none{% endif %}">
+        <div class="text-end">
+            <span id="error-duplicate" class="ms-1{% if not duplicateItems %} d-none{% endif %}">
+                <span class="duplicate-footer">{{ 'duplicate.title'|trans }}</span>
+            </span>
+            <span id="error-empty" class="ms-1{% if not emptyItems %} d-none{% endif %}">
+                <span class="empty-footer">{{ 'empty.title'|trans }}</span>
+            </span>
+        </div>
     </div>
 </div>

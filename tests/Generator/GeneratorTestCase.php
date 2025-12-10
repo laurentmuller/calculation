@@ -19,6 +19,7 @@ use App\Tests\DatabaseTrait;
 use App\Tests\KernelServiceTestCase;
 use App\Utils\StringUtils;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -31,9 +32,9 @@ abstract class GeneratorTestCase extends KernelServiceTestCase
     use DatabaseTrait;
 
     protected FakerService $fakerService;
-    protected LoggerInterface $logger;
+    protected MockObject&LoggerInterface $logger;
     protected EntityManagerInterface $manager;
-    protected TranslatorInterface $translator;
+    protected MockObject&TranslatorInterface $translator;
 
     #[\Override]
     protected function setUp(): void

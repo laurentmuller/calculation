@@ -26,7 +26,7 @@ final class ReCaptchaTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;
 
-    private Request $request;
+    private MockObject&Request $request;
     private MockObject&RequestStack $requestStack;
     private MockObject&RecaptchaService $service;
 

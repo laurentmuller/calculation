@@ -28,12 +28,12 @@ use Twig\Environment;
 final class StateChartTest extends TestCase
 {
     use TranslatorMockTrait;
-    private UrlGeneratorInterface $generator;
 
-    private ApplicationParameters $parameters;
+    private MockObject&UrlGeneratorInterface $generator;
+    private MockObject&ApplicationParameters $parameters;
     private MockObject&CalculationStateRepository $repository;
-    private TranslatorInterface $translator;
-    private Environment $twig;
+    private MockObject&TranslatorInterface $translator;
+    private MockObject&Environment $twig;
 
     #[\Override]
     protected function setUp(): void

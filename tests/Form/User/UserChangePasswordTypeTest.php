@@ -27,6 +27,7 @@ use App\Tests\Form\CustomConstraintValidatorFactory;
 use App\Tests\Form\EntityTypeTestCase;
 use App\Tests\TranslatorMockTrait;
 use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 use Symfony\Component\Validator\Constraints\NotCompromisedPassword;
@@ -44,7 +45,7 @@ final class UserChangePasswordTypeTest extends EntityTypeTestCase
     use ValidatorExtensionTrait;
 
     private bool $compromisedPassword = false;
-    private ApplicationParameters $parameters;
+    private MockObject&ApplicationParameters $parameters;
     private Password $password;
     private StrengthLevel $score;
     private Strength $strength;

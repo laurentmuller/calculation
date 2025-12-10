@@ -254,32 +254,26 @@ body.status-bar .btn-back-to-top {
 }
 
 /* calculation (duplicate items, empty values and below margin) */
-.duplicate-cell::after {
-    content: ' (D) ';
+.duplicate-cell::after,
+.duplicate-footer::before,
+.empty-cell::before,
+.empty-footer::before {
     color: var(--bs-danger);
-    font-size: x-small;
     vertical-align: super;
+    font-size: smaller;
+}
+
+.duplicate-cell::after {
+    content: ' (D)';
 }
 
 .duplicate-footer::before {
-    content: ' (D) ';
-    color: var(--bs-danger);
-    font-size: smaller;
-    vertical-align: super;
+    content: '(D) ';
 }
 
-.empty-cell::before {
-    content: ' (V) ';
-    color: var(--bs-danger);
-    font-size: x-small;
-    vertical-align: super;
-}
-
+.empty-cell::before,
 .empty-footer::before {
-    content: ' (V) ';
-    color: var(--bs-danger);
-    font-size: smaller;
-    vertical-align: super;
+    content: '(V) ';
 }
 
 /* textarea */

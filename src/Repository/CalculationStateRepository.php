@@ -72,7 +72,8 @@ class CalculationStateRepository extends AbstractRepository
             ))
             ->innerJoin('s.calculations', 'c')
             ->groupBy('s.id')
-            ->orderBy('s.code', self::SORT_ASC);
+            ->orderBy('s.editable', self::SORT_DESC)
+            ->addOrderBy('s.code', self::SORT_ASC);
 
         /** @var CalculationsStateItem[] $items */
         $items = $builder->getQuery()

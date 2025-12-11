@@ -36,11 +36,17 @@ final class CspReportControllerTest extends ControllerTestCase
         $this->invoke('{');
     }
 
+    public function testWithNoCspReport(): void
+    {
+        $this->invoke('{}');
+    }
+
     public function testWithTransportException(): void
     {
+        $exception = new UnexpectedResponseException('Fake Message');
         $mailer = $this->createMock(MailerInterface::class);
         $mailer->method('send')
-            ->willThrowException(new UnexpectedResponseException('Fake Message'));
+            ->willThrowException($exception);
         $this->setService(MailerInterface::class, $mailer);
 
         $this->invoke($this->getValidContent());
@@ -60,7 +66,7 @@ final class CspReportControllerTest extends ControllerTestCase
                     "disposition": "report",
                     "document-uri": "https://example.com/signup.html",
                     "effective-directive": "style-src-elem",
-                    "original-policy": "default-src 'none'; style-src cdn.example.com; report-uri /_/csp-reports",
+                    "original-policy": "default-src 'none'; style-src cdn.example.com; report-uri /csp-reports",
                     "referrer": "",
                     "status-code": 200,
                     "violated-directive": "style-src-elem"

@@ -72,21 +72,21 @@ final class StringUtils
     /**
      * Takes an encoded JSON string and converts it into a PHP value.
      *
-     * @param string $value the value to decode
-     * @param bool   $assoc when true, returned objects will be converted into associative arrays
+     * @param string $value       the value to decode
+     * @param bool   $associative when true, returned objects will be converted into associative arrays
      *
      * @return array|\stdClass the decoded value in the appropriate PHP type
      *
      * @see StringUtils::encodeJson()
      *
-     * @phpstan-return ($assoc is true ? array : \stdClass)
+     * @phpstan-return ($associative is true ? array : \stdClass)
      *
      * @throws \InvalidArgumentException if the value cannot be decoded
      */
-    public static function decodeJson(string $value, bool $assoc = true, int $flags = 0): array|\stdClass
+    public static function decodeJson(string $value, bool $associative = true, int $flags = 0): array|\stdClass
     {
         try {
-            return \json_decode(json: $value, associative: $assoc, flags: $flags | \JSON_THROW_ON_ERROR);
+            return \json_decode(json: $value, associative: $associative, flags: $flags | \JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
             throw new \InvalidArgumentException('Unable to decode value.', $e->getCode(), $e);
         }

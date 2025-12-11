@@ -84,12 +84,17 @@ class ResponseListener
             return;
         }
 
+        $response = $event->getResponse();
+        if ($response->isRedirection()) {
+            return;
+        }
+
         $request = $event->getRequest();
         if ($this->isDevFirewall($request)) {
             return;
         }
 
-        $headers = $event->getResponse()->headers;
+        $headers = $response->headers;
         $headers->add(self::DEFAULT_HEADERS);
         if ($request->isSecure()) {
             $headers->add(self::SECURE_HEADERS);

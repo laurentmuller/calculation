@@ -16,6 +16,7 @@ namespace App\Service;
 use App\Utils\FileUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 
@@ -31,16 +32,13 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 readonly class BundleInfoService
 {
-    private string $projectDir;
-
     public function __construct(
         private KernelInterface $kernel,
         #[Target('calculation.symfony')]
         private CacheInterface $cache,
         #[Autowire('%kernel.project_dir%')]
-        string $projectDir,
+        private string $projectDir,
     ) {
-        $this->projectDir = FileUtils::normalize($projectDir);
     }
 
     /**
@@ -59,17 +57,9 @@ readonly class BundleInfoService
     private function loadBundles(): array
     {
         $bundles = [];
-        $projectDir = $this->projectDir;
-        $vendorDir = FileUtils::buildPath($projectDir, 'vendor');
-        foreach ($this->kernel->getBundles() as $name => $bundleObject) {
-            $path = $bundleObject->getPath();
-            $bundles[$name] = [
-                'name' => $name,
-                'namespace' => $bundleObject->getNamespace(),
-                'path' => $this->makePathRelative($path),
-                'package' => $this->makePathRelative($path, $vendorDir),
-                'size' => FileUtils::formatSize($path),
-            ];
+        $vendorDir = FileUtils::buildPath($this->projectDir, 'vendor');
+        foreach ($this->kernel->getBundles() as $name => $bundle) {
+            $bundles[$name] = $this->parseBundle($name, $bundle, $vendorDir);
         }
         \ksort($bundles);
 
@@ -79,5 +69,21 @@ readonly class BundleInfoService
     private function makePathRelative(string $endPath, ?string $startPath = null): string
     {
         return \rtrim(FileUtils::makePathRelative($endPath, $startPath ?? $this->projectDir), '/src');
+    }
+
+    /**
+     * @phpstan-return BundleType
+     */
+    private function parseBundle(string $name, BundleInterface $bundle, string $vendorDir): array
+    {
+        $path = $bundle->getPath();
+
+        return [
+            'name' => $name,
+            'namespace' => $bundle->getNamespace(),
+            'path' => $this->makePathRelative($path),
+            'package' => $this->makePathRelative($path, $vendorDir),
+            'size' => FileUtils::formatSize($path),
+        ];
     }
 }

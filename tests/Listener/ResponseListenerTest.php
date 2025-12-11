@@ -112,6 +112,17 @@ final class ResponseListenerTest extends TestCase
         self::assertStringContainsString(CspReportController::ROUTE_NAME, $actual);
     }
 
+    public function testRedirection(): void
+    {
+        $file = $this->getCspFile();
+        $listener = $this->createListener($file);
+        $response = new Response(status: Response::HTTP_FOUND);
+        $event = $this->createEvent(response: $response);
+        $listener->onKernelResponse($event);
+        $response = $event->getResponse();
+        self::assertTrue($response->isRedirection());
+    }
+
     public function testSecureHeaders(): void
     {
         $file = $this->getCspFile();
@@ -131,11 +142,12 @@ final class ResponseListenerTest extends TestCase
 
     private function createEvent(
         int $requestType = HttpKernelInterface::MAIN_REQUEST,
-        ?Request $request = null
+        ?Request $request = null,
+        ?Response $response = null
     ): ResponseEvent {
         $kernel = $this->createMock(HttpKernelInterface::class);
         $request ??= new Request();
-        $response = new Response();
+        $response ??= new Response();
 
         return new ResponseEvent($kernel, $request, $requestType, $response);
     }

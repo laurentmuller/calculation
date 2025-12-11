@@ -19,6 +19,7 @@ use App\Enums\Importance;
 use App\Mime\NotificationEmail;
 use App\Utils\StringUtils;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
@@ -37,24 +38,25 @@ class CspReportController extends AbstractController
     public const ROUTE_NAME = 'log_csp';
 
     #[GetRoute(path: '/csp', name: self::ROUTE_NAME)]
-    public function invoke(LoggerInterface $logger, MailerInterface $mailer): Response
+    public function invoke(Request $request, LoggerInterface $logger, MailerInterface $mailer): Response
     {
-        $context = $this->getContext();
-        if (false === $context) {
+        $content = StringUtils::trim($request->getContent());
+        if (null === $content) {
             return new Response(status: Response::HTTP_NO_CONTENT);
         }
 
         try {
+            $context = $this->getContext($content);
             $message = $this->trans('notification.csp_title');
             $logger->error($message, $context);
             $this->sendNotification($context, $mailer);
-        } catch (TransportExceptionInterface $e) {
+        } catch (\InvalidArgumentException|TransportExceptionInterface $e) {
             $message = $this->trans('notification.csp_error');
             $context = $this->getExceptionContext($e);
             $logger->error($message, $context);
+        } finally {
+            return new Response(status: Response::HTTP_NO_CONTENT);
         }
-
-        return new Response(status: Response::HTTP_NO_CONTENT);
     }
 
     private function explodeOriginalPolicy(string $value): array
@@ -79,28 +81,25 @@ class CspReportController extends AbstractController
 
     private function getActionUrl(): string
     {
-        return $this->generateUrl(self::HOME_PAGE, [], UrlGeneratorInterface::ABSOLUTE_URL);
+        return $this->generateUrl(route: self::HOME_PAGE, referenceType: UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
-    private function getContext(): array|false
+    /**
+     * @throws \InvalidArgumentException
+     */
+    private function getContext(string $content): array
     {
-        try {
-            $content = \file_get_contents('php://input');
-            if (false === $content || '' === $content) {
-                return false;
-            }
-
-            /** @phpstan-var array{csp-report: string[]} $data */
-            $data = StringUtils::decodeJson($content);
-            $context = \array_filter($data['csp-report']);
-            if (isset($context['original-policy'])) {
-                $context['original-policy'] = $this->explodeOriginalPolicy($context['original-policy']);
-            }
-
-            return $context;
-        } catch (\InvalidArgumentException) {
-            return false;
+        /** @phpstan-var array{csp-report?: string[]} $data */
+        $data = StringUtils::decodeJson($content);
+        if (!isset($data['csp-report'])) {
+            throw new \InvalidArgumentException('Content without "csp-report".');
         }
+        $context = \array_filter($data['csp-report']);
+        if (isset($context['original-policy'])) {
+            $context['original-policy'] = $this->explodeOriginalPolicy($context['original-policy']);
+        }
+
+        return $context;
     }
 
     /**

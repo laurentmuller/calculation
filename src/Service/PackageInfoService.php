@@ -121,15 +121,19 @@ readonly class PackageInfoService
      */
     private function loadPackages(): array
     {
-        /**
-         * @phpstan-var array{
-         *     packages: array<string, PackageSourceType>,
-         *     dev-package-names: string[]
-         * } $content
-         */
+        /** @phpstan-var array{packages: array<string, PackageSourceType>, dev-package-names: string[]} $content */
         $content = FileUtils::decodeJson($this->getJsonFile());
 
-        return $this->parsePackages($content['packages'], $content['dev-package-names']);
+        $packages = [];
+        $runtimePackages = $content['packages'];
+        $debugPackages = $content['dev-package-names'];
+        foreach ($runtimePackages as $package) {
+            $name = $package['name'];
+            $packages[$name] = $this->parsePackage($name, $package, $debugPackages);
+        }
+        \ksort($packages);
+
+        return $packages;
     }
 
     /**
@@ -168,41 +172,31 @@ readonly class PackageInfoService
      */
     private function parseLicense(array $package): ?string
     {
-        $pattern = $this->getPackagePattern($package);
-        $files = \glob($pattern, \GLOB_BRACE | \GLOB_NOSORT);
-        if (\is_array($files) && [] !== $files) {
-            return $files[0];
-        }
+        /** @var list<string> $files */
+        $files = \glob($this->getPackagePattern($package), \GLOB_BRACE | \GLOB_NOSORT);
 
-        return null;
+        return \array_first($files);
     }
 
     /**
-     * @phpstan-param array<string, PackageSourceType> $runtimePackages
-     * @phpstan-param string[]                         $debugPackages
+     * @phpstan-param PackageSourceType $package
+     * @phpstan-param string[]          $debugPackages
      *
-     * @phpstan-return array<string, PackageType>
+     * @return PackageType
      */
-    private function parsePackages(array $runtimePackages, array $debugPackages): array
+    private function parsePackage(string $name, array $package, array $debugPackages): array
     {
-        $packages = [];
-        foreach ($runtimePackages as $package) {
-            $name = $package['name'];
-            $packages[$name] = [
-                'name' => $name,
-                'time' => $this->parseTime($package),
-                'version' => $this->parseVersion($package),
-                'license' => $this->parseLicense($package),
-                'homepage' => $this->parseHomepage($package),
-                'description' => $this->parseDescription($package),
-                'debug' => \in_array($name, $debugPackages, true),
-                'production' => $this->parseProduction($package),
-                'development' => $this->parseDevelopment($package),
-            ];
-        }
-        \ksort($packages);
-
-        return $packages;
+        return [
+            'name' => $name,
+            'time' => $this->parseTime($package),
+            'version' => $this->parseVersion($package),
+            'license' => $this->parseLicense($package),
+            'homepage' => $this->parseHomepage($package),
+            'description' => $this->parseDescription($package),
+            'debug' => \in_array($name, $debugPackages, true),
+            'production' => $this->parseProduction($package),
+            'development' => $this->parseDevelopment($package),
+        ];
     }
 
     /**

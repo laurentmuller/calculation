@@ -6,7 +6,7 @@ classDiagram
     direction LR
 
     class Calculation {
-        -DateTimeInterface date
+        -DatePoint date
         -CalculationState state
         -string customer
         -string description
@@ -15,8 +15,8 @@ classDiagram
         -float itemsTotal
         -float overallTotal
         -Collection~CalculationGroup~ groups
-        +getDate() DateTimeInterface
-        +setDate(DateTimeInterface)
+        +getDate() DatePoint
+        +setDate(DatePoint)
         +getState() CalculationState
         +setState(CalculationState)
         +getCustomer() string
@@ -109,13 +109,14 @@ classDiagram
 
     EntityInterface <|.. AbstractEntity
     AbstractEntity <|-- Calculation
+    TimestampableInterface <|.. Calculation
     Calculation "0" --* "*" CalculationGroup
     CalculationGroup "0" --* "*" CalculationCategory
     CalculationCategory "0" --* "*" CalculationItem
     CalculationState "*" <--> "1" Calculation
     CalculationGroup "1" <--> "*" Group
     CalculationCategory "1" <--> "*" Category
-    TimestampableInterface <|-- Calculation
+
 
     click EntityInterface call nodeCallback()
     click AbstractEntity call nodeCallback()

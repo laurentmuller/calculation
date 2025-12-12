@@ -25,20 +25,14 @@ classDiagram
         <<Interface>>
     }
 
-    class TimestampableInterface {
-        <<Interface>>
-    }
-
     EntityInterface <|.. AbstractEntity
     AbstractEntity <|-- AbstractCategoryItemEntity
     AbstractCategoryItemEntity <|-- Product
     AbstractCategoryItemEntity "0" --> "*" Category
     Category "0" --> "*" Group
-    TimestampableInterface <|-- Product
 
     click EntityInterface call nodeCallback()
     click AbstractEntity call nodeCallback()
     click AbstractCategoryItemEntity call nodeCallback()
     click Category call nodeCallback()
     click Group call nodeCallback()
-    click TimestampableInterface call nodeCallback()

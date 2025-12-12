@@ -30,7 +30,14 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 class DiagramService
 {
-    private const FILE_SUFFIX = '.mmd';
+    private const CONFIGURATION = <<<CONFIG
+        ---
+        config:
+            class:
+                hideEmptyMembersBox: true
+        ---
+        CONFIG;
+    private const FILE_EXTENSION = '.mmd';
     private const TITLE_PATTERN = '/title\s?:\s?(.*)/m';
 
     public function __construct(
@@ -57,7 +64,7 @@ class DiagramService
      */
     public function getFiles(): array
     {
-        return $this->cache->get('diagram_files', $this->loadDiagrams(...));
+        return $this->cache->get('diagram_files', $this->loadFiles(...));
     }
 
     private function findTitle(string $content, string $name): string
@@ -67,26 +74,27 @@ class DiagramService
         }
 
         return StringUtils::unicode($name)
-            ->camel()
-            ->title()
+            ->replace('_', ' ')
+            ->lower()
+            ->title(allWords: true)
             ->toString();
     }
 
     /**
      * @phpstan-return array<string, DiagramType>
      */
-    private function loadDiagrams(): array
+    private function loadFiles(): array
     {
         $files = [];
         $finder = Finder::create()
             ->in($this->path)
             ->files()
-            ->name('*' . self::FILE_SUFFIX);
+            ->name('*' . self::FILE_EXTENSION);
         foreach ($finder as $file) {
             $content = $file->getContents();
-            $name = $file->getBasename(self::FILE_SUFFIX);
+            $name = $file->getBasename(self::FILE_EXTENSION);
             $title = $this->findTitle($content, $name);
-            $content = $this->removeTitle($content);
+            $content = $this->replaceTitle($content);
             $files[$name] = [
                 'name' => $name,
                 'title' => $title,
@@ -98,8 +106,13 @@ class DiagramService
         return $files;
     }
 
-    private function removeTitle(string $content): string
+    private function replaceTitle(string $content): string
     {
-        return StringUtils::pregReplace(self::TITLE_PATTERN, '', $content);
+        $pos = \strrpos($content, '---');
+        if (false !== $pos) {
+            $content = \substr($content, $pos + 3);
+        }
+
+        return self::CONFIGURATION . $content;
     }
 }

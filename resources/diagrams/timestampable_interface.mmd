@@ -3,37 +3,49 @@ title: Timestampable Interface
 ---
 
 classDiagram
-    direction TB
-
     class EntityInterface {
         <<Interface>>
     }
 
+    class AbstractCodeEntity {
+        <<Abstract>>
+    }
+
+    class AbstractCategoryItemEntity {
+        <<Abstract>>
+    }
+
     class TimestampableInterface {
         <<Interface>>
-        +getCreatedAt() ?DateTimeInterface
+        +getCreatedAt() ?DatePoint
         +getCreatedBy() ?string
         +getCreatedMessage(bool short) TranslatableMessage
-        +getUpdatedAt() ?DateTimeInterface
+        +getUpdatedAt() ?DatePoint
         +getUpdatedBy() ?string
         +getUpdatedMessage(bool short) TranslatableMessage
-        +updateTimestampable(DateTimeImmutable date, string user) bool
+        +updateTimestampable(DatePoint date, string user) bool
     }
 
     EntityInterface <|.. TimestampableInterface
     TimestampableInterface <|.. Calculation
     TimestampableInterface <|.. CalculationState
-    TimestampableInterface <|.. Group
-    TimestampableInterface <|.. Category
-    TimestampableInterface <|.. Product
+    TimestampableInterface <|.. AbstractCodeEntity
+    AbstractCodeEntity <|-- Group
+    AbstractCodeEntity <|-- Category
+    TimestampableInterface <|.. AbstractCategoryItemEntity
+    AbstractCategoryItemEntity <|.. Product
+    AbstractCategoryItemEntity <|.. Task
     TimestampableInterface <|.. User
     TimestampableInterface <|.. GlobalMargin
 
     click EntityInterface call nodeCallback()
     click Calculation call nodeCallback()
     click CalculationState call nodeCallback()
+    click AbstractCodeEntity call nodeCallback()
     click Group call nodeCallback()
     click Category call nodeCallback()
+    click AbstractCategoryItemEntity call nodeCallback()
     click Product call nodeCallback()
+    click Task call nodeCallback()
     click User call nodeCallback()
     click GlobalMargin call nodeCallback()

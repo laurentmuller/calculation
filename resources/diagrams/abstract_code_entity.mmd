@@ -1,0 +1,40 @@
+---
+title: Abstract Code Entity
+---
+
+classDiagram
+    direction LR
+
+    class AbstractCodeEntity {
+        <<Abstract>>
+        -string code
+        -?string description
+        +getCode() string
+        +setCode(string)
+        +getDescription() ?string
+        +setDescription(?string)
+    }
+
+    class AbstractEntity {
+        <<Abstract>>
+    }
+
+    class EntityInterface {
+        <<Interface>>
+    }
+
+    class TimestampableInterface {
+        <<Interface>>
+    }
+
+    EntityInterface <|.. AbstractEntity
+    AbstractEntity <|-- AbstractCodeEntity
+    TimestampableInterface <|.. AbstractCodeEntity
+    AbstractCodeEntity <|-- Group
+    AbstractCodeEntity <|-- Category
+
+    click EntityInterface call nodeCallback()
+    click TimestampableInterface call nodeCallback()
+    click AbstractEntity call nodeCallback()
+    click Group call nodeCallback()
+    click Category call nodeCallback()

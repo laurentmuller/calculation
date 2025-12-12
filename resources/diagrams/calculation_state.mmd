@@ -37,7 +37,7 @@ classDiagram
     EntityInterface <|.. AbstractEntity
     AbstractEntity <|-- CalculationState
     CalculationState "0" --> "*" Calculation
-    TimestampableInterface <|-- CalculationState
+    TimestampableInterface <|.. CalculationState
 
     click EntityInterface call nodeCallback()
     click AbstractEntity call nodeCallback()

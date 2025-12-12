@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\TimestampableInterface;
+use App\Traits\TimestampableTrait;
 use App\Utils\StringUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -21,8 +23,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Abstract entity with a category, a unit and a supplier.
  */
 #[ORM\MappedSuperclass]
-abstract class AbstractCategoryItemEntity extends AbstractEntity
+abstract class AbstractCategoryItemEntity extends AbstractEntity implements TimestampableInterface
 {
+    use TimestampableTrait;
+
     /**
      * The parent's category.
      */

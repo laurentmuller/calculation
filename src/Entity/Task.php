@@ -15,9 +15,7 @@ namespace App\Entity;
 
 use App\Interfaces\ComparableInterface;
 use App\Interfaces\SortModeInterface;
-use App\Interfaces\TimestampableInterface;
 use App\Repository\TaskRepository;
-use App\Traits\TimestampableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -33,10 +31,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 #[ORM\UniqueConstraint(name: 'unique_task_name', columns: ['name'])]
 #[UniqueEntity(fields: 'name', message: 'task.unique_name')]
-class Task extends AbstractCategoryItemEntity implements \Countable, ComparableInterface, TimestampableInterface
+class Task extends AbstractCategoryItemEntity implements \Countable, ComparableInterface
 {
-    use TimestampableTrait;
-
     /**
      * The parent's category.
      */

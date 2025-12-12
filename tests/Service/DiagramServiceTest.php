@@ -54,12 +54,10 @@ final class DiagramServiceTest extends TestCase
 
     public function testGetFileNoTitle(): void
     {
-        $expected = 'no_title';
-        $actual = $this->service->getFile($expected);
+        $file = 'no_title';
+        $actual = $this->service->getFile($file);
         self::assertIsArray($actual);
-        self::assertArrayHasKey('name', $actual);
-        self::assertArrayHasKey('title', $actual);
-        self::assertArrayHasKey('content', $actual);
-        self::assertSame($expected, $actual['name']);
+        self::assertSame($file, $actual['name']);
+        self::assertSame('No Title', $actual['title']);
     }
 }

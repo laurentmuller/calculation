@@ -2,7 +2,7 @@
 title: Global Margin
 ---
 classDiagram
-    direction LR
+    direction TB
 
     class GlobalMargin {
     }
@@ -35,7 +35,7 @@ classDiagram
     AbstractEntity <|-- AbstractMargin
     AbstractMargin <|-- GlobalMargin
     MarginInterface <|.. AbstractMargin
-    TimestampableInterface <|-- GlobalMargin
+    TimestampableInterface <|.. GlobalMargin
 
     click EntityInterface call nodeCallback()
     click AbstractEntity call nodeCallback()

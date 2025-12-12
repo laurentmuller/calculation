@@ -8,14 +8,14 @@ classDiagram
     class AbstractCategoryItemEntity {
         <<Abstract>>
         -Category category
-        -string supplier
-        -string unit
+        -?string supplier
+        -?string unit
         +getCategory() Category
         +setCategory(Category)
-        +getSupplier() string
-        +setSupplier(string)
-        +getUnit() string
-        +setUnit(string)
+        +getSupplier() ?string
+        +setSupplier(?string)
+        +getUnit() ?string
+        +setUnit(?string)
     }
 
     class AbstractEntity {
@@ -26,14 +26,20 @@ classDiagram
         <<Interface>>
     }
 
+    class TimestampableInterface {
+        <<Interface>>
+    }
+
     EntityInterface <|.. AbstractEntity
     AbstractEntity <|-- AbstractCategoryItemEntity
+    TimestampableInterface <|.. AbstractCategoryItemEntity
     AbstractCategoryItemEntity "0" --> "*" Category
     AbstractCategoryItemEntity <|-- Product
     AbstractCategoryItemEntity <|-- Task
     Category "0" --> "*" Group
 
     click EntityInterface call nodeCallback()
+    click TimestampableInterface call nodeCallback()
     click AbstractEntity call nodeCallback()
     click Group call nodeCallback()
     click Category call nodeCallback()

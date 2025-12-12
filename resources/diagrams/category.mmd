@@ -27,24 +27,26 @@ classDiagram
     class AbstractEntity {
         <<Abstract>>
     }
+
+    class AbstractCodeEntity {
+        <<Abstract>>
+    }
+
     class EntityInterface {
         <<Interface>>
     }
 
-    class TimestampableInterface {
-        <<Interface>>
-    }
-
     EntityInterface <|.. AbstractEntity
-    AbstractEntity <|-- Category
+    AbstractCodeEntity <|-- Category
+    AbstractEntity <|-- AbstractCodeEntity
+
     Group "0" --> "*" Category
     Category "0" --> "*" Product
     Category "0" --> "*" Task
-    TimestampableInterface <|-- Category
 
     click EntityInterface call nodeCallback()
     click AbstractEntity call nodeCallback()
+    click AbstractCodeEntity call nodeCallback()
     click Group call nodeCallback()
     click Product call nodeCallback()
     click Task call nodeCallback()
-    click TimestampableInterface call nodeCallback()

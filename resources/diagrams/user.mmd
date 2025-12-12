@@ -4,9 +4,9 @@ title: User
 classDiagram
     direction LR
 
-    class UserInterface {
+    class UserInterface{
         <<Interface>>
-        +getRoles() array
+        +getRoles() string[]
         +getUserIdentifier() string
         +eraseCredentials()
     }
@@ -31,8 +31,9 @@ classDiagram
         -string role
         -bool enabled
         -bool verified
+        -string ?imageName
         -Collection~UserProperty~ properties
-        +getRoles() array
+        +getRoles() string[]
         +getUserIdentifier() string
         +eraseCredentials()
         +getUsername() string
@@ -47,6 +48,8 @@ classDiagram
         +setEnabled(bool)
         +isVerified() bool
         +setVerified(bool)
+        +getImageName() ?string
+        +setImageName(?string)
         +addProperty(UserProperty)
         +removeProperty(UserProperty)
         +getProperties() Collection~UserProperty~

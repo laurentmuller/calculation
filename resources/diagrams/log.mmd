@@ -5,24 +5,24 @@ classDiagram
     direction LR
 
     class Log {
-        -createdAt DateTimeInterface
+        -createdAt DatePoint
         -message string
         -channel string
         -level string
-        -context ?array
-        -extra ?array
-        +getCreatedAt() DateTimeInterface
-        +setCreatedAt(DateTimeInterface)
+        -context ?array~string,string~
+        -extra ?array~string,string~
+        +getCreatedAt() DatePoint
+        +setCreatedAt(DatePoint)
         +getMessage() string
         +setMessage(string)
         +getChannel() string
         +setChannel(string)
         +getLevel() string
         +setLevel(string)
-        +getContext() ?array
-        +setContext(?array)
-        +getExtra() ?array
-        +setExtra(?array)
+        +getContext() ?array~string,string~
+        +setContext(?array~string,string~)
+        +getExtra() ?array~string,string~
+        +setExtra(?array~string,string~)
         +getUser() ?string
     }
 

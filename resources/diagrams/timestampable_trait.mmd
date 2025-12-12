@@ -10,17 +10,17 @@ classDiagram
 
     class TimestampableTrait {
         <<Trait>>
-        -?DateTimeInterface createdAt
+        -?DatePoint createdAt
         -?string createdBy
-        -?DateTimeInterface updatedAt
+        -?DatePoint updatedAt
         -?string $updatedBy
-        +getCreatedAt() ?DateTimeInterface
+        +getCreatedAt() ?DatePoint
         +getCreatedBy() ?string
         +getCreatedMessage(bool short) TranslatableMessage
-        +getUpdatedAt() ?DateTimeInterface
+        +getUpdatedAt() ?DatePoint
         +getUpdatedBy() ?string
         +getUpdatedMessage(bool short) TranslatableMessage
-        +updateTimestampable(DateTimeImmutable date, string user) bool
+        +updateTimestampable(DatePoint date, string user) bool
     }
 
     TimestampableInterface <|.. TimestampableTrait

@@ -16,6 +16,10 @@ classDiagram
         +isNew() bool
     }
 
+    class AbstractCodeEntity {
+        <<Abstract>>
+    }
+
     class AbstractCategoryItemEntity {
         <<Abstract>>
     }
@@ -30,17 +34,19 @@ classDiagram
 
     EntityInterface <|.. AbstractEntity
 
+    AbstractEntity <|-- AbstractCodeEntity
     AbstractEntity <|-- AbstractCategoryItemEntity
     AbstractEntity <|-- AbstractMargin
     AbstractEntity <|-- AbstractProperty
     AbstractEntity <|-- Calculation
     AbstractEntity <|-- CalculationState
-    AbstractEntity <|-- Group
-    AbstractEntity <|-- Category
     AbstractEntity <|-- TaskItem
     AbstractEntity <|-- TaskItemMargin
     AbstractEntity <|-- User
     AbstractEntity <|-- Log
+
+    AbstractCodeEntity <|-- Group
+    AbstractCodeEntity <|-- Category
 
     AbstractCategoryItemEntity <|-- Product
     AbstractCategoryItemEntity <|-- Task
@@ -52,15 +58,19 @@ classDiagram
     AbstractMargin <|-- GroupMargin
 
     click EntityInterface call nodeCallback()
+    click AbstractCodeEntity call nodeCallback()
+    click AbstractCategoryItemEntity call nodeCallback()
     click AbstractMargin call nodeCallback()
     click AbstractProperty call nodeCallback()
     click Calculation call nodeCallback()
     click CalculationState call nodeCallback()
+    click User call nodeCallback()
+    click Log call nodeCallback()
+
     click Group call nodeCallback()
     click Category call nodeCallback()
+
     click Product call nodeCallback()
     click Task call nodeCallback()
-    click User call nodeCallback()
+
     click GlobalMargin call nodeCallback()
-    click AbstractCategoryItemEntity call nodeCallback()
-    click Log call nodeCallback()

@@ -72,10 +72,10 @@ class DiagramController extends AbstractController
     private function findFile(Request $request): array|string
     {
         $name = $this->getQueryName($request);
-        $file = $this->service->getFile($name);
-        if (null === $file) {
+        if (!$this->service->hasDiagram($name)) {
             return $this->trans('diagram.error_not_found', ['%name%' => $name]);
         }
+        $file = $this->service->getDiagram($name);
         $this->setDiagramSession($request, $name);
 
         return $file;
@@ -88,7 +88,7 @@ class DiagramController extends AbstractController
 
     private function getFiles(): array
     {
-        return \array_column($this->service->getFiles(), 'title', 'name');
+        return \array_column($this->service->getDiagrams(), 'title', 'name');
     }
 
     private function getQueryName(Request $request): string

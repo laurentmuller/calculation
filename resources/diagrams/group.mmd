@@ -6,14 +6,8 @@ classDiagram
     direction LR
 
     class Group {
-        -string code
-        -string description
         -Collection~GroupMargin~ margins
         -Collection~Category~ categories
-        +getCode() string
-        +setCode(string)
-        +getDescription() string
-        +setDescription(string)
         +addMargin(GroupMargin)
         +removeMargin(GroupMargin)
         +getMargins() Collection~GroupMargin~

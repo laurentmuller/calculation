@@ -48,13 +48,15 @@ class DiagramService
     }
 
     /**
-     * Gets the diagram file for the given name.
+     * Gets the diagram for the given name.
      *
-     * @phpstan-return DiagramType|null
+     * @phpstan-return DiagramType
+     *
+     * @throws \InvalidArgumentException if the diagram name does not exist
      */
-    public function getFile(string $name): ?array
+    public function getDiagram(string $name): array
     {
-        return $this->getFiles()[$name] ?? null;
+        return $this->getDiagrams()[$name] ?? throw new \InvalidArgumentException(\sprintf('Unknown diagram name: "%s".', $name));
     }
 
     /**
@@ -62,9 +64,17 @@ class DiagramService
      *
      * @phpstan-return array<string, DiagramType>
      */
-    public function getFiles(): array
+    public function getDiagrams(): array
     {
-        return $this->cache->get('diagram_files', $this->loadFiles(...));
+        return $this->cache->get('diagram_files', $this->loadDiagrams(...));
+    }
+
+    /**
+     * Gets a value indicating if the diagram file exists for the given name.
+     */
+    public function hasDiagram(string $name): bool
+    {
+        return \array_key_exists($name, $this->getDiagrams());
     }
 
     private function findTitle(string $content, string $name): string
@@ -83,7 +93,7 @@ class DiagramService
     /**
      * @phpstan-return array<string, DiagramType>
      */
-    private function loadFiles(): array
+    private function loadDiagrams(): array
     {
         $files = [];
         $finder = Finder::create()

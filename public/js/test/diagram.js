@@ -138,6 +138,7 @@
     };
 
     /**
+     * Update the disable state of the given button.
      * @param {HTMLButtonElement}  button
      * @param {boolean} disabled
      */
@@ -166,6 +167,7 @@
     const destroyPanzoom = (panzoom) => {
         if (panzoom) {
             const svgDiagram = getSvgDiagram();
+            svgDiagram.dataset.startScale = panzoom.getScale();
             svgDiagram.parentElement.removeEventListener('wheel', panzoom.zoomWithWheel);
             svgDiagram.removeEventListener('panzoomchange', zoomHandler);
             zoomOut.removeEventListener('click', panzoom.zoomOut);
@@ -182,16 +184,22 @@
     const createPanZoom = () => {
         // initialize
         const svgDiagram = getSvgDiagram();
+        const startScale = svgDiagram.dataset.startScale || 1;
         // eslint-disable-next-line
         const panzoom = Panzoom(svgDiagram, {
+            step: 0.1,
+            origin: '0 0',
+            startScale: startScale,
             minScale: MIN_SCALE,
-            maxScale: MAX_SCALE,
+            maxScale: MAX_SCALE
         });
 
         // set handlers
-        reset.addEventListener('click', panzoom.reset);
         zoomIn.addEventListener('click', panzoom.zoomIn);
         zoomOut.addEventListener('click', panzoom.zoomOut);
+        reset.addEventListener('click', () => {
+            panzoom.reset({startScale: 1});
+        });
         svgDiagram.addEventListener('panzoomchange', zoomHandler);
         svgDiagram.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
 
@@ -207,7 +215,10 @@
             startOnLoad: false,
             useMaxWidth: false,
             securityLevel: 'loose',
-            themeVariables: getThemeVariables()
+            themeVariables: getThemeVariables(),
+            class: {
+                hideEmptyMembersBox: true
+            }
         });
         mermaid.run({
             nodes: [diagram]

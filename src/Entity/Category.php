@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\CategoryRepository;
-use App\Utils\StringUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -85,21 +84,6 @@ class Category extends AbstractCodeEntity
         }
 
         return $this;
-    }
-
-    /**
-     * Clone this category.
-     *
-     * @param ?string $code the new code
-     */
-    public function clone(?string $code = null): self
-    {
-        $copy = clone $this;
-        if (StringUtils::isString($code)) {
-            $copy->setCode($code);
-        }
-
-        return $copy;
     }
 
     /**

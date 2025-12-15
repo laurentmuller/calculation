@@ -76,6 +76,10 @@
             "to": "public/build/mermaid/"
         },
         {
+            "from": "node_modules/@mermaid-js/tiny/dist/mermaid.tiny.js",
+            "to": "public/build/mermaid/"
+        },
+        {
             "from": "node_modules/@panzoom/panzoom/dist/panzoom.js",
             "to": "public/build/panzoom/"
         },

@@ -74,8 +74,11 @@ class AboutSymfonyController extends AbstractController
         PackageInfoService $service,
         MarkdownInterface $markdown,
     ): JsonResponse {
+        if (!$service->hasPackage($name)) {
+            return $this->jsonFalse(['message' => $this->trans('about.package.not_found')]);
+        }
         $package = $service->getPackage($name);
-        if (null === $package || ([] === $package['production'] && [] === $package['development'])) {
+        if ([] === $package['production'] && [] === $package['development']) {
             return $this->jsonFalse(['message' => $this->trans('about.package.not_found')]);
         }
         $content = $this->getMarkdownDependency($markdown, $package);
@@ -113,8 +116,11 @@ class AboutSymfonyController extends AbstractController
         PackageInfoService $service,
         MarkdownInterface $markdown,
     ): JsonResponse {
+        if (!$service->hasPackage($name)) {
+            return $this->jsonFalse(['message' => $this->trans('about.licence.not_found')]);
+        }
         $package = $service->getPackage($name);
-        if (null === $package || null === $package['license']) {
+        if (null === $package['license']) {
             return $this->jsonFalse(['message' => $this->trans('about.licence.not_found')]);
         }
         $content = $this->getMarkdownLicense($markdown, $package);

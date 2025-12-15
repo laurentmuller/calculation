@@ -6,19 +6,13 @@ classDiagram
     direction LR
 
     class CalculationState {
-        -string code
         -string color
         -bool editable
-        -string description
         -Collection~Calculation~ calculations
-        +getCode() string
-        +setCode(string)
         +getColor() string
         +setColor(string)
         +isEditable() bool
         +setEditable(bool)
-        +getDescription() string
-        +setDescription(string)
         +getCalculations() Collection~calculations~
         +count() int
     }
@@ -26,20 +20,22 @@ classDiagram
     class AbstractEntity {
         <<Abstract>>
     }
+
+    class AbstractCodeEntity {
+        <<Abstract>>
+    }
+
     class EntityInterface {
         <<Interface>>
     }
 
-    class TimestampableInterface {
-        <<Interface>>
-    }
-
     EntityInterface <|.. AbstractEntity
-    AbstractEntity <|-- CalculationState
+    AbstractCodeEntity <|-- CalculationState
+    AbstractEntity <|-- AbstractCodeEntity
+
     CalculationState "0" --> "*" Calculation
-    TimestampableInterface <|.. CalculationState
 
     click EntityInterface call nodeCallback()
     click AbstractEntity call nodeCallback()
+    click AbstractCodeEntity call nodeCallback()
     click Calculation call nodeCallback()
-    click TimestampableInterface call nodeCallback()

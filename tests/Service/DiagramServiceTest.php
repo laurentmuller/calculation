@@ -31,35 +31,31 @@ final class DiagramServiceTest extends TestCase
 
     public function testCount(): void
     {
-        $files = $this->service->getDiagrams();
-        self::assertCount(2, $files);
+        self::assertCount(2, $this->service);
     }
 
-    public function testGetFileFound(): void
+    public function testGetDiagramFound(): void
     {
-        $name = 'user';
-        $actual = $this->service->getDiagram($name);
-        self::assertArrayHasKey('name', $actual);
-        self::assertArrayHasKey('title', $actual);
-        self::assertArrayHasKey('content', $actual);
-        self::assertSame($name, $actual['name']);
+        $actual = $this->service->getDiagram('user');
+        self::assertSame('User', $actual['title']);
+        self::assertSame('user', $actual['name']);
+        $content = $actual['content'];
+        self::assertStringNotContainsString('---', $content);
+        self::assertStringNotContainsString('title:', $content);
     }
 
-    public function testGetFileNotFound(): void
+    public function testGetDiagramNotFound(): void
     {
         self::expectException(\InvalidArgumentException::class);
         self::expectExceptionMessage('Unknown diagram name: "fake_name".');
         $this->service->getDiagram('fake_name');
     }
 
-    public function testGetFileNoTitle(): void
+    public function testGetDiagramNoTitle(): void
     {
-        $name = 'no_title';
-        $actual = $this->service->getDiagram($name);
-        self::assertArrayHasKey('name', $actual);
-        self::assertArrayHasKey('title', $actual);
-        self::assertArrayHasKey('content', $actual);
-        self::assertSame($name, $actual['name']);
+        $actual = $this->service->getDiagram('no_title');
+        self::assertSame('no_title', $actual['name']);
+        self::assertSame('No Title', $actual['title']);
     }
 
     public function testHasDiagram(): void

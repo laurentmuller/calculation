@@ -20,6 +20,7 @@
         "jquery-validation": "^1.0",
         "mark.js": "^8.0",
         "mermaid": "^11.0",
+        "@mermaid-js/tiny": "^11.0",
         "select2": "^4.1.0-rc.0",
         "select2-bootstrap-5-theme": "^1.0"
     },

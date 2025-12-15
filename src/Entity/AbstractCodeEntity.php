@@ -16,6 +16,7 @@ namespace App\Entity;
 use App\Interfaces\ComparableInterface;
 use App\Interfaces\TimestampableInterface;
 use App\Traits\TimestampableTrait;
+use App\Utils\StringUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -43,6 +44,21 @@ abstract class AbstractCodeEntity extends AbstractEntity implements ComparableIn
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
     protected ?string $description = null;
+
+    /**
+     * Clone this entity.
+     *
+     * @param ?string $code the new code
+     */
+    public function clone(?string $code = null): static
+    {
+        $copy = clone $this;
+        if (StringUtils::isString($code)) {
+            $copy->setCode($code);
+        }
+
+        return $copy;
+    }
 
     #[\Override]
     public function compare(ComparableInterface $other): int

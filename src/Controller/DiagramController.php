@@ -20,6 +20,7 @@ use App\Service\DiagramService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
@@ -42,9 +43,9 @@ class DiagramController extends AbstractController
      * Index of the diagram view.
      */
     #[IndexRoute]
-    public function index(Request $request): Response
+    public function index(Request $request, #[MapQueryParameter] ?string $name = null): Response
     {
-        $file = $this->findFile($request);
+        $file = $this->findFile($request, $name);
         if (\is_string($file)) {
             throw $this->createNotFoundException($file);
         }
@@ -56,12 +57,12 @@ class DiagramController extends AbstractController
     }
 
     /**
-     * Load a diagram.
+     * Load a diagram file.
      */
     #[GetRoute(path: '/load', name: 'load')]
-    public function load(Request $request): JsonResponse
+    public function load(Request $request, #[MapQueryParameter] string $name): JsonResponse
     {
-        $file = $this->findFile($request);
+        $file = $this->findFile($request, $name);
         if (\is_string($file)) {
             return $this->jsonFalse(['message' => $file]);
         }
@@ -69,9 +70,9 @@ class DiagramController extends AbstractController
         return $this->jsonTrue(['file' => $file]);
     }
 
-    private function findFile(Request $request): array|string
+    private function findFile(Request $request, ?string $name): array|string
     {
-        $name = $this->getQueryName($request);
+        $name ??= $this->getDiagramSession($request);
         if (!$this->service->hasDiagram($name)) {
             return $this->trans('diagram.error_not_found', ['%name%' => $name]);
         }
@@ -89,11 +90,6 @@ class DiagramController extends AbstractController
     private function getFiles(): array
     {
         return \array_column($this->service->getDiagrams(), 'title', 'name');
-    }
-
-    private function getQueryName(Request $request): string
-    {
-        return $request->query->getString('name', $this->getDiagramSession($request));
     }
 
     private function setDiagramSession(Request $request, string $name): void

@@ -28,15 +28,8 @@ use Symfony\Contracts\Cache\CacheInterface;
  *     title: string,
  *     content: string}
  */
-class DiagramService
+class DiagramService implements \Countable
 {
-    private const CONFIGURATION = <<<CONFIG
-        ---
-        config:
-            class:
-                hideEmptyMembersBox: true
-        ---
-        CONFIG;
     private const FILE_EXTENSION = '.mmd';
     private const TITLE_PATTERN = '/title\s?:\s?(.*)/m';
 
@@ -45,6 +38,12 @@ class DiagramService
         private readonly string $path,
         private readonly CacheInterface $cache
     ) {
+    }
+
+    #[\Override]
+    public function count(): int
+    {
+        return \count($this->getDiagrams());
     }
 
     /**
@@ -60,7 +59,7 @@ class DiagramService
     }
 
     /**
-     * Gets all diagram files.
+     * Gets all diagrams.
      *
      * @phpstan-return array<string, DiagramType>
      */
@@ -70,11 +69,19 @@ class DiagramService
     }
 
     /**
-     * Gets a value indicating if the diagram file exists for the given name.
+     * Gets a value indicating if the diagram exists for the given name.
      */
     public function hasDiagram(string $name): bool
     {
         return \array_key_exists($name, $this->getDiagrams());
+    }
+
+    private function createFinder(): Finder
+    {
+        return Finder::create()
+            ->in($this->path)
+            ->files()
+            ->name('*' . self::FILE_EXTENSION);
     }
 
     private function findTitle(string $content, string $name): string
@@ -96,15 +103,12 @@ class DiagramService
     private function loadDiagrams(): array
     {
         $files = [];
-        $finder = Finder::create()
-            ->in($this->path)
-            ->files()
-            ->name('*' . self::FILE_EXTENSION);
+        $finder = $this->createFinder();
         foreach ($finder as $file) {
             $content = $file->getContents();
             $name = $file->getBasename(self::FILE_EXTENSION);
             $title = $this->findTitle($content, $name);
-            $content = $this->replaceTitle($content);
+            $content = $this->removeTitle($content);
             $files[$name] = [
                 'name' => $name,
                 'title' => $title,
@@ -116,13 +120,13 @@ class DiagramService
         return $files;
     }
 
-    private function replaceTitle(string $content): string
+    private function removeTitle(string $content): string
     {
         $pos = \strrpos($content, '---');
         if (false !== $pos) {
             $content = \substr($content, $pos + 3);
         }
 
-        return self::CONFIGURATION . $content;
+        return $content;
     }
 }

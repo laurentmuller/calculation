@@ -16,7 +16,6 @@ namespace App\Entity;
 use App\Interfaces\SortModeInterface;
 use App\Repository\GroupRepository;
 use App\Traits\ValidateMarginsTrait;
-use App\Utils\StringUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -111,21 +110,6 @@ class Group extends AbstractCodeEntity
         }
 
         return $this;
-    }
-
-    /**
-     * Clone this group.
-     *
-     * @param ?string $code the new code
-     */
-    public function clone(?string $code = null): self
-    {
-        $copy = clone $this;
-        if (StringUtils::isString($code)) {
-            $copy->setCode($code);
-        }
-
-        return $copy;
     }
 
     /**

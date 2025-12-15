@@ -6,7 +6,7 @@
 /**
  * Vendor Files
  */
-<!--#include file="../../build/mermaid/mermaid.js" -->
+<!--#include file="../../build/mermaid/mermaid.tiny.js" -->
 <!--#include file="../../build/panzoom/panzoom.js" -->
 
 /**

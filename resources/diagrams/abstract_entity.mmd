@@ -39,7 +39,6 @@ classDiagram
     AbstractEntity <|-- AbstractMargin
     AbstractEntity <|-- AbstractProperty
     AbstractEntity <|-- Calculation
-    AbstractEntity <|-- CalculationState
     AbstractEntity <|-- TaskItem
     AbstractEntity <|-- TaskItemMargin
     AbstractEntity <|-- User
@@ -47,6 +46,7 @@ classDiagram
 
     AbstractCodeEntity <|-- Group
     AbstractCodeEntity <|-- Category
+    AbstractCodeEntity <|-- CalculationState
 
     AbstractCategoryItemEntity <|-- Product
     AbstractCategoryItemEntity <|-- Task
@@ -63,12 +63,13 @@ classDiagram
     click AbstractMargin call nodeCallback()
     click AbstractProperty call nodeCallback()
     click Calculation call nodeCallback()
-    click CalculationState call nodeCallback()
+
     click User call nodeCallback()
     click Log call nodeCallback()
 
     click Group call nodeCallback()
     click Category call nodeCallback()
+    click CalculationState call nodeCallback()
 
     click Product call nodeCallback()
     click Task call nodeCallback()

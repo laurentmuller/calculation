@@ -26,14 +26,19 @@ final class PackageInfoServiceTest extends TestCase
         self::assertNotEmpty($actual);
     }
 
-    public function testGetPackage(): void
+    public function testGetPackageFound(): void
     {
         $service = $this->createService();
         $actual = $service->getPackage('symfony/mime');
-        self::assertIsArray($actual);
+        self::assertSame('symfony/mime', $actual['name']);
+    }
 
-        $actual = $service->getPackage('fake/fake');
-        self::assertNull($actual);
+    public function testGetPackageNotFound(): void
+    {
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage('Unknown package name: "fake/fake".');
+        $service = $this->createService();
+        $service->getPackage('fake/fake');
     }
 
     public function testGetPackages(): void
@@ -48,6 +53,13 @@ final class PackageInfoServiceTest extends TestCase
         $service = $this->createService();
         $actual = $service->getRuntimePackages();
         self::assertNotEmpty($actual);
+    }
+
+    public function testHasPackage(): void
+    {
+        $service = $this->createService();
+        self::assertTrue($service->hasPackage('symfony/mime'));
+        self::assertFalse($service->hasPackage('fake/fake'));
     }
 
     public function testLicenseFound(): void

@@ -70,11 +70,13 @@ readonly class PackageInfoService
     /**
      * Gets the package for the given name.
      *
-     * @phpstan-return PackageType|null
+     * @phpstan-return PackageType
+     *
+     * @throws \InvalidArgumentException if the package name does not exist
      */
-    public function getPackage(string $name): ?array
+    public function getPackage(string $name): array
     {
-        return $this->getPackages()[$name] ?? null;
+        return $this->getPackages()[$name] ?? throw new \InvalidArgumentException(\sprintf('Unknown package name: "%s".', $name));
     }
 
     /**
@@ -93,6 +95,14 @@ readonly class PackageInfoService
     public function getRuntimePackages(): array
     {
         return $this->filterPackages(false);
+    }
+
+    /**
+     * Gets a value indicating if the package exists for the given name.
+     */
+    public function hasPackage(string $name): bool
+    {
+        return \array_key_exists($name, $this->getPackages());
     }
 
     /**

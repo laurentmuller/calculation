@@ -28,10 +28,10 @@ classDiagram
 
     EntityInterface <|.. TimestampableInterface
     TimestampableInterface <|.. Calculation
-    TimestampableInterface <|.. CalculationState
     TimestampableInterface <|.. AbstractCodeEntity
     AbstractCodeEntity <|-- Group
     AbstractCodeEntity <|-- Category
+    AbstractCodeEntity <|.. CalculationState
     TimestampableInterface <|.. AbstractCategoryItemEntity
     AbstractCategoryItemEntity <|.. Product
     AbstractCategoryItemEntity <|.. Task

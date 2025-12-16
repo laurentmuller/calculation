@@ -3,7 +3,6 @@
 (() => {
     'use strict';
 
-    const THEME_DARK = 'dark';
     const THEME_ATTRIBUTE = 'data-bs-theme';
     const DATA_PROCESSED = 'data-processed';
     const CLASS_REGEX = /classId-(.*)-\d+/;
@@ -55,7 +54,8 @@
     const zoom = document.getElementById('zoom');
 
     /**
-     * The SVG pan zoom.
+     * The SVG panzoom.
+     * @type {Object}
      */
     let panzoom = null;
 
@@ -64,12 +64,6 @@
      * @return {SVGSVGElement}
      */
     const getSvgDiagram = () => document.querySelector('#diagram svg');
-
-    /**
-     * Returns if the dark theme is selected.
-     * @return {boolean}
-     */
-    const isDarkTheme = () => rootNode.getAttribute(THEME_ATTRIBUTE) === THEME_DARK;
 
     /**
      * The number to format zoom.
@@ -113,27 +107,32 @@
     };
 
     /**
-     * Gets the color variables, depending on the selected theme.
-     * @return {object}
+     * Gets card header colors
+     * @return {{textColor: string, backgroundColor: string, borderColor: string}}
+     */
+    const getColors = () => {
+        const element = document.querySelector('.card-header');
+        const style = getComputedStyle(element);
+        return {
+            textColor: style.color,
+            backgroundColor: style.backgroundColor,
+            borderColor: style.borderBottomColor,
+        };
+    };
+
+    /**
+     * Gets the themed color variables.
+     * @return {Object.<string, string>}
      */
     const getThemeVariables = () => {
-        if (isDarkTheme()) {
-            return {
-                primaryColor: '#DEE2E608',
-                primaryTextColor: '#FFF',
-                primaryBorderColor: '#6C757D',
-                lineColor: '#6C757D',
-                secondaryColor: '#006100',
-                tertiaryColor: '#FFF'
-            };
-        }
+        const colors = getColors();
         return {
-            primaryColor: '#21252908',
-            primaryTextColor: '#000',
-            primaryBorderColor: '#6C757D',
-            lineColor: '#6C757D',
-            secondaryColor: '#006100',
-            tertiaryColor: '#FFF'
+            primaryTextColor: colors.textColor,
+            primaryColor: colors.backgroundColor,
+            primaryBorderColor: colors.borderColor,
+            lineColor: colors.borderColor,
+            // secondaryColor: '#006100',
+            // tertiaryColor: '#FFF'
         };
     };
 
@@ -151,9 +150,18 @@
     };
 
     /**
-     * Handle the pan zoom change event.
+     * Listener to zoom wheel panzoom.
      */
-    const zoomHandler = function (event) {
+    const zoomWheelListener = () => {
+        if (panzoom) {
+            panzoom.zoomWithWheel();
+        }
+    };
+
+    /**
+     * Listener to zoom change event.
+     */
+    const zoomChangeListener = function (event) {
         const scale = event.detail.scale;
         updateState(zoomIn, scale >= MAX_SCALE);
         updateState(zoomOut, scale <= MIN_SCALE);
@@ -162,48 +170,79 @@
     };
 
     /**
-     * Destroy the SVG pan zoom.
+     * Listener to zoom out panzoom.
      */
-    const destroyPanzoom = (panzoom) => {
+    const zoomOutListener = () => {
         if (panzoom) {
-            const svgDiagram = getSvgDiagram();
-            svgDiagram.dataset.startScale = panzoom.getScale();
-            svgDiagram.parentElement.removeEventListener('wheel', panzoom.zoomWithWheel);
-            svgDiagram.removeEventListener('panzoomchange', zoomHandler);
-            zoomOut.removeEventListener('click', panzoom.zoomOut);
-            zoomIn.removeEventListener('click', panzoom.zoomIn);
-            reset.removeEventListener('click', panzoom.reset);
-            panzoom.destroy();
+            panzoom.zoomOut();
         }
-        return null;
     };
 
     /**
-     * Create the SVG pan zoom.
+     * Listener to zoom in panzoom.
      */
-    const createPanZoom = () => {
-        // initialize
+    const zoomInListener = () => {
+        if (panzoom) {
+            panzoom.zoomIn();
+        }
+    };
+
+    /**
+     * Listener to reset panzoom.
+     */
+    const resetListener = () => {
+        if (panzoom) {
+            panzoom.reset({startScale: 1});
+        }
+    };
+
+    /**
+     * Remove panzoom listeners.
+     * @param {SVGSVGElement} svgDiagram
+     */
+    const removePanzoomListeners = function (svgDiagram) {
+        svgDiagram.parentElement.removeEventListener('wheel', zoomWheelListener);
+        svgDiagram.removeEventListener('panzoomchange', zoomChangeListener);
+        zoomOut.removeEventListener('click', zoomOutListener);
+        zoomIn.removeEventListener('click', zoomInListener);
+        reset.removeEventListener('click', resetListener);
+    };
+
+    /**
+     * Add panzoom listeners.
+     * @param {SVGSVGElement} svgDiagram
+     */
+    const addPanzoomListeners = function (svgDiagram) {
+        svgDiagram.parentElement.addEventListener('wheel', zoomWheelListener);
+        svgDiagram.addEventListener('panzoomchange', zoomChangeListener);
+        zoomOut.addEventListener('click', zoomOutListener);
+        zoomIn.addEventListener('click', zoomInListener);
+        reset.addEventListener('click', resetListener);
+    };
+
+    /**
+     * Destroy and re-create the panzoom.
+     */
+    const resetPanZoom = () => {
+        let startScale = 1;
         const svgDiagram = getSvgDiagram();
-        const startScale = svgDiagram.dataset.startScale || 1;
+        if (panzoom) {
+            // save scale and remove listeners
+            startScale = panzoom.getScale();
+            removePanzoomListeners(svgDiagram);
+            panzoom.destroy();
+            panzoom = null;
+        }
         // eslint-disable-next-line
-        const panzoom = Panzoom(svgDiagram, {
+        panzoom = Panzoom(svgDiagram, {
             step: 0.1,
             origin: '0 0',
             startScale: startScale,
             minScale: MIN_SCALE,
-            maxScale: MAX_SCALE
+            maxScale: MAX_SCALE,
         });
-
-        // set handlers
-        zoomIn.addEventListener('click', panzoom.zoomIn);
-        zoomOut.addEventListener('click', panzoom.zoomOut);
-        reset.addEventListener('click', () => {
-            panzoom.reset({startScale: 1});
-        });
-        svgDiagram.addEventListener('panzoomchange', zoomHandler);
-        svgDiagram.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
-
-        return panzoom;
+        // add listeners
+        addPanzoomListeners(svgDiagram);
     };
 
     /**
@@ -223,13 +262,12 @@
         mermaid.run({
             nodes: [diagram]
         }).then(() => {
-            panzoom = destroyPanzoom(panzoom);
-            panzoom = createPanZoom();
+            resetPanZoom();
         });
     };
 
     /**
-     * Save the HTML content of the diagram.
+     * Save the text content of the diagram.
      */
     const saveDiagram = () => {
         diagram.dataset.code = diagram.textContent;
@@ -247,20 +285,11 @@
     };
 
     /**
-     * Add a listener for the theme attribute.
+     * Reset and load the diagram.
      */
-    const addThemeObserver = () => {
-        const callback = (mutationsList) => {
-            for (const mutation of mutationsList) {
-                if (mutation.attributeName === THEME_ATTRIBUTE) {
-                    resetDiagram();
-                    loadDiagram();
-                    break;
-                }
-            }
-        };
-        const observer = new MutationObserver(callback);
-        observer.observe(rootNode, {attributes: true});
+    const reloadDiagram = () => {
+        resetDiagram();
+        loadDiagram();
     };
 
     /**
@@ -284,19 +313,15 @@
         $.getJSON(url, data, function (response) {
             // focus
             diagrams.focus();
-
             // error?
             if (!response.result) {
                 showError(response.message);
                 return;
             }
-
             // reload diagram
             diagram.textContent = response.diagram.content;
             saveDiagram();
-            resetDiagram();
-            loadDiagram();
-
+            reloadDiagram();
             // update history
             pushState(response.diagram.name);
         });
@@ -312,10 +337,11 @@
         }
     });
 
-    // save and initialize diagrams.
+    // save and load diagrams.
     saveDiagram();
     loadDiagram();
 
-    // add a listener for the theme attribute
-    addThemeObserver();
+    // add listener when the theme data attribute change.
+    const observer = new MutationObserver(() => reloadDiagram());
+    observer.observe(rootNode, {attributeFilter: [THEME_ATTRIBUTE]});
 })();

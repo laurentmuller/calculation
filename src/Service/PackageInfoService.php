@@ -44,7 +44,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  *      require?: array<string, string>,
  *      require-dev?: array<string, string>}
  */
-readonly class PackageInfoService
+readonly class PackageInfoService implements \Countable
 {
     private const JSON_FILE = 'installed.json';
     private const LICENSE_PATTERN = '{license{*},LICENSE{*}}';
@@ -55,6 +55,12 @@ readonly class PackageInfoService
         #[Target('calculation.symfony')]
         private CacheInterface $cache,
     ) {
+    }
+
+    #[\Override]
+    public function count(): int
+    {
+        return \count($this->getPackages());
     }
 
     /**

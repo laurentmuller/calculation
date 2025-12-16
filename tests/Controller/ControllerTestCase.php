@@ -34,10 +34,11 @@ abstract class ControllerTestCase extends AuthenticateWebTestCase
     /**
      * Checks the given route.
      *
-     * @param string $url      the URL to be tested
-     * @param string $username the username to log in
-     * @param int    $expected the expected result
-     * @param string $method   the request method
+     * @param string $url            the URL to be tested
+     * @param string $username       the username to log in
+     * @param int    $expected       the expected result
+     * @param string $method         the request method
+     * @param bool   $xmlHttpRequest true if XMLHttpRequest
      */
     #[DataProvider('getRoutes')]
     public function testRoutes(

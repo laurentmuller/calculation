@@ -33,18 +33,11 @@ final class StrengthValidatorTest extends ConstraintValidatorTestCase
 
     private const EMPTY_MESSAGE = 'empty';
 
-    public static function getStrengthInvalids(): \Generator
-    {
-        yield [-2];
-        yield [5];
-    }
-
     public static function getStrengthLevels(): \Generator
     {
         $levels = StrengthLevel::cases();
         foreach ($levels as $level) {
             yield [$level];
-            yield [$level->value];
         }
     }
 
@@ -56,7 +49,7 @@ final class StrengthValidatorTest extends ConstraintValidatorTestCase
     }
 
     #[DataProvider('getStrengthLevels')]
-    public function testEmptyIsValid(StrengthLevel|int $level): void
+    public function testEmptyIsValid(StrengthLevel $level): void
     {
         $constraint = new Strength($level);
         $this->validator->validate('', $constraint);
@@ -79,7 +72,7 @@ final class StrengthValidatorTest extends ConstraintValidatorTestCase
     }
 
     #[DataProvider('getStrengthLevels')]
-    public function testNullIsValid(StrengthLevel|int $level): void
+    public function testNullIsValid(StrengthLevel $level): void
     {
         $constraint = new Strength($level);
         $this->validator->validate(null, $constraint);
@@ -122,14 +115,6 @@ final class StrengthValidatorTest extends ConstraintValidatorTestCase
         } else {
             self::assertNoViolation();
         }
-    }
-
-    #[DataProvider('getStrengthInvalids')]
-    public function testStrengthInvalid(int $strength): void
-    {
-        $this->expectException(ConstraintDefinitionException::class);
-        $this->expectExceptionMessage('Unable to find a strength level for the value ' . $strength . '.');
-        new Strength($strength);
     }
 
     #[\Override]

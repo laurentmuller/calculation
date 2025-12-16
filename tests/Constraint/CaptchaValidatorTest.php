@@ -45,7 +45,7 @@ final class CaptchaValidatorTest extends ConstraintValidatorTestCase
         $validator = $this->initValidator(false);
         $validator->validate('dummy', $contraint);
         $this->buildViolation('captcha.timeout')
-            ->setCode(Captcha::IS_TIMEOUT_ERROR)
+            ->setCode(Captcha::TIMEOUT_ERROR)
             ->assertRaised();
     }
 
@@ -55,7 +55,7 @@ final class CaptchaValidatorTest extends ConstraintValidatorTestCase
         $validator = $this->initValidator(true, false);
         $validator->validate('dummy', $contraint);
         $this->buildViolation('captcha.invalid')
-            ->setCode(Captcha::IS_INVALID_ERROR)
+            ->setCode(Captcha::INVALID_ERROR)
             ->assertRaised();
     }
 

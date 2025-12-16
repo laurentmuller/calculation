@@ -480,7 +480,7 @@ class SchemaService
 
     private function mapName(Name $name): string
     {
-        return \strtolower($name->toString());
+        return \strtolower(\trim($name->toString(), '"'));
     }
 
     /**

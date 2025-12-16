@@ -70,7 +70,7 @@ class StrengthValidator extends AbstractConstraintValidator
             '%minimum%' => $this->service->translateLevel($constraint->minimum),
             '%score%' => $this->service->translateLevel($score),
         ];
-        $this->context->buildViolation($constraint->strength_message)
+        $this->context->buildViolation($constraint->message)
             ->setCode(Strength::STRENGTH_ERROR)
             ->setParameters($parameters)
             ->addViolation();

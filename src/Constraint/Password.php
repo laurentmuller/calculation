@@ -49,24 +49,9 @@ class Password extends Constraint
     ];
 
     /**
-     * Test all violations (true) or stop after the first violation found (false).
-     */
-    public bool $all = false;
-
-    /**
-     * Checks if the password contains upper and lower characters.
-     */
-    public bool $caseDiff = false;
-
-    /**
      * Case diff error message.
      */
     public string $caseDiffMessage = 'password.caseDiff';
-
-    /**
-     * Checks if the password is an e-mail.
-     */
-    public bool $email = false;
 
     /**
      * Email error message.
@@ -74,19 +59,9 @@ class Password extends Constraint
     public string $emailMessage = 'password.email';
 
     /**
-     * Checks if the password contains letters.
-     */
-    public bool $letter = false;
-
-    /**
      * Letters error message.
      */
     public string $letterMessage = 'password.letter';
-
-    /**
-     * Checks if the password contains numbers.
-     */
-    public bool $number = false;
 
     /**
      * Numbers error message.
@@ -94,35 +69,31 @@ class Password extends Constraint
     public string $numberMessage = 'password.number';
 
     /**
-     * Checks if the password contains special characters.
-     */
-    public bool $specialChar = false;
-
-    /**
      * Special char error message.
      */
     public string $specialCharMessage = 'password.specialChar';
 
+    /**
+     * @param bool $all         test all violations (true) or stop after the first violation found (false)
+     * @param bool $letter      checks if the password contains letters
+     * @param bool $caseDiff    checks if the password contains upper and lower characters
+     * @param bool $number      checks if the password contains numbers
+     * @param bool $specialChar checks if the password contains special characters
+     * @param bool $email       checks if the password is an e-mail
+     */
     #[HasNamedArguments]
     public function __construct(
-        ?bool $all = null,
-        ?bool $letter = null,
-        ?bool $caseDiff = null,
-        ?bool $number = null,
-        ?bool $specialChar = null,
-        ?bool $email = null,
+        public bool $all = false,
+        public bool $letter = false,
+        public bool $caseDiff = false,
+        public bool $number = false,
+        public bool $specialChar = false,
+        public bool $email = false,
         ?array $options = null,
         ?array $groups = null,
         mixed $payload = null
     ) {
         parent::__construct($options, $groups, $payload);
-
-        $this->all = $all ?? $this->all;
-        $this->letter = $letter ?? $this->letter;
-        $this->caseDiff = $caseDiff ?? $this->caseDiff;
-        $this->number = $number ?? $this->number;
-        $this->specialChar = $specialChar ?? $this->specialChar;
-        $this->email = $email ?? $this->email;
     }
 
     /**

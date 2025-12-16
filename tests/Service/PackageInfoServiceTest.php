@@ -19,17 +19,29 @@ use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 final class PackageInfoServiceTest extends TestCase
 {
+    private PackageInfoService $service;
+
+    #[\Override]
+    protected function setUp(): void
+    {
+        $this->service = $this->createService();
+    }
+
+    public function testCount(): void
+    {
+        $actual = \count($this->service);
+        self::assertSame(3, $actual);
+    }
+
     public function testGetDebugPackages(): void
     {
-        $service = $this->createService();
-        $actual = $service->getDebugPackages();
+        $actual = $this->service->getDebugPackages();
         self::assertNotEmpty($actual);
     }
 
     public function testGetPackageFound(): void
     {
-        $service = $this->createService();
-        $actual = $service->getPackage('symfony/mime');
+        $actual = $this->service->getPackage('symfony/mime');
         self::assertSame('symfony/mime', $actual['name']);
     }
 
@@ -37,43 +49,37 @@ final class PackageInfoServiceTest extends TestCase
     {
         self::expectException(\InvalidArgumentException::class);
         self::expectExceptionMessage('Unknown package name: "fake/fake".');
-        $service = $this->createService();
-        $service->getPackage('fake/fake');
+        $this->service->getPackage('fake/fake');
     }
 
     public function testGetPackages(): void
     {
-        $service = $this->createService();
-        $actual = $service->getPackages();
+        $actual = $this->service->getPackages();
         self::assertNotEmpty($actual);
     }
 
     public function testGetRuntimePackages(): void
     {
-        $service = $this->createService();
-        $actual = $service->getRuntimePackages();
+        $actual = $this->service->getRuntimePackages();
         self::assertNotEmpty($actual);
     }
 
     public function testHasPackage(): void
     {
-        $service = $this->createService();
-        self::assertTrue($service->hasPackage('symfony/mime'));
-        self::assertFalse($service->hasPackage('fake/fake'));
+        self::assertTrue($this->service->hasPackage('symfony/mime'));
+        self::assertFalse($this->service->hasPackage('fake/fake'));
     }
 
     public function testLicenseFound(): void
     {
-        $service = $this->createService();
-        $package = $service->getPackage('symfony/mime');
+        $package = $this->service->getPackage('symfony/mime');
         self::assertIsArray($package);
         self::assertNull($package['license']);
     }
 
     public function testLicenseNotFound(): void
     {
-        $service = $this->createService();
-        $package = $service->getPackage('symfony/mime');
+        $package = $this->service->getPackage('symfony/mime');
         self::assertIsArray($package);
         self::assertNull($package['license']);
     }

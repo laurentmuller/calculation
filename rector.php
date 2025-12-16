@@ -47,13 +47,13 @@ $skip = [
     MakeInheritedMethodVisibilitySameAsParentRector::class => [
         __DIR__ . '/tests/Fixture/*.php',
     ],
-    // not space before or after statements
+    // no space before or after statements
     NewlineAfterStatementRector::class,
     NewlineBeforeNewAssignSetRector::class,
-    // don't rename exception
-    CatchExceptionNameMatchingTypeRector::class,
     // don't separate constants
     NewlineBetweenClassLikeStmtsRector::class,
+    // don't rename exception
+    CatchExceptionNameMatchingTypeRector::class,
 ];
 
 $sets = [

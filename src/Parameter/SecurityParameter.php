@@ -70,7 +70,7 @@ class SecurityParameter implements ParameterInterface
     /**
      * Gets the password constraint.
      */
-    public function getPasswordConstraint(?bool $all = null): Password
+    public function getPasswordConstraint(bool $all = false): Password
     {
         return new Password(
             all: $all,

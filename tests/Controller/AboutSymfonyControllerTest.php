@@ -13,30 +13,56 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use App\Service\PackageInfoService;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class AboutSymfonyControllerTest extends ControllerTestCase
 {
     #[\Override]
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->setService(PackageInfoService::class, $this->createService());
+    }
+
+    #[\Override]
     public static function getRoutes(): \Generator
     {
-        yield ['/about/symfony/content', self::ROLE_USER, Response::HTTP_FORBIDDEN];
-        yield ['/about/symfony/content', self::ROLE_ADMIN];
-        yield ['/about/symfony/content', self::ROLE_SUPER_ADMIN];
-        yield ['/about/symfony/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN];
-        yield ['/about/symfony/excel', self::ROLE_ADMIN];
-        yield ['/about/symfony/excel', self::ROLE_SUPER_ADMIN];
-        yield ['/about/symfony/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN];
-        yield ['/about/symfony/pdf', self::ROLE_ADMIN];
-        yield ['/about/symfony/pdf', self::ROLE_SUPER_ADMIN];
+        $routes = [
+            '/about/symfony/content',
+            '/about/symfony/excel',
+            '/about/symfony/pdf',
+        ];
+        foreach ($routes as $route) {
+            yield [$route, self::ROLE_USER, Response::HTTP_FORBIDDEN];
+            yield [$route, self::ROLE_ADMIN];
+            yield [$route, self::ROLE_SUPER_ADMIN];
+        }
 
-        $query = '/about/symfony/license?name=';
-        yield [$query . 'symfony/cache-contracts', self::ROLE_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
-        yield [$query . 'fake', self::ROLE_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
+        $queries = [
+            '/about/symfony/license?name=',
+            '/about/symfony/dependency?name=',
+        ];
+        $names = [
+            'symfony/composer',
+            'symfony/property',
+            'symfony/mime',
+            'fake',
+        ];
+        foreach ($queries as $query) {
+            foreach ($names as $name) {
+                yield [$query . $name, self::ROLE_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
+            }
+        }
+    }
 
-        $query = '/about/symfony/dependency?name=';
-        yield [$query . 'symfony/cache-contracts', self::ROLE_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
-        yield [$query . 'fake', self::ROLE_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
+    private function createService(): PackageInfoService
+    {
+        $path = __DIR__ . '/../files/json/';
+        $cache = new ArrayAdapter();
+
+        return new PackageInfoService($path, $cache);
     }
 }

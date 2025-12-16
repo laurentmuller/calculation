@@ -16,7 +16,6 @@ namespace App\Constraint;
 use App\Enums\StrengthLevel;
 use Symfony\Component\Validator\Attribute\HasNamedArguments;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 
 /**
  * Strength constraint.
@@ -31,21 +30,18 @@ class Strength extends Constraint
     ];
 
     /**
-     * The password strength level.
-     */
-    public StrengthLevel $minimum;
-
-    /**
      * The password strength error message.
      */
-    public string $strength_message = 'password.strength_level';
+    public string $message = 'password.strength_level';
 
     /**
-     * @throws ConstraintDefinitionException if the minimum parameter is an integer and cannot be parsed to a strength level
+     * @param StrengthLevel $minimum      the password strength level
+     * @param string|null   $userNamePath the username property path
+     * @param string|null   $emailPath    the email property path
      */
     #[HasNamedArguments]
     public function __construct(
-        StrengthLevel|int $minimum = StrengthLevel::NONE,
+        public StrengthLevel $minimum = StrengthLevel::NONE,
         public ?string $userNamePath = null,
         public ?string $emailPath = null,
         ?array $options = null,
@@ -53,16 +49,6 @@ class Strength extends Constraint
         mixed $payload = null
     ) {
         parent::__construct($options, $groups, $payload);
-
-        if (\is_int($minimum)) {
-            try {
-                $minimum = StrengthLevel::from($minimum);
-            } catch (\ValueError $e) {
-                throw new ConstraintDefinitionException(\sprintf('Unable to find a strength level for the value %d.', $minimum), previous: $e);
-            }
-        }
-
-        $this->minimum = $minimum;
     }
 
     #[\Override]

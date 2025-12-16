@@ -20,6 +20,7 @@ use App\Service\DiagramService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -45,14 +46,14 @@ class DiagramController extends AbstractController
     #[IndexRoute]
     public function index(Request $request, #[MapQueryParameter] ?string $name = null): Response
     {
-        $file = $this->findFile($request, $name);
-        if (\is_string($file)) {
-            throw $this->createNotFoundException($file);
+        $diagram = $this->findDiagram($request->getSession(), $name);
+        if (\is_string($diagram)) {
+            throw $this->createNotFoundException($diagram);
         }
 
         return $this->render('test/diagram.html.twig', [
-            'file' => $file,
-            'files' => $this->getFiles(),
+            'diagrams' => $this->getDiagrams(),
+            'diagram' => $diagram,
         ]);
     }
 
@@ -62,38 +63,38 @@ class DiagramController extends AbstractController
     #[GetRoute(path: '/load', name: 'load')]
     public function load(Request $request, #[MapQueryParameter] string $name): JsonResponse
     {
-        $file = $this->findFile($request, $name);
-        if (\is_string($file)) {
-            return $this->jsonFalse(['message' => $file]);
+        $diagram = $this->findDiagram($request->getSession(), $name);
+        if (\is_string($diagram)) {
+            return $this->jsonFalse(['message' => $diagram]);
         }
 
-        return $this->jsonTrue(['file' => $file]);
+        return $this->jsonTrue(['diagram' => $diagram]);
     }
 
-    private function findFile(Request $request, ?string $name): array|string
+    private function findDiagram(SessionInterface $session, ?string $name): array|string
     {
-        $name ??= $this->getDiagramSession($request);
+        $name ??= $this->getDiagram($session);
         if (!$this->service->hasDiagram($name)) {
             return $this->trans('diagram.error_not_found', ['%name%' => $name]);
         }
-        $file = $this->service->getDiagram($name);
-        $this->setDiagramSession($request, $name);
+        $diagram = $this->service->getDiagram($name);
+        $this->saveDiagram($session, $name);
 
-        return $file;
+        return $diagram;
     }
 
-    private function getDiagramSession(Request $request): string
+    private function getDiagram(SessionInterface $session): string
     {
-        return (string) $request->getSession()->get(self::KEY_DIAGRAM, self::DEFAULT_DIAGRAM);
+        return (string) $session->get(self::KEY_DIAGRAM, self::DEFAULT_DIAGRAM);
     }
 
-    private function getFiles(): array
+    private function getDiagrams(): array
     {
         return \array_column($this->service->getDiagrams(), 'title', 'name');
     }
 
-    private function setDiagramSession(Request $request, string $name): void
+    private function saveDiagram(SessionInterface $session, string $name): void
     {
-        $request->getSession()->set(self::KEY_DIAGRAM, $name);
+        $session->set(self::KEY_DIAGRAM, $name);
     }
 }

@@ -138,7 +138,7 @@
     };
 
     /**
-     * Update the disable state of the given button.
+     * Update the disabled state of the given button.
      * @param {HTMLButtonElement}  button
      * @param {boolean} disabled
      */
@@ -264,6 +264,16 @@
     };
 
     /**
+     * Push a new state to the history.
+     * @param {string} name
+     */
+    const pushState = (name) => {
+        const url = new URL(location);
+        url.searchParams.set('name', name);
+        window.history.pushState({'name': name}, '', url);
+    };
+
+    /**
      * Handle diagrams change selection.
      */
     diagrams.addEventListener('change', function () {
@@ -282,16 +292,13 @@
             }
 
             // reload diagram
-            diagram.textContent = response.file.content;
+            diagram.textContent = response.diagram.content;
             saveDiagram();
             resetDiagram();
             loadDiagram();
 
             // update history
-            const name = response.file.name;
-            const url = new URL(location);
-            url.searchParams.set('name', name);
-            window.history.pushState({'name': name}, '', url);
+            pushState(response.diagram.name);
         });
     });
 

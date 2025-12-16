@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Abstract entity with a category, a unit and a supplier.
+ * Abstract entity with a category, a unit, and a supplier.
  */
 #[ORM\MappedSuperclass]
 abstract class AbstractCategoryItemEntity extends AbstractEntity implements TimestampableInterface

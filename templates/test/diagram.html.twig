@@ -16,8 +16,8 @@
         <div class="d-print-none">
             <div class="input-group input-group-sm">
                 <select class="form-select form-select-sm w-auto" id="diagrams" name="diagrams">
-                    {% for key, value in files %}
-                        <option value="{{ key }}"{% if file.name == key %} selected{% endif %}>{{ value }}</option>
+                    {% for name, title in diagrams %}
+                        <option value="{{ name }}"{% if diagram.name == name %} selected{% endif %}>{{ title }}</option>
                     {% endfor %}
                 </select>
                 <span class="input-group-text text-center d-inline" id="zoom" title="{{ 'diagram.zoom'|trans }}">100 %</span>
@@ -37,7 +37,7 @@
 {# body #}
 {% block card_body -%}
 <div id="diagram" class="diagram" data-url="{{ path('diagram_load') }}" data-error="{{ 'diagram.error_not_found'|trans }}">
-    {{- file.content -}}
+    {{- diagram.content -}}
 </div>
 {% endblock card_body %}
 {# stylesheets #}

@@ -41,10 +41,10 @@ classDiagram
     EntityInterface <|.. AbstractEntity
     AbstractCodeEntity <|-- Group
     AbstractEntity <|-- AbstractCodeEntity
+    AbstractMargin <|-- GroupMargin
 
     Group "0" --* "*" GroupMargin
     Group "0" --> "*" Category
-    AbstractMargin --|> GroupMargin
     Category "0" --> "*" Product
     Category "0" --> "*" Task
 

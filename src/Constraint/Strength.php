@@ -50,10 +50,4 @@ class Strength extends Constraint
     ) {
         parent::__construct($options, $groups, $payload);
     }
-
-    #[\Override]
-    public function getDefaultOption(): string
-    {
-        return 'minimum';
-    }
 }

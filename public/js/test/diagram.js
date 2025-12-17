@@ -130,9 +130,7 @@
             primaryTextColor: colors.textColor,
             primaryColor: colors.backgroundColor,
             primaryBorderColor: colors.borderColor,
-            lineColor: colors.borderColor,
-            // secondaryColor: '#006100',
-            // tertiaryColor: '#FFF'
+            lineColor: colors.borderColor
         };
     };
 
@@ -151,10 +149,11 @@
 
     /**
      * Listener to zoom wheel panzoom.
+     * @param {WheelEvent} e the wheel event.
      */
-    const zoomWheelListener = () => {
+    const zoomWheelListener = (e) => {
         if (panzoom) {
-            panzoom.zoomWithWheel();
+            panzoom.zoomWithWheel(e);
         }
     };
 
@@ -190,7 +189,7 @@
     /**
      * Listener to reset panzoom.
      */
-    const resetListener = () => {
+    const resetZoomListener = () => {
         if (panzoom) {
             panzoom.reset({startScale: 1});
         }
@@ -205,7 +204,7 @@
         svgDiagram.removeEventListener('panzoomchange', zoomChangeListener);
         zoomOut.removeEventListener('click', zoomOutListener);
         zoomIn.removeEventListener('click', zoomInListener);
-        reset.removeEventListener('click', resetListener);
+        reset.removeEventListener('click', resetZoomListener);
     };
 
     /**
@@ -213,11 +212,11 @@
      * @param {SVGSVGElement} svgDiagram
      */
     const addPanzoomListeners = function (svgDiagram) {
-        svgDiagram.parentElement.addEventListener('wheel', zoomWheelListener);
+        svgDiagram.parentElement.addEventListener('wheel', (e) => zoomWheelListener(e));
         svgDiagram.addEventListener('panzoomchange', zoomChangeListener);
         zoomOut.addEventListener('click', zoomOutListener);
         zoomIn.addEventListener('click', zoomInListener);
-        reset.addEventListener('click', resetListener);
+        reset.addEventListener('click', resetZoomListener);
     };
 
     /**
@@ -341,7 +340,26 @@
     saveDiagram();
     loadDiagram();
 
-    // add listener when the theme data attribute change.
+    // add a listener when the theme data attribute is changing
     const observer = new MutationObserver(() => reloadDiagram());
     observer.observe(rootNode, {attributeFilter: [THEME_ATTRIBUTE]});
 })();
+
+/**
+ * Ready function
+ */
+$(function () {
+    'use strict';
+    $('#diagram-modal .btn-copy').copyClipboard();
+    $('#diagram-modal').on('hide.bs.modal', function () {
+        $(this).find('.pre-scrollable').scrollTop(0);
+    }).on('show.bs.modal', function () {
+        const $diagram = $('#diagram');
+        let code = $diagram[0].dataset.code;
+        if (!code) {
+            const name = $('#diagrams option:selected').text();
+            code = $diagram.data('error').replace('%name%', name);
+        }
+        $('#diagram-data').text(code.trim());
+    });
+});

@@ -8,6 +8,11 @@
 {% block card_footer_class ' d-none' %}
 {% block card_body_class ' p-1' %}
 {% block card_header_class ' d-flex-wrap-center' %}
+{# body #}
+{% block body -%}
+    {{ parent() }}
+    {{ include('dialog/dialog_diagram.html.twig') }}
+{% endblock body %}
 {# header #}
 {% block card_header %}
     <div class="me-auto">{{ parent() }}</div>
@@ -30,6 +35,10 @@
                 <button type="button" class="btn btn-outline-secondary btn-zoom-out" title="{{ 'diagram.zoom_out'|trans }}">
                     <i class="fa-solid fa-magnifying-glass-minus"></i>
                 </button>
+                <button type="button" class="btn btn-outline-secondary btn-code" title="{{ 'diagram.content'|trans }}"
+                        data-bs-toggle="modal" data-bs-target="#diagram-modal">
+                    <i class="fa-solid fa-code"></i>
+                </button>
             </div>
         </div>
     </div>
@@ -48,6 +57,8 @@
 {% block javascripts %}
 {% if is_js_debug %}
     {{ parent() }}
+    {{ asset_js('build/clipboard/clipboard.js') }}
+    {{ asset_js('js/plugins/plugin-copy.js') }}
     {{ asset_js('build/mermaid/mermaid.js') }}
     {{ asset_js('build/panzoom/panzoom.js') }}
     {{ asset_js('js/test/diagram.js') }}

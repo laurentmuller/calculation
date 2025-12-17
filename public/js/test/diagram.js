@@ -18,7 +18,7 @@
     const diagram = document.getElementById('diagram');
 
     /**
-     * The diagrams list.
+     * The diagrams list (toolbar).
      * @type {HTMLSelectElement}
      */
     const diagrams = document.getElementById('diagrams');
@@ -30,34 +30,46 @@
     const rootNode = document.documentElement;
 
     /**
-     * The zoom-out button.
-     * @type {HTMLButtonElement}
-     */
-    const zoomOut = document.querySelector('.btn-zoom-out');
-
-    /**
-     * The zoom-in button
-     * @type {HTMLButtonElement}
-     */
-    const zoomIn = document.querySelector('.btn-zoom-in');
-
-    /**
-     * The reset button.
+     * The reset button (toolbar).
      * @type {HTMLButtonElement}
      */
     const reset = document.querySelector('.btn-reset');
 
     /**
-     * The zoom label.
-     * @type {HTMLSpanElement}
+     * The zoom button (toolbar).
+     * @type {HTMLButtonElement}
      */
-    const zoom = document.getElementById('zoom');
+    const buttonZoom = document.querySelector('.btn-zoom');
+
+    /**
+     * The reset zoom button (drop-down).
+     * @type {HTMLButtonElement}
+     */
+    const buttonResetZoom = document.querySelector('.btn-reset-zoom');
+
+    /**
+     * The zoom range input (drop-down).
+     * @type {HTMLInputElement}
+     */
+    const rangeZoom = document.getElementById('rangeZoom');
+
+    /**
+     * The zoom label (drop-down).
+     * @type {HTMLLabelElement}
+     */
+    const rangeLabel = document.getElementById('rangeLabel');
 
     /**
      * The SVG panzoom.
      * @type {Object}
      */
     let panzoom = null;
+
+    /**
+     * The themed colors.
+     * @type {Object.<string, string>}
+     */
+    let themeVariables = null;
 
     /**
      * Gets SVG element.
@@ -68,19 +80,34 @@
     /**
      * The number to format zoom.
      */
-    const zoomFormatter = new Intl.NumberFormat('default', {
+    const zoomFormatter = new Intl.NumberFormat('en', {
         style: 'percent',
         minimumFractionDigits: 0,
         maximumFractionDigits: 0
     });
 
     /**
-     * Show an error message.
+     * Show the given error message.
      * @param {string} message
      */
     const showError = (message) => {
         const title = document.querySelector('.card-title').textContent;
         Toaster.danger(message, title);
+    };
+
+    /**
+     * Sets the zoom value.
+     * @param {number} zoom the zoom to set.
+     */
+    const setZoom = (zoom) => {
+        if (!panzoom) {
+            return;
+        }
+        zoom = Math.max(MIN_SCALE, Math.min(MAX_SCALE, zoom));
+        if (panzoom.getScale() === zoom) {
+            return;
+        }
+        panzoom.zoom(zoom);
     };
 
     /**
@@ -107,31 +134,22 @@
     };
 
     /**
-     * Gets card header colors
-     * @return {{textColor: string, backgroundColor: string, borderColor: string}}
-     */
-    const getColors = () => {
-        const element = document.querySelector('.card-header');
-        const style = getComputedStyle(element);
-        return {
-            textColor: style.color,
-            backgroundColor: style.backgroundColor,
-            borderColor: style.borderBottomColor,
-        };
-    };
-
-    /**
      * Gets the themed color variables.
      * @return {Object.<string, string>}
      */
     const getThemeVariables = () => {
-        const colors = getColors();
-        return {
-            primaryTextColor: colors.textColor,
-            primaryColor: colors.backgroundColor,
-            primaryBorderColor: colors.borderColor,
-            lineColor: colors.borderColor
-        };
+        if (!themeVariables) {
+            const element = document.querySelector('.card-header');
+            const style = getComputedStyle(element);
+            themeVariables = {
+                primaryTextColor: style.color,
+                primaryColor: style.backgroundColor,
+                primaryBorderColor: style.borderBottomColor,
+                lineColor: style.borderBottomColor
+            };
+        }
+
+        return themeVariables;
     };
 
     /**
@@ -162,28 +180,8 @@
      */
     const zoomChangeListener = function (event) {
         const scale = event.detail.scale;
-        updateState(zoomIn, scale >= MAX_SCALE);
-        updateState(zoomOut, scale <= MIN_SCALE);
         updateState(reset, scale === 1 && event.detail.x === 0 && event.detail.y === 0);
-        zoom.textContent = zoomFormatter.format(scale);
-    };
-
-    /**
-     * Listener to zoom out panzoom.
-     */
-    const zoomOutListener = () => {
-        if (panzoom) {
-            panzoom.zoomOut();
-        }
-    };
-
-    /**
-     * Listener to zoom in panzoom.
-     */
-    const zoomInListener = () => {
-        if (panzoom) {
-            panzoom.zoomIn();
-        }
+        buttonZoom.textContent = zoomFormatter.format(scale);
     };
 
     /**
@@ -202,8 +200,6 @@
     const removePanzoomListeners = function (svgDiagram) {
         svgDiagram.parentElement.removeEventListener('wheel', zoomWheelListener);
         svgDiagram.removeEventListener('panzoomchange', zoomChangeListener);
-        zoomOut.removeEventListener('click', zoomOutListener);
-        zoomIn.removeEventListener('click', zoomInListener);
         reset.removeEventListener('click', resetZoomListener);
     };
 
@@ -214,8 +210,6 @@
     const addPanzoomListeners = function (svgDiagram) {
         svgDiagram.parentElement.addEventListener('wheel', (e) => zoomWheelListener(e));
         svgDiagram.addEventListener('panzoomchange', zoomChangeListener);
-        zoomOut.addEventListener('click', zoomOutListener);
-        zoomIn.addEventListener('click', zoomInListener);
         reset.addEventListener('click', resetZoomListener);
     };
 
@@ -285,10 +279,44 @@
 
     /**
      * Reset and load the diagram.
+     * @param {boolean} resetTheme true to reset the themed colors.
      */
-    const reloadDiagram = () => {
+    const reloadDiagram = (resetTheme) => {
+        if (resetTheme) {
+            themeVariables = null;
+        }
         resetDiagram();
         loadDiagram();
+    };
+
+    const initDropDown = () => {
+        rangeZoom.style.minWidth = '15rem';
+        rangeZoom.addEventListener('input', () => {
+            const scale = Number.parseFloat(rangeZoom.value) / 100.0;
+            rangeLabel.textContent = zoomFormatter.format(scale);
+            setZoom(scale);
+        });
+        rangeZoom.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                buttonZoom.focus();
+            }
+        });
+        buttonZoom.addEventListener('show.bs.dropdown', () => {
+            if (panzoom) {
+                const scale = panzoom.getScale();
+                rangeLabel.textContent = zoomFormatter.format(scale);
+                rangeZoom.value = String(scale * 100);
+            }
+        });
+        buttonZoom.addEventListener('shown.bs.dropdown', () => {
+            rangeZoom.focus();
+        });
+        buttonZoom.addEventListener('hidden.bs.dropdown', () => {
+            buttonZoom.focus();
+        });
+        buttonResetZoom.addEventListener('click', () => {
+            setZoom(1);
+        });
     };
 
     /**
@@ -320,7 +348,7 @@
             // reload diagram
             diagram.textContent = response.diagram.content;
             saveDiagram();
-            reloadDiagram();
+            reloadDiagram(false);
             // update history
             pushState(response.diagram.name);
         });
@@ -336,13 +364,16 @@
         }
     });
 
+    // initialize the zoom drop-down
+    initDropDown();
+
+    // add a listener when the theme data attribute is changing
+    const observer = new MutationObserver(() => reloadDiagram(true));
+    observer.observe(rootNode, {attributeFilter: [THEME_ATTRIBUTE]});
+
     // save and load diagrams.
     saveDiagram();
     loadDiagram();
-
-    // add a listener when the theme data attribute is changing
-    const observer = new MutationObserver(() => reloadDiagram());
-    observer.observe(rootNode, {attributeFilter: [THEME_ATTRIBUTE]});
 })();
 
 /**

@@ -1589,6 +1589,7 @@ diagram:
     title: Diagramme de classe
     list: Diagramme
     reset: Réinitialiser la position et le facteur d'agrandissement
+    reset_zoom: Réinitialiser le facteur d'agrandissement
     zoom: Facteur d'agrandissement (Zoom)
     zoom_in: Zoom avant
     zoom_out: Zoom arrière

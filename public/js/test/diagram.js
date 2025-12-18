@@ -9,7 +9,8 @@
     const REPLACE_REGEX = /([a-z])([A-Z])/g;
     const REPLACE_TARGET = '$1_$2';
     const MIN_SCALE = 0.5;
-    const MAX_SCALE = 2.5;
+    const MAX_SCALE = 2.0;
+    const ZOOM_STEP = 0.05;
 
     /**
      * The diagram renderer.
@@ -33,7 +34,7 @@
      * The reset button (toolbar).
      * @type {HTMLButtonElement}
      */
-    const reset = document.querySelector('.btn-reset');
+    const buttonReset = document.querySelector('.btn-reset');
 
     /**
      * The zoom button (toolbar).
@@ -87,6 +88,15 @@
     });
 
     /**
+     * Round the zoom value to the nearest 0.05.
+     * @param {number} value
+     * @return {number}
+     */
+    const roundZoom = (value) => {
+        return Math.ceil(value * 20) / 20;
+    };
+
+    /**
      * Show the given error message.
      * @param {string} message
      */
@@ -103,7 +113,7 @@
         if (!panzoom) {
             return;
         }
-        zoom = Math.max(MIN_SCALE, Math.min(MAX_SCALE, zoom));
+        zoom = Math.max(MIN_SCALE, Math.min(MAX_SCALE, roundZoom(zoom)));
         if (panzoom.getScale() === zoom) {
             return;
         }
@@ -180,7 +190,7 @@
      */
     const zoomChangeListener = function (event) {
         const scale = event.detail.scale;
-        updateState(reset, scale === 1 && event.detail.x === 0 && event.detail.y === 0);
+        updateState(buttonReset, scale === 1 && event.detail.x === 0 && event.detail.y === 0);
         buttonZoom.textContent = zoomFormatter.format(scale);
     };
 
@@ -200,7 +210,7 @@
     const removePanzoomListeners = function (svgDiagram) {
         svgDiagram.parentElement.removeEventListener('wheel', zoomWheelListener);
         svgDiagram.removeEventListener('panzoomchange', zoomChangeListener);
-        reset.removeEventListener('click', resetZoomListener);
+        buttonReset.removeEventListener('click', resetZoomListener);
     };
 
     /**
@@ -210,7 +220,7 @@
     const addPanzoomListeners = function (svgDiagram) {
         svgDiagram.parentElement.addEventListener('wheel', (e) => zoomWheelListener(e));
         svgDiagram.addEventListener('panzoomchange', zoomChangeListener);
-        reset.addEventListener('click', resetZoomListener);
+        buttonReset.addEventListener('click', resetZoomListener);
     };
 
     /**
@@ -233,6 +243,17 @@
             startScale: startScale,
             minScale: MIN_SCALE,
             maxScale: MAX_SCALE,
+            setTransform: (_, {scale, x, y}) => {
+                let newScale = roundZoom(scale);
+                if (newScale !== scale) {
+                    if (newScale === startScale) {
+                        newScale = startScale - ZOOM_STEP;
+                    }
+                }
+                panzoom.setStyle('transform', `scale(${newScale}) translate(${x}px, ${y}px)`);
+                startScale = newScale;
+                setZoom(newScale);
+            }
         });
         // add listeners
         addPanzoomListeners(svgDiagram);
@@ -289,10 +310,13 @@
         loadDiagram();
     };
 
-    const initDropDown = () => {
+    const initZoomDropDown = () => {
+        rangeZoom.min = String(MIN_SCALE);
+        rangeZoom.max = String(MAX_SCALE);
+        rangeZoom.step = String(ZOOM_STEP);
         rangeZoom.style.minWidth = '15rem';
         rangeZoom.addEventListener('input', () => {
-            const scale = Number.parseFloat(rangeZoom.value) / 100.0;
+            const scale = Number.parseFloat(rangeZoom.value);
             rangeLabel.textContent = zoomFormatter.format(scale);
             setZoom(scale);
         });
@@ -305,7 +329,7 @@
             if (panzoom) {
                 const scale = panzoom.getScale();
                 rangeLabel.textContent = zoomFormatter.format(scale);
-                rangeZoom.value = String(scale * 100);
+                rangeZoom.value = String(scale);
             }
         });
         buttonZoom.addEventListener('shown.bs.dropdown', () => {
@@ -365,7 +389,7 @@
     });
 
     // initialize the zoom drop-down
-    initDropDown();
+    initZoomDropDown();
 
     // add a listener when the theme data attribute is changing
     const observer = new MutationObserver(() => reloadDiagram(true));

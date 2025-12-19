@@ -47,6 +47,7 @@ classDiagram
         +setMaximum(float)
         +getValue() float
         +setValue(float)
+        +contains(float) bool
     }
 
     class AbstractEntity {
@@ -59,7 +60,7 @@ classDiagram
     EntityInterface <|.. AbstractEntity
     AbstractEntity <|-- Task
     AbstractCategoryItemEntity <|-- Task
-    AbstractCategoryItemEntity "1" <--> "1" Category
+    AbstractCategoryItemEntity "0" --> "*" Category
     Task "0" --* "*" TaskItem
     TaskItem "0" --* "*" TaskItemMargin
     Category "0" --> "*" Group

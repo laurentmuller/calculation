@@ -2,19 +2,20 @@
 {% from 'macros/_icons.html.twig' import icon %}
 {% from 'macros/_attributes.html.twig' import attributes %}
 {# macros #}
-{% macro button(class, title, icon, attributes = {}) -%}
-    <button type="button" class="btn btn-outline-secondary {{ class }}" title="{{ title|trans }}"{{ attributes(attributes) }}>
+{% macro button(class, title, icon, attr = {}) -%}
+    <button type="button" class="btn btn-outline-secondary {{ class }}" title="{{ title|trans }}"{{ attributes(attr) }}>
         {{- icon(icon) -}}
     </button>
 {%- endmacro button %}
 {# parameters #}
 {%- set title = 'diagram.title' -%}
 {%- set title_icon = 'diagram-project' -%}
+{%- set data_attributes = {url: path('diagram_load'), error: 'diagram.error_not_found'|trans, zoom: zoom} -%}
 {% block container_class 'container-fluid' %}
 {% block card_container_class '' %}
-{% block card_footer_class ' d-none' %}
-{% block card_body_class ' p-1' %}
 {% block card_header_class ' d-flex-wrap-center' %}
+{% block card_body_class ' p-1' %}
+{% block card_footer_class ' d-none' %}
 {# body #}
 {% block body -%}
     {{ parent() }}
@@ -28,20 +29,24 @@
         <div class="d-print-none">
             <div class="input-group input-group-sm">
                 <select class="form-select form-select-sm w-auto" id="diagrams" name="diagrams">
-                    {% for name, title in diagrams %}
-                        <option value="{{ name }}"{% if diagram.name == name %} selected{% endif %}>{{ title }}</option>
+                    {% for current in diagrams %}
+                        <option value="{{ current.name }}"{% if current == diagram %} selected{% endif %}>
+                            {{- current.title -}}
+                        </option>
                     {% endfor %}
                 </select>
-                <button type="button" class="btn btn-sm btn-zoom btn-outline-secondary dropdown-toggle" title="{{ 'diagram.zoom'|trans }}"
-                        data-bs-toggle="dropdown" data-bs-target="#dropdownZoom" aria-expanded="false">
+                <button type="button" class="btn btn-zoom btn-outline-secondary dropdown-toggle"
+                        title="{{ 'diagram.zoom'|trans }}" data-bs-toggle="dropdown" data-bs-target="#dropdownZoom"
+                        aria-expanded="false">
                     {{- 1|percent -}}
                 </button>
                 <div id="dropdownZoom" class="dropdown-menu dropdown-menu-end px-2 py-3">
                     <div class="d-flex-no-wrap-center">
-                        <label id="rangeLabel" for="rangeZoom" class="form-label mb-0">{{ 1.0|percent }}</label>
-                        <input id="rangeZoom" type="range" class="form-range border rounded-pill px-1 py-2">
-                        <button type="button" class="btn btn-sm btn-link btn-reset-zoom" title="{{ 'diagram.reset_zoom'|trans }}">
-                            <i class="fa-solid fa-down-left-and-up-right-to-center"></i>
+                        <input id="rangeZoom" type="range" class="form-range border rounded-pill px-1 py-2"
+                               aria-label="{{ 'diagram.zoom'|trans }}">
+                        <button type="button" class="btn btn-sm btn-link btn-reset-zoom"
+                                title="{{ 'diagram.reset_zoom'|trans }}">
+                            <i class="fa-solid fa-rotate-left"></i>
                         </button>
                     </div>
                 </div>
@@ -56,7 +61,7 @@
 {% endblock card_header %}
 {# body #}
 {% block card_body -%}
-    <div id="diagram" class="diagram" data-url="{{ path('diagram_load') }}" data-error="{{ 'diagram.error_not_found'|trans }}">
+    <div id="diagram" class="diagram"{{ attributes(data_attributes, 'data-') }}>
         {{- diagram.content -}}
     </div>
 {% endblock card_body %}

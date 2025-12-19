@@ -39,3 +39,11 @@ body:not(.sidebar-show) .diagram {
 .diagram svg .error-text {
     stroke: var(--bs-danger) !important;
 }
+
+#rangeZoom {
+    min-width: 14rem;
+}
+
+.btn-zoom {
+    min-width: 4.5rem;
+}

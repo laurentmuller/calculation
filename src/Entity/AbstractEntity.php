@@ -47,7 +47,7 @@ abstract class AbstractEntity implements \Stringable, EntityInterface
     #[\Override]
     public function getDisplay(): string
     {
-        return \sprintf('%d', (int) $this->id);
+        return \sprintf('%d', $this->id ?? 0);
     }
 
     #[\Override]

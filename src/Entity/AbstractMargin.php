@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 abstract class AbstractMargin extends AbstractEntity implements MarginInterface
 {
     /**
-     * The margin in percent (%) to use when an amount is within this range.
+     * The margin in percent (1.0 = 100%) to use when an amount is within this range.
      */
     #[Assert\GreaterThanOrEqual(1.0)]
     #[ORM\Column(type: FixedFloatType::NAME)]
@@ -64,11 +64,15 @@ abstract class AbstractMargin extends AbstractEntity implements MarginInterface
     #[\Override]
     public function getDisplay(): string
     {
-        return FormatUtils::formatAmount($this->getMinimum()) . ' - ' . FormatUtils::formatAmount($this->getMaximum());
+        return \sprintf(
+            '%s - %s',
+            FormatUtils::formatAmount($this->getMinimum()),
+            FormatUtils::formatAmount($this->getMaximum())
+        );
     }
 
     /**
-     * Get margin in percent.
+     * Get margin in percent (1.0 = 100%).
      */
     public function getMargin(): float
     {
@@ -96,7 +100,7 @@ abstract class AbstractMargin extends AbstractEntity implements MarginInterface
     }
 
     /**
-     * Set the margin in percent.
+     * Set the margin in percent (1.0 = 100%).
      */
     public function setMargin(float $margin): static
     {

@@ -117,7 +117,11 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
     }
 
     /**
-     * Gets the margin for the given quantity.
+     * Finds the margin for the given quantity.
+     *
+     * @param float $quantity the quantity to get margin for
+     *
+     * @return ?TaskItemMargin the margin, if found; null otherwise
      */
     public function findMargin(float $quantity): ?TaskItemMargin
     {
@@ -129,7 +133,7 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
     /**
      * Finds the item margin value for the given quantity.
      *
-     * @param float $quantity the quantity to get value for
+     * @param float $quantity the quantity to get the value for
      *
      * @return float the value of the item margin, if found; 0 otherwise
      *

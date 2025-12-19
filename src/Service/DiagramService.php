@@ -127,6 +127,6 @@ class DiagramService implements \Countable
             $content = \substr($content, $pos + 3);
         }
 
-        return $content;
+        return \trim($content);
     }
 }

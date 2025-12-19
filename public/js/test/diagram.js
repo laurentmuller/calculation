@@ -182,6 +182,22 @@
     };
 
     /**
+     * Push or replace a new state to the history.
+     * @param {String} name the diagram name
+     * @param {Boolean} replace true to replace, false to push
+     */
+    const pushState = (name, replace = false) => {
+        const url = new URL(location);
+        url.searchParams.set('name', name);
+        url.searchParams.set('zoom', String(getZoom()));
+        if (replace) {
+            window.history.replaceState({'name': name}, '', url);
+        } else {
+            window.history.pushState({'name': name}, '', url);
+        }
+    };
+
+    /**
      * Listener to zoom wheel panzoom.
      * @param {WheelEvent} e the wheel event.
      */
@@ -338,22 +354,6 @@
         buttonResetZoom.addEventListener('click', () => {
             setZoom(DEFAULT_ZOOM);
         });
-    };
-
-    /**
-     * Push or replace a new state to the history.
-     * @param {String} name the diagram name
-     * @param {Boolean} replace true to replace, false to push
-     */
-    const pushState = (name, replace = false) => {
-        const url = new URL(location);
-        url.searchParams.set('name', name);
-        url.searchParams.set('zoom', String(getZoom()));
-        if (replace) {
-            window.history.replaceState({'name': name}, '', url);
-        } else {
-            window.history.pushState({'name': name}, '', url);
-        }
     };
 
     /**

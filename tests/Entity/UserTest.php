@@ -110,7 +110,7 @@ final class UserTest extends EntityValidatorTestCase
         }
     }
 
-    public function testEmailAddress(): void
+    public function testEmailAndAddress(): void
     {
         $user = new User();
         $user->setUsername('user')
@@ -120,7 +120,7 @@ final class UserTest extends EntityValidatorTestCase
         self::assertSame('user@mail.com', $user->getEmail());
         self::assertSame('user (user@mail.com)', $user->getNameAndEmail());
 
-        $address = $user->getEmailAddress();
+        $address = $user->getAddress();
         self::assertSame('user', $address->getName());
         self::assertSame('user@mail.com', $address->getAddress());
     }

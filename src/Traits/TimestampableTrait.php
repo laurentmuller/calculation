@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use App\Interfaces\TimestampableInterface;
 use App\Interfaces\UserInterface;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
@@ -25,7 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Trait for class implementing the TimestampableInterface interface.
  *
- * @phpstan-require-implements \App\Interfaces\TimestampableInterface
+ * @phpstan-require-implements TimestampableInterface
  */
 trait TimestampableTrait
 {

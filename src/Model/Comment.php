@@ -193,6 +193,6 @@ class Comment
 
     private function convertAddress(string|Address|User $address): Address
     {
-        return $address instanceof User ? $address->getEmailAddress() : Address::create($address);
+        return $address instanceof User ? $address->getAddress() : Address::create($address);
     }
 }

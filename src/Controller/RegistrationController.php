@@ -115,7 +115,7 @@ class RegistrationController extends AbstractController
             ->subject(new TranslatableMessage('registration.subject'))
             ->importance(Importance::MEDIUM)
             ->from($this->getAddressFrom())
-            ->to($user->getEmailAddress());
+            ->to($user->getAddress());
     }
 
     private function findUser(Request $request): ?User

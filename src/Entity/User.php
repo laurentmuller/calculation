@@ -17,6 +17,7 @@ use App\Interfaces\ComparableInterface;
 use App\Interfaces\TimestampableInterface;
 use App\Interfaces\UserInterface;
 use App\Repository\UserRepository;
+use App\Traits\ResetPasswordRequestTrait;
 use App\Traits\RoleTrait;
 use App\Traits\TimestampableTrait;
 use App\Utils\DateUtils;
@@ -49,6 +50,7 @@ use Vich\UploaderBundle\Storage\StorageInterface;
 #[Vich\Uploadable]
 class User extends AbstractEntity implements ComparableInterface, TimestampableInterface, UserInterface
 {
+    use ResetPasswordRequestTrait;
     use RoleTrait;
     use TimestampableTrait;
 
@@ -60,13 +62,6 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
 
     #[ORM\Column(options: ['default' => true])]
     private bool $enabled = true;
-
-    #[ORM\Column(type: DatePointType::NAME, nullable: true)]
-    private ?DatePoint $expiresAt = null;
-
-    #[Assert\Length(max: 100)]
-    #[ORM\Column(length: 100, nullable: true)]
-    private ?string $hashedToken = null;
 
     /**
      * The image file. NB: This is not a mapped field of entity metadata, just a simple property.
@@ -102,13 +97,6 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
         orphanRemoval: true
     )]
     private Collection $properties;
-
-    #[ORM\Column(type: DatePointType::NAME, nullable: true)]
-    private ?DatePoint $requestedAt = null;
-
-    #[Assert\Length(max: 20)]
-    #[ORM\Column(length: 20, nullable: true)]
-    private ?string $selector = null;
 
     #[Assert\NotBlank]
     #[Assert\NoSuspiciousCharacters]
@@ -181,16 +169,11 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     }
 
     /**
-     * Removes the reset password request values.
+     * Gets email address.
      */
-    public function eraseResetPasswordRequest(): self
+    public function getAddress(): Address
     {
-        $this->requestedAt = null;
-        $this->expiresAt = null;
-        $this->selector = null;
-        $this->hashedToken = null;
-
-        return $this;
+        return new Address((string) $this->email, (string) $this->username);
     }
 
     #[\Override]
@@ -205,26 +188,6 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     public function getEmail(): ?string
     {
         return $this->email;
-    }
-
-    /**
-     * Gets email address.
-     */
-    public function getEmailAddress(): Address
-    {
-        return new Address((string) $this->email, (string) $this->username);
-    }
-
-    #[\Override]
-    public function getExpiresAt(): DatePoint
-    {
-        return $this->expiresAt ?? DateUtils::createDatePoint();
-    }
-
-    #[\Override]
-    public function getHashedToken(): string
-    {
-        return (string) $this->hashedToken;
     }
 
     /**
@@ -285,7 +248,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
      */
     public function getNameAndEmail(): string
     {
-        return \sprintf('%s (%s)', $this->getUserIdentifier(), (string) $this->getEmail());
+        return \sprintf('%s (%s)', $this->getUserIdentifier(), $this->getEmail());
     }
 
     #[\Override]
@@ -302,23 +265,6 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     public function getProperties(): Collection
     {
         return $this->properties;
-    }
-
-    #[\Override]
-    public function getRequestedAt(): DatePoint
-    {
-        return $this->requestedAt ?? DateUtils::createDatePoint();
-    }
-
-    public function getSelector(): ?string
-    {
-        return $this->selector;
-    }
-
-    #[\Override]
-    public function getUser(): self
-    {
-        return $this;
     }
 
     /**
@@ -351,20 +297,6 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     public function isEnabled(): bool
     {
         return $this->enabled;
-    }
-
-    #[\Override]
-    public function isExpired(): bool
-    {
-        return !$this->expiresAt instanceof DatePoint || $this->expiresAt->getTimestamp() <= \time();
-    }
-
-    /**
-     * Returns a value indicating if the reset password was requested.
-     */
-    public function isResetPassword(): bool
-    {
-        return null !== $this->hashedToken;
     }
 
     /**
@@ -445,22 +377,6 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     public function setPassword(string $password): self
     {
         $this->password = $password;
-
-        return $this;
-    }
-
-    /**
-     * Sets the reset password request values.
-     *
-     * @param string $selector    a non-hashed random string used to fetch a request from persistence
-     * @param string $hashedToken the hashed token used to verify a reset request
-     */
-    public function setResetPasswordRequest(DatePoint $expiresAt, string $selector, string $hashedToken): self
-    {
-        $this->expiresAt = $expiresAt;
-        $this->selector = $selector;
-        $this->hashedToken = $hashedToken;
-        $this->requestedAt = DateUtils::createDatePoint();
 
         return $this;
     }

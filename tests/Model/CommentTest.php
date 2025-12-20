@@ -78,7 +78,7 @@ final class CommentTest extends TestCase
         $user = $this->createUser();
         $comment->setFrom($user);
         $actual = $comment->getFrom();
-        $expected = $user->getEmailAddress();
+        $expected = $user->getAddress();
         self::assertEqualsCanonicalizing($expected, $actual);
     }
 
@@ -97,7 +97,7 @@ final class CommentTest extends TestCase
         $user = $this->createUser();
         $comment->setTo($user);
         $actual = $comment->getTo();
-        $expected = $user->getEmailAddress();
+        $expected = $user->getAddress();
         self::assertEqualsCanonicalizing($expected, $actual);
     }
 

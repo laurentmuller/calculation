@@ -207,7 +207,7 @@ class NotificationEmail extends BaseNotificationEmail
     private function convertAddresses(string|Address|User ...$addresses): array
     {
         return \array_map(
-            static fn (string|Address|User $address): string|Address => $address instanceof User ? $address->getEmailAddress() : $address,
+            static fn (string|Address|User $address): string|Address => $address instanceof User ? $address->getAddress() : $address,
             $addresses
         );
     }

@@ -165,7 +165,7 @@ readonly class ResetPasswordService
             ->subject(new TranslatableMessage('resetting.request.title'))
             ->importance(Importance::HIGH)
             ->from($this->getAddressFrom())
-            ->to($user->getEmailAddress())
+            ->to($user->getAddress())
             ->action($this->trans('resetting.request.submit'), $this->getResetAction($token))
             ->context([
                 'token' => $token->getToken(),

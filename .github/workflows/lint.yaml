@@ -23,10 +23,13 @@ jobs:
                 run: php bin/console lint:yaml translations .github/workflows --parse-tags
 
             -   name: Lint Twig
-                run: php bin/console lint:twig templates
+                run: php bin/console lint:twig templates --show-deprecations
 
             -   name: Lint Container
                 run: php bin/console lint:container
+
+            -   name: Lint Translations
+                run: php bin/console lint:translations --locale fr_CH
 
             -   name: Lint Markdown
                 uses: DavidAnson/markdownlint-cli2-action@v21

@@ -3,7 +3,7 @@
         "stylelint-config-standard"
     ],
     "rules": {
-        "number-max-precision": [6],
+        "number-max-precision": 6,
         "selector-attribute-quotes": "never",
         "import-notation": "string",
         "no-descending-specificity": null,

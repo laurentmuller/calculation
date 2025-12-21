@@ -77,7 +77,9 @@ class TestController extends AbstractController
         $helper = $this->createFormHelper('user.fields.', $data);
         $helper->field('subject')->addTextType()
             ->field('message')->addTextType()
-            ->field('captcha')->updateOption('expectedAction', $expectedAction)->add(ReCaptchaType::class)
+            ->field('captcha')
+            ->updateOption('expectedAction', $expectedAction)
+            ->add(ReCaptchaType::class)
             ->getBuilder()->setAttribute('block_name', '');
         $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {

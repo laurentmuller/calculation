@@ -36,12 +36,10 @@ class GroupType extends AbstractEntityType
         $helper->field('code')
             ->maxLength(EntityInterface::MAX_CODE_LENGTH)
             ->addTextType();
-
         $helper->field('description')
             ->maxLength(EntityInterface::MAX_STRING_LENGTH)
             ->notRequired()
             ->addTextareaType();
-
         $helper->field('margins')
             ->addCollectionType(GroupMarginType::class);
     }

@@ -37,25 +37,20 @@ class TaskType extends AbstractEntityType
         $helper->field('name')
             ->maxLength(EntityInterface::MAX_STRING_LENGTH)
             ->addTextType();
-
         $helper->field('category')
             ->add(CategoryListType::class);
-
         $helper->field('unit')
             ->autocomplete('off')
             ->notRequired()
             ->maxLength(15)
             ->addTextType();
-
         $helper->field('supplier')
             ->autocomplete('off')
             ->updateOption('prepend_icon', 'fa-solid fa-dolly')
             ->maxLength(EntityInterface::MAX_STRING_LENGTH)
             ->notRequired()
             ->addTextType();
-
         $helper->field('items')
-            ->updateOption('prototype_name', '__itemIndex__')
-            ->addCollectionType(TaskItemType::class);
+            ->addCollectionType(TaskItemType::class, '__itemIndex__');
     }
 }

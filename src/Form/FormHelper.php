@@ -52,7 +52,6 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Exception\UnexpectedValueException;
 use Symfony\Contracts\Translation\TranslatableInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Vich\UploaderBundle\Form\Type\VichImageType;
@@ -188,25 +187,23 @@ class FormHelper
     /**
      * Add a collection type to the builder with the given entry type and reset all values to the default.
      *
-     * @param string               $entryType the entry type class must be a subclass of the FormTypeInterface class
-     * @param array<string, mixed> $options   the default options to override
+     * @template TValue
+     * @template TFormType of FormTypeInterface<TValue>
      *
-     * @throws UnexpectedValueException if the entry type is not an instance of FormTypeInterface class
+     * @param class-string<TFormType> $entryType     the entry type
+     * @param ?string                 $prototypeName the optional prototype name
      */
-    public function addCollectionType(string $entryType, array $options = []): self
+    public function addCollectionType(string $entryType, ?string $prototypeName = null): self
     {
-        if (!\is_a($entryType, FormTypeInterface::class, true)) {
-            throw new UnexpectedValueException($entryType, FormTypeInterface::class);
-        }
-
-        $options = \array_merge([
+        $options = [
             'label' => false,
             'allow_add' => true,
             'allow_delete' => true,
             'by_reference' => false,
             'entry_type' => $entryType,
+            'prototype_name' => $prototypeName,
             'entry_options' => ['label' => false],
-        ], $options);
+        ];
 
         return $this->updateOptions($options)
             ->add(CollectionType::class);
@@ -249,8 +246,10 @@ class FormHelper
     public function addEmailType(): self
     {
         return $this->updateAttribute('inputmode', 'email')
-            ->updateOption('prepend_icon', 'fa-solid fa-at')
-            ->updateOption('prepend_class', 'input-group-email')
+            ->updateOptions([
+                'prepend_icon' => 'fa-solid fa-at',
+                'prepend_class' => 'input-group-email',
+            ])
             ->add(EmailType::class);
     }
 
@@ -307,8 +306,10 @@ class FormHelper
     public function addMoneyType(?string $currency = 'CHF'): self
     {
         return $this->widgetClass('text-end')
-            ->updateOption('currency', $currency)
-            ->updateOption('html5', true)
+            ->updateOptions([
+                'currency' => $currency,
+                'html5' => true,
+            ])
             ->add(MoneyType::class);
     }
 
@@ -322,9 +323,11 @@ class FormHelper
         $input_mode = $scale > 0 ? 'decimal' : 'numeric';
 
         return $this->widgetClass('text-end')
-            ->updateAttribute('inputmode', $input_mode)
-            ->updateAttribute('scale', $scale)
             ->updateOption('html5', true)
+            ->updateAttributes([
+                'inputmode' => $input_mode,
+                'scale' => $scale,
+            ])
             ->add(NumberType::class);
     }
 
@@ -346,24 +349,19 @@ class FormHelper
      *
      * @param ?int  $min  the minimum value allowed (inclusive) or null if none
      * @param ?int  $max  the maximum value allowed (inclusive) or null if none
-     * @param float $step the step increment or a negative value if none
+     * @param float $step the step increment or a non-positive value if none
      */
     public function addPercentType(?int $min = null, ?int $max = null, float $step = 1.0): self
     {
         $this->widgetClass('text-end')
-            ->updateAttribute('inputmode', 'decimal')
             ->updateOption('html5', true)
-            ->autocomplete('off');
-
-        if (null !== $min) {
-            $this->updateAttribute('min', $min);
-        }
-        if (null !== $max) {
-            $this->updateAttribute('max', $max);
-        }
-        if ($step > 0) {
-            $this->updateAttribute('step', $step);
-        }
+            ->autocomplete('off')
+            ->updateAttributes([
+                'inputmode' => 'decimal',
+                'min' => $min,
+                'max' => $max,
+                'step' => $step > 0 ? $step : null,
+            ]);
 
         return $this->add(PercentType::class);
     }
@@ -378,11 +376,9 @@ class FormHelper
      */
     public function addPlainType(bool $expanded = true): self
     {
-        if ($expanded) {
-            $this->updateOption('expanded', true);
-        }
-
-        return $this->notRequired()->add(PlainType::class);
+        return $this->notRequired()
+            ->updateOption('expanded', $expanded)
+            ->add(PlainType::class);
     }
 
     /**
@@ -441,10 +437,12 @@ class FormHelper
      */
     public function addTelType(?string $pattern = null): self
     {
-        return $this->updateOption('prepend_icon', 'fa-solid fa-phone')
-            ->updateOption('prepend_class', 'input-group-phone')
-            ->updateAttribute('inputmode', 'tel')
-            ->updateAttribute('pattern', $pattern)
+        return $this->updateAttributes([
+            'inputmode' => 'tel',
+            'pattern' => $pattern])
+            ->updateOptions([
+                'prepend_icon' => 'fa-solid fa-phone',
+                'prepend_class' => 'input-group-phone'])
             ->add(TelType::class);
     }
 
@@ -490,10 +488,12 @@ class FormHelper
      */
     public function addUrlType(string $protocol = 'https', ?string $icon = null): self
     {
-        return $this->updateOption('default_protocol', $protocol)
-            ->updateOption('prepend_icon', $icon ?? 'fa-solid fa-globe')
-            ->updateOption('prepend_class', 'input-group-url')
-            ->updateAttribute('inputmode', 'url')
+        return $this->updateAttribute('inputmode', 'url')
+            ->updateOptions([
+                'default_protocol' => $protocol,
+                'prepend_icon' => $icon ?? 'fa-solid fa-globe',
+                'prepend_class' => 'input-group-url',
+            ])
             ->add(UrlType::class);
     }
 
@@ -757,11 +757,11 @@ class FormHelper
     }
 
     /**
-     * Sets the required property to false.
+     * Sets the required option to false.
      */
     public function notRequired(): self
     {
-        return $this->required(false);
+        return $this->updateOption('required', false);
     }
 
     /**
@@ -792,16 +792,6 @@ class FormHelper
     public function readonly(): self
     {
         return $this->updateAttribute('readonly', true);
-    }
-
-    /**
-     * Sets the required property.
-     *
-     * @param bool $required <code>true</code> if required, <code>false</code> otherwise
-     */
-    public function required(bool $required): self
-    {
-        return $this->updateOption('required', $required);
     }
 
     /**

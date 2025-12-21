@@ -40,8 +40,10 @@ abstract class AbstractRightsType extends AbstractHelperType
     {
         $helper->field($field)
             ->label('user.fields.role')
-            ->updateOption('prepend_icon', 'fa-solid fa-user-tag')
-            ->updateOption('value_transformer', $this->service->translateRole(...))
+            ->updateOptions([
+                'prepend_icon' => 'fa-solid fa-user-tag',
+                'value_transformer' => $this->service->translateRole(...),
+            ])
             ->addPlainType();
     }
 

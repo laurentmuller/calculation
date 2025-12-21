@@ -40,7 +40,7 @@ body:not(.sidebar-show) .diagram {
     stroke: var(--bs-danger) !important;
 }
 
-#rangeZoom {
+.range-zoom {
     min-width: 14rem;
 }
 

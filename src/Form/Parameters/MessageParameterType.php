@@ -31,14 +31,16 @@ class MessageParameterType extends AbstractParameterType
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('position')
-            ->updateOption('prepend_icon', 'fa-solid fa-crosshairs')
             ->label('parameters.fields.message_position')
+            ->updateOption('prepend_icon', 'fa-solid fa-crosshairs')
             ->addEnumType(MessagePosition::class);
 
         $helper->field('timeout')
-            ->updateOption('prepend_icon', 'fa-solid fa-alarm-clock')
             ->label('parameters.fields.message_timeout')
-            ->updateOption('choice_translation_domain', false)
+            ->updateOptions([
+                'prepend_icon' => 'fa-solid fa-alarm-clock',
+                'choice_translation_domain' => false,
+            ])
             ->addChoiceType($this->getTimeoutChoice());
 
         $helper->field('progress')

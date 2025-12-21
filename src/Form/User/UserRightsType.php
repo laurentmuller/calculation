@@ -38,8 +38,10 @@ class UserRightsType extends AbstractRightsType
             ->label('user.fields.username_full')
             ->addPlainType();
         $helper->field('enabled')
-            ->updateOption('prepend_icon', 'fa-solid fa-user-check')
-            ->updateOption('value_transformer', $this->translateEnabled(...))
+            ->updateOptions([
+                'prepend_icon' => 'fa-solid fa-user-check',
+                'value_transformer' => $this->translateEnabled(...),
+            ])
             ->addPlainType();
         $helper->field('overwrite')
             ->addCheckboxType();

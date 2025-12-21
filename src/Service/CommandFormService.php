@@ -21,7 +21,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 
 /**
- * Service to build form for a command.
+ * Service to create forms for a command.
  *
  * @phpstan-import-type CommandType from CommandService
  * @phpstan-import-type InputType from CommandService
@@ -110,8 +110,10 @@ readonly class CommandFormService
             ->label($name)
             ->rowClass('col-6 col-md-3')
             ->updateRowAttributes($attributes)
-            ->updateOption('priority', self::PRIORITY_BOOL)
-            ->required($required)
+            ->updateOptions([
+                'priority' => self::PRIORITY_BOOL,
+                'required' => $required,
+            ])
             ->domain(false)
             ->addCheckboxType(switch: false);
     }
@@ -165,9 +167,11 @@ readonly class CommandFormService
             ->label($name)
             ->rowClass('col-6 col-md-3')
             ->updateAttributes($attributes)
-            ->updateOption('priority', $priority)
+            ->updateOptions([
+                'priority' => $priority,
+                'required' => $required,
+            ])
             ->modelTransformer($transformer)
-            ->required($required)
             ->domain(false)
             ->addTextType();
     }

@@ -50,7 +50,6 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
-use Symfony\Component\Validator\Exception\UnexpectedValueException;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
 final class FormHelperTest extends TypeTestCase
@@ -153,15 +152,14 @@ final class FormHelperTest extends TypeTestCase
         $this->validateForm(
             form: $actual,
             class: CollectionType::class,
+            options: [
+                'label' => false,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+                'entry_type' => TextType::class,
+            ]
         );
-    }
-
-    public function testCollectionTypeException(): void
-    {
-        self::expectException(UnexpectedValueException::class);
-        $helper = $this->getFormHelper();
-        $helper->field(self::FIELD)
-            ->addCollectionType(self::class);
     }
 
     public function testColorType(): void
@@ -789,7 +787,9 @@ final class FormHelperTest extends TypeTestCase
             ->createForm();
         $this->validateForm(
             form: $actual,
-            class: UrlType::class
+            class: UrlType::class,
+            options: ['default_protocol' => 'https'],
+            attributes: ['inputmode' => 'url']
         );
     }
 

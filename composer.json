@@ -166,8 +166,9 @@
     "scripts": {
         "app-lint": [
             "@php bin/console lint:yaml translations .github/workflows --parse-tags",
-            "@php bin/console lint:twig templates",
+            "@php bin/console lint:twig templates --show-deprecations",
             "@php bin/console lint:container",
+            "@php bin/console lint:translations --locale fr_CH",
             "@php bin/console doctrine:schema:validate --skip-sync",
             "@composer validate --strict"
         ],

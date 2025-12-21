@@ -15,7 +15,6 @@ namespace App\Tests\Form\Type;
 
 use App\Entity\User;
 use App\Form\Type\PlainType;
-use App\Tests\Fixture\FixtureDataForm;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
 use Symfony\Component\Clock\DatePoint;
@@ -28,22 +27,14 @@ final class PlainTypeTest extends TypeTestCase
     use PreloadedExtensionsTrait;
     use TranslatorMockTrait;
 
-    public function testExceptException(): void
-    {
-        self::expectException(TransformationFailedException::class);
-        $data = new FixtureDataForm();
-        $this->factory->create(PlainType::class, $data)
-            ->createView();
-    }
-
-    public function testWithArray(): void
+    public function testArray(): void
     {
         $data = [1, 2, 3];
         $expected = '1, 2, 3';
         $this->validateViewValue($data, $expected);
     }
 
-    public function testWithBoolWithDisplayTransformer(): void
+    public function testBoolWithDisplayTransformer(): void
     {
         $data = 'fake';
         $expected = 'fake';
@@ -57,7 +48,7 @@ final class PlainTypeTest extends TypeTestCase
         self::assertSame($expected, $actual);
     }
 
-    public function testWithBoolWithValueTransformer(): void
+    public function testBoolWithValueTransformer(): void
     {
         $expected = 'common.value_true';
         $callback = static fn (): bool => true;
@@ -65,7 +56,7 @@ final class PlainTypeTest extends TypeTestCase
         $this->validateViewValue(true, $expected, $options);
     }
 
-    public function testWithDateWithDateAndTime(): void
+    public function testDateWithDateAndTime(): void
     {
         $data = new DatePoint('2024-06-10 12:22:03');
         $expected = '10.06.2024 12:22';
@@ -77,7 +68,7 @@ final class PlainTypeTest extends TypeTestCase
         $this->validateViewValue($data, $expected, $options);
     }
 
-    public function testWithDateWithDateOnly(): void
+    public function testDateWithDateOnly(): void
     {
         $data = new DatePoint('2024-06-10 12:22:03');
         $expected = '10.06.2024';
@@ -89,7 +80,7 @@ final class PlainTypeTest extends TypeTestCase
         $this->validateViewValue($data, $expected, $options);
     }
 
-    public function testWithDateWithTimeOnly(): void
+    public function testDateWithTimeOnly(): void
     {
         $data = new DatePoint('2024-06-10 12:22:03');
         $expected = '12:22';
@@ -101,14 +92,14 @@ final class PlainTypeTest extends TypeTestCase
         $this->validateViewValue($data, $expected, $options);
     }
 
-    public function testWithEmpty(): void
+    public function testEmptyDefault(): void
     {
         $data = '';
         $expected = 'common.value_null';
         $this->validateViewValue($data, $expected);
     }
 
-    public function testWithEmptyWithCallback(): void
+    public function testEmptyWithCallback(): void
     {
         $data = '';
         $expected = 'callback';
@@ -117,7 +108,15 @@ final class PlainTypeTest extends TypeTestCase
         $this->validateViewValue($data, $expected, $options);
     }
 
-    public function testWithEntity(): void
+    public function testEmptyWithNull(): void
+    {
+        $data = null;
+        $expected = 'custom_empty_text';
+        $options = ['empty_value' => $expected];
+        $this->validateViewValue($data, $expected, $options);
+    }
+
+    public function testEntity(): void
     {
         $data = new User();
         $data->setUsername('username');
@@ -125,7 +124,15 @@ final class PlainTypeTest extends TypeTestCase
         $this->validateViewValue($data, $expected);
     }
 
-    public function testWithNumberAmount(): void
+    public function testInvalidDataValue(): void
+    {
+        self::expectException(TransformationFailedException::class);
+        self::expectExceptionMessage('Unable to map instance of "stdClass" to string.');
+        $this->factory->create(PlainType::class, new \stdClass())
+            ->createView();
+    }
+
+    public function testNumberAmount(): void
     {
         $data = 1;
         $expected = '1.00';
@@ -133,7 +140,7 @@ final class PlainTypeTest extends TypeTestCase
         $this->validateViewValue($data, $expected, $options);
     }
 
-    public function testWithNumberIdentifier(): void
+    public function testNumberIdentifier(): void
     {
         $data = 123;
         $expected = '000123';
@@ -141,7 +148,7 @@ final class PlainTypeTest extends TypeTestCase
         $this->validateViewValue($data, $expected, $options);
     }
 
-    public function testWithNumberInteger(): void
+    public function testNumberInteger(): void
     {
         $data = 123456;
         $expected = "123'456";
@@ -149,7 +156,7 @@ final class PlainTypeTest extends TypeTestCase
         $this->validateViewValue($data, $expected, $options);
     }
 
-    public function testWithNumberPercent(): void
+    public function testNumberPercent(): void
     {
         $data = 0.1;
         $expected = '10.00%';
@@ -157,7 +164,7 @@ final class PlainTypeTest extends TypeTestCase
         $this->validateViewValue($data, $expected, $options);
     }
 
-    public function testWithNumeric(): void
+    public function testNumeric(): void
     {
         $data = 123456;
         $expected = '123456';

@@ -88,7 +88,7 @@
     {# help #}
     {% if command.help %}
         {{ _self.outputTitleCollapse('help', query.help) }}
-        <div id="help" class="ms-2 mt-2 collapse{% if query.help %}  show{% endif %}">
+        <div id="help" class="ms-2 mt-2 collapse{% if query.help %} show{% endif %}">
             <pre class="fs-6 mb-0 text-wrap">{{ command.help|raw|nl2br }}</pre>
         </div>
     {% endif %}

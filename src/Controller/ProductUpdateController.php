@@ -94,14 +94,18 @@ class ProductUpdateController extends AbstractController
             ->add(EntityType::class);
 
         $helper->field('percent')
-            ->updateAttribute('data-type', ProductUpdateQuery::UPDATE_PERCENT)
-            ->updateAttribute('aria-label', $this->trans('product.update.percent'))
+            ->updateAttributes([
+                'data-type' => ProductUpdateQuery::UPDATE_PERCENT,
+                'aria-label' => $this->trans('product.update.percent'),
+            ])
             ->help('product.update.percent_help')
             ->addPercentType();
 
         $helper->field('fixed')
-            ->updateAttribute('data-type', ProductUpdateQuery::UPDATE_FIXED)
-            ->updateAttribute('aria-label', $this->trans('product.update.fixed'))
+            ->updateAttributes([
+                'data-type' => ProductUpdateQuery::UPDATE_FIXED,
+                'aria-label' => $this->trans('product.update.fixed'),
+            ])
             ->help('product.update.fixed_help')
             ->addNumberType();
 

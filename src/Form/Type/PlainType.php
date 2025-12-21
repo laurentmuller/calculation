@@ -112,7 +112,7 @@ class PlainType extends AbstractType
     {
         $data = $form->getViewData();
         $value = $this->getDataValue($data, $options);
-        $display_value = $this->getDisplayValue($data, $options, $value);
+        $display_value = $this->transform($options['display_transformer'], $data, $value);
 
         $view->vars = \array_replace($view->vars, [
             'value' => $value,
@@ -307,49 +307,18 @@ class PlainType extends AbstractType
      */
     private function getDataValue(mixed $value, array $options): string
     {
-        $value = $this->transformValue($value, $options);
+        $value = $this->transform($options['value_transformer'], $value, $value);
 
-        if (\is_bool($value)) {
-            return $this->formatBool($value);
-        }
-
-        if (null === $value || '' === $value) {
-            return $this->formatEmpty($value, $options);
-        }
-
-        if (\is_array($value)) {
-            return $this->formatArray($value, $options);
-        }
-
-        if ($value instanceof EntityInterface) {
-            return $value->getDisplay();
-        }
-
-        if ($value instanceof DatePoint) {
-            return $this->formatDate($value, $options);
-        }
-
-        if (\is_numeric($value)) {
-            return $this->formatNumber($value, $options);
-        }
-
-        if (\is_scalar($value) || $value instanceof \Stringable) {
-            return (string) $value;
-        }
-
-        throw new TransformationFailedException(\sprintf('Unable to map the instance of "%s" to a string.', StringUtils::getDebugType($value)));
-    }
-
-    /**
-     * @phpstan-param OptionsType $options
-     */
-    private function getDisplayValue(mixed $value, array $options, string $default): string
-    {
-        if (\is_callable($options['display_transformer'])) {
-            return \call_user_func($options['display_transformer'], $value) ?? $default;
-        }
-
-        return $default;
+        return match (true) {
+            $value instanceof EntityInterface => $value->getDisplay(),
+            $value instanceof DatePoint => $this->formatDate($value, $options),
+            null === $value || '' === $value => $this->formatEmpty($value, $options),
+            \is_bool($value) => $this->formatBool($value),
+            \is_array($value) => $this->formatArray($value, $options),
+            \is_numeric($value) => $this->formatNumber($value, $options),
+            \is_scalar($value) || $value instanceof \Stringable => (string) $value,
+            default => throw new TransformationFailedException(\sprintf('Unable to map instance of "%s" to string.', StringUtils::getDebugType($value)))
+        };
     }
 
     private function trans(string $id): string
@@ -358,14 +327,17 @@ class PlainType extends AbstractType
     }
 
     /**
-     * @phpstan-param OptionsType $options
+     * @template TValue
+     *
+     * @phpstan-param ?callable(mixed): ?TValue $callable
+     * @phpstan-param TValue                    $default
      */
-    private function transformValue(mixed $value, array $options): mixed
+    private function transform(?callable $callable, mixed $value, mixed $default): mixed
     {
-        if (\is_callable($options['value_transformer'])) {
-            return \call_user_func($options['value_transformer'], $value) ?? $value;
+        if (\is_callable($callable)) {
+            return \call_user_func($callable, $value) ?? $default;
         }
 
-        return $value;
+        return $default;
     }
 }

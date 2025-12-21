@@ -42,7 +42,6 @@ class CalculationCategoryType extends AbstractEntityType
         $helper->field('position')
             ->addHiddenType();
         $helper->field('items')
-            ->updateOption('prototype_name', '__itemIndex__')
-            ->addCollectionType(CalculationItemType::class);
+            ->addCollectionType(CalculationItemType::class, '__itemIndex__');
     }
 }

@@ -36,26 +36,19 @@ class CalculationType extends AbstractEntityType
     {
         $helper->field('date')
             ->addDatePointType();
-
         $helper->field('customer')
             ->maxLength(EntityInterface::MAX_STRING_LENGTH)
             ->autocomplete('off')
             ->addTextType();
-
         $helper->field('description')
             ->maxLength(EntityInterface::MAX_STRING_LENGTH)
             ->addTextType();
-
         $helper->field('userMargin')
             ->percent(true)
             ->addPercentType(-100, 300);
-
         $helper->field('state')
             ->add(CalculationStateListType::class);
-
-        // groupes
         $helper->field('groups')
-            ->updateOption('prototype_name', '__groupIndex__')
-            ->addCollectionType(CalculationGroupType::class);
+            ->addCollectionType(CalculationGroupType::class, '__groupIndex__');
     }
 }

@@ -37,12 +37,9 @@ class TaskItemType extends AbstractEntityType
             ->widgetClass('unique-name')
             ->maxLength(EntityInterface::MAX_STRING_LENGTH)
             ->addTextType();
-
         $helper->field('position')
             ->addHiddenType();
-
         $helper->field('margins')
-            ->updateOption('prototype_name', '__marginIndex__')
-            ->addCollectionType(TaskItemMarginType::class);
+            ->addCollectionType(TaskItemMarginType::class, '__marginIndex__');
     }
 }

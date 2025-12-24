@@ -46,7 +46,7 @@ trait GroupByTrait
             return $result;
         }
 
-        /** @phpstan-var callable(array): array $function */
+        /** @phpstan-var callable $function */
         $function = [self::class, __FUNCTION__]; // @phpstan-ignore varTag.nativeType
         $slice_args = \array_slice(\func_get_args(), 2);
         foreach ($result as $groupKey => $value) {
@@ -57,6 +57,9 @@ trait GroupByTrait
         return $result;
     }
 
+    /**
+     * @param array<array-key, array-key>|object $value
+     */
     private function getGroupKey(array|object $value, string|int|callable $key): string|int
     {
         if (\is_callable($key)) {
@@ -64,11 +67,9 @@ trait GroupByTrait
         }
 
         if (\is_array($value)) {
-            /** @phpstan-var array-key */
             return $value[$key];
         }
 
-        /** @phpstan-var array-key */
         return $value->{$key}; // @phpstan-ignore property.dynamicName
     }
 }

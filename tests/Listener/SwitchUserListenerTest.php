@@ -113,9 +113,6 @@ final class SwitchUserListenerTest extends TestCase
         );
     }
 
-    /**
-     * @param non-empty-string $name
-     */
     private function createUser(string $name): User
     {
         return (new User())->setUsername($name);

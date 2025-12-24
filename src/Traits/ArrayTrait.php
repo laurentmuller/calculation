@@ -49,16 +49,15 @@ trait ArrayTrait
      * @template TValue
      *
      * @param array<TKey, TValue> $array    the array that should be searched
-     * @param \Closure            $callback The callback function to call to find a matching element.
+     * @param callable            $callback The callback function to call to find a matching element.
      *                                      The first parameter contains the value ($value), the second parameter
      *                                      contains the corresponding key ($key).
      *
-     * @phpstan-param \Closure(TValue, TKey=): bool $callback
+     * @phpstan-param callable(TValue, TKey): bool $callback
      *
-     * @return TValue|null a value if there is at least one element for which callback returns <code>true</code>,
-     *                     null otherwise
+     * @return TValue|null a value if there is at least one element for which callback returns true, null otherwise
      */
-    public function findFirst(array $array, \Closure $callback): mixed
+    public function findFirst(array $array, callable $callback): mixed
     {
         return \array_find($array, $callback);
     }
@@ -142,7 +141,7 @@ trait ArrayTrait
      */
     public function getFiltered(array $values, ?callable $callback = null, int $mode = 0): array
     {
-        // @phpstan-ignore-next-line
+        /** @phpstan-var T[] */
         return \array_filter($values, $callback, $mode);
     }
 

@@ -22,9 +22,9 @@ use Twig\Attribute\AsTwigFilter;
 final class FormatUtils
 {
     /**
-     * The default date type format.
+     * The default date and time type format.
      */
-    public const DATE_TYPE = \IntlDateFormatter::SHORT;
+    public const DATE_TIME_TYPE = \IntlDateFormatter::SHORT;
 
     /**
      * The decimal separator character.
@@ -57,21 +57,16 @@ final class FormatUtils
     public const THOUSANDS_SEP = "'";
 
     /**
-     * The default time type format.
-     */
-    public const TIME_TYPE = \IntlDateFormatter::SHORT;
-
-    /**
      * The date formatters cache.
      *
-     * @var \IntlDateFormatter[]
+     * @var array<string, \IntlDateFormatter>
      */
     private static array $dateFormatters = [];
 
     /**
      * The number formatters cache.
      *
-     * @var \NumberFormatter[]
+     * @var array<string, \NumberFormatter>
      */
     private static array $numberFormatters = [];
 
@@ -251,22 +246,14 @@ final class FormatUtils
         ?string $pattern = null,
         \DateTimeZone|string|null $timezone = null
     ): \IntlDateFormatter {
-        $locale = self::DEFAULT_LOCALE;
-        $dateType ??= self::DATE_TYPE;
-        $timeType ??= self::TIME_TYPE;
-        $pattern ??= '';
         $hash = self::hashCode($dateType, $timeType, $timezone, $pattern);
-        if (!isset(self::$dateFormatters[$hash])) {
-            $formatter = new \IntlDateFormatter($locale, $dateType, $timeType, $timezone, pattern: $pattern);
-            $pattern = (string) $formatter->getPattern();
-            if (!\str_contains($pattern, 'yyyy') && \str_contains($pattern, 'yy')) {
-                $pattern = \str_replace('yy', 'yyyy', $pattern);
-                $formatter->setPattern($pattern);
-            }
-            self::$dateFormatters[$hash] = $formatter;
-        }
 
-        return self::$dateFormatters[$hash];
+        return self::$dateFormatters[$hash] ??= self::createDateFormatter(
+            dateType: $dateType,
+            timeType: $timeType,
+            pattern: $pattern,
+            timezone: $timezone
+        );
     }
 
     /**
@@ -286,17 +273,13 @@ final class FormatUtils
         string $percentSymbol = ''
     ): \NumberFormatter {
         $hash = self::hashCode($style, $digits, $roundingMode, $percentSymbol);
-        if (!isset(self::$numberFormatters[$hash])) {
-            $formatter = new \NumberFormatter(self::DEFAULT_LOCALE, $style);
-            $formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $digits);
-            $formatter->setAttribute(\NumberFormatter::ROUNDING_MODE, $roundingMode);
-            $formatter->setSymbol(\NumberFormatter::GROUPING_SEPARATOR_SYMBOL, self::THOUSANDS_SEP);
-            $formatter->setSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL, self::DECIMAL_SEP);
-            $formatter->setSymbol(\NumberFormatter::PERCENT_SYMBOL, $percentSymbol);
-            self::$numberFormatters[$hash] = $formatter;
-        }
 
-        return self::$numberFormatters[$hash];
+        return self::$numberFormatters[$hash] ??= self::createNumberFormatter(
+            style: $style,
+            digits: $digits,
+            roundingMode: $roundingMode,
+            percentSymbol: $percentSymbol
+        );
     }
 
     /**
@@ -312,6 +295,44 @@ final class FormatUtils
         $value = (float) $number;
 
         return ($value ** -1.0) === -\INF ? 0.0 : $value;
+    }
+
+    private static function createDateFormatter(
+        ?int $dateType = null,
+        ?int $timeType = null,
+        ?string $pattern = null,
+        \DateTimeZone|string|null $timezone = null
+    ): \IntlDateFormatter {
+        $formatter = new \IntlDateFormatter(
+            locale: self::DEFAULT_LOCALE,
+            dateType: $dateType ?? self::DATE_TIME_TYPE,
+            timeType: $timeType ?? self::DATE_TIME_TYPE,
+            timezone: $timezone,
+            pattern: $pattern
+        );
+
+        $pattern = (string) $formatter->getPattern();
+        if (\str_contains($pattern, 'yy') && !\str_contains($pattern, 'yyyy')) {
+            $formatter->setPattern(\str_replace('yy', 'yyyy', $pattern));
+        }
+
+        return $formatter;
+    }
+
+    private static function createNumberFormatter(
+        int $style,
+        int $digits,
+        int $roundingMode = \NumberFormatter::ROUND_HALFEVEN,
+        string $percentSymbol = ''
+    ): \NumberFormatter {
+        $formatter = new \NumberFormatter(self::DEFAULT_LOCALE, $style);
+        $formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $digits);
+        $formatter->setAttribute(\NumberFormatter::ROUNDING_MODE, $roundingMode);
+        $formatter->setSymbol(\NumberFormatter::PERCENT_SYMBOL, $percentSymbol);
+        $formatter->setSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL, self::DECIMAL_SEP);
+        $formatter->setSymbol(\NumberFormatter::GROUPING_SEPARATOR_SYMBOL, self::THOUSANDS_SEP);
+
+        return $formatter;
     }
 
     private static function hashCode(\DateTimeZone|string|int|null ...$values): string

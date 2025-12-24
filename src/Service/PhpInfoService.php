@@ -46,34 +46,33 @@ class PhpInfoService
         );
 
         $result = [];
-        $matchs = null;
         $regexInfo = '<info>([^<]+)<\/info>';
         $regex2cols = \sprintf('/%1$s\s*%1$s/i', $regexInfo);
         $regex3cols = \sprintf('/%1$s\s*%1$s\s*%1$s/i', $regexInfo);
         $regexLine = '/<h2[^>]*>([^<]+)<\/h2>/i';
 
         /** @var array<int, string> $array */
-        $array = (array) \preg_split('/(<h2[^>]*>[^<]+<\/h2>)/i', $content, -1, \PREG_SPLIT_DELIM_CAPTURE);
+        $array = (array) \preg_split('/(<h2[^>]*>[^<]+<\/h2>)/i', $content, flags: \PREG_SPLIT_DELIM_CAPTURE);
         foreach ($array as $index => $entry) {
-            if (StringUtils::pregMatch($regexLine, $entry, $matchs)) {
-                $name = \trim($matchs[1]);
-                $vals = StringUtils::splitLines($array[$index + 1]);
-                foreach ($vals as $val) {
-                    if (StringUtils::pregMatch($regex3cols, $val, $matchs)) {
+            if (StringUtils::pregMatch($regexLine, $entry, $matches)) {
+                $name = \trim($matches[1]);
+                $values = StringUtils::splitLines($array[$index + 1]);
+                foreach ($values as $value) {
+                    if (StringUtils::pregMatch($regex3cols, $value, $matches)) {
                         // 3 columns
-                        $match1 = \trim($matchs[1]);
-                        $match2 = $this->convert(\trim($matchs[2]));
-                        $match3 = $this->convert(\trim($matchs[3]));
+                        $match1 = \trim($matches[1]);
+                        $match2 = $this->convert(\trim($matches[2]));
+                        $match3 = $this->convert(\trim($matches[3]));
                         if (!StringUtils::equalIgnoreCase('directive', $match1)) {
                             $result[$name][$match1] = [
                                 'local' => $match2,
                                 'master' => $match3,
                             ];
                         }
-                    } elseif (StringUtils::pregMatch($regex2cols, $val, $matchs)) {
+                    } elseif (StringUtils::pregMatch($regex2cols, $value, $matches)) {
                         // 2 columns
-                        $match1 = \trim($matchs[1]);
-                        $match2 = $this->convert(\trim($matchs[2]));
+                        $match1 = \trim($matches[1]);
+                        $match2 = $this->convert(\trim($matches[2]));
                         $result[$name][$match1] = $match2;
                     }
                 }

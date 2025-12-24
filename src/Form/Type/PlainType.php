@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Form\Type;
 
+use App\Interfaces\DateFormatInterface;
 use App\Interfaces\EntityInterface;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
@@ -53,50 +54,25 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *     value_transformer: callable(mixed):mixed|null,
  *     ...}
  */
-class PlainType extends AbstractType
+class PlainType extends AbstractType implements DateFormatInterface
 {
     /**
-     * The full date or time format.
-     */
-    final public const FORMAT_FULL = \IntlDateFormatter::FULL;
-
-    /**
-     * The long date or time format.
-     */
-    final public const FORMAT_LONG = \IntlDateFormatter::LONG;
-
-    /**
-     * The medium date or time format.
-     */
-    final public const FORMAT_MEDIUM = \IntlDateFormatter::MEDIUM;
-
-    /**
-     * The none date or time format.
-     */
-    final public const FORMAT_NONE = \IntlDateFormatter::NONE;
-
-    /**
-     * The short date or time format.
-     */
-    final public const FORMAT_SHORT = \IntlDateFormatter::SHORT;
-
-    /**
-     * The amount number pattern.
+     * The amount number format.
      */
     final public const NUMBER_AMOUNT = 'price';
 
     /**
-     * The identifier number pattern.
+     * The identifier number format.
      */
     final public const NUMBER_IDENTIFIER = 'identifier';
 
     /**
-     * The integer number pattern.
+     * The integer number format.
      */
     final public const NUMBER_INTEGER = 'integer';
 
     /**
-     * The percent number pattern.
+     * The percent number format.
      */
     final public const NUMBER_PERCENT = 'percent';
 
@@ -133,23 +109,16 @@ class PlainType extends AbstractType
 
     private function configureDate(OptionsResolver $resolver): void
     {
-        $allowedValues = [
-            null,
-            self::FORMAT_FULL,
-            self::FORMAT_LONG,
-            self::FORMAT_MEDIUM,
-            self::FORMAT_SHORT,
-            self::FORMAT_NONE,
-        ];
+        $allowedValues = [null, ...\array_keys(self::DATE_FORMATS)];
 
         $resolver->define('date_format')
             ->default(null)
-            ->allowedTypes('null', 'int')
+            ->allowedTypes('null', 'string')
             ->allowedValues(...$allowedValues);
 
         $resolver->define('time_format')
             ->default(null)
-            ->allowedTypes('null', 'int')
+            ->allowedTypes('null', 'string')
             ->allowedValues(...$allowedValues);
 
         $resolver->define('date_pattern')
@@ -253,12 +222,11 @@ class PlainType extends AbstractType
      */
     private function formatDate(DatePoint|int|null $value, array $options): string
     {
-        return (string) FormatUtils::formatDateTime(
-            $value,
-            $options['date_format'],
-            $options['time_format'],
-            $options['date_pattern'],
-        );
+        $dateType = self::DATE_FORMATS[$options['date_format']] ?? null;
+        $timeType = self::DATE_FORMATS[$options['time_format']] ?? null;
+        $pattern = $options['date_pattern'];
+
+        return (string) FormatUtils::formatDateTime($value, $dateType, $timeType, $pattern);
     }
 
     /**
@@ -329,8 +297,8 @@ class PlainType extends AbstractType
     /**
      * @template TValue
      *
-     * @phpstan-param ?callable(mixed): ?TValue $callable
-     * @phpstan-param TValue                    $default
+     * @param ?callable(mixed): ?TValue $callable
+     * @param TValue                    $default
      */
     private function transform(?callable $callable, mixed $value, mixed $default): mixed
     {

@@ -151,9 +151,6 @@ class PasswordValidator extends AbstractConstraintValidator
         );
     }
 
-    /**
-     * @param non-empty-string $pattern
-     */
     private function validateRegex(bool $enabled, string $pattern, string $value, string $message, string $code): bool
     {
         if ($enabled && !StringUtils::pregMatch($pattern, $value)) {

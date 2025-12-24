@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Database;
 
 use App\Utils\FileUtils;
+use App\Utils\StringUtils;
 
 /**
  * Extended the SQLite3 database with transaction support and caching SQL statements.
@@ -40,18 +41,16 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
     /**
      * Instantiates and opens the database.
      *
-     * @param string $filename       Path to the SQLite database, or <code>:memory:</code> to use
-     *                               the in-memory database.
-     *                               If the filename is an empty string, then a private, temporary on-disk database
-     *                               will be created.
-     *                               This private database will be automatically deleted as soon as the database
-     *                               connection is closed.
-     * @param bool   $readonly       <code>true</code> open the database for reading only. Notes that if the file name
-     *                               does not exist, the database is opened with the
-     *                               <code>SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE</code> flags.
-     * @param string $encryption_key an optional encryption key used when encrypting and decrypting an SQLite database
+     * @param string $filename      Path to the SQLite database, or <code>:memory:</code> to use the in-memory database.
+     *                              If the filename is an empty string, then a private, temporary on-disk database will
+     *                              be created. This private database will be automatically deleted as soon as the
+     *                              database connection is closed.
+     * @param bool   $readonly      <code>true</code> open the database for reading only. Notes that if the file name
+     *                              does not exist, the database is opened with the
+     *                              <code>SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE</code> flags.
+     * @param string $encryptionKey an optional encryption key used when encrypting and decrypting an SQLite database
      */
-    public function __construct(protected string $filename, bool $readonly = false, string $encryption_key = '')
+    public function __construct(protected string $filename, bool $readonly = false, string $encryptionKey = '')
     {
         // check creation state
         $create = '' === $filename || self::IN_MEMORY === $filename
@@ -65,7 +64,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
             $flags = \SQLITE3_OPEN_READWRITE;
         }
 
-        parent::__construct($filename, $flags, $encryption_key);
+        parent::__construct($filename, $flags, $encryptionKey);
 
         // create schema
         if ($create) {
@@ -83,7 +82,9 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
     }
 
     /**
-     * Begin a transaction.
+     * Begin a new transaction.
+     *
+     * <b>Note:</b> if one transaction is already in effect, no new one is started.
      *
      * @return bool true on success; false on failure
      *
@@ -165,17 +166,18 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
     }
 
     /**
-     * Gets the number of records for the given table.
+     * Gets the number of records for the given table name.
      *
-     * @return int<0, max>
+     * @phpstan-return non-negative-int
      */
     public function getRecordsCount(string $table): int
     {
-        $query = 'SELECT COUNT(1) FROM ' . $table;
-        $result = $this->querySingle($query);
+        if (!StringUtils::pregMatch('/^\w+$/', $table)) {
+            throw new \InvalidArgumentException(\sprintf('Invalid table name: "%s".', $table));
+        }
 
-        /** @phpstan-var int<0, max> */
-        return \is_int($result) ? $result : 0;
+        /** @phpstan-var non-negative-int */
+        return $this->querySingle(\sprintf('SELECT COUNT(1) FROM %s;', $table)) ?? 0;
     }
 
     /**

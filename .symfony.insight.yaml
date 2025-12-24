@@ -1,9 +1,9 @@
 php_version: 8.2
 global_exclude_dirs:
     - config
-    - vendor
     - tests
     - var
+    - vendor
 rules:
     web.apache_config:
         enabled: false

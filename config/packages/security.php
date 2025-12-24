@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use App\Entity\User;
 use App\Interfaces\RoleInterface;
 use App\Repository\UserRepository;
 use App\Security\LoginFormAuthenticator;
@@ -70,10 +69,10 @@ return App::config([
                 'security' => false,
             ],
             SecurityAttributes::MAIN_FIREWALL => [
-                'custom_authenticators' => [LoginFormAuthenticator::class],
-                'entry_point' => LoginFormAuthenticator::class,
-                'provider' => 'user_provider',
                 'lazy' => true,
+                'provider' => 'user_provider',
+                'entry_point' => LoginFormAuthenticator::class,
+                'custom_authenticators' => [LoginFormAuthenticator::class],
                 'login_throttling' => [], // allows 5 login attempts per minute
                 'switch_user' => [
                     'role' => RoleInterface::ROLE_SUPER_ADMIN,
@@ -100,7 +99,6 @@ return App::config([
     'when@test' => [
         'security' => [
             'password_hashers' => [
-                User::class => 'plaintext',
                 PasswordAuthenticatedUserInterface::class => 'plaintext',
             ],
         ],

@@ -127,6 +127,13 @@ final class AbstractDatabaseTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    public function testRecordsCountInvalidName(): void
+    {
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage('Invalid table name: "?*".');
+        $this->database->getRecordsCount('?*');
+    }
+
     public function testSearch(): void
     {
         $query = 'SELECT * FROM sy_User WHERE sy_User.username LIKE :value LIMIT :limit';
@@ -142,7 +149,7 @@ final class AbstractDatabaseTest extends TestCase
         $actual = $this->database->getFilename();
         self::assertSame(AbstractDatabase::IN_MEMORY, $actual);
 
-        $actual = $this->database->__toString();
+        $actual = (string) $this->database;
         self::assertSame(AbstractDatabase::IN_MEMORY, $actual);
     }
 

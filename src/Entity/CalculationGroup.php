@@ -395,9 +395,10 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
         }
 
         // margin
-        $margin = $this->group instanceof Group ? $this->group->findPercent($amount) : 0.0;
+        $margin = $this->group?->findPercent($amount) ?? 0.0;
 
-        return $this->setAmount($amount)->setMargin($margin);
+        return $this->setAmount($amount)
+            ->setMargin($margin);
     }
 
     /**

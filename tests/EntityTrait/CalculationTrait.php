@@ -45,11 +45,12 @@ trait CalculationTrait
 
     public function updateCalculation(): void
     {
-        if ($this->calculation instanceof Calculation) {
+        $calculation = $this->calculation;
+        if ($calculation instanceof Calculation) {
             $service = self::getContainer()->get(CalculationUpdateService::class);
             self::assertInstanceOf(CalculationUpdateService::class, $service);
-            $service->updateCalculation($this->calculation); // @phpstan-ignore-line
-            $this->addEntity($this->calculation); // @phpstan-ignore-line
+            $service->updateCalculation($calculation);
+            $this->addEntity($calculation);
         }
     }
 

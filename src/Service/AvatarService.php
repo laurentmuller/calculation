@@ -31,7 +31,6 @@ class AvatarService
      * @param int    $set        the image set (only used if the value is between 1 and 5 inclusive)
      * @param int    $background the background set (only used if the value is between 1 and 2 inclusive)
      *
-     * @phpstan-param non-empty-string $name
      * @phpstan-param int<0,5> $set
      * @phpstan-param int<0,2> $background
      */

@@ -20,7 +20,7 @@ use Twig\Extra\Markdown\MarkdownInterface;
 /**
  * Service to convert Markdown to HTML and to update tags.
  *
- * @phpstan-type TagType = array{0: non-empty-string, 1: non-empty-string, 2?: non-empty-string}
+ * @phpstan-type TagType = array{0: string, 1: string, 2?: string}
  */
 readonly class MarkdownService
 {

@@ -30,8 +30,8 @@ class ProfilePasswordType extends AbstractChangePasswordType
     }
 
     #[\Override]
-    protected function getLabelPrefix(): ?string
+    protected function getLabelPrefix(): string
     {
-        return null;
+        return '';
     }
 }

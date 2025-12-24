@@ -169,8 +169,6 @@ class NotificationEmail extends BaseNotificationEmail
 
     /**
      * Creates a new instance.
-     *
-     * @phpstan-param non-empty-string $template
      */
     public static function instance(
         TranslatorInterface $translator,

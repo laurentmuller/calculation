@@ -207,18 +207,27 @@ final class ArrayTraitTest extends TestCase
     public function testFindFirstWithKey(): void
     {
         $array = [];
+        $closure = static fn (string $value): bool => '' === $value;
+        $actual = $this->findFirst($array, $closure);
+        self::assertNull($actual);
+
         $closure = static fn (string $value, int $key): bool => 2 === $key;
-        $actual = $this->findFirst($array, $closure); // @phpstan-ignore argument.type
+        $actual = $this->findFirst($array, $closure);
         self::assertNull($actual);
 
         $array = $this->createArray();
         $closure = static fn (string $value, int $key): bool => 10 === $key;
-        $actual = $this->findFirst($array, $closure); // @phpstan-ignore argument.type
+        $actual = $this->findFirst($array, $closure);
         self::assertSame('B', $actual);
 
         $closure = static fn (string $value, int $key): bool => 40 === $key;
-        $actual = $this->findFirst($array, $closure); // @phpstan-ignore argument.type
+        $actual = $this->findFirst($array, $closure);
         self::assertNull($actual);
+
+        $array = $this->createArray();
+        $closure = static fn (string $value): bool => 'B' === $value;
+        $actual = $this->findFirst($array, $closure);
+        self::assertSame('B', $actual);
     }
 
     public function testFindFirstWithValue(): void

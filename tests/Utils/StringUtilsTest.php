@@ -223,10 +223,10 @@ final class StringUtilsTest extends TestCase
 
     public function testGetShortNameInvalid(): void
     {
-        $objectOrClass = 'Fake Class';
-        $this->expectException(\RuntimeException::class);
-        // @phpstan-ignore argument.type
-        StringUtils::getShortName($objectOrClass);
+        $objectOrClass = 'FakeClass';
+        self::expectException(\RuntimeException::class);
+        self::expectExceptionMessage('Unable to get short name for "FakeClass".');
+        StringUtils::getShortName($objectOrClass); // @phpstan-ignore argument.type
     }
 
     /**
@@ -251,9 +251,6 @@ final class StringUtilsTest extends TestCase
         self::assertSame("\n", StringUtils::NEW_LINE);
     }
 
-    /**
-     * @phpstan-param non-empty-string $pattern
-     */
     #[DataProvider('getPregMatch')]
     public function testPregMatch(string $pattern, string $subject, bool $expected): void
     {
@@ -261,9 +258,6 @@ final class StringUtilsTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @phpstan-param non-empty-string $pattern
-     */
     #[DataProvider('getPregMatchAll')]
     public function testPregMatchAll(string $pattern, string $subject, bool $expected): void
     {
@@ -271,9 +265,6 @@ final class StringUtilsTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @phpstan-param non-empty-string $pattern
-     */
     #[DataProvider('getPregReplace')]
     public function testPregReplace(string $pattern, string $replacement, string $subject, string $expected): void
     {
@@ -281,9 +272,6 @@ final class StringUtilsTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @phpstan-param non-empty-array<non-empty-string, string> $values
-     */
     #[DataProvider('getPregReplaceAll')]
     public function testPregReplaceAll(array $values, string $subject, string $expected): void
     {

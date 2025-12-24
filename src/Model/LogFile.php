@@ -114,9 +114,6 @@ class LogFile implements \Countable
         return $this;
     }
 
-    /**
-     * @param non-empty-string $name
-     */
     private function updateChannels(string $name): void
     {
         if (!\array_key_exists($name, $this->channels)) {

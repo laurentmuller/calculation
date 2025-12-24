@@ -71,7 +71,7 @@ final class LogLevelTest extends TestCase
         $expected = PsrLevel::WARNING;
         $logLevel = LogLevel::instance($expected);
         self::assertSame($expected, $logLevel->getLevel());
-        self::assertSame($expected, $logLevel->__toString());
+        self::assertSame($expected, (string) $logLevel);
         self::assertSame('Warning', $logLevel->getLevelTitle());
         self::assertCount(0, $logLevel);
     }

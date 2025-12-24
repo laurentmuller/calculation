@@ -456,7 +456,6 @@ abstract class AbstractController extends BaseController
             throw $this->createTranslatedNotFoundException('errors.render_document');
         }
         if (!StringUtils::isString($name) && StringUtils::isString($doc->getTitle())) {
-            /** @phpstan-var non-empty-string $name */
             $name = $doc->getTitle();
         }
 

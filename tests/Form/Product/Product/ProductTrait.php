@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Form\Product;
+namespace App\Tests\Form\Product\Product;
 
 use App\Entity\Product;
 use App\Repository\ProductRepository;

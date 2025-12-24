@@ -107,7 +107,6 @@ final class StringUtils
     public static function encodeJson(mixed $value, int $flags = 0): string
     {
         try {
-            /** @phpstan-var non-empty-string */
             return \json_encode($value, $flags | \JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
             throw new \InvalidArgumentException(\sprintf("Unable to encode value '%s'.", self::getDebugType($value)), $e->getCode(), $e);
@@ -175,7 +174,7 @@ final class StringUtils
         try {
             return (new \ReflectionClass($objectOrClass))->getShortName();
         } catch (\ReflectionException $e) {
-            throw new \RuntimeException(\sprintf("Unable to get short name for '%s'.", self::getDebugType($objectOrClass)), $e->getCode(), $e);
+            throw new \RuntimeException(\sprintf('Unable to get short name for "%s".', self::getDebugType($objectOrClass)), $e->getCode(), $e);
         }
     }
 
@@ -192,18 +191,27 @@ final class StringUtils
     /**
      * Perform a regular expression match.
      *
+     * @template TFlags as int-mask<0, 256, 512>
+     *
      * @param string $pattern the pattern to search for
      * @param string $subject the input string
+     * @param ?array $matches if provided, then they are filled with the search results
+     * @param TFlags $flags   can be a combination of flags
+     * @param int    $offset  to specify the place from which to start the search
      *
-     * @param-out string[] $matches if matches are provided, then they are filled with the search results.
+     * @return bool true if the pattern matches the given subject
      *
-     * @param int $flags  can be a combination of flags
-     * @param int $offset to specify the place from which to start the search
-     *
-     * @phpstan-param non-empty-string $pattern
-     * @phpstan-param 0|256|512|768 $flags
-     *
-     * @return bool <code>true</code> if the pattern matches the given subject
+     * @param-out (
+     *              TFlags is 256
+     *              ? array<array-key, array{string, 0|positive-int}|array{'', -1}>
+     *              : (TFlags is 512
+     *                  ? array<array-key, string|null>
+     *                  : (TFlags is 768
+     *                      ? array<array-key, array{string, 0|positive-int}|array{null, -1}>
+     *                      : array<array-key, string>
+     *                      )
+     *                  )
+     *              ) $matches
      */
     public static function pregMatch(
         string $pattern,
@@ -212,24 +220,45 @@ final class StringUtils
         int $flags = 0,
         int $offset = 0
     ): bool {
-        return 1 === \preg_match($pattern, $subject, $matches, $flags, $offset); // @phpstan-ignore paramOut.type
+        return 1 === \preg_match($pattern, $subject, $matches, $flags, $offset);
     }
 
     /**
      * Perform a global regular expression match.
      *
+     * @template TFlags as int-mask<1, 2, 256, 512>
+     *
      * @param string $pattern the pattern to search for
      * @param string $subject the input string
+     * @param ?array $matches if provided, then they are filled with the search results
+     * @param TFlags $flags   can be a combination of flags
+     * @param int    $offset  to specify the place from which to start the search
      *
-     * @param-out array<int, array> $matches if matches are provided, then they ar filled with the search results.
+     * @return bool true if the pattern matches the given subject
      *
-     * @param int $flags  can be a combination of flags
-     * @param int $offset to specify the place from which to start the search
-     *
-     * @phpstan-param non-empty-string $pattern
-     * @phpstan-param int-mask<1, 2, 256, 512> $flags
-     *
-     * @return bool <code>true</code> if the pattern matches the given subject
+     * @param-out (
+     *           TFlags is 1
+     *           ? array<list<string>>
+     *           : (TFlags is 2
+     *               ? list<array<string>>
+     *               : (TFlags is 256|257
+     *                   ? array<list<array{string, int}>>
+     *                   : (TFlags is 258
+     *                       ? list<array<array{string, int}>>
+     *                       : (TFlags is 512|513
+     *                           ? array<list<?string>>
+     *                           : (TFlags is 514
+     *                               ? list<array<?string>>
+     *                               : (TFlags is 770
+     *                                   ? list<array<array{?string, int}>>
+     *                                   : (TFlags is 0 ? array<list<string>> : array<mixed>)
+     *                               )
+     *                           )
+     *                       )
+     *                   )
+     *               )
+     *           )
+     *         ) $matches
      */
     public static function pregMatchAll(
         string $pattern,
@@ -238,7 +267,6 @@ final class StringUtils
         int $flags = 0,
         int $offset = 0
     ): bool {
-        /** @phpstan-ignore paramOut.type */
         $result = \preg_match_all($pattern, $subject, $matches, $flags, $offset);
 
         return \is_int($result) && $result > 0;

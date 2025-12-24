@@ -108,15 +108,6 @@ class LogService
         return $this->fileValid;
     }
 
-    /**
-     * @phpstan-return non-empty-string
-     */
-    private function parseChannel(string $value): string
-    {
-        /** @phpstan-var non-empty-string */
-        return $value;
-    }
-
     private function parseDate(string $value): ?DatePoint
     {
         try {
@@ -135,15 +126,24 @@ class LogService
             if (6 !== \count($values)) {
                 continue;
             }
+            /**
+             * @phpstan-var array{
+             *     0: string,
+             *     1: string,
+             *     2: LogLevel::*,
+             *     3: string,
+             *     4: string,
+             *     5: string} $values
+             */
             $date = $this->parseDate($values[0]);
             if (!$date instanceof DatePoint) {
                 continue;
             }
             $log = Log::instance($key)
                 ->setCreatedAt($date)
-                ->setChannel($this->parseChannel($values[1]))
-                ->setLevel($this->parseLevel($values[2]))
-                ->setMessage($this->parseMessage($values[3]))
+                ->setChannel($values[1])
+                ->setLevel($values[2])
+                ->setMessage(\trim($values[3]))
                 ->setContext($this->parseJson($values[4]))
                 ->setExtra($this->parseJson($values[5]));
             $file->addLog($log);
@@ -163,19 +163,5 @@ class LogService
         } catch (\InvalidArgumentException) {
             return null;
         }
-    }
-
-    /**
-     * @phpstan-return LogLevel::*
-     */
-    private function parseLevel(string $value): string
-    {
-        /** @phpstan-var LogLevel::*  */
-        return \strtolower($value);
-    }
-
-    private function parseMessage(string $value): string
-    {
-        return \trim($value);
     }
 }

@@ -83,9 +83,6 @@ final class LogTest extends TestCase
         self::assertSame('application', $log->getChannel());
     }
 
-    /**
-     * @phpstan-param non-empty-string $channel
-     */
     #[DataProvider('getChannelIcons')]
     public function testChannelIcon(string $channel, string $expected): void
     {

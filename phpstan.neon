@@ -16,6 +16,7 @@ parameters:
     reportMaybesInPropertyPhpDocTypes: true
     reportStaticMethodSignatures: true
     reportUnmatchedIgnoredErrors: true
+    checkDynamicProperties: true
 
     doctrine:
     	allowNullablePropertyForRequiredField: true

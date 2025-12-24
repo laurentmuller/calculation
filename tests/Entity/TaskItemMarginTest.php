@@ -48,21 +48,14 @@ final class TaskItemMarginTest extends EntityValidatorTestCase
 
         $item = new TaskItem();
         $entity->setTaskItem($item);
+        self::assertNotNull($entity->getTaskItem());
         self::assertSame($item, $entity->getTaskItem());
         self::assertNull($entity->getParentEntity());
 
         $task = new Task();
         $task->addItem($item);
-
-        $actualTaskItem = $entity->getTaskItem();
-        self::assertNotNull($actualTaskItem); // @phpstan-ignore-line
-        self::assertInstanceOf(TaskItem::class, $actualTaskItem); // @phpstan-ignore-line
-        self::assertSame($item, $actualTaskItem); // @phpstan-ignore-line
-
-        $actualParentEntity = $entity->getParentEntity();
-        self::assertNotNull($actualParentEntity); // @phpstan-ignore-line
-        self::assertInstanceOf(Task::class, $actualParentEntity); // @phpstan-ignore-line
-        self::assertSame($task, $actualParentEntity); // @phpstan-ignore-line
+        self::assertNotNull($entity->getParentEntity());
+        self::assertSame($task, $entity->getParentEntity());
     }
 
     public function testValid(): void

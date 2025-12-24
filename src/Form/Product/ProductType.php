@@ -14,17 +14,16 @@ declare(strict_types=1);
 namespace App\Form\Product;
 
 use App\Entity\Product;
-use App\Form\AbstractEntityType;
-use App\Form\Category\CategoryListType;
+use App\Form\AbstractCategoryItemType;
 use App\Form\FormHelper;
 use App\Interfaces\EntityInterface;
 
 /**
  * Product edit type.
  *
- * @extends AbstractEntityType<Product>
+ * @extends AbstractCategoryItemType<Product>
  */
-class ProductType extends AbstractEntityType
+class ProductType extends AbstractCategoryItemType
 {
     public function __construct()
     {
@@ -34,27 +33,11 @@ class ProductType extends AbstractEntityType
     #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
+        parent::addFormFields($helper);
         $helper->field('description')
             ->maxLength(EntityInterface::MAX_STRING_LENGTH)
             ->addTextType();
-
-        $helper->field('unit')
-            ->autocomplete('off')
-            ->maxLength(15)
-            ->notRequired()
-            ->addTextType();
-
         $helper->field('price')
             ->addMoneyType();
-
-        $helper->field('category')
-            ->add(CategoryListType::class);
-
-        $helper->field('supplier')
-            ->autocomplete('off')
-            ->updateOption('prepend_icon', 'fa-solid fa-dolly')
-            ->maxLength(EntityInterface::MAX_STRING_LENGTH)
-            ->notRequired()
-            ->addTextType();
     }
 }

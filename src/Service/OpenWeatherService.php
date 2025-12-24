@@ -306,9 +306,11 @@ class OpenWeatherService extends AbstractHttpClientService
     private function checkErrorCode(array $result): bool
     {
         $code = (int) ($result['cod'] ?? Response::HTTP_OK);
+        if (Response::HTTP_OK === $code) {
+            return true;
+        }
 
-        // @phpstan-ignore booleanOr.rightAlwaysFalse
-        return Response::HTTP_OK === $code || $this->setLastError($code, (string) $result['message']);
+        return $this->setLastError($code, (string) $result['message']);
     }
 
     /**

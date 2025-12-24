@@ -18,6 +18,7 @@ use App\Form\AbstractEntityType;
 use App\Form\CalculationState\CalculationStateListType;
 use App\Form\FormHelper;
 use App\Form\Type\PlainType;
+use App\Interfaces\DateFormatInterface;
 use App\Parameter\ApplicationParameters;
 use App\Utils\FormatUtils;
 use Symfony\Component\Form\Event\PreSetDataEvent;
@@ -46,7 +47,7 @@ class CalculationEditStateType extends AbstractEntityType
             ->addPlainType();
 
         $helper->field('date')
-            ->updateOption('time_format', PlainType::FORMAT_NONE)
+            ->updateOption('time_format', DateFormatInterface::FORMAT_NONE)
             ->widgetClass('text-center')
             ->addPlainType();
 

@@ -383,8 +383,6 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
 
     /**
      * Sets the username.
-     *
-     * @param non-empty-string $username
      */
     public function setUsername(string $username): self
     {

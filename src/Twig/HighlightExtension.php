@@ -27,9 +27,6 @@ use Twig\Environment;
  */
 class HighlightExtension
 {
-    /**
-     * @var array<non-empty-string, string>
-     */
     private const PHP_PATTERNS = [
         '/title="(.*?)"/i' => '',
         '/data-depth=\d+\s/i' => '',

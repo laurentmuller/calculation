@@ -31,9 +31,6 @@ trait LogChannelTrait
      */
     private const APP_CHANNEL_SHORT = 'app';
 
-    /**
-     * @var non-empty-string
-     */
     #[Assert\NotBlank]
     #[Assert\Length(max: 50)]
     #[ORM\Column(length: 50)]
@@ -41,8 +38,6 @@ trait LogChannelTrait
 
     /**
      * Gets the channel's icon.
-     *
-     * @phpstan-return non-empty-string
      */
     public function getChannel(): string
     {
@@ -76,9 +71,6 @@ trait LogChannelTrait
         return \ucfirst($this->channel);
     }
 
-    /**
-     * @param non-empty-string $channel
-     */
     public function setChannel(string $channel): self
     {
         $channel = \strtolower($channel);

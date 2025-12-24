@@ -33,11 +33,11 @@ final class AbstractEntityTest extends TestCase
     {
         $entity = $this->getEntity();
         self::assertSame('0', $entity->getDisplay());
-        self::assertSame('0', $entity->__toString());
+        self::assertSame('0', (string) $entity);
 
         $entity = $this->getEntity(10);
         self::assertSame('10', $entity->getDisplay());
-        self::assertSame('10', $entity->__toString());
+        self::assertSame('10', (string) $entity);
     }
 
     public function testIsNew(): void

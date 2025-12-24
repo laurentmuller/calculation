@@ -267,9 +267,9 @@ final class FormatUtilsTest extends TestCase
         self::assertSame($expected, $actual->getPattern());
     }
 
-    public function testDateType(): void
+    public function testDateTimeType(): void
     {
-        self::assertSame(\IntlDateFormatter::SHORT, FormatUtils::DATE_TYPE);
+        self::assertSame(\IntlDateFormatter::SHORT, FormatUtils::DATE_TIME_TYPE);
     }
 
     public function testDecimalSep(): void
@@ -404,11 +404,6 @@ final class FormatUtilsTest extends TestCase
     public function testThousandsSep(): void
     {
         self::assertSame("'", FormatUtils::THOUSANDS_SEP);
-    }
-
-    public function testTimeType(): void
-    {
-        self::assertSame(\IntlDateFormatter::SHORT, FormatUtils::TIME_TYPE);
     }
 
     private static function createDate(): DatePoint

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Twig;
 
+use App\Interfaces\DateFormatInterface;
 use App\Traits\TranslatorTrait;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
@@ -26,17 +27,9 @@ use Twig\Extension\CoreExtension;
 /**
  * Twig extension to format dates, numbers or boolean values.
  */
-final class FormatExtension
+final class FormatExtension implements DateFormatInterface
 {
     use TranslatorTrait;
-
-    private const DATE_FORMATS = [
-        'none' => \IntlDateFormatter::NONE,
-        'short' => \IntlDateFormatter::SHORT,
-        'medium' => \IntlDateFormatter::MEDIUM,
-        'long' => \IntlDateFormatter::LONG,
-        'full' => \IntlDateFormatter::FULL,
-    ];
 
     private ?CoreExtension $extension = null;
 
@@ -79,7 +72,7 @@ final class FormatExtension
         ?string $dateFormat = null,
         ?string $pattern = null
     ): string {
-        return $this->formatDateTime($env, $date, $dateFormat, 'none', $pattern);
+        return $this->formatDateTime($env, $date, $dateFormat, self::FORMAT_NONE, $pattern);
     }
 
     /**
@@ -135,7 +128,7 @@ final class FormatExtension
         ?string $timeFormat = null,
         ?string $pattern = null
     ): string {
-        return $this->formatDateTime($env, $date, 'none', $timeFormat, $pattern);
+        return $this->formatDateTime($env, $date, self::FORMAT_NONE, $timeFormat, $pattern);
     }
 
     #[\Override]
@@ -168,12 +161,7 @@ final class FormatExtension
         if (null === $format || '' === $format) {
             return null;
         }
-        if (isset(self::DATE_FORMATS[$format])) {
-            return self::DATE_FORMATS[$format];
-        }
 
-        $formats = \implode('", "', \array_keys(self::DATE_FORMATS));
-        $message = \sprintf('The date/time type "%s" does not exist. Allowed values are: "%s".', $format, $formats);
-        throw new RuntimeError($message);
+        return self::DATE_FORMATS[$format] ?? throw new RuntimeError(\sprintf('The date/time type "%s" does not exist. Allowed values are: "%s".', $format, \implode('", "', \array_keys(self::DATE_FORMATS))));
     }
 }

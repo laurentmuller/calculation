@@ -99,9 +99,6 @@ class OpenWeatherDatabase extends AbstractDatabase implements \Countable
         LIMIT :limit
         SQL;
 
-    /**
-     * @return int<0, max>
-     */
     #[\Override]
     public function count(): int
     {

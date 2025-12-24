@@ -32,9 +32,6 @@ final class LogChannelTest extends TestCase
         yield ['deprecation', 'fa-fw fa-solid fa-bug'];
     }
 
-    /**
-     * @phpstan-param non-empty-string $channel
-     */
     #[DataProvider('getChannelIcons')]
     public function testChannelIcon(string $channel, string $expected): void
     {
@@ -58,7 +55,7 @@ final class LogChannelTest extends TestCase
     {
         $logChannel = LogChannel::instance('channel');
         self::assertSame('channel', $logChannel->getChannel());
-        self::assertSame('channel', $logChannel->__toString());
+        self::assertSame('channel', (string) $logChannel);
         self::assertSame('Channel', $logChannel->getChannelTitle());
         self::assertCount(0, $logChannel);
     }

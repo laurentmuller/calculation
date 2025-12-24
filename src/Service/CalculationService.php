@@ -167,9 +167,9 @@ class CalculationService implements ConstantsInterface
      */
     private function addTotalGroups(Collection $groups, float $userMargin, ?float $globalMargin = null): void
     {
-        $groupsAmount = $this->getGroupsAmount($groups);
-        $groupsMargin = $this->getGroupsMargin($groups);
-        $totalNet = $groupsAmount + $groupsMargin;
+        $groupsAmount = $this->round($this->getGroupsAmount($groups));
+        $groupsMargin = $this->round($this->getGroupsMargin($groups));
+        $totalNet = $this->round($groupsAmount + $groupsMargin);
         $totalMargin = 1.0 + $this->round($this->safeDivide($groupsMargin, $groupsAmount));
         $groups->set(self::ROW_TOTAL_GROUP, $this->createResultGroup(
             id: self::ROW_TOTAL_GROUP,
@@ -201,7 +201,7 @@ class CalculationService implements ConstantsInterface
         ));
 
         $overallTotal = $totalNet + $userAmount;
-        $overallAmount = $overallTotal - $groupsAmount;
+        $overallAmount = $this->round($overallTotal - $groupsAmount);
         $overallMargin = $this->floor(1.0 + $this->safeDivide($overallAmount, $groupsAmount));
         $groups->set(self::ROW_OVERALL_TOTAL, $this->createResultGroup(
             id: self::ROW_OVERALL_TOTAL,

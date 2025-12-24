@@ -110,37 +110,37 @@ class CalculationUpdateService implements ServiceSubscriberInterface
     public function updateCalculation(Calculation $calculation): bool
     {
         // save old values
-        $old_items_total = $this->round($calculation->getItemsTotal());
-        $old_overall_total = $this->round($calculation->getOverallTotal());
-        $old_global_margin = $this->round($calculation->getGlobalMargin());
+        $oldItemsTotal = $this->round($calculation->getItemsTotal());
+        $oldOverallTotal = $this->round($calculation->getOverallTotal());
+        $oldGlobalMargin = $this->round($calculation->getGlobalMargin());
 
-        // 1. update each group and compute item and overall total
-        $items_total = 0.0;
-        $overall_total = 0.0;
+        // 1. update each group and compute item and overall totals
+        $newItemsTotal = 0.0;
+        $newOverallTotal = 0.0;
         foreach ($calculation->getGroups() as $group) {
             $group->update();
-            $items_total += $group->getAmount();
-            $overall_total += $group->getTotal();
+            $newItemsTotal += $group->getAmount();
+            $newOverallTotal += $group->getTotal();
         }
-        $items_total = $this->round($items_total);
-        $overall_total = $this->round($overall_total);
+        $newItemsTotal = $this->round($newItemsTotal);
+        $newOverallTotal = $this->round($newOverallTotal);
 
         // 2. update global margin, net total and overall total
-        $global_margin = $this->round($this->getGlobalMargin($overall_total));
-        $overall_total = $this->round($overall_total * $global_margin);
-        $overall_total = $this->round($overall_total * (1.0 + $calculation->getUserMargin()));
+        $newGlobalMargin = $this->round($this->getGlobalMargin($newOverallTotal));
+        $newOverallTotal = $this->round($newOverallTotal * $newGlobalMargin);
+        $newOverallTotal = $this->round($newOverallTotal * (1.0 + $calculation->getUserMargin()));
 
         // 3. equal?
-        if ($this->isFloatEquals($old_items_total, $items_total)
-            && $this->isFloatEquals($old_global_margin, $global_margin)
-            && $this->isFloatEquals($old_overall_total, $overall_total)) {
+        if ($this->isFloatEquals($oldItemsTotal, $newItemsTotal)
+            && $this->isFloatEquals($oldGlobalMargin, $newGlobalMargin)
+            && $this->isFloatEquals($oldOverallTotal, $newOverallTotal)) {
             return false;
         }
 
         // 4. update
-        $calculation->setItemsTotal($items_total)
-            ->setGlobalMargin($global_margin)
-            ->setOverallTotal($overall_total);
+        $calculation->setItemsTotal($newItemsTotal)
+            ->setGlobalMargin($newGlobalMargin)
+            ->setOverallTotal($newOverallTotal);
 
         return true;
     }

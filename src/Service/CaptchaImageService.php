@@ -26,7 +26,7 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
  * Service to generate and validate a captcha image.
  *
  * @phpstan-type ComputeTextType = array{
- *     char: non-empty-string,
+ *     char: string,
  *     angle: int,
  *     width: int,
  *     height: int}
@@ -187,9 +187,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
     /**
      * Compute the text layout.
      *
-     * @phpstan-param non-empty-string $text
-     *
-     * @phpstan-return non-empty-list<ComputeTextType>
+     * @phpstan-return list<ComputeTextType>
      *
      * @throws \Exception
      */
@@ -211,7 +209,6 @@ class CaptchaImageService implements ServiceSubscriberInterface
     /**
      * Create an image.
      *
-     * @phpstan-param non-empty-string $text
      * @phpstan-param positive-int $width
      * @phpstan-param positive-int $height
      *
@@ -288,8 +285,6 @@ class CaptchaImageService implements ServiceSubscriberInterface
     /**
      * Draws the image text.
      *
-     * @phpstan-param non-empty-string $text
-     *
      * @throws \Exception
      */
     private function drawText(ImageService $image, int $width, int $height, string $text): void
@@ -325,20 +320,17 @@ class CaptchaImageService implements ServiceSubscriberInterface
 
     /**
      * Generate a random string.
-     *
-     * @phpstan-return non-empty-string
      */
     private function generateRandomString(int $length): string
     {
         $length = $this->validateRange($length, 2, \strlen(self::ALLOWED_VALUES));
         $result = \str_shuffle(self::ALLOWED_VALUES);
 
-        /** @phpstan-var non-empty-string */
         return \substr($result, 0, $length);
     }
 
     /**
-     * @phpstan-param non-empty-list<ComputeTextType> $items
+     * @phpstan-param list<ComputeTextType> $items
      */
     private function getTextHeight(array $items): int
     {
@@ -346,7 +338,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
     }
 
     /**
-     * @phpstan-param non-empty-list<ComputeTextType> $items
+     * @phpstan-param list<ComputeTextType> $items
      */
     private function getTextWidth(array $items): int
     {

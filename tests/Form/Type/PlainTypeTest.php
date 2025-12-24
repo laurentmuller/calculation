@@ -15,6 +15,7 @@ namespace App\Tests\Form\Type;
 
 use App\Entity\User;
 use App\Form\Type\PlainType;
+use App\Interfaces\DateFormatInterface;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
 use Symfony\Component\Clock\DatePoint;
@@ -74,7 +75,7 @@ final class PlainTypeTest extends TypeTestCase
         $expected = '10.06.2024';
         $options = [
             'date_format' => null,
-            'time_format' => PlainType::FORMAT_NONE,
+            'time_format' => DateFormatInterface::FORMAT_NONE,
             'date_pattern' => null,
         ];
         $this->validateViewValue($data, $expected, $options);
@@ -85,7 +86,7 @@ final class PlainTypeTest extends TypeTestCase
         $data = new DatePoint('2024-06-10 12:22:03');
         $expected = '12:22';
         $options = [
-            'date_format' => PlainType::FORMAT_NONE,
+            'date_format' => DateFormatInterface::FORMAT_NONE,
             'time_format' => null,
             'date_pattern' => null,
         ];

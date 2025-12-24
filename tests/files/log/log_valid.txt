@@ -1,4 +1,4 @@
-23.02.2023 16:47:53.967|request|INFO|Matched route "homepage".|{"route":"homepage","route_parameters":{"_route":"homepage","_controller":"App\\Controller\\IndexController::invoke"},"request_uri":"http://127.0.0.1:8000/","method":"GET"}|[]
-23.02.2023 16:47:53.970|security|DEBUG|Checking for authenticator support.|{"firewall_name":"main","authenticators":2}|[]
-23.02.2023 16:47:53.970|security|DEBUG|Checking support on authenticator.|{"firewall_name":"main","authenticator":"Symfony\\Component\\Security\\Http\\Authenticator\\FormLoginAuthenticator"}|[]
-23.02.2023 16:47:53.971|security|DEBUG|Authenticator does not support the request.|{"firewall_name":"main","authenticator":"Symfony\\Component\\Security\\Http\\Authenticator\\FormLoginAuthenticator"}|[]
+23.02.2023 16:47:53.967|request|INFO|Username|Matched route "homepage".|{"route":"homepage","route_parameters":{"_route":"homepage","_controller":"App\\Controller\\IndexController::invoke"},"request_uri":"http://127.0.0.1:8000/","method":"GET"}
+23.02.2023 16:47:53.970|security|DEBUG|Username|Checking for authenticator support.|{"firewall_name":"main","authenticators":2}
+23.02.2023 16:47:53.970|security|DEBUG|Username|Checking support on authenticator.|{"firewall_name":"main","authenticator":"Symfony\\Component\\Security\\Http\\Authenticator\\FormLoginAuthenticator"}
+23.02.2023 16:47:53.971|security|DEBUG|Username|Authenticator does not support the request.|{"firewall_name":"main","authenticator":"Symfony\\Component\\Security\\Http\\Authenticator\\FormLoginAuthenticator"}

@@ -17,56 +17,49 @@ use App\Entity\User;
 use App\Logger\UserRequestProcessor;
 use Monolog\Level;
 use Monolog\LogRecord;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\Clock\DatePoint;
 
 final class UserRequestProcessorTest extends TestCase
 {
-    public function testInvokeWithoutUser(): void
+    public function testWithoutUser(): void
     {
-        $security = $this->createSecurity();
-        $processor = new UserRequestProcessor($security);
+        $processor = $this->createProcessor();
         $record = $processor($this->createRecord());
 
         $extra = $record->extra;
         self::assertEmpty($extra);
     }
 
-    public function testInvokeWithUser(): void
+    public function testWithUser(): void
     {
-        $user = new User();
-        $user->setUsername('user-name');
-        $security = $this->createSecurity($user);
-        $processor = new UserRequestProcessor($security);
+        $user = (new User())->setUsername('user-name');
+        $processor = $this->createProcessor($user);
         $record = $processor($this->createRecord());
 
         $extra = $record->extra;
         self::assertCount(1, $extra);
         self::assertArrayHasKey('user', $extra);
+        self::assertSame('user-name', $extra['user']);
+    }
 
-        $actual = $extra['user'];
-        $expected = $user->getUserIdentifier();
-        self::assertSame($expected, $actual);
+    private function createProcessor(?User $user = null): UserRequestProcessor
+    {
+        $security = $this->createMock(Security::class);
+        $security->expects(self::once())
+            ->method('getUser')
+            ->willReturn($user);
+
+        return new UserRequestProcessor($security);
     }
 
     private function createRecord(): LogRecord
     {
         return new LogRecord(
-            new DatePoint(),
-            'channel',
-            Level::Debug,
-            'message'
+            datetime: new \DateTimeImmutable(),
+            channel: 'Channel',
+            level: Level::Debug,
+            message: 'Message'
         );
-    }
-
-    private function createSecurity(?User $user = null): MockObject&Security
-    {
-        $security = $this->createMock(Security::class);
-        $security->method('getUser')
-            ->willReturn($user);
-
-        return $security;
     }
 }

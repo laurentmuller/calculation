@@ -70,10 +70,10 @@ final class LogFilterTest extends TestCase
     {
         $log1 = Log::instance(1)
             ->setCreatedAt(new DatePoint('2024-01-01'))
-            ->setExtra(['user' => 'user']);
+            ->setUser('user');
         $log2 = Log::instance(1)
             ->setCreatedAt(new DatePoint('2024-02-02'))
-            ->setExtra(['user' => 'user']);
+            ->setUser('user');
         $logs = [$log1, $log2];
 
         $filter = new LogFilter('user', '', '');

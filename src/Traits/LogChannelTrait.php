@@ -32,8 +32,8 @@ trait LogChannelTrait
     private const APP_CHANNEL_SHORT = 'app';
 
     #[Assert\NotBlank]
-    #[Assert\Length(max: 50)]
-    #[ORM\Column(length: 50)]
+    #[Assert\Length(max: 20)]
+    #[ORM\Column(length: 20)]
     private string $channel = self::APP_CHANNEL_LONG;
 
     /**

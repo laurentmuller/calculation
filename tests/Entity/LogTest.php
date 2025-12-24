@@ -126,16 +126,6 @@ final class LogTest extends TestCase
         self::assertSame('message', $log->getMessage());
     }
 
-    public function testExtra(): void
-    {
-        $log = new Log();
-        self::assertNull($log->getExtra());
-
-        $expected = ['key' => 'value'];
-        $log->setExtra($expected);
-        self::assertSame($expected, $log->getExtra());
-    }
-
     public function testFormatMessageDefault(): void
     {
         $log = new Log();
@@ -162,13 +152,13 @@ final class LogTest extends TestCase
         self::assertSame('message', $actual);
     }
 
-    public function testFormatMessageWithExtra(): void
+    public function testFormatMessageWithUser(): void
     {
         $log = new Log();
         $log->setMessage('message');
-        $log->setExtra(['key' => 'value']);
+        $log->setUser('username');
         $actual = $log->formatMessage($this->createSqlFormatter());
-        self::assertSame("message\nExtra:\n[\n  'key' => 'value'\n]", $actual);
+        self::assertSame("message\nUser:\nusername", $actual);
     }
 
     public function testFormattedDate(): void
@@ -236,7 +226,7 @@ final class LogTest extends TestCase
         self::assertNull($log->getUser());
 
         $expected = 'my_user_name';
-        $log->setExtra(['user' => $expected]);
+        $log->setUser($expected);
         self::assertSame($expected, $log->getUser());
     }
 

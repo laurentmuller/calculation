@@ -32,14 +32,15 @@ trait ComparableTrait
      */
     public function sortComparable(array $values): array
     {
-        return $this->compareInternal(
-            $values,
-            static fn (ComparableInterface $a, ComparableInterface $b): int => $a->compare($b)
-        );
+        if ([] !== $values) {
+            \uasort($values, static fn (ComparableInterface $a, ComparableInterface $b): int => $a->compare($b));
+        }
+
+        return $values;
     }
 
     /**
-     * Sort, in reverse order, the given array of comparable.
+     * Sort the given array of comparable in reverse order.
      *
      * @template TKey of array-key
      * @template TValue of ComparableInterface
@@ -50,27 +51,9 @@ trait ComparableTrait
      */
     public function sortReverseComparable(array $values): array
     {
-        return $this->compareInternal(
-            $values,
-            static fn (ComparableInterface $a, ComparableInterface $b): int => $b->compare($a)
-        );
-    }
-
-    /**
-     * @template TKey of array-key
-     * @template TValue of ComparableInterface
-     *
-     * @param array<TKey, TValue>          $values
-     * @param callable(TValue, TValue):int $callable
-     *
-     * @return array<TKey, TValue>
-     */
-    private function compareInternal(array $values, callable $callable): array
-    {
-        if ([] === $values || 1 === \count($values)) {
-            return $values;
+        if ([] !== $values) {
+            \uasort($values, static fn (ComparableInterface $a, ComparableInterface $b): int => $b->compare($a));
         }
-        \uasort($values, $callable);
 
         return $values;
     }

@@ -24,9 +24,6 @@
 {% if item.context|length %}
     {{ property('log.fields.context', item.context|var_export_php) }}
 {% endif %}
-{% if item.extra|length %}
-    {{ property('log.fields.extra', item.extra|var_export_php) }}
-{% endif %}
 {% endblock property_body %}
 {# stylesheets #}
 {% block stylesheets %}

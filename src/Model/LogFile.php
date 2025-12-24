@@ -106,9 +106,9 @@ class LogFile implements \Countable
     public function sort(): self
     {
         if (!$this->isEmpty()) {
-            \ksort($this->channels);
-            $this->levels = $this->sortReverseComparable($this->levels);
             $this->logs = $this->sortReverseComparable($this->logs);
+            $this->channels = $this->sortComparable($this->channels);
+            $this->levels = $this->sortReverseComparable($this->levels);
         }
 
         return $this;
@@ -116,10 +116,7 @@ class LogFile implements \Countable
 
     private function updateChannels(string $name): void
     {
-        if (!\array_key_exists($name, $this->channels)) {
-            $this->channels[$name] = LogChannel::instance($name);
-        }
-        $this->channels[$name]->increment();
+        ($this->channels[$name] ??= LogChannel::instance($name))->increment();
     }
 
     /**
@@ -127,10 +124,6 @@ class LogFile implements \Countable
      */
     private function updateLevels(string $name): void
     {
-        if (!\array_key_exists($name, $this->levels)) {
-            $this->levels[$name] = LogLevel::instance($name);
-        }
-
-        $this->levels[$name]->increment();
+        ($this->levels[$name] ??= LogLevel::instance($name))->increment();
     }
 }

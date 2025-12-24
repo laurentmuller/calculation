@@ -97,9 +97,9 @@ final class LogSorterTest extends TestCase
     public function testSortByUser(): void
     {
         $log1 = Log::instance(1)
-            ->setExtra(['user' => 'user1']);
+            ->setUser('user1');
         $log2 = Log::instance(2)
-            ->setExtra(['user' => 'user2']);
+            ->setUser('user2');
         $logs = [$log1, $log2];
 
         $sorter = new LogSorter('user', true);

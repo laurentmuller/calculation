@@ -13,13 +13,17 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Interfaces\ComparableInterface;
 use App\Traits\LogChannelTrait;
 
-class LogChannel implements \Countable, \Stringable
+/**
+ * @implements ComparableInterface<LogChannel>
+ */
+class LogChannel implements \Countable, \Stringable, ComparableInterface
 {
     use LogChannelTrait;
 
-    /** @phpstan-var int<0, max> */
+    /** @phpstan-var non-negative-int */
     private int $count = 0;
 
     public function __construct(string $channel)
@@ -33,9 +37,12 @@ class LogChannel implements \Countable, \Stringable
         return $this->getChannel();
     }
 
-    /**
-     * @return int<0, max>
-     */
+    #[\Override]
+    public function compare(ComparableInterface $other): int
+    {
+        return $this->getChannel() <=> $other->getChannel();
+    }
+
     #[\Override]
     public function count(): int
     {

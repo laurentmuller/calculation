@@ -25,7 +25,7 @@ class LogLevel implements \Countable, \Stringable, ComparableInterface
 {
     use LogLevelTrait;
 
-    /** @phpstan-var int<0, max> */
+    /** @phpstan-var non-negative-int */
     private int $count = 0;
 
     /**
@@ -48,9 +48,6 @@ class LogLevel implements \Countable, \Stringable, ComparableInterface
         return $this->getLevelIndex() <=> $other->getLevelIndex();
     }
 
-    /**
-     * @return int<0, max>
-     */
     #[\Override]
     public function count(): int
     {

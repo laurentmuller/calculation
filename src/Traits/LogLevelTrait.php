@@ -26,8 +26,8 @@ trait LogLevelTrait
      * @phpstan-var PsrLevel::*
      */
     #[Assert\NotBlank]
-    #[Assert\Length(max: 50)]
-    #[ORM\Column(length: 50)]
+    #[Assert\Length(max: 20)]
+    #[ORM\Column(length: 20)]
     private string $level = PsrLevel::INFO;
 
     /**
@@ -84,7 +84,7 @@ trait LogLevelTrait
      */
     public function setLevel(string $level): self
     {
-        $this->level = $level;
+        $this->level = \strtolower($level);
 
         return $this;
     }

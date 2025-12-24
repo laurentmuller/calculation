@@ -143,9 +143,9 @@ class LogService
                 ->setCreatedAt($date)
                 ->setChannel($values[1])
                 ->setLevel($values[2])
-                ->setMessage(\trim($values[3]))
-                ->setContext($this->parseJson($values[4]))
-                ->setExtra($this->parseJson($values[5]));
+                ->setUser($values[3])
+                ->setMessage(\trim($values[4]))
+                ->setContext($this->parseJson($values[5]));
             $file->addLog($log);
         }
 

@@ -84,7 +84,7 @@ return App::config([
         LogService::FORMATTER_NAME => [
             'class' => LineFormatter::class,
             'arguments' => [
-                '$format' => "%%datetime%%|%%channel%%|%%level_name%%|%%message%%|%%context%%|%%extra%%\n",
+                '$format' => "%%datetime%%|%%channel%%|%%level_name%%|%%extra.user%%|%%message%%|%%context%%\n",
                 '$dateFormat' => LogService::DATE_FORMAT,
             ],
             'calls' => [

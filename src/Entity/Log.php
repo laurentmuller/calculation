@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Interfaces\ComparableInterface;
+use App\Interfaces\UserInterface;
 use App\Traits\LogChannelTrait;
 use App\Traits\LogLevelTrait;
 use App\Utils\DateUtils;
@@ -38,14 +39,7 @@ class Log extends AbstractEntity implements ComparableInterface
     use LogChannelTrait;
     use LogLevelTrait;
 
-    /**
-     * The user extra field name.
-     */
-    final public const USER_FIELD = 'user';
-
-    /**
-     * The doctrine channel name.
-     */
+    // the doctrine channel name
     private const DOCTRINE_CHANNEL = 'doctrine';
 
     #[ORM\Column(nullable: true)]
@@ -55,16 +49,13 @@ class Log extends AbstractEntity implements ComparableInterface
     #[ORM\Column(type: DatePointType::NAME)]
     private DatePoint $createdAt;
 
-    /**
-     * @var ?array<string, string>
-     */
-    #[ORM\Column(nullable: true)]
-    private ?array $extra = null;
-
     private ?string $formattedDate = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private string $message = '';
+
+    #[ORM\Column(length: UserInterface::MAX_USERNAME_LENGTH, nullable: true)]
+    private ?string $user = null;
 
     public function __construct()
     {
@@ -74,9 +65,9 @@ class Log extends AbstractEntity implements ComparableInterface
     #[\Override]
     public function compare(ComparableInterface $other): int
     {
-        $result = $this->getCreatedAt() <=> $other->getCreatedAt();
+        $result = $this->createdAt <=> $other->createdAt;
 
-        return 0 !== $result ? $result : $this->getId() <=> $other->getId();
+        return 0 !== $result ? $result : $this->id <=> $other->id;
     }
 
     public static function formatDate(DatePoint $date): string
@@ -85,7 +76,7 @@ class Log extends AbstractEntity implements ComparableInterface
     }
 
     /**
-     * Gets the message with the context and extra properties if available.
+     * Gets the message with the user and context properties if available.
      */
     public function formatMessage(SqlFormatter $formatter): string
     {
@@ -93,11 +84,11 @@ class Log extends AbstractEntity implements ComparableInterface
         if (self::DOCTRINE_CHANNEL === $this->getChannel()) {
             $message = $formatter->format($message);
         }
+        if (StringUtils::isString($this->user)) {
+            $message .= "\nUser:\n" . $this->user;
+        }
         if (null !== $this->context && [] !== $this->context) {
             $message .= "\nContext:\n" . StringUtils::exportVar($this->getContext());
-        }
-        if (null !== $this->extra && [] !== $this->extra) {
-            $message .= "\nExtra:\n" . StringUtils::exportVar($this->getExtra());
         }
 
         return $message;
@@ -119,11 +110,6 @@ class Log extends AbstractEntity implements ComparableInterface
         return $this->getMessage();
     }
 
-    public function getExtra(): ?array
-    {
-        return $this->extra;
-    }
-
     public function getFormattedDate(): string
     {
         if (null === $this->formattedDate) {
@@ -143,12 +129,15 @@ class Log extends AbstractEntity implements ComparableInterface
      */
     public function getTimestamp(): int
     {
-        return $this->getCreatedAt()->getTimestamp();
+        return $this->createdAt->getTimestamp();
     }
 
+    /**
+     * Gets the user identifier.
+     */
     public function getUser(): ?string
     {
-        return $this->extra[self::USER_FIELD] ?? null;
+        return $this->user;
     }
 
     /**
@@ -178,19 +167,16 @@ class Log extends AbstractEntity implements ComparableInterface
         return $this;
     }
 
-    /**
-     * @param ?array<string, string> $extra
-     */
-    public function setExtra(?array $extra): self
+    public function setMessage(string $message): self
     {
-        $this->extra = $extra;
+        $this->message = $message;
 
         return $this;
     }
 
-    public function setMessage(string $message): self
+    public function setUser(?string $user): self
     {
-        $this->message = $message;
+        $this->user = StringUtils::trim($user);
 
         return $this;
     }

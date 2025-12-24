@@ -34,9 +34,9 @@ class LogDatabase extends AbstractDatabase
             created_at INTEGER NOT NULL,
             channel    TEXT NOT NULL,
             level      TEXT NOT NULL,
+            user       TEXT,
             message    TEXT NOT NULL,
-            context    TEXT,
-            extra      TEXT
+            context    TEXT
         )
         sql;
 
@@ -46,8 +46,8 @@ class LogDatabase extends AbstractDatabase
      * @var string
      */
     private const SQL_INSERT = <<<'sql'
-        INSERT INTO sy_Log(id, created_at, channel, level, message, context, extra)
-            VALUES(:id, :created_at, :channel, :level, :message, :context, :extra)
+        INSERT INTO sy_Log(id, created_at, channel, level, user, message, context)
+            VALUES(:id, :created_at, :channel, :level, :user, :message, :context)
         sql;
 
     /**
@@ -67,9 +67,9 @@ class LogDatabase extends AbstractDatabase
         $stmt->bindValue(':created_at', $this->dateToInt($log->getCreatedAt()), \SQLITE3_INTEGER);
         $stmt->bindValue(':channel', $log->getChannel());
         $stmt->bindValue(':level', $log->getLevel());
+        $stmt->bindValue(':user', $log->getUser());
         $stmt->bindValue(':message', $log->getMessage());
         $stmt->bindValue(':context', $this->arrayToString($log->getContext()));
-        $stmt->bindValue(':extra', $this->arrayToString($log->getExtra()));
 
         // execute
         return false !== $stmt->execute();

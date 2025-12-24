@@ -148,14 +148,15 @@ class LogsReport extends AbstractReport
             $icon = $value->getChannelIcon();
         }
 
+        $alignment = PdfTextAlignment::CENTER;
         $cell = $this->service->getFontAwesomeCell(
             icon: $icon,
             color: $color,
             text: $text,
-            alignment: PdfTextAlignment::CENTER
+            alignment: $alignment
         );
 
-        return $cell ?? new PdfCell($text);
+        return $cell ?? new PdfCell(text: $text, alignment: $alignment);
     }
 
     /**
@@ -180,26 +181,25 @@ class LogsReport extends AbstractReport
 
     private function renderCards(): self
     {
-        $levels = $this->logFile->getLevels();
-        $channels = $this->logFile->getChannels();
-
         $columns = [];
         $textCells = [];
         $valueCells = [];
-        $sepCol = PdfColumn::center(width: 3);
-        $emptyCol = PdfColumn::center(width: 1);
+        $sepCol = PdfColumn::center(width: 2, fixed: true);
         $emptyCell = new PdfCell(style: PdfStyle::getNoBorderStyle());
 
-        $this->updateCardsEntries($levels, $columns, $textCells, $valueCells, $emptyCol, $emptyCell);
+        // levels
+        $this->updateCardsEntries($this->logFile->getLevels(), $columns, $textCells, $valueCells);
         $columns[] = $sepCol;
         $textCells[] = $emptyCell;
         $valueCells[] = $emptyCell;
 
-        $this->updateCardsEntries($channels, $columns, $textCells, $valueCells, $emptyCol, $emptyCell);
+        // channels
+        $this->updateCardsEntries($this->logFile->getChannels(), $columns, $textCells, $valueCells);
         $columns[] = $sepCol;
         $textCells[] = $emptyCell;
         $valueCells[] = $emptyCell;
 
+        // total
         $columns[] = PdfColumn::center(width: 30);
         $textCells[] = new PdfCell($this->trans('report.total'));
         $valueCells[] = new PdfCell(FormatUtils::formatInt($this->logFile->count()));
@@ -261,25 +261,13 @@ class LogsReport extends AbstractReport
      * @param PdfCell[]                          $textCells
      * @param PdfCell[]                          $valueCells
      */
-    private function updateCardsEntries(
-        array $values,
-        array &$columns,
-        array &$textCells,
-        array &$valueCells,
-        PdfColumn $emptyCol,
-        PdfCell $emptyCell
-    ): void {
-        $index = \count($values);
+    private function updateCardsEntries(array $values, array &$columns, array &$textCells, array &$valueCells): void
+    {
         foreach ($values as $key => $value) {
             $columns[] = PdfColumn::center($key, 30);
             $text = StringUtils::capitalize($key);
             $textCells[] = $this->getImageIcon($value, $text);
             $valueCells[] = new PdfCell(FormatUtils::formatInt($value));
-            if (--$index > 0) {
-                $columns[] = $emptyCol;
-                $textCells[] = $emptyCell;
-                $valueCells[] = $emptyCell;
-            }
         }
     }
 }

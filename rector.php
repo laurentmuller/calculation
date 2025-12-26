@@ -19,6 +19,7 @@ use Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector;
 use Rector\CodingStyle\Rector\Closure\StaticClosureRector;
 use Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
 use Rector\Config\RectorConfig;
+use Rector\DeadCode\Rector\ClassMethod\RemoveParentDelegatingConstructorRector;
 use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
@@ -54,6 +55,8 @@ $skip = [
     NewlineBetweenClassLikeStmtsRector::class,
     // don't rename exception
     CatchExceptionNameMatchingTypeRector::class,
+    // allow delegate constructor
+    RemoveParentDelegatingConstructorRector::class,
 ];
 
 $sets = [

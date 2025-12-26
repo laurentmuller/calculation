@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use App\Service\LogService;
+use App\Service\LogParserService;
 use Psr\Log\LogLevel;
 
 return App::config([
@@ -32,7 +32,7 @@ return App::config([
                     'type' => 'stream',
                     'path' => '%kernel.logs_dir%/%kernel.environment%.log',
                     'level' => LogLevel::INFO,
-                    'formatter' => LogService::FORMATTER_NAME,
+                    'formatter' => LogParserService::FORMATTER_NAME,
                     'channels' => ['!deprecation'],
                 ],
                 'console' => [
@@ -43,7 +43,7 @@ return App::config([
                 'deprecation' => [
                     'type' => 'stream',
                     'path' => '%kernel.logs_dir%/%kernel.environment%.deprecations.log',
-                    'formatter' => LogService::FORMATTER_NAME,
+                    'formatter' => LogParserService::FORMATTER_NAME,
                     'channels' => ['deprecation'],
                 ],
             ],
@@ -57,7 +57,7 @@ return App::config([
                     'type' => 'stream',
                     'path' => '%kernel.logs_dir%/%kernel.environment%.log',
                     'level' => LogLevel::DEBUG,
-                    'formatter' => LogService::FORMATTER_NAME,
+                    'formatter' => LogParserService::FORMATTER_NAME,
                     'channels' => ['!event', '!deprecation'],
                 ],
                 'console' => [
@@ -68,7 +68,7 @@ return App::config([
                 'deprecation' => [
                     'type' => 'stream',
                     'path' => '%kernel.logs_dir%/%kernel.environment%.deprecations.log',
-                    'formatter' => LogService::FORMATTER_NAME,
+                    'formatter' => LogParserService::FORMATTER_NAME,
                     'channels' => ['deprecation'],
                 ],
             ],
@@ -80,7 +80,7 @@ return App::config([
                 'main' => [
                     'type' => 'stream',
                     'path' => '%kernel.logs_dir%/%kernel.environment%.log',
-                    'formatter' => LogService::FORMATTER_NAME,
+                    'formatter' => LogParserService::FORMATTER_NAME,
                     'channels' => ['app'],
                 ],
             ],

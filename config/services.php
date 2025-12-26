@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use App\Service\LogService;
+use App\Service\LogParserService;
 use Monolog\Formatter\LineFormatter;
 use Twig\Extra\Markdown\MarkdownInterface;
 
@@ -81,11 +81,11 @@ return App::config([
                 $path . 'Word',
             ],
         ],
-        LogService::FORMATTER_NAME => [
+        LogParserService::FORMATTER_NAME => [
             'class' => LineFormatter::class,
             'arguments' => [
                 '$format' => "%%datetime%%|%%channel%%|%%level_name%%|%%extra.user%%|%%message%%|%%context%%\n",
-                '$dateFormat' => LogService::DATE_FORMAT,
+                '$dateFormat' => LogParserService::DATE_FORMAT,
             ],
             'calls' => [
                 ['setBasePath' => ['%kernel.project_dir%']],

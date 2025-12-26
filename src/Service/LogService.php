@@ -15,11 +15,8 @@ namespace App\Service;
 
 use App\Entity\Log;
 use App\Model\LogFile;
-use App\Reader\CSVReader;
+use App\Traits\CacheKeyTrait;
 use App\Utils\FileUtils;
-use App\Utils\StringUtils;
-use Psr\Log\LogLevel;
-use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -29,23 +26,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 class LogService
 {
-    /**
-     * The date format.
-     */
-    public const DATE_FORMAT = 'd.m.Y H:i:s.v';
-
-    /**
-     * The service formatter name.
-     */
-    public const FORMATTER_NAME = 'monolog.application.formatter';
-
-    /**
-     * The values separator.
-     */
-    public const SEPARATOR = '|';
-
-    // The key to cache the log file.
-    private const KEY_CACHE = 'log_file';
+    use CacheKeyTrait;
 
     // the file name
     private readonly string $fileName;
@@ -67,7 +48,7 @@ class LogService
      */
     public function clearCache(): self
     {
-        $this->cache->delete(self::KEY_CACHE);
+        $this->cache->delete($this->getCacheKey());
 
         return $this;
     }
@@ -94,7 +75,7 @@ class LogService
     public function getLogFile(): ?LogFile
     {
         if ($this->fileValid) {
-            return $this->cache->get(self::KEY_CACHE, $this->parseFile(...));
+            return $this->cache->get($this->getCacheKey(), $this->parseFile(...));
         }
 
         return null;
@@ -108,60 +89,15 @@ class LogService
         return $this->fileValid;
     }
 
-    private function parseDate(string $value): ?DatePoint
+    private function getCacheKey(): string
     {
-        try {
-            return DatePoint::createFromFormat(self::DATE_FORMAT, $value);
-        } catch (\DateMalformedStringException) {
-            return null;
-        }
+        return $this->cleanKey('log_file_' . \basename($this->fileName));
     }
 
     private function parseFile(): LogFile
     {
-        $file = new LogFile($this->fileName);
-        $reader = CSVReader::instance(file: $this->fileName, separator: self::SEPARATOR);
+        $service = new LogParserService();
 
-        foreach ($reader as $key => $values) {
-            if (6 !== \count($values)) {
-                continue;
-            }
-            /**
-             * @phpstan-var array{
-             *     0: string,
-             *     1: string,
-             *     2: LogLevel::*,
-             *     3: string,
-             *     4: string,
-             *     5: string} $values
-             */
-            $date = $this->parseDate($values[0]);
-            if (!$date instanceof DatePoint) {
-                continue;
-            }
-            $log = Log::instance($key)
-                ->setCreatedAt($date)
-                ->setChannel($values[1])
-                ->setLevel($values[2])
-                ->setUser($values[3])
-                ->setMessage(\trim($values[4]))
-                ->setContext($this->parseJson($values[5]));
-            $file->addLog($log);
-        }
-
-        return $file->sort();
-    }
-
-    /**
-     * @phpstan-return array<string, string>|null
-     */
-    private function parseJson(string $value): ?array
-    {
-        try {
-            /** @phpstan-var array<string, string> */
-            return StringUtils::decodeJson($value);
-        } catch (\InvalidArgumentException) {
-            return null;
-        }
+        return $service->parseFile($this->fileName);
     }
 }

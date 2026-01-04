@@ -11,7 +11,7 @@
 {# properties #}
 {% block property_body %}
 {{ property('log.fields.createdAt', item.formattedDate) }}
-{%- if item.channel == 'doctrine' -%}
+{%- if item.doctrineMessage -%}
     {{ property('log.fields.message', item.message|var_export_sql) }}
 {%- else -%}
     {{ property('log.fields.message', item.message, 'text-break') }}

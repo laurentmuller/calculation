@@ -4,9 +4,6 @@
 {%- set title = title|default('calculation.list.title') -%}
 {%- set title_icon = title_icon|default(ICON_CALCULATION) -%}
 {%- set object_type = ENTITY_CALCULATION -%}
-{#
-{%- set attributes = attributes|default({})|merge({'danger-tooltip-selector': 'span.has-tooltip'}) -%}
-#}
 {# header actions #}
 {% block header_actions -%}
 {% if allow_add %}<a class="add-link p-0" href="{{ path('calculation_add', params) }}">{{ 'calculation.add.title'|trans }}</a>{% endif %}
@@ -14,15 +11,15 @@
 {# toolbar actions #}
 {% block toolbar_actions -%}
 {% if customData.dropdown is defined and customData.dropdown|length %}
-    {%- set state_editable = customData.editable|default(0) -%}
     {%- set state_id = customData.state.id|default(0) -%}
-    {%- set input_value = state_id ? state_id : state_editable -%}
+    {%- set state_editable = customData.editable|default(0) -%}
+    {%- set input_value = state_id != 0 ? state_id : state_editable -%}
     {%- set data_default = 'calculation.fields.state'|trans -%}
     {%- set text = data_default -%}
-    {% if state_id %}
+    {% if state_id != 0 %}
         {% set text = customData.state.code %}
-    {% elseif state_editable %}
-        {% set text = (state_editable ? 'calculationstate.list.editable_1' : 'calculationstate.list.editable_0')|trans %}
+    {% elseif state_editable != 0 %}
+        {% set text = (state_editable == 1 ? 'calculationstate.list.editable_1' : 'calculationstate.list.editable_0')|trans %}
     {% endif %}
     {{ _self.output_dropdown_menu('state', ICON_CALCULATION_STATE, text, 'calculation.list.state_help', input_value, data_default) }}
     <ul class="dropdown-menu" aria-labelledby="state">
@@ -92,7 +89,7 @@
 {{ _self.property_line() }}
 {{ _self.property_both('%overallMargin%', '%overallTotal%', '', 'text-end') }}
 {%- endblock custom_view_body %}
-
+{# stylesheets #}
 {% block stylesheets -%}
     {{ parent() }}
     <style nonce="{{ csp_nonce() }}">

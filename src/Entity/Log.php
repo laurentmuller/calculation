@@ -41,6 +41,8 @@ class Log extends AbstractEntity implements ComparableInterface
 
     // the doctrine channel name
     private const DOCTRINE_CHANNEL = 'doctrine';
+    // the doctrine prefix message
+    private const DOCTRINE_PREFIX = 'Executing ';
 
     #[ORM\Column(nullable: true)]
     private ?array $context = null;
@@ -81,7 +83,7 @@ class Log extends AbstractEntity implements ComparableInterface
     public function formatMessage(SqlFormatter $formatter): string
     {
         $message = $this->getMessage();
-        if (self::DOCTRINE_CHANNEL === $this->getChannel()) {
+        if ($this->isDoctrineMessage()) {
             $message = $formatter->format($message);
         }
         if (StringUtils::isString($this->user)) {
@@ -112,11 +114,7 @@ class Log extends AbstractEntity implements ComparableInterface
 
     public function getFormattedDate(): string
     {
-        if (null === $this->formattedDate) {
-            $this->formattedDate = self::formatDate($this->createdAt);
-        }
-
-        return $this->formattedDate;
+        return $this->formattedDate ??= self::formatDate($this->createdAt);
     }
 
     public function getMessage(): string
@@ -151,6 +149,12 @@ class Log extends AbstractEntity implements ComparableInterface
         $log->id = $id;
 
         return $log;
+    }
+
+    public function isDoctrineMessage(): bool
+    {
+        return self::DOCTRINE_CHANNEL === $this->getChannel()
+            && \str_starts_with($this->message, self::DOCTRINE_PREFIX);
     }
 
     public function setContext(?array $context): self

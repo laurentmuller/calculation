@@ -19,14 +19,11 @@ use Monolog\Level;
 use Psr\Log\LogLevel as PsrLevel;
 
 /**
- * @implements ComparableInterface<LogLevel>
+ * @extends AbstractLogCounter<LogLevel>
  */
-class LogLevel implements \Countable, \Stringable, ComparableInterface
+class LogLevel extends AbstractLogCounter
 {
     use LogLevelTrait;
-
-    /** @phpstan-var non-negative-int */
-    private int $count = 0;
 
     /**
      * @phpstan-param PsrLevel::* $level
@@ -48,25 +45,9 @@ class LogLevel implements \Countable, \Stringable, ComparableInterface
         return $this->getLevelIndex() <=> $other->getLevelIndex();
     }
 
-    #[\Override]
-    public function count(): int
-    {
-        return $this->count;
-    }
-
     public function getLevelIndex(): int
     {
         return Level::fromName($this->level)->value;
-    }
-
-    /**
-     * @phpstan-param positive-int $value
-     */
-    public function increment(int $value = 1): self
-    {
-        $this->count += $value;
-
-        return $this;
     }
 
     /**

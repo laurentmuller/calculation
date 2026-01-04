@@ -37,7 +37,7 @@ class LogsDocument extends AbstractDocument
     {
         parent::__construct($controller);
         $file = $controller->getRelativePath($this->logFile->getFile());
-        $this->setDescriptionTrans('log.list.file', ['%file%' => $file]);
+        $this->setTranslatedDescription('log.list.file', ['%file%' => $file]);
     }
 
     #[\Override]

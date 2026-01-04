@@ -15,6 +15,7 @@ namespace App\Tests\Controller;
 
 use App\Entity\Calculation;
 use App\Tests\EntityTrait\CalculationTrait;
+use App\Utils\DateUtils;
 use Symfony\Component\HttpFoundation\Response;
 
 final class CalendarControllerTest extends ControllerTestCase
@@ -40,15 +41,17 @@ final class CalendarControllerTest extends ControllerTestCase
 
     public function testTwoCalculations(): void
     {
-        $calculation1 = $this->getCalculation();
-        $calculation2 = clone $calculation1;
-        $this->addEntity($calculation1);
-        $this->addEntity($calculation2);
+        try {
+            $date = DateUtils::createDate('2024-02-04');
+            $calculation1 = $this->getCalculation(date: $date);
+            $calculation2 = clone $calculation1;
+            $this->addEntity($calculation2);
 
-        $this->checkRoute('/calendar/week', self::ROLE_ADMIN);
-        $this->checkRoute('/calendar/month', self::ROLE_ADMIN);
-        $this->checkRoute('/calendar/year', self::ROLE_ADMIN);
-
-        $this->deleteEntitiesByClass(Calculation::class);
+            $this->checkRoute('/calendar/week', self::ROLE_ADMIN);
+            $this->checkRoute('/calendar/month', self::ROLE_ADMIN);
+            $this->checkRoute('/calendar/year', self::ROLE_ADMIN);
+        } finally {
+            $this->deleteEntitiesByClass(Calculation::class);
+        }
     }
 }

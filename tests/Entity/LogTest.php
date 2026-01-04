@@ -126,6 +126,23 @@ final class LogTest extends TestCase
         self::assertSame('message', $log->getMessage());
     }
 
+    public function testDoctrineMessage(): void
+    {
+        $log = new Log();
+        $log->setMessage('message');
+        $log->setChannel('doctrine');
+        $actual = $log->isDoctrineMessage();
+        self::assertFalse($actual);
+
+        $log->setMessage('Executing statement: SELECT * FROM table');
+        $actual = $log->isDoctrineMessage();
+        self::assertTrue($actual);
+
+        $log->setMessage('Executing query: SELECT * FROM table');
+        $actual = $log->isDoctrineMessage();
+        self::assertTrue($actual);
+    }
+
     public function testFormatMessageDefault(): void
     {
         $log = new Log();

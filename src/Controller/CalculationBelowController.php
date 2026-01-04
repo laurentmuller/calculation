@@ -55,8 +55,8 @@ class CalculationBelowController extends AbstractController
         }
         $items = $this->getItems($repository, $minMargin);
         $doc = new CalculationsDocument($this, $items);
-        $doc->setDescriptionTrans('below.description', ['%margin%' => FormatUtils::formatPercent($minMargin)])
-            ->setTitleTrans('below.title');
+        $doc->setTranslatedDescription('below.description', ['%margin%' => FormatUtils::formatPercent($minMargin)])
+            ->setTranslatedTitle('below.title');
 
         return $this->renderSpreadsheetDocument($doc);
     }

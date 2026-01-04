@@ -130,20 +130,20 @@ final class SpreadsheetDocumentTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    public function testSetDescriptionTrans(): void
+    public function testSetTranslatedDescription(): void
     {
-        $expected = 'id';
+        $expected = 'Translated description';
         $doc = $this->createDocument();
-        $doc->setDescriptionTrans($expected);
+        $doc->setTranslatedDescription($expected);
         $actual = $doc->getProperties()->getDescription();
         self::assertSame($expected, $actual);
     }
 
-    public function testSetTitleTrans(): void
+    public function testSetTranslatedTitle(): void
     {
-        $expected = 'id';
+        $expected = 'Translated title';
         $doc = $this->createDocument();
-        $doc->setTitleTrans($expected);
+        $doc->setTranslatedTitle($expected);
         $actual = $doc->getTitle();
         self::assertSame($expected, $actual);
     }

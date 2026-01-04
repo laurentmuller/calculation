@@ -17,14 +17,11 @@ use App\Interfaces\ComparableInterface;
 use App\Traits\LogChannelTrait;
 
 /**
- * @implements ComparableInterface<LogChannel>
+ * @extends AbstractLogCounter<LogChannel>
  */
-class LogChannel implements \Countable, \Stringable, ComparableInterface
+class LogChannel extends AbstractLogCounter
 {
     use LogChannelTrait;
-
-    /** @phpstan-var non-negative-int */
-    private int $count = 0;
 
     public function __construct(string $channel)
     {
@@ -41,22 +38,6 @@ class LogChannel implements \Countable, \Stringable, ComparableInterface
     public function compare(ComparableInterface $other): int
     {
         return $this->getChannel() <=> $other->getChannel();
-    }
-
-    #[\Override]
-    public function count(): int
-    {
-        return $this->count;
-    }
-
-    /**
-     * @phpstan-param positive-int $value
-     */
-    public function increment(int $value = 1): self
-    {
-        $this->count += $value;
-
-        return $this;
     }
 
     public static function instance(string $channel): self

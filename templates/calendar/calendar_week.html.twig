@@ -5,7 +5,7 @@
 {# parameters #}
 {%- set title = 'calendar.week_title' -%}
 {%- set title_parameters = {'%year%': week.year, '%week%': week.number} -%}
-
+{# body #}
 {% block body %}
 <div class="row">
     <div class="col-md-4">
@@ -72,7 +72,7 @@
     </table>
 {%- endfor %}
 {% endblock body %}
-
+{# stylesheets #}
 {% block stylesheets -%}
 {{ parent() }}
 <style nonce="{{ csp_nonce() }}">

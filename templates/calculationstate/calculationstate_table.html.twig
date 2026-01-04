@@ -4,13 +4,13 @@
 {%- set title = 'calculationstate.list.title' -%}
 {%- set title_icon = ICON_CALCULATION_STATE -%}
 {%- set object_type = ENTITY_CALCULATION_STATE -%}
-
+{# header actions #}
 {% block header_actions -%}
 {% if allow_add %}
     {{ link(path('calculationstate_add', params), 'calculationstate.add.title', 'add-link p-0') }}
 {% endif %}
 {%- endblock header_actions %}
-
+{# global actions #}
 {% block global_actions -%}
 {{- _self.item_external(path('calculationstate_pdf'), 'calculationstate.list.pdf_title', ICON_PDF) }}
 {{- _self.item_external(path('calculationstate_excel'), 'calculationstate.list.excel_title', ICON_EXCEL) }}
@@ -19,31 +19,31 @@
     {{- _self.item_path(path('chart_state_index'), 'chart.state.title', 'chart-pie') }}
 {% endif %}
 {%- endblock global_actions %}
-
+{# show actions #}
 {% block show_actions -%}
 {{- _self.item_path(path('calculationstate_show', params), 'calculationstate.show.title', ICON_SHOW, show_class) }}
 {%- endblock show_actions %}
-
+{# edit actions #}
 {% block edit_actions -%}
 {{- _self.item_path(path('calculationstate_edit', params), 'calculationstate.edit.title', ICON_EDIT, edit_class) }}
 {%- endblock edit_actions %}
-
+{# delete actions #}
 {% block delete_actions -%}
 {{- _self.item_path(path('calculationstate_delete', params), 'calculationstate.delete.title', ICON_DELETE, 'btn-delete') }}
 {%- endblock delete_actions %}
-
+{# add actions #}
 {% block add_actions -%}
 {{- _self.item_path(path('calculationstate_add', params), 'calculationstate.add.title', ICON_ADD, 'btn-add') }}
 {{- _self.item_path(path('calculationstate_clone', params), 'common.button_clone', ICON_COPY, 'btn-clone') }}
 {%- endblock add_actions %}
-
+{# other actions #}
 {% block other_actions -%}
 {% if is_granted(PERMISSION_LIST, ENTITY_CALCULATION) %}
     {{- _self.item_separator() }}
     {{- _self.item_path(path('calculation_index'), 'calculationstate.list.calculation_title', ICON_CALCULATION, 'btn-show-calculation') }}
 {% endif %}
 {%- endblock other_actions %}
-
+{# custom view header #}
 {% block custom_view_card_class ' text-border' %}
 {% block custom_view_header -%}
 {%- if row_edit -%}
@@ -54,14 +54,14 @@
     <span>%code%</span>
 {%- endif -%}
 {%- endblock custom_view_header %}
-
+{# custom view body #}
 {% block custom_view_body -%}
 {{ _self.property_value('%description%') }}
 {{ _self.property_line() }}
 {{ _self.property_row('calculationstate.fields.editable', '%editable%') }}
 {{ _self.property_row('calculationstate.fields.calculations', '%calculations%') }}
 {%- endblock custom_view_body %}
-
+{# stylesheets #}
 {% block stylesheets -%}
     {{ parent() }}
     <style nonce="{{ csp_nonce() }}">

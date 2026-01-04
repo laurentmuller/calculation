@@ -54,7 +54,7 @@
 {{ _self.property_line() }}
 {{ _self.property_value('%items%', 'text-danger') }}
 {%- endblock custom_view_body %}
-
+{# stylesheets #}
 {% block stylesheets -%}
     {{ parent() }}
     <style nonce="{{ csp_nonce() }}">

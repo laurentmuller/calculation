@@ -16,6 +16,7 @@ namespace App\Tests\EntityTrait;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Service\CalculationUpdateService;
+use Symfony\Component\Clock\DatePoint;
 
 /**
  * Trait to manage a calculation.
@@ -29,7 +30,8 @@ trait CalculationTrait
     public function getCalculation(
         ?CalculationState $state = null,
         string $customer = 'Test Customer',
-        string $description = 'Test Description'
+        string $description = 'Test Description',
+        ?DatePoint $date = null
     ): Calculation {
         if ($this->calculation instanceof Calculation) {
             return $this->calculation;
@@ -39,6 +41,9 @@ trait CalculationTrait
         $this->calculation->setState($state ?? $this->getCalculationState())
             ->setCustomer($customer)
             ->setDescription($description);
+        if ($date instanceof DatePoint) {
+            $this->calculation->setDate($date);
+        }
 
         return $this->addEntity($this->calculation);
     }

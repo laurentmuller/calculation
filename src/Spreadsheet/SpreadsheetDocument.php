@@ -284,18 +284,6 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Sets the document description to be translated.
-     *
-     * @param string|\Stringable|TranslatableInterface $id         the description identifier
-     *                                                             (may also be an object that can be cast to string)
-     * @param array                                    $parameters an array of parameters for the message
-     */
-    public function setDescriptionTrans(string|\Stringable|TranslatableInterface $id, array $parameters = []): static
-    {
-        return $this->setDescription($this->trans($id, $parameters));
-    }
-
-    /**
      * Sets the subject property.
      *
      * @param ?string $subject the subject
@@ -323,13 +311,27 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
+     * Sets the document description to be translated.
+     *
+     * @param string|\Stringable|TranslatableInterface $id         the description identifier
+     *                                                             (may also be an object that can be cast to string)
+     * @param array                                    $parameters an array of parameters for the message
+     */
+    public function setTranslatedDescription(
+        string|\Stringable|TranslatableInterface $id,
+        array $parameters = []
+    ): static {
+        return $this->setDescription($this->trans($id, $parameters));
+    }
+
+    /**
      * Sets the title to be translated.
      *
      * @param string|\Stringable|TranslatableInterface $id         the title identifier
      *                                                             (may also be an object that can be cast to string)
      * @param array                                    $parameters an array of parameters for the message
      */
-    public function setTitleTrans(string|\Stringable|TranslatableInterface $id, array $parameters = []): static
+    public function setTranslatedTitle(string|\Stringable|TranslatableInterface $id, array $parameters = []): static
     {
         return $this->setTitle($this->trans($id, $parameters));
     }

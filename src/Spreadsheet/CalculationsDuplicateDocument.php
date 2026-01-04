@@ -31,6 +31,6 @@ class CalculationsDuplicateDocument extends AbstractCalculationItemsDocument
     public function __construct(AbstractController $controller, array $entities)
     {
         parent::__construct($controller, $entities, 'duplicate.title');
-        $this->setDescriptionTrans('duplicate.description');
+        $this->setTranslatedDescription('duplicate.description');
     }
 }

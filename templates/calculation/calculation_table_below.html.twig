@@ -17,7 +17,7 @@
 {{- _self.item_external(path('calculation_below_pdf'), 'calculation.list.pdf_title', ICON_PDF) }}
 {{- _self.item_external(path('calculation_below_excel'), 'calculation.list.excel_title', ICON_EXCEL) }}
 {%- endblock global_actions %}
-
+{# stylesheets #}
 {% block stylesheets -%}
     {{ parent() }}
     <style nonce="{{ csp_nonce() }}">

@@ -21,14 +21,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 trait LogChannelTrait
 {
-    /**
-     * The long application channel name.
-     */
+    // the long application channel name
     private const APP_CHANNEL_LONG = 'application';
-
-    /**
-     * The short application channel name.
-     */
+    // the short application channel name
     private const APP_CHANNEL_SHORT = 'app';
 
     #[Assert\NotBlank]

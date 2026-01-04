@@ -216,7 +216,7 @@ trait ArrayTrait
     }
 
     /**
-     * Maps each keys and values of the given array to a string using the given callback.
+     * Maps all keys and values of the given array to a string using the given callback.
      *
      * @template TKey of array-key
      * @template TValue

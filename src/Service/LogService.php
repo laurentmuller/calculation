@@ -28,9 +28,8 @@ class LogService
 {
     use CacheKeyTrait;
 
-    // the file name
+    private readonly string $fileKey;
     private readonly string $fileName;
-    // the file valid state
     private readonly bool $fileValid;
 
     public function __construct(
@@ -41,6 +40,7 @@ class LogService
     ) {
         $this->fileName = FileUtils::normalize($fileName);
         $this->fileValid = !FileUtils::empty($fileName);
+        $this->fileKey = $this->cleanKey('log_file_' . \basename($this->fileName));
     }
 
     /**
@@ -48,7 +48,7 @@ class LogService
      */
     public function clearCache(): self
     {
-        $this->cache->delete($this->getCacheKey());
+        $this->cache->delete($this->fileKey);
 
         return $this;
     }
@@ -75,7 +75,7 @@ class LogService
     public function getLogFile(): ?LogFile
     {
         if ($this->fileValid) {
-            return $this->cache->get($this->getCacheKey(), $this->parseFile(...));
+            return $this->cache->get($this->fileKey, $this->parseFile(...));
         }
 
         return null;
@@ -87,11 +87,6 @@ class LogService
     public function isFileValid(): bool
     {
         return $this->fileValid;
-    }
-
-    private function getCacheKey(): string
-    {
-        return $this->cleanKey('log_file_' . \basename($this->fileName));
     }
 
     private function parseFile(): LogFile

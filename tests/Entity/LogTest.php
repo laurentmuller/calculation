@@ -147,7 +147,8 @@ final class LogTest extends TestCase
     {
         $log = new Log();
         $log->setMessage('message');
-        $actual = $log->formatMessage($this->createSqlFormatter());
+        $formatter = $this->createSqlFormatter();
+        $actual = $log->formatMessage($formatter);
         self::assertSame('message', $actual);
     }
 
@@ -156,17 +157,19 @@ final class LogTest extends TestCase
         $log = new Log();
         $log->setMessage('message');
         $log->setContext(['key' => 'value']);
-        $actual = $log->formatMessage($this->createSqlFormatter());
+        $formatter = $this->createSqlFormatter();
+        $actual = $log->formatMessage($formatter);
         self::assertSame("message\nContext:\n[\n  'key' => 'value'\n]", $actual);
     }
 
     public function testFormatMessageWithDoctrine(): void
     {
         $log = new Log();
-        $log->setMessage('message');
         $log->setChannel('doctrine');
-        $actual = $log->formatMessage($this->createSqlFormatter());
-        self::assertSame('message', $actual);
+        $log->setMessage('Executing statement');
+        $formatter = $this->createSqlFormatter();
+        $actual = $log->formatMessage($formatter);
+        self::assertSame('Executing statement', $actual);
     }
 
     public function testFormatMessageWithUser(): void
@@ -174,7 +177,8 @@ final class LogTest extends TestCase
         $log = new Log();
         $log->setMessage('message');
         $log->setUser('username');
-        $actual = $log->formatMessage($this->createSqlFormatter());
+        $formatter = $this->createSqlFormatter();
+        $actual = $log->formatMessage($formatter);
         self::assertSame("message\nUser:\nusername", $actual);
     }
 
@@ -183,6 +187,8 @@ final class LogTest extends TestCase
         $date = new DatePoint();
         $log = new Log();
         $log->setCreatedAt($date);
+        $actual = $log->getCreatedAt();
+        self::assertTimestampEquals($date, $actual);
         $expected = FormatUtils::formatDateTime($date, \IntlDateFormatter::SHORT, \IntlDateFormatter::MEDIUM);
         $actual = $log->getFormattedDate();
         self::assertSame($expected, $actual);

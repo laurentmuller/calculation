@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Chart;
 
+use App\Model\CalculationsState;
 use App\Model\CalculationsStateItem;
-use App\Model\CalculationsTotal;
 use App\Parameter\ApplicationParameters;
 use App\Repository\CalculationStateRepository;
 use App\Table\CalculationTable;
@@ -43,27 +43,23 @@ class StateChart extends AbstractHighchart
      *
      * @return array{
      *     chart: StateChart,
-     *     data: CalculationsStateItem[],
-     *     total: CalculationsTotal,
+     *     data: CalculationsState,
      *     minMargin: float}
      */
     public function generate(): array
     {
-        $calculationsState = $this->repository->getCalculations();
-        $items = $calculationsState->items;
-        $total = $calculationsState->total;
+        $data = $this->repository->getCalculations();
 
         $this->setType(self::TYPE_PIE)
             ->hideTitle()
             ->setPlotOptions()
             ->setTooltipOptions()
-            ->setColors($items)
-            ->setSeries($items);
+            ->setColors($data->items)
+            ->setSeries($data->items);
 
         return [
             'chart' => $this,
-            'data' => $items,
-            'total' => $total,
+            'data' => $data,
             'minMargin' => $this->getMinMargin(),
         ];
     }
@@ -126,7 +122,7 @@ class StateChart extends AbstractHighchart
     /**
      * @param CalculationsStateItem[] $items
      */
-    private function mapData(array $items): array
+    private function mapItems(array $items): array
     {
         return \array_map(fn (CalculationsStateItem $entry): array => [
             'y' => $entry->total,
@@ -172,7 +168,7 @@ class StateChart extends AbstractHighchart
         $this->series->merge([
             [
                 'name' => $this->trans('chart.state.title'),
-                'data' => $this->mapData($items),
+                'data' => $this->mapItems($items),
             ],
         ]);
     }

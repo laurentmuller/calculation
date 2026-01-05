@@ -40,8 +40,9 @@ class ProductUpdateController extends AbstractController
         $query = $service->createQuery();
         $application = $this->getApplicationParameters();
 
-        $form = $this->createQueryForm($service, $query);
-        if ($this->handleRequestForm($request, $form)) {
+        $form = $this->createQueryForm($service, $query)
+            ->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
             $service->saveQuery($query);
             $result = $service->update($query);
             if (!$query->isSimulate() && $result->isValid()) {

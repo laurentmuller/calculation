@@ -1,39 +1,35 @@
 {% extends 'cards/card_edit.html.twig' %}
 {# parameters #}
 {%- set title_icon = 'envelope far' -%}
-{%- set title = isMail ? 'user.message.title' : 'user.comment.title' -%}
-{%- set title_description = isMail ? 'user.message.description' : 'user.comment.description' -%}
+{%- set title = message ? 'user.message.title' : 'user.comment.title' -%}
+{%- set title_description = message ? 'user.message.description' : 'user.comment.description' -%}
+{%- set page_list = message ? 'user_index' : 'homepage' -%}
 {%- set submit_text = 'common.button_send' -%}
-{%- set page_list = isMail ? 'user_index' : 'homepage' -%}
 {# body #}
 {% block card_body %}
-{% if isMail %}
     {{ form_row(form.to) }}
-{% else %}
-    {{ form_row(form.from) }}
-{% endif %}
-<div class="row">
-    <div class="col-md-8">
-        {{ form_row(form.subject) }}
+    <div class="row">
+        <div class="col-md-8">
+            {{ form_row(form.subject) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_row(form.importance) }}
+        </div>
     </div>
-    <div class="col-md-4">
-        {{ form_row(form.importance) }}
-    </div>
-</div>
-{{ form_row(form.message) }}
-{{ form_row(form.attachments) }}
+    {{ form_row(form.message) }}
+    {{ form_row(form.attachments) }}
 {% endblock card_body %}
 {# stylesheets #}
 {% block stylesheets %}
-{{ asset_css('css/simple_editor.css') }}
+    {{ asset_css('css/simple_editor.css') }}
 {% endblock stylesheets %}
 {# javascripts #}
 {% block javascripts %}
-{% if is_js_debug %}
-    {{ parent() }}
-    {{ asset_js('js/extensions/simple-editor-extension.js') }}
-    {{ asset_js('js/application/user_comment.js') }}
-{% else %}
-    {{ asset_js('js/compiled/user_comment.js') }}
-{% endif %}
+    {% if is_js_debug %}
+        {{ parent() }}
+        {{ asset_js('js/extensions/simple-editor-extension.js') }}
+        {{ asset_js('js/application/user_comment.js') }}
+    {% else %}
+        {{ asset_js('js/compiled/user_comment.js') }}
+    {% endif %}
 {% endblock javascripts %}

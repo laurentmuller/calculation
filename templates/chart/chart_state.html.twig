@@ -17,7 +17,7 @@
     </tr>
 </thead>
 <tbody data-link="row" class="rowlink">
-    {% for item in data -%}
+    {% for item in data.items -%}
     <tr title="{{ 'chart.state.row'|trans({'%name%': item.code}) }}">
         <td class="text-nowrap">
             <a class="d-flex align-items-center" href="{{ path(list_path, {stateId: item.id}) }}">
@@ -37,6 +37,7 @@
         <td class="text-percent">{{ item.totalPercent|percent(true, 2, 5) }}</td>
     </tr>
     {% endfor -%}
+    {% set total = data.total %}
     <tr title="{{ 'chart.row_all'|trans }}" class="fw-bold">
         <td class="text-nowrap">
             <a href="{{ path(list_path) }}">{{ 'calculation.fields.total'|trans }}</a>

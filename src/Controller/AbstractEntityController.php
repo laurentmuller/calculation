@@ -107,8 +107,9 @@ abstract class AbstractEntityController extends AbstractController
             'csrf_field_name' => 'delete_token',
             'csrf_token_id' => $this->getDeleteToken($item),
         ];
-        $form = $this->createForm(FormType::class, [], $options);
-        if ($this->handleRequestForm($request, $form)) {
+        $form = $this->createForm(FormType::class, [], $options)
+            ->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $this->deleteFromDatabase($item);
             } catch (\Exception $e) {
@@ -153,8 +154,9 @@ abstract class AbstractEntityController extends AbstractController
         $isNew = $item->isNew();
         $this->checkPermission($isNew ? EntityPermission::ADD : EntityPermission::EDIT);
         $type = $this->getEditFormType();
-        $form = $this->createForm($type, $item);
-        if ($this->handleRequestForm($request, $form)) {
+        $form = $this->createForm($type, $item)
+            ->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->saveToDatabase($item);
 
             return $this->redirectToDefaultRoute($request, $item, $parameters['route'] ?? null);

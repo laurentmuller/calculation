@@ -22,7 +22,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Type to send a comment.
+ * Abstract comment type.
  *
  * @extends AbstractType<Comment>
  */
@@ -35,11 +35,7 @@ class UserCommentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $helper = new FormHelper($builder, 'user.fields.');
-
-        /** @var Comment $data */
-        $data = $options['data'];
-        $address = $data->isMail() ? 'to' : 'from';
-        $helper->field($address)
+        $helper->field('to')
             ->updateOption('prepend_icon', 'fa-solid fa-user')
             ->modelTransformer(new AddressTransformer())
             ->addPlainType();
@@ -65,5 +61,11 @@ class UserCommentType extends AbstractType
                 'maxsizetotal' => '30mi', ])
             ->notRequired()
             ->addFileType();
+    }
+
+    #[\Override]
+    public function getBlockPrefix(): string
+    {
+        return '';
     }
 }

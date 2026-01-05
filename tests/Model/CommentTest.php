@@ -25,10 +25,6 @@ final class CommentTest extends TestCase
     public function testConstructor(): void
     {
         $comment = new Comment();
-        self::assertTrue($comment->isMail());
-        $comment = new Comment(false);
-        self::assertFalse($comment->isMail());
-
         self::assertSame([], $comment->getAttachments());
         self::assertNull($comment->getFrom());
         self::assertSame(Importance::getDefault(), $comment->getImportance());
@@ -37,19 +33,23 @@ final class CommentTest extends TestCase
         self::assertNull($comment->getTo());
     }
 
+    public function testInstance(): void
+    {
+        $comment = Comment::instance('subject');
+        self::assertSame('subject', $comment->getSubject());
+    }
+
     public function testProperties(): void
     {
         $comment = new Comment();
 
-        $expected = 'message';
         self::assertNull($comment->getMessage());
-        $comment->setMessage($expected);
-        self::assertSame($expected, $comment->getMessage());
+        $comment->setMessage('message');
+        self::assertSame('message', $comment->getMessage());
 
-        $expected = 'subject';
         self::assertNull($comment->getSubject());
-        $comment->setSubject($expected);
-        self::assertSame($expected, $comment->getSubject());
+        $comment->setSubject('subject');
+        self::assertSame('subject', $comment->getSubject());
 
         $expected = Importance::getDefault();
         self::assertSame($expected, $comment->getImportance());

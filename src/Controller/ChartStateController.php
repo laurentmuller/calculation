@@ -47,8 +47,9 @@ class ChartStateController extends AbstractController
     {
         $this->checkPermission(EntityPermission::EXPORT);
         $state = $repository->getCalculations();
+        $report = new CalculationByStateReport($this, $state, $generator);
 
-        return $this->renderPdfDocument(new CalculationByStateReport($this, $state, $generator));
+        return $this->renderPdfDocument($report);
     }
 
     private function checkPermission(EntityPermission $permission): void

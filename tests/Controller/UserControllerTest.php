@@ -118,7 +118,7 @@ final class UserControllerTest extends EntityControllerTestCase
     public function testMessageSuccess(): void
     {
         $uri = \sprintf('/user/message/%d', self::ID_USER);
-        $data = ['user_comment[message]' => 'The message to send.'];
+        $data = ['message' => 'The message to send.'];
         $this->checkForm($uri, 'common.button_send', $data);
     }
 

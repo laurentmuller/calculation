@@ -22,7 +22,6 @@ use App\Form\User\UserCommentType;
 use App\Model\Comment;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
-use Symfony\Component\Form\FormTypeExtensionInterface;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 final class UserCommentTypeTest extends TypeTestCase
@@ -34,9 +33,9 @@ final class UserCommentTypeTest extends TypeTestCase
     {
         $model = new Comment();
         $data = [
-            'fromAddress' => 'fromAddress@example.com',
-            'toAddress' => 'toAddress@example.com',
             'subject' => 'subject',
+            'from' => 'fromAddress@example.com',
+            'to' => 'toAddress@example.com',
             'message' => 'message',
             'importance' => Importance::HIGH,
             'attachments' => null,
@@ -51,13 +50,13 @@ final class UserCommentTypeTest extends TypeTestCase
     {
         return [
             new PlainType($this->createMockTranslator()),
-            new UserCommentType(),
             new SimpleEditorType(''),
+            new UserCommentType(),
         ];
     }
 
     /**
-     * @phpstan-return FormTypeExtensionInterface<mixed>[]
+     * @return array{FileTypeExtension, InputGroupTypeExtension}
      */
     #[\Override]
     protected function getTypeExtensions(): array

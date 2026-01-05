@@ -47,11 +47,20 @@ readonly class MailerService
      */
     public function sendComment(Comment $comment): void
     {
-        $notification = $this->createNotification($comment->getImportance(), (string) $comment->getMessage())
+        /** @var string $message */
+        $message = $comment->getMessage();
+        /** @var string $subject */
+        $subject = $comment->getSubject();
+        /** @var Address $from */
+        $from = $comment->getFrom();
+        /** @var Address $to */
+        $to = $comment->getTo();
+
+        $notification = $this->createNotification($comment->getImportance(), $message)
             ->attachFromUploadedFiles(...$comment->getAttachments())
-            ->subject((string) $comment->getSubject())
-            ->from($comment->getFrom()) // @phpstan-ignore argument.type
-            ->to($comment->getTo()); // @phpstan-ignore argument.type
+            ->subject($subject)
+            ->from($from)
+            ->to($to);
 
         $this->send($notification);
     }

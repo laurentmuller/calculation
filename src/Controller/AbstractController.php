@@ -37,7 +37,6 @@ use fpdf\PdfDocument;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -306,9 +305,6 @@ abstract class AbstractController extends BaseController
         return $this->createNotFoundException($this->trans($id, $parameters, $domain), $previous);
     }
 
-    /**
-     * {inheritDoc}.
-     */
     #[\Override]
     protected function denyAccessUnlessGranted(mixed $attribute, mixed $subject = null, ?string $message = null): void
     {
@@ -326,25 +322,6 @@ abstract class AbstractController extends BaseController
     {
         /** @phpstan-var string */
         return $this->getParameter('cookie_path');
-    }
-
-    /**
-     * Inspects the given request and calls submit() if the form was submitted, checks whether the given
-     * form is submitted and if the form and all children are valid.
-     *
-     * @template T
-     *
-     * @param FormInterface<T> $form the form to validate
-     *
-     * @see FormInterface::handleRequest()
-     * @see FormInterface::isSubmitted()
-     * @see FormInterface::isValid()
-     */
-    protected function handleRequestForm(Request $request, FormInterface $form): bool
-    {
-        $form->handleRequest($request);
-
-        return $form->isSubmitted() && $form->isValid();
     }
 
     /**

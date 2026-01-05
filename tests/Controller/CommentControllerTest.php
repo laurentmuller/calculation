@@ -37,9 +37,9 @@ final class CommentControllerTest extends ControllerTestCase
             uri: 'user/comment',
             id: 'common.button_send',
             data: [
-                'user_comment[subject]' => 'subject',
-                'user_comment[importance]' => Importance::MEDIUM->value,
-                'user_comment[message]' => 'message',
+                'subject' => 'subject',
+                'importance' => Importance::MEDIUM->value,
+                'message' => 'message',
             ],
             userName: self::ROLE_USER
         );
@@ -63,9 +63,9 @@ final class CommentControllerTest extends ControllerTestCase
             uri: 'user/comment',
             id: 'common.button_send',
             data: [
-                'user_comment[subject]' => 'subject',
-                'user_comment[importance]' => Importance::MEDIUM->value,
-                'user_comment[message]' => 'message',
+                'subject' => 'subject',
+                'importance' => Importance::MEDIUM->value,
+                'message' => 'message',
             ],
             userName: self::ROLE_USER,
             followRedirect: false,

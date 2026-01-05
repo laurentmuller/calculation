@@ -36,8 +36,9 @@ class ImportAddressController extends AbstractController
     #[GetPostRoute(path: '/import', name: 'import')]
     public function invoke(Request $request, SwissPostUpdater $updater): Response
     {
-        $form = $updater->createForm();
-        if ($this->handleRequestForm($request, $form)) {
+        $form = $updater->createForm()
+            ->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
             /** @phpstan-var array{file: UploadedFile|string|null, overwrite: bool} $data */
             $data = $form->getData();
             $file = $data['file'];

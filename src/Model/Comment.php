@@ -63,10 +63,7 @@ class Comment
     #[Assert\NotNull]
     private ?Address $to = null;
 
-    /**
-     * @param bool $mail true to send an email, false to send a comment
-     */
-    public function __construct(private readonly bool $mail = true)
+    public function __construct()
     {
         $this->importance = Importance::getDefault();
     }
@@ -119,13 +116,13 @@ class Comment
     }
 
     /**
-     * Returns if this is an email or a comment.
-     *
-     * @return bool true if is an email, false if is a comment
+     * Create a new instance with the given subject.
      */
-    public function isMail(): bool
+    public static function instance(string $subject): self
     {
-        return $this->mail;
+        $comment = new self();
+
+        return $comment->setSubject($subject);
     }
 
     /**

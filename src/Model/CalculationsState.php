@@ -15,11 +15,11 @@ namespace App\Model;
 
 use App\Traits\MathTrait;
 
-class CalculationsState implements \Countable
+readonly class CalculationsState implements \Countable
 {
     use MathTrait;
 
-    public readonly CalculationsTotal $total;
+    public CalculationsTotal $total;
 
     public function __construct(
         /** @var CalculationsStateItem[] $items */

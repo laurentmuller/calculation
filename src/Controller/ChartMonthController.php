@@ -61,8 +61,9 @@ class ChartMonthController extends AbstractController
         $this->checkPermission(EntityPermission::EXPORT);
         $count = $this->validateCount($count);
         $month = $repository->getByMonth($count);
+        $report = new CalculationByMonthReport($this, $month, $generator);
 
-        return $this->renderPdfDocument(new CalculationByMonthReport($this, $month, $generator));
+        return $this->renderPdfDocument($report);
     }
 
     private function checkPermission(EntityPermission $permission): void

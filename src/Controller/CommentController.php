@@ -23,8 +23,8 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 /**
  * Controller to send comments to the webmaster.
@@ -37,16 +37,19 @@ class CommentController extends AbstractController
      */
     #[ForUser]
     #[GetPostRoute(path: '/comment', name: 'comment')]
-    public function invoke(Request $request, MailerService $service, LoggerInterface $logger): Response
-    {
-        /** @var User|Address $from */
-        $from = $this->getUser() ?? $this->getAddressFrom();
-        $comment = new Comment(false);
-        $comment->setSubject($this->getApplicationName())
+    public function invoke(
+        Request $request,
+        #[CurrentUser]
+        User $from,
+        MailerService $service,
+        LoggerInterface $logger
+    ): Response {
+        $comment = Comment::instance($this->getApplicationName())
             ->setFrom($from)
             ->setTo($this->getAddressFrom());
-        $form = $this->createForm(UserCommentType::class, $comment);
-        if ($this->handleRequestForm($request, $form)) {
+        $form = $this->createForm(UserCommentType::class, $comment)
+            ->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $service->sendComment($comment);
 
@@ -55,11 +58,10 @@ class CommentController extends AbstractController
                 return $this->renderFormException('user.comment.error', $e, $logger);
             }
         }
-        $parameters = [
-            'form' => $form,
-            'isMail' => $comment->isMail(),
-        ];
 
-        return $this->render('user/user_comment.html.twig', $parameters);
+        return $this->render('user/user_comment.html.twig', [
+            'form' => $form,
+            'message' => false,
+        ]);
     }
 }

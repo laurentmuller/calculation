@@ -60,8 +60,9 @@ class LogController extends AbstractController
             return $this->getEmptyResponse();
         }
 
-        $form = $this->createForm(FormType::class);
-        if ($this->handleRequestForm($request, $form)) {
+        $form = $this->createForm(FormType::class)
+            ->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
             try {
                 if ($this->setEmptyFile($file)) {
                     return $this->redirectToHomePage('log.delete.success');

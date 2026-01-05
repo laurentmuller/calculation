@@ -81,8 +81,9 @@ class ProfileController extends AbstractController
         string $message,
         array $parameters = []
     ): Response {
-        $form = $this->createForm($type, $user);
-        if ($this->handleRequestForm($request, $form)) {
+        $form = $this->createForm($type, $user)
+            ->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->manager->flush();
 
             return $this->redirectToHomePage($message, ['%username%' => $user]);

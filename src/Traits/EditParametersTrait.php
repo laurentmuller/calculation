@@ -46,8 +46,9 @@ trait EditParametersTrait
         array $templateParameters
     ): Response {
         $options = ['default_values' => $parameters->getDefaultValues()];
-        $form = $this->createForm($type, $parameters, $options);
-        if ($this->handleRequestForm($request, $form)) {
+        $form = $this->createForm($type, $parameters, $options)
+            ->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
             if (!$parameters->save()) {
                 return $this->redirectToHomePage();
             }

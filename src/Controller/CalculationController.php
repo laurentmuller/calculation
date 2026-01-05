@@ -190,8 +190,9 @@ class CalculationController extends AbstractEntityController
     #[GetPostRoute(path: '/state/{id}', name: 'state', requirements: self::ID_REQUIREMENT)]
     public function state(Request $request, Calculation $item): Response
     {
-        $form = $this->createForm(CalculationEditStateType::class, $item);
-        if ($this->handleRequestForm($request, $form)) {
+        $form = $this->createForm(CalculationEditStateType::class, $item)
+            ->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->getRepository()->flush();
 
             return $this->redirectToDefaultRoute($request, $item);

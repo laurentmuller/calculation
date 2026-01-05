@@ -55,8 +55,9 @@ class AdminController extends AbstractController
         CacheService $service,
         LoggerInterface $logger
     ): Response {
-        $form = $this->createForm(FormType::class);
-        if ($this->handleRequestForm($request, $form)) {
+        $form = $this->createForm(FormType::class)
+            ->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
             try {
                 if ($service->clear()) {
                     return $this->redirectToHomePage('clear_cache.success', request: $request);
@@ -173,8 +174,9 @@ class AdminController extends AbstractController
         Role $role,
         Role $default
     ): Response {
-        $form = $this->createForm(RoleRightsType::class, $role);
-        if ($this->handleRequestForm($request, $form)) {
+        $form = $this->createForm(RoleRightsType::class, $role)
+            ->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
             $rights = $role->getRights();
             if ($role->isAdmin()) {
                 $parameters->getRights()->setAdminRights($rights);

@@ -39,8 +39,9 @@ class CalculationUpdateController extends AbstractController
         $query = $service->createQuery();
         $application = $this->getApplicationParameters();
         $datesParameter = $application->getDates();
-        $form = $this->createQueryForm($query);
-        if ($this->handleRequestForm($request, $form)) {
+        $form = $this->createQueryForm($query)
+            ->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
             $service->saveQuery($query);
             $result = $service->update($query);
             if (!$query->isSimulate() && $result->isValid()) {

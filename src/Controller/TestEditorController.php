@@ -64,9 +64,9 @@ class TestEditorController extends AbstractController
                 'maxsizetotal' => '30mi'])
             ->notRequired()
             ->addFileType();
-        $form = $helper->createForm();
-
-        if ($this->handleRequestForm($request, $form)) {
+        $form = $helper->createForm()
+            ->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
             /**
              * @var array{email: string, message: string, importance: Importance, attachments: UploadedFile[]} $data
              */

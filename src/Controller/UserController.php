@@ -57,10 +57,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordToken;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
@@ -128,25 +128,29 @@ class UserController extends AbstractEntityController
     }
 
     /**
-     * Send an email from the current user to the selected user.
+     * Send a comment from the current user to the selected user.
      */
     #[GetPostRoute(path: '/message/{id}', name: 'message', requirements: self::ID_REQUIREMENT)]
-    public function message(Request $request, User $user, MailerService $service, LoggerInterface $logger): Response
-    {
+    public function message(
+        Request $request,
+        User $user,
+        #[CurrentUser]
+        User $from,
+        MailerService $service,
+        LoggerInterface $logger
+    ): Response {
         if ($this->isConnectedUser($user)) {
             $this->warningTrans('user.message.connected');
 
             return $this->redirectToDefaultRoute($request, $user);
         }
 
-        /** @var User|Address $from */
-        $from = $this->getUser() ?? $this->getAddressFrom();
-        $comment = new Comment();
-        $comment->setSubject($this->getApplicationName())
+        $comment = Comment::instance($this->getApplicationName())
             ->setFrom($from)
             ->setTo($user);
-        $form = $this->createForm(UserCommentType::class, $comment);
-        if ($this->handleRequestForm($request, $form)) {
+        $form = $this->createForm(UserCommentType::class, $comment)
+            ->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $service->sendComment($comment);
                 $this->successTrans('user.message.success', ['%name%' => $user->getDisplay()]);
@@ -156,12 +160,11 @@ class UserController extends AbstractEntityController
                 return $this->renderFormException('user.message.error', $e, $logger);
             }
         }
-        $parameters = [
-            'form' => $form,
-            'isMail' => $comment->isMail(),
-        ];
 
-        return $this->render('user/user_comment.html.twig', $parameters);
+        return $this->render('user/user_comment.html.twig', [
+            'form' => $form,
+            'message' => true,
+        ]);
     }
 
     /**
@@ -170,8 +173,9 @@ class UserController extends AbstractEntityController
     #[GetPostRoute(path: '/password/{id}', name: 'password', requirements: self::ID_REQUIREMENT)]
     public function password(Request $request, User $item, PasswordTooltipService $service): Response
     {
-        $form = $this->createForm(UserChangePasswordType::class, $item);
-        if ($this->handleRequestForm($request, $form)) {
+        $form = $this->createForm(UserChangePasswordType::class, $item)
+            ->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->saveToDatabase($item);
 
             return $this->redirectToDefaultRoute($request, $item);
@@ -224,8 +228,9 @@ class UserController extends AbstractEntityController
         $data = [$name => $users];
         $form = $this->createFormBuilder($data)
             ->add($name, ResetAllPasswordType::class)
-            ->getForm();
-        if ($this->handleRequestForm($request, $form)) {
+            ->getForm()
+            ->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
             /** @var User[] $users */
             $users = $form->get($name)->getData();
             $repository->resetPasswordRequest($users);
@@ -244,8 +249,9 @@ class UserController extends AbstractEntityController
     public function resetPasswordRequest(Request $request, User $item): Response
     {
         $parameters = ['%name%' => $item];
-        $form = $this->createForm(FormType::class);
-        if ($this->handleRequestForm($request, $form)) {
+        $form = $this->createForm(FormType::class)
+            ->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
             if ($this->removeResetPasswordRequest($item)) {
                 $this->successTrans('user.reset.success', $parameters);
             } else {
@@ -281,8 +287,9 @@ class UserController extends AbstractEntityController
         }
 
         $default = $this->getDefaultRole($builder, $item);
-        $form = $this->createForm(UserRightsType::class, $item);
-        if ($this->handleRequestForm($request, $form)) {
+        $form = $this->createForm(UserRightsType::class, $item)
+            ->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
             // same as default?
             if ($item->getRights() === $default->getRights()) {
                 $item->setRights(null);
@@ -339,8 +346,9 @@ class UserController extends AbstractEntityController
     public function sendPasswordRequest(Request $request, User $item, ResetPasswordService $service): Response
     {
         $parameters = ['%name%' => $item];
-        $form = $this->createForm(FormType::class);
-        if ($this->handleRequestForm($request, $form)) {
+        $form = $this->createForm(FormType::class)
+            ->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->removeResetPasswordRequest($item);
             $result = $service->sendEmail($request, $item);
             if (false === $result) {

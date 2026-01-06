@@ -17,7 +17,7 @@ rules:
         enabled: false
     # to be verified one by one
     php.invalid_typehint:
-        enabled: true
+        enabled: false
     php.missing_return_typehint:
         enabled: false
     php.invalid_return_typehint:

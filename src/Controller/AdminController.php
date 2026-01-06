@@ -29,6 +29,7 @@ use App\Service\CommandService;
 use App\Service\RoleBuilderService;
 use App\Service\RoleService;
 use App\Traits\EditParametersTrait;
+use App\Traits\FormExceptionTrait;
 use App\Utils\FileUtils;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -45,6 +46,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class AdminController extends AbstractController
 {
     use EditParametersTrait;
+    use FormExceptionTrait;
 
     /**
      * Clear the application cache.

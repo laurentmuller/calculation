@@ -19,6 +19,7 @@ use App\Entity\User;
 use App\Enums\Importance;
 use App\Form\Type\SimpleEditorType;
 use App\Service\MailerService;
+use App\Traits\FormExceptionTrait;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,6 +32,8 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 #[Route(path: '/test', name: 'test_')]
 class TestEditorController extends AbstractController
 {
+    use FormExceptionTrait;
+
     /**
      * Test sending notification mail.
      */

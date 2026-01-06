@@ -36,13 +36,11 @@ use App\Word\AbstractWordDocument;
 use App\Word\WordDocument;
 use fpdf\PdfDocument;
 use Psr\Container\ContainerExceptionInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Requirement\Requirement;
@@ -351,21 +349,6 @@ abstract class AbstractController extends BaseController
     protected function jsonTrue(array $data = []): JsonResponse
     {
         return $this->json(\array_merge_recursive(['result' => true], $data));
-    }
-
-    /**
-     * Render the template exception.
-     */
-    protected function renderFormException(string $id, \Throwable $e, ?LoggerInterface $logger = null): Response
-    {
-        $message = $this->trans($id);
-        $context = $this->getExceptionContext($e);
-        $logger?->error($message, $context);
-
-        return $this->render('bundles/TwigBundle/Exception/exception.html.twig', [
-            'message' => $message,
-            'exception' => $e,
-        ]);
     }
 
     /**

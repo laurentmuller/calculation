@@ -31,6 +31,7 @@ use App\Service\LogService;
 use App\Spreadsheet\LogsDocument;
 use App\Table\DataQuery;
 use App\Table\LogTable;
+use App\Traits\FormExceptionTrait;
 use App\Traits\TableTrait;
 use App\Utils\FileUtils;
 use Psr\Log\LoggerInterface;
@@ -48,6 +49,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(path: '/log', name: 'log_')]
 class LogController extends AbstractController
 {
+    use FormExceptionTrait;
     use TableTrait;
 
     /**

@@ -52,6 +52,7 @@ use App\Spreadsheet\UserRightsDocument;
 use App\Spreadsheet\UsersDocument;
 use App\Table\DataQuery;
 use App\Table\UserTable;
+use App\Traits\FormExceptionTrait;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -75,6 +76,8 @@ use Vich\UploaderBundle\Storage\StorageInterface;
 #[Route(path: '/user', name: 'user_')]
 class UserController extends AbstractEntityController
 {
+    use FormExceptionTrait;
+
     public function __construct(UserRepository $repository, private readonly PasswordTooltipService $service)
     {
         parent::__construct($repository);

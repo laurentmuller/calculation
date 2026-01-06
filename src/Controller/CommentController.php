@@ -19,6 +19,7 @@ use App\Entity\User;
 use App\Form\User\UserCommentType;
 use App\Model\UserComment;
 use App\Service\MailerService;
+use App\Traits\FormExceptionTrait;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,6 +33,8 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 #[Route(path: '/user', name: 'user_')]
 class CommentController extends AbstractController
 {
+    use FormExceptionTrait;
+
     /**
      * Send a comment to the webmaster.
      */

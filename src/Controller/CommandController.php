@@ -26,7 +26,9 @@ use App\Service\CommandDataService;
 use App\Service\CommandFormService;
 use App\Service\CommandService;
 use App\Traits\CacheKeyTrait;
+use App\Traits\FormExceptionTrait;
 use App\Utils\StringUtils;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,6 +46,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class CommandController extends AbstractController
 {
     use CacheKeyTrait;
+    use FormExceptionTrait;
 
     private const KEY_QUERY_COMMAND = 'last_command';
 
@@ -87,7 +90,8 @@ class CommandController extends AbstractController
         Request $request,
         CommandService $service,
         CommandFormService $formService,
-        CommandDataService $dataService
+        CommandDataService $dataService,
+        LoggerInterface $logger,
     ): Response {
         $name = $query->name ?? '';
         if (!$service->hasCommand($name)) {
@@ -119,7 +123,7 @@ class CommandController extends AbstractController
                     'query' => $query,
                 ]);
             } catch (\Exception $e) {
-                return $this->renderFormException('command.result.error', $e);
+                return $this->renderFormException('command.result.error', $e, $logger);
             }
         }
 

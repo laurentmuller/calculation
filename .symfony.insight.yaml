@@ -4,8 +4,6 @@ global_exclude_dirs:
     - var
     - vendor
     - vendor-bin
-exclude_patterns:
-    - config/reference.php
 rules:
     web.apache_config:
         enabled: false
@@ -14,6 +12,8 @@ rules:
     twig.xss_vulnerability:
         enabled: false
     symfony.verbose_logging_in_production:
+        enabled: false
+    php.file_contains_more_than_one_class:
         enabled: false
     # to be verified one by one
     php.invalid_typehint:

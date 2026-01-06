@@ -115,11 +115,13 @@ readonly class ResetPasswordService
     }
 
     /**
-     * Handle an exception by set the authentication error to the session, if applicable, and log it.
+     * Handle an exception.
      */
     public function handleException(Request $request, \Throwable $e): void
     {
-        $this->logException($this->service->handleException($request, $e));
+        $exception = $this->service->handleException($request, $e);
+        $message = $this->service->translate($exception);
+        $this->logException($exception, $message);
     }
 
     /**

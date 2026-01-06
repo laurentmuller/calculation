@@ -42,7 +42,7 @@ authenticator:
     empty_token: Le jeton de falsification de requête inter-sites (CSRF) est requis.
 # error
 error:
-    send_email: Il y a eu un problème lors de l'envoi du courrier électronique.
+    send_email: Un problème est survenu lors de l'envoi du courrier électronique.
     unknown: Une erreur inconnue s'est produite lors de l'exécution de l'action.
 # common
 Invalid credentials.: Le nom de l'utilisateur ou le mot de passe est invalide.

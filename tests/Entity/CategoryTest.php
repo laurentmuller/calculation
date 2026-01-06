@@ -121,18 +121,6 @@ final class CategoryTest extends EntityValidatorTestCase
         }
     }
 
-    public function testFullCode(): void
-    {
-        $object = new Category();
-        $object->setCode('code');
-        self::assertSame('code', $object->getFullCode());
-
-        $group = new Group();
-        $group->setCode('group');
-        $object->setGroup($group);
-        self::assertSame('code - group', $object->getFullCode());
-    }
-
     public function testGroup(): void
     {
         $category = new Category();

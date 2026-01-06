@@ -73,8 +73,6 @@ class CalculationCategory extends AbstractEntity implements \Countable, Comparab
      * The items.
      *
      * @var Collection<int, CalculationItem>
-     *
-     * @phpstan-var ArrayCollection<int, CalculationItem>
      */
     #[Assert\Valid]
     #[ORM\OneToMany(

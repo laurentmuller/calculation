@@ -18,6 +18,7 @@ use App\Attribute\ForAdmin;
 use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
 use App\Enums\FlashType;
+use App\Model\TranslatableFlashMessage;
 use App\Report\CalculationsEmptyReport;
 use App\Repository\CalculationRepository;
 use App\Resolver\DataQueryValueResolver;
@@ -91,7 +92,12 @@ class CalculationEmptyController extends AbstractController
     private function getEmptyResponse(CalculationRepository $repository): ?RedirectResponse
     {
         if (0 === $repository->countItemsEmpty()) {
-            return $this->redirectToHomePage(id: 'empty.empty', type: FlashType::WARNING);
+            return $this->redirectToHomePage(
+                message: new TranslatableFlashMessage(
+                    message: 'empty.empty',
+                    type: FlashType::WARNING
+                )
+            );
         }
 
         return null;

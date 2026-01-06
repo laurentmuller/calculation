@@ -20,6 +20,7 @@ use App\Entity\User;
 use App\Enums\Importance;
 use App\Form\User\UserRegistrationType;
 use App\Mime\NotificationEmail;
+use App\Model\TranslatableFlashMessage;
 use App\Repository\UserRepository;
 use App\Service\EmailVerifier;
 use App\Service\UserExceptionService;
@@ -107,7 +108,12 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute(self::ROUTE_REGISTER);
         }
 
-        return $this->redirectToHomePage('registration.confirmed', ['%username%' => $user->getUserIdentifier()]);
+        return $this->redirectToHomePage(
+            message: new TranslatableFlashMessage(
+                message: 'registration.confirmed',
+                parameters: ['%username%' => $user],
+            )
+        );
     }
 
     private function createEmail(User $user): NotificationEmail
@@ -128,6 +134,8 @@ class RegistrationController extends AbstractController
 
     private function handleException(Request $request, \Throwable $e): void
     {
-        $this->logException($this->service->handleException($request, $e));
+        $exception = $this->service->handleException($request, $e);
+        $message = $this->service->translate($exception);
+        $this->logException($exception, $message);
     }
 }

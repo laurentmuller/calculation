@@ -45,8 +45,6 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
      * The children's items.
      *
      * @var Collection<int, TaskItem>
-     *
-     * @phpstan-var ArrayCollection<int, TaskItem>
      */
     #[Assert\Valid]
     #[ORM\OneToMany(

@@ -71,11 +71,9 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     private float $globalMargin = 0.0;
 
     /**
-     * The children groupes.
+     * The groups.
      *
      * @var Collection<int, CalculationGroup>
-     *
-     * @phpstan-var ArrayCollection<int, CalculationGroup>
      */
     #[Assert\Valid]
     #[ORM\OneToMany(

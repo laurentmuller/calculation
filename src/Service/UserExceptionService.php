@@ -17,22 +17,26 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ExpiredResetPasswordTokenException;
 use SymfonyCasts\Bundle\ResetPassword\Exception\InvalidResetPasswordTokenException;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\Exception\TooManyPasswordRequestsException;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\ExpiredSignatureException;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\InvalidSignatureException;
-use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\WrongEmailVerifyException;
 
 /**
  * Service to map registration and reset password exceptions.
  */
-class UserExceptionService
+readonly class UserExceptionService
 {
+    public function __construct(private TranslatorInterface $translator)
+    {
+    }
+
     /**
-     * Handle an exception by set the authentication error to the session.
+     * Handle an exception by set the authentication error to the session (if any).
      */
     public function handleException(Request $request, \Throwable $e): CustomUserMessageAuthenticationException
     {
@@ -45,14 +49,11 @@ class UserExceptionService
     }
 
     /**
-     * Creates a custom user exception.
+     * Translate the given exception, using the security domain.
      */
-    private function createException(
-        string $message,
-        \Throwable $previous,
-        array $parameters = []
-    ): CustomUserMessageAuthenticationException {
-        return new CustomUserMessageAuthenticationException($message, $parameters, 0, $previous);
+    public function translate(CustomUserMessageAuthenticationException $exception): string
+    {
+        return $this->translator->trans($exception->getMessageKey(), $exception->getMessageData(), 'security');
     }
 
     /**
@@ -65,7 +66,6 @@ class UserExceptionService
             $e instanceof ExpiredSignatureException => 'registration.expired_signature',
             $e instanceof InvalidSignatureException => 'registration.invalid_signature',
             $e instanceof WrongEmailVerifyException => 'registration.wrong_email_verify',
-            $e instanceof VerifyEmailExceptionInterface => $e->getReason(),
             // reset password
             $e instanceof ExpiredResetPasswordTokenException => 'reset.expired_reset_password_token',
             $e instanceof InvalidResetPasswordTokenException => 'reset.invalid_reset_password_token',
@@ -77,11 +77,15 @@ class UserExceptionService
             default => 'error.unknown'
         };
 
-        $parameters = match (true) {
+        $messageData = match (true) {
             $e instanceof TooManyPasswordRequestsException => ['%availableAt%' => $e->getAvailableAt()->format('H:i')],
             default => []
         };
 
-        return $this->createException($message, $e, $parameters);
+        return new CustomUserMessageAuthenticationException(
+            message: $message,
+            messageData: $messageData,
+            previous: $e
+        );
     }
 }

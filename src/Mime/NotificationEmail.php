@@ -150,7 +150,8 @@ class NotificationEmail extends BaseNotificationEmail
     /**
      * @phpstan-param Importance|self::IMPORTANCE_* $importance
      *
-     * @throws \InvalidArgumentException if the importance is a string and cannot be translated to the corresponding enumeration
+     * @throws \InvalidArgumentException if the importance is a string and cannot be translated to the corresponding
+     *                                   enumeration
      */
     #[\Override]
     public function importance(Importance|string $importance): static
@@ -162,7 +163,7 @@ class NotificationEmail extends BaseNotificationEmail
                 throw new \InvalidArgumentException(\sprintf('Invalid importance value: "%s".', $importance), $e->getCode(), $e);
             }
         }
-        $this->importance = $importance->translateTitle($this->translator);
+        $this->importance = $importance->transTitle($this->translator);
 
         return parent::importance($importance->value);
     }

@@ -39,8 +39,6 @@ class CalculationState extends AbstractCodeEntity
      * The calculations.
      *
      * @var Collection<int, Calculation>
-     *
-     * @phpstan-var ArrayCollection<int, Calculation>
      */
     #[ORM\OneToMany(targetEntity: Calculation::class, mappedBy: 'state', fetch: self::EXTRA_LAZY)]
     private Collection $calculations;

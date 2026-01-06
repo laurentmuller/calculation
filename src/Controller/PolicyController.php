@@ -36,7 +36,7 @@ class PolicyController extends AbstractController
     #[GetRoute(path: '/accept', name: 'accept')]
     public function accept(): RedirectResponse
     {
-        $response = $this->redirectToHomePage('cookie_banner.success');
+        $response = $this->redirectToHomePage(message: 'cookie_banner.success');
         $this->updateCookie($response, self::POLICY_ACCEPTED, true);
 
         return $response;

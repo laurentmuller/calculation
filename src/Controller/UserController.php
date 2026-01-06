@@ -25,6 +25,7 @@ use App\Attribute\PdfRoute;
 use App\Attribute\ShowEntityRoute;
 use App\Entity\User;
 use App\Enums\EntityPermission;
+use App\Enums\FlashType;
 use App\Form\User\ResetAllPasswordType;
 use App\Form\User\UserChangePasswordType;
 use App\Form\User\UserCommentType;
@@ -32,6 +33,7 @@ use App\Form\User\UserRightsType;
 use App\Interfaces\EntityInterface;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
+use App\Model\TranslatableFlashMessage;
 use App\Model\UserComment;
 use App\Report\UsersReport;
 use App\Report\UsersRightsReport;
@@ -85,9 +87,15 @@ class UserController extends AbstractEntityController
     public function delete(Request $request, User $item, Security $security, LoggerInterface $logger): Response
     {
         if ($this->isConnectedUser($item) || $this->isOriginalUser($item, $security)) {
-            $this->warningTrans('user.delete.connected', ['%name%' => $item]);
-
-            return $this->redirectToDefaultRoute($request, $item);
+            return $this->redirectToDefaultRoute(
+                request: $request,
+                item: $item,
+                message: new TranslatableFlashMessage(
+                    message: 'user.delete.connected',
+                    parameters: ['%name%' => $item],
+                    type: FlashType::WARNING,
+                )
+            );
         }
 
         return $this->deleteEntity($request, $item, $logger);
@@ -140,22 +148,30 @@ class UserController extends AbstractEntityController
         LoggerInterface $logger
     ): Response {
         if ($this->isConnectedUser($user)) {
-            $this->warningTrans('user.message.connected');
-
-            return $this->redirectToDefaultRoute($request, $user);
+            return $this->redirectToDefaultRoute(
+                request: $request,
+                item: $user,
+                message: new TranslatableFlashMessage(
+                    message: 'user.message.connected',
+                    type: FlashType::WARNING,
+                )
+            );
         }
-
-        $comment = UserComment::instance($this->getApplicationName())
-            ->setFrom($from)
-            ->setTo($user);
+        $comment = UserComment::instance($this->getApplicationName(), $from, $user);
         $form = $this->createForm(UserCommentType::class, $comment)
             ->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $service->sendComment($comment);
-                $this->successTrans('user.message.success', ['%name%' => $user->getDisplay()]);
 
-                return $this->redirectToDefaultRoute($request, $user);
+                return $this->redirectToDefaultRoute(
+                    request: $request,
+                    item: $user,
+                    message: new TranslatableFlashMessage(
+                        message: 'user.message.success',
+                        parameters: ['%name%' => $user]
+                    )
+                );
             } catch (TransportExceptionInterface $e) {
                 return $this->renderFormException('user.message.error', $e, $logger);
             }
@@ -212,9 +228,13 @@ class UserController extends AbstractEntityController
         $users = $repository->getResettableUsers();
         $count = \count($users);
         if (0 === $count) {
-            $this->warningTrans('user.reset_all.empty');
-
-            return $this->redirectToDefaultRoute($request);
+            return $this->redirectToDefaultRoute(
+                request: $request,
+                message: new TranslatableFlashMessage(
+                    message: 'user.reset_all.empty',
+                    type: FlashType::WARNING,
+                )
+            );
         }
 
         if (1 === $count) {
@@ -224,19 +244,23 @@ class UserController extends AbstractEntityController
             return $this->redirectToRoute('user_reset', $params);
         }
 
-        $name = 'users';
-        $data = [$name => $users];
+        $data = ['users' => $users];
         $form = $this->createFormBuilder($data)
-            ->add($name, ResetAllPasswordType::class)
+            ->add('users', ResetAllPasswordType::class)
             ->getForm()
             ->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var User[] $users */
-            $users = $form->get($name)->getData();
+            $users = $form->get('users')->getData();
             $repository->resetPasswordRequest($users);
-            $this->successTrans('user.reset_all.success', ['%count%' => \count($users)]);
 
-            return $this->redirectToDefaultRoute($request);
+            return $this->redirectToDefaultRoute(
+                request: $request,
+                message: new TranslatableFlashMessage(
+                    message: 'user.reset_all.success',
+                    parameters: ['%count%' => \count($users)],
+                )
+            );
         }
 
         return $this->render('user/user_reset_all_passwords.html.twig', ['form' => $form]);
@@ -253,12 +277,22 @@ class UserController extends AbstractEntityController
             ->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             if ($this->removeResetPasswordRequest($item)) {
-                $this->successTrans('user.reset.success', $parameters);
+                $id = 'user.reset.success';
+                $type = FlashType::SUCCESS;
             } else {
-                $this->warningTrans('user.reset.error', $parameters);
+                $id = 'user.reset.error';
+                $type = FlashType::WARNING;
             }
 
-            return $this->redirectToDefaultRoute($request, $item);
+            return $this->redirectToDefaultRoute(
+                request: $request,
+                item: $item,
+                message: new TranslatableFlashMessage(
+                    message: $id,
+                    parameters: ['%name%' => $item],
+                    type: $type,
+                )
+            );
         }
 
         return $this->render('cards/card_delete.html.twig', [
@@ -281,16 +315,20 @@ class UserController extends AbstractEntityController
         RoleBuilderService $builder
     ): Response {
         if ($this->isConnectedUser($item) && !$service->hasRole($item, RoleInterface::ROLE_SUPER_ADMIN)) {
-            $this->warningTrans('user.rights.connected');
-
-            return $this->redirectToDefaultRoute($request, $item);
+            return $this->redirectToDefaultRoute(
+                request: $request,
+                item: $item,
+                message: new TranslatableFlashMessage(
+                    message: 'user.rights.connected',
+                    type: FlashType::WARNING,
+                )
+            );
         }
 
         $default = $this->getDefaultRole($builder, $item);
         $form = $this->createForm(UserRightsType::class, $item)
             ->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            // same as default?
             if ($item->getRights() === $default->getRights()) {
                 $item->setRights(null);
                 if ($item->isEnabled()) {
@@ -352,14 +390,26 @@ class UserController extends AbstractEntityController
             $this->removeResetPasswordRequest($item);
             $result = $service->sendEmail($request, $item);
             if (false === $result) {
-                $this->warningTrans('reset.user_not_found', $parameters, 'security');
+                $id = 'reset.user_not_found';
+                $type = FlashType::WARNING;
             } elseif (!$result instanceof ResetPasswordToken) {
-                $this->warningTrans('reset.token_not_found', $parameters, 'security');
+                $id = 'reset.token_not_found';
+                $type = FlashType::WARNING;
             } else {
-                $this->successTrans('reset.token_send', $parameters, 'security');
+                $id = 'reset.token_send';
+                $type = FlashType::SUCCESS;
             }
 
-            return $this->redirectToDefaultRoute($request, $item);
+            return $this->redirectToDefaultRoute(
+                request: $request,
+                item: $item,
+                message: new TranslatableFlashMessage(
+                    message: $id,
+                    parameters: $parameters,
+                    domain: 'security',
+                    type: $type
+                )
+            );
         }
 
         return $this->render('cards/card_confirm.html.twig', [

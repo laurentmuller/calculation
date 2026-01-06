@@ -42,7 +42,7 @@ trait EditParametersTrait
         Request $request,
         AbstractParameters $parameters,
         string $type,
-        string $success,
+        string $message,
         array $templateParameters
     ): Response {
         $options = ['default_values' => $parameters->getDefaultValues()];
@@ -52,7 +52,7 @@ trait EditParametersTrait
             if (!$parameters->save()) {
                 return $this->redirectToHomePage();
             }
-            $response = $this->redirectToHomePage($success);
+            $response = $this->redirectToHomePage(message: $message);
             $view = $parameters->getDisplay()->getDisplayMode();
             $this->updateCookie($response, TableInterface::PARAM_VIEW, $view);
 

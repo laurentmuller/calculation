@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Traits;
 
 use App\Entity\CalculationState;
-use App\Enums\FlashType;
+use App\Model\TranslatableFlashMessage;
 use App\Parameter\UserParameters;
 use App\Table\AbstractTable;
 use App\Table\DataQuery;
@@ -84,9 +84,10 @@ final class TableTraitTest extends TestCase
         return new JsonResponse($data, $status);
     }
 
-    public function redirectToHomePage(?string $id = null, FlashType $type = FlashType::SUCCESS): Response
-    {
-        return new Response(($id ?? '') . $type->getIcon());
+    public function redirectToHomePage(
+        TranslatableFlashMessage $message
+    ): Response {
+        return new Response($message->getMessage());
     }
 
     public function render(string $view, array $parameters = []): Response

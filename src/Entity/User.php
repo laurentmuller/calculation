@@ -86,8 +86,6 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
 
     /**
      * @var Collection<int, UserProperty>
-     *
-     * @phpstan-var ArrayCollection<int, UserProperty>
      */
     #[ORM\OneToMany(
         targetEntity: UserProperty::class,

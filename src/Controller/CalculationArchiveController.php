@@ -15,8 +15,10 @@ namespace App\Controller;
 
 use App\Attribute\ForAdmin;
 use App\Attribute\GetPostRoute;
+use App\Enums\FlashType;
 use App\Form\CalculationState\CalculationStateListType;
 use App\Model\CalculationArchiveQuery;
+use App\Model\TranslatableFlashMessage;
 use App\Repository\CalculationStateRepository;
 use App\Service\CalculationArchiveService;
 use Doctrine\ORM\QueryBuilder;
@@ -36,10 +38,22 @@ class CalculationArchiveController extends AbstractController
     public function invoke(Request $request, CalculationArchiveService $service): Response
     {
         if (!$service->isEditableStates()) {
-            return $this->redirectToHomePage('archive.editable_empty', request: $request);
+            return $this->redirectToHomePage(
+                request: $request,
+                message: new TranslatableFlashMessage(
+                    message: 'archive.editable_empty',
+                    type: FlashType::WARNING
+                )
+            );
         }
         if (!$service->isNotEditableStates()) {
-            return $this->redirectToHomePage('archive.not_editable_empty', request: $request);
+            return $this->redirectToHomePage(
+                request: $request,
+                message: new TranslatableFlashMessage(
+                    message: 'archive.not_editable_empty',
+                    type: FlashType::WARNING
+                )
+            );
         }
 
         $query = $service->createQuery();

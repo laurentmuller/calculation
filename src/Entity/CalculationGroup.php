@@ -58,8 +58,6 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
      * The categories.
      *
      * @var Collection<int, CalculationCategory>
-     *
-     * @phpstan-var ArrayCollection<int, CalculationCategory>
      */
     #[Assert\Valid]
     #[ORM\OneToMany(

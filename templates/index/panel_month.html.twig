@@ -29,7 +29,7 @@
 {%- set panel_title = panel_show ? 'common.collapse' : 'common.expand' -%}
 {%- set route_name = is_granted(PERMISSION_LIST, ENTITY_CALCULATION) ? 'calculation_index' : false -%}
 {%- set is_months = months|length -%}
-{%- set header_attributes = header_attributes|merge({
+{%- set header_attributes = header_attributes|default({})|merge({
     href: '#' ~ panel_key,
     title: panel_title|trans,
     'aria-expanded': panel_show|json_encode}) -%}

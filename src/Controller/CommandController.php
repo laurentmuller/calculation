@@ -18,7 +18,9 @@ use App\Attribute\GetPostRoute;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
+use App\Enums\FlashType;
 use App\Model\CommandQuery;
+use App\Model\TranslatableFlashMessage;
 use App\Report\CommandsReport;
 use App\Service\CommandDataService;
 use App\Service\CommandFormService;
@@ -148,7 +150,12 @@ class CommandController extends AbstractController
     ): Response {
         $count = $service->count();
         if (0 === $count) {
-            return $this->redirectToHomePage('command.list.empty');
+            return $this->redirectToHomePage(
+                message: new TranslatableFlashMessage(
+                    message: 'command.list.empty',
+                    type: FlashType::WARNING,
+                )
+            );
         }
 
         $session = $request->getSession();
@@ -175,7 +182,7 @@ class CommandController extends AbstractController
     public function pdf(CommandService $service): Response
     {
         if (0 === $service->count()) {
-            return $this->redirectToHomePage('command.list.empty');
+            return $this->redirectToHomePage(message: 'command.list.empty');
         }
 
         $root = $this->trans('command.list.available');

@@ -37,12 +37,11 @@ class CategoriesDocument extends AbstractArrayDocument
             'category.fields.tasks' => HeaderFormat::int(),
         ]);
 
-        $default = $this->trans('report.other');
         foreach ($entities as $entity) {
             $sheet->setRowValues($row++, [
                 $entity->getCode(),
                 $entity->getDescription(),
-                $entity->getGroupCode() ?? $default,
+                $entity->getGroupCode(),
                 $entity->countProducts(),
                 $entity->countTasks(),
             ]);

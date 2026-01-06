@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\UserExceptionService;
+use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
@@ -32,13 +33,16 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\WrongEmailVerifyException;
 
 final class UserExceptionServiceTest extends TestCase
 {
+    use TranslatorMockTrait;
+
     private Request $request;
     private UserExceptionService $service;
 
     #[\Override]
     protected function setUp(): void
     {
-        $this->service = new UserExceptionService();
+        $translator = $this->createMockTranslator();
+        $this->service = new UserExceptionService($translator);
         $storage = new MockArraySessionStorage();
         $session = new Session($storage);
         $this->request = new Request();
@@ -69,6 +73,13 @@ final class UserExceptionServiceTest extends TestCase
         self::assertSame($message, $result->getMessageKey());
         self::assertCount($messageData, $result->getMessageData());
         self::assertInstanceOf($e::class, $result->getPrevious());
+    }
+
+    public function testTranslate(): void
+    {
+        $exception = $this->mapException(new \Exception());
+        $actual = $this->service->translate($exception);
+        self::assertSame('error.unknown', $actual);
     }
 
     private function mapException(\Exception $e): CustomUserMessageAuthenticationException

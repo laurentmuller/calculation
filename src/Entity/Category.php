@@ -41,8 +41,6 @@ class Category extends AbstractCodeEntity
      * The products that belong to this category.
      *
      * @var Collection<int, Product>
-     *
-     * @phpstan-var ArrayCollection<int, Product>
      */
     #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'category', fetch: self::EXTRA_LAZY)]
     private Collection $products;
@@ -51,8 +49,6 @@ class Category extends AbstractCodeEntity
      * The tasks that belong to this category.
      *
      * @var Collection<int, Task>
-     *
-     * @phpstan-var ArrayCollection<int, Task>
      */
     #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'category', fetch: self::EXTRA_LAZY)]
     private Collection $tasks;
@@ -108,20 +104,6 @@ class Category extends AbstractCodeEntity
     public function countTasks(): int
     {
         return $this->tasks->count();
-    }
-
-    /**
-     * Gets this code and the group code (if any).
-     */
-    public function getFullCode(): ?string
-    {
-        $code = $this->code;
-        $groupCode = $this->getGroupCode();
-        if (null !== $groupCode) {
-            return \sprintf('%s - %s', (string) $code, $groupCode);
-        }
-
-        return $code;
     }
 
     /**

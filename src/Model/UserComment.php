@@ -116,13 +116,21 @@ class UserComment
     }
 
     /**
-     * Create a new instance with the given subject.
+     * Create a new instance.
+     *
+     * @throws \InvalidArgumentException if the <code>\$from</code> or <code>\$to</code> parameters cannot be converted
+     *                                   to an Address
      */
-    public static function instance(string $subject): self
-    {
-        $comment = new self();
+    public static function instance(
+        string $subject,
+        Address|User|string $from,
+        Address|User|string $to
+    ): self {
+        $instance = new self();
 
-        return $comment->setSubject($subject);
+        return $instance->setSubject($subject)
+            ->setFrom($from)
+            ->setTo($to);
     }
 
     /**
@@ -140,11 +148,11 @@ class UserComment
     /**
      * Sets the "from" address.
      *
-     * @throws \InvalidArgumentException if the parameter is not an instanceof of Address, User or string
+     * @throws \InvalidArgumentException if the given parameter cannot be converted to an Address
      */
-    public function setFrom(Address|User|string $fromAddress): self
+    public function setFrom(Address|User|string $from): self
     {
-        $this->from = $this->convertAddress($fromAddress);
+        $this->from = $this->convertAddress($from);
 
         return $this;
     }
@@ -179,11 +187,11 @@ class UserComment
     /**
      * Sets the "to" address.
      *
-     * @throws \InvalidArgumentException if the parameter is not an instanceof of Address, User or string
+     * @throws \InvalidArgumentException if the given parameter cannot be converted to an Address
      */
-    public function setTo(Address|User|string $toAddress): self
+    public function setTo(Address|User|string $to): self
     {
-        $this->to = $this->convertAddress($toAddress);
+        $this->to = $this->convertAddress($to);
 
         return $this;
     }

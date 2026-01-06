@@ -17,6 +17,7 @@ use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Interfaces\EntityInterface;
 use App\Interfaces\SortModeInterface;
+use App\Model\TranslatableFlashMessage;
 use App\Repository\AbstractRepository;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
@@ -247,10 +248,14 @@ abstract class AbstractEntityController extends AbstractController
         Request $request,
         EntityInterface|int|null $item = 0,
         ?string $route = null,
-        int $status = Response::HTTP_FOUND,
+        ?TranslatableFlashMessage $message = null
     ): RedirectResponse {
+        if ($message instanceof TranslatableFlashMessage) {
+            $this->addFlashMessage($message->getType(), $this->trans($message));
+        }
+
         return $this->getUrlGenerator()
-            ->redirect($request, $item, $route ?? $this->getDefaultRoute(), $status);
+            ->redirect($request, $item, $route ?? $this->getDefaultRoute());
     }
 
     #[\Override]

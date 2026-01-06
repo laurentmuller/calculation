@@ -23,6 +23,7 @@ use App\Attribute\ShowEntityRoute;
 use App\Entity\Log;
 use App\Enums\FlashType;
 use App\Model\LogFile;
+use App\Model\TranslatableFlashMessage;
 use App\Report\LogsReport;
 use App\Resolver\DataQueryValueResolver;
 use App\Service\FontAwesomeService;
@@ -65,10 +66,15 @@ class LogController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 if ($this->setEmptyFile($file)) {
-                    return $this->redirectToHomePage('log.delete.success');
+                    return $this->redirectToHomePage(message: 'log.delete.success');
                 }
 
-                return $this->redirectToHomePage('log.delete.error', [], FlashType::DANGER);
+                return $this->redirectToHomePage(
+                    message: new TranslatableFlashMessage(
+                        message: 'log.delete.error',
+                        type: FlashType::DANGER,
+                    )
+                );
             } catch (\Exception $e) {
                 return $this->renderFormException('log.delete.error', $e, $logger);
             } finally {
@@ -94,7 +100,12 @@ class LogController extends AbstractController
     public function download(LogService $service): Response
     {
         if (!$service->isFileValid()) {
-            return $this->redirectToHomePage('log.download.error', [], FlashType::WARNING);
+            return $this->redirectToHomePage(
+                message: new TranslatableFlashMessage(
+                    message: 'log.download.error',
+                    type: FlashType::WARNING,
+                )
+            );
         }
 
         return $this->file($service->getFileName());
@@ -180,7 +191,12 @@ class LogController extends AbstractController
 
     private function getEmptyResponse(): RedirectResponse
     {
-        return $this->redirectToHomePage('log.list.empty', [], FlashType::INFO);
+        return $this->redirectToHomePage(
+            message: new TranslatableFlashMessage(
+                message: 'log.list.empty',
+                type: FlashType::INFO,
+            )
+        );
     }
 
     private function getLogFile(LogService $service): ?LogFile

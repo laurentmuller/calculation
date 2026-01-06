@@ -49,8 +49,6 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
      * The margins.
      *
      * @var Collection<int, TaskItemMargin>
-     *
-     * @phpstan-var ArrayCollection<int, TaskItemMargin>
      */
     #[Assert\Valid]
     #[ORM\OneToMany(

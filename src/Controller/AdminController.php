@@ -22,6 +22,7 @@ use App\Enums\FlashType;
 use App\Form\Parameters\ApplicationParametersType;
 use App\Form\User\RoleRightsType;
 use App\Model\Role;
+use App\Model\TranslatableFlashMessage;
 use App\Parameter\ApplicationParameters;
 use App\Service\CacheService;
 use App\Service\CommandService;
@@ -60,13 +61,18 @@ class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 if ($service->clear()) {
-                    return $this->redirectToHomePage('clear_cache.success', request: $request);
+                    return $this->redirectToHomePage(
+                        request: $request,
+                        message: 'clear_cache.success'
+                    );
                 }
 
                 return $this->redirectToHomePage(
-                    id: 'clear_cache.failure',
-                    type: FlashType::DANGER,
-                    request: $request
+                    request: $request,
+                    message: new TranslatableFlashMessage(
+                        message: 'clear_cache.failure',
+                        type: FlashType::DANGER
+                    )
                 );
             } catch (\Exception $e) {
                 return $this->renderFormException('clear_cache.failure', $e, $logger);
@@ -97,11 +103,21 @@ class AdminController extends AbstractController
     {
         $result = $service->execute('doctrine:schema:update', ['--dump-sql' => true]);
         if (!$result->isSuccess()) {
-            return $this->redirectToHomePage('admin.dump_sql.error', type: FlashType::WARNING);
+            return $this->redirectToHomePage(
+                message: new TranslatableFlashMessage(
+                    message: 'admin.dump_sql.error',
+                    type: FlashType::WARNING
+                )
+            );
         }
 
         if (\str_contains($result->content, '[OK]')) {
-            return $this->redirectToHomePage('admin.dump_sql.no_change', type: FlashType::INFO);
+            return $this->redirectToHomePage(
+                message: new TranslatableFlashMessage(
+                    message: 'admin.dump_sql.no_change',
+                    type: FlashType::INFO
+                )
+            );
         }
 
         return $this->render('admin/dump_sql.html.twig', [
@@ -186,9 +202,11 @@ class AdminController extends AbstractController
 
             if ($parameters->save()) {
                 return $this->redirectToHomePage(
-                    id: 'admin.rights.success',
-                    parameters: ['%name%' => $roleService->translateRole($role)],
-                    request: $request
+                    request: $request,
+                    message: new TranslatableFlashMessage(
+                        message: 'admin.rights.success',
+                        parameters: ['%name%' => $roleService->translateRole($role)],
+                    )
                 );
             }
 

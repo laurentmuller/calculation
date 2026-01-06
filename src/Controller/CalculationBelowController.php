@@ -19,6 +19,7 @@ use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
 use App\Entity\Calculation;
 use App\Enums\FlashType;
+use App\Model\TranslatableFlashMessage;
 use App\Report\CalculationsBelowReport;
 use App\Repository\CalculationRepository;
 use App\Resolver\DataQueryValueResolver;
@@ -99,7 +100,12 @@ class CalculationBelowController extends AbstractController
     private function getEmptyResponse(CalculationRepository $repository, float $minMargin): ?RedirectResponse
     {
         if (0 === $repository->countItemsBelow($minMargin)) {
-            return $this->redirectToHomePage(id: 'below.empty', type: FlashType::WARNING);
+            return $this->redirectToHomePage(
+                message: new TranslatableFlashMessage(
+                    message: 'below.empty',
+                    type: FlashType::WARNING
+                )
+            );
         }
 
         return null;

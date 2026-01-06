@@ -35,8 +35,13 @@ final class UserCommentTest extends TestCase
 
     public function testInstance(): void
     {
-        $comment = UserComment::instance('subject');
+        $subject = 'subject';
+        $user = $this->createUser();
+        $comment = UserComment::instance($subject, $user, $user);
         self::assertSame('subject', $comment->getSubject());
+        $expected = $user->getAddress();
+        self::assertEqualsCanonicalizing($expected, $comment->getFrom());
+        self::assertEqualsCanonicalizing($expected, $comment->getTo());
     }
 
     public function testProperties(): void

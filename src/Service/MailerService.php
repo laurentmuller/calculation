@@ -47,18 +47,14 @@ readonly class MailerService
      */
     public function sendComment(UserComment $comment): void
     {
-        /** @var string $message */
-        $message = $comment->getMessage();
-        /** @var string $subject */
-        $subject = $comment->getSubject();
         /** @var Address $from */
         $from = $comment->getFrom();
         /** @var Address $to */
         $to = $comment->getTo();
 
-        $notification = $this->createNotification($comment->getImportance(), $message)
+        $notification = $this->createNotification($comment->getImportance(), (string) $comment->getMessage())
             ->attachFromUploadedFiles(...$comment->getAttachments())
-            ->subject($subject)
+            ->subject((string) $comment->getSubject())
             ->from($from)
             ->to($to);
 

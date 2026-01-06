@@ -44,16 +44,17 @@ class CommentController extends AbstractController
         MailerService $service,
         LoggerInterface $logger
     ): Response {
-        $comment = UserComment::instance($this->getApplicationName())
-            ->setFrom($from)
-            ->setTo($this->getAddressFrom());
+        $comment = UserComment::instance($this->getApplicationName(), $from, $this->getAddressFrom());
         $form = $this->createForm(UserCommentType::class, $comment)
             ->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $service->sendComment($comment);
 
-                return $this->redirectToHomePage('user.comment.success', request: $request);
+                return $this->redirectToHomePage(
+                    request: $request,
+                    message: 'user.comment.success'
+                );
             } catch (TransportExceptionInterface $e) {
                 return $this->renderFormException('user.comment.error', $e, $logger);
             }

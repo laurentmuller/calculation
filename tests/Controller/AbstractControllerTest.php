@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\AbstractController;
+use App\Model\TranslatableFlashMessage;
 use App\Parameter\UserParameters;
 use App\Report\AbstractReport;
 use App\Service\UrlGeneratorService;
@@ -239,7 +240,12 @@ final class AbstractControllerTest extends KernelTestCase
     public function testRedirectToHomePageWithMessage(): void
     {
         $controller = $this->createController();
-        $response = $controller->redirectToHomePage('id', ['key' => 'value']);
+        $response = $controller->redirectToHomePage(
+            message: new TranslatableFlashMessage(
+                message: 'log.list.empty',
+                parameters: ['key' => 'value'],
+            )
+        );
         self::assertTrue($response->isRedirect());
     }
 

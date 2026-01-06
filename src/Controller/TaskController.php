@@ -25,9 +25,11 @@ use App\Attribute\PdfRoute;
 use App\Attribute\ShowEntityRoute;
 use App\Entity\Category;
 use App\Entity\Task;
+use App\Enums\FlashType;
 use App\Form\Task\TaskServiceType;
 use App\Interfaces\EntityInterface;
 use App\Model\TaskComputeQuery;
+use App\Model\TranslatableFlashMessage;
 use App\Report\TasksReport;
 use App\Repository\TaskRepository;
 use App\Resolver\DataQueryValueResolver;
@@ -81,9 +83,13 @@ class TaskController extends AbstractEntityController
     {
         [$tasks, $task] = $this->getTasks($service, $task);
         if (null === $task) {
-            $this->warningTrans('task.list.empty');
-
-            return $this->redirectToDefaultRoute($request);
+            return $this->redirectToDefaultRoute(
+                request: $request,
+                message: new TranslatableFlashMessage(
+                    message: 'task.list.empty',
+                    type: FlashType::WARNING
+                )
+            );
         }
 
         $query = TaskComputeQuery::instance($task);

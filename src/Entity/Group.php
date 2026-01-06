@@ -40,8 +40,6 @@ class Group extends AbstractCodeEntity
      * The children categories.
      *
      * @var Collection<int, Category>
-     *
-     * @phpstan-var ArrayCollection<int, Category>
      */
     #[ORM\OneToMany(
         targetEntity: Category::class,
@@ -57,8 +55,6 @@ class Group extends AbstractCodeEntity
      * The children margins.
      *
      * @var Collection<int, GroupMargin>
-     *
-     * @phpstan-var ArrayCollection<int, GroupMargin>
      */
     #[Assert\Valid]
     #[ORM\OneToMany(

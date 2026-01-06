@@ -17,6 +17,7 @@ use App\Enums\EntityPermission;
 use App\Enums\FlashType;
 use App\Form\FormHelper;
 use App\Model\CustomerInformation;
+use App\Model\TranslatableFlashMessage;
 use App\Parameter\ApplicationParameters;
 use App\Parameter\UserParameters;
 use App\Report\AbstractReport;
@@ -245,22 +246,16 @@ abstract class AbstractController extends BaseController
     }
 
     /**
-     * Display a flash message, if not empty, and redirect to the home page.
-     *
-     * @param ?string   $id         the optional flash message identifier to translate
-     * @param array     $parameters an array of parameters for the flash message
-     * @param FlashType $type       the flash message type
-     * @param ?Request  $request    the optional request, if not null, and the caller parameter is set, redirect to it
+     * Display a flash message, if defined, and redirect to the home page.
      */
     public function redirectToHomePage(
-        ?string $id = null,
-        array $parameters = [],
-        FlashType $type = FlashType::SUCCESS,
-        ?Request $request = null
+        ?Request $request = null,
+        TranslatableFlashMessage|string|null $message = null
     ): RedirectResponse {
-        if (StringUtils::isString($id)) {
-            $id = $this->trans($id, $parameters);
-            $this->addFlashMessage($type, $id);
+        if (\is_string($message)) {
+            $this->addFlashMessage(FlashType::SUCCESS, $this->trans($message));
+        } elseif ($message instanceof TranslatableFlashMessage) {
+            $this->addFlashMessage($message->getType(), $this->trans($message));
         }
         if ($request instanceof Request) {
             return $this->getUrlGenerator()->redirect($request);

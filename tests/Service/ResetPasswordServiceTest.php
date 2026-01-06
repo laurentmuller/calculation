@@ -168,8 +168,8 @@ final class ResetPasswordServiceTest extends TestCase
             $repository->method('findByUsernameOrEmail')
                 ->willReturn($user);
         }
-        $service = new UserExceptionService();
         $translator = $this->createMockTranslator();
+        $service = new UserExceptionService($translator);
         $generator = $this->createMock(UrlGeneratorInterface::class);
         $mailer ??= $this->createMock(MailerInterface::class);
         $logger = $this->createMock(LoggerInterface::class);

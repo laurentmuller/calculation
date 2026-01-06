@@ -88,7 +88,7 @@ class TestController extends AbstractController
             $message = $response instanceof ReCaptchaResponse ?
                 $responseService->format($response) : 'test.recaptcha_success';
 
-            return $this->redirectToHomePage($message);
+            return $this->redirectToHomePage(message: $message);
         }
 
         return $this->render('test/recaptcha.html.twig', ['form' => $form]);

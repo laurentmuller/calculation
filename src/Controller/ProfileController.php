@@ -19,6 +19,7 @@ use App\Entity\User;
 use App\Form\AbstractEntityType;
 use App\Form\User\ProfileEditType;
 use App\Form\User\ProfilePasswordType;
+use App\Model\TranslatableFlashMessage;
 use App\Service\PasswordTooltipService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -86,7 +87,12 @@ class ProfileController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->manager->flush();
 
-            return $this->redirectToHomePage($message, ['%username%' => $user]);
+            return $this->redirectToHomePage(
+                message: new TranslatableFlashMessage(
+                    message: $message,
+                    parameters: ['%username%' => $user],
+                )
+            );
         }
 
         return $this->render($template, \array_merge(['form' => $form], $parameters));

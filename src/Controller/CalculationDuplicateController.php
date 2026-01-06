@@ -18,6 +18,7 @@ use App\Attribute\ForAdmin;
 use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
 use App\Enums\FlashType;
+use App\Model\TranslatableFlashMessage;
 use App\Report\CalculationsDuplicateReport;
 use App\Repository\CalculationRepository;
 use App\Resolver\DataQueryValueResolver;
@@ -91,7 +92,12 @@ class CalculationDuplicateController extends AbstractController
     private function getEmptyResponse(CalculationRepository $repository): ?RedirectResponse
     {
         if (0 === $repository->countItemsDuplicate()) {
-            return $this->redirectToHomePage(id: 'duplicate.empty', type: FlashType::WARNING);
+            return $this->redirectToHomePage(
+                message: new TranslatableFlashMessage(
+                    message: 'duplicate.empty',
+                    type: FlashType::WARNING
+                )
+            );
         }
 
         return null;

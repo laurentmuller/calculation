@@ -27,7 +27,7 @@ use App\Response\WordResponse;
 use App\Service\UrlGeneratorService;
 use App\Spreadsheet\AbstractDocument;
 use App\Spreadsheet\SpreadsheetDocument;
-use App\Traits\ExceptionContextTrait;
+use App\Traits\JsonResponseTrait;
 use App\Traits\RequestTrait;
 use App\Traits\TranslatorFlashMessageAwareTrait;
 use App\Utils\FileUtils;
@@ -37,7 +37,6 @@ use App\Word\WordDocument;
 use fpdf\PdfDocument;
 use Psr\Container\ContainerExceptionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -53,7 +52,7 @@ use Twig\Attribute\AsTwigFilter;
  */
 abstract class AbstractController extends BaseController
 {
-    use ExceptionContextTrait;
+    use JsonResponseTrait;
     use RequestTrait;
     use TranslatorFlashMessageAwareTrait;
 
@@ -315,40 +314,6 @@ abstract class AbstractController extends BaseController
     {
         /** @phpstan-var string */
         return $this->getParameter('cookie_path');
-    }
-
-    /**
-     * Returns the given exception as a JsonResponse.
-     *
-     * @param \Exception $e       the exception to serialize
-     * @param ?string    $message the optional error message
-     */
-    protected function jsonException(\Exception $e, ?string $message = null): JsonResponse
-    {
-        return $this->jsonFalse([
-            'message' => $message ?? $e->getMessage(),
-            'exception' => $this->getExceptionContext($e),
-        ]);
-    }
-
-    /**
-     * Returns a JSON response with false as the result.
-     *
-     * @param array $data the data to merge within the response
-     */
-    protected function jsonFalse(array $data = []): JsonResponse
-    {
-        return $this->json(\array_merge_recursive(['result' => false], $data));
-    }
-
-    /**
-     * Returns a JSON response with true as the result.
-     *
-     * @param array $data the data to merge within the response
-     */
-    protected function jsonTrue(array $data = []): JsonResponse
-    {
-        return $this->json(\array_merge_recursive(['result' => true], $data));
     }
 
     /**

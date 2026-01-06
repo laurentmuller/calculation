@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represent a comment to send.
  */
-class Comment
+class UserComment
 {
     /**
      * The attachments.

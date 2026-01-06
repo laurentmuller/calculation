@@ -15,7 +15,7 @@ namespace App\Tests\Service;
 
 use App\Entity\User;
 use App\Enums\Importance;
-use App\Model\Comment;
+use App\Model\UserComment;
 use App\Service\MailerService;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\TestCase;
@@ -34,7 +34,7 @@ final class MailerServiceTest extends TestCase
      */
     public function testSendComment(): void
     {
-        $comment = new Comment();
+        $comment = new UserComment();
         $comment->setFrom('from@example.com')
             ->setTo('to@example.com')
             ->setSubject('subject')

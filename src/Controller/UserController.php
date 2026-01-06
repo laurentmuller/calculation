@@ -31,8 +31,8 @@ use App\Form\User\UserCommentType;
 use App\Form\User\UserRightsType;
 use App\Interfaces\EntityInterface;
 use App\Interfaces\RoleInterface;
-use App\Model\Comment;
 use App\Model\Role;
+use App\Model\UserComment;
 use App\Report\UsersReport;
 use App\Report\UsersRightsReport;
 use App\Repository\AbstractRepository;
@@ -145,7 +145,7 @@ class UserController extends AbstractEntityController
             return $this->redirectToDefaultRoute($request, $user);
         }
 
-        $comment = Comment::instance($this->getApplicationName())
+        $comment = UserComment::instance($this->getApplicationName())
             ->setFrom($from)
             ->setTo($user);
         $form = $this->createForm(UserCommentType::class, $comment)

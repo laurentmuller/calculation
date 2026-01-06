@@ -17,7 +17,7 @@ use App\Attribute\ForUser;
 use App\Attribute\GetPostRoute;
 use App\Entity\User;
 use App\Form\User\UserCommentType;
-use App\Model\Comment;
+use App\Model\UserComment;
 use App\Service\MailerService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,7 +44,7 @@ class CommentController extends AbstractController
         MailerService $service,
         LoggerInterface $logger
     ): Response {
-        $comment = Comment::instance($this->getApplicationName())
+        $comment = UserComment::instance($this->getApplicationName())
             ->setFrom($from)
             ->setTo($this->getAddressFrom());
         $form = $this->createForm(UserCommentType::class, $comment)

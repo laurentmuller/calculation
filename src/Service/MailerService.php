@@ -17,7 +17,7 @@ use App\Controller\AbstractController;
 use App\Entity\User;
 use App\Enums\Importance;
 use App\Mime\NotificationEmail;
-use App\Model\Comment;
+use App\Model\UserComment;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
@@ -45,7 +45,7 @@ readonly class MailerService
      *
      * @throws TransportExceptionInterface if an exception occurs while sending the comment
      */
-    public function sendComment(Comment $comment): void
+    public function sendComment(UserComment $comment): void
     {
         /** @var string $message */
         $message = $comment->getMessage();

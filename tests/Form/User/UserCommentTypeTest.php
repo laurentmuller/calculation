@@ -19,7 +19,7 @@ use App\Form\Extension\InputGroupTypeExtension;
 use App\Form\Type\PlainType;
 use App\Form\Type\SimpleEditorType;
 use App\Form\User\UserCommentType;
-use App\Model\Comment;
+use App\Model\UserComment;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
@@ -31,7 +31,7 @@ final class UserCommentTypeTest extends TypeTestCase
 
     public function testSubmitValidData(): void
     {
-        $model = new Comment();
+        $model = new UserComment();
         $data = [
             'subject' => 'subject',
             'from' => 'fromAddress@example.com',

@@ -17,19 +17,19 @@ use App\Enums\Importance;
 use App\Form\DataTransformer\AddressTransformer;
 use App\Form\FormHelper;
 use App\Form\Type\SimpleEditorType;
-use App\Model\Comment;
+use App\Model\UserComment;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Type to send a comment.
  *
- * @extends AbstractType<Comment>
+ * @extends AbstractType<UserComment>
  */
 class UserCommentType extends AbstractType
 {
     /**
-     * @phpstan-param FormBuilderInterface<Comment|null> $builder
+     * @phpstan-param FormBuilderInterface<UserComment|null> $builder
      */
     #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void

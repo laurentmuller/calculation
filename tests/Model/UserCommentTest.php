@@ -15,16 +15,16 @@ namespace App\Tests\Model;
 
 use App\Entity\User;
 use App\Enums\Importance;
-use App\Model\Comment;
+use App\Model\UserComment;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mime\Address;
 
-final class CommentTest extends TestCase
+final class UserCommentTest extends TestCase
 {
     public function testConstructor(): void
     {
-        $comment = new Comment();
+        $comment = new UserComment();
         self::assertSame([], $comment->getAttachments());
         self::assertNull($comment->getFrom());
         self::assertSame(Importance::getDefault(), $comment->getImportance());
@@ -35,13 +35,13 @@ final class CommentTest extends TestCase
 
     public function testInstance(): void
     {
-        $comment = Comment::instance('subject');
+        $comment = UserComment::instance('subject');
         self::assertSame('subject', $comment->getSubject());
     }
 
     public function testProperties(): void
     {
-        $comment = new Comment();
+        $comment = new UserComment();
 
         self::assertNull($comment->getMessage());
         $comment->setMessage('message');
@@ -65,7 +65,7 @@ final class CommentTest extends TestCase
 
     public function testSetFrom(): void
     {
-        $comment = new Comment();
+        $comment = new UserComment();
         $comment->setFrom('test@test.com');
         $expected = new Address('test@test.com');
         $actual = $comment->getFrom();
@@ -84,7 +84,7 @@ final class CommentTest extends TestCase
 
     public function testSetTo(): void
     {
-        $comment = new Comment();
+        $comment = new UserComment();
         $comment->setTo('test@test.com');
         $expected = new Address('test@test.com');
         $actual = $comment->getTo();

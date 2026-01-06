@@ -5,12 +5,12 @@ $(function () {
     'use strict';
 
     // initialize editor
-    $("#user_comment_message").initSimpleEditor({
+    $("#message").initSimpleEditor({
         focus: true
     });
 
     // initialize attachements
-    $('#user_comment_attachments').initSimpleFileInput();
+    $('#attachments').initSimpleFileInput();
 
     // initialize validator
     $("form").initValidator({

@@ -22,7 +22,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Abstract comment type.
+ * Type to send a comment.
  *
  * @extends AbstractType<Comment>
  */

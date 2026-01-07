@@ -24,15 +24,26 @@ use Symfony\Component\HttpFoundation\Response;
  */
 trait FormExceptionTrait
 {
-    protected function renderFormException(string $id, \Throwable $e, LoggerInterface $logger): Response
+    protected function logFormException(string $id, \Throwable $e, LoggerInterface $logger): array
     {
         $message = $this->trans($id);
         $context = $this->getExceptionContext($e);
         $logger->error($message, $context);
 
-        return $this->render('bundles/TwigBundle/Exception/exception.html.twig', [
+        return [
             'message' => $message,
+            'context' => $context,
             'exception' => $e,
-        ]);
+        ];
+    }
+
+    protected function renderFormException(string $id, \Throwable $e, LoggerInterface $logger, array $parameters = []): Response
+    {
+        $parameters = \array_merge(
+            $this->logFormException($id, $e, $logger),
+            $parameters
+        );
+
+        return $this->render('bundles/TwigBundle/Exception/exception.html.twig', $parameters);
     }
 }

@@ -78,22 +78,19 @@ trait TableTrait
 
             return $response;
         } catch (\Throwable $e) {
-            $context = $this->getExceptionContext($e);
-            $message = $this->trans('error_page.description');
-            $logger->error($message, $context);
-            $status = Response::HTTP_BAD_REQUEST;
-            $parameters = [
-                'result' => false,
-                'message' => $message,
-                'exception' => $context,
-                'status_code' => $status,
-                'status_text' => $this->trans('errors.invalid_request'),
-            ];
             if ($query->callback) {
-                return $this->json($parameters, $status);
+                $parameters = $this->logFormException('error_page.description', $e, $logger);
+                $parameters['exception'] = $parameters['context'];
+                unset($parameters['context']);
+
+                return $this->jsonFalse($parameters, Response::HTTP_BAD_REQUEST);
             }
 
-            return $this->render('bundles/TwigBundle/Exception/error.html.twig', $parameters);
+            $parameters = [
+                'status_code' => Response::HTTP_BAD_REQUEST,
+            ];
+
+            return $this->renderFormException('errors.invalid_request', $e, $logger, $parameters);
         }
     }
 

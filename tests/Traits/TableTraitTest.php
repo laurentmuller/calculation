@@ -84,6 +84,20 @@ final class TableTraitTest extends TestCase
         return new JsonResponse($data, $status);
     }
 
+    public function jsonFalse(array $data = [], int $status = Response::HTTP_OK): JsonResponse
+    {
+        return new JsonResponse(\array_merge_recursive(['result' => false], $data), $status);
+    }
+
+    public function logFormException(string $id, \Throwable $e, LoggerInterface $logger): array
+    {
+        return [
+            'message' => $this->trans($id),
+            'context' => $this->getExceptionContext($e),
+            'exception' => $e,
+        ];
+    }
+
     public function redirectToHomePage(
         TranslatableFlashMessage $message
     ): Response {
@@ -93,6 +107,14 @@ final class TableTraitTest extends TestCase
     public function render(string $view, array $parameters = []): Response
     {
         return new Response(content: $view, headers: $parameters);
+    }
+
+    public function renderFormException(string $id, \Throwable $e, LoggerInterface $logger, array $parameters = []): Response
+    {
+        $message = $this->trans($id);
+        $logger->error($message, $this->getExceptionContext($e));
+
+        return new Response(content: $message, headers: $parameters);
     }
 
     public function testDenyAccess(): void

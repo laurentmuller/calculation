@@ -15,6 +15,7 @@ namespace App\Traits;
 
 use App\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Trait to render JSON response.
@@ -30,32 +31,38 @@ trait JsonResponseTrait
      *
      * @param \Exception $e       the exception to serialize
      * @param ?string    $message the optional error message
+     * @param int        $status  the HTTP status code
      */
-    protected function jsonException(\Exception $e, ?string $message = null): JsonResponse
-    {
+    protected function jsonException(
+        \Exception $e,
+        ?string $message = null,
+        int $status = Response::HTTP_OK
+    ): JsonResponse {
         return $this->jsonFalse([
             'message' => $message ?? $e->getMessage(),
             'exception' => $this->getExceptionContext($e),
-        ]);
+        ], $status);
     }
 
     /**
      * Returns a JSON response with false as the result.
      *
-     * @param array $data the data to merge within the response
+     * @param array $data   the data to merge within the response
+     * @param int   $status the HTTP status code
      */
-    protected function jsonFalse(array $data = []): JsonResponse
+    protected function jsonFalse(array $data = [], int $status = Response::HTTP_OK): JsonResponse
     {
-        return $this->json(\array_merge_recursive(['result' => false], $data));
+        return $this->json(\array_merge_recursive(['result' => false], $data), $status);
     }
 
     /**
      * Returns a JSON response with true as the result.
      *
-     * @param array $data the data to merge within the response
+     * @param array $data   the data to merge within the response
+     * @param int   $status the HTTP status code
      */
-    protected function jsonTrue(array $data = []): JsonResponse
+    protected function jsonTrue(array $data = [], int $status = Response::HTTP_OK): JsonResponse
     {
-        return $this->json(\array_merge_recursive(['result' => true], $data));
+        return $this->json(\array_merge_recursive(['result' => true], $data), $status);
     }
 }

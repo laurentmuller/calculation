@@ -80,7 +80,8 @@ final class GoogleTranslatorServiceTest extends TestCase
 
     public function testGetApiURL(): void
     {
-        $actual = GoogleTranslatorService::getApiUrl();
+        $translator = $this->createTranslator();
+        $actual = $translator->getApiUrl();
         self::assertSame('https://cloud.google.com/translate/docs/translating-text', $actual);
     }
 

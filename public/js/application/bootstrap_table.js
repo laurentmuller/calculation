@@ -513,7 +513,8 @@ function showSortDialog($table, $button) {
         // initialize table
         const options = {
             draggableModal: {
-                marginBottom: $('footer:visible').length ? $('footer').outerHeight() : 0, focusOnShow: true
+                marginBottom: $('footer:visible').length ? $('footer').outerHeight() : 0,
+                focusOnShow: true
             },
 
             /**

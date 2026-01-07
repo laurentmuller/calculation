@@ -118,7 +118,8 @@ final class BingTranslatorServiceTest extends TestCase
 
     public function testGetApiURL(): void
     {
-        $actual = BingTranslatorService::getApiUrl();
+        $translator = $this->createTranslator();
+        $actual = $translator->getApiUrl();
         self::assertSame('https://docs.microsoft.com/en-us/azure/cognitive-services/translator/translator-info-overview', $actual);
     }
 

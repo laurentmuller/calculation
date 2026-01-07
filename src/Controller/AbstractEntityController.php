@@ -23,7 +23,6 @@ use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Response\WordResponse;
 use App\Spreadsheet\SpreadsheetDocument;
-use App\Traits\FormExceptionTrait;
 use App\Traits\TableTrait;
 use App\Utils\StringUtils;
 use App\Word\WordDocument;
@@ -45,7 +44,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 abstract class AbstractEntityController extends AbstractController
 {
-    use FormExceptionTrait;
     use TableTrait;
 
     /**

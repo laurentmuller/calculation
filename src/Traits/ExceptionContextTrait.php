@@ -25,7 +25,7 @@ trait ExceptionContextTrait
      *
      * @param \Throwable $e the exception to get the context for
      *
-     * @phpstan-return array{
+     * @return array{
      *     message: string,
      *     code: string|int,
      *     file: string,

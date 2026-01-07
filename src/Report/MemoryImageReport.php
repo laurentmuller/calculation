@@ -52,6 +52,7 @@ class MemoryImageReport extends AbstractReport
         AbstractController $controller,
         private readonly ?string $logoFile = null,
         private readonly ?string $iconFile = null,
+        private readonly ?string $transparencyFile = null,
         private readonly ?string $screenshotFile = null,
         private readonly ?FontAwesomeService $service = null,
     ) {
@@ -126,10 +127,10 @@ class MemoryImageReport extends AbstractReport
 
     private function addTransparencyImage(): void
     {
-        if (null === $this->iconFile) {
+        if (null === $this->transparencyFile) {
             return;
         }
-        $data = FileUtils::readFile($this->iconFile);
+        $data = FileUtils::readFile($this->transparencyFile);
         if ('' === $data) {
             throw PdfException::instance('Unable to get image content.');
         }

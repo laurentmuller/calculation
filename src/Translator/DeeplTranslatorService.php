@@ -66,7 +66,7 @@ class DeeplTranslatorService extends AbstractTranslatorService
     }
 
     #[\Override]
-    public static function getApiUrl(): string
+    public function getApiUrl(): string
     {
         return 'https://developers.deepl.com/docs';
     }

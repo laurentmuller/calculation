@@ -33,6 +33,7 @@ use Symfony\Component\HttpFoundation\Response;
 trait TableTrait
 {
     use CookieTrait;
+    use FormExceptionTrait;
 
     /**
      * Handles a table request.
@@ -64,40 +65,44 @@ trait TableTrait
             $prefix = $query->prefix;
             $results = $table->processDataQuery($query);
             $response = $query->callback ? $this->json($results) : $this->render($template, (array) $results);
-            $this->saveCookie($response, $results, TableInterface::PARAM_VIEW, TableView::TABLE);
-            $this->saveCookie($response, $results, TableInterface::PARAM_LIMIT, TableView::TABLE->getPageSize(), $prefix);
-            $this->saveCookie($response, $results, TableInterface::PARAM_SORT, $query->sort, $prefix);
-            $this->saveCookie($response, $results, TableInterface::PARAM_ORDER, $query->order, $prefix);
-
-            $userParameters = $this->getUserParameters();
-            $display = $userParameters->getDisplay();
-            if ($display->getDisplayMode() !== $query->view) {
-                $display->setDisplayMode($query->view);
-                $userParameters->save();
-            }
+            $this->saveTableCookie($response, $results, TableInterface::PARAM_VIEW, TableView::TABLE);
+            $this->saveTableCookie($response, $results, TableInterface::PARAM_LIMIT, TableView::TABLE->getPageSize(), $prefix);
+            $this->saveTableCookie($response, $results, TableInterface::PARAM_SORT, $query->sort, $prefix);
+            $this->saveTableCookie($response, $results, TableInterface::PARAM_ORDER, $query->order, $prefix);
+            $this->saveTableView($query->view);
 
             return $response;
         } catch (\Throwable $e) {
-            if ($query->callback) {
-                $parameters = $this->logFormException('error_page.description', $e, $logger);
-                $parameters['exception'] = $parameters['context'];
-                unset($parameters['context']);
-
-                return $this->jsonFalse($parameters, Response::HTTP_BAD_REQUEST);
-            }
-
-            $parameters = [
-                'status_code' => Response::HTTP_BAD_REQUEST,
-            ];
-
-            return $this->renderFormException('errors.invalid_request', $e, $logger, $parameters);
+            return $this->handleTableException($query->callback, $logger, $e);
         }
     }
 
     /**
-     * Save the given parameter from the data result to a cookie.
+     * Handle table exception.
      */
-    protected function saveCookie(
+    private function handleTableException(bool $callback, LoggerInterface $logger, \Throwable $e): Response
+    {
+        if ($callback) {
+            $parameters = $this->logFormException('error_page.description', $e, $logger);
+            $parameters = [
+                'message' => $parameters['message'],
+                'exception' => $parameters['context'],
+            ];
+
+            return $this->jsonFalse($parameters, Response::HTTP_BAD_REQUEST);
+        }
+
+        $parameters = [
+            'status_code' => Response::HTTP_BAD_REQUEST,
+        ];
+
+        return $this->renderFormException('errors.invalid_request', $e, $logger, $parameters);
+    }
+
+    /**
+     * Save the table parameter from the data result to a cookie.
+     */
+    private function saveTableCookie(
         Response $response,
         DataResults $results,
         string $key,
@@ -106,5 +111,18 @@ trait TableTrait
     ): void {
         $value = $results->getParameter($key, $default);
         $this->updateCookie($response, $key, $value, $prefix);
+    }
+
+    /**
+     * Save the display mode.
+     */
+    private function saveTableView(TableView $view): void
+    {
+        $userParameters = $this->getUserParameters();
+        $display = $userParameters->getDisplay();
+        if ($display->getDisplayMode() !== $view) {
+            $display->setDisplayMode($view);
+            $userParameters->save();
+        }
     }
 }

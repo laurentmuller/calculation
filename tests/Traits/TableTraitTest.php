@@ -14,7 +14,10 @@ declare(strict_types=1);
 namespace App\Tests\Traits;
 
 use App\Entity\CalculationState;
+use App\Enums\EntityPermission;
+use App\Enums\TableView;
 use App\Model\TranslatableFlashMessage;
+use App\Parameter\DisplayParameter;
 use App\Parameter\UserParameters;
 use App\Table\AbstractTable;
 use App\Table\DataQuery;
@@ -53,7 +56,7 @@ final class TableTraitTest extends TestCase
 
     public function denyAccessUnlessGranted(mixed $attribute, mixed $subject = null): void
     {
-        if ($this->denyException) {
+        if ($this->denyException && EntityPermission::LIST === $attribute && \is_string($subject)) {
             throw new AccessDeniedException();
         }
     }
@@ -76,7 +79,15 @@ final class TableTraitTest extends TestCase
             throw new \LogicException();
         }
 
-        return $this->createMock(UserParameters::class);
+        $display = $this->createMock(DisplayParameter::class);
+        $display->method('getDisplayMode')
+            ->willReturn(TableView::CUSTOM);
+
+        $userParameters = $this->createMock(UserParameters::class);
+        $userParameters->method('getDisplay')
+            ->willReturn($display);
+
+        return $userParameters;
     }
 
     public function json(mixed $data, int $status = 200): JsonResponse
@@ -98,9 +109,8 @@ final class TableTraitTest extends TestCase
         ];
     }
 
-    public function redirectToHomePage(
-        TranslatableFlashMessage $message
-    ): Response {
+    public function redirectToHomePage(TranslatableFlashMessage $message): Response
+    {
         return new Response($message->getMessage());
     }
 

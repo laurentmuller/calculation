@@ -259,12 +259,14 @@
                 // initialize
                 $this.bootstrapTable(settings);
                 $this.enableKeys().highlight();
+
                 // select row on right click
                 $this.find('tbody').on('mousedown', 'tr[data-index]', function (e) {
                     if (e.button === 2) {
                         $(this).updateRow($this);
                     }
                 });
+
                 // handle items in the custom view
                 $this.getTableContainer().on('mousedown', '.custom-item', function () {
                     $(this).updateCustomRow($this);
@@ -275,6 +277,7 @@
                         $this.editRow();
                     }
                 });
+
                 // handle page item click
                 $('.fixed-table-pagination').on('keydown mousedown', '.page-link', function (e) {
                     const $that = $(this);
@@ -292,6 +295,7 @@
                         }
                     }
                 });
+
                 // search focus
                 $this.getSearchInput().on('focus', function () {
                     $(this).trigger('select');
@@ -342,11 +346,13 @@
                     limit: options.pageSize,
                     view: $this.getDisplayMode()
                 };
+
                 // add search if applicable
                 const search = $this.getSearchText();
                 if (search.length) {
                     params.search = search;
                 }
+
                 // query parameters function?
                 if (typeof options.queryParams === 'function') {
                     return $.extend(params, options.queryParams(params));
@@ -500,7 +506,9 @@
                 const $this = $(this);
                 const url = $this.getOptions().saveUrl;
                 if (url) {
-                    const data = {view: $this.getDisplayMode()};
+                    const data = {
+                        view: $this.getDisplayMode()
+                    };
                     $.post(url, data);
                 }
                 return $this;

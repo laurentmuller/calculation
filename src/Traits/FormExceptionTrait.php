@@ -13,17 +13,17 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
-use App\Controller\AbstractController;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Trait to render a form exception.
- *
- * @phpstan-require-extends AbstractController
+ * Trait to log and render an exception.
  */
 trait FormExceptionTrait
 {
+    /**
+     * @return array{message: string, context: array<string, string|int>, exception: \Throwable}
+     */
     protected function logFormException(string $id, \Throwable $e, LoggerInterface $logger): array
     {
         $message = $this->trans($id);

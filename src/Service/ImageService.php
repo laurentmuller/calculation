@@ -142,40 +142,40 @@ class ImageService
     /**
      * Copy and resize part of an image with resampling.
      *
-     * @param ImageService $dst_image the destination image handler
-     * @param int          $dst_x     the x-coordinate of destination point
-     * @param int          $dst_y     the y-coordinate of destination point
-     * @param int          $src_x     the x-coordinate of source point
-     * @param int          $src_y     the y-coordinate of source point
-     * @param int          $dst_w     the destination width
-     * @param int          $dst_h     the destination height
-     * @param int          $src_w     the source width
-     * @param int          $src_h     the source height
+     * @param ImageService $dstImage  the destination image handler
+     * @param int          $dstX      the x-coordinate of destination point
+     * @param int          $dstY      the y-coordinate of destination point
+     * @param int          $srcX      the x-coordinate of source point
+     * @param int          $srcY      the y-coordinate of source point
+     * @param int          $dstWidth  the destination width
+     * @param int          $dstHeight the destination height
+     * @param int          $srcWidth  the source width
+     * @param int          $srcHeight the source height
      *
      * @return bool true on success or false on failure
      */
     public function copyResampled(
-        self $dst_image,
-        int $dst_x,
-        int $dst_y,
-        int $src_x,
-        int $src_y,
-        int $dst_w,
-        int $dst_h,
-        int $src_w,
-        int $src_h
+        self $dstImage,
+        int $dstX,
+        int $dstY,
+        int $srcX,
+        int $srcY,
+        int $dstWidth,
+        int $dstHeight,
+        int $srcWidth,
+        int $srcHeight
     ): bool {
         return \imagecopyresampled(
-            $dst_image->image,
-            $this->image,
-            $dst_x,
-            $dst_y,
-            $src_x,
-            $src_y,
-            $dst_w,
-            $dst_h,
-            $src_w,
-            $src_h
+            dst_image: $dstImage->image,
+            src_image: $this->image,
+            dst_x: $dstX,
+            dst_y: $dstY,
+            src_x: $srcX,
+            src_y: $srcY,
+            dst_width: $dstWidth,
+            dst_height: $dstHeight,
+            src_width: $srcWidth,
+            src_height: $srcHeight
         );
     }
 
@@ -222,13 +222,13 @@ class ImageService
      */
     public static function fromFile(string $filename): ?self
     {
-        $file_extension = FileUtils::getExtension($filename, true);
-        $image_extension = ImageExtension::tryFrom($file_extension);
-        if (!$image_extension instanceof ImageExtension) {
+        $fileExtension = FileUtils::getExtension($filename, true);
+        $imageExtension = ImageExtension::tryFrom($fileExtension);
+        if (!$imageExtension instanceof ImageExtension) {
             return null;
         }
 
-        $image = $image_extension->createImage($filename);
+        $image = $imageExtension->createImage($filename);
         if (!$image instanceof \GdImage) {
             return null;
         }

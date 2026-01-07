@@ -82,7 +82,7 @@ class GoogleTranslatorService extends AbstractTranslatorService
     }
 
     #[\Override]
-    public static function getApiUrl(): string
+    public function getApiUrl(): string
     {
         return 'https://cloud.google.com/translate/docs/translating-text';
     }

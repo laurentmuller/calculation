@@ -17,12 +17,13 @@ use App\Controller\AbstractController;
 use App\Model\FontAwesomeImage;
 use App\Report\MemoryImageReport;
 use App\Service\FontAwesomeService;
+use App\Utils\FileUtils;
 use fpdf\PdfException;
 use PHPUnit\Framework\TestCase;
 
 final class MemoryImageReportTest extends TestCase
 {
-    public function testEmptyImage(): void
+    public function testImageEmpty(): void
     {
         self::expectException(PdfException::class);
         $controller = $this->createMock(AbstractController::class);
@@ -31,7 +32,7 @@ final class MemoryImageReportTest extends TestCase
         $report->render();
     }
 
-    public function testInvalidImage(): void
+    public function testImageInvalid(): void
     {
         self::expectException(PdfException::class);
         $controller = $this->createMock(AbstractController::class);
@@ -48,7 +49,7 @@ final class MemoryImageReportTest extends TestCase
         self::assertTrue($actual);
     }
 
-    public function testRenderWithIconFile(): void
+    public function testRenderIconFile(): void
     {
         $controller = $this->createMock(AbstractController::class);
         $iconFile = $this->getImageFile('icons/favicon-114x114.png');
@@ -57,7 +58,7 @@ final class MemoryImageReportTest extends TestCase
         self::assertTrue($actual);
     }
 
-    public function testRenderWithInvalidIconFile(): void
+    public function testRenderIconFileInvalid(): void
     {
         self::expectException(PdfException::class);
         $controller = $this->createMock(AbstractController::class);
@@ -65,7 +66,7 @@ final class MemoryImageReportTest extends TestCase
         $report->render();
     }
 
-    public function testRenderWithLogoFile(): void
+    public function testRenderLogoFile(): void
     {
         $controller = $this->createMock(AbstractController::class);
         $logoFile = $this->getImageFile('icons/favicon-114x114.png');
@@ -74,7 +75,7 @@ final class MemoryImageReportTest extends TestCase
         self::assertTrue($actual);
     }
 
-    public function testRenderWithScreenshot(): void
+    public function testRenderScreenshot(): void
     {
         $controller = $this->createMock(AbstractController::class);
         $screenshotFile = $this->getImageFile('screenshots/home_light.png');
@@ -83,16 +84,70 @@ final class MemoryImageReportTest extends TestCase
         self::assertTrue($actual);
     }
 
-    public function testRenderWithService(): void
+    public function testRenderService(): void
     {
+        $image = $this->getImage();
+        $path = $this->getTestFile();
+        $service = $this->createMock(FontAwesomeService::class);
+        $service->method('getPath')
+            ->willReturn($path);
+        $service->method('getImage')
+            ->willReturn($image);
+
         $controller = $this->createMock(AbstractController::class);
+        $report = new MemoryImageReport(controller: $controller, service: $service);
+        $actual = $report->render();
+        self::assertTrue($actual);
+    }
+
+    public function testRenderServiceWithoutImage(): void
+    {
+        $path = $this->getTestFile();
+        $service = $this->createMock(FontAwesomeService::class);
+        $service->method('getPath')
+            ->willReturn($path);
+
+        $controller = $this->createMock(AbstractController::class);
+        $report = new MemoryImageReport(controller: $controller, service: $service);
+        $actual = $report->render();
+        self::assertTrue($actual);
+    }
+
+    public function testRenderServiceWithoutPath(): void
+    {
         $image = $this->getImage();
         $service = $this->createMock(FontAwesomeService::class);
         $service->method('getImage')
             ->willReturn($image);
+
+        $controller = $this->createMock(AbstractController::class);
         $report = new MemoryImageReport(controller: $controller, service: $service);
         $actual = $report->render();
         self::assertTrue($actual);
+    }
+
+    public function testRenderTransparencyImage(): void
+    {
+        $transparencyFile = $this->getImageFile('icons/favicon-114x114.png');
+        $controller = $this->createMock(AbstractController::class);
+        $report = new MemoryImageReport(
+            controller: $controller,
+            transparencyFile: $transparencyFile
+        );
+        $actual = $report->render();
+        self::assertTrue($actual);
+    }
+
+    public function testRenderTransparencyImageInvalid(): void
+    {
+        self::expectException(PdfException::class);
+        $transparencyFile = FileUtils::buildPath(__DIR__, 'fake.txt');
+        $controller = $this->createMock(AbstractController::class);
+        $report = new MemoryImageReport(
+            controller: $controller,
+            transparencyFile: $transparencyFile
+        );
+        $report->render();
     }
 
     public function testWithAllImages(): void
@@ -105,6 +160,7 @@ final class MemoryImageReportTest extends TestCase
             controller: $controller,
             logoFile: $logoFile,
             iconFile: $iconFile,
+            transparencyFile: $iconFile,
             screenshotFile: $screenshotFile,
         );
         $actual = $report->render();

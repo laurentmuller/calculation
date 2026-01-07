@@ -61,6 +61,8 @@ use Vich\UploaderBundle\Form\Type\VichImageType;
  */
 class FormHelper
 {
+    private const DEFAULT_ROW_ATTRIBUTES = ['class' => 'mb-3 form-group'];
+
     /**
      * The attributes.
      *
@@ -111,7 +113,7 @@ class FormHelper
      *
      * @var array<string, mixed>
      */
-    private array $rowAttributes = ['class' => 'mb-3 form-group'];
+    private array $rowAttributes = self::DEFAULT_ROW_ATTRIBUTES;
 
     /**
      * @param FormBuilderInterface $builder     the parent builder
@@ -607,7 +609,7 @@ class FormHelper
         $this->field = $field;
 
         // add label if applicable
-        if (null !== $this->labelPrefix && !\in_array('label_format', $this->options, true)) {
+        if (null !== $this->labelPrefix) {
             return $this->label($this->labelPrefix . $field);
         }
 
@@ -627,17 +629,19 @@ class FormHelper
     /**
      * Sets the help property.
      *
-     * @param ?string $help the help identifier to translate
+     * If null or an empty string is provided, no help is displayed.
      */
-    public function help(?string $help): self
+    public function help(TranslatableInterface|\Stringable|string|null $help): self
     {
-        $help = StringUtils::isString($help) ? $help : null;
+        if ($help instanceof \Stringable) {
+            $help = (string) $help;
+        }
 
-        return $this->updateOption('help', $help);
+        return $this->updateOption('help', '' === $help ? null : $help);
     }
 
     /**
-     * Add a class name to the help class attributes.
+     * Add classes to the help class attributes.
      *
      * @param string $classNames one or more space-separated classes to be added to the help class attribute
      */
@@ -647,34 +651,21 @@ class FormHelper
     }
 
     /**
-     * Sets the help HTML property.
-     *
-     * Set this option to true to not escape them, which is useful when the help contains HTML elements.
-     *
-     * @param bool $html <code>true</code> if required, <code>false</code> otherwise
-     */
-    public function helpHtml(bool $html = true): self
-    {
-        return $this->updateOption('help_html', $html);
-    }
-
-    /**
      * Sets the label property.
      *
-     * @param TranslatableInterface|string|false $label the translatable, the label identifier to translate or false
-     *                                                  to hide
+     * If false, or an empty string is provided, no label is displayed.
      */
-    public function label(string|\Stringable|TranslatableInterface|false $label): self
+    public function label(TranslatableInterface|\Stringable|string|false $label): self
     {
-        if ('' === $label) {
-            $label = null;
+        if ($label instanceof \Stringable) {
+            $label = (string) $label;
         }
 
-        return $this->updateOption('label', $label);
+        return $this->updateOption('label', '' === $label ? null : $label);
     }
 
     /**
-     * Add a class name to the label class attributes.
+     * Add classes to the label class attributes.
      *
      * @param string $classNames one or more space-separated classes to be added to the label class attribute
      */
@@ -775,18 +766,6 @@ class FormHelper
     }
 
     /**
-     * Sets the priority.
-     *
-     * @param int $priority the priority to set.
-     *                      Fields with higher priorities are rendered first, and fields with the same priority
-     *                      are rendered in their original order.
-     */
-    public function priority(int $priority): self
-    {
-        return $this->updateOption('priority', $priority);
-    }
-
-    /**
      * Sets the read-only property to true.
      */
     public function readonly(): self
@@ -801,16 +780,16 @@ class FormHelper
     {
         $this->options = [];
         $this->attributes = [];
-        $this->rowAttributes = ['class' => 'mb-3 form-group'];
         $this->helpAttributes = [];
         $this->labelAttributes = [];
         $this->modelTransformer = null;
+        $this->rowAttributes = self::DEFAULT_ROW_ATTRIBUTES;
 
         return $this;
     }
 
     /**
-     * Add a class name to the row class attributes.
+     * Add classes to the row class attributes.
      *
      * @param string $classNames one or more space-separated classes to be added to the row class attribute
      */
@@ -924,9 +903,8 @@ class FormHelper
             return $this;
         }
 
-        $existing = (string) ($array['class'] ?? '');
-        $oldValues = \array_filter(\explode(' ', $existing));
         $newValues = \array_filter(\explode(' ', $classNames));
+        $oldValues = \array_filter(\explode(' ', $array['class'] ?? ''));
         $array['class'] = \implode(' ', \array_unique([...$oldValues, ...$newValues]));
 
         return $this;

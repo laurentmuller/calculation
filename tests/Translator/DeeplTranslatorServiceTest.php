@@ -34,7 +34,8 @@ final class DeeplTranslatorServiceTest extends TestCase
 
     public function testGetApiURL(): void
     {
-        $actual = DeeplTranslatorService::getApiUrl();
+        $translator = $this->createTranslator();
+        $actual = $translator->getApiUrl();
         self::assertSame('https://developers.deepl.com/docs', $actual);
     }
 

@@ -46,7 +46,7 @@ interface TranslatorServiceInterface
     /**
      * Gets the API documentation.
      */
-    public static function getApiUrl(): string;
+    public function getApiUrl(): string;
 
     /**
      * Gets the set of languages supported by other operations of the service.

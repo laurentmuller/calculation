@@ -24,6 +24,7 @@ use App\Form\Type\CurrentPasswordType;
 use App\Form\Type\PlainType;
 use App\Form\Type\RepeatPasswordType;
 use App\Pdf\Html\HtmlAttribute;
+use App\Tests\Fixture\FixtureStringable;
 use App\Tests\Form\User\PasswordHasherExtensionTrait;
 use App\Tests\Form\User\VichImageTypeTrait;
 use App\Tests\TranslatorMockTrait;
@@ -240,6 +241,20 @@ final class FormHelperTest extends TypeTestCase
         );
     }
 
+    public function testDuplicateClass(): void
+    {
+        $helper = $this->getFormHelper();
+        $actual = $helper->field(self::FIELD)
+            ->labelClass('text-start text-end')
+            ->labelClass('text-start')
+            ->addTextType()
+            ->createForm();
+        $this->validateForm(
+            form: $actual,
+            options: ['label_attr' => ['class' => 'text-start text-end']],
+        );
+    }
+
     public function testEmailType(): void
     {
         $helper = $this->getFormHelper();
@@ -313,16 +328,16 @@ final class FormHelperTest extends TypeTestCase
         );
     }
 
-    public function testHelpHtml(): void
+    public function testHelpStringable(): void
     {
         $helper = $this->getFormHelper();
         $actual = $helper->field(self::FIELD)
-            ->helpHtml()
+            ->help(new FixtureStringable())
             ->addTextType()
             ->createForm();
         $this->validateForm(
             form: $actual,
-            options: ['help_html' => true]
+            attributes: ['help' => null]
         );
     }
 
@@ -343,6 +358,19 @@ final class FormHelperTest extends TypeTestCase
         $helper = $this->getFormHelper();
         $actual = $helper->field(self::FIELD)
             ->label('')
+            ->addTextType()
+            ->createForm();
+        $this->validateForm(
+            form: $actual,
+            attributes: ['label' => null]
+        );
+    }
+
+    public function testLabelStringable(): void
+    {
+        $helper = $this->getFormHelper();
+        $actual = $helper->field(self::FIELD)
+            ->label(new FixtureStringable())
             ->addTextType()
             ->createForm();
         $this->validateForm(
@@ -551,19 +579,6 @@ final class FormHelperTest extends TypeTestCase
         $this->validateForm(
             form: $actual,
             class: PlainType::class
-        );
-    }
-
-    public function testPriority(): void
-    {
-        $helper = $this->getFormHelper();
-        $actual = $helper->field(self::FIELD)
-            ->priority(100)
-            ->addTextType()
-            ->createForm();
-        $this->validateForm(
-            form: $actual,
-            options: ['priority' => 100]
         );
     }
 

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use App\Entity\Calculation;
 use App\Entity\Product;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
@@ -37,6 +38,13 @@ final class CalculationDuplicateControllerTest extends ControllerTestCase
         yield ['/calculation/duplicate/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/calculation/duplicate/excel', self::ROLE_ADMIN];
         yield ['/calculation/duplicate/excel', self::ROLE_SUPER_ADMIN];
+    }
+
+    public function testEmptyCalculation(): void
+    {
+        $this->deleteEntitiesByClass(Calculation::class);
+        $this->checkRoute('/calculation/duplicate/pdf', self::ROLE_ADMIN, Response::HTTP_FOUND);
+        $this->checkRoute('/calculation/duplicate/excel', self::ROLE_ADMIN, Response::HTTP_FOUND);
     }
 
     #[\Override]

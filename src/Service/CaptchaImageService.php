@@ -98,14 +98,10 @@ class CaptchaImageService implements ServiceSubscriberInterface
     /**
      * Generate a captcha image and save values to the session.
      *
-     * @param bool $force  true to recreate an image, false to take previous created image (if any)
-     * @param int  $length the number of characters to output
-     * @param int  $width  the image width
-     * @param int  $height the image height
-     *
-     * @phpstan-param positive-int $length
-     * @phpstan-param positive-int $width
-     * @phpstan-param positive-int $height
+     * @param bool         $force  true to recreate an image, false to take previous created image (if any)
+     * @param positive-int $length the number of characters to output
+     * @param positive-int $width  the image width
+     * @param positive-int $height the image height
      *
      * @return ?string the image encoded with base 64 or null if the image cannot be created
      *
@@ -120,10 +116,6 @@ class CaptchaImageService implements ServiceSubscriberInterface
         $this->clear();
         $text = $this->generateRandomString($length);
         $image = $this->createImage($text, $width, $height);
-        if (!$image instanceof ImageService) {
-            return null;
-        }
-
         $data = $this->encodeImage($image);
         $this->setSessionValues([
             self::KEY_TEXT => $text,
@@ -169,7 +161,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
     }
 
     /**
-     * Validate the given token; ignoring case.
+     * Validate the given token; ignoring case consideration.
      */
     public function validateToken(?string $token): bool
     {
@@ -209,18 +201,14 @@ class CaptchaImageService implements ServiceSubscriberInterface
     /**
      * Create an image.
      *
-     * @phpstan-param positive-int $width
-     * @phpstan-param positive-int $height
+     * @param positive-int $width
+     * @param positive-int $height
      *
-     * @throws \Exception
+     * throws \Exception
      */
-    private function createImage(string $text, int $width, int $height): ?ImageService
+    private function createImage(string $text, int $width, int $height): ImageService
     {
         $image = ImageService::fromTrueColor($width, $height);
-        if (!$image instanceof ImageService) {
-            return null;
-        }
-
         $this->drawBackground($image);
         $this->drawPoints($image, $width, $height);
         $this->drawLines($image, $width, $height);
@@ -234,12 +222,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
      */
     private function drawBackground(ImageService $image): void
     {
-        $color = $image->allocateWhite();
-        if (!\is_int($color)) {
-            return;
-        }
-
-        $image->fill($color);
+        $image->fill($image->allocateWhite());
     }
 
     /**
@@ -250,10 +233,6 @@ class CaptchaImageService implements ServiceSubscriberInterface
     private function drawLines(ImageService $image, int $width, int $height): void
     {
         $color = $image->allocate(195, 195, 195);
-        if (!\is_int($color)) {
-            return;
-        }
-
         $lines = \random_int(3, 7);
         for ($i = 0; $i < $lines; ++$i) {
             $y1 = \random_int(0, $height);
@@ -270,10 +249,6 @@ class CaptchaImageService implements ServiceSubscriberInterface
     private function drawPoints(ImageService $image, int $width, int $height): void
     {
         $color = $image->allocate(0, 0, 255);
-        if (!\is_int($color)) {
-            return;
-        }
-
         $points = \random_int(300, 400);
         for ($i = 0; $i < $points; ++$i) {
             $x = \random_int(0, $width);
@@ -289,12 +264,8 @@ class CaptchaImageService implements ServiceSubscriberInterface
      */
     private function drawText(ImageService $image, int $width, int $height, string $text): void
     {
-        $color = $image->allocateBlack();
-        if (!\is_int($color)) {
-            return;
-        }
-
         $font = $this->font;
+        $color = $image->allocateBlack();
         $size = (int) ((float) $height * 0.7);
         $items = $this->computeText($image, $size, $font, $text);
         $x = \intdiv($width - $this->getTextWidth($items), 2);

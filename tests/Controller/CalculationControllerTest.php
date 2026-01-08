@@ -17,6 +17,7 @@ use App\Entity\Calculation;
 use App\Parameter\ApplicationParameters;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
+use Symfony\Component\HttpFoundation\Response;
 
 final class CalculationControllerTest extends EntityControllerTestCase
 {
@@ -37,6 +38,8 @@ final class CalculationControllerTest extends EntityControllerTestCase
         yield ['/calculation/edit/1', self::ROLE_USER];
         yield ['/calculation/edit/1', self::ROLE_ADMIN];
         yield ['/calculation/edit/1', self::ROLE_SUPER_ADMIN];
+        // invalid id
+        yield ['/calculation/edit/-1', self::ROLE_USER, Response::HTTP_NOT_FOUND];
 
         yield ['/calculation/state/1', self::ROLE_USER];
         yield ['/calculation/state/1', self::ROLE_ADMIN];

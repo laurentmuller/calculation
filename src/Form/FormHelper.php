@@ -609,7 +609,7 @@ class FormHelper
         $this->field = $field;
 
         // add label if applicable
-        if (null !== $this->labelPrefix) {
+        if (null !== $this->labelPrefix && !\in_array('label', $this->options, true)) {
             return $this->label($this->labelPrefix . $field);
         }
 

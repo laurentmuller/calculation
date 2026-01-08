@@ -24,13 +24,13 @@ class PdfLabel implements \Stringable
     /**
      * The number of horizontal labels (columns).
      *
-     * @phpstan-var positive-int
+     * @var positive-int
      */
     public int $cols = 1;
     /**
      * The font size in points.
      *
-     * @phpstan-var positive-int
+     * @var positive-int
      */
     public int $fontSize = 9;
     /**
@@ -56,7 +56,7 @@ class PdfLabel implements \Stringable
     /**
      * The number of vertical labels (rows).
      *
-     * @phpstan-var positive-int
+     * @var positive-int
      */
     public int $rows = 1;
     /**

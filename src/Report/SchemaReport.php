@@ -90,7 +90,7 @@ class SchemaReport extends AbstractReport
 
     private function createTable(string $id, PdfColumn ...$columns): PdfTable
     {
-        /** @phpstan-var positive-int $cols */
+        /** @var positive-int $cols */
         $cols = \count($columns);
 
         return ReportTable::fromReport($this)

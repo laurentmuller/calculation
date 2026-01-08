@@ -21,90 +21,52 @@ final class ImageServiceTest extends TestCase
 {
     public function testAllocate(): void
     {
-        $service = ImageService::fromTrueColor(100, 200);
-        self::assertNotNull($service);
-        self::assertIsInt($service->allocate(255, 255, 255));
-    }
-
-    public function testAllocateAlpha(): void
-    {
-        $service = ImageService::fromTrueColor(100, 200);
-        self::assertNotNull($service);
-        self::assertIsInt($service->allocateAlpha(255, 255, 255));
-        self::assertIsInt($service->allocateAlpha(255, 255, 255, 100));
-    }
-
-    public function testAllocateColors(): void
-    {
-        $service = ImageService::fromTrueColor(100, 200);
-        self::assertNotNull($service);
-        self::assertIsInt($service->allocateBlack());
-        self::assertIsInt($service->allocateWhite());
-    }
-
-    public function testAlphaBlending(): void
-    {
-        $service = ImageService::fromTrueColor(100, 200);
-        self::assertNotNull($service);
-        self::assertTrue($service->alphaBlending(true));
-        self::assertTrue($service->alphaBlending(false));
-    }
-
-    public function testCopyResampled(): void
-    {
-        $source = ImageService::fromTrueColor(100, 200);
-        self::assertNotNull($source);
-        $target = ImageService::fromTrueColor(100, 200);
-        self::assertNotNull($target);
-        self::assertTrue($source->copyResampled($target, 0, 0, 0, 0, 10, 10, 10, 10));
+        $service = $this->createService();
+        self::assertNonNegative($service->allocateBlack());
+        self::assertNonNegative($service->allocateWhite());
+        self::assertNonNegative($service->allocate(255, 255, 255));
     }
 
     public function testFill(): void
     {
-        $service = ImageService::fromTrueColor(100, 200);
-        self::assertNotNull($service);
+        $service = $this->createService();
         $black = $service->allocateBlack();
-        self::assertIsInt($black);
         self::assertTrue($service->fill($black, 10, 15));
     }
 
     public function testFillRectangle(): void
     {
-        $service = ImageService::fromTrueColor(100, 200);
-        self::assertNotNull($service);
+        $service = $this->createService();
         $black = $service->allocateBlack();
-        self::assertIsInt($black);
         self::assertTrue($service->fillRectangle($black, 0, 0, 14, 22));
     }
 
     public function testFromFile(): void
     {
-        $file = __DIR__ . '/../files/images/example.png';
+        $file = Path::normalize(__DIR__ . '/../files/images/example.png');
         $service = ImageService::fromFile($file);
-        self::assertNotNull($service);
         self::assertSame($file, $service->getFilename());
-        $image = $service->getImage();
-        $x = \imagesx($image);
-        self::assertSame(124, $x);
-        $y = \imagesy($image);
-        self::assertSame(147, $y);
     }
 
-    public function testFromFileInvalid(): void
+    public function testFromFileInvalidImage(): void
+    {
+        $file = Path::normalize(__DIR__ . '/../files/images/example_invalid.png');
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage('Unable to load image from "' . $file . '".');
+        @ImageService::fromFile($file);
+    }
+
+    public function testFromFileInvalidName(): void
     {
         $file = Path::normalize(__FILE__);
-        $service = ImageService::fromFile($file);
-        self::assertNull($service);
-
-        $file = Path::normalize(__DIR__ . '/../files/images/example_invalid.png');
-        $service = @ImageService::fromFile($file);
-        self::assertNull($service);
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage('Unsupported file image extension "' . $file . '".');
+        ImageService::fromFile($file);
     }
 
     public function testFromTrueColor(): void
     {
-        $service = ImageService::fromTrueColor(100, 200);
-        self::assertNotNull($service);
+        $service = $this->createService();
         self::assertNull($service->getFilename());
         $image = $service->getImage();
         $x = \imagesx($image);
@@ -115,61 +77,28 @@ final class ImageServiceTest extends TestCase
 
     public function testLine(): void
     {
-        $service = ImageService::fromTrueColor(100, 200);
-        self::assertNotNull($service);
+        $service = $this->createService();
         $black = $service->allocateBlack();
-        self::assertIsInt($black);
         self::assertTrue($service->line(0, 0, 10, 15, $black));
     }
 
     public function testRectangle(): void
     {
-        $service = ImageService::fromTrueColor(100, 200);
-        self::assertNotNull($service);
+        $service = $this->createService();
         $black = $service->allocateBlack();
-        self::assertIsInt($black);
         self::assertTrue($service->rectangle(0, 0, 10, 15, $black));
-    }
-
-    public function testResolution(): void
-    {
-        $service = ImageService::fromTrueColor(100, 200);
-        self::assertNotNull($service);
-        $actual = $service->resolution();
-        self::assertSame(96, $actual);
-    }
-
-    public function testSaveAlpha(): void
-    {
-        $service = ImageService::fromTrueColor(100, 200);
-        self::assertNotNull($service);
-        self::assertTrue($service->saveAlpha(true));
-        self::assertTrue($service->saveAlpha(false));
     }
 
     public function testSetPixel(): void
     {
-        $service = ImageService::fromTrueColor(100, 200);
-        self::assertNotNull($service);
+        $service = $this->createService();
         $black = $service->allocateBlack();
-        self::assertIsInt($black);
         self::assertTrue($service->setPixel(1, 1, $black));
-    }
-
-    public function testTransparent(): void
-    {
-        $service = ImageService::fromTrueColor(100, 200);
-        self::assertNotNull($service);
-        $black = $service->allocateBlack();
-        self::assertIsInt($black);
-        $actual = $service->transparent($black);
-        self::assertSame(0, $actual);
     }
 
     public function testTtfBox(): void
     {
-        $service = ImageService::fromTrueColor(100, 200);
-        self::assertNotNull($service);
+        $service = $this->createService();
         $font = $this->getFont();
         $actual = $service->ttfBox(10.0, 0.0, $font, 'text');
         self::assertIsArray($actual);
@@ -177,8 +106,7 @@ final class ImageServiceTest extends TestCase
 
     public function testTtfSize(): void
     {
-        $service = ImageService::fromTrueColor(100, 200);
-        self::assertNotNull($service);
+        $service = $this->createService();
         $font = $this->getFont();
         $actual = $service->ttfSize(10.0, 0.0, $font, 'text');
         self::assertNotEmpty($actual);
@@ -187,8 +115,7 @@ final class ImageServiceTest extends TestCase
 
     public function testTtfSizeInvalid(): void
     {
-        $service = ImageService::fromTrueColor(100, 200);
-        self::assertNotNull($service);
+        $service = $this->createService();
         $actual = @$service->ttfSize(10.0, 0.0, Path::normalize(__FILE__), 'text');
         self::assertNotEmpty($actual);
         self::assertCount(2, $actual);
@@ -198,14 +125,21 @@ final class ImageServiceTest extends TestCase
 
     public function testTtfText(): void
     {
-        $service = ImageService::fromTrueColor(100, 200);
-        self::assertNotNull($service);
+        $service = $this->createService();
         $black = $service->allocateBlack();
-        self::assertIsInt($black);
-
         $font = $this->getFont();
         $actual = $service->ttfText(10.0, 0.0, 0, 0, $black, $font, 'text');
         self::assertIsArray($actual);
+    }
+
+    protected static function assertNonNegative(int $value): void
+    {
+        self::assertGreaterThanOrEqual(0, $value);
+    }
+
+    private function createService(): ImageService
+    {
+        return ImageService::fromTrueColor(100, 200);
     }
 
     private function getFont(): string

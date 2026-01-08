@@ -198,6 +198,23 @@ class CalculationRepository extends AbstractRepository
     }
 
     /**
+     * Gets a calculation by its identifier.
+     */
+    public function getById(int $id): ?Calculation
+    {
+        return $this->createQueryBuilder('calculation')
+            ->innerJoin('calculation.state', 'state')
+            ->leftJoin('calculation.groups', 'groups')
+            ->leftJoin('groups.categories', 'categories')
+            ->leftJoin('categories.items', 'items')
+            ->select('calculation, state, groups, categories, items')
+            ->where('calculation.id = :id')
+            ->setParameter('id', $id, Types::INTEGER)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
      * Gets calculation for the given date range.
      *
      * @param DatePoint $from the start date (exclusive)

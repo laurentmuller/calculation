@@ -116,7 +116,7 @@ final class HtmlListTypeTest extends TestCase
     }
 
     /**
-     * @phpstan-param positive-int $value
+     * @param positive-int $value
      */
     #[DataProvider('getLetterLower')]
     public function testLetterLower(int $value, string $expected, string $suffix = ''): void
@@ -126,7 +126,7 @@ final class HtmlListTypeTest extends TestCase
     }
 
     /**
-     * @phpstan-param positive-int $value
+     * @param positive-int $value
      */
     #[DataProvider('getLetterUpper')]
     public function testLetterUpper(int $value, string $expected, string $suffix = ''): void
@@ -136,7 +136,7 @@ final class HtmlListTypeTest extends TestCase
     }
 
     /**
-     * @phpstan-param positive-int $value
+     * @param positive-int $value
      */
     #[DataProvider('getNumberValues')]
     public function testNumber(int $value, string $expected, string $suffix = ''): void
@@ -146,7 +146,7 @@ final class HtmlListTypeTest extends TestCase
     }
 
     /**
-     * @phpstan-param positive-int $value
+     * @param positive-int $value
      */
     #[DataProvider('getRomanLower')]
     public function testRomanLower(int $value, string $expected, string $suffix = ''): void
@@ -156,7 +156,7 @@ final class HtmlListTypeTest extends TestCase
     }
 
     /**
-     * @phpstan-param positive-int $value
+     * @param positive-int $value
      */
     #[DataProvider('getRomanUpper')]
     public function testRomanUpper(int $value, string $expected, string $suffix = ''): void

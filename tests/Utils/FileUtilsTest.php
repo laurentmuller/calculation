@@ -205,7 +205,7 @@ final class FileUtilsTest extends TestCase
     }
 
     /**
-     * @phpstan-param string|non-negative-int $path
+     * @param string|non-negative-int $path
      */
     #[DataProvider('getFormatSize')]
     public function testFormatSize(string|int $path, string $expected): void

@@ -33,8 +33,8 @@ final class CategoryRepositoryTest extends AbstractRepositoryTestCase
 
     public function testCreateDefaultQueryBuilder(): void
     {
-        $actual = $this->repository->createDefaultQueryBuilder();
-        self::assertInstanceOf(QueryBuilder::class, $actual);
+        $this->repository->createDefaultQueryBuilder();
+        self::expectNotToPerformAssertions();
     }
 
     public function testGetDropDownProducts(): void

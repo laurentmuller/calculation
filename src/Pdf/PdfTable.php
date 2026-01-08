@@ -579,7 +579,7 @@ class PdfTable
         ?PdfStyle $style = null,
         ?PdfTextAlignment $alignment = null
     ): static {
-        /** @phpstan-var positive-int $cols */
+        /** @var positive-int $cols */
         $cols = $this->getColumnsCount();
 
         return $this->startRow()

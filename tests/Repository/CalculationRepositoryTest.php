@@ -22,7 +22,6 @@ use App\Tests\DateAssertTrait;
 use App\Tests\Entity\IdTrait;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
-use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Clock\DatePoint;
 
 /**
@@ -84,8 +83,21 @@ final class CalculationRepositoryTest extends AbstractRepositoryTestCase
 
     public function testCreateDefaultQueryBuilder(): void
     {
-        $actual = $this->repository->createDefaultQueryBuilder();
-        self::assertInstanceOf(QueryBuilder::class, $actual);
+        $this->repository->createDefaultQueryBuilder();
+        self::expectNotToPerformAssertions();
+    }
+
+    public function testGetByIdFound(): void
+    {
+        $id = $this->getCalculation()->getId();
+        $actual = $this->repository->getById((int) $id);
+        self::assertNotNull($actual);
+    }
+
+    public function testGetByIdNotFound(): void
+    {
+        $actual = $this->repository->getById(-1);
+        self::assertNull($actual);
     }
 
     public function testGetByInterval(): void

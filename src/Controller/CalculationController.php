@@ -67,6 +67,15 @@ class CalculationController extends AbstractEntityController
     }
 
     /**
+     * Add a calculation.
+     */
+    #[AddEntityRoute]
+    public function add(Request $request): Response
+    {
+        return $this->editEntity($request, $this->createCalculation());
+    }
+
+    /**
      * Edit a copy (cloned) calculation.
      */
     #[CloneEntityRoute]
@@ -94,13 +103,17 @@ class CalculationController extends AbstractEntityController
     }
 
     /**
-     * Add or edit a calculation.
+     * Edit a calculation.
      */
-    #[AddEntityRoute]
     #[EditEntityRoute]
-    public function edit(Request $request, ?Calculation $item): Response
+    public function edit(Request $request, int $id): Response
     {
-        return $this->editEntity($request, $item ?? $this->createCalculation());
+        $item = $this->getRepository()->getById($id);
+        if (!$item instanceof Calculation) {
+            throw $this->createTranslatedNotFoundException('errors.item_not_found', ['%class%' => Calculation::class, '%id%' => $id]);
+        }
+
+        return $this->editEntity($request, $item);
     }
 
     /**

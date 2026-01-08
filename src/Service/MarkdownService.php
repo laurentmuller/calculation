@@ -61,7 +61,7 @@ readonly class MarkdownService
      */
     private function convert(string $content): string
     {
-        $content = $this->markdown->convert($content);
+        $content = \trim($this->markdown->convert($content));
 
         // remove line breaks of continuous texts
         return StringUtils::pregReplace('/[^>]$/m', '$0 ', $content);

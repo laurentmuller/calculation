@@ -140,9 +140,7 @@ class SearchService implements ServiceSubscriberInterface
      * @param ?string $search the term to search
      * @param ?string $entity the entity to search in or null for all
      *
-     * @return int the number of rows
-     *
-     * @phpstan-return non-negative-int
+     * @return non-negative-int the number of rows
      */
     public function count(?string $search, ?string $entity = null): int
     {

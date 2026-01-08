@@ -77,10 +77,8 @@ class PdfLabelDocument extends PdfDocument
     private float $lineHeight;
 
     /**
-     * @param PdfLabel $label      the label to output
-     * @param int      $startIndex the zero-based index of the first label
-     *
-     * @phpstan-param non-negative-int $startIndex
+     * @param PdfLabel         $label      the label to output
+     * @param non-negative-int $startIndex the zero-based index of the first label
      *
      * @throws PdfException if the label's font size is invalid
      */

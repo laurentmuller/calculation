@@ -21,7 +21,7 @@ namespace App\Pdf\Html;
 class HtmlOlChunk extends AbstractHtmlListChunk
 {
     /**
-     * @phpstan-param positive-int $start
+     * @param positive-int $start
      */
     public function __construct(
         ?HtmlParentChunk $parent = null,

@@ -25,28 +25,16 @@ use App\Utils\FileUtils;
 class ImageService
 {
     /**
-     * The default image resolution (96) in the dot per each (DPI).
-     */
-    final public const DEFAULT_RESOLUTION = 96;
-
-    /**
      * The allocated colors.
      *
-     * @var int[]
+     * @var array<string, int>
      */
     private array $colors = [];
 
-    /**
-     * @param \GdImage $image    the image to handle
-     * @param ?string  $filename the file name, the URL or null if none
-     */
     private function __construct(private readonly \GdImage $image, private readonly ?string $filename = null)
     {
     }
 
-    /**
-     * Destructor.
-     */
     public function __destruct()
     {
         foreach ($this->colors as $color) {
@@ -60,123 +48,37 @@ class ImageService
      *
      * The color is automatically de-allocated as soon as there are no other references to this instance.
      *
-     * @param int $red   the value of the red component
-     * @param int $green the value of the green component
-     * @param int $blue  the value of the blue component
+     * @param int<0, 255> $red   the value of the red component
+     * @param int<0, 255> $green the value of the green component
+     * @param int<0, 255> $blue  the value of the blue component
      *
-     * @phpstan-param int<0, 255> $red
-     * @phpstan-param int<0, 255> $green
-     * @phpstan-param int<0, 255> $blue
-     *
-     * @return int|false the color identifier on success, false if the allocation failed
+     * @return int the color identifier
      */
-    public function allocate(int $red, int $green, int $blue): int|false
+    public function allocate(int $red, int $green, int $blue): int
     {
-        $color = \imagecolorallocate($this->image, $red, $green, $blue);
-        if (false !== $color) {
-            $this->colors[] = $color;
-        }
+        $key = \sprintf('%d-%d-%d', $red, $green, $blue);
 
-        return $color;
+        return $this->colors[$key] ??= (int) \imagecolorallocate($this->image, $red, $green, $blue);
     }
 
     /**
-     * Allocate a color for this image.
+     * Allocate the black color (red: 0, green: 0, blue: 0) for this image.
      *
-     * The color is automatically de-allocated as soon as there are no other references to this instance.
-     *
-     * @param int $red   the value of the red component
-     * @param int $green the value of the green component
-     * @param int $blue  the value of the blue component
-     * @param int $alpha a value between 0 and 127
-     *
-     * @phpstan-param int<0, 255> $red
-     * @phpstan-param int<0, 255> $green
-     * @phpstan-param int<0, 255> $blue
-     * @phpstan-param int<0, 127> $alpha
-     *
-     * @return int|false the color identifier on success, false if the allocation failed
+     * @return int the color identifier
      */
-    public function allocateAlpha(int $red = 0, int $green = 0, int $blue = 0, int $alpha = 127): int|false
-    {
-        $color = \imagecolorallocatealpha($this->image, $red, $green, $blue, $alpha);
-        if (false !== $color) {
-            $this->colors[] = $color;
-        }
-
-        return $color;
-    }
-
-    /**
-     * Allocate the black color for this image.
-     *
-     * @return int|false the color identifier on success, false if the allocation failed
-     */
-    public function allocateBlack(): int|false
+    public function allocateBlack(): int
     {
         return $this->allocate(0, 0, 0);
     }
 
     /**
-     * Allocate the white color for this image.
+     * Allocate the white color (red: 255, green: 255, blue: 255) for this image.
      *
-     * @return int|false the color identifier on success, false if the allocation failed
+     * @return int the color identifier
      */
-    public function allocateWhite(): int|false
+    public function allocateWhite(): int
     {
         return $this->allocate(255, 255, 255);
-    }
-
-    /**
-     * Set the blending mode for this image.
-     *
-     * @param bool $blendMode whether to enable the blending mode or not
-     *
-     * @return bool true on success or false on failure
-     */
-    public function alphaBlending(bool $blendMode): bool
-    {
-        return \imagealphablending($this->image, $blendMode);
-    }
-
-    /**
-     * Copy and resize part of an image with resampling.
-     *
-     * @param ImageService $dstImage  the destination image handler
-     * @param int          $dstX      the x-coordinate of destination point
-     * @param int          $dstY      the y-coordinate of destination point
-     * @param int          $srcX      the x-coordinate of source point
-     * @param int          $srcY      the y-coordinate of source point
-     * @param int          $dstWidth  the destination width
-     * @param int          $dstHeight the destination height
-     * @param int          $srcWidth  the source width
-     * @param int          $srcHeight the source height
-     *
-     * @return bool true on success or false on failure
-     */
-    public function copyResampled(
-        self $dstImage,
-        int $dstX,
-        int $dstY,
-        int $srcX,
-        int $srcY,
-        int $dstWidth,
-        int $dstHeight,
-        int $srcWidth,
-        int $srcHeight
-    ): bool {
-        return \imagecopyresampled(
-            dst_image: $dstImage->image,
-            src_image: $this->image,
-            dst_x: $dstX,
-            dst_y: $dstY,
-            src_x: $srcX,
-            src_y: $srcY,
-            dst_width: $dstWidth,
-            dst_height: $dstHeight,
-            src_width: $srcWidth,
-            src_height: $srcHeight
-        );
     }
 
     /**
@@ -208,7 +110,14 @@ class ImageService
      */
     public function fillRectangle(int $x, int $y, int $width, int $height, int $color): bool
     {
-        return \imagefilledrectangle($this->image, $x, $y, $x + $width, $y + $height, $color);
+        return \imagefilledrectangle(
+            image: $this->image,
+            x1: $x,
+            y1: $y,
+            x2: $x + $width,
+            y2: $y + $height,
+            color: $color
+        );
     }
 
     /**
@@ -218,19 +127,19 @@ class ImageService
      *
      * @param string $filename the path to the image
      *
-     * @return ?ImageService an image handler on success, <code>null</code> on error
+     * @throw \InvalidArgumentException if the file extension is not supported or if the image cannot be loaded
      */
-    public static function fromFile(string $filename): ?self
+    public static function fromFile(string $filename): self
     {
         $fileExtension = FileUtils::getExtension($filename, true);
         $imageExtension = ImageExtension::tryFrom($fileExtension);
         if (!$imageExtension instanceof ImageExtension) {
-            return null;
+            throw new \InvalidArgumentException(\sprintf('Unsupported file image extension "%s".', $filename));
         }
 
         $image = $imageExtension->createImage($filename);
         if (!$image instanceof \GdImage) {
-            return null;
+            throw new \InvalidArgumentException(\sprintf('Unable to load image from "%s".', $filename));
         }
 
         return new self($image, $filename);
@@ -239,20 +148,13 @@ class ImageService
     /**
      * Create a new true color image handler.
      *
-     * @param int $width  the image width
-     * @param int $height the image height
-     *
-     * @phpstan-param positive-int $width
-     * @phpstan-param positive-int $height
-     *
-     * @return ?ImageService an image handler on success, <code>null</code> on error
+     * @param positive-int $width  the image width
+     * @param positive-int $height the image height
      */
-    public static function fromTrueColor(int $width, int $height): ?self
+    public static function fromTrueColor(int $width, int $height): self
     {
+        /** @var \GdImage $image */
         $image = \imagecreatetruecolor($width, $height);
-        if (!$image instanceof \GdImage) {
-            return null;
-        }
 
         return new self($image);
     }
@@ -304,38 +206,14 @@ class ImageService
      */
     public function rectangle(int $x, int $y, int $width, int $height, int $color): bool
     {
-        return \imagerectangle($this->image, $x, $y, $x + $width, $y + $height, $color);
-    }
-
-    /**
-     * Get the horizontal resolution of this image in the dot per inch (DPI).
-     *
-     * @param int $default the default resolution to use on failure
-     *
-     * @return int the resolution
-     */
-    public function resolution(int $default = self::DEFAULT_RESOLUTION): int
-    {
-        /** @phpstan-var int[]|false $values */
-        $values = \imageresolution($this->image);
-        if (!\is_array($values)) {
-            return $default;
-        }
-
-        return $values[0];
-    }
-
-    /**
-     * Set the flag to save full alpha channel information (as opposed to single-color transparency)
-     * when saving PNG images.
-     *
-     * @param bool $save whether to save the alpha channel or not
-     *
-     * @return bool true on success or false on failure
-     */
-    public function saveAlpha(bool $save): bool
-    {
-        return \imagesavealpha($this->image, $save);
+        return \imagerectangle(
+            image: $this->image,
+            x1: $x,
+            y1: $y,
+            x2: $x + $width,
+            y2: $y + $height,
+            color: $color
+        );
     }
 
     /**
@@ -352,19 +230,6 @@ class ImageService
     public function setPixel(int $x, int $y, int $color): bool
     {
         return \imagesetpixel($this->image, $x, $y, $color);
-    }
-
-    /**
-     * Define a color as transparent.
-     *
-     * @param int $color a color identifier created with the allocate method
-     *
-     * @return int the identifier of the new (or current, if none is specified) transparent color is returned. If color
-     *             is null, and the image has no transparent color, the returned identifier will be -1.
-     */
-    public function transparent(int $color): int
-    {
-        return \imagecolortransparent($this->image, $color);
     }
 
     /**
@@ -424,7 +289,12 @@ class ImageService
      */
     public function ttfBox(float $size, float $angle, string $fontFile, string $text): array|false
     {
-        return \imagettfbbox($size, $angle, $fontFile, $text);
+        return \imagettfbbox(
+            size: $size,
+            angle: $angle,
+            font_filename: $fontFile,
+            string: $text
+        );
     }
 
     /**
@@ -538,14 +408,14 @@ class ImageService
         string $text
     ): array|false {
         return \imagettftext(
-            $this->image,
-            $size,
-            $angle,
-            $x,
-            $y,
-            $color,
-            $fontFile,
-            $text
+            image: $this->image,
+            size: $size,
+            angle: $angle,
+            x: $x,
+            y: $y,
+            color: $color,
+            font_filename: $fontFile,
+            text: $text
         );
     }
 }

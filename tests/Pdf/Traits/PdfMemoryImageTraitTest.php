@@ -124,13 +124,11 @@ final class PdfMemoryImageTraitTest extends TestCase
     private function createGdImage(): \GdImage
     {
         $service = ImageService::fromTrueColor(200, 150);
-        self::assertInstanceOf(ImageService::class, $service);
-
-        $service->fill((int) $service->allocateWhite());
-        $service->rectangle(0, 0, 199, 149, (int) $service->allocateBlack());
-        $service->fillRectangle(30, 100, 30, 48, (int) $service->allocate(255, 0, 0));
-        $service->fillRectangle(80, 80, 30, 68, (int) $service->allocate(0, 255, 0));
-        $service->fillRectangle(130, 40, 30, 108, (int) $service->allocate(0, 0, 255));
+        $service->fill($service->allocateWhite());
+        $service->rectangle(0, 0, 199, 149, $service->allocateBlack());
+        $service->fillRectangle(30, 100, 30, 48, $service->allocate(255, 0, 0));
+        $service->fillRectangle(80, 80, 30, 68, $service->allocate(0, 255, 0));
+        $service->fillRectangle(130, 40, 30, 108, $service->allocate(0, 0, 255));
 
         return $service->getImage();
     }

@@ -191,7 +191,6 @@ final class ImageExtensionTest extends TestCase
 
         try {
             $service = ImageService::fromTrueColor(50, 50);
-            self::assertNotNull($service);
             $extension = ImageExtension::PNG;
             $result = $extension->saveImage($service, $file);
             self::assertTrue($result);

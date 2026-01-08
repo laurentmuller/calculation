@@ -113,7 +113,7 @@ class CalculationsBelowReport extends AbstractArrayReport
         $margins = $this->safeDivide($this->overall, $this->items);
         $text = $this->translateCount($entities, 'counters.calculations');
         $style = PdfStyle::getHeaderStyle()->setTextColor(PdfTextColor::red());
-        /** @phpstan-var positive-int $cols */
+        /** @var positive-int $cols */
         $cols = $table->getColumnsCount() - 3;
         $table->getColumns()[0]
             ->setAlignment(PdfTextAlignment::LEFT)

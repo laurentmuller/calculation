@@ -22,7 +22,7 @@ use App\Interfaces\ComparableInterface;
  */
 abstract class AbstractLogCounter implements \Countable, \Stringable, ComparableInterface
 {
-    /** @phpstan-var non-negative-int */
+    /** @var non-negative-int */
     private int $count = 0;
 
     #[\Override]
@@ -32,7 +32,7 @@ abstract class AbstractLogCounter implements \Countable, \Stringable, Comparable
     }
 
     /**
-     * @phpstan-param positive-int $value
+     * @param positive-int $value
      */
     public function increment(int $value = 1): static
     {

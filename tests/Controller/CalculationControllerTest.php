@@ -39,7 +39,7 @@ final class CalculationControllerTest extends EntityControllerTestCase
         yield ['/calculation/edit/1', self::ROLE_ADMIN];
         yield ['/calculation/edit/1', self::ROLE_SUPER_ADMIN];
         // invalid id
-        yield ['/calculation/edit/-1', self::ROLE_USER, Response::HTTP_NOT_FOUND];
+        yield ['/calculation/edit/0', self::ROLE_USER, Response::HTTP_NOT_FOUND];
 
         yield ['/calculation/state/1', self::ROLE_USER];
         yield ['/calculation/state/1', self::ROLE_ADMIN];

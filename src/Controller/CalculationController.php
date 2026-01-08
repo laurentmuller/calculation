@@ -42,10 +42,12 @@ use App\Spreadsheet\CalculationDocument;
 use App\Spreadsheet\CalculationsDocument;
 use App\Table\CalculationTable;
 use App\Table\DataQuery;
+use App\Utils\FormatUtils;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -104,13 +106,19 @@ class CalculationController extends AbstractEntityController
 
     /**
      * Edit a calculation.
+     *
+     * @throws NotFoundHttpException if the calculation for the given identifier is not found
      */
     #[EditEntityRoute]
     public function edit(Request $request, int $id): Response
     {
         $item = $this->getRepository()->getById($id);
         if (!$item instanceof Calculation) {
-            throw $this->createTranslatedNotFoundException('errors.item_not_found', ['%class%' => Calculation::class, '%id%' => $id]);
+            $parameters = [
+                '%class%' => $this->trans('calculation.name'),
+                '%id%' => FormatUtils::formatId($id),
+            ];
+            throw $this->createTranslatedNotFoundException('errors.item_not_found', $parameters);
         }
 
         return $this->editEntity($request, $item);

@@ -17,6 +17,7 @@ use App\Entity\User;
 use App\Interfaces\EntityInterface;
 use App\Interfaces\RoleInterface;
 use App\Repository\AbstractRepository;
+use App\Repository\ApplicationPropertyRepository;
 use App\Repository\CalculationCategoryRepository;
 use App\Repository\CalculationGroupRepository;
 use App\Repository\CalculationItemRepository;
@@ -25,7 +26,6 @@ use App\Repository\CalculationStateRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\CustomerRepository;
 use App\Repository\GlobalMarginRepository;
-use App\Repository\GlobalPropertyRepository;
 use App\Repository\GroupMarginRepository;
 use App\Repository\GroupRepository;
 use App\Repository\ProductRepository;
@@ -55,7 +55,7 @@ final class DatabaseTest extends KernelServiceTestCase
         yield [CategoryRepository::class];
         yield [CustomerRepository::class];
         yield [GlobalMarginRepository::class];
-        yield [GlobalPropertyRepository::class, self::PROPERTIES_COUNT];
+        yield [ApplicationPropertyRepository::class, self::PROPERTIES_COUNT];
         yield [GroupMarginRepository::class];
         yield [GroupRepository::class];
         yield [ProductRepository::class];
@@ -76,7 +76,7 @@ final class DatabaseTest extends KernelServiceTestCase
         yield ['sy_Category'];
         yield ['sy_Customer'];
         yield ['sy_GlobalMargin'];
-        yield ['sy_Property', self::PROPERTIES_COUNT]; // GlobalProperty
+        yield ['sy_Property', self::PROPERTIES_COUNT]; // ApplicationProperty
         yield ['sy_GroupMargin'];
         yield ['sy_Group'];
         yield ['sy_Product'];

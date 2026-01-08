@@ -13,20 +13,20 @@ declare(strict_types=1);
 
 namespace App\Tests\Repository;
 
-use App\Entity\GlobalProperty;
-use App\Repository\GlobalPropertyRepository;
+use App\Entity\ApplicationProperty;
+use App\Repository\ApplicationPropertyRepository;
 
 /**
- * @extends AbstractRepositoryTestCase<GlobalProperty, GlobalPropertyRepository>
+ * @extends AbstractRepositoryTestCase<ApplicationProperty, ApplicationPropertyRepository>
  */
-final class GlobalPropertyRepositoryTest extends AbstractRepositoryTestCase
+final class ApplicationPropertyRepositoryTest extends AbstractRepositoryTestCase
 {
     public function testFindOneByName(): void
     {
         $actual = $this->repository->findOneByName('name');
         self::assertNull($actual);
 
-        $property = new GlobalProperty();
+        $property = new ApplicationProperty();
         $property->setName('name')
             ->setValue('value');
         $this->repository->persist($property);
@@ -41,6 +41,6 @@ final class GlobalPropertyRepositoryTest extends AbstractRepositoryTestCase
     #[\Override]
     protected function getRepositoryClass(): string
     {
-        return GlobalPropertyRepository::class;
+        return ApplicationPropertyRepository::class;
     }
 }

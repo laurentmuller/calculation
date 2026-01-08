@@ -13,18 +13,18 @@ declare(strict_types=1);
 
 namespace App\Tests\Parameter;
 
+use App\Entity\ApplicationProperty;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Category;
-use App\Entity\GlobalProperty;
 use App\Entity\Product;
 use App\Enums\EntityAction;
 use App\Enums\StrengthLevel;
 use App\Parameter\ApplicationParameters;
 use App\Repository\AbstractRepository;
+use App\Repository\ApplicationPropertyRepository;
 use App\Repository\CalculationStateRepository;
 use App\Repository\CategoryRepository;
-use App\Repository\GlobalPropertyRepository;
 use App\Repository\ProductRepository;
 use App\Tests\Entity\IdTrait;
 use Doctrine\ORM\EntityManagerInterface;
@@ -40,7 +40,7 @@ final class ApplicationParametersTest extends TestCase
     public function testDatePoint(): void
     {
         $date = new DatePoint();
-        $property = GlobalProperty::instance('last_import')
+        $property = ApplicationProperty::instance('last_import')
             ->setValue($date);
         $parameters = $this->createApplicationParameters([$property]);
         $parameters->getDates()
@@ -51,7 +51,7 @@ final class ApplicationParametersTest extends TestCase
 
     public function testEnumInt(): void
     {
-        $property = GlobalProperty::instance('security_level')
+        $property = ApplicationProperty::instance('security_level')
             ->setValue(StrengthLevel::NONE);
         $parameters = $this->createApplicationParameters([$property]);
         $parameters->getSecurity()
@@ -62,7 +62,7 @@ final class ApplicationParametersTest extends TestCase
 
     public function testEnumString(): void
     {
-        $property = GlobalProperty::instance('edit_action')
+        $property = ApplicationProperty::instance('edit_action')
             ->setValue(EntityAction::EDIT);
         $parameters = $this->createApplicationParameters([$property]);
         $parameters->getDisplay()
@@ -85,7 +85,7 @@ final class ApplicationParametersTest extends TestCase
         $category->setCode('fake');
         self::setId($category, $id);
 
-        $property = GlobalProperty::instance('default_category')
+        $property = ApplicationProperty::instance('default_category')
             ->setValue($id);
 
         $parameters = $this->createApplicationParameters([$property], $category);
@@ -107,7 +107,7 @@ final class ApplicationParametersTest extends TestCase
         $product->setDescription('fake');
         self::setId($product, $id);
 
-        $property = GlobalProperty::instance('default_product')
+        $property = ApplicationProperty::instance('default_product')
             ->setValue($id);
 
         $parameters = $this->createApplicationParameters([$property], product: $product);
@@ -129,7 +129,7 @@ final class ApplicationParametersTest extends TestCase
         $state->setCode('fake');
         self::setId($state, $id);
 
-        $property = GlobalProperty::instance('default_state')
+        $property = ApplicationProperty::instance('default_state')
             ->setValue($id);
 
         $parameters = $this->createApplicationParameters([$property], state: $state);
@@ -218,7 +218,7 @@ final class ApplicationParametersTest extends TestCase
 
     public function testWithDefaultValue(): void
     {
-        $property = GlobalProperty::instance('security_captcha')
+        $property = ApplicationProperty::instance('security_captcha')
             ->setValue(false);
         $parameters = $this->createApplicationParameters([$property]);
         $parameters->getSecurity()
@@ -232,7 +232,7 @@ final class ApplicationParametersTest extends TestCase
         $category = new Category();
         $category->setCode('fake');
         self::setId($category);
-        $property = GlobalProperty::instance('default_category')
+        $property = ApplicationProperty::instance('default_category')
             ->setValue(10);
         $parameters = $this->createApplicationParameters([$property]);
         $parameters->getDefault()
@@ -243,7 +243,7 @@ final class ApplicationParametersTest extends TestCase
 
     public function testWithExistingProperty(): void
     {
-        $property = GlobalProperty::instance('security_captcha');
+        $property = ApplicationProperty::instance('security_captcha');
         $property->setValue(true);
         $parameters = $this->createApplicationParameters([$property]);
         $parameters->getSecurity()
@@ -270,7 +270,7 @@ final class ApplicationParametersTest extends TestCase
         ?CalculationState $state = null,
         ?Product $product = null
     ): MockObject&EntityManagerInterface {
-        $propertyRepository = $this->createMock(GlobalPropertyRepository::class);
+        $propertyRepository = $this->createMock(ApplicationPropertyRepository::class);
         $propertyRepository->method('findAll')
             ->willReturn($properties);
 

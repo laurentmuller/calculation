@@ -13,14 +13,14 @@ declare(strict_types=1);
 
 namespace App\Parameter;
 
+use App\Entity\ApplicationProperty;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Category;
-use App\Entity\GlobalProperty;
 use App\Entity\Product;
 use App\Interfaces\EntityInterface;
 use App\Model\CustomerInformation;
-use App\Repository\GlobalPropertyRepository;
+use App\Repository\ApplicationPropertyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
@@ -30,7 +30,7 @@ use Symfony\Contracts\Cache\CacheInterface;
 /**
  * Contains application parameters.
  *
- * @extends AbstractParameters<GlobalProperty>
+ * @extends AbstractParameters<ApplicationProperty>
  */
 class ApplicationParameters extends AbstractParameters
 {
@@ -193,9 +193,9 @@ class ApplicationParameters extends AbstractParameters
     }
 
     #[\Override]
-    protected function createProperty(string $name): GlobalProperty
+    protected function createProperty(string $name): ApplicationProperty
     {
-        return GlobalProperty::instance($name);
+        return ApplicationProperty::instance($name);
     }
 
     #[\Override]
@@ -212,9 +212,9 @@ class ApplicationParameters extends AbstractParameters
     }
 
     #[\Override]
-    protected function getRepository(): GlobalPropertyRepository
+    protected function getRepository(): ApplicationPropertyRepository
     {
-        return $this->manager->getRepository(GlobalProperty::class);
+        return $this->manager->getRepository(ApplicationProperty::class);
     }
 
     #[\Override]

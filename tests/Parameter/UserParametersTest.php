@@ -18,7 +18,7 @@ use App\Entity\UserProperty;
 use App\Enums\EntityAction;
 use App\Parameter\ApplicationParameters;
 use App\Parameter\UserParameters;
-use App\Repository\GlobalPropertyRepository;
+use App\Repository\ApplicationPropertyRepository;
 use App\Repository\UserPropertyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -103,7 +103,7 @@ final class UserParametersTest extends TestCase
     private function createApplication(): ApplicationParameters
     {
         $cache = new ArrayAdapter();
-        $repository = $this->createMock(GlobalPropertyRepository::class);
+        $repository = $this->createMock(ApplicationPropertyRepository::class);
         $manager = $this->createMock(EntityManagerInterface::class);
         $manager->method('getRepository')
             ->willReturn($repository);

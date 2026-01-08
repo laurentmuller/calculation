@@ -18,7 +18,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Repository for user's property entity.
+ * Repository for user property entity.
  *
  * @extends AbstractRepository<UserProperty>
  */

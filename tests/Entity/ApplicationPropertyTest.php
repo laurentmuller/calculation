@@ -13,19 +13,19 @@ declare(strict_types=1);
 
 namespace App\Tests\Entity;
 
-use App\Entity\GlobalProperty;
+use App\Entity\ApplicationProperty;
 
-final class GlobalPropertyTest extends EntityValidatorTestCase
+final class ApplicationPropertyTest extends EntityValidatorTestCase
 {
     public function testDuplicate(): void
     {
-        $first = new GlobalProperty();
+        $first = new ApplicationProperty();
         $first->setName('name')
             ->setValue('value');
 
         try {
             $this->saveEntity($first);
-            $second = new GlobalProperty();
+            $second = new ApplicationProperty();
             $second->setName('name')
                 ->setValue('value');
             $results = $this->validate($second, 1);
@@ -37,20 +37,20 @@ final class GlobalPropertyTest extends EntityValidatorTestCase
 
     public function testInstance(): void
     {
-        $object = GlobalProperty::instance('name');
+        $object = ApplicationProperty::instance('name');
         self::assertSame('name', $object->getName());
     }
 
     public function testInvalidBoth(): void
     {
-        $object = new GlobalProperty();
+        $object = new ApplicationProperty();
         $results = $this->validate($object, 2);
         $this->validatePaths($results, 'name', 'value');
     }
 
     public function testInvalidName(): void
     {
-        $object = new GlobalProperty();
+        $object = new ApplicationProperty();
         $object->setValue('value');
         $results = $this->validate($object, 1);
         $this->validatePaths($results, 'name');
@@ -58,7 +58,7 @@ final class GlobalPropertyTest extends EntityValidatorTestCase
 
     public function testInvalidValue(): void
     {
-        $object = new GlobalProperty();
+        $object = new ApplicationProperty();
         $object->setName('name');
         $results = $this->validate($object, 1);
         $this->validatePaths($results, 'value');
@@ -66,13 +66,13 @@ final class GlobalPropertyTest extends EntityValidatorTestCase
 
     public function testNotDuplicate(): void
     {
-        $first = new GlobalProperty();
+        $first = new ApplicationProperty();
         $first->setName('name')
             ->setValue('value');
 
         try {
             $this->saveEntity($first);
-            $second = new GlobalProperty();
+            $second = new ApplicationProperty();
             $second->setName('name2')
                 ->setValue('value');
             $this->validate($second);

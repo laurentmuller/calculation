@@ -20,7 +20,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * A user's property.
+ * Represents a user property.
  */
 #[ORM\Table(name: 'sy_UserProperty')]
 #[ORM\Entity(repositoryClass: UserPropertyRepository::class)]

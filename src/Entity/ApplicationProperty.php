@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Repository\GlobalPropertyRepository;
+use App\Repository\ApplicationPropertyRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -21,10 +21,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * Represents an application (global) property.
  */
 #[ORM\Table(name: 'sy_Property')]
-#[ORM\Entity(repositoryClass: GlobalPropertyRepository::class)]
+#[ORM\Entity(repositoryClass: ApplicationPropertyRepository::class)]
 #[ORM\UniqueConstraint(name: 'unique_property_name', columns: ['name'])]
 #[UniqueEntity(fields: 'name', message: 'property.unique_name')]
-class GlobalProperty extends AbstractProperty
+class ApplicationProperty extends AbstractProperty
 {
     /**
      * Create a new instance for the given.

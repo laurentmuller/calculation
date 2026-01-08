@@ -139,14 +139,7 @@ final class TestControllerTest extends ControllerTestCase
 
     public function testSearch(): void
     {
-        $row = [
-            'id' => 1,
-            'type' => 'calculation',
-            'fields' => 'id',
-            'content' => '1',
-            'entityName' => 'calculation',
-            'fieldName' => 'id',
-        ];
+        $row = $this->createSearchItem();
         $service = $this->createMock(SearchService::class);
         $service->method('count')
             ->willReturn(1);
@@ -215,5 +208,17 @@ final class TestControllerTest extends ControllerTestCase
             ->setZipCode('1234');
 
         return $customer;
+    }
+
+    private function createSearchItem(): array
+    {
+        return [
+            SearchService::COLUMN_ID => 1,
+            SearchService::COLUMN_TYPE => 'calculation',
+            SearchService::COLUMN_FIELD => 'id',
+            SearchService::COLUMN_CONTENT => '1',
+            SearchService::COLUMN_ENTITY_NAME => 'calculation',
+            SearchService::COLUMN_FIELD_NAME => 'id',
+        ];
     }
 }

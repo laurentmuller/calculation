@@ -385,7 +385,7 @@ class SearchService implements ServiceSubscriberInterface
 
         $sql = \implode(' UNION ', $queries) . $extra;
         $query = $this->createNativeQuery($sql);
-        $query->setParameter(self::SEARCH_PARAM, \sprintf('%%%s%%', $search), Types::STRING);
+        $query->setParameter(self::SEARCH_PARAM, '%' . $search . '%', Types::STRING);
 
         /** @phpstan-var SearchType[] */
         return $query->getArrayResult();

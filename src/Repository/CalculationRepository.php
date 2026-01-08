@@ -198,10 +198,14 @@ class CalculationRepository extends AbstractRepository
     }
 
     /**
-     * Gets a calculation by its identifier.
+     * Gets a calculation by the given identifier.
      */
-    public function getById(int $id): ?Calculation
+    public function findOneById(int $id): ?Calculation
     {
+        if ($id <= 0) {
+            return null;
+        }
+
         return $this->createQueryBuilder('calculation')
             ->innerJoin('calculation.state', 'state')
             ->leftJoin('calculation.groups', 'groups')

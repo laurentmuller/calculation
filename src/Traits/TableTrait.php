@@ -84,19 +84,16 @@ trait TableTrait
     {
         if ($callback) {
             $parameters = $this->logFormException('error_page.description', $e, $logger);
-            $parameters = [
+
+            return $this->jsonFalse([
                 'message' => $parameters['message'],
                 'exception' => $parameters['context'],
-            ];
-
-            return $this->jsonFalse($parameters, Response::HTTP_BAD_REQUEST);
+            ], Response::HTTP_NOT_FOUND);
         }
 
-        $parameters = [
-            'status_code' => Response::HTTP_BAD_REQUEST,
-        ];
-
-        return $this->renderFormException('errors.invalid_request', $e, $logger, $parameters);
+        return $this->renderFormException('errors.invalid_request', $e, $logger, [
+            'status_code' => Response::HTTP_NOT_FOUND,
+        ]);
     }
 
     /**

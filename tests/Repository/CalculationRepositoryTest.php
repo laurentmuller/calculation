@@ -87,16 +87,16 @@ final class CalculationRepositoryTest extends AbstractRepositoryTestCase
         self::expectNotToPerformAssertions();
     }
 
-    public function testGetByIdFound(): void
+    public function testFindOneByIdFound(): void
     {
         $id = $this->getCalculation()->getId();
-        $actual = $this->repository->getById((int) $id);
+        $actual = $this->repository->findOneById((int) $id);
         self::assertNotNull($actual);
     }
 
-    public function testGetByIdNotFound(): void
+    public function testFindOneByIdNotFound(): void
     {
-        $actual = $this->repository->getById(-1);
+        $actual = $this->repository->findOneById(0);
         self::assertNull($actual);
     }
 

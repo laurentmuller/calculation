@@ -37,8 +37,12 @@ trait FormExceptionTrait
         ];
     }
 
-    protected function renderFormException(string $id, \Throwable $e, LoggerInterface $logger, array $parameters = []): Response
-    {
+    protected function renderFormException(
+        string $id,
+        \Throwable $e,
+        LoggerInterface $logger,
+        array $parameters = []
+    ): Response {
         $parameters = \array_merge(
             $this->logFormException($id, $e, $logger),
             $parameters

@@ -15,6 +15,7 @@ namespace App\Service;
 
 use App\Utils\DateUtils;
 use App\Utils\FileUtils;
+use App\Utils\StringUtils;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\HttpKernel\Kernel;
@@ -174,7 +175,7 @@ readonly class SymfonyInfoService
      */
     public function isApcuEnabled(): bool
     {
-        return \str_starts_with($this->getApcuStatus(), self::LABEL_ENABLED);
+        return StringUtils::startWith($this->getApcuStatus(), self::LABEL_ENABLED);
     }
 
     /**
@@ -182,7 +183,7 @@ readonly class SymfonyInfoService
      */
     public function isLongTermSupport(): bool
     {
-        return (4 <=> Kernel::MINOR_VERSION) === 0; // @phpstan-ignore identical.alwaysTrue
+        return 4 === \intdiv(Kernel::VERSION_ID, 100) % 10;
     }
 
     /**
@@ -190,7 +191,7 @@ readonly class SymfonyInfoService
      */
     public function isOpCacheEnabled(): bool
     {
-        return \str_starts_with($this->getOpCacheStatus(), self::LABEL_ENABLED);
+        return StringUtils::startWith($this->getOpCacheStatus(), self::LABEL_ENABLED);
     }
 
     /**
@@ -198,7 +199,7 @@ readonly class SymfonyInfoService
      */
     public function isXdebugEnabled(): bool
     {
-        return \str_starts_with($this->getXdebugStatus(), self::LABEL_ENABLED);
+        return StringUtils::startWith($this->getXdebugStatus(), self::LABEL_ENABLED);
     }
 
     private function createDate(string $date): DatePoint
@@ -238,14 +239,13 @@ readonly class SymfonyInfoService
 
     private function loadReleaseDate(): string
     {
-        $url = \sprintf(self::RELEASE_URL, Kernel::MAJOR_VERSION, Kernel::MINOR_VERSION);
-
         try {
-            /** @phpstan-var array{release_date: string, ...} $content */
-            $content = FileUtils::decodeJson($url);
-            $date = $content['release_date'];
+            $url = \sprintf(self::RELEASE_URL, Kernel::MAJOR_VERSION, Kernel::MINOR_VERSION);
 
-            return $this->formatMonthYear($date);
+            /** @phpstan-var array{release_date: string} $content */
+            $content = FileUtils::decodeJson($url);
+
+            return $this->formatMonthYear($content['release_date']);
         } catch (\InvalidArgumentException) {
             return self::UNKNOWN;
         }

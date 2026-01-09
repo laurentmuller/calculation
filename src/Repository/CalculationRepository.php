@@ -58,11 +58,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class CalculationRepository extends AbstractRepository
 {
-    /**
-     * The alias for the state entity.
-     */
-    final public const STATE_ALIAS = 's';
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Calculation::class);

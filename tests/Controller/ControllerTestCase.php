@@ -24,6 +24,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 abstract class ControllerTestCase extends AuthenticateWebTestCase
 {
+    protected const DEFAULT_USERS = [
+        self::ROLE_USER,
+        self::ROLE_ADMIN,
+        self::ROLE_SUPER_ADMIN,
+    ];
+
     /**
      * Gets the routes to test.
      *
@@ -81,7 +87,6 @@ abstract class ControllerTestCase extends AuthenticateWebTestCase
             if ('' !== $userName) {
                 $this->loginUsername($userName);
             }
-
             $this->client->request($method, $uri);
             $button = $this->getService(TranslatorInterface::class)
                 ->trans($id);

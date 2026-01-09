@@ -46,21 +46,6 @@ class CategoryRepository extends AbstractRepository
      */
     final public const FILTER_TASKS = 2;
 
-    /**
-     * The alias for the group entity.
-     */
-    final public const GROUP_ALIAS = 'g';
-
-    /**
-     * The alias for the product entity.
-     */
-    final public const PRODUCT_ALIAS = 'p';
-
-    /**
-     * The alias for the task entity.
-     */
-    final public const TASK_ALIAS = 't';
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Category::class);

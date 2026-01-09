@@ -28,10 +28,9 @@ final class ImportAddressControllerTest extends ControllerTestCase
     public function testImport(): void
     {
         $this->checkForm(
-            'admin/import',
-            'common.button_ok',
-            [],
-            self::ROLE_SUPER_ADMIN,
+            uri: 'admin/import',
+            id: 'common.button_ok',
+            userName: self::ROLE_SUPER_ADMIN,
             followRedirect: false
         );
     }

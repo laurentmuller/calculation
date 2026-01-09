@@ -27,16 +27,14 @@ final class UserParametersControllerTest extends ControllerTestCase
 
     public function testParametersNoChange(): void
     {
-        $this->checkForm(
-            'user/parameters'
-        );
+        $this->checkForm('user/parameters');
     }
 
     public function testParametersWithChanges(): void
     {
         $data = ['message[position]' => MessagePosition::TOP_LEFT->value];
         $this->checkForm(
-            'user/parameters',
+            uri: 'user/parameters',
             data: $data
         );
     }

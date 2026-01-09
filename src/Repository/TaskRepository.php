@@ -24,11 +24,6 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class TaskRepository extends AbstractCategoryItemRepository
 {
-    /**
-     * The alias for the task item entity.
-     */
-    private const ITEM_ALIAS = 'i';
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Task::class);
@@ -92,8 +87,8 @@ class TaskRepository extends AbstractCategoryItemRepository
     {
         return $this->createTableQueryBuilder($alias)
             ->addSelect($alias . '.name')
-            ->addSelect($this->getCountDistinct(self::ITEM_ALIAS, 'items'))
-            ->leftJoin($alias . '.items', self::ITEM_ALIAS)
+            ->addSelect($this->getCountDistinct(self::TASK_ITEM_ALIAS, 'items'))
+            ->leftJoin($alias . '.items', self::TASK_ITEM_ALIAS)
             ->groupBy($alias . '.id');
     }
 }

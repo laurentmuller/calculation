@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Utils\StringUtils;
+
 /**
  * Service to generate and validate command parameters.
  *
@@ -177,12 +179,12 @@ class CommandDataService
 
     private function isArgumentPrefix(string $key): bool
     {
-        return \str_starts_with($key, self::ARGUMENT_PREFIX);
+        return StringUtils::startWith($key, self::ARGUMENT_PREFIX);
     }
 
     private function isOptionPrefix(string $key): bool
     {
-        return \str_starts_with($key, self::OPTION_PREFIX);
+        return StringUtils::startWith($key, self::OPTION_PREFIX);
     }
 
     private function trimArgumentPrefix(string $key): string

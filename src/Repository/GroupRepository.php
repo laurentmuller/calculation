@@ -27,23 +27,9 @@ use Doctrine\Persistence\ManagerRegistry;
 class GroupRepository extends AbstractRepository
 {
     /**
-     * The alias for the category entity.
-     */
-    private const CATEGORY_ALIAS = AbstractCategoryItemRepository::CATEGORY_ALIAS;
-
-    /**
      * The alias for the group margin entity.
      */
     private const MARGIN_ALIAS = 'm';
-
-    /**
-     * The alias for the product entity.
-     */
-    private const PRODUCT_ALIAS = CategoryRepository::PRODUCT_ALIAS;
-    /**
-     * The alias for the task entity.
-     */
-    private const TASK_ALIAS = CategoryRepository::TASK_ALIAS;
 
     public function __construct(ManagerRegistry $registry)
     {

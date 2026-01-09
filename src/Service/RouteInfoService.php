@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouterInterface;
@@ -74,7 +75,7 @@ readonly class RouteInfoService
 
     private function isDebugRoute(string $name): bool
     {
-        return \str_starts_with($name, '_');
+        return StringUtils::startWith($name, '_');
     }
 
     /**

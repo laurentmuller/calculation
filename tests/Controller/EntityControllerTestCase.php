@@ -25,28 +25,24 @@ abstract class EntityControllerTestCase extends ControllerTestCase
         string $uri,
         array $data = [],
         string $userName = self::ROLE_ADMIN,
-        string $method = Request::METHOD_POST,
     ): void {
         $this->checkForm(
-            $uri,
-            'common.button_submit_add',
-            $data,
-            $userName,
-            $method
+            uri: $uri,
+            id: 'common.button_submit_add',
+            data: $data,
+            userName: $userName
         );
     }
 
     protected function checkDeleteEntity(
         string $uri,
         string $userName = self::ROLE_ADMIN,
-        string $method = Request::METHOD_GET,
     ): void {
         $this->checkForm(
-            $uri,
-            'common.button_delete',
-            [],
-            $userName,
-            $method
+            uri: $uri,
+            id: 'common.button_delete',
+            userName: $userName,
+            method: Request::METHOD_GET
         );
     }
 
@@ -54,20 +50,18 @@ abstract class EntityControllerTestCase extends ControllerTestCase
         string $uri,
         array $data = [],
         string $userName = self::ROLE_ADMIN,
-        string $method = Request::METHOD_POST,
         string $id = 'common.button_submit_edit',
     ): void {
         $this->checkForm(
-            $uri,
-            $id,
-            $data,
-            $userName,
-            $method
+            uri: $uri,
+            id: $id,
+            data: $data,
+            userName: $userName
         );
     }
 
     /**
-     * @phpstan-param class-string $className
+     * @param class-string $className
      */
     protected function checkUriWithEmptyEntity(
         string $uri,

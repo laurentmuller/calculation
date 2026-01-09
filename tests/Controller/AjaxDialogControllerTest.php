@@ -22,11 +22,13 @@ final class AjaxDialogControllerTest extends ControllerTestCase
     #[\Override]
     public static function getRoutes(): \Generator
     {
-        $routes = ['page', 'item', 'task'];
-        $users = [self::ROLE_USER, self::ROLE_ADMIN, self::ROLE_SUPER_ADMIN];
-
+        $routes = [
+            'page',
+            'item',
+            'task',
+        ];
         foreach ($routes as $route) {
-            foreach ($users as $user) {
+            foreach (self::DEFAULT_USERS as $user) {
                 yield ['/ajax/dialog/' . $route, $user, Response::HTTP_OK, Request::METHOD_GET, true];
             }
         }

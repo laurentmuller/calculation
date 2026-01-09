@@ -32,9 +32,9 @@ final class IndexControllerTest extends ControllerTestCase
         yield ['/hide/month', self::ROLE_USER, Response::HTTP_OK,  Request::METHOD_POST, true];
         yield ['/hide/state', self::ROLE_USER, Response::HTTP_OK,  Request::METHOD_POST, true];
 
-        yield ['/content', self::ROLE_USER, Response::HTTP_OK,  Request::METHOD_GET, true];
-        yield ['/content?custom=1&restrict=1', self::ROLE_USER, Response::HTTP_OK,  Request::METHOD_GET, true];
-        yield ['/content?custom=1&restrict=1&count=8', self::ROLE_USER, Response::HTTP_OK,  Request::METHOD_GET, true];
+        yield ['/content', self::ROLE_USER, 'xmlHttpRequest' => true];
+        yield ['/content?custom=1&restrict=1', self::ROLE_USER, 'xmlHttpRequest' => true];
+        yield ['/content?custom=1&restrict=1&count=8', self::ROLE_USER, 'xmlHttpRequest' => true];
     }
 
     public function testInvalidContent(): void

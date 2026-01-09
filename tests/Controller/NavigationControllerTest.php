@@ -25,13 +25,8 @@ final class NavigationControllerTest extends ControllerTestCase
             '/navigation/horizontal',
             '/navigation/vertical',
         ];
-        $users = [
-            self::ROLE_USER,
-            self::ROLE_ADMIN,
-            self::ROLE_SUPER_ADMIN,
-        ];
         foreach ($routes as $route) {
-            foreach ($users as $user) {
+            foreach (self::DEFAULT_USERS as $user) {
                 yield [$route, $user, Response::HTTP_OK, Request::METHOD_GET, true];
             }
         }

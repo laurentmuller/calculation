@@ -40,11 +40,6 @@ class CalculationStateRepository extends AbstractRepository
     use GroupByTrait;
     use MathTrait;
 
-    /**
-     * The alias for the calculation entity.
-     */
-    private const CALCULATION_ALIAS = 'c';
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CalculationState::class);

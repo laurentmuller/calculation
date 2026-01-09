@@ -37,10 +37,9 @@ final class ProfileControllerTest extends ControllerTestCase
             'currentPassword' => $user->getPassword(),
         ];
         $this->checkForm(
-            '/user/profile/edit',
-            'common.button_ok',
-            $data,
-            self::ROLE_USER
+            uri: '/user/profile/edit',
+            data: $data,
+            userName: self::ROLE_USER
         );
     }
 
@@ -55,10 +54,9 @@ final class ProfileControllerTest extends ControllerTestCase
             'plainPassword[second]' => $password,
         ];
         $this->checkForm(
-            '/user/profile/password',
-            'common.button_ok',
-            $data,
-            self::ROLE_USER
+            uri: '/user/profile/password',
+            data: $data,
+            userName: self::ROLE_USER
         );
     }
 }

@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-
 final class ThemeControllerTest extends ControllerTestCase
 {
     #[\Override]
@@ -25,15 +22,9 @@ final class ThemeControllerTest extends ControllerTestCase
             '/theme/dialog',
             '/theme/save',
         ];
-        $users = [
-            self::ROLE_USER,
-            self::ROLE_ADMIN,
-            self::ROLE_SUPER_ADMIN,
-        ];
-
         foreach ($routes as $route) {
-            foreach ($users as $user) {
-                yield [$route, $user, Response::HTTP_OK, Request::METHOD_GET, true];
+            foreach (self::DEFAULT_USERS as $user) {
+                yield [$route, $user, 'xmlHttpRequest' => true];
             }
         }
     }

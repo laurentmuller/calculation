@@ -26,12 +26,6 @@ final class OpenWeatherControllerTest extends ControllerTestCase
     #[\Override]
     public static function getRoutes(): \Generator
     {
-        $users = [
-            self::ROLE_USER,
-            self::ROLE_ADMIN,
-            self::ROLE_SUPER_ADMIN,
-        ];
-
         $routes = [
             '/openweather/api/current',
             '/openweather/api/daily',
@@ -42,11 +36,11 @@ final class OpenWeatherControllerTest extends ControllerTestCase
             '/openweather/search',
         ];
         foreach ($routes as $route) {
-            foreach ($users as $user) {
+            foreach (self::DEFAULT_USERS as $user) {
                 yield [$route, $user];
             }
         }
-        foreach ($users as $user) {
+        foreach (self::DEFAULT_USERS as $user) {
             yield ['/openweather', $user, Response::HTTP_FOUND];
         }
 

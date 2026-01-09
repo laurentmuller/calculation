@@ -142,7 +142,10 @@ final class UserControllerTest extends EntityControllerTestCase
             'plainPassword[first]' => '$password123456#',
             'plainPassword[second]' => '$password123456#',
         ];
-        $this->checkForm($uri, data: $data);
+        $this->checkForm(
+            uri: $uri,
+            data: $data
+        );
     }
 
     public function testResetAllPasswordRequestNoUser(): void
@@ -166,20 +169,29 @@ final class UserControllerTest extends EntityControllerTestCase
     {
         $this->setResetPasswordRequest(self::ROLE_USER);
         $this->setResetPasswordRequest(self::ROLE_ADMIN);
-        $this->checkForm('/user/reset', 'common.button_delete');
+        $this->checkForm(
+            uri: '/user/reset',
+            id: 'common.button_delete'
+        );
     }
 
     public function testResetNotResettable(): void
     {
         $uri = \sprintf('/user/reset/%d', self::ID_ADMIN);
-        $this->checkForm($uri, 'common.button_delete');
+        $this->checkForm(
+            uri: $uri,
+            id: 'common.button_delete'
+        );
     }
 
     public function testResetSuccess(): void
     {
         $user = $this->setResetPasswordRequest(self::ROLE_USER);
         $uri = \sprintf('/user/reset/%d', (int) $user->getId());
-        $this->checkForm($uri, 'common.button_delete');
+        $this->checkForm(
+            uri: $uri,
+            id: 'common.button_delete'
+        );
     }
 
     public function testRightsNoChange(): void

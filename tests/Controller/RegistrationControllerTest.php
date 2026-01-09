@@ -38,10 +38,10 @@ final class RegistrationControllerTest extends ControllerTestCase
             'agreeTerms' => 1,
         ];
         $this->checkForm(
-            '/register',
-            'registration.register.submit',
-            $data,
-            self::ROLE_SUPER_ADMIN
+            uri: '/register',
+            id: 'registration.register.submit',
+            data: $data,
+            userName: self::ROLE_SUPER_ADMIN
         );
     }
 }

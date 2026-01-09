@@ -86,9 +86,8 @@ abstract class AuthenticateWebTestCase extends WebTestCase
      */
     protected function loadUser(string $username): ?User
     {
-        $repository = $this->getService(UserRepository::class);
-
-        return $repository->findByUsername($username);
+        return $this->getService(UserRepository::class)
+            ->findByUsername($username);
     }
 
     /**

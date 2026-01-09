@@ -26,7 +26,6 @@ use App\Service\EmailVerifier;
 use App\Service\UserExceptionService;
 use App\Traits\LoggerTrait;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -77,9 +76,7 @@ class RegistrationController extends AbstractController
 
                 return $this->redirectToHomePage();
             } catch (TransportExceptionInterface $e) {
-                $this->handleException($request, $e);
-
-                return $this->redirectToRoute(self::ROUTE_REGISTER);
+                return $this->handleException($request, $e);
             }
         }
 
@@ -93,7 +90,7 @@ class RegistrationController extends AbstractController
      * Verify the user e-mail.
      */
     #[GetRoute(path: '/verify', name: self::ROUTE_VERIFY)]
-    public function verify(Request $request): RedirectResponse
+    public function verify(Request $request): Response
     {
         $user = $this->findUser($request);
         if (!$user instanceof User) {
@@ -103,9 +100,7 @@ class RegistrationController extends AbstractController
         try {
             $this->verifier->handleEmail($request, $user);
         } catch (\Throwable $e) {
-            $this->handleException($request, $e);
-
-            return $this->redirectToRoute(self::ROUTE_REGISTER);
+            return $this->handleException($request, $e);
         }
 
         return $this->redirectToHomePage(
@@ -129,13 +124,15 @@ class RegistrationController extends AbstractController
     {
         $id = $this->getRequestInt($request, 'id');
 
-        return 0 !== $id ? $this->repository->find($id) : null;
+        return 0 === $id ? null : $this->repository->find($id);
     }
 
-    private function handleException(Request $request, \Throwable $e): void
+    private function handleException(Request $request, \Throwable $e): Response
     {
         $exception = $this->service->handleException($request, $e);
         $message = $this->service->translate($exception);
         $this->logException($exception, $message);
+
+        return $this->redirectToRoute(self::ROUTE_REGISTER);
     }
 }

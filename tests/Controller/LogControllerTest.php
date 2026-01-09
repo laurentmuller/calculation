@@ -73,8 +73,8 @@ final class LogControllerTest extends ControllerTestCase
     public function testDelete(): void
     {
         $this->checkForm(
-            '/log/delete',
-            'common.button_delete'
+            uri: '/log/delete',
+            id: 'common.button_delete'
         );
     }
 

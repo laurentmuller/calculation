@@ -40,9 +40,9 @@ final class CalculationUpdateControllerTest extends ControllerTestCase
             'form[confirm]' => '1',
         ];
         $this->checkForm(
-            '/admin/update',
-            'calculation.update.submit',
-            $data,
+            uri: '/admin/update',
+            id: 'calculation.update.submit',
+            data: $data,
             followRedirect: false
         );
     }

@@ -42,7 +42,7 @@ class Log extends AbstractEntity implements ComparableInterface
     // the doctrine channel name
     private const DOCTRINE_CHANNEL = 'doctrine';
     // the doctrine prefix message
-    private const DOCTRINE_PREFIX = 'Executing ';
+    private const DOCTRINE_PREFIX = 'executing ';
 
     #[ORM\Column(nullable: true)]
     private ?array $context = null;
@@ -154,7 +154,7 @@ class Log extends AbstractEntity implements ComparableInterface
     public function isDoctrineMessage(): bool
     {
         return self::DOCTRINE_CHANNEL === $this->getChannel()
-            && \str_starts_with($this->message, self::DOCTRINE_PREFIX);
+            && StringUtils::startWith($this->message, self::DOCTRINE_PREFIX);
     }
 
     public function setContext(?array $context): self

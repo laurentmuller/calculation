@@ -85,7 +85,7 @@ readonly class CacheService
 
         $results = [];
         foreach ($lines as $line) {
-            if (\str_starts_with($line, '-') || \str_starts_with($line, 'Pool name')) {
+            if (StringUtils::startWith($line, '-') || StringUtils::startWith($line, 'pool name')) {
                 continue;
             }
             $values = \explode('.', $line, 2);

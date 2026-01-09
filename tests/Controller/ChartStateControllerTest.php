@@ -31,13 +31,8 @@ final class ChartStateControllerTest extends ControllerTestCase
             '/chart/state',
             '/chart/state/pdf',
         ];
-        $users = [
-            self::ROLE_USER,
-            self::ROLE_ADMIN,
-            self::ROLE_SUPER_ADMIN,
-        ];
         foreach ($routes as $route) {
-            foreach ($users as $user) {
+            foreach (self::DEFAULT_USERS as $user) {
                 yield [$route, $user];
             }
         }

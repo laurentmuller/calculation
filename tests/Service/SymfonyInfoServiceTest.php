@@ -95,7 +95,7 @@ final class SymfonyInfoServiceTest extends TestCase
     public function testIsLongTermSupport(): void
     {
         $service = $this->createService();
-        $expected = (4 <=> Kernel::MINOR_VERSION) === 0; // @phpstan-ignore-line
+        $expected = 4 === $this->getMinorVersion();
         $actual = $service->isLongTermSupport();
         self::assertSame($expected, $actual);
     }
@@ -119,6 +119,11 @@ final class SymfonyInfoServiceTest extends TestCase
     private function createService(): SymfonyInfoService
     {
         return new SymfonyInfoService(new ArrayAdapter());
+    }
+
+    private function getMinorVersion(): int
+    {
+        return Kernel::MINOR_VERSION;
     }
 
     private function isExtensionLoaded(string $extension, string $enabled = ''): bool

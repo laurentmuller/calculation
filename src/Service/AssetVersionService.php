@@ -17,6 +17,7 @@ use App\Entity\User;
 use App\Interfaces\DisableListenerInterface;
 use App\Traits\DisableListenerTrait;
 use App\Utils\FileUtils;
+use App\Utils\StringUtils;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Events;
 use Symfony\Component\Asset\VersionStrategy\StaticVersionStrategy;
@@ -78,7 +79,7 @@ class AssetVersionService extends StaticVersionStrategy implements DisableListen
     #[\Override]
     public function getVersion(string $path): string
     {
-        if (\str_starts_with($path, self::IMAGES_PATH)) {
+        if (StringUtils::startWith($path, self::IMAGES_PATH)) {
             return $this->getUserImages()[\basename($path)] ?? $this->imagesVersion;
         }
 

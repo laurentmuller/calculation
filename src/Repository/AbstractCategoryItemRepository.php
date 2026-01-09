@@ -28,16 +28,6 @@ use Doctrine\ORM\QueryBuilder;
 abstract class AbstractCategoryItemRepository extends AbstractRepository
 {
     /**
-     * The alias for the category entity.
-     */
-    final public const CATEGORY_ALIAS = 'c';
-
-    /**
-     * The alias for the group entity.
-     */
-    final public const GROUP_ALIAS = CategoryRepository::GROUP_ALIAS;
-
-    /**
      * Count the number of products or tasks for the given category.
      *
      * @param Category $category the category to search for

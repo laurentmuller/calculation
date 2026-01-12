@@ -30,19 +30,19 @@ final class PackageInfoServiceTest extends TestCase
     public function testCount(): void
     {
         $actual = \count($this->service);
-        self::assertSame(3, $actual);
+        self::assertSame(2, $actual);
     }
 
     public function testGetDebugPackages(): void
     {
         $actual = $this->service->getDebugPackages();
-        self::assertNotEmpty($actual);
+        self::assertCount(1, $actual);
     }
 
     public function testGetPackageFound(): void
     {
-        $actual = $this->service->getPackage('symfony/mime');
-        self::assertSame('symfony/mime', $actual['name']);
+        $actual = $this->service->getPackage('symfony/finder');
+        self::assertSame('symfony/finder', $actual['name']);
     }
 
     public function testGetPackageNotFound(): void
@@ -55,40 +55,33 @@ final class PackageInfoServiceTest extends TestCase
     public function testGetPackages(): void
     {
         $actual = $this->service->getPackages();
-        self::assertNotEmpty($actual);
+        self::assertCount(2, $actual);
     }
 
     public function testGetRuntimePackages(): void
     {
         $actual = $this->service->getRuntimePackages();
-        self::assertNotEmpty($actual);
+        self::assertCount(1, $actual);
     }
 
     public function testHasPackage(): void
     {
-        self::assertTrue($this->service->hasPackage('symfony/mime'));
+        self::assertTrue($this->service->hasPackage('symfony/finder'));
         self::assertFalse($this->service->hasPackage('fake/fake'));
     }
 
     public function testLicenseFound(): void
     {
-        $package = $this->service->getPackage('symfony/mime');
-        self::assertIsArray($package);
-        self::assertNull($package['license']);
-    }
-
-    public function testLicenseNotFound(): void
-    {
-        $package = $this->service->getPackage('symfony/mime');
-        self::assertIsArray($package);
-        self::assertNull($package['license']);
+        $package = $this->service->getPackage('symfony/finder');
+        self::assertNotNull($package['license']);
     }
 
     private function createService(): PackageInfoService
     {
-        $path = __DIR__ . '/../files/json/';
+        $jsonPath = __DIR__ . '/../files/json/composer.lock';
+        $vendorPath = __DIR__ . '/../../vendor';
         $cache = new ArrayAdapter();
 
-        return new PackageInfoService($path, $cache);
+        return new PackageInfoService($jsonPath, $vendorPath, $cache);
     }
 }

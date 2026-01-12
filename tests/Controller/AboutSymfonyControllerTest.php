@@ -60,9 +60,10 @@ final class AboutSymfonyControllerTest extends ControllerTestCase
 
     private function createService(): PackageInfoService
     {
-        $path = __DIR__ . '/../files/json/';
+        $jsonPath = __DIR__ . '/../files/json/composer.lock';
+        $vendorPath = __DIR__ . '/../../vendor';
         $cache = new ArrayAdapter();
 
-        return new PackageInfoService($path, $cache);
+        return new PackageInfoService($jsonPath, $vendorPath, $cache);
     }
 }

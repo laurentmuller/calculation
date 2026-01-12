@@ -125,10 +125,10 @@ final class StringUtilsTest extends TestCase
 
     public static function getStartWith(): \Generator
     {
-        yield ['fake', '', false, false];
-        yield ['fake', 'fa', false, true];
-        yield ['fake', 'FA', false, false];
-        yield ['fake', 'FA', true, true];
+        yield ['fake', '', false];
+        yield ['fake', 'fa', true];
+        yield ['fake', 'FA', true];
+        yield ['fake', 'Fa', true];
     }
 
     public static function getTrim(): \Generator
@@ -318,9 +318,9 @@ final class StringUtilsTest extends TestCase
     }
 
     #[DataProvider('getStartWith')]
-    public function testStartWith(string $string, string $prefix, bool $ignoreCase, bool $expected): void
+    public function testStartWith(string $string, string $prefix, bool $expected): void
     {
-        $actual = StringUtils::startWith($string, $prefix, $ignoreCase);
+        $actual = StringUtils::startWith($string, $prefix);
         self::assertSame($expected, $actual);
     }
 

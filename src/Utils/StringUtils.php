@@ -347,26 +347,18 @@ final class StringUtils
     }
 
     /**
-     * Tests if a string starts within the given prefix.
+     * Tests if a string starts within the given prefix, ignoring case consideration.
      *
      * <b>NB:</b> If the prefix argument is empty, this function returns false.
      *
-     * @param string $string     the string to search in
-     * @param string $prefix     the string prefix to search for
-     * @param bool   $ignoreCase <code>true</code> for case-insensitive; <code>false</code> for case-sensitive
+     * @param string $string the string to search in
+     * @param string $prefix the string prefix to search for
      *
      * @return bool true if the string starts within the prefix
      */
-    public static function startWith(string $string, string $prefix, bool $ignoreCase = true): bool
+    public static function startWith(string $string, string $prefix): bool
     {
-        if ('' === $prefix) {
-            return false;
-        }
-        if ($ignoreCase) {
-            return 0 === \stripos($string, $prefix);
-        }
-
-        return \str_starts_with($string, $prefix);
+        return '' !== $prefix && 0 === \stripos($string, $prefix);
     }
 
     /**

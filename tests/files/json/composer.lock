@@ -1,0 +1,58 @@
+{
+    "packages": [
+        {
+            "name": "symfony/finder",
+            "version": "1.8.2",
+            "require": {
+                "composer-plugin-api": "^2.0"
+            },
+            "require-dev": {
+                "composer/composer": "^2.0"
+            },
+            "time": "2022-10-31T08:38:03+00:00",
+            "description": "No end point"
+        },
+        {
+            "name": "symfony/fake-runtime",
+            "version": "1.8.2",
+            "require": {
+                "composer-plugin-api": "^2.0"
+            },
+            "require-dev": {
+                "php-coveralls/php-coveralls": "*"
+            },
+            "time": "2022-10-31T08:38:03+00:00",
+            "description": "Fake package"
+        }
+    ],
+    "packages-dev": [
+        {
+            "name": "symfony/process",
+            "version": "v3.0.1",
+            "time": "2024-10-01T13:55:55+00:00",
+            "installation-source": "dist",
+            "description": "Valid package.",
+            "homepage": "https://www.example.com",
+            "require": {
+                "composer-plugin-api": "^2.0"
+            },
+            "require-dev": {
+                "composer/composer": "^2.0"
+            }
+        },
+        {
+            "name": "symfony/fake-dev",
+            "version": "v3.0.1",
+            "time": "2024-10-01T13:55:55+00:00",
+            "installation-source": "dist",
+            "description": "Fake package.",
+            "homepage": "https://www.example.com",
+            "require": {
+                "composer-plugin-api": "^2.0"
+            },
+            "require-dev": {
+                "composer/composer": "^2.0"
+            }
+        }
+    ]
+}

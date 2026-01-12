@@ -15,6 +15,7 @@ namespace App\Service;
 
 use App\Utils\FileUtils;
 use App\Utils\FormatUtils;
+use App\Utils\StringUtils;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
@@ -38,7 +39,6 @@ use Symfony\Contracts\Cache\CacheInterface;
  *      version: string,
  *      description?: string,
  *      homepage?: string,
- *      install-path: string,
  *      time: string,
  *      support?: array{source?: string},
  *      require?: array<string, string>,
@@ -46,12 +46,13 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 readonly class PackageInfoService implements \Countable
 {
-    private const JSON_FILE = 'installed.json';
     private const LICENSE_PATTERN = '{license{*},LICENSE{*}}';
 
     public function __construct(
-        #[Autowire('%kernel.project_dir%/vendor/composer')]
-        private string $path,
+        #[Autowire('%kernel.project_dir%/composer.lock')]
+        private string $jsonPath,
+        #[Autowire('%kernel.project_dir%/vendor')]
+        private string $vendorPath,
         #[Target('calculation.symfony')]
         private CacheInterface $cache,
     ) {
@@ -119,17 +120,12 @@ readonly class PackageInfoService implements \Countable
         return \array_filter($this->getPackages(), static fn (array $package): bool => $debug === $package['debug']);
     }
 
-    private function getJsonFile(): string
-    {
-        return FileUtils::buildPath($this->path, self::JSON_FILE);
-    }
-
     /**
      * @phpstan-param PackageSourceType $package
      */
-    private function getPackagePattern(array $package): string
+    private function getLicensePattern(array $package): string
     {
-        return FileUtils::buildPath($this->path, $package['install-path'], self::LICENSE_PATTERN);
+        return FileUtils::buildPath($this->vendorPath, $package['name'], self::LICENSE_PATTERN);
     }
 
     /**
@@ -137,16 +133,12 @@ readonly class PackageInfoService implements \Countable
      */
     private function loadPackages(): array
     {
-        /** @phpstan-var array{packages: array<string, PackageSourceType>, dev-package-names: string[]} $content */
-        $content = FileUtils::decodeJson($this->getJsonFile());
-
-        $packages = [];
-        $runtimePackages = $content['packages'];
-        $debugPackages = $content['dev-package-names'];
-        foreach ($runtimePackages as $package) {
-            $name = $package['name'];
-            $packages[$name] = $this->parsePackage($name, $package, $debugPackages);
-        }
+        /** @phpstan-var array{packages: PackageSourceType[], packages-dev: PackageSourceType[]} $content */
+        $content = FileUtils::decodeJson($this->jsonPath);
+        $packages = \array_merge(
+            $this->parsePackages($content['packages'], false),
+            $this->parsePackages($content['packages-dev'], true)
+        );
         \ksort($packages);
 
         return $packages;
@@ -155,14 +147,19 @@ readonly class PackageInfoService implements \Countable
     /**
      * @phpstan-param PackageSourceType $package
      */
+    private function packageExists(array $package): bool
+    {
+        return FileUtils::exists(FileUtils::buildPath($this->vendorPath, $package['name']));
+    }
+
+    /**
+     * @phpstan-param PackageSourceType $package
+     */
     private function parseDescription(array $package): string
     {
         $description = $package['description'] ?? '';
-        if ('' === $description || \str_ends_with($description, '.')) {
-            return $description;
-        }
 
-        return $description . '.';
+        return StringUtils::isString($description) ? \rtrim($description, '.') . '.' : '';
     }
 
     /**
@@ -189,30 +186,48 @@ readonly class PackageInfoService implements \Countable
     private function parseLicense(array $package): ?string
     {
         /** @var list<string> $files */
-        $files = \glob($this->getPackagePattern($package), \GLOB_BRACE | \GLOB_NOSORT);
+        $files = \glob($this->getLicensePattern($package), \GLOB_BRACE | \GLOB_NOSORT);
 
         return \array_first($files);
     }
 
     /**
      * @phpstan-param PackageSourceType $package
-     * @phpstan-param string[]          $debugPackages
      *
      * @return PackageType
      */
-    private function parsePackage(string $name, array $package, array $debugPackages): array
+    private function parsePackage(string $name, bool $debug, array $package): array
     {
         return [
             'name' => $name,
+            'debug' => $debug,
             'time' => $this->parseTime($package),
             'version' => $this->parseVersion($package),
             'license' => $this->parseLicense($package),
             'homepage' => $this->parseHomepage($package),
             'description' => $this->parseDescription($package),
-            'debug' => \in_array($name, $debugPackages, true),
             'production' => $this->parseProduction($package),
             'development' => $this->parseDevelopment($package),
         ];
+    }
+
+    /**
+     * @phpstan-param PackageSourceType[] $packages
+     *
+     * @phpstan-return array<string, PackageType>
+     */
+    private function parsePackages(array $packages, bool $debug): array
+    {
+        $results = [];
+        foreach ($packages as $package) {
+            if (!$this->packageExists($package)) {
+                continue;
+            }
+            $name = $package['name'];
+            $results[$name] = $this->parsePackage($name, $debug, $package);
+        }
+
+        return $results;
     }
 
     /**

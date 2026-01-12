@@ -29,6 +29,7 @@ use App\Service\SymfonyInfoService;
 use App\Spreadsheet\SymfonyDocument;
 use App\Traits\ArrayTrait;
 use App\Utils\FileUtils;
+use App\Utils\StringUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
@@ -165,8 +166,9 @@ class AboutSymfonyController extends AbstractController
      */
     private function getMarkdownLicense(MarkdownInterface $markdown, array $package): string
     {
-        $content = $this->implodeHeader($package)
-            . FileUtils::readFile((string) $package['license']);
+        $license = FileUtils::readFile((string) $package['license']);
+        $license = StringUtils::pregReplace('/#{1,4} /', '##### ', $license);
+        $content = $this->implodeHeader($package) . $license;
         $content = $markdown->convert($content);
 
         return \strip_tags($content, '<p><h1><h2><h3><h4><h5><h6><em><strong><code><hr>');

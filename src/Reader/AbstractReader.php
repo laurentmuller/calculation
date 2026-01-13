@@ -44,8 +44,6 @@ abstract class AbstractReader implements \IteratorAggregate
 
     /**
      * By default, close the resource file.
-     *
-     * @return void
      */
     public function __destruct()
     {

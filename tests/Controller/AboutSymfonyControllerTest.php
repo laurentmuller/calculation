@@ -34,7 +34,6 @@ final class AboutSymfonyControllerTest extends ControllerTestCase
             '/about/symfony/excel',
             '/about/symfony/pdf',
         ];
-        // xmlHttpRequest
         foreach ($routes as $route) {
             yield [$route, self::ROLE_USER, Response::HTTP_FORBIDDEN];
             yield [$route, self::ROLE_ADMIN];

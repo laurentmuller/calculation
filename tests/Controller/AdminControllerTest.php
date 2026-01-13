@@ -14,9 +14,12 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Enums\EntityPermission;
+use App\Model\CommandResult;
 use App\Parameter\ApplicationParameters;
 use App\Service\CacheService;
+use App\Service\CommandService;
 use App\Service\DictionaryService;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\HttpFoundation\Response;
 
 final class AdminControllerTest extends ControllerTestCase
@@ -97,6 +100,36 @@ final class AdminControllerTest extends ControllerTestCase
             userName: self::ROLE_SUPER_ADMIN,
             followRedirect: false,
             disableReboot: true
+        );
+    }
+
+    public function testDumSqlFailure(): void
+    {
+        $result = new CommandResult(Command::FAILURE, 'Fake output');
+        $service = $this->createMock(CommandService::class);
+        $service->method('execute')
+            ->willReturn($result);
+        $this->setService(CommandService::class, $service);
+
+        $this->checkRoute(
+            url: 'admin/dump-sql',
+            username: self::ROLE_SUPER_ADMIN,
+            expected: Response::HTTP_FOUND
+        );
+    }
+
+    public function testDumSqlOK(): void
+    {
+        $result = new CommandResult(Command::SUCCESS, '[OK]');
+        $service = $this->createMock(CommandService::class);
+        $service->method('execute')
+            ->willReturn($result);
+        $this->setService(CommandService::class, $service);
+
+        $this->checkRoute(
+            url: 'admin/dump-sql',
+            username: self::ROLE_SUPER_ADMIN,
+            expected: Response::HTTP_FOUND
         );
     }
 

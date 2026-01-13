@@ -44,6 +44,7 @@ final class ResetPasswordControllerTest extends ControllerTestCase
     public function testRequestForm(): void
     {
         $data = ['user' => self::ROLE_SUPER_ADMIN];
+        $this->setResetPasswordPublicToken();
         $this->checkForm(
             uri: '/reset-password',
             id: 'resetting.request.submit',
@@ -57,13 +58,13 @@ final class ResetPasswordControllerTest extends ControllerTestCase
         $helper->method('validateTokenAndFetchUser')
             ->willThrowException(new FakeRepositoryException());
         $this->setService(ResetPasswordHelperInterface::class, $helper);
-
-        $session = $this->client->getSession();
-        $session?->set('ResetPasswordPublicToken', 'fake');
-        $session?->save();
+        $this->setResetPasswordPublicToken();
 
         $url = '/reset-password/reset';
-        $this->client->request(Request::METHOD_GET, $url);
+        $this->client->request(
+            method: Request::METHOD_GET,
+            uri: $url
+        );
         $this->checkResponse($url, self::ROLE_USER, Response::HTTP_FOUND);
     }
 
@@ -74,10 +75,7 @@ final class ResetPasswordControllerTest extends ControllerTestCase
         $helper->method('validateTokenAndFetchUser')
             ->willReturn($user);
         $this->setService(ResetPasswordHelperInterface::class, $helper);
-
-        $session = $this->client->getSession();
-        $session?->set('ResetPasswordPublicToken', 'fake');
-        $session?->save();
+        $this->setResetPasswordPublicToken();
 
         $data = [
             'plainPassword[first]' => '$A722-32012d313e5c',
@@ -95,7 +93,17 @@ final class ResetPasswordControllerTest extends ControllerTestCase
     public function testResetWithTokenNull(): void
     {
         $url = '/reset-password/reset';
-        $this->client->request(Request::METHOD_GET, $url);
+        $this->client->request(
+            method: Request::METHOD_GET,
+            uri: $url
+        );
         $this->checkResponse($url, self::ROLE_USER, Response::HTTP_NOT_FOUND);
+    }
+
+    private function setResetPasswordPublicToken(): void
+    {
+        $session = $this->client->getSession();
+        $session?->set('ResetPasswordPublicToken', 'fake');
+        $session?->save();
     }
 }

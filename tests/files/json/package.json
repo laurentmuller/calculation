@@ -27,18 +27,14 @@
     ],
     "packages-dev": [
         {
-            "name": "symfony/process",
+            "name": "symfony/asset",
             "version": "v3.0.1",
             "time": "2024-10-01T13:55:55+00:00",
             "installation-source": "dist",
             "description": "Valid package.",
             "homepage": "https://www.example.com",
-            "require": {
-                "composer-plugin-api": "^2.0"
-            },
-            "require-dev": {
-                "composer/composer": "^2.0"
-            }
+            "require": {},
+            "require-dev": {}
         },
         {
             "name": "symfony/fake-dev",

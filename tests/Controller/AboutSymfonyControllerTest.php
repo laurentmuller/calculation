@@ -46,9 +46,8 @@ final class AboutSymfonyControllerTest extends ControllerTestCase
             '/about/symfony/dependency?name=',
         ];
         $names = [
-            'symfony/composer',
-            'symfony/property',
-            'symfony/mime',
+            'symfony/finder',
+            'symfony/asset',
             'fake',
         ];
         foreach ($queries as $query) {
@@ -60,7 +59,7 @@ final class AboutSymfonyControllerTest extends ControllerTestCase
 
     private function createService(): PackageInfoService
     {
-        $jsonPath = __DIR__ . '/../files/json/composer.lock';
+        $jsonPath = __DIR__ . '/../files/json/package.json';
         $vendorPath = __DIR__ . '/../../vendor';
         $cache = new ArrayAdapter();
 

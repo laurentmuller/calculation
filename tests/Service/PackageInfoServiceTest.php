@@ -78,7 +78,7 @@ final class PackageInfoServiceTest extends TestCase
 
     private function createService(): PackageInfoService
     {
-        $jsonPath = __DIR__ . '/../files/json/composer.lock';
+        $jsonPath = __DIR__ . '/../files/json/package.json';
         $vendorPath = __DIR__ . '/../../vendor';
         $cache = new ArrayAdapter();
 

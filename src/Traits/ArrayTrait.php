@@ -216,15 +216,16 @@ trait ArrayTrait
     }
 
     /**
-     * Maps all keys and values of the given array to a string using the given callback.
+     * Maps all keys and values of the given array using the given callback.
      *
      * @template TKey of array-key
      * @template TValue
+     * @template TResult
      *
-     * @param array<TKey, TValue>            $array    the array to map
-     * @param callable(TKey, TValue): string $callable the callback to get the single value
+     * @param array<TKey, TValue>             $array    the array to map
+     * @param callable(TKey, TValue): TResult $callable the callback to get the single value
      *
-     * @return string[] the mapped array
+     * @return TResult[] the mapped array
      */
     public function mapKeyAndValue(array $array, callable $callable): array
     {

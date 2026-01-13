@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Service\PackageInfoService;
-use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -35,6 +34,7 @@ final class AboutSymfonyControllerTest extends ControllerTestCase
             '/about/symfony/excel',
             '/about/symfony/pdf',
         ];
+        // xmlHttpRequest
         foreach ($routes as $route) {
             yield [$route, self::ROLE_USER, Response::HTTP_FORBIDDEN];
             yield [$route, self::ROLE_ADMIN];
@@ -48,7 +48,7 @@ final class AboutSymfonyControllerTest extends ControllerTestCase
         $names = [
             'symfony/finder',
             'symfony/asset',
-            'fake',
+            'symfony/fake',
         ];
         foreach ($queries as $query) {
             foreach ($names as $name) {
@@ -59,10 +59,55 @@ final class AboutSymfonyControllerTest extends ControllerTestCase
 
     private function createService(): PackageInfoService
     {
-        $jsonPath = __DIR__ . '/../files/json/package.json';
-        $vendorPath = __DIR__ . '/../../vendor';
-        $cache = new ArrayAdapter();
+        $finderPackage = [
+            'name' => 'symfony/finder',
+            'version' => '1.8.2',
+            'description' => 'Finder description.',
+            'homepage' => 'https://symfony.com/',
+            'license' => __DIR__ . '/../../vendor/symfony/finder/LICENSE',
+            'time' => '01.01.2025',
+            'debug' => false,
+            'production' => ['composer-plugin-api' => '^2.0'],
+            'development' => [],
+        ];
+        $assetPackage = [
+            'name' => 'symfony/asset',
+            'version' => '1.8.2',
+            'description' => 'Asset description.',
+            'homepage' => 'https://symfony.com/',
+            'license' => null,
+            'time' => '02.01.2025',
+            'debug' => true,
+            'production' => [],
+            'development' => [],
+        ];
+        $packages = [
+            'symfony/finder' => $finderPackage,
+            'symfony/asset' => $assetPackage,
+        ];
 
-        return new PackageInfoService($jsonPath, $vendorPath, $cache);
+        $service = $this->createMock(PackageInfoService::class);
+        $service->method('getPackages')
+            ->willReturn($packages);
+        $service->method('getRuntimePackages')
+            ->willReturn($packages);
+        $service->method('getDebugPackages')
+            ->willReturn($packages);
+
+        $service->method('hasPackage')
+            ->willReturnMap([
+                ['symfony/finder', true],
+                ['symfony/asset', true],
+                ['symfony/fake', false],
+            ]);
+
+        $service->method('getPackage')
+            ->willReturnMap([
+                ['symfony/finder', $finderPackage],
+                ['symfony/asset', $assetPackage],
+                ['symfony/fake', []],
+            ]);
+
+        return $service;
     }
 }

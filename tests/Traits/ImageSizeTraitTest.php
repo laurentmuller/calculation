@@ -23,7 +23,6 @@ final class ImageSizeTraitTest extends TestCase
 
     public static function getSizes(): \Generator
     {
-        yield ['', [0, 0]];
         yield [__DIR__ . '/../files/images/example.png', 124, 147];
         yield [__DIR__ . '/../files/images/example.jpg', 500, 477];
     }
@@ -36,10 +35,21 @@ final class ImageSizeTraitTest extends TestCase
         self::assertSame($height, $actual->height);
     }
 
-    public function testImageSizeInvalid(): void
+    public function testImageSizeFileNotFound(): void
     {
-        $actual = $this->getImageSize(__FILE__);
-        self::assertSame(0, $actual->width);
-        self::assertSame(0, $actual->height);
+        $filename = __DIR__ . '/__fake__.png';
+        $expected = 'The file "' . $filename . '" does not exist.';
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage($expected);
+        $this->getImageSize($filename);
+    }
+
+    public function testImageSizeNotImage(): void
+    {
+        $filename = __FILE__;
+        $expected = 'Unable to get image size for "' . $filename . '".';
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage($expected);
+        $this->getImageSize($filename);
     }
 }

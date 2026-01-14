@@ -19,7 +19,6 @@ use App\Service\RoleService;
 use App\Traits\ImageSizeTrait;
 use App\Utils\FileUtils;
 use App\Utils\FormatUtils;
-use App\Utils\StringUtils;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Conditional;
@@ -77,10 +76,11 @@ class UsersDocument extends AbstractArrayDocument
                 $entity->isEnabled(),
                 $this->formatLastLogin($entity->getLastLogin()),
             ]);
-            $path = $this->getImagePath($entity);
-            if (StringUtils::isString($path) && FileUtils::isFile($path)) {
-                $size = $this->getImageSize($path);
-                $sheet->setCellImage($path, 'A' . $row, $size->width, $size->height);
+            $path = $entity->getImagePath($this->storage);
+            if (null !== $path && FileUtils::exists($path)) {
+                $size = $this->getImageSize($path)
+                    ->resize(32);
+                $sheet->setCellImage($path, 'A' . $row, $size);
             }
             ++$row;
         }
@@ -132,25 +132,5 @@ class UsersDocument extends AbstractArrayDocument
         }
 
         return $this->trans('common.value_none');
-    }
-
-    /**
-     * Gets the user's image path.
-     *
-     * @param User $user the user to get the image path for
-     *
-     * @return string|null the image path, if exists; null otherwise
-     */
-    private function getImagePath(User $user): ?string
-    {
-        $path = $user->getImagePath($this->storage);
-        if (null !== $path) {
-            $path = \str_replace('192', '032', $path);
-            if (FileUtils::isFile($path)) {
-                return $path;
-            }
-        }
-
-        return null;
     }
 }

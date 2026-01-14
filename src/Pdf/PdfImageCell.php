@@ -44,8 +44,7 @@ class PdfImageCell extends AbstractPdfImageCell
      * @param positive-int      $cols      the cell columns span
      * @param ?PdfStyle         $style     the cell style
      * @param ?PdfTextAlignment $alignment the cell alignment
-     * @param string|int|null   $link      the optional cell link.
-     *                                     A URL or an identifier returned by the <code>addLink()</code> function.
+     * @param string|int|null   $link      the optional cell link
      *
      * @throws PdfException if the given image path does not exist
      */
@@ -57,18 +56,12 @@ class PdfImageCell extends AbstractPdfImageCell
         ?PdfTextAlignment $alignment = null,
         string|int|null $link = null
     ) {
+        parent::__construct($text, $cols, $style, $alignment, $link);
         if (!FileUtils::exists($path)) {
             throw PdfException::format("The image '%s' does not exist.", $path);
         }
-        parent::__construct($text, $cols, $style, $alignment, $link);
         $this->originalSize = $this->getImageSize($path);
         $this->size = clone $this->originalSize;
-    }
-
-    #[\Override]
-    public function getHeight(): int
-    {
-        return $this->size->height;
     }
 
     /**
@@ -86,9 +79,9 @@ class PdfImageCell extends AbstractPdfImageCell
     }
 
     #[\Override]
-    public function getWidth(): int
+    public function getSize(): ImageSize
     {
-        return $this->size->width;
+        return $this->size;
     }
 
     /**

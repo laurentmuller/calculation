@@ -31,7 +31,7 @@ class PdfFontAwesomeCell extends AbstractPdfImageCell
     /**
      * The image size.
      */
-    private ImageSize $size;
+    private readonly ImageSize $size;
 
     /**
      * @param FontAwesomeImage  $image     the FontAwesome image to output
@@ -51,18 +51,12 @@ class PdfFontAwesomeCell extends AbstractPdfImageCell
         ?PdfTextAlignment $alignment = null,
         string|int|null $link = null
     ) {
+        parent::__construct($text, $cols, $style, $alignment, $link);
         $this->size = $image->resize($size);
         $this->imageData = ImageData::instance(
             data: $image->getContent(),
             mimeType: $image->getMimeType()
         );
-        parent::__construct($text, $cols, $style, $alignment, $link);
-    }
-
-    #[\Override]
-    public function getHeight(): int
-    {
-        return $this->size->height;
     }
 
     #[\Override]
@@ -72,14 +66,14 @@ class PdfFontAwesomeCell extends AbstractPdfImageCell
     }
 
     #[\Override]
-    public function getType(): string
+    public function getSize(): ImageSize
     {
-        return $this->imageData->getFileType();
+        return $this->size;
     }
 
     #[\Override]
-    public function getWidth(): int
+    public function getType(): string
     {
-        return $this->size->width;
+        return $this->imageData->getFileType();
     }
 }

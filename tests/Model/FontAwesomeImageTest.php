@@ -19,6 +19,12 @@ use PHPUnit\Framework\TestCase;
 
 final class FontAwesomeImageTest extends TestCase
 {
+    public static function assertSameImageSize(int $expectedWidth, int $expectedHeight, ImageSize $actual): void
+    {
+        self::assertSame($expectedWidth, $actual->width);
+        self::assertSame($expectedHeight, $actual->height);
+    }
+
     public function testConstructor(): void
     {
         $content = 'My Content';
@@ -26,12 +32,11 @@ final class FontAwesomeImageTest extends TestCase
         $height = 220;
         $resolution = 76;
         $mimeType = 'image/png';
-        $actual = $this->createImage($content, $width, $height, $resolution);
-        self::assertSame($content, $actual->getContent());
-        self::assertSame($width, $actual->getWidth());
-        self::assertSame($height, $actual->getHeight());
-        self::assertSame($resolution, $actual->getResolution());
-        self::assertSame($mimeType, $actual->getMimeType());
+        $image = $this->createImage($content, $width, $height, $resolution);
+        self::assertSame($content, $image->getContent());
+        self::assertSameImageSize($width, $height, $image->getSize());
+        self::assertSame($resolution, $image->getResolution());
+        self::assertSame($mimeType, $image->getMimeType());
     }
 
     public function testResizeBiggestHeight(): void
@@ -53,12 +58,6 @@ final class FontAwesomeImageTest extends TestCase
         $image = $this->createImage(width: 40, height: 40);
         $actual = $image->resize(50);
         self::assertSameImageSize(50, 50, $actual);
-    }
-
-    private function assertSameImageSize(int $expectedWidth, int $expectedHeight, ImageSize $actual): void
-    {
-        self::assertSame($expectedWidth, $actual->width);
-        self::assertSame($expectedHeight, $actual->height);
     }
 
     private function createImage(

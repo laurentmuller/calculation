@@ -110,8 +110,7 @@ final readonly class FunctionExtension
     /**
      * Output the user image profile.
      *
-     * @param User|array|null           $user       the user
-     * @param array<string, string|int> $parameters
+     * @param array<string, string|int> $parameters additional parameters
      */
     #[AsTwigFunction(name: 'asset_image_user', isSafe: ['html'])]
     public function assetImageUser(

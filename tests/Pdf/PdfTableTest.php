@@ -331,12 +331,14 @@ final class PdfTableTest extends TestCase
 
         $expected = \getimagesize($path);
         self::assertIsArray($expected);
-        self::assertSame($expected[0], $cell->getWidth());
-        self::assertSame($expected[1], $cell->getHeight());
+        $actual = $cell->getSize();
+        self::assertSame($expected[0], $actual->width);
+        self::assertSame($expected[1], $actual->height);
 
         $cell->resize(248);
-        self::assertSame(248, $cell->getHeight());
-        self::assertSame(210, $cell->getWidth());
+        $actual = $cell->getSize();
+        self::assertSame(210, $actual->width);
+        self::assertSame(248, $actual->height);
 
         $actual = $cell->getOriginalSize();
         self::assertSame($expected[0], $actual->width);

@@ -931,8 +931,9 @@ class PdfTable
         $parent = $this->parent;
         $margins = 2.0 * $parent->getCellMargin();
         if ($cell instanceof AbstractPdfImageCell) {
-            $imageHeight = $margins + $parent->pixels2UserUnit($cell->getHeight());
-            $width -= $parent->pixels2UserUnit($cell->getWidth());
+            $size = $cell->getSize();
+            $imageHeight = $margins + $parent->pixels2UserUnit($size->height);
+            $width -= $parent->pixels2UserUnit($size->width);
         }
 
         $style->apply($parent);

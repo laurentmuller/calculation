@@ -83,11 +83,8 @@ class ImageResizer
 
     private function getTargetSize(string $filename): Box
     {
-        $size = $this->getImageSize($filename);
-        if ($size->isEmpty()) {
-            throw new \InvalidArgumentException(\sprintf('Unable to get image size for the file "%s".', $filename));
-        }
-        $size = $size->resize(self::IMAGE_SIZE);
+        $size = $this->getImageSize($filename)
+            ->resize(self::IMAGE_SIZE);
 
         return new Box($size->width, $size->height);
     }

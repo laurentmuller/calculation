@@ -16,7 +16,7 @@ namespace App\Tests\Model;
 use App\Model\ImageSize;
 use PHPUnit\Framework\TestCase;
 
-class ImageSizeTest extends TestCase
+final class ImageSizeTest extends TestCase
 {
     public function testInstance(): void
     {

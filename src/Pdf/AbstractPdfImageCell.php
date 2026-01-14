@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
+use App\Model\ImageSize;
 use App\Pdf\Interfaces\PdfCellOutputInterface;
 use App\Utils\StringUtils;
 use fpdf\Enums\PdfMove;
@@ -36,19 +37,18 @@ abstract class AbstractPdfImageCell extends PdfCell implements PdfCellOutputInte
             $width += $parent->getCellMargin();
         }
 
-        return $width + $parent->pixels2UserUnit($this->getWidth());
+        return $width + $parent->pixels2UserUnit($this->getSize()->width);
     }
-
-    /**
-     *  Gets the image height in pixels.
-     * /
-     */
-    abstract public function getHeight(): int;
 
     /**
      * Gets the image path.
      */
     abstract public function getPath(): string;
+
+    /**
+     * Gets the image size.
+     */
+    abstract public function getSize(): ImageSize;
 
     /**
      * Gets the image type.
@@ -57,11 +57,6 @@ abstract class AbstractPdfImageCell extends PdfCell implements PdfCellOutputInte
     {
         return '';
     }
-
-    /**
-     * Gets the image width in pixels.
-     */
-    abstract public function getWidth(): int;
 
     /**
      * Override the default behavior by output this image before the text.
@@ -77,8 +72,9 @@ abstract class AbstractPdfImageCell extends PdfCell implements PdfCellOutputInte
         $this->getStyle()?->apply($parent);
 
         // convert size
-        $imageWidth = $parent->pixels2UserUnit($this->getWidth());
-        $imageHeight = $parent->pixels2UserUnit($this->getHeight());
+        $size = $this->getSize();
+        $imageWidth = $parent->pixels2UserUnit($size->width);
+        $imageHeight = $parent->pixels2UserUnit($size->height);
 
         // compute text
         $text = $this->getText() ?? '';

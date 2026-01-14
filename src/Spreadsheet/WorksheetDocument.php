@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Spreadsheet;
 
 use App\Model\CustomerInformation;
+use App\Model\ImageSize;
 use App\Utils\StringUtils;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Exception;
@@ -197,32 +198,31 @@ class WorksheetDocument extends Worksheet
     /**
      * Sets image at the given coordinate.
      *
-     * @param string $path        the image path
-     * @param string $coordinates the coordinates of the cell (like 'A1')
-     * @param int    $width       the image width
-     * @param int    $height      the image height
+     * @param string    $path        the image path
+     * @param string    $coordinates the coordinates of the cell (like 'A1')
+     * @param ImageSize $size        the image size
      *
      * @throws Exception if an exception occurs
      */
-    public function setCellImage(string $path, string $coordinates, int $width, int $height): static
+    public function setCellImage(string $path, string $coordinates, ImageSize $size): static
     {
         $drawing = new Drawing();
         $drawing->setPath($path)
             ->setResizeProportional(false)
             ->setCoordinates($coordinates)
-            ->setWidth($width)
-            ->setHeight($height)
+            ->setWidth($size->width)
+            ->setHeight($size->height)
             ->setOffsetX(2)
             ->setOffsetY(2)
             ->setWorksheet($this);
         [$columnIndex, $rowIndex] = Coordinate::indexesFromString($coordinates);
         $columnDimension = $this->getColumnDimensionByColumn($columnIndex);
-        if ($width > $columnDimension->getWidth()) {
-            $columnDimension->setWidth($width);
+        if ($size->width > $columnDimension->getWidth()) {
+            $columnDimension->setWidth($size->width);
         }
         $rowDimension = $this->getRowDimension($rowIndex);
-        if ($height > $rowDimension->getRowHeight()) {
-            $rowDimension->setRowHeight($height);
+        if ($size->height > $rowDimension->getRowHeight()) {
+            $rowDimension->setRowHeight($size->height);
         }
 
         return $this;

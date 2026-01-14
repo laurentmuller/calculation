@@ -212,11 +212,9 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     public function getImagePath(StorageInterface $storage): ?string
     {
         try {
-            if (null !== $this->imageName) {
-                $path = $storage->resolvePath($this);
-                if (null !== $path && FileUtils::isFile($path)) {
-                    return $path;
-                }
+            $path = $storage->resolvePath($this);
+            if (null !== $path && FileUtils::isFile($path)) {
+                return $path;
             }
         } catch (MappingNotFoundException) {
             // ignore
@@ -339,12 +337,6 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
 
     /**
      * Sets image file.
-     *
-     * If manually uploading a file (i.e., not using Symfony Form), ensure an instance
-     * of 'UploadedFile' is injected into this setter to trigger the update. If this
-     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
-     * must be able to accept an instance of 'File' as the bundle will inject one here
-     * during Doctrine hydration.
      *
      * @param ?File $imageFile the file
      * @param bool  $update    true to update the modification date

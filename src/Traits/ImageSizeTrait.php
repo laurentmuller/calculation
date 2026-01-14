@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Traits;
 
 use App\Model\ImageSize;
+use App\Utils\FileUtils;
 
 /**
  * Trait ot get image size.
@@ -23,17 +24,16 @@ trait ImageSizeTrait
     /**
      * Gets the image size for the given file name.
      *
-     * @return ImageSize the image size, if success; an empty size (0, 0) if fail
+     * @throw \InvalidArgumentException if the file does not exist or is not an image
      */
     public function getImageSize(string $filename): ImageSize
     {
-        if ('' === $filename) {
-            return ImageSize::instance(0, 0);
+        if (!FileUtils::exists($filename)) {
+            throw new \InvalidArgumentException(\sprintf('The file "%s" does not exist.', $filename));
         }
-
         $size = \getimagesize($filename);
         if (false === $size) {
-            return ImageSize::instance(0, 0);
+            throw new \InvalidArgumentException(\sprintf('Unable to get image size for "%s".', $filename));
         }
 
         return ImageSize::instance($size[0], $size[1]);

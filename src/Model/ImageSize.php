@@ -45,6 +45,7 @@ class ImageSize
      * Gets a scaled width and height to the desired size.
      *
      * @param int $size the desired size. Values are computed as follows:
+     *                  <ul>
      *                  <li>If this width is greater than this height, then width is set to the desired size and
      *                  height is calculated.</li>
      *                  <li>If this height is greater than this width, then height is set to the desired size and

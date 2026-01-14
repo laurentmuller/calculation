@@ -15,6 +15,7 @@ namespace App\Tests\Spreadsheet;
 
 use App\Controller\AbstractController;
 use App\Model\CustomerInformation;
+use App\Model\ImageSize;
 use App\Spreadsheet\HeaderFormat;
 use App\Spreadsheet\SpreadsheetDocument;
 use App\Spreadsheet\WorksheetDocument;
@@ -89,7 +90,7 @@ final class WorksheetDocumentTest extends TestCase
     {
         $path = __DIR__ . '/../files/images/example.png';
         $sheet = $this->getActiveSheet();
-        $sheet->setCellImage($path, 'A1', 124, 147);
+        $sheet->setCellImage($path, 'A1', ImageSize::instance(124, 147));
         $actual = $sheet->getColumnDimension('A')->getWidth();
         self::assertSame(124.0, $actual);
         $actual = $sheet->getRowDimension(1)->getRowHeight();

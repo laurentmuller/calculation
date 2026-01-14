@@ -20,12 +20,12 @@ readonly class FontAwesomeImage
 {
     /**
      * @param string    $content    the content, as 'png' format
-     * @param ImageSize $imageSize  the image size in pixels
+     * @param ImageSize $size       the image size in pixels
      * @param int       $resolution the resolution in DPI (dot per each)
      */
     public function __construct(
         private string $content,
-        private ImageSize $imageSize,
+        private ImageSize $size,
         private int $resolution
     ) {
     }
@@ -36,14 +36,6 @@ readonly class FontAwesomeImage
     public function getContent(): string
     {
         return $this->content;
-    }
-
-    /**
-     * Gets the image height in pixels.
-     */
-    public function getHeight(): int
-    {
-        return $this->imageSize->height;
     }
 
     /**
@@ -63,18 +55,20 @@ readonly class FontAwesomeImage
     }
 
     /**
-     * Gets the image width in pixels.
+     * Gets the image size in pixels.
      */
-    public function getWidth(): int
+    public function getSize(): ImageSize
     {
-        return $this->imageSize->width;
+        return $this->size;
     }
 
     /**
      * Gets a scaled image size to the desired size.
+     *
+     * @see ImageSize::resize()
      */
     public function resize(int $size): ImageSize
     {
-        return $this->imageSize->resize($size);
+        return $this->size->resize($size);
     }
 }

@@ -14,12 +14,19 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Model\FontAwesomeImage;
+use App\Model\ImageSize;
 use App\Service\FontAwesomeImageService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 final class FontAwesomeImageServiceTest extends TestCase
 {
+    public static function assertSameImageSize(int $expectedWidth, int $expectedHeight, ImageSize $actual): void
+    {
+        self::assertSame($expectedWidth, $actual->width);
+        self::assertSame($expectedHeight, $actual->height);
+    }
+
     public function testInvalidDirectory(): void
     {
         $this->checkImageIsInvalid('fake', 'fake', false);
@@ -53,23 +60,20 @@ final class FontAwesomeImageServiceTest extends TestCase
 
     public function testValidFileSizeEquals(): void
     {
-        $actual = $this->checkImageIsValid(__DIR__ . '/../files/images', '512x512.svg');
-        self::assertSame(64, $actual->getWidth());
-        self::assertSame(64, $actual->getHeight());
+        $image = $this->checkImageIsValid(__DIR__ . '/../files/images', '512x512.svg');
+        self::assertSameImageSize(64, 64, $image->getSize());
     }
 
     public function testValidFileWidthGreater(): void
     {
-        $actual = $this->checkImageIsValid(__DIR__ . '/../files/images', '576x512.svg');
-        self::assertSame(64, $actual->getWidth());
-        self::assertSame(57, $actual->getHeight());
+        $image = $this->checkImageIsValid(__DIR__ . '/../files/images', '576x512.svg');
+        self::assertSameImageSize(64, 57, $image->getSize());
     }
 
     public function testValidFileWidthSmaller(): void
     {
-        $actual = $this->checkImageIsValid(__DIR__ . '/../files/images', '448x512.svg');
-        self::assertSame(56, $actual->getWidth());
-        self::assertSame(64, $actual->getHeight());
+        $image = $this->checkImageIsValid(__DIR__ . '/../files/images', '448x512.svg');
+        self::assertSameImageSize(56, 64, $image->getSize());
     }
 
     public function testValidFileWithColor(): void

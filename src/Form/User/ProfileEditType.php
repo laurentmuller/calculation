@@ -54,7 +54,6 @@ class ProfileEditType extends AbstractEntityType
             ->addCurrentPasswordType();
 
         $helper->field('imageFile')
-            ->updateOption('delete_label', 'user.edit.delete_image')
-            ->addVichImageType();
+            ->addUserImageType();
     }
 }

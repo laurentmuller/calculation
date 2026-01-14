@@ -65,8 +65,7 @@ class UserType extends AbstractEntityType
             ->addPlainType();
 
         $helper->field('imageFile')
-            ->updateOption('maxsize', '10mi')
-            ->addVichImageType();
+            ->addUserImageType();
 
         $helper->listenerPreSetData($this->onPreSetData(...));
     }

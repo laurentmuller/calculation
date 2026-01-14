@@ -16,6 +16,7 @@ namespace App\Form;
 use App\Form\Type\CurrentPasswordType;
 use App\Form\Type\PlainType;
 use App\Form\Type\RepeatPasswordType;
+use App\Form\User\UserImageType;
 use App\Interfaces\EntityInterface;
 use App\Interfaces\EnumSortableInterface;
 use App\Interfaces\UserInterface;
@@ -197,7 +198,7 @@ class FormHelper
      */
     public function addCollectionType(string $entryType, ?string $prototypeName = null): self
     {
-        $options = [
+        return $this->updateOptions([
             'label' => false,
             'allow_add' => true,
             'allow_delete' => true,
@@ -205,10 +206,7 @@ class FormHelper
             'entry_type' => $entryType,
             'prototype_name' => $prototypeName,
             'entry_options' => ['label' => false],
-        ];
-
-        return $this->updateOptions($options)
-            ->add(CollectionType::class);
+        ])->add(CollectionType::class);
     }
 
     /**
@@ -318,16 +316,14 @@ class FormHelper
     /**
      * Add a number type to the builder and reset all values to the default.
      *
-     * @param int $scale the number of decimals to set
+     * @param non-negative-int $scale the number of decimals to set
      */
     public function addNumberType(int $scale = 2): self
     {
-        $input_mode = $scale > 0 ? 'decimal' : 'numeric';
-
         return $this->widgetClass('text-end')
             ->updateOption('html5', true)
             ->updateAttributes([
-                'inputmode' => $input_mode,
+                'inputmode' => $scale > 0 ? 'decimal' : 'numeric',
                 'scale' => $scale,
             ])
             ->add(NumberType::class);
@@ -335,15 +331,14 @@ class FormHelper
 
     public function addPasswordType(): self
     {
-        $this->autocomplete('current-password')
+        return $this->autocomplete('current-password')
             ->minLength(UserInterface::MIN_PASSWORD_LENGTH)
             ->maxLength(EntityInterface::MAX_STRING_LENGTH)
             ->constraints(
                 new NotBlank(),
                 new Length(min: UserInterface::MIN_PASSWORD_LENGTH, max: EntityInterface::MAX_STRING_LENGTH),
-            );
-
-        return $this->add(PasswordType::class);
+            )
+            ->add(PasswordType::class);
     }
 
     /**
@@ -355,7 +350,7 @@ class FormHelper
      */
     public function addPercentType(?int $min = null, ?int $max = null, float $step = 1.0): self
     {
-        $this->widgetClass('text-end')
+        return $this->widgetClass('text-end')
             ->updateOption('html5', true)
             ->autocomplete('off')
             ->updateAttributes([
@@ -363,9 +358,8 @@ class FormHelper
                 'min' => $min,
                 'max' => $max,
                 'step' => $step > 0 ? $step : null,
-            ]);
-
-        return $this->add(PercentType::class);
+            ])
+            ->add(PercentType::class);
     }
 
     /**
@@ -500,6 +494,14 @@ class FormHelper
     }
 
     /**
+     * Adds a user image type (VichImageType) and reset all values to the default.
+     */
+    public function addUserImageType(): self
+    {
+        return $this->add(UserImageType::class);
+    }
+
+    /**
      * Add a username type.
      */
     public function addUserNameType(string|bool $autocomplete = 'username'): self
@@ -511,27 +513,6 @@ class FormHelper
                 'maxLength' => UserInterface::MAX_USERNAME_LENGTH,
             ])
             ->addTextType();
-    }
-
-    /**
-     * Adds a Vich image type and reset all values to the default.
-     */
-    public function addVichImageType(): self
-    {
-        $this->notRequired()
-            ->updateOptions([
-                'translation_domain' => 'messages',
-                'download_uri' => false,
-            ])->updateAttributes([
-                'accept' => 'image/gif,image/jpeg,image/png,image/bmp',
-            ]);
-
-        // label
-        if (!isset($this->options['delete_label'])) {
-            $this->updateOption('delete_label', false);
-        }
-
-        return $this->add(VichImageType::class);
     }
 
     /**

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Model;
 
 use App\Model\FontAwesomeImage;
+use App\Model\ImageSize;
 use PHPUnit\Framework\TestCase;
 
 final class FontAwesomeImageTest extends TestCase
@@ -37,21 +38,27 @@ final class FontAwesomeImageTest extends TestCase
     {
         $image = $this->createImage(width: 20, height: 40);
         $actual = $image->resize(80);
-        self::assertSame([40, 80], $actual);
+        self::assertSameImageSize(40, 80, $actual);
     }
 
     public function testResizeBiggestWidth(): void
     {
         $image = $this->createImage(width: 40, height: 20);
         $actual = $image->resize(80);
-        self::assertSame([80, 40], $actual);
+        self::assertSameImageSize(80, 40, $actual);
     }
 
     public function testResizeSameValues(): void
     {
         $image = $this->createImage(width: 40, height: 40);
         $actual = $image->resize(50);
-        self::assertSame([50, 50], $actual);
+        self::assertSameImageSize(50, 50, $actual);
+    }
+
+    private function assertSameImageSize(int $expectedWidth, int $expectedHeight, ImageSize $actual): void
+    {
+        self::assertSame($expectedWidth, $actual->width);
+        self::assertSame($expectedHeight, $actual->height);
     }
 
     private function createImage(
@@ -60,6 +67,6 @@ final class FontAwesomeImageTest extends TestCase
         int $height = 50,
         int $resolution = 96
     ): FontAwesomeImage {
-        return new FontAwesomeImage($content, $width, $height, $resolution);
+        return new FontAwesomeImage($content, ImageSize::instance($width, $height), $resolution);
     }
 }

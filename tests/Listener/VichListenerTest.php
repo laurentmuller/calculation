@@ -18,10 +18,7 @@ use App\Listener\VichListener;
 use App\Service\ImageResizer;
 use App\Service\UserNamer;
 use App\Tests\TranslatorMockTrait;
-use App\Utils\FileUtils;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Vich\UploaderBundle\Event\Event;
 use Vich\UploaderBundle\Mapping\PropertyMapping;
@@ -29,48 +26,6 @@ use Vich\UploaderBundle\Mapping\PropertyMapping;
 final class VichListenerTest extends TestCase
 {
     use TranslatorMockTrait;
-
-    public function testPostUploadInvalidFile(): void
-    {
-        $event = $this->createEvent();
-        $listener = $this->createListener();
-        $listener->onPostUpload($event);
-        self::expectNotToPerformAssertions();
-    }
-
-    public function testPostUploadNewFile(): void
-    {
-        $path = $this->getImagesPath();
-
-        try {
-            $name = 'user_new_000000.jpg';
-            FileUtils::copy($path . 'user_example.jpg', $path . $name, true);
-            $file = $this->createUploadedFile($name);
-            $event = $this->createEvent($file);
-            $listener = $this->createListener();
-            $listener->onPostUpload($event);
-            self::expectNotToPerformAssertions();
-        } finally {
-            FileUtils::remove($path . 'USER_000000_192.jpg');
-        }
-    }
-
-    public function testPostUploadValidFile(): void
-    {
-        $file = $this->createUploadedFile();
-        $event = $this->createEvent($file);
-        $listener = $this->createListener();
-        $listener->onPostUpload($event);
-        self::expectNotToPerformAssertions();
-    }
-
-    public function testPreRemove(): void
-    {
-        $event = $this->createEvent();
-        $listener = $this->createListener();
-        $listener->onPreRemove($event);
-        self::expectNotToPerformAssertions();
-    }
 
     public function testPreUploadInvalidFile(): void
     {
@@ -118,20 +73,9 @@ final class VichListenerTest extends TestCase
 
     private function createListener(): VichListener
     {
-        $resizer = $this->createMockImageResizer();
+        $resizer = $this->createMock(ImageResizer::class);
 
         return new VichListener($resizer);
-    }
-
-    private function createMockImageResizer(): MockObject&ImageResizer
-    {
-        $translator = $this->createMockTranslator();
-        $logger = $this->createMock(LoggerInterface::class);
-        $resizer = $this->createMock(ImageResizer::class);
-        $resizer->setTranslator($translator);
-        $resizer->setLogger($logger);
-
-        return $resizer;
     }
 
     private function createPropertyMapping(?UserNamer $namer = null): PropertyMapping

@@ -580,7 +580,7 @@ class HelpReport extends AbstractReport
         if (!FileUtils::exists($file)) {
             return;
         }
-        $width = $this->getImageSize($file)[0];
+        $width = $this->getImageSize($file)->width;
         if (0 === $width) {
             return;
         }

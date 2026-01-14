@@ -14,49 +14,63 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Enums\ImageExtension;
-use App\Enums\ImageSize;
 use App\Traits\ImageSizeTrait;
-use App\Traits\LoggerAwareTrait;
-use App\Traits\TranslatorAwareTrait;
+use App\Traits\LoggerTrait;
+use App\Traits\TranslatorTrait;
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
-use Imagine\Image\ImagineInterface;
-use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Psr\Log\LoggerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Service to resize images.
+ * Service to resize user profile image.
  */
-class ImageResizer implements ServiceSubscriberInterface
+class ImageResizer
 {
     use ImageSizeTrait;
-    use LoggerAwareTrait;
-    use ServiceMethodsSubscriberTrait;
-    use TranslatorAwareTrait;
+    use LoggerTrait;
+    use TranslatorTrait;
 
-    private ImagineInterface $imagine;
+    /**
+     * The target image size.
+     */
+    public const IMAGE_SIZE = 192;
 
-    public function __construct()
+    public function __construct(
+        private readonly TranslatorInterface $translator,
+        private readonly LoggerInterface $logger
+    ) {
+    }
+
+    #[\Override]
+    public function getLogger(): LoggerInterface
     {
-        $this->imagine = new Imagine();
+        return $this->logger;
+    }
+
+    #[\Override]
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
     }
 
     /**
-     * Resize an image with the given size.
+     * Resize the image to the default size.
      *
-     * @param string    $source the source image path
-     * @param string    $target the target image path
-     * @param ImageSize $size   the image size
+     * @param string  $source the source image path
+     * @param ?string $target the target image path or null to replace the source image
      *
      * @return bool true on success, false on error, or if the size is not a positive value
      */
-    public function resize(string $source, string $target, ImageSize $size): bool
+    public function resize(string $source, ?string $target = null): bool
     {
         try {
+            $target ??= $source;
+            $targetSize = $this->getTargetSize($source);
             $options = ['format' => ImageExtension::PNG->value];
-            $newSize = $this->getTargetSize($source, $size->value);
-            $this->imagine->open($source)
-                ->resize($newSize)
+            $imagine = new Imagine();
+            $imagine->open($source)
+                ->resize($targetSize)
                 ->save($target, $options);
 
             return true;
@@ -67,60 +81,14 @@ class ImageResizer implements ServiceSubscriberInterface
         }
     }
 
-    /**
-     * Resize the given image with the default size (192 pixels).
-     *
-     * @param string $source the source image path
-     * @param string $target the target image path
-     *
-     * @return bool true on success, false on error
-     */
-    public function resizeDefault(string $source, string $target): bool
+    private function getTargetSize(string $filename): Box
     {
-        return $this->resize($source, $target, ImageSize::DEFAULT);
-    }
-
-    /**
-     * Resize the given image with the medium size (96 pixels).
-     *
-     * @param string $source the source image path
-     * @param string $target the target image path
-     *
-     * @return bool true on success, false on error
-     */
-    public function resizeMedium(string $source, string $target): bool
-    {
-        return $this->resize($source, $target, ImageSize::MEDIUM);
-    }
-
-    /**
-     * Resize the given image with the small size (32 pixels).
-     *
-     * @param string $source the source image path
-     * @param string $target the target image path
-     *
-     * @return bool true on success, false on error
-     */
-    public function resizeSmall(string $source, string $target): bool
-    {
-        return $this->resize($source, $target, ImageSize::SMALL);
-    }
-
-    private function getTargetSize(string $filename, float $size): Box
-    {
-        [$imageWidth, $imageHeight] = $this->getImageSize($filename);
-        if (0 === $imageWidth || 0 === $imageHeight) {
+        $size = $this->getImageSize($filename);
+        if ($size->isEmpty()) {
             throw new \InvalidArgumentException(\sprintf('Unable to get image size for the file "%s".', $filename));
         }
-        $ratio = (float) $imageWidth / (float) $imageHeight;
-        $width = $size;
-        $height = $size;
-        if ($width / $height > $ratio) {
-            $width = $height * $ratio;
-        } else {
-            $height = $width / $ratio;
-        }
+        $size = $size->resize(self::IMAGE_SIZE);
 
-        return new Box((int) $width, (int) $height);
+        return new Box($size->width, $size->height);
     }
 }

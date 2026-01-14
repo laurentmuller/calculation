@@ -14,5 +14,5 @@ return [
     'user' => new App\Entity\User(),
 ]
 --EXPECT--
-<image src="url" height="170" width="190">
-<image src="url" height="170" width="190">
+<image src="url" height="170" width="192">
+<image src="url" height="29" width="32">

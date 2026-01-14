@@ -16,6 +16,7 @@ namespace App\Tests\Report;
 use App\Controller\AbstractController;
 use App\Entity\Log;
 use App\Model\FontAwesomeImage;
+use App\Model\ImageSize;
 use App\Model\LogChannel;
 use App\Model\LogFile;
 use App\Model\LogLevel;
@@ -85,6 +86,6 @@ final class LogsReportTest extends TestCase
         $content = \file_get_contents($path);
         self::assertIsString($content);
 
-        return new FontAwesomeImage($content, 64, 64, 96);
+        return new FontAwesomeImage($content, ImageSize::instance(64, 64), 96);
     }
 }

@@ -15,7 +15,6 @@ namespace App\Service;
 
 use App\Entity\User;
 use App\Enums\ImageExtension;
-use App\Enums\ImageSize;
 use Vich\UploaderBundle\Mapping\PropertyMapping;
 use Vich\UploaderBundle\Naming\NamerInterface;
 
@@ -27,26 +26,14 @@ use Vich\UploaderBundle\Naming\NamerInterface;
 class UserNamer implements NamerInterface
 {
     /**
-     * Gets the base file name.
+     * @phpstan-param User $object
      */
-    public static function getBaseName(User|int $key, ImageSize $size, ImageExtension|string|null $ext = null): string
-    {
-        $id = \is_int($key) ? $key : (int) $key->getId();
-        $name = \sprintf('USER_%06d_%03d', $id, $size->value);
-        if (null !== $ext && '' !== $ext) {
-            if ($ext instanceof ImageExtension) {
-                $ext = $ext->value;
-            }
-
-            return \sprintf('%s.%s', $name, $ext);
-        }
-
-        return $name;
-    }
-
     #[\Override]
     public function name(object $object, PropertyMapping $mapping): string
     {
-        return self::getBaseName($object, ImageSize::DEFAULT, ImageExtension::PNG);
+        $id = (int) $object->getId();
+        $name = \sprintf('USER_%06d_%03d', $id, ImageResizer::IMAGE_SIZE);
+
+        return \sprintf('%s.%s', $name, ImageExtension::PNG->value);
     }
 }

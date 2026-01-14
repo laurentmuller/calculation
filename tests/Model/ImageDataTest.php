@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Model;
 
 use App\Model\ImageData;
+use App\Model\ImageSize;
 use PHPUnit\Framework\TestCase;
 
 final class ImageDataTest extends TestCase
@@ -39,8 +40,8 @@ final class ImageDataTest extends TestCase
         self::assertSame($expected, $actual);
 
         $actual = $imageData->getSize();
-        self::assertIsArray($actual);
-        self::assertSame(124, $actual[0]);
-        self::assertSame(147, $actual[1]);
+        self::assertInstanceOf(ImageSize::class, $actual);
+        self::assertSame(124, $actual->width);
+        self::assertSame(147, $actual->height);
     }
 }

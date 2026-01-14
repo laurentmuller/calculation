@@ -15,6 +15,7 @@ namespace App\Pdf;
 
 use App\Model\FontAwesomeImage;
 use App\Model\ImageData;
+use App\Model\ImageSize;
 use fpdf\Enums\PdfTextAlignment;
 
 /**
@@ -29,10 +30,8 @@ class PdfFontAwesomeCell extends AbstractPdfImageCell
 
     /**
      * The image size.
-     *
-     * @var array{0: int, 1: int}
      */
-    private array $size;
+    private ImageSize $size;
 
     /**
      * @param FontAwesomeImage  $image     the FontAwesome image to output
@@ -63,7 +62,7 @@ class PdfFontAwesomeCell extends AbstractPdfImageCell
     #[\Override]
     public function getHeight(): int
     {
-        return $this->size[1];
+        return $this->size->height;
     }
 
     #[\Override]
@@ -81,6 +80,6 @@ class PdfFontAwesomeCell extends AbstractPdfImageCell
     #[\Override]
     public function getWidth(): int
     {
-        return $this->size[0];
+        return $this->size->width;
     }
 }

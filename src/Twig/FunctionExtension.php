@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace App\Twig;
 
 use App\Entity\User;
+use App\Model\ImageSize;
+use App\Service\ImageResizer;
 use App\Service\NonceService;
 use App\Traits\ImageSizeTrait;
 use App\Utils\FileUtils;
@@ -65,16 +67,15 @@ final readonly class FunctionExtension
 
     /**
      * Checks if the given asset path exists.
+     *
+     * @phpstan-assert-if-true non-empty-string $path
      */
     #[AsTwigFunction(name: 'asset_exists')]
     public function assetExists(?string $path = null): bool
     {
         $file = $this->getRealPath($path);
-        if (!StringUtils::isString($file)) {
-            return false;
-        }
 
-        return StringUtils::startWith($file, $this->publicDir);
+        return StringUtils::isString($file) && StringUtils::startWith($file, $this->publicDir);
     }
 
     /**
@@ -96,11 +97,11 @@ final readonly class FunctionExtension
     #[AsTwigFunction(name: 'asset_image', isSafe: ['html'])]
     public function assetImage(string $path, array $parameters = []): string
     {
-        [$width, $height] = $this->imageSize($path);
+        $size = $this->imageSize($path);
         $parameters = \array_merge([
             'src' => $this->getAssetUrl($path),
-            'height' => $height,
-            'width' => $width,
+            'height' => $size->height,
+            'width' => $size->width,
         ], $parameters);
 
         return \sprintf('<image %s>', $this->reduceParams($parameters));
@@ -113,20 +114,27 @@ final readonly class FunctionExtension
      * @param array<string, string|int> $parameters
      */
     #[AsTwigFunction(name: 'asset_image_user', isSafe: ['html'])]
-    public function assetImageUser(User|array|null $user, ?string $size = null, array $parameters = []): string|false
-    {
+    public function assetImageUser(
+        User|array|null $user,
+        int $size = ImageResizer::IMAGE_SIZE,
+        array $parameters = []
+    ): string|false {
         if (null === $user || [] === $user) {
             return false;
         }
-        $asset = $this->uploaderHelper->asset($user, className: User::class);
-        if (null === $asset) {
-            return false;
-        }
-        if (null !== $size) {
-            $asset = \str_replace('192', $size, $asset);
-        }
+
+        $asset = $this->uploaderHelper->asset(obj: $user, className: User::class);
         if (!$this->assetExists($asset)) {
             return false;
+        }
+
+        if (ImageResizer::IMAGE_SIZE !== $size) {
+            $imageSize = $this->imageSize($asset)
+                ->resize($size);
+            $parameters = \array_merge([
+                'height' => $imageSize->height,
+                'width' => $imageSize->width,
+            ], $parameters);
         }
 
         return $this->assetImage(\ltrim($asset, '/'), $parameters);
@@ -195,10 +203,8 @@ final readonly class FunctionExtension
 
     /**
      * Gets the image size.
-     *
-     * @return array{0: int, 1: int}
      */
-    private function imageSize(string $path): array
+    private function imageSize(string $path): ImageSize
     {
         $realPath = (string) $this->getRealPath($path);
 
@@ -212,8 +218,13 @@ final readonly class FunctionExtension
      */
     private function reduceParams(array $parameters): string
     {
-        $callback = static fn (string $key, string|int $value): string => \sprintf('%s="%s"', $key, \htmlspecialchars((string) $value));
-
-        return \implode(' ', \array_map($callback, \array_keys($parameters), \array_values($parameters)));
+        return \implode(
+            ' ',
+            \array_map(
+                static fn (string $key, string|int $value): string => \sprintf('%s="%s"', $key, \htmlspecialchars((string) $value)),
+                \array_keys($parameters),
+                \array_values($parameters)
+            )
+        );
     }
 }

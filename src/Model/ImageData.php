@@ -18,8 +18,7 @@ namespace App\Model;
  */
 class ImageData
 {
-    /** @var array{0: int, 1: int}|false|null */
-    private array|false|null $size = null;
+    private ImageSize|false|null $size = null;
 
     /**
      * @param string  $data     the image data
@@ -86,13 +85,13 @@ class ImageData
     /**
      * Gets the image size.
      *
-     * @return array{0: int, 1: int}|false the image width and height, if applicable; false otherwise
+     * @return ImageSize|false the image width and height, if applicable; false otherwise
      */
-    public function getSize(): array|false
+    public function getSize(): ImageSize|false
     {
         if (null === $this->size) {
             $size = \getimagesizefromstring($this->data);
-            $this->size = \is_array($size) ? [$size[0], $size[1]] : false;
+            $this->size = \is_array($size) ? ImageSize::instance($size[0], $size[1]) : false;
         }
 
         return $this->size;

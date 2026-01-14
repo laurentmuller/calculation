@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Pdf;
 
 use App\Model\FontAwesomeImage;
+use App\Model\ImageSize;
 use App\Pdf\PdfFontAwesomeCell;
 use App\Pdf\PdfStyle;
 use App\Tests\Fixture\FixturePdfImageDocument;
@@ -85,6 +86,6 @@ final class PdfFontAwesomeCellTest extends TestCase
         $content = \file_get_contents($path);
         self::assertIsString($content);
 
-        return new FontAwesomeImage($content, 64, 64, 96);
+        return new FontAwesomeImage($content, ImageSize::instance(64, 64), 96);
     }
 }

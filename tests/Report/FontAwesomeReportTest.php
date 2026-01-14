@@ -15,6 +15,7 @@ namespace App\Tests\Report;
 
 use App\Controller\AbstractController;
 use App\Model\FontAwesomeImage;
+use App\Model\ImageSize;
 use App\Report\FontAwesomeReport;
 use App\Service\FontAwesomeImageService;
 use App\Utils\FileUtils;
@@ -44,7 +45,7 @@ final class FontAwesomeReportTest extends TestCase
         $file = $this->getSvgDirectory() . '/example.png';
         $content = FileUtils::readFile($file);
 
-        return new FontAwesomeImage($content, 124, 147, 96);
+        return new FontAwesomeImage($content, ImageSize::instance(124, 147), 96);
     }
 
     private function createReport(?FontAwesomeImage $image): FontAwesomeReport

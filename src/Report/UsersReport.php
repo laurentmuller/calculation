@@ -132,12 +132,8 @@ class UsersReport extends AbstractArrayReport
             return $this->getDefaultImageCell();
         }
         $cell = new PdfImageCell($path);
-        [$width, $height] = $cell->getOriginalSize();
-        if ($width > $height) {
-            return $cell->resize(width: self::IMAGE_SIZE);
-        }
 
-        return $cell->resize(height: self::IMAGE_SIZE);
+        return $cell->resize(self::IMAGE_SIZE);
     }
 
     private function getRoleCell(User $user): PdfCell

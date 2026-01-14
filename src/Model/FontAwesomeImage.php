@@ -19,15 +19,13 @@ namespace App\Model;
 readonly class FontAwesomeImage
 {
     /**
-     * @param string $content    the content, as 'png' format
-     * @param int    $width      the width in pixels
-     * @param int    $height     the height in pixels
-     * @param int    $resolution the resolution in DPI (dot per each)
+     * @param string    $content    the content, as 'png' format
+     * @param ImageSize $imageSize  the image size in pixels
+     * @param int       $resolution the resolution in DPI (dot per each)
      */
     public function __construct(
         private string $content,
-        private int $width,
-        private int $height,
+        private ImageSize $imageSize,
         private int $resolution
     ) {
     }
@@ -45,7 +43,7 @@ readonly class FontAwesomeImage
      */
     public function getHeight(): int
     {
-        return $this->height;
+        return $this->imageSize->height;
     }
 
     /**
@@ -69,37 +67,14 @@ readonly class FontAwesomeImage
      */
     public function getWidth(): int
     {
-        return $this->width;
+        return $this->imageSize->width;
     }
 
     /**
-     * Gets a scaled width and height to the desired size.
-     *
-     * @param int $size the desired size.
-     *                  If this width is greater than this height, then the width is set to the given size and
-     *                  the height is calculated.
-     *                  If this height is greater than this width, then the height is set to the given size and
-     *                  the width is calculated.
-     *                  If both values are equal, then return the desired size.
-     *
-     * @return array{0: int, 1: int} an array where the first element is the scaled width or the desired size.
-     *                               The second element is the scaled height or the desired size
+     * Gets a scaled image size to the desired size.
      */
-    public function resize(int $size): array
+    public function resize(int $size): ImageSize
     {
-        if ($this->width === $this->height) {
-            return [$size, $size];
-        }
-
-        if ($this->width > $this->height) {
-            return [$size, $this->round($size, $this->height, $this->width)];
-        }
-
-        return [$this->round($size, $this->width, $this->height), $size];
-    }
-
-    private function round(float $size, float $dividend, float $divisor): int
-    {
-        return (int) \round($size * $dividend / $divisor);
+        return $this->imageSize->resize($size);
     }
 }

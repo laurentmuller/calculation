@@ -15,21 +15,17 @@ namespace App\Listener;
 
 use App\Entity\User;
 use App\Enums\ImageExtension;
-use App\Enums\ImageSize;
 use App\Service\ImageResizer;
-use App\Service\UserNamer;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Vich\UploaderBundle\Event\Event;
 use Vich\UploaderBundle\Event\Events;
-use Vich\UploaderBundle\Mapping\PropertyMapping;
 use Vich\UploaderBundle\Naming\Polyfill\FileExtensionTrait;
 
 /**
- * Listener to resize the profile image.
+ * Listener to resize the user profile image.
  */
 class VichListener
 {
@@ -37,46 +33,6 @@ class VichListener
 
     public function __construct(private readonly ImageResizer $resizer)
     {
-    }
-
-    /**
-     * Create the small and medium image if applicable.
-     */
-    #[AsEventListener(event: Events::POST_UPLOAD)]
-    public function onPostUpload(Event $event): void
-    {
-        /** @var User $user */
-        $user = $event->getObject();
-        $mapping = $event->getMapping();
-        $file = $mapping->getFile($user);
-        if (!$file instanceof File || !$file->isReadable()) {
-            return;
-        }
-
-        // new?
-        if (StringUtils::pregMatch('/0{6}/m', $file->getFilename())) {
-            $file = $this->rename($mapping, $user, $file);
-        }
-
-        $source = $file->getRealPath();
-        $this->resizer->resizeMedium($source, $this->buildPath($user, ImageSize::MEDIUM, $file));
-        $this->resizer->resizeSmall($source, $this->buildPath($user, ImageSize::SMALL, $file));
-    }
-
-    /**
-     * Remove the medium and the small images.
-     */
-    #[AsEventListener(event: Events::PRE_REMOVE)]
-    public function onPreRemove(Event $event): void
-    {
-        /** @var User $user */
-        $user = $event->getObject();
-        $mapping = $event->getMapping();
-        $path = $mapping->getUploadDestination();
-        $name = (string) $mapping->getFileName($user);
-        $file = new File(FileUtils::buildPath($path, $name), false);
-        FileUtils::remove($this->buildPath($user, ImageSize::MEDIUM, $file));
-        FileUtils::remove($this->buildPath($user, ImageSize::SMALL, $file));
     }
 
     /**
@@ -100,23 +56,13 @@ class VichListener
         }
 
         // resize
-        $source = $file->getRealPath();
-        $this->resizer->resizeDefault($source, $source);
+        $this->resizer->resize($file->getRealPath());
 
         // rename extension if not PNG
         if (ImageExtension::PNG->value !== $this->getFileExtension($file)) {
             $newName = FileUtils::changeExtension($name, ImageExtension::PNG);
             $mapping->setFileName($user, $newName);
         }
-    }
-
-    private function buildPath(User $user, ImageSize $size, File $file): string
-    {
-        $path = $file->getPath();
-        $ext = $file->getExtension();
-        $baseName = UserNamer::getBaseName($user, $size, $ext);
-
-        return FileUtils::buildPath($path, $baseName);
     }
 
     /**
@@ -127,19 +73,5 @@ class VichListener
         $extension = $this->getExtension($file);
 
         return StringUtils::isString($extension) ? \strtolower($extension) : ImageExtension::PNG->value;
-    }
-
-    private function rename(PropertyMapping $mapping, User $user, File $file): File
-    {
-        $name = UserNamer::getBaseName($user, ImageSize::DEFAULT, $file->getExtension());
-        $path = FileUtils::buildPath($file->getPath(), $name);
-        $newFile = new File($path, false);
-
-        FileUtils::rename($file->getPathname(), $newFile->getPathname());
-
-        $mapping->setFileName($user, $name);
-        $mapping->setFile($user, $newFile);
-
-        return $newFile;
     }
 }

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Model\FontAwesomeImage;
+use App\Model\ImageSize;
 use App\Traits\CacheKeyTrait;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
@@ -127,14 +128,14 @@ class FontAwesomeImageService
 
         try {
             $imagick->readImageBlob($content);
-            $size = $this->getTargetSize($content);
-            $imagick->resizeImage($size[0], $size[1], \Imagick::FILTER_LANCZOS, 1);
+            $imageSize = $this->getTargetSize($content);
+            $imagick->resizeImage($imageSize->width, $imageSize->height, \Imagick::FILTER_LANCZOS, 1);
             $imagick->transparentPaintImage(self::TRANSPARENT_COLOR, 0.0, (float) \Imagick::getQuantum(), false);
             $imagick->setImageFormat(self::IMAGE_FORMAT);
             $imageBlob = $imagick->getImageBlob();
             $resolution = (int) $imagick->getImageResolution()['x'];
 
-            return new FontAwesomeImage($imageBlob, $size[0], $size[1], $resolution);
+            return new FontAwesomeImage($imageBlob, $imageSize, $resolution);
         } finally {
             $imagick->clear();
         }
@@ -145,23 +146,15 @@ class FontAwesomeImageService
         return $this->imagick ??= new \Imagick();
     }
 
-    /**
-     * @return array{0: int, 1: int}
-     */
-    private function getTargetSize(string $content): array
+    private function getTargetSize(string $content): ImageSize
     {
         $result = StringUtils::pregMatch(self::VIEW_BOX_PATTERN, $content, $matches);
         if (!$result || $matches['width'] === $matches['height']) {
-            return [self::TARGET_SIZE, self::TARGET_SIZE];
+            return ImageSize::instance(self::TARGET_SIZE, self::TARGET_SIZE);
         }
 
-        $width = (int) $matches['width'];
-        $height = (int) $matches['height'];
-        if ($width > $height) {
-            return [self::TARGET_SIZE, $this->roundSize(self::TARGET_SIZE * $height, $width)];
-        }
-
-        return [$this->roundSize(self::TARGET_SIZE * $width, $height), self::TARGET_SIZE];
+        return ImageSize::instance((int) $matches['width'], (int) $matches['height'])
+            ->resize(self::TARGET_SIZE);
     }
 
     private function isSvgDirectory(): bool
@@ -198,10 +191,5 @@ class FontAwesomeImageService
     private function replaceCurrentColor(string $content, string $color): string
     {
         return \str_replace('currentColor', $color, $content);
-    }
-
-    private function roundSize(float $dividend, float $divisor): int
-    {
-        return (int) \round($dividend / $divisor);
     }
 }

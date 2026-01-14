@@ -24,20 +24,22 @@ final class ImageSizeTraitTest extends TestCase
     public static function getSizes(): \Generator
     {
         yield ['', [0, 0]];
-        yield [__DIR__ . '/../files/images/example.png', [124, 147]];
-        yield [__DIR__ . '/../files/images/example.jpg', [500, 477]];
+        yield [__DIR__ . '/../files/images/example.png', 124, 147];
+        yield [__DIR__ . '/../files/images/example.jpg', 500, 477];
     }
 
     #[DataProvider('getSizes')]
-    public function testSize(string $filename, array $expected): void
+    public function testImageSize(string $filename, int $width, int $height): void
     {
         $actual = $this->getImageSize($filename);
-        self::assertSame($expected, $actual);
+        self::assertSame($width, $actual->width);
+        self::assertSame($height, $actual->height);
     }
 
-    public function testSizeInvalid(): void
+    public function testImageSizeInvalid(): void
     {
         $actual = $this->getImageSize(__FILE__);
-        self::assertSame([0, 0], $actual);
+        self::assertSame(0, $actual->width);
+        self::assertSame(0, $actual->height);
     }
 }

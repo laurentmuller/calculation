@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
+use App\Model\ImageSize;
 use App\Traits\ImageSizeTrait;
 use App\Traits\MathTrait;
 use App\Utils\FileUtils;
@@ -28,24 +29,14 @@ class PdfImageCell extends AbstractPdfImageCell
     use MathTrait;
 
     /**
-     * The image height.
+     * The original image size.
      */
-    private int $height;
+    private ImageSize $originalSize;
 
     /**
-     * The original image height.
+     * The image size.
      */
-    private int $originalHeight;
-
-    /**
-     * The original image width.
-     */
-    private int $originalWidth;
-
-    /**
-     * The image width.
-     */
-    private int $width;
+    private ImageSize $size;
 
     /**
      * @param string            $path      the image path
@@ -70,28 +61,22 @@ class PdfImageCell extends AbstractPdfImageCell
             throw PdfException::format("The image '%s' does not exist.", $path);
         }
         parent::__construct($text, $cols, $style, $alignment, $link);
-        $size = $this->getImageSize($path);
-        $this->width = $size[0];
-        $this->originalWidth = $size[0];
-        $this->height = $size[1];
-        $this->originalHeight = $size[1];
+        $this->originalSize = $this->getImageSize($path);
+        $this->size = clone $this->originalSize;
     }
 
     #[\Override]
     public function getHeight(): int
     {
-        return $this->height;
+        return $this->size->height;
     }
 
     /**
-     * Gets the original image width and height.
-     *
-     * @return array{0: int, 1: int} an array with two elements. Index 0 and 1 contain respectively the original width and the
-     *                               original height.
+     * Gets the original image size.
      */
-    public function getOriginalSize(): array
+    public function getOriginalSize(): ImageSize
     {
-        return [$this->originalWidth, $this->originalHeight];
+        return $this->originalSize;
     }
 
     #[\Override]
@@ -103,36 +88,17 @@ class PdfImageCell extends AbstractPdfImageCell
     #[\Override]
     public function getWidth(): int
     {
-        return $this->width;
+        return $this->size->width;
     }
 
     /**
      * Resize the image.
      *
-     * If both height and width arguments are <code>null</code>, the new width and height are
-     * equals to the original size.
-     *
-     * @param ?int $width  the new width or <code>null</code> to take the original height as reference
-     * @param ?int $height the new height or <code>null</code> to take the original width as reference
+     * @see ImageSize::resize()
      */
-    public function resize(?int $width = null, ?int $height = null): self
+    public function resize(int $size): self
     {
-        if (null === $width && null === $height) {
-            $this->width = $this->originalWidth;
-            $this->height = $this->originalHeight;
-
-            return $this;
-        }
-
-        $ratio = $this->safeDivide($this->originalWidth, $this->originalHeight, 1);
-        if (null !== $height) {
-            $width = (int) \round((float) $height * $ratio);
-        } else {
-            $height = (int) \round((float) $width / $ratio);
-        }
-
-        $this->width = $width;
-        $this->height = $height;
+        $this->size = $this->originalSize->resize($size);
 
         return $this;
     }

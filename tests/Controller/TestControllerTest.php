@@ -16,10 +16,12 @@ namespace App\Tests\Controller;
 use App\Entity\Category;
 use App\Entity\Customer;
 use App\Entity\Group;
+use App\Enums\Importance;
 use App\Model\HttpClientError;
 use App\Repository\CustomerRepository;
 use App\Repository\GroupRepository;
 use App\Service\FontAwesomeService;
+use App\Service\MailerService;
 use App\Service\RecaptchaService;
 use App\Service\SearchService;
 use App\Translator\TranslatorFactory;
@@ -28,6 +30,7 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\UnexpectedResponseException;
 
 final class TestControllerTest extends ControllerTestCase
 {
@@ -77,6 +80,20 @@ final class TestControllerTest extends ControllerTestCase
             Request::METHOD_GET,
             true,
         ];
+    }
+
+    public function testEditorException(): void
+    {
+        $service = $this->createMock(MailerService::class);
+        $service->method('sendNotification')
+            ->willThrowException(new UnexpectedResponseException('Fake Message'));
+        self::setService(MailerService::class, $service);
+        $this->sendMessage(false);
+    }
+
+    public function testEditorSuccess(): void
+    {
+        $this->sendMessage(true);
     }
 
     public function testExportFontAwesome(): void
@@ -220,5 +237,22 @@ final class TestControllerTest extends ControllerTestCase
             SearchService::COLUMN_ENTITY_NAME => 'calculation',
             SearchService::COLUMN_FIELD_NAME => 'id',
         ];
+    }
+
+    private function sendMessage(bool $followRedirect): void
+    {
+        $data = [
+            'form[email]' => 'bibi@bibi.nu',
+            'form[importance]' => Importance::LOW->value,
+            'form[message]' => 'Fake message to be send.',
+        ];
+        $this->checkForm(
+            uri: '/test/editor',
+            id: 'common.button_send',
+            data: $data,
+            userName: self::ROLE_SUPER_ADMIN,
+            followRedirect: $followRedirect,
+            disableReboot: true
+        );
     }
 }

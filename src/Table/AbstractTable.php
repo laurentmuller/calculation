@@ -166,9 +166,10 @@ abstract class AbstractTable implements SortModeInterface
             return [];
         }
 
-        $columns = $this->getColumns();
-
-        return \array_map(fn (EntityInterface|array $entity): array => $this->mapEntity($entity, $columns), $entities);
+        return \array_map(
+            fn (EntityInterface|array $entity): array => $this->mapEntity($entity, $this->getColumns()),
+            $entities
+        );
     }
 
     /**

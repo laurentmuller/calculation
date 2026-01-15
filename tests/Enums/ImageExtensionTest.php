@@ -132,6 +132,14 @@ final class ImageExtensionTest extends TestCase
         yield [ImageExtension::XPM, 'xpm'];
     }
 
+    public function testChangeExtension(): void
+    {
+        $path = __FILE__;
+        $expected = \str_replace('.php', '.png', $path);
+        $actual = ImageExtension::PNG->changeExtension($path);
+        self::assertSame($expected, $actual);
+    }
+
     public function testCount(): void
     {
         self::assertCount(9, ImageExtension::cases());

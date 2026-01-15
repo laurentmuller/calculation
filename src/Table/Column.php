@@ -66,9 +66,7 @@ class Column implements \Stringable, SortModeInterface
     /**
      * The field formatter (server side).
      *
-     * @var ?callable
-     *
-     * @phpstan-var callable(mixed, EntityType): string|null
+     * @var ?callable(mixed, EntityType): string
      */
     private $fieldFormatter;
 
@@ -151,10 +149,8 @@ class Column implements \Stringable, SortModeInterface
             throw new \InvalidArgumentException(\sprintf('The file "%s" contains no definition.', $path));
         }
 
-        $accessor = self::getAccessor();
-
         return \array_map(
-            static fn (array $definition): self => self::mapDefinition($parent, $definition, $accessor),
+            static fn (array $definition): self => self::mapDefinition($parent, $definition, self::getAccessor()),
             $definitions
         );
     }
@@ -210,7 +206,7 @@ class Column implements \Stringable, SortModeInterface
     }
 
     /**
-     * @return callable(mixed, EntityType): string|null
+     * @return ?callable(mixed, EntityType): string
      */
     public function getFieldFormatter(): ?callable
     {
@@ -273,7 +269,7 @@ class Column implements \Stringable, SortModeInterface
     /**
      * Map the given entity or array to a string value using this field.
      *
-     * @phpstan-param EntityType $objectOrArray the entity or array to map
+     * @param EntityType $objectOrArray the entity or array to map
      */
     public function mapValue(EntityInterface|array $objectOrArray): string
     {
@@ -320,7 +316,7 @@ class Column implements \Stringable, SortModeInterface
     }
 
     /**
-     * @param callable(mixed, EntityType): string|null $fieldFormatter
+     * @param ?callable(mixed, EntityType): string $fieldFormatter
      */
     public function setFieldFormatter(?callable $fieldFormatter): self
     {
@@ -388,7 +384,6 @@ class Column implements \Stringable, SortModeInterface
 
     /**
      * @phpstan-param EntityType $objectOrArray
-     * @phpstan-param mixed      $value
      */
     private function formatValue(EntityInterface|array $objectOrArray, mixed $value): string
     {

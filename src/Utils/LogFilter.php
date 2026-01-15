@@ -106,9 +106,9 @@ readonly class LogFilter
         return $this->acceptValue($log->getUser());
     }
 
-    private function acceptValue(?string $haystack): bool
+    private function acceptValue(?string $value): bool
     {
-        return null !== $haystack && false !== \stripos($haystack, $this->searchValue);
+        return null !== $value && false !== \stripos($value, $this->searchValue);
     }
 
     /**

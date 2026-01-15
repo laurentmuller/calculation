@@ -313,6 +313,16 @@ final class PdfTableTest extends TestCase
         self::assertSame(1, $table->getColumnsCount());
     }
 
+    public function testImageCellComputeWidth(): void
+    {
+        $path = __DIR__ . '/../files/images/example.png';
+        $table = $this->createTable()
+            ->addColumn(new PdfColumn());
+        $cell = new PdfImageCell($path, 'Fake text');
+        $width = $cell->computeWidth($table->getParent());
+        self::assertGreaterThan(0, $width);
+    }
+
     public function testImageCellInvalid(): void
     {
         self::expectException(PdfException::class);

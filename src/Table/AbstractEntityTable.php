@@ -133,7 +133,6 @@ abstract class AbstractEntityTable extends AbstractTable
     {
         $results = parent::handleQuery($query);
         $builder = $this->createQueryBuilder();
-        /** @phpstan-var string $alias */
         $alias = $builder->getRootAliases()[0];
         $results->totalNotFiltered = $this->count();
         $results->filtered = $results->totalNotFiltered;
@@ -149,7 +148,7 @@ abstract class AbstractEntityTable extends AbstractTable
             $q->setHint(CountWalker::HINT_DISTINCT, false);
         }
 
-        /** @phpstan-var EntityType[] $entities */
+        /** @var EntityType[] $entities */
         $entities = $q->getResult();
         $this->addSelection($entities, $query, $alias);
         $results->rows = $this->mapEntities($entities);
@@ -196,9 +195,9 @@ abstract class AbstractEntityTable extends AbstractTable
     /**
      * Add the selected entity if any and if it is missing.
      *
-     * @phpstan-param EntityType[]   $entities the entities to search in or to update
-     * @phpstan-param DataQuery      $query    the query to get values from
-     * @phpstan-param string $alias    the entity alias
+     * @param EntityType[] $entities the entities to search in or to update
+     * @param DataQuery    $query    the query to get values from
+     * @param string       $alias    the entity alias
      */
     private function addSelection(array &$entities, DataQuery $query, string $alias): void
     {
@@ -209,13 +208,13 @@ abstract class AbstractEntityTable extends AbstractTable
 
         if ($this->anyMatch(
             $entities,
-            /** @phpstan-param EntityType $current */
+            /** @param EntityType $current */
             fn (EntityInterface|array $current): bool => $id === $this->getEntityId($current)
         )) {
             return;
         }
 
-        /** @phpstan-var EntityType|null $entity */
+        /** @var EntityType|null $entity */
         $entity = $this->createQueryBuilder($alias)
             ->where($alias . '.id = :id')
             ->setParameter('id', $id, Types::INTEGER)
@@ -249,7 +248,7 @@ abstract class AbstractEntityTable extends AbstractTable
     /**
      * Gets the entity identifier.
      *
-     * @phpstan-param EntityType $entity
+     * @param EntityType $entity
      */
     private function getEntityId(array|EntityInterface $entity): ?int
     {

@@ -34,6 +34,6 @@ class UserNamer implements NamerInterface
         $id = (int) $object->getId();
         $name = \sprintf('USER_%06d_%03d', $id, ImageResizer::IMAGE_SIZE);
 
-        return \sprintf('%s.%s', $name, ImageExtension::PNG->value);
+        return ImageExtension::PNG->changeExtension($name);
     }
 }

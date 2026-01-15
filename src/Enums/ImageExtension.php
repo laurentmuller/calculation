@@ -17,6 +17,7 @@ use App\Service\ImageService;
 use Elao\Enum\Attribute\EnumCase;
 use fpdf\Interfaces\PdfEnumDefaultInterface;
 use fpdf\Traits\PdfEnumDefaultTrait;
+use Symfony\Component\Filesystem\Path;
 
 /**
  * Image file extension numeration.
@@ -83,6 +84,14 @@ enum ImageExtension: string implements PdfEnumDefaultInterface
      * The X11 pixmap extension (XPM).
      */
     case XPM = 'xpm';
+
+    /**
+     * Changes the extension of a file path.
+     */
+    public function changeExtension(string $path): string
+    {
+        return Path::changeExtension($path, $this->value);
+    }
 
     /**
      * Create a new image from a file or a URL.

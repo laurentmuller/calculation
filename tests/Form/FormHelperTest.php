@@ -21,6 +21,7 @@ use App\Form\Extension\UrlTypeExtension;
 use App\Form\Extension\VichImageTypeExtension;
 use App\Form\FormHelper;
 use App\Form\Type\CurrentPasswordType;
+use App\Form\Type\CustomColorType;
 use App\Form\Type\PlainType;
 use App\Form\Type\RepeatPasswordType;
 use App\Form\User\UserImageType;
@@ -33,7 +34,6 @@ use Elao\Enum\Bridge\Symfony\Form\Type\EnumType as ElaoEnumType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
@@ -163,20 +163,8 @@ final class FormHelperTest extends TypeTestCase
             ->createForm();
         $this->validateForm(
             form: $form,
-            class: ColorType::class,
+            class: CustomColorType::class,
             attributes: ['class' => 'color-picker']
-        );
-    }
-
-    public function testColorTypeNoPicker(): void
-    {
-        $form = $this->createFormHelper()
-            ->addColorType(false)
-            ->createForm();
-        $this->validateForm(
-            form: $form,
-            class: ColorType::class,
-            attributes: ['class' => null]
         );
     }
 
@@ -843,8 +831,11 @@ final class FormHelperTest extends TypeTestCase
     #[\Override]
     protected function getPreloadedExtensions(): array
     {
+        $colorsPath = __DIR__ . '/../files/json/colors.json';
+
         return [
             new PlainType($this->createMockTranslator()),
+            new CustomColorType($colorsPath),
             $this->createVichImageType(),
         ];
     }

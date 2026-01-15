@@ -139,19 +139,6 @@
         },
 
         /**
-         * Remove this toasts DIV container.
-         *
-         * @returns {Toaster} this instance.
-         */
-        removeContainer: function () {
-            if (this.id) {
-                $(`#${this.id}`).remove();
-                this.id = null;
-            }
-            return this;
-        },
-
-        /**
          * The allowed message types.
          */
         NotificationTypes: {
@@ -318,7 +305,7 @@
          * Gets or creates the toast container div.
          *
          * @param {Object} options - The toast options.
-         * @returns {jQuery} The container of toasts.
+         * @returns {jQuery|any} The container of toasts.
          * @private
          */
         _getContainer: function (options) {
@@ -344,15 +331,6 @@
         },
 
         /**
-         * Return if the dark them is created
-         * @return {boolean}
-         * @private
-         */
-        _isDarkTheme: function () {
-            return document.documentElement.getAttribute('data-bs-theme') === 'dark';
-        },
-
-        /**
          * Return if the title must be created
          * @param {Object} options - The toast options.
          * @return {boolean}
@@ -365,7 +343,7 @@
         /**
          * Append the toast header.
          *
-         * @param {jQuery} $parent - the parent to append the header to.
+         * @param {jQuery|any} $parent - the parent to append the header to.
          * @param {Object} options - The toast options.
          * @private
          */
@@ -388,7 +366,7 @@
         /**
          * Append the header icon.
          *
-         * @param {jQuery} $parent - the parent to append the icon to.
+         * @param {jQuery|any} $parent - the parent to append the icon to.
          * @param {Object} options - The options.
          * @returns {jQuery|undefined} The icon or null if no icon.
          * @private
@@ -436,7 +414,7 @@
         /**
          * Append the header subtitle.
 
-         * @param {jQuery} $parent - the parent to append header subtitle to.
+         * @param {jQuery|any} $parent - the parent to append header subtitle to.
          * @param {Object} options - The toast options.
          * @private
          */
@@ -452,7 +430,7 @@
         /**
          * Append the header close button.
          *
-         * @param {jQuery} $parent - the parent to append close button to.
+         * @param {jQuery|any} $parent - the parent to append close button to.
          * @param {Object} options - The toast options.
          * @private
          */
@@ -479,7 +457,7 @@
         /**
          * Append the header title.
          *
-         * @param {jQuery} $parent - the parent to append header title to.
+         * @param {jQuery|any} $parent - the parent to append header title to.
          * @param {Object} options - The toast options.
          * @private
          */
@@ -494,7 +472,7 @@
         /**
          * Append the toast message.
          *
-         * @param {jQuery} $parent - the parent to append the message to.
+         * @param {jQuery|any} $parent - the parent to append the message to.
          * @param {Object} options - The toast options.
          * @private
          */
@@ -537,7 +515,7 @@
         /**
          * Append the bottom progress bar.
          *
-         * @param {jQuery} $parent - the parent to append progress bar to.
+         * @param {jQuery|any} $parent - the parent to append progress bar to.
          * @param {Object} options - The toast options.
          * @private
          */
@@ -565,7 +543,7 @@
         /**
          * Show the toast.
          *
-         * @param {jQuery} $toast - The toast to show.
+         * @param {jQuery|any} $toast - The toast to show.
          * @param {Object} options - The toast options.
          * @return {Toaster} This instance.
          * @private

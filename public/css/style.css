@@ -93,11 +93,11 @@ footer span {
 
 /* buttons for edit form */
 .btn-form {
-    min-width: 120px;
+    min-width: 120px !important;
 }
 
 .btn-form-sm {
-    min-width: 90px;
+    min-width: 90px !important;;
 }
 
 /* required */

@@ -59,8 +59,9 @@
         {%- set attr = attr|default({})|merge({
             tabindex: -1,
             class: (required ? 'd-table-column must-validate' : 'd-table-column'),
-            'data-custom-text': 'color_picker.custom_text'|trans,
             'data-advanced-text': 'color_picker.advanced_text'|trans,
+            'data-custom-text': 'color_picker.custom_text'|trans,
+            'data-colors': colors|json_encode,
         }) -%}
         {%- set button_attr = {
             type: 'button',

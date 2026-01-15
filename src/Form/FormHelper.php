@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Form;
 
 use App\Form\Type\CurrentPasswordType;
+use App\Form\Type\CustomColorType;
 use App\Form\Type\PlainType;
 use App\Form\Type\RepeatPasswordType;
 use App\Form\User\UserImageType;
@@ -30,7 +31,6 @@ use Symfony\Component\Form\Event\PreSubmitEvent;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
@@ -55,7 +55,6 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Contracts\Translation\TranslatableInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Vich\UploaderBundle\Form\Type\VichImageType;
 
 /**
  * Helper class to add types to a form builder.
@@ -210,17 +209,11 @@ class FormHelper
     }
 
     /**
-     * Add a color type to the builder and reset all values to the default.
-     *
-     * @param bool $colorPicker true to wrap widget to a color-picker
+     * Add a custom color type to the builder and reset all values to the default.
      */
-    public function addColorType(bool $colorPicker = true): self
+    public function addColorType(): self
     {
-        if ($colorPicker) {
-            $this->widgetClass('color-picker');
-        }
-
-        return $this->add(ColorType::class);
+        return $this->add(CustomColorType::class);
     }
 
     /**

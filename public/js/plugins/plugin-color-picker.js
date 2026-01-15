@@ -34,13 +34,13 @@ $(function () {
          * Destructor.
          */
         destroy() {
-            this.$dropdown.off('shown.bs.dropdown', () => this._onDropdownVisible());
-            this.$dropdown.off('show.bs.dropdown', () => this._onDropdownShow());
-            this.$label.off('click', (e) => this._onLabelClick(e));
+            this.$dropdown.off('shown.bs.dropdown', this._onDropdownVisible);
+            this.$dropdown.off('show.bs.dropdown', this._onDropdownShow);
+            this.$label.off('click', this._onLabelClick);
             if (this.$parent) {
                 this.$parent.before(this.$parent).remove();
             }
-            this.$element.off('input', () => this._onElementInput());
+            this.$element.off('input', this._onElementInput);
             this.$element.css('display', 'block').removeData(ColorPicker.NAME);
         }
 
@@ -221,6 +221,7 @@ $(function () {
          */
         _onDropdownVisible() {
             const value = (this.$element.val() || '').toUpperCase();
+            /** @var {jQuery<HTMLElement>|any} $button */
             const $button = this._findButton(`.btn-color[data-value="${value}"]`);
             if ($button) {
                 $button.trigger('focus');
@@ -232,7 +233,7 @@ $(function () {
         /**
          * Handles the custom button click event.
          *
-         * @param {Event} e - the event.
+         * @param {MouseEvent} e - the event.
          * @private
          */
         _onCustomButtonClick(e) {
@@ -244,7 +245,7 @@ $(function () {
         /**
          * Handles the color button click event.
          *
-         * @param {Event} e - the event.
+         * @param {MouseEvent} e - the event.
          * @private
          */
         _onColorButtonClick(e) {
@@ -300,7 +301,7 @@ $(function () {
         /**
          * Handles the label click event.
          *
-         * @param {Event} e - the event.
+         * @param {MouseEvent} e - the event.
          * @private
          */
         _onLabelClick(e) {
@@ -347,6 +348,7 @@ $(function () {
          */
         _getSelection($button) {
             // find button
+            /** @type {Window.jQuery|any} */
             const $selection = this._findButton('.btn-color:focus') || $button;
             if ($selection && $selection.length) {
                 const index = $selection.data('index');
@@ -386,6 +388,7 @@ $(function () {
         _setSelection(selection) {
             const index = selection.row * this.cols + selection.col;
             const selector = `.btn-color[data-index="${index}"]`;
+            /** @var {jQuery<HTMLElement>|any} $button */
             const $button = this._findButton(selector);
             if ($button) {
                 return $button.trigger('focus');
@@ -559,88 +562,26 @@ $(function () {
     // Default options
     // -----------------------------------
     ColorPicker.DEFAULTS = {
-        focus: false, // set focus to the control
-
-        columns: 8, // the number of columns
-        displayText: true, // false to hide text
-
-        // texts
-        customText: 'Custom', // the custom color text
-        advancedText: 'Advanced...', // the advanced button's text
-
-        // tooltip
-        tooltipDisplay: true, // display
-        tooltipPlacement: 'top', // placement
-        tooltipContent: '{name} ({color})', // text format
-        tooltipTrigger: 'hover', // trigger event
-
-        // colors
-        colors: {
-            "Noir": "#000000",
-            "Tundora": "#424242",
-            "Colombe grise": "#636363",
-            "Poussi\u00e8re d'\u00e9toile": "#9C9C94",
-            "Ardoise": "#CEC6CE",
-            "Galerie": "#EFEFEF",
-            "Alb\u00e2tre": "#F7F7F7",
-            "Blanc": "#FFFFFF",
-            "Rouge": "#FF0000",
-            "Pelure d'orange": "#FF9C00",
-            "Jaune": "#FFFF00",
-            "Vert": "#00FF00",
-            "Cyan": "#00FFFF",
-            "Bleu": "#0000FF",
-            "Violet": "#9C00FF",
-            "Magenta": "#FF00FF",
-            "Azal\u00e9e": "#F7C6CE",
-            "Karry": "#FFE7CE",
-            "Blanc d'oeuf": "#FFEFC6",
-            "Zanah": "#D6EFD6",
-            "Botticelli": "#CEDEE7",
-            "Bleu tropical": "#CEE7F7",
-            "Mischka": "#D6D6E7",
-            "Cr\u00e9puscule": "#E7D6DE",
-            "Rose Tonys": "#E79C9C",
-            "Orange p\u00eache": "#FFC69C",
-            "Cr\u00e8me brul\u00e9e": "#FFE79C",
-            "Germes": "#B5D6A5",
-            "Casper": "#A5C6CE",
-            "Perano": "#9CC6EF",
-            "Violet froid": "#B5A5D6",
-            "Rose Careys": "#D6A5BD",
-            "Mandy": "#E76363",
-            "Rajah": "#F7AD6B",
-            "Pissenlit": "#FFD663",
-            "Olivine": "#94BD7B",
-            "Ruisseau": "#73A5AD",
-            "Viking": "#6BADDE",
-            "Blue Marguerite": "#8C7BC6",
-            "Puce": "#C67BA5",
-            "Gardien Rouge": "#CE0000",
-            "Fire Bush": "#E79439",
-            "R\u00eave d'or": "#EFC631",
-            "Concombre": "#6BA54A",
-            "Bleu slim": "#4A7B8C",
-            "Bleu Boston": "#3984C6",
-            "Papillon du Bush": "#634AA5",
-            "Cadillac": "#A54A7B",
-            "Sangria": "#9C0000",
-            "Mai Tai": "#B56308",
-            "Bouddha d'or": "#BD9400",
-            "Vert for\u00eat": "#397B21",
-            "Eden": "#104A5A",
-            "Bleu Venise": "#085294",
-            "M\u00e9t\u00e9orite": "#311873",
-            "Bordeaux": "#731842",
-            "Bois de rose": "#630000",
-            "Cannelle": "#7B3900",
-            "Olive": "#846300",
-            "Persil": "#295218",
-            "Tibre": "#083139",
-            "Bleu Minuit": "#003163",
-            "Valentino": "#21104A",
-            "Loulou": "#4A1031"
-        }
+        // set focus to the control
+        focus: false,
+        // the number of columns
+        columns: 8,
+        // false to hide text
+        displayText: true,
+        // the custom color text
+        customText: 'Custom',
+        // the advanced button's text
+        advancedText: 'Advanced...',
+        // the tooltip displayed
+        tooltipDisplay: true,
+        // the tooltip placement
+        tooltipPlacement: 'top',
+        // the tooltip text format
+        tooltipContent: '{name} ({color})',
+        // the tooltip trigger event
+        tooltipTrigger: 'hover',
+        // the displayed colors
+        colors: {}
     };
 
     /**

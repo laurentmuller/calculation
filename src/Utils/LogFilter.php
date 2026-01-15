@@ -20,9 +20,6 @@ use App\Entity\Log;
  */
 readonly class LogFilter
 {
-    private bool $isFilterChannel;
-    private bool $isFilterLevel;
-    private bool $isFilterValue;
     private string $searchChannel;
     private string $searchLevel;
     private string $searchValue;
@@ -32,14 +29,11 @@ readonly class LogFilter
      * @param string $level   the level to search for
      * @param string $channel the channel to search for
      */
-    public function __construct(string $value, string $level, string $channel)
+    public function __construct(string $value = '', string $level = '', string $channel = '')
     {
         $this->searchValue = \trim($value);
         $this->searchLevel = \trim($level);
         $this->searchChannel = \trim($channel);
-        $this->isFilterValue = '' !== $this->searchValue;
-        $this->isFilterLevel = '' !== $this->searchLevel;
-        $this->isFilterChannel = '' !== $this->searchChannel;
     }
 
     /**
@@ -51,20 +45,28 @@ readonly class LogFilter
      */
     public function filter(array $logs): array
     {
-        if (!self::isFilter($this->searchValue, $this->searchLevel, $this->searchChannel)) {
+        $isChannel = StringUtils::isString($this->searchChannel);
+        $isLevel = StringUtils::isString($this->searchLevel);
+        $isValue = StringUtils::isString($this->searchValue);
+        if (!$isChannel && !$isLevel && !$isValue) {
             return $logs;
         }
-        if ($this->isFilterLevel) {
-            $logs = $this->filterLevel($logs);
-        }
-        if ($this->isFilterChannel) {
-            $logs = $this->filterChannel($logs);
-        }
-        if ($this->isFilterValue) {
-            return $this->filterValue($logs);
+
+        $result = [];
+        foreach ($logs as $log) {
+            if ($isChannel && !$this->matchChannel($log)) {
+                continue;
+            }
+            if ($isLevel && !$this->matchLevel($log)) {
+                continue;
+            }
+            if ($isValue && !$this->matchValue($log)) {
+                continue;
+            }
+            $result[] = $log;
         }
 
-        return $logs;
+        return $result;
     }
 
     /**
@@ -76,14 +78,16 @@ readonly class LogFilter
      *
      * @return bool true if a filter must be applied; false otherwise
      */
-    public static function isFilter(string $value, string $level, string $channel): bool
+    public static function isFilter(string $value = '', string $level = '', string $channel = ''): bool
     {
-        return '' !== \trim($value) || '' !== \trim($level) || '' !== \trim($channel);
+        return null !== StringUtils::trim($value)
+            || null !== StringUtils::trim($level)
+            || null !== StringUtils::trim($channel);
     }
 
     private function acceptChannel(Log $log): bool
     {
-        return !$this->isFilterChannel && $this->acceptValue($log->getChannel());
+        return $this->acceptValue($log->getChannel());
     }
 
     private function acceptDate(Log $log): bool
@@ -93,7 +97,7 @@ readonly class LogFilter
 
     private function acceptLevel(Log $log): bool
     {
-        return !$this->isFilterLevel && $this->acceptValue($log->getLevel());
+        return $this->acceptValue($log->getLevel());
     }
 
     private function acceptMessage(Log $log): bool
@@ -111,52 +115,22 @@ readonly class LogFilter
         return null !== $value && false !== \stripos($value, $this->searchValue);
     }
 
-    /**
-     * Filters the given logs for this channel.
-     *
-     * @param Log[] $logs the logs to search in
-     *
-     * @return Log[] the filtered logs
-     */
-    private function filterChannel(array $logs): array
+    private function matchChannel(Log $log): bool
     {
-        return \array_filter(
-            $logs,
-            fn (Log $log): bool => StringUtils::equalIgnoreCase($this->searchChannel, $log->getChannel())
-        );
+        return StringUtils::equalIgnoreCase($this->searchChannel, $log->getChannel());
     }
 
-    /**
-     * Filters the given logs for this level.
-     *
-     * @param Log[] $logs the logs to search in
-     *
-     * @return Log[] the filtered logs
-     */
-    private function filterLevel(array $logs): array
+    private function matchLevel(Log $log): bool
     {
-        return \array_filter(
-            $logs,
-            fn (Log $log): bool => StringUtils::equalIgnoreCase($this->searchLevel, $log->getLevel())
-        );
+        return StringUtils::equalIgnoreCase($this->searchLevel, $log->getLevel());
     }
 
-    /**
-     * Filter the given logs for this search value.
-     *
-     * @param Log[] $logs the logs to search in
-     *
-     * @return Log[] the filtered logs
-     */
-    private function filterValue(array $logs): array
+    private function matchValue(Log $log): bool
     {
-        return \array_filter(
-            $logs,
-            fn (Log $log): bool => $this->acceptChannel($log)
-            || $this->acceptLevel($log)
-            || $this->acceptDate($log)
-            || $this->acceptMessage($log)
-            || $this->acceptUser($log)
-        );
+        return $this->acceptChannel($log)
+                || $this->acceptLevel($log)
+                || $this->acceptDate($log)
+                || $this->acceptMessage($log)
+                || $this->acceptUser($log);
     }
 }

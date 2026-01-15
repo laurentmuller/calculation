@@ -21,37 +21,31 @@ use Symfony\Component\Clock\DatePoint;
 
 final class LogFilterTest extends TestCase
 {
-    public function testFilterByChannel(): void
+    public function testByChannel(): void
     {
         $log1 = Log::instance(1)
             ->setCreatedAt(new DatePoint('2024-01-01'))
-            ->setChannel('channel');
+            ->setChannel('channel1');
         $log2 = Log::instance(1)
             ->setCreatedAt(new DatePoint('2024-02-02'))
-            ->setChannel('channel');
-        $logs = [$log1, $log2];
-
-        $filter = new LogFilter('', '', 'channel');
-        $filter->filter($logs);
-        self::assertSame([$log1, $log2], $logs);
+            ->setChannel('channel2');
+        $filter = new LogFilter(channel: 'channel1');
+        $this->assertSameLogs($filter, [$log1, $log2], $log1);
     }
 
-    public function testFilterByLevel(): void
+    public function testByLevel(): void
     {
         $log1 = Log::instance(1)
             ->setCreatedAt(new DatePoint('2024-01-01'))
             ->setLevel(PsrLevel::ALERT);
         $log2 = Log::instance(1)
             ->setCreatedAt(new DatePoint('2024-02-02'))
-            ->setLevel(PsrLevel::ALERT);
-        $logs = [$log1, $log2];
-
-        $filter = new LogFilter('', PsrLevel::ALERT, '');
-        $filter->filter($logs);
-        self::assertSame([$log1, $log2], $logs);
+            ->setLevel(PsrLevel::INFO);
+        $filter = new LogFilter(level: PsrLevel::ALERT);
+        $this->assertSameLogs($filter, [$log1, $log2], $log1);
     }
 
-    public function testFilterByMessage(): void
+    public function testByNone(): void
     {
         $log1 = Log::instance(1)
             ->setCreatedAt(new DatePoint('2024-01-01'))
@@ -59,52 +53,52 @@ final class LogFilterTest extends TestCase
         $log2 = Log::instance(1)
             ->setCreatedAt(new DatePoint('2024-02-02'))
             ->setMessage('message');
-        $logs = [$log1, $log2];
-
-        $filter = new LogFilter('message', '', '');
-        $filter->filter($logs);
-        self::assertSame([$log1, $log2], $logs);
+        $filter = new LogFilter();
+        $this->assertSameLogs($filter, [$log1, $log2], $log1, $log2);
     }
 
-    public function testFilterByUser(): void
+    public function testByUser(): void
     {
         $log1 = Log::instance(1)
             ->setCreatedAt(new DatePoint('2024-01-01'))
-            ->setUser('user');
+            ->setUser('user1');
         $log2 = Log::instance(1)
             ->setCreatedAt(new DatePoint('2024-02-02'))
-            ->setUser('user');
-        $logs = [$log1, $log2];
-
-        $filter = new LogFilter('user', '', '');
-        $filter->filter($logs);
-        self::assertSame([$log1, $log2], $logs);
+            ->setUser('user2');
+        $filter = new LogFilter(value: 'user1');
+        $this->assertSameLogs($filter, [$log1, $log2], $log1);
     }
 
-    public function testFilterNone(): void
+    public function testByValue(): void
     {
         $log1 = Log::instance(1)
             ->setCreatedAt(new DatePoint('2024-01-01'))
-            ->setMessage('message');
+            ->setMessage('message1');
         $log2 = Log::instance(1)
             ->setCreatedAt(new DatePoint('2024-02-02'))
-            ->setMessage('message');
-        $logs = [$log1, $log2];
-
-        $filter = new LogFilter('', '', '');
-        $filter->filter($logs);
-        self::assertSame([$log1, $log2], $logs);
+            ->setMessage('message2');
+        $filter = new LogFilter(value: 'message1');
+        $this->assertSameLogs($filter, [$log1, $log2], $log1);
     }
 
     public function testIsFilter(): void
     {
-        $actual = LogFilter::isFilter('', '', '');
+        $actual = LogFilter::isFilter();
         self::assertFalse($actual);
-        $actual = LogFilter::isFilter('value', '', '');
+        $actual = LogFilter::isFilter(value: 'value');
         self::assertTrue($actual);
-        $actual = LogFilter::isFilter('', 'level', '');
+        $actual = LogFilter::isFilter(level: 'level');
         self::assertTrue($actual);
-        $actual = LogFilter::isFilter('', '', 'channel');
+        $actual = LogFilter::isFilter(channel: 'channel');
         self::assertTrue($actual);
+    }
+
+    /**
+     * @param Log[] $logs
+     */
+    private function assertSameLogs(LogFilter $filter, array $logs, Log ...$expected): void
+    {
+        $actual = $filter->filter($logs);
+        self::assertSame($expected, $actual);
     }
 }

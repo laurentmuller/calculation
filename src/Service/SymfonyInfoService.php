@@ -77,10 +77,7 @@ readonly class SymfonyInfoService
      */
     public function getEndOfLife(): string
     {
-        $date = $this->formatMonthYear(Kernel::END_OF_LIFE);
-        $days = $this->getDaysBeforeExpiration(Kernel::END_OF_LIFE);
-
-        return \sprintf('%s (%s)', $date, $days);
+        return $this->formatMonthYear(Kernel::END_OF_LIFE);
     }
 
     /**
@@ -88,10 +85,7 @@ readonly class SymfonyInfoService
      */
     public function getEndOfMaintenance(): string
     {
-        $date = $this->formatMonthYear(Kernel::END_OF_MAINTENANCE);
-        $days = $this->getDaysBeforeExpiration(Kernel::END_OF_MAINTENANCE);
-
-        return \sprintf('%s (%s)', $date, $days);
+        return $this->formatMonthYear(Kernel::END_OF_MAINTENANCE);
     }
 
     /**
@@ -210,17 +204,6 @@ readonly class SymfonyInfoService
     private function formatMonthYear(string $date): string
     {
         return $this->createDate($date)->format('F Y');
-    }
-
-    private function getDaysBeforeExpiration(string $date): string
-    {
-        $today = DateUtils::createDatePoint();
-        $endOfMonth = $this->getEndOfMonth($date);
-        if ($endOfMonth < $today) {
-            return 'Expired';
-        }
-
-        return $today->diff($endOfMonth)->format('%R%a days');
     }
 
     private function getEndOfMonth(string $date): DatePoint

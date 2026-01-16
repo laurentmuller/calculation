@@ -627,7 +627,7 @@ http_error_500:
 http_error_503:
     description: Le service est temporairement indisponible ou en maintenance.
 color_picker:
-    advanced_text: Avancé...
+    advanced_text: Avancé
     custom_text: Personnalisé
 index:
     disabled: <b>%username%</b>, vous ne pouvez pas accéder à ce site car votre profil a été désactivé.<br><br>Veuillez demander à votre supérieur hiérarchique de vous octroyer les droits nécessaires ou à l'administrateur du site de réactiver votre compte.

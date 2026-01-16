@@ -34,13 +34,14 @@ $(function () {
          * Destructor.
          */
         destroy() {
-            this.$dropdown.off('shown.bs.dropdown', this._onDropdownVisible);
-            this.$dropdown.off('show.bs.dropdown', this._onDropdownShow);
-            this.$label.off('click', this._onLabelClick);
+            this.$dropdown.off('shown.bs.dropdown', this.dropdownShowProxy);
+            this.$dropdown.off('show.bs.dropdown', this.dropdownVisibleProxy);
+            this.$dropdown.off('hidden.bs.dropdown', this.dropdownHideProxy);
+            this.$label.off('click.color', this.labelClickProxy);
             if (this.$parent) {
                 this.$parent.before(this.$parent).remove();
             }
-            this.$element.off('input', this._onElementInput);
+            this.$element.off('input.color', this.elementInputProxy);
             this.$element.css('display', 'block').removeData(ColorPicker.NAME);
         }
 
@@ -53,23 +54,26 @@ $(function () {
          * @private
          */
         _init() {
-            const that = this;
-            const $element = that.$element;
+            const $element = this.$element;
             const focused = $element.is(':focus');
-            that.length = Object.keys(that.options.colors).length;
-            that.cols = that.options.columns;
-            that.rows = Math.ceil(that.length / that.cols);
+            this.length = Object.keys(this.options.colors).length;
+            this.cols = this.options.columns;
+            this.rows = Math.ceil(this.length / this.cols);
+            this.$element[0].removeAttribute('data-colors');
 
             // drop-down
-            that._createDropDown();
+            this._createDropDown();
+
+            // proxy
+            this.elementInputProxy = () => this._onElementInput();
 
             // add handler
-            $element.on('input', () => that._onElementInput());
-            that._updateUI();
+            $element.on('input.color', this.elementInputProxy);
+            this._updateUI();
 
             // focus
-            if (focused || that.options.focus) {
-                that._setFocus();
+            if (focused || this.options.focus) {
+                this._setFocus();
             }
         }
 
@@ -78,58 +82,57 @@ $(function () {
          * @private
          */
         _createDropDown() {
-            const that = this;
-            const options = that.options;
-
             // already created?
-            const $existing = that.$element.siblings('[data-bs-toggle="dropdown"]');
+            const $existing = this.$element.siblings('[data-bs-toggle="dropdown"]');
             if ($existing.length) {
-                that.$dropdown = $existing;
-                that.$spanText = $existing.children('.dropdown-text:first');
-                that.$spanColor = $existing.children('.dropdown-color:first');
-                that.$dropdownMenu = $existing.siblings('.dropdown-menu:first');
+                this.$dropdown = $existing;
+                this.$spanText = $existing.children('.dropdown-text:first');
+                this.$spanColor = $existing.children('.dropdown-color:first');
+                this.$dropdownMenu = $existing.siblings('.dropdown-menu:first');
             } else {
                 // parent
-                that.$parent = $('<div/>', {
+                this.$parent = $('<div/>', {
                     'class': 'color-picker-parent'
                 });
-
                 // button
-                that.$dropdown = $('<button/>', {
+                this.$dropdown = $('<button/>', {
                     'type': 'button',
                     'role': 'combobox',
                     'aria-expanded': 'false',
                     'data-bs-toggle': 'dropdown',
                     'class': 'color-picker dropdown-toggle form-control d-flex align-items-center'
-                }).appendTo(that.$parent);
-
+                }).appendTo(this.$parent);
                 // span color
-                that.$spanColor = $('<span/>', {
+                this.$spanColor = $('<span/>', {
                     'class': 'dropdown-color border'
-                }).appendTo(that.$dropdown);
-
+                }).appendTo(this.$dropdown);
                 // span text
-                if (options.displayText) {
-                    that.$spanText = $('<span/>', {
-                        'class': 'dropdown-text flex-fill text-start'
-                    }).appendTo(that.$dropdown);
-                }
-
+                this.$spanText = $('<span/>', {
+                    'class': 'dropdown-text flex-fill text-start'
+                }).appendTo(this.$dropdown);
                 // menu
-                that.$dropdownMenu = $('<div/>', {
+                this.$dropdownMenu = $('<div/>', {
                     'class': 'color-picker dropdown-menu text-center p-2'
-                }).appendTo(that.$parent);
-
+                }).appendTo(this.$parent);
                 // hide the element and add the parent
-                that.$element.css('display', 'table-column').after(that.$parent).prependTo(that.$parent);
+                this.$element.css('display', 'table-column')
+                    .after(this.$parent)
+                    .prependTo(this.$parent);
             }
 
-            that.$label = that.$dropdownMenu.parents('.form-group').children('.form-label:first');
+            this.$label = this.$dropdownMenu.parents('.form-group').children('.form-label:first');
+
+            // proxies
+            this.dropdownShowProxy = () => this._onDropdownShow();
+            this.dropdownVisibleProxy = () => this._onDropdownVisible();
+            this.dropdownHideProxy = () => this._onDropdownHide();
+            this.labelClickProxy = (e) => this._onLabelClick(e);
 
             // add handlers
-            that.$dropdown.on('show.bs.dropdown', () => that._onDropdownShow());
-            that.$dropdown.on('shown.bs.dropdown', () => that._onDropdownVisible());
-            that.$label.on('click', (e) => that._onLabelClick(e));
+            this.$dropdown.on('show.bs.dropdown', this.dropdownShowProxy);
+            this.$dropdown.on('shown.bs.dropdown', this.dropdownVisibleProxy);
+            this.$dropdown.on('hidden.bs.dropdown', this.dropdownHideProxy);
+            this.$label.on('click.color', this.labelClickProxy);
         }
 
         /**
@@ -138,28 +141,24 @@ $(function () {
          */
         _createPalette() {
             // already created?
-            const that = this;
-            if (that.$dropdownMenu.children().length) {
+            if (this.$dropdownMenu.children().length) {
                 return;
             }
 
             // options
-            const options = that.options;
+            const options = this.options;
             const colors = options.colors;
             const columns = options.columns;
+            const titleText = options.titleText;
 
             // default buttons options
             let buttonOptions = {
                 'type': 'button',
                 'class': 'btn btn-color border'
             };
-            if (options.tooltipDisplay) {
-                buttonOptions['data-bs-toggle'] = 'tooltip';
-                buttonOptions['data-bs-trigger'] = options.tooltipTrigger;
-                buttonOptions['data-bs-placement'] = options.tooltipPlacement;
-            }
 
             // colors
+            const that = this;
             Object.keys(colors).forEach(function (name, index) {
                 const color = colors[name];
                 buttonOptions.css = {
@@ -167,8 +166,9 @@ $(function () {
                 };
                 buttonOptions['data-index'] = index;
                 buttonOptions['data-value'] = color;
-                buttonOptions.title = options.tooltipContent.replace('{name}', name).replace('{color}', color);
-                $('<button/>', buttonOptions).appendTo(that.$dropdownMenu);
+                buttonOptions.title = titleText.replace('{name}', name).replace('{color}', color);
+                $('<button/>', buttonOptions)
+                    .appendTo(that.$dropdownMenu);
 
                 // separator
                 if ((index + 1) % columns === 0) {
@@ -177,21 +177,19 @@ $(function () {
             });
 
             // custom button
-            that.$customButton = $('<button/>', {
+            this.$customButton = $('<button/>', {
                 'type': 'button',
                 'text': options.advancedText,
                 'class': 'btn btn-sm btn-outline-secondary mt-1 w-100'
-            }).appendTo(that.$dropdownMenu);
+            }).appendTo(this.$dropdownMenu);
 
-            // tooltip
-            if (options.tooltipDisplay) {
-                that._findButton('.btn-color').tooltip();
-            }
+            // proxies
+            this.customButtonClickProxy = (e) => this._onCustomButtonClick(e);
+            this.colorButtonClickProxy = (e) => this._onColorButtonClick(e);
 
             // add handlers
-            that.$customButton.on('click', (e) => that._onCustomButtonClick(e));
-            that.$dropdownMenu.on('click', '.btn-color', (e) => that._onColorButtonClick(e));
-            that.$dropdownMenu.on('keyup', '.btn-color', (e) => that._onColorButtonKeyUp(e));
+            this.$customButton.on('click.color', this.customButtonClickProxy);
+            this.$dropdownMenu.on('click.color', '.btn-color', this.colorButtonClickProxy);
         }
 
         // -----------------------------
@@ -228,6 +226,20 @@ $(function () {
             } else {
                 this._setSelection({col: 0, row: 0});
             }
+
+            // proxy
+            if (!this.colorButtonKeyUpProxy) {
+                this.colorButtonKeyUpProxy = (e) => this._onColorButtonKeyUp(e);
+            }
+            this.$dropdownMenu.on('keyup.color', 'button.btn-color', this.colorButtonKeyUpProxy);
+        }
+
+        /**
+         * Handles the dropdown hidden event.
+         * @private
+         */
+        _onDropdownHide() {
+            this.$dropdownMenu.off('keyup.color', 'button.btn-color', this.colorButtonKeyUpProxy);
         }
 
         /**
@@ -333,10 +345,7 @@ $(function () {
             /** @type {string} */
             const value = this.$element.val();
             this.$spanColor.css('background-color', value);
-            if (this.$spanText) {
-                const text = this._getColorName(value);
-                this.$spanText.text(text);
-            }
+            this.$spanText.text(this._getColorName(value));
         }
 
         /**
@@ -348,7 +357,7 @@ $(function () {
          */
         _getSelection($button) {
             // find button
-            /** @type {Window.jQuery|any} */
+            /** @type {jQuery|any} */
             const $selection = this._findButton('.btn-color:focus') || $button;
             if ($selection && $selection.length) {
                 const index = $selection.data('index');
@@ -370,7 +379,7 @@ $(function () {
          * Finds color buttons for the given selector.
          *
          * @param {string} selector - the button selector.
-         * @returns {jQuery} the buttons, if found; null otherwise.
+         * @returns {jQuery} the button, if found; null otherwise.
          * @private
          */
         _findButton(selector) {
@@ -399,19 +408,19 @@ $(function () {
         /**
          * Find the name for the given hexadecimal color.
          *
-         * @param {string} color - the hexadecimal color to search for.
+         * @param {?string} color - the hexadecimal color to search for.
          * @returns {string} the color name, if found; the custom text otherwise.
          * @private
          */
         _getColorName(color) {
             color = color || '';
             const colors = this.options.colors;
+            /* @type {string[]} */
             const values = Object.values(colors);
             const index = values.findIndex((value) => value.equalsIgnoreCase(color));
             if (index !== -1) {
                 return Object.keys(colors)[index];
             }
-
             // custom text
             return this.options.customText;
         }
@@ -566,21 +575,13 @@ $(function () {
         focus: false,
         // the number of columns
         columns: 8,
-        // false to hide text
-        displayText: true,
-        // the custom color text
+        // the custom text
         customText: 'Custom',
         // the advanced button's text
         advancedText: 'Advanced...',
-        // the tooltip displayed
-        tooltipDisplay: true,
-        // the tooltip placement
-        tooltipPlacement: 'top',
-        // the tooltip text format
-        tooltipContent: '{name} ({color})',
-        // the tooltip trigger event
-        tooltipTrigger: 'hover',
-        // the displayed colors
+        // the title text format
+        titleText: '{name} ({color})',
+        // the colors to display
         colors: {}
     };
 

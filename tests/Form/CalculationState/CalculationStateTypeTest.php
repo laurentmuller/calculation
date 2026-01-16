@@ -15,6 +15,7 @@ namespace App\Tests\Form\CalculationState;
 
 use App\Entity\CalculationState;
 use App\Form\CalculationState\CalculationStateType;
+use App\Form\Type\CustomColorType;
 use App\Tests\Form\EntityTypeTestCase;
 
 /**
@@ -43,5 +44,15 @@ final class CalculationStateTypeTest extends EntityTypeTestCase
     protected function getFormTypeClass(): string
     {
         return CalculationStateType::class;
+    }
+
+    #[\Override]
+    protected function getPreloadedExtensions(): array
+    {
+        $colorsPath = __DIR__ . '/../../files/json/colors.json';
+
+        return [
+            new CustomColorType($colorsPath),
+        ];
     }
 }

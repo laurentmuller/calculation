@@ -215,7 +215,7 @@ class SymfonyDocument extends AbstractDocument
                 $row++,
                 $route['name'],
                 $route['path'],
-                $route['methods']
+                \implode(', ', $route['methods'])
             );
         }
         $sheet->setAutoSize(1, 2)

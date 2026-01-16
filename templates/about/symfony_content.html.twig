@@ -87,7 +87,20 @@
 <tr>
     <td class="e">{{ route.name }}</td>
     <td class="v">{{ route.path }}</td>
-    <td class="v text-state">{{ route.methods }}</td>
+    <td class="v text-state">
+        {% for method in route.methods %}
+            {% switch method %}
+            {% case 'GET' %}
+                <span class="badge rounded me-1 text-bg-success">{{ method }}</span>
+            {% case 'POST' %}
+                <span class="badge rounded me-1 text-bg-secondary">{{ method }}</span>
+            {% case 'DELETE' %}
+                <span class="badge rounded me-1 text-bg-danger">{{ method }}</span>
+            {% default %}
+                <span class="badge rounded me-1 text-bg-light">{{ method }}</span>
+            {% endswitch %}
+        {% endfor %}
+    </td>
 </tr>
 {%- endmacro rowRoute %}
 {% macro headerNameValue() %}

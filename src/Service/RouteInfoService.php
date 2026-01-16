@@ -26,7 +26,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  *      name: string,
  *      path: string,
  *      debug: bool,
- *      methods: string}
+ *      methods: string[]}
  */
 readonly class RouteInfoService
 {
@@ -104,7 +104,7 @@ readonly class RouteInfoService
             'name' => $name,
             'path' => $route->getPath(),
             'debug' => $this->isDebugRoute($name),
-            'methods' => [] === $methods ? 'ANY' : \implode(', ', $methods),
+            'methods' => [] === $methods ? ['ANY'] : $methods,
         ];
     }
 }

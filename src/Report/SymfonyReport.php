@@ -208,7 +208,7 @@ class SymfonyReport extends AbstractReport
             $table->addRow(
                 $route['name'],
                 $route['path'],
-                $route['methods']
+                \implode(', ', $route['methods'])
             );
         }
     }

@@ -24,7 +24,7 @@ trait ImageSizeTrait
     /**
      * Gets the image size for the given file name.
      *
-     * @throw \InvalidArgumentException if the file does not exist or is not an image
+     * @throws \InvalidArgumentException if the file does not exist or is not an image
      */
     public function getImageSize(string $filename): ImageSize
     {

@@ -92,13 +92,14 @@ class SymfonyReport extends AbstractReport
             ->addColumns(
                 PdfColumn::left('Name', 40),
                 PdfColumn::left('Path', 70),
+                PdfColumn::right('Files', 18, true),
                 PdfColumn::right('Size', 18, true)
             )
             ->setGroupBeforeHeader(true)
             ->setGroupKey('Bundles')
             ->outputHeaders();
         foreach ($bundles as $bundle) {
-            $table->addRow($bundle['name'], $bundle['path'], $bundle['size']);
+            $table->addRow($bundle['name'], $bundle['path'], $bundle['files'], $bundle['size']);
         }
     }
 
@@ -197,8 +198,8 @@ class SymfonyReport extends AbstractReport
         $table = PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
-                PdfColumn::left('Name', 42),
-                PdfColumn::left('Path', 69),
+                PdfColumn::left('Name', 40),
+                PdfColumn::left('Path', 50),
                 PdfColumn::left('Method', 25, true)
             )
             ->setGroupBeforeHeader(true)

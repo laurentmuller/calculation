@@ -15,6 +15,7 @@
 <tr>
     <td class="e">{{ bundle.name }}</td>
     <td class="v">{{ bundle.path }}</td>
+    <td class="v text-percent">{{ bundle.files }}</td>
     <td class="v text-percent">{{ bundle.size }}</td>
 </tr>
 {%- endmacro rowBundle %}
@@ -77,17 +78,17 @@
 {% macro headerRoute() -%}
 <thead>
     <tr>
-        <th>Name</th>
-        <th>Path</th>
-        <th class="v text-state">Method</th>
+        <th class="w-40">Name</th>
+        <th class="w-50">Path</th>
+        <th class="text-category">Method</th>
     </tr>
 </thead>
 {%- endmacro headerRoute %}
 {% macro rowRoute(route) -%}
 <tr>
-    <td class="e">{{ route.name }}</td>
-    <td class="v">{{ route.path }}</td>
-    <td class="v text-state">
+    <td class="w-40">{{ route.name }}</td>
+    <td class="w-50">{{ route.path }}</td>
+    <td class="text-category">
         {% for method in route.methods %}
             {% switch method %}
             {% case 'GET' %}
@@ -198,6 +199,7 @@
                         <tr>
                             <th>Name</th>
                             <th>Path</th>
+                            <th class="text-percent">Files</th>
                             <th class="text-percent">Size</th>
                         </tr>
                     </thead>

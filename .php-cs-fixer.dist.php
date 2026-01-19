@@ -65,7 +65,7 @@ $rules = [
     'header_comment' => ['header' => $comment, 'location' => 'after_open'],
     'phpdoc_to_comment' => [
         'allow_before_return_statement' => true,
-        'ignored_tags' => ['psalm-var', 'psalm-suppress', 'phpstan-var', 'phpstan-param', 'phpstan-ignore'],
+        'ignored_tags' => ['phpstan-var', 'phpstan-param', 'phpstan-ignore'],
     ],
 ];
 

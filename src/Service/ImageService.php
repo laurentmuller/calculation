@@ -127,7 +127,7 @@ class ImageService
      *
      * @param string $filename the path to the image
      *
-     * @throw \InvalidArgumentException if the file extension is not supported or if the image cannot be loaded
+     * @throws \InvalidArgumentException if the file extension is not supported or if the image cannot be loaded
      */
     public static function fromFile(string $filename): self
     {

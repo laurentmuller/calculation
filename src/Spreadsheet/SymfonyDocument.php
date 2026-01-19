@@ -72,12 +72,14 @@ class SymfonyDocument extends AbstractDocument
         $row = $sheet->setHeaders([
             'Name' => HeaderFormat::instance(),
             'Path' => HeaderFormat::instance(),
+            'Files' => HeaderFormat::right(),
             'Size' => HeaderFormat::right(),
         ]);
         foreach ($bundles as $bundle) {
             $sheet->setRowValues($row++, [
                 $bundle['name'],
                 $bundle['path'],
+                $bundle['files'],
                 $bundle['size'],
             ]);
         }

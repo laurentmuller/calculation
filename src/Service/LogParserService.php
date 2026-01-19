@@ -16,7 +16,7 @@ namespace App\Service;
 use App\Entity\Log;
 use App\Model\LogFile;
 use App\Model\LogFileEntry;
-use App\Reader\CSVReader;
+use App\Reader\CsvReader;
 use App\Utils\StringUtils;
 use Psr\Log\LogLevel;
 use Symfony\Component\Clock\DatePoint;
@@ -46,7 +46,8 @@ class LogParserService
     {
         $path = $fileName instanceof LogFileEntry ? $fileName->path : $fileName;
         $file = new LogFile($path);
-        $reader = CSVReader::instance(file: $path, separator: self::SEPARATOR);
+        $service = CsvService::instance(separator: self::SEPARATOR);
+        $reader = CsvReader::instance($path, $service);
         foreach ($reader as $key => $values) {
             if (6 !== \count($values)) {
                 continue;

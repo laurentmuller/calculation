@@ -373,6 +373,10 @@ input[type=number]::-webkit-inner-spin-button {
     width: 35% !important;
 }
 
+.w-40 {
+    width: 40% !important;
+}
+
 .w-60 {
     width: 60% !important;
 }
@@ -758,7 +762,6 @@ span.bottom-border-gradient {
     flex-wrap: wrap !important;
     align-items: start !important;
     gap: 0.25rem 0.5rem !important;
-    -moz-column-gap: 0.5rem !important;
 }
 
 .d-flex-wrap-center {
@@ -766,14 +769,12 @@ span.bottom-border-gradient {
     flex-wrap: wrap !important;
     align-items: center !important;
     gap: 0.25rem 0.5rem !important;
-    -moz-column-gap: 0.5rem !important;
 }
 
 .d-flex-no-wrap-center {
     display: flex !important;
     align-items: center !important;
     column-gap: 0.5rem !important;
-    -moz-column-gap: 0.5rem !important;
 }
 
 .card.card-collapse .card-header {

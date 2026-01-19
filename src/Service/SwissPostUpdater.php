@@ -17,7 +17,7 @@ use App\Database\SwissDatabase;
 use App\Form\FormHelper;
 use App\Model\SwissPostUpdateResult;
 use App\Parameter\ApplicationParameters;
-use App\Reader\CSVReader;
+use App\Reader\CsvReader;
 use App\Traits\LoggerAwareTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Utils\DateUtils;
@@ -81,6 +81,11 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     private const REC_05_STOP_PROCESS = 5;
 
     /**
+     * The CSV separator.
+     */
+    private const SEPARATOR = ';';
+
+    /**
      * The states file.
      */
     private const STATE_FILE = 'swiss_state.csv';
@@ -141,7 +146,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
                 return $result;
             }
             $reader = $this->openReader($result, $archive);
-            if (!$reader instanceof CSVReader) {
+            if (!$reader instanceof CsvReader) {
                 return $result;
             }
             $database = $this->openDatabase($tempFile);
@@ -179,7 +184,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
         $database?->close();
     }
 
-    private function closeReader(?CSVReader $reader): void
+    private function closeReader(?CsvReader $reader): void
     {
         $reader?->close();
     }
@@ -232,7 +237,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
         return $database;
     }
 
-    private function openReader(SwissPostUpdateResult $result, \ZipArchive $archive): ?CSVReader
+    private function openReader(SwissPostUpdateResult $result, \ZipArchive $archive): ?CsvReader
     {
         $name = $archive->getNameIndex(0);
         if (false === $name) {
@@ -253,7 +258,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
             return null;
         }
 
-        return CSVReader::instance(file: $stream, separator: ';');
+        return CsvReader::instance($stream, CsvService::instance(separator: self::SEPARATOR));
     }
 
     /**
@@ -270,7 +275,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
             ]);
     }
 
-    private function processReader(SwissPostUpdateResult $result, SwissDatabase $database, CSVReader $reader): bool
+    private function processReader(SwissPostUpdateResult $result, SwissDatabase $database, CsvReader $reader): bool
     {
         $stop_process = false;
         /** @phpstan-var SwissAddressType $data */
@@ -313,8 +318,8 @@ class SwissPostUpdater implements ServiceSubscriberInterface
         if (!FileUtils::exists($filename) || FileUtils::empty($filename)) {
             return $this->setError($result, 'file_states');
         }
-
-        $reader = CSVReader::instance(file: $filename, separator: ';');
+        $service = CsvService::instance(separator: self::SEPARATOR);
+        $reader = CsvReader::instance($filename, $service);
         /** @phpstan-var array{0: string, 1: string} $data */
         foreach ($reader as $data) {
             $result->addState($database->insertState($data));

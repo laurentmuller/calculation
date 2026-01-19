@@ -385,6 +385,38 @@ final class FileUtils
     }
 
     /**
+     * Gets the size, in bytes, and the number of files for the given directory.
+     *
+     * @return array{size: int, files: int}
+     *
+     * @throws \InvalidArgumentException if the path does not exist or is not a directory
+     */
+    public static function sizeAndFiles(string $path): array
+    {
+        if (!self::exists($path)) {
+            throw new \InvalidArgumentException(\sprintf('Path "%s" does not exist.', $path));
+        }
+        if (!self::isDir($path)) {
+            throw new \InvalidArgumentException(\sprintf('Path "%s" is not a directory.', $path));
+        }
+
+        $size = 0;
+        $files = 0;
+        $finder = Finder::create()->in($path)->files();
+        foreach ($finder as $file) {
+            if ($file->isReadable()) {
+                $size += $file->getSize();
+                ++$files;
+            }
+        }
+
+        return [
+            'size' => $size,
+            'files' => $files,
+        ];
+    }
+
+    /**
      * Create the temporary directory in the given directory with a unique name.
      *
      * @param ?string $dir          the directory where the temporary directory will be created or null to use

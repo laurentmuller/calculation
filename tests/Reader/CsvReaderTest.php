@@ -13,11 +13,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Reader;
 
-use App\Reader\CSVReader;
+use App\Reader\CsvReader;
+use App\Service\CsvService;
 use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 
-final class CSVReaderTest extends TestCase
+final class CsvReaderTest extends TestCase
 {
     private const VALUES_SEP = '|';
 
@@ -35,27 +36,6 @@ final class CSVReaderTest extends TestCase
         $filename = $this->getFileName();
         self::assertFileExists($filename);
         self::assertFileIsReadable($filename);
-    }
-
-    public function testInvalidEnclosure(): void
-    {
-        self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessage('Field enclosure character must be a single byte character.');
-        CSVReader::instance(file: $this->getFileName(), enclosure: 'fake');
-    }
-
-    public function testInvalidEscape(): void
-    {
-        self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessage('Escape character must be a single byte character or an empty string.');
-        CSVReader::instance(file: $this->getFileName(), escape: 'fake');
-    }
-
-    public function testInvalidSeparator(): void
-    {
-        self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessage('Field separator must be a single byte character.');
-        CSVReader::instance(file: $this->getFileName(), separator: 'fake');
     }
 
     public function testIsOpen(): void
@@ -110,7 +90,7 @@ final class CSVReaderTest extends TestCase
         try {
             $resource = \fopen($this->getFileName(), 'r');
             self::assertIsResource($resource);
-            $reader = CSVReader::instance($resource);
+            $reader = CsvReader::instance($resource);
             self::assertTrue($reader->isOpen());
             $reader->close();
         } finally {
@@ -123,7 +103,7 @@ final class CSVReaderTest extends TestCase
     public function testWithFileString(): void
     {
         $file = $this->getFileName();
-        $reader = CSVReader::instance($file);
+        $reader = CsvReader::instance($file);
         self::assertTrue($reader->isOpen());
         $reader->close();
     }
@@ -133,8 +113,11 @@ final class CSVReaderTest extends TestCase
         return __DIR__ . '/../files/csv/data.csv';
     }
 
-    private function getReader(): CSVReader
+    private function getReader(): CsvReader
     {
-        return CSVReader::instance(file: $this->getFileName(), separator: self::VALUES_SEP);
+        $file = $this->getFileName();
+        $service = new CsvService(separator: self::VALUES_SEP);
+
+        return CsvReader::instance($file, $service);
     }
 }

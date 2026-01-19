@@ -17,7 +17,7 @@
 
 {% macro dataRow(calculation, extra_class = '') %}
 {% set extra_class = ('text-nowrap ' ~ (extra_class|default('')))|trim %}
-{% set margin_class = app_params.default.marginBelow(calculation) ? 'text-percent text-danger' : 'text-percent' %}
+{% set margin_class = app_params.marginBelow(calculation) ? 'text-percent text-danger' : 'text-percent' %}
 <tr>
     <td class="text-id text-border state-border-{{ calculation.stateId }}">{{ calculation.id|identifier }}</td>
     <td class="text-state">{{ calculation.state.code }}</td>

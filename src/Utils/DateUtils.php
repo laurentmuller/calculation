@@ -107,7 +107,7 @@ final class DateUtils
     /**
      * Create a date interval.
      *
-     * @throw \InvalidArgumentException if the given duration cannot be parsed as an interval
+     * @throws \InvalidArgumentException if the given duration cannot be parsed as an interval
      */
     public static function createDateInterval(string $duration): \DateInterval
     {

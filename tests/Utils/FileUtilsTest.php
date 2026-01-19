@@ -372,6 +372,30 @@ final class FileUtilsTest extends TestCase
         self::assertGreaterThan(0, $actual);
     }
 
+    public function testSizeAndFiles(): void
+    {
+        $path = __DIR__;
+        $actual = FileUtils::sizeAndFiles($path);
+        self::assertGreaterThan(0, $actual['size']);
+        self::assertGreaterThan(0, $actual['files']);
+    }
+
+    public function testSizeAndFilesNotDirectory(): void
+    {
+        $path = __FILE__;
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage('Path "' . $path . '" is not a directory.');
+        FileUtils::sizeAndFiles($path);
+    }
+
+    public function testSizeAndFilesNotExist(): void
+    {
+        $path = $this->getFakeFile();
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage('Path "' . $path . '" does not exist.');
+        FileUtils::sizeAndFiles($path);
+    }
+
     public function testTempDir(): void
     {
         $actual = FileUtils::tempDir(__DIR__);

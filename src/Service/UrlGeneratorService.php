@@ -53,7 +53,7 @@ class UrlGeneratorService
         // index page
         IndexController::PARAM_CUSTOM,
         IndexController::PARAM_RESTRICT,
-        // bootstrap-table
+        // table
         TableInterface::PARAM_ID,
         TableInterface::PARAM_SEARCH,
         TableInterface::PARAM_SORT,

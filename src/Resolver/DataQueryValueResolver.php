@@ -151,7 +151,6 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
      */
     private function updateQuery(DataQuery $query, InputBag $inputBag): void
     {
-        /** @var string[] $keys */
         $keys = $inputBag->keys();
         foreach ($keys as $key) {
             match ($key) {

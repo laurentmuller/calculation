@@ -146,13 +146,11 @@ class PhpIniReport extends AbstractReport
      */
     private function sortEntries(array &$entries): void
     {
-        \uksort($entries, static function (string $a, string $b) use ($entries): int {
-            $result = \is_array($entries[$a]) <=> \is_array($entries[$b]);
-            if (0 !== $result) {
-                return $result;
-            }
-
-            return \strcasecmp($a, $b);
-        });
+        \uksort(
+            $entries,
+            // @phpstan-ignore ternary.shortNotAllowed
+            static fn (string $a, string $b): int => \is_array($entries[$a]) <=> \is_array($entries[$b])
+                ?: \strcasecmp($a, $b)
+        );
     }
 }

@@ -44,12 +44,8 @@ class LogFileEntry implements \Stringable, ComparableInterface
     #[\Override]
     public function compare(ComparableInterface $other): int
     {
-        $value = $this->isDeprecation() <=> $other->isDeprecation();
-        if (0 !== $value) {
-            return $value;
-        }
-
-        return $this->date <=> $other->date;
+        // @phpstan-ignore ternary.shortNotAllowed
+        return $this->isDeprecation() <=> $other->isDeprecation() ?: $this->date <=> $other->date;
     }
 
     /**

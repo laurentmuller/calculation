@@ -293,19 +293,10 @@ class HelpService
      */
     private function compareDialogs(array $a, array $b): int
     {
-        $result = \strnatcmp($a['group'], $b['group']);
-        if (0 !== $result) {
-            return $result;
-        }
-
-        $idA = $a['id'];
-        $idB = $b['id'];
-        $result = \str_ends_with($idB, '.list.title') <=> \str_ends_with($idA, '.list.title');
-        if (0 !== $result) {
-            return $result;
-        }
-
-        return \strnatcmp($this->trans($idA), $this->trans($idB));
+        /** @phpstan-ignore-next-line */
+        return \strnatcmp($a['group'], $b['group'])
+            ?: \str_ends_with($b['id'], '.list.title') <=> \str_ends_with($a['id'], '.list.title')
+            ?: \strnatcmp($this->trans($a['id']), $this->trans($b['id']));
     }
 
     /**

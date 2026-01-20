@@ -518,11 +518,7 @@ class SchemaService
      */
     private function sortIndexes(array $a, array $b): int
     {
-        $result = $b['primary'] <=> $a['primary'];
-        if (0 !== $result) {
-            return $result;
-        }
-
-        return $a['name'] <=> $b['name'];
+        // @phpstan-ignore ternary.shortNotAllowed
+        return $b['primary'] <=> $a['primary'] ?: $a['name'] <=> $b['name'];
     }
 }

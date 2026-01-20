@@ -67,9 +67,8 @@ class Log extends AbstractEntity implements ComparableInterface
     #[\Override]
     public function compare(ComparableInterface $other): int
     {
-        $result = $this->createdAt <=> $other->createdAt;
-
-        return 0 !== $result ? $result : $this->id <=> $other->id;
+        // @phpstan-ignore ternary.shortNotAllowed
+        return $this->createdAt <=> $other->createdAt ?: $this->id <=> $other->id;
     }
 
     public static function formatDate(DatePoint $date): string

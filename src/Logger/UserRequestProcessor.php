@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Logger;
 
+use App\Service\LogSorterService;
 use Monolog\LogRecord;
 use Monolog\Processor\ProcessorInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -32,7 +33,7 @@ readonly class UserRequestProcessor implements ProcessorInterface
     {
         $user = $this->security->getUser();
         if ($user instanceof UserInterface) {
-            $record->extra['user'] = $user->getUserIdentifier();
+            $record->extra[LogSorterService::COLUMN_USER] = $user->getUserIdentifier();
         }
 
         return $record;

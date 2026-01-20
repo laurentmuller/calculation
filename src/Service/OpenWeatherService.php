@@ -538,11 +538,12 @@ class OpenWeatherService extends AbstractHttpClientService
      */
     private function sortResults(array &$results): void
     {
-        \uksort($results, static function (string|int $keyA, string|int $keyB) use ($results): int {
-            $result = \is_array($results[$keyA]) <=> \is_array($results[$keyB]);
-
-            return 0 !== $result ? $result : $keyA <=> $keyB;
-        });
+        \uksort(
+            $results,
+            // @phpstan-ignore ternary.shortNotAllowed
+            static fn (string|int $keyA, string|int $keyB): int => \is_array($results[$keyA]) <=> \is_array($results[$keyB])
+                ?: $keyA <=> $keyB
+        );
 
         foreach ($results as &$value) {
             if (\is_array($value)) {

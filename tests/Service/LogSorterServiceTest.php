@@ -11,20 +11,20 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Utils;
+namespace App\Tests\Service;
 
 use App\Entity\Log;
-use App\Utils\LogSorter;
+use App\Service\LogSorterService;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
 use Symfony\Component\Clock\DatePoint;
 
-final class LogSorterTest extends TestCase
+final class LogSorterServiceTest extends TestCase
 {
     public function testIsDefaultSort(): void
     {
-        self::assertTrue(LogSorter::isDefaultSort('createdAt', false));
-        self::assertFalse(LogSorter::isDefaultSort('message', true));
+        self::assertTrue(LogSorterService::isDefaultSort('createdAt', false));
+        self::assertFalse(LogSorterService::isDefaultSort('message', true));
     }
 
     public function testSortByChannel(): void
@@ -35,7 +35,7 @@ final class LogSorterTest extends TestCase
             ->setChannel('ChannelB');
         $logs = [$log1, $log2];
 
-        $sorter = new LogSorter('channel', true);
+        $sorter = LogSorterService::instance('channel', true);
         $sorter->sort($logs);
         self::assertSame([$log1, $log2], $logs);
     }
@@ -50,7 +50,7 @@ final class LogSorterTest extends TestCase
             ->setChannel('ChannelA');
         $logs = [$log1, $log2];
 
-        $sorter = new LogSorter('channel', true);
+        $sorter = LogSorterService::instance('channel', true);
         $sorter->sort($logs);
         self::assertSame([$log1, $log2], $logs);
     }
@@ -63,7 +63,7 @@ final class LogSorterTest extends TestCase
             ->setCreatedAt(new DatePoint('2024-02-02'));
         $logs = [$log1, $log2];
 
-        $sorter = new LogSorter('createdAt', true);
+        $sorter = LogSorterService::instance('createdAt', true);
         $sorter->sort($logs);
         self::assertSame([$log1, $log2], $logs);
     }
@@ -76,7 +76,7 @@ final class LogSorterTest extends TestCase
             ->setLevel(LogLevel::DEBUG);
         $logs = [$log1, $log2];
 
-        $sorter = new LogSorter('level', true);
+        $sorter = LogSorterService::instance('level', true);
         $sorter->sort($logs);
         self::assertSame([$log1, $log2], $logs);
     }
@@ -89,7 +89,7 @@ final class LogSorterTest extends TestCase
             ->setMessage('Message 2');
         $logs = [$log1, $log2];
 
-        $sorter = new LogSorter('message', true);
+        $sorter = LogSorterService::instance('message', true);
         $sorter->sort($logs);
         self::assertSame([$log1, $log2], $logs);
     }
@@ -102,7 +102,7 @@ final class LogSorterTest extends TestCase
             ->setUser('user2');
         $logs = [$log1, $log2];
 
-        $sorter = new LogSorter('user', true);
+        $sorter = LogSorterService::instance('user', true);
         $sorter->sort($logs);
         self::assertSame([$log1, $log2], $logs);
     }
@@ -110,7 +110,7 @@ final class LogSorterTest extends TestCase
     public function testSortEmpty(): void
     {
         $logs = [];
-        $sorter = new LogSorter('createdAt', false);
+        $sorter = LogSorterService::instance('createdAt', false);
         $sorter->sort($logs);
         self::assertSame([], $logs);
     }
@@ -121,7 +121,7 @@ final class LogSorterTest extends TestCase
             ->setCreatedAt(new DatePoint());
         $logs = [$log, $log];
 
-        $sorter = new LogSorter('channel', false);
+        $sorter = LogSorterService::instance('channel', false);
         $sorter->sort($logs);
         self::assertSame([$log, $log], $logs);
     }

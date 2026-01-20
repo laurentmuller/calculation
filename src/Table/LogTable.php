@@ -17,10 +17,10 @@ use App\Entity\Log;
 use App\Model\LogChannel;
 use App\Model\LogFile;
 use App\Model\LogLevel;
+use App\Service\LogFilterService;
 use App\Service\LogService;
+use App\Service\LogSorterService;
 use App\Utils\FileUtils;
-use App\Utils\LogFilter;
-use App\Utils\LogSorter;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
@@ -138,13 +138,12 @@ class LogTable extends AbstractTable implements \Countable
         $search = $query->search;
         $level = $this->getQueryLevel($query);
         $channel = $this->getQueryChannel($query);
-        if (LogFilter::isFilter($search, $level, $channel)) {
-            $filter = new LogFilter($search, $level, $channel);
-
-            return $filter->filter($entities);
+        if (!LogFilterService::isFilter($search, $level, $channel)) {
+            return $entities;
         }
 
-        return $entities;
+        return LogFilterService::instance($search, $level, $channel)
+            ->filter($entities);
     }
 
     private function getQueryChannel(DataQuery $query): string
@@ -193,13 +192,13 @@ class LogTable extends AbstractTable implements \Countable
      */
     private function sort(DataQuery $query, array &$entities): void
     {
-        /** @phpstan-var ''|LogSorter::COLUMN_* $field */
+        /** @phpstan-var ''|LogSorterService::COLUMN_* $field */
         $field = $query->sort;
         $ascending = self::SORT_ASC === $query->order;
-        if ('' === $field || LogSorter::isDefaultSort($field, $ascending)) {
+        if ('' === $field || LogSorterService::isDefaultSort($field, $ascending)) {
             return;
         }
-        $sorter = new LogSorter($field, $ascending);
-        $sorter->sort($entities);
+        LogSorterService::instance($field, $ascending)
+            ->sort($entities);
     }
 }

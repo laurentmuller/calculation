@@ -11,15 +11,15 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Utils;
+namespace App\Tests\Service;
 
 use App\Entity\Log;
-use App\Utils\LogFilter;
+use App\Service\LogFilterService;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel as PsrLevel;
 use Symfony\Component\Clock\DatePoint;
 
-final class LogFilterTest extends TestCase
+final class LogFilterServiceTest extends TestCase
 {
     public function testByChannel(): void
     {
@@ -29,7 +29,7 @@ final class LogFilterTest extends TestCase
         $log2 = Log::instance(1)
             ->setCreatedAt(new DatePoint('2024-02-02'))
             ->setChannel('channel2');
-        $filter = new LogFilter(channel: 'channel1');
+        $filter = LogFilterService::instance(channel: 'channel1');
         $this->assertSameLogs($filter, [$log1, $log2], $log1);
     }
 
@@ -41,7 +41,7 @@ final class LogFilterTest extends TestCase
         $log2 = Log::instance(1)
             ->setCreatedAt(new DatePoint('2024-02-02'))
             ->setLevel(PsrLevel::INFO);
-        $filter = new LogFilter(level: PsrLevel::ALERT);
+        $filter = LogFilterService::instance(level: PsrLevel::ALERT);
         $this->assertSameLogs($filter, [$log1, $log2], $log1);
     }
 
@@ -53,7 +53,7 @@ final class LogFilterTest extends TestCase
         $log2 = Log::instance(1)
             ->setCreatedAt(new DatePoint('2024-02-02'))
             ->setMessage('message');
-        $filter = new LogFilter();
+        $filter = LogFilterService::instance();
         $this->assertSameLogs($filter, [$log1, $log2], $log1, $log2);
     }
 
@@ -65,7 +65,7 @@ final class LogFilterTest extends TestCase
         $log2 = Log::instance(1)
             ->setCreatedAt(new DatePoint('2024-02-02'))
             ->setUser('user2');
-        $filter = new LogFilter(value: 'user1');
+        $filter = LogFilterService::instance(value: 'user1');
         $this->assertSameLogs($filter, [$log1, $log2], $log1);
     }
 
@@ -77,26 +77,26 @@ final class LogFilterTest extends TestCase
         $log2 = Log::instance(1)
             ->setCreatedAt(new DatePoint('2024-02-02'))
             ->setMessage('message2');
-        $filter = new LogFilter(value: 'message1');
+        $filter = LogFilterService::instance(value: 'message1');
         $this->assertSameLogs($filter, [$log1, $log2], $log1);
     }
 
     public function testIsFilter(): void
     {
-        $actual = LogFilter::isFilter();
+        $actual = LogFilterService::isFilter();
         self::assertFalse($actual);
-        $actual = LogFilter::isFilter(value: 'value');
+        $actual = LogFilterService::isFilter(value: 'value');
         self::assertTrue($actual);
-        $actual = LogFilter::isFilter(level: 'level');
+        $actual = LogFilterService::isFilter(level: 'level');
         self::assertTrue($actual);
-        $actual = LogFilter::isFilter(channel: 'channel');
+        $actual = LogFilterService::isFilter(channel: 'channel');
         self::assertTrue($actual);
     }
 
     /**
      * @param Log[] $logs
      */
-    private function assertSameLogs(LogFilter $filter, array $logs, Log ...$expected): void
+    private function assertSameLogs(LogFilterService $filter, array $logs, Log ...$expected): void
     {
         $actual = $filter->filter($logs);
         self::assertSame($expected, $actual);

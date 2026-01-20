@@ -11,14 +11,15 @@
 
 declare(strict_types=1);
 
-namespace App\Utils;
+namespace App\Service;
 
 use App\Entity\Log;
+use App\Utils\StringUtils;
 
 /**
  * Class to filter logs.
  */
-readonly class LogFilter
+readonly class LogFilterService
 {
     private string $searchChannel;
     private string $searchLevel;
@@ -67,6 +68,18 @@ readonly class LogFilter
         }
 
         return $result;
+    }
+
+    /**
+     * Creates a new instance.
+     *
+     * @param string $value   the value to search for
+     * @param string $level   the level to search for
+     * @param string $channel the channel to search for
+     */
+    public static function instance(string $value = '', string $level = '', string $channel = ''): self
+    {
+        return new self($value, $level, $channel);
     }
 
     /**

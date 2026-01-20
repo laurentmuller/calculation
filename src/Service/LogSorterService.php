@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace App\Utils;
+namespace App\Service;
 
 use App\Entity\Log;
 
 /**
  * Class to sort logs.
  */
-readonly class LogSorter
+readonly class LogSorterService
 {
     // sortable field names
     private const COLUMN_CHANNEL = 'channel';
@@ -35,6 +35,19 @@ readonly class LogSorter
      */
     public function __construct(private string $field, private bool $ascending)
     {
+    }
+
+    /**
+     * Creates a new instance.
+     *
+     * @param string $field     the field to sort
+     * @param bool   $ascending true to sort in ascending mode false to sort in descending mode
+     *
+     * @phpstan-param self::COLUMN_* $field
+     */
+    public static function instance(string $field, bool $ascending): self
+    {
+        return new self($field, $ascending);
     }
 
     /**

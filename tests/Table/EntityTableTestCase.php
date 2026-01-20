@@ -106,8 +106,6 @@ abstract class EntityTableTestCase extends TestCase
      * @phpstan-param MockObject&TRepository $repository
      *
      * @phpstan-return TEntityTable
-     *
-     * @phpstan-ignore-next-line
      */
     abstract protected function createTable(MockObject&AbstractRepository $repository): AbstractEntityTable;
 

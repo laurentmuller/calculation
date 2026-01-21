@@ -27,8 +27,8 @@ interface ComparableInterface
      *
      * @phpstan-param TComparable $other
      *
-     * @return int<-1, 1> 0 if this instance is equal to the other instance, -1 if this instance is less than the other
-     *                    instance and 1 if this instance is greater than the other instance
+     * @return int 0 if this instance is equal to the other instance, -1 if this instance is less than the other
+     *             instance and 1 if this instance is greater than the other instance
      */
     public function compare(self $other): int;
 }

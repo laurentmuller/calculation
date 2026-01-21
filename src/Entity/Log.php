@@ -15,6 +15,7 @@ namespace App\Entity;
 
 use App\Interfaces\ComparableInterface;
 use App\Interfaces\UserInterface;
+use App\Traits\ClosureSortTrait;
 use App\Traits\LogChannelTrait;
 use App\Traits\LogLevelTrait;
 use App\Utils\DateUtils;
@@ -36,6 +37,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Log extends AbstractEntity implements ComparableInterface
 {
+    use ClosureSortTrait;
     use LogChannelTrait;
     use LogLevelTrait;
 
@@ -67,8 +69,12 @@ class Log extends AbstractEntity implements ComparableInterface
     #[\Override]
     public function compare(ComparableInterface $other): int
     {
-        // @phpstan-ignore ternary.shortNotAllowed
-        return $this->createdAt <=> $other->createdAt ?: $this->id <=> $other->id;
+        return $this->compareByClosures(
+            $this,
+            $other,
+            static fn (Log $a, Log $b): int => $a->createdAt <=> $b->createdAt,
+            static fn (Log $a, Log $b): int => $a->id <=> $b->id,
+        );
     }
 
     public static function formatDate(DatePoint $date): string

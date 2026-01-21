@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Model;
 
 use App\Interfaces\ComparableInterface;
+use App\Traits\ClosureSortTrait;
 use Symfony\Component\Clock\DatePoint;
 
 /**
@@ -23,6 +24,8 @@ use Symfony\Component\Clock\DatePoint;
  */
 class LogFileEntry implements \Stringable, ComparableInterface
 {
+    use ClosureSortTrait;
+
     /**
      * @param string    $name the log file name
      * @param string    $path the log file path
@@ -44,8 +47,12 @@ class LogFileEntry implements \Stringable, ComparableInterface
     #[\Override]
     public function compare(ComparableInterface $other): int
     {
-        // @phpstan-ignore ternary.shortNotAllowed
-        return $this->isDeprecation() <=> $other->isDeprecation() ?: $this->date <=> $other->date;
+        return $this->compareByClosures(
+            $this,
+            $other,
+            static fn (LogFileEntry $a, LogFileEntry $b): int => $a->isDeprecation() <=> $b->isDeprecation(),
+            static fn (LogFileEntry $a, LogFileEntry $b): int => $a->date <=> $b->date,
+        );
     }
 
     /**

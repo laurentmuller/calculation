@@ -35,14 +35,11 @@ trait CollectionTrait
      */
     public function getReverseSortedCollection(Collection $collection): array
     {
-        if ($collection->isEmpty()) {
-            return [];
-        }
-        if (1 === $collection->count()) {
-            return $collection->toArray();
-        }
-
-        return $this->sortReverseComparable($collection->toArray());
+        return match ($collection->count()) {
+            0 => [],
+            1 => $collection->toArray(),
+            default => $this->sortReverseComparable($collection->toArray()),
+        };
     }
 
     /**
@@ -57,13 +54,10 @@ trait CollectionTrait
      */
     public function getSortedCollection(Collection $collection): array
     {
-        if ($collection->isEmpty()) {
-            return [];
-        }
-        if (1 === $collection->count()) {
-            return $collection->toArray();
-        }
-
-        return $this->sortComparable($collection->toArray());
+        return match ($collection->count()) {
+            0 => [],
+            1 => $collection->toArray(),
+            default => $this->sortComparable($collection->toArray()),
+        };
     }
 }

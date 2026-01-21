@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Traits\ArrayTrait;
+use App\Traits\ClosureSortTrait;
 use App\Traits\TranslatorTrait;
 use App\Utils\FileUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -87,6 +88,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class HelpService
 {
     use ArrayTrait;
+    use ClosureSortTrait;
     use TranslatorTrait;
 
     /**
@@ -287,27 +289,6 @@ class HelpService
         \uasort($array, static fn (array $a, array $b): int => ($a['name'] ?? '') <=> ($b['name'] ?? ''));
     }
 
-    /**
-     * @phpstan-param HelpDialogType $a
-     * @phpstan-param HelpDialogType $b
-     */
-    private function compareDialogs(array $a, array $b): int
-    {
-        /** @phpstan-ignore-next-line */
-        return \strnatcmp($a['group'], $b['group'])
-            ?: \str_ends_with($b['id'], '.list.title') <=> \str_ends_with($a['id'], '.list.title')
-            ?: \strnatcmp($this->trans($a['id']), $this->trans($b['id']));
-    }
-
-    /**
-     * @phpstan-param HelpEntityType $a
-     * @phpstan-param HelpEntityType $b
-     */
-    private function compareEntities(array $a, array $b): int
-    {
-        return ($a['name'] ?? '') <=> ($b['name'] ?? '');
-    }
-
     private function decodeJson(string $filename): array
     {
         $path = Path::join($this->jsonPath, $filename);
@@ -371,7 +352,13 @@ class HelpService
             $dialog['group'] = $this->trans($dialog['group']);
             $dialog['name'] = $this->trans($dialog['name'] ?? $dialog['id']);
         }
-        \uasort($dialogs, $this->compareDialogs(...));
+
+        $this->sortByClosures(
+            $dialogs,
+            static fn (array $a, array $b): int => \strnatcmp($a['group'], $b['group']),
+            static fn (array $a, array $b): int => \str_ends_with($b['id'], '.list.title') <=> \str_ends_with($a['id'], '.list.title'),
+            fn (array $a, array $b): int => \strnatcmp($this->trans($a['id']), $this->trans($b['id'])),
+        );
     }
 
     /**
@@ -383,6 +370,9 @@ class HelpService
             $entity['id'] = $key;
             $entity['name'] = $this->trans($entity['id'] . '.name');
         }
-        \uasort($entities, $this->compareEntities(...));
+        \uasort(
+            $entities,
+            static fn (array $a, array $b): int => \strnatcmp($a['name'] ?? '', $b['name'] ?? '')
+        );
     }
 }

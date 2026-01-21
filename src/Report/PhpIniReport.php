@@ -19,6 +19,7 @@ use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Service\PhpInfoService;
+use App\Traits\ClosureSortTrait;
 
 /**
  * Report for php.ini.
@@ -28,6 +29,8 @@ use App\Service\PhpInfoService;
  */
 class PhpIniReport extends AbstractReport
 {
+    use ClosureSortTrait;
+
     public function __construct(AbstractController $controller, private readonly PhpInfoService $service)
     {
         parent::__construct($controller);
@@ -146,11 +149,10 @@ class PhpIniReport extends AbstractReport
      */
     private function sortEntries(array &$entries): void
     {
-        \uksort(
+        $this->sortKeysByClosures(
             $entries,
-            // @phpstan-ignore ternary.shortNotAllowed
-            static fn (string $a, string $b): int => \is_array($entries[$a]) <=> \is_array($entries[$b])
-                ?: \strcasecmp($a, $b)
+            static fn (string $a, string $b): int => \is_array($entries[$a]) <=> \is_array($entries[$b]),
+            static fn (string $a, string $b): int => \strcasecmp($a, $b)
         );
     }
 }

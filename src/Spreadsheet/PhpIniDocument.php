@@ -15,6 +15,7 @@ namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
 use App\Service\PhpInfoService;
+use App\Traits\ClosureSortTrait;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
@@ -28,6 +29,8 @@ use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
  */
 class PhpIniDocument extends AbstractDocument
 {
+    use ClosureSortTrait;
+
     public function __construct(AbstractController $controller, private readonly PhpInfoService $service)
     {
         parent::__construct($controller);
@@ -164,11 +167,10 @@ class PhpIniDocument extends AbstractDocument
      */
     private function sortEntries(array &$entries): void
     {
-        \uksort(
+        $this->sortKeysByClosures(
             $entries,
-            // @phpstan-ignore ternary.shortNotAllowed
-            static fn (string $a, string $b): int => \is_array($entries[$a]) <=> \is_array($entries[$b])
-                ?: \strcasecmp($a, $b)
+            static fn (string $a, string $b): int => \is_array($entries[$a]) <=> \is_array($entries[$b]),
+            static fn (string $a, string $b): int => \strcasecmp($a, $b)
         );
     }
 

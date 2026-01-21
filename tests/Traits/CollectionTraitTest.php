@@ -40,11 +40,11 @@ final class CollectionTraitTest extends TestCase
 
         $collection = $this->createCollection($product);
         $actual = $this->getSortedCollection($collection);
-        self::assertSame([$product], $actual);
+        self::assertSame([0 => $product], $actual);
 
         $collection = $this->createCollection($product);
         $actual = $this->getReverseSortedCollection($collection);
-        self::assertSame([$product], $actual);
+        self::assertSame([0 => $product], $actual);
     }
 
     public function testReverseSorted(): void
@@ -64,7 +64,7 @@ final class CollectionTraitTest extends TestCase
         $collection = $this->createCollection($product1, $product2);
 
         $actual = $this->getSortedCollection($collection);
-        self::assertSame([$product1, $product2], $actual);
+        self::assertSame([0 => $product1, 1 => $product2], $actual);
     }
 
     /**

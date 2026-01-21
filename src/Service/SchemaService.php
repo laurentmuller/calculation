@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Traits\ArrayTrait;
+use App\Traits\ClosureSortTrait;
 use App\Utils\StringUtils;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
@@ -68,6 +69,7 @@ use Symfony\Contracts\Cache\CacheInterface;
 class SchemaService
 {
     use ArrayTrait;
+    use ClosureSortTrait;
 
     // Query to get records and sizes for MySQL platform
     private const SQL_ALL = <<<SQL
@@ -337,7 +339,11 @@ class SchemaService
             ];
         }, $indexes);
 
-        \usort($results, $this->sortIndexes(...));
+        $this->sortByClosures(
+            $results,
+            static fn (array $a, array $b): int => $b['primary'] <=> $a['primary'],
+            static fn (array $a, array $b): int => $a['name'] <=> $b['name']
+        );
 
         return $results;
     }
@@ -508,17 +514,5 @@ class SchemaService
             \array_keys($this->getMetaDatas()),
             static fn (string $value): bool => StringUtils::equalIgnoreCase($value, $name)
         ) ?? \strtolower($name);
-    }
-
-    /**
-     * Compare indexes by primary keys in reverse order, then by names.
-     *
-     * @phpstan-param SchemaIndexType $a
-     * @phpstan-param SchemaIndexType $b
-     */
-    private function sortIndexes(array $a, array $b): int
-    {
-        // @phpstan-ignore ternary.shortNotAllowed
-        return $b['primary'] <=> $a['primary'] ?: $a['name'] <=> $b['name'];
     }
 }

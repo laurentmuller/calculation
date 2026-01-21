@@ -14,12 +14,15 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Log;
+use App\Traits\ClosureSortTrait;
 
 /**
  * Class to sort logs.
  */
 readonly class LogSorterService
 {
+    use ClosureSortTrait;
+
     /**
      * The channel column name.
      */
@@ -86,7 +89,7 @@ readonly class LogSorterService
      */
     public function sort(array &$logs): bool
     {
-        if (\count($logs) <= 1 || self::isDefaultSort($this->field, $this->ascending)) {
+        if (\count($logs) < 2 || self::isDefaultSort($this->field, $this->ascending)) {
             return false;
         }
 
@@ -95,31 +98,37 @@ readonly class LogSorterService
             self::COLUMN_LEVEL => $this->getLevelSorter(),
             self::COLUMN_MESSAGE => $this->getMessageSorter(),
             self::COLUMN_USER => $this->getUserSorter(),
-            default => $this->getDateSorter(), // date
+            default => $this->getDateSorter(),
         };
 
-        return \uasort($logs, $sorter);
+        if ($sorter instanceof \Closure) {
+            return \uasort($logs, $sorter);
+        }
+
+        return $this->sortByClosures($logs, ...$sorter);
     }
 
     /**
      * @param callable(Log): ?string $callable
      *
-     * @return \Closure(Log, Log): int
+     * @return array<\Closure(Log, Log): int>
      */
-    private function createSorter(callable $callable): \Closure
+    private function createSorter(callable $callable): array
     {
         $order = $this->ascending ? 1 : -1;
 
-        // @phpstan-ignore ternary.shortNotAllowed
-        return static fn (Log $a, Log $b): int => $order * ($callable($a) <=> $callable($b)) ?: $b->compare($a);
+        return [
+            static fn (Log $a, Log $b): int => $order * ($callable($a) <=> $callable($b)),
+            static fn (Log $a, Log $b): int => $b->compare($a),
+        ];
     }
 
     /**
      * Compare by channel, date descending and identifier descending.
      *
-     * @return \Closure(Log, Log): int
+     * @return array<\Closure(Log, Log): int>
      */
-    private function getChannelSorter(): \Closure
+    private function getChannelSorter(): array
     {
         return $this->createSorter(static fn (Log $log): string => $log->getChannel());
     }
@@ -137,9 +146,9 @@ readonly class LogSorterService
     /**
      * Compare by level, date descending and identifier descending.
      *
-     * @return \Closure(Log, Log): int
+     * @return array<\Closure(Log, Log): int>
      */
-    private function getLevelSorter(): \Closure
+    private function getLevelSorter(): array
     {
         return $this->createSorter(static fn (Log $log): string => $log->getLevel());
     }
@@ -147,9 +156,9 @@ readonly class LogSorterService
     /**
      * Compare by message, date descending and identifier descending.
      *
-     * @return \Closure(Log, Log): int
+     * @return array<\Closure(Log, Log): int>
      */
-    private function getMessageSorter(): \Closure
+    private function getMessageSorter(): array
     {
         return $this->createSorter(static fn (Log $log): string => $log->getMessage());
     }
@@ -157,9 +166,9 @@ readonly class LogSorterService
     /**
      * Compare by user, date descending and identifier descending.
      *
-     * @return \Closure(Log, Log): int
+     * @return array<\Closure(Log, Log): int>
      */
-    private function getUserSorter(): \Closure
+    private function getUserSorter(): array
     {
         return $this->createSorter(static fn (Log $log): ?string => $log->getUser());
     }

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Enums\OpenWeatherUnits;
+use App\Traits\ClosureSortTrait;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,6 +31,8 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  */
 class OpenWeatherService extends AbstractHttpClientService
 {
+    use ClosureSortTrait;
+
     /**
      * The number of daily results to return.
      */
@@ -538,11 +541,10 @@ class OpenWeatherService extends AbstractHttpClientService
      */
     private function sortResults(array &$results): void
     {
-        \uksort(
+        $this->sortKeysByClosures(
             $results,
-            // @phpstan-ignore ternary.shortNotAllowed
-            static fn (string|int $keyA, string|int $keyB): int => \is_array($results[$keyA]) <=> \is_array($results[$keyB])
-                ?: $keyA <=> $keyB
+            static fn (string|int $keyA, string|int $keyB): int => \is_array($results[$keyA]) <=> \is_array($results[$keyB]),
+            static fn (string|int $keyA, string|int $keyB): int => $keyA <=> $keyB
         );
 
         foreach ($results as &$value) {

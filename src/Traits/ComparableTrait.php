@@ -21,7 +21,7 @@ use App\Interfaces\ComparableInterface;
 trait ComparableTrait
 {
     /**
-     * Sort the given array of comparable.
+     * Sort the given array of comparable and maintain index association.
      *
      * @template TKey of array-key
      * @template TValue of ComparableInterface
@@ -32,7 +32,7 @@ trait ComparableTrait
      */
     public function sortComparable(array $values): array
     {
-        if ([] !== $values) {
+        if (\count($values) > 1) {
             \uasort($values, static fn (ComparableInterface $a, ComparableInterface $b): int => $a->compare($b));
         }
 
@@ -40,7 +40,7 @@ trait ComparableTrait
     }
 
     /**
-     * Sort the given array of comparable in reverse order.
+     * Sort the given array of comparable in reverse order and maintain index association.
      *
      * @template TKey of array-key
      * @template TValue of ComparableInterface
@@ -51,7 +51,7 @@ trait ComparableTrait
      */
     public function sortReverseComparable(array $values): array
     {
-        if ([] !== $values) {
+        if (\count($values) > 1) {
             \uasort($values, static fn (ComparableInterface $a, ComparableInterface $b): int => $b->compare($a));
         }
 

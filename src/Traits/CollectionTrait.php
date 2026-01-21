@@ -17,47 +17,32 @@ use App\Interfaces\ComparableInterface;
 use Doctrine\Common\Collections\Collection;
 
 /**
- * Trait for collections.
+ * Trait to sort collections of {@link ComparableInterface} values.
  */
 trait CollectionTrait
 {
     use ComparableTrait;
 
     /**
-     * Sort, in reverse order, the given collection of comparable.
+     * Sort the given collection of comparable and maintain index association.
      *
      * @template TKey of array-key
      * @template TValue of ComparableInterface
      *
      * @param Collection<TKey, TValue> $collection the collection to sort
-     *
-     * @return array<TKey, TValue> the sorted values in reverse order
-     */
-    public function getReverseSortedCollection(Collection $collection): array
-    {
-        return match ($collection->count()) {
-            0 => [],
-            1 => $collection->toArray(),
-            default => $this->sortReverseComparable($collection->toArray()),
-        };
-    }
-
-    /**
-     * Sort the given collection of comparable.
-     *
-     * @template TKey of array-key
-     * @template TValue of ComparableInterface
-     *
-     * @param Collection<TKey, TValue> $collection the collection to sort
+     * @param bool                     $reverse    <code>true</code> to sort in descending (reverse) mode,
+     *                                             <code>false</code> (default) to sort in ascending mode
      *
      * @return array<TKey, TValue> the sorted values
      */
-    public function getSortedCollection(Collection $collection): array
+    public function getSortedCollection(Collection $collection, bool $reverse = false): array
     {
-        return match ($collection->count()) {
-            0 => [],
-            1 => $collection->toArray(),
-            default => $this->sortComparable($collection->toArray()),
-        };
+        $values = $collection->toArray();
+        if (\count($values) < 2) {
+            return $values;
+        }
+        $this->sortComparable($values, $reverse);
+
+        return $values;
     }
 }

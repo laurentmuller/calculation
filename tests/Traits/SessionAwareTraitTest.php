@@ -32,7 +32,19 @@ final class SessionAwareTraitTest extends AwareTraitTestCase
         self::assertSame($expected, $actual);
     }
 
-    public function testGetSessionDateInt(): void
+    public function testGetSessionDateAsDate(): void
+    {
+        $date = new DatePoint();
+        $session = $this->createMock(Session::class);
+        $session->method('get')
+            ->willReturn($date);
+        $this->initializeRequestStack($session);
+        $actual = $this->getSessionDate('date');
+        self::assertInstanceOf(DatePoint::class, $actual);
+        self::assertSame($date->getTimestamp(), $actual->getTimestamp());
+    }
+
+    public function testGetSessionDateAsInt(): void
     {
         $session = $this->createMock(Session::class);
         $session->method('get')

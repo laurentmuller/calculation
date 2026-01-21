@@ -10,22 +10,32 @@
 {% block table_responsive_class '' %}
 {# properties #}
 {% block property_body %}
-{{ property('log.fields.createdAt', item.formattedDate) }}
-{%- if item.doctrineMessage -%}
-    {{ property('log.fields.message', item.message|var_export_sql) }}
-{%- else -%}
-    {{ property('log.fields.message', item.message, 'text-break') }}
-{%- endif -%}
-{{ property('log.fields.level', include('macros/_cell_log_level.html.twig', {log: item})) }}
-{{ property('log.fields.channel', include('macros/_cell_log_channel.html.twig', {log: item})) }}
-{% if item.user %}
-    {{ property('log.fields.user', item.user) }}
-{% endif %}
-{% if item.context|length %}
-    {{ property('log.fields.context', item.context|var_export_php) }}
-{% endif %}
+    {{ property('log.fields.createdAt', item.formattedDate) }}
+    {%- if item.doctrineMessage -%}
+        {{ property('log.fields.message', item.message|var_export_sql) }}
+    {%- else -%}
+        {{ property('log.fields.message', item.message, 'text-break') }}
+    {%- endif -%}
+    {{ property('log.fields.level', include('macros/_cell_log_level.html.twig', {log: item})) }}
+    {{ property('log.fields.channel', include('macros/_cell_log_channel.html.twig', {log: item})) }}
+    {% if item.user %}
+        {{ property('log.fields.user', item.user) }}
+    {% endif %}
+    {% if item.context %}
+        <tr>
+            <td colspan="2">
+                <a class="drop-down-icon-right text-body collapsed d-flex" href="#context" data-bs-toggle="collapse"
+                   data-bs-target="#context" aria-controls="context" aria-expanded="false">
+                    <span class="w-100">{{- 'log.fields.context'|trans -}}</span>
+                </a>
+            </td>
+        </tr>
+        <tr id="context" class="collapse">
+            <td colspan="2">{{ item.context|var_export_php }}</td>
+        </tr>
+    {% endif %}
 {% endblock property_body %}
 {# stylesheets #}
 {% block stylesheets %}
-{{ asset_css('css/table_log.css') }}
+    {{ asset_css('css/table_log.css') }}
 {% endblock stylesheets %}

@@ -106,9 +106,9 @@ class LogFile implements \Countable
     public function sort(): self
     {
         if (!$this->isEmpty()) {
-            $this->logs = $this->sortReverseComparable($this->logs);
-            $this->channels = $this->sortComparable($this->channels);
-            $this->levels = $this->sortReverseComparable($this->levels);
+            $this->sortComparable($this->logs, true);
+            $this->sortComparable($this->channels);
+            $this->sortComparable($this->levels, true);
         }
 
         return $this;

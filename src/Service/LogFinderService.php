@@ -54,8 +54,9 @@ class LogFinderService
             $date = $this->getDate($name, (int) $file->getMTime());
             $results[$name] = LogFileEntry::instance($name, $path, $date);
         }
+        $this->sortComparable($results);
 
-        return $this->sortComparable($results);
+        return $results;
     }
 
     private function createFinder(): Finder

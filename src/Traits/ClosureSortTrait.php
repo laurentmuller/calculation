@@ -44,14 +44,16 @@ trait ClosureSortTrait
      *
      * @param array<TKey, TValue>           $array       the array to sort
      * @param \Closure(TValue, TValue): int ...$closures the closures to use for comparison
+     *
+     * @return bool true if the given array contains more than 1 value and closures are not empty
      */
     public function sortByClosures(array &$array, \Closure ...$closures): bool
     {
-        if (\count($array) > 1 && [] !== $closures) {
-            return \uasort($array, fn (mixed $a, mixed $b): int => $this->compareByClosures($a, $b, ...$closures));
+        if (\count($array) < 2 || [] === $closures) {
+            return false;
         }
 
-        return false;
+        return \uasort($array, fn (mixed $a, mixed $b): int => $this->compareByClosures($a, $b, ...$closures));
     }
 
     /**
@@ -62,13 +64,15 @@ trait ClosureSortTrait
      *
      * @param array<TKey, TValue>       $array       the array to sort
      * @param \Closure(TKey, TKey): int ...$closures the closures to use for comparison
+     *
+     * @return bool true if the given array contains more than 1 value and closures are not empty
      */
     public function sortKeysByClosures(array &$array, \Closure ...$closures): bool
     {
-        if (\count($array) > 1 && [] !== $closures) {
-            return \uksort($array, fn (mixed $a, mixed $b): int => $this->compareByClosures($a, $b, ...$closures));
+        if (\count($array) < 2 || [] === $closures) {
+            return false;
         }
 
-        return false;
+        return \uksort($array, fn (mixed $a, mixed $b): int => $this->compareByClosures($a, $b, ...$closures));
     }
 }

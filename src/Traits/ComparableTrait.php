@@ -26,35 +26,21 @@ trait ComparableTrait
      * @template TKey of array-key
      * @template TValue of ComparableInterface
      *
-     * @param array<TKey, TValue> $values the values to sort
+     * @param array<TKey, TValue> $values  the values to sort
+     * @param bool                $reverse <code>true</code> to sort in descending (reverse) mode,
+     *                                     <code>false</code> (default) to sort in ascending mode
      *
-     * @return array<TKey, TValue> $values the sorted values
+     * @return bool true if the given array contains more than 1 values
      */
-    public function sortComparable(array $values): array
+    public function sortComparable(array &$values, bool $reverse = false): bool
     {
-        if (\count($values) > 1) {
-            \uasort($values, static fn (ComparableInterface $a, ComparableInterface $b): int => $a->compare($b));
+        if (\count($values) < 2) {
+            return false;
+        }
+        if ($reverse) {
+            return \uasort($values, static fn (ComparableInterface $a, ComparableInterface $b): int => $b->compare($a));
         }
 
-        return $values;
-    }
-
-    /**
-     * Sort the given array of comparable in reverse order and maintain index association.
-     *
-     * @template TKey of array-key
-     * @template TValue of ComparableInterface
-     *
-     * @param array<TKey, TValue> $values the values to sort
-     *
-     * @return array<TKey, TValue> $values the sorted values, in reverse order
-     */
-    public function sortReverseComparable(array $values): array
-    {
-        if (\count($values) > 1) {
-            \uasort($values, static fn (ComparableInterface $a, ComparableInterface $b): int => $b->compare($a));
-        }
-
-        return $values;
+        return \uasort($values, static fn (ComparableInterface $a, ComparableInterface $b): int => $a->compare($b));
     }
 }

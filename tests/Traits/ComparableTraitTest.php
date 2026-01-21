@@ -23,10 +23,14 @@ final class ComparableTraitTest extends TestCase
 
     public function testEmptyArray(): void
     {
-        $values = $this->sortComparable($this->createArray());
+        $values = $this->createArray();
+        $actual = $this->sortComparable($values);
+        self::assertFalse($actual);
         self::assertSame([], $values);
 
-        $values = $this->sortReverseComparable($this->createArray());
+        $values = $this->createArray();
+        $actual = $this->sortComparable($values, true);
+        self::assertFalse($actual);
         self::assertSame([], $values);
     }
 
@@ -34,10 +38,14 @@ final class ComparableTraitTest extends TestCase
     {
         $product = $this->createProduct('description1');
 
-        $values = $this->sortComparable($this->createArray($product));
+        $values = $this->createArray($product);
+        $actual = $this->sortComparable($values);
+        self::assertFalse($actual);
         self::assertSame([$product], $values);
 
-        $values = $this->sortReverseComparable($this->createArray($product));
+        $values = $this->createArray($product);
+        $actual = $this->sortComparable($values, true);
+        self::assertFalse($actual);
         self::assertSame([$product], $values);
     }
 
@@ -45,17 +53,19 @@ final class ComparableTraitTest extends TestCase
     {
         $product1 = $this->createProduct('description1');
         $product2 = $this->createProduct('description2');
-
-        $values = $this->sortComparable($this->createArray($product1, $product2));
+        $values = $this->createArray($product1, $product2);
+        $actual = $this->sortComparable($values);
+        self::assertTrue($actual);
         self::assertSame([$product1, $product2], $values);
     }
 
-    public function testSortReverseComparable(): void
+    public function testSortComparableReverse(): void
     {
         $product1 = $this->createProduct('description1');
         $product2 = $this->createProduct('description2');
-
-        $values = $this->sortReverseComparable($this->createArray($product1, $product2));
+        $values = $this->createArray($product1, $product2);
+        $actual = $this->sortComparable($values, true);
+        self::assertTrue($actual);
         self::assertSame([1 => $product2, 0 => $product1], $values);
     }
 

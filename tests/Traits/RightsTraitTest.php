@@ -32,6 +32,13 @@ final class RightsTraitTest extends FlagBagTestCase implements RoleInterface
         $this->rights = null;
     }
 
+    public function testGetPermissions(): void
+    {
+        $actual = $this->getPermissions();
+        $expected = \count(EntityName::cases());
+        self::assertCount($expected, $actual);
+    }
+
     public function testOverwrite(): void
     {
         self::assertFalse($this->isOverwrite());

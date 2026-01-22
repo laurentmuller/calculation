@@ -104,10 +104,11 @@ abstract class AbstractParameters
     {
         $saved = false;
         $properties = $this->loadProperties();
+        $repository = $this->getRepository();
         $defaultParameters = $this->getDefaultParameters();
         $parameters = \array_filter($this->getParameters());
         foreach ($parameters as $key => $parameter) {
-            if ($this->saveParameter($properties, $parameter, $defaultParameters[$key] ?? null)) {
+            if ($this->saveParameter($properties, $repository, $parameter, $defaultParameters[$key] ?? null)) {
                 $saved = true;
             }
         }
@@ -290,7 +291,7 @@ abstract class AbstractParameters
     }
 
     /**
-     * @param TParameter $parameter
+     * @phpstan-param TParameter $parameter
      *
      * @return MetaData[]
      */
@@ -345,16 +346,17 @@ abstract class AbstractParameters
     }
 
     /**
-     * @phpstan-param array<string, TProperty> $properties
+     * @param array<string, TProperty>      $properties
+     * @param AbstractRepository<TProperty> $repository
      */
     private function saveParameter(
         array &$properties,
+        AbstractRepository $repository,
         ParameterInterface $parameter,
         ?ParameterInterface $defaultParameter = null
     ): bool {
         $changed = false;
         $accessor = $this->getAccessor();
-        $repository = $this->getRepository();
         $metaDatas = $this->getMetaDatas($parameter);
 
         foreach ($metaDatas as $metaData) {

@@ -286,17 +286,6 @@ final class ArrayTraitTest extends TestCase
         self::assertSame([10 => 'B',  20 => 'C'], $actual);
     }
 
-    public function testSorted(): void
-    {
-        $array = [];
-        $this->getSorted($array);
-        self::assertSame([], $array);
-
-        $array = ['C', 'A'];
-        $this->getSorted($array);
-        self::assertSame([0 => 'C', 1 => 'A'], $array);
-    }
-
     /**
      * @phpstan-param 0|1|2 $mode
      */

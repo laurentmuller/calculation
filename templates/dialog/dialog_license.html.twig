@@ -5,9 +5,7 @@
      data-load-error="{{ 'about.licence.not_loaded'|trans }}">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
-                {{- modal_title('modal-license-title', 'book-open-reader', 'about.licence.title', dialog_id) -}}
-            </div>
+            {{- modal_title(id: 'modal-license-title', title_icon: 'book-open-reader', title_text: 'about.licence.title', data_target: dialog_id) -}}
             <div class="modal-body">
                 <div class="border pre-scrollable scrollbar-thin">
                     <div id="license-content" class="modal-data p-2 overflow-hidden"></div>
@@ -15,7 +13,7 @@
             </div>
             <div class="modal-footer justify-content-start">
                 {{ button_copy(target: '#license-content', class: 'btn-primary', hide_modal: true) }}
-                {{- modal_close_button(for_header: false, data_target: dialog_id) }}
+                {{- modal_close_button(data_target: dialog_id) }}
             </div>
         </div>
     </div>

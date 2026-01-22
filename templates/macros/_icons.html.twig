@@ -128,18 +128,28 @@
 {{- _self.linkExternal(app_owner_url, 'footer.copyright', class, null, 'footer.copyright_title', parameters) -}}
 {%- endmacro copyright_link %}
 
-{% macro modal_title(id, icon_title, text_title, data_target = false) %}
-    <h5 class="modal-title"{% if id %} id="{{ id }}{% endif %}">{{ _self.icon(icon_title, text_title) }}</h5>
-    {{- _self.modal_close_button(data_target: data_target) -}}
+{% macro modal_title(id, title_icon, title_text, data_target = false, header_class = null) %}
+    <div class="modal-header{% if header_class %} {{ header_class }}{% endif %}">
+        <h5 class="modal-title"{% if id %} id="{{ id }}{% endif %}">
+            {{- _self.icon(title_icon, title_text) -}}
+        </h5>
+        {{- _self.modal_close_button(for_header: true, data_target: data_target) -}}
+    </div>
 {% endmacro modal_title %}
 
-{% macro modal_close_button(for_header = true, label = null, data_target = false) -%}
-{% set text = (label|default('common.button_close'))|trans %}
+{% macro modal_footer(label = null, data_target = false) %}
+    <div class="modal-footer">
+        {{ _self.modal_close_button(label: label, data_target: data_target) }}
+    </div>
+{% endmacro modal_footer %}
+
+{% macro modal_close_button(for_header = false, label = null, data_target = false) -%}
+{% set label = label|default('common.button_close')|trans %}
 {% if for_header %}
-    <button type="button" class="btn-close" data-bs-dismiss="modal"{% if data_target %} data-bs-target="#{{ data_target }}"{% endif %} aria-label="{{ text }}" title="{{ text }}"></button>
+    <button type="button"{% if data_target %} data-bs-target="#{{ data_target }}"{% endif %} data-bs-dismiss="modal" class="btn-close" title="{{ label }}"></button>
 {% else %}
-    <button type="button" class="btn btn-form btn-secondary" data-bs-dismiss="modal"{% if data_target %} data-bs-target="#{{ data_target }}"{% endif %}>
-        {{- text -}}
+    <button type="button"{% if data_target %} data-bs-target="#{{ data_target }}"{% endif %} data-bs-dismiss="modal" class="btn btn-form btn-secondary">
+        {{- label -}}
     </button>
 {% endif %}
 {%- endmacro modal_close_button %}

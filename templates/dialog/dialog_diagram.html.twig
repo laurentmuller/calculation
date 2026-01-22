@@ -4,9 +4,7 @@
 <div id="{{ dialog_id }}" class="modal fade" tabindex="-1" aria-labelledby="modal-data-title" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
-                {{- modal_title('modal-data-title', 'code', 'diagram.content', dialog_id) -}}
-            </div>
+            {{- modal_title(id: 'modal-data-title', title_icon: 'code', title_text: 'diagram.content', data_target: dialog_id) -}}
             <div class="modal-body">
                 <div class="border pre-scrollable scrollbar-thin font-monospace p-2">
                     <pre id="diagram-data"></pre>
@@ -14,7 +12,7 @@
             </div>
             <div class="modal-footer justify-content-start">
                 {{ button_copy(target: '#diagram-data', class: 'btn-primary', hide_modal: true) }}
-                {{- modal_close_button(for_header: false, data_target: dialog_id) }}
+                {{- modal_close_button(data_target: dialog_id) }}
             </div>
         </div>
     </div>

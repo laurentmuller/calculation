@@ -13,9 +13,9 @@
     <div class="modal-dialog modal-lg">
        <div class="modal-content">
             <form id="{{ form_prefix }}_form" autocomplete="off" data-add="{{ add_title }}" data-edit="{{ edit_title }}"{{ attributes(form_attr) }}>
-                <div class="modal-header cursor-move">
+                <div class="modal-header">
                     <h5 class="modal-title" id="{{ dialog_id }}">{{ icon(dialog_icon ~ ' me-1') }}<span class="dialog-title">{{ edit_title }}</span></h5>
-                    {{- modal_close_button(data_target: dialog_id) }}
+                    {{- modal_close_button(for_header: true, data_target: dialog_id) }}
                 </div>
                 <div class="modal-body">
                     {% block modal_body %}{% endblock modal_body %}

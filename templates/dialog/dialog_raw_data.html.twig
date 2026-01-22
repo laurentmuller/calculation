@@ -6,9 +6,7 @@
 <div class="modal modal-raw-data fade" id="{{ dialog_id }}" tabindex="-1" aria-labelledby="modal-data-title" aria-hidden="true">
     <div class="modal-dialog{% if raw_data %} modal-lg{% endif %}">
         <div class="modal-content{% if not raw_data %} border-danger{% endif %}">
-            <div class="modal-header{% if not raw_data %} text-bg-danger{% endif %}">
-                {{- modal_title('modal-data-title', 'code', 'dialog_raw_data.title', dialog_id) -}}
-            </div>
+            {{- modal_title(id: 'modal-data-title', title_icon: 'code', title_text: 'dialog_raw_data.title', data_target: dialog_id, header_class: raw_data ? 'text-bg-danger' : null) -}}
             <div class="modal-body">
             {%- if raw_data -%}
                 {% if description is defined and description %}
@@ -27,7 +25,7 @@
                 {% if raw_data and allow_copy is defined and allow_copy %}
                     {{ button_copy(target: '#' ~ raw_data_id, class: 'btn-primary', hide_modal: true) }}
                 {% endif %}
-                {{- modal_close_button(for_header: false, data_target: dialog_id) }}
+                {{- modal_close_button(data_target: dialog_id) }}
             </div>
         </div>
     </div>

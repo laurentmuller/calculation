@@ -1,5 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
-{% from 'macros/_icons.html.twig' import link, homepage, sitemap, modal_title, modal_close_button %}
+{% from 'macros/_icons.html.twig' import link, homepage, sitemap, modal_title, modal_footer %}
 {# macro #}
 {% macro add_line_info(name, value) -%}
 <tr>
@@ -44,9 +44,7 @@
 <div class="modal fade" id="modal-result" tabindex="-1" aria-labelledby="modal-result-title" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
-                {{ modal_title('modal-result-title', title_icon, title) }}
-            </div>
+            {{ modal_title(id: 'modal-result-title', title_icon: title_icon, title_text: title) }}
             <div class="modal-body">
                 <span class="form-label">{{ 'product.result.updated'|trans }}</span>
                 <div class="overflow-auto table-fixed-header scrollbar-thin border">
@@ -78,9 +76,7 @@
                     </table>
                 </div>
             </div>
-            <div class="modal-footer">
-                {{- modal_close_button(false) -}}
-            </div>
+            {{- modal_footer() -}}
         </div>
     </div>
 </div>

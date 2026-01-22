@@ -34,9 +34,7 @@
 <div class="modal fade" id="modal-result" tabindex="-1" aria-labelledby="modal-generate-title" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <div class="modal-header">
-                {{ modal_title('modal-generate-title', title_icon, title) }}
-            </div>
+            {{ modal_title(id: 'modal-generate-title', title_icon: title_icon, title_text: title) }}
             <div class="modal-body">
                 <span class="form-label fw-bold">{{ 'generate.result_text'|trans }}</span>
                 <div id="overflow" class="overflow-auto table-fixed-header scrollbar-thin border">
@@ -48,7 +46,7 @@
             <div class="modal-footer">
                 <div class="d-flex-wrap flex-fill">
                     <div class="me-auto">
-                        {{ modal_close_button(false) }}
+                        {{ modal_close_button() }}
                     </div>
                     <p id="simulated" class="small mb-0 d-none">{{ 'simulate.message'|trans }}</p>
                 </div>

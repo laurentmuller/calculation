@@ -14,9 +14,7 @@
         <div class="modal fade" id="modal-cache-list" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        {{ modal_title(text_title: 'clear_cache.list') }}
-                    </div>
+                    {{ modal_title(title_text: 'clear_cache.list') }}
                     <div class="modal-body p-2">
                         <div id="accordion-cache" class="accordion accordion-flush accordion-no-background p-2">
                             {% for key, pool in pools %}
@@ -48,7 +46,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        {{- modal_close_button(false) -}}
+                        {{- modal_close_button() -}}
                         {% if pools_length %}
                             <span class="ms-auto">{{ 'clear_cache.count'|trans({'%count%': pools_length|integer}) }}</span>
                         {% endif %}

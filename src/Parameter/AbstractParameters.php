@@ -103,10 +103,11 @@ abstract class AbstractParameters
     public function save(): bool
     {
         $saved = false;
+        $properties = $this->loadProperties();
         $defaultParameters = $this->getDefaultParameters();
         $parameters = \array_filter($this->getParameters());
         foreach ($parameters as $key => $parameter) {
-            if ($this->saveParameter($parameter, $defaultParameters[$key] ?? null)) {
+            if ($this->saveParameter($properties, $parameter, $defaultParameters[$key] ?? null)) {
                 $saved = true;
             }
         }
@@ -191,7 +192,7 @@ abstract class AbstractParameters
     abstract protected function getRepository(): AbstractRepository;
 
     /**
-     * @return TProperty[]
+     * @return array<string, TProperty>
      */
     abstract protected function loadProperties(): array;
 
@@ -238,7 +239,7 @@ abstract class AbstractParameters
         $metaDatas = $this->getMetaDatas($parameter);
 
         foreach ($metaDatas as $metaData) {
-            $property = $this->findProperty($properties, $metaData->name);
+            $property = $properties[$metaData->name] ?? null;
             if ($property instanceof AbstractProperty) {
                 $value = $this->getPropertyValue($metaData, $property);
             } else {
@@ -250,16 +251,6 @@ abstract class AbstractParameters
         }
 
         return $parameter;
-    }
-
-    /**
-     * @param TProperty[] $properties
-     *
-     * @return TProperty|null
-     */
-    private function findProperty(array $properties, string $name): ?AbstractProperty
-    {
-        return \array_find($properties, static fn (AbstractProperty $property): bool => $name === $property->getName());
     }
 
     private function getAccessor(): PropertyAccessor
@@ -353,33 +344,42 @@ abstract class AbstractParameters
         };
     }
 
-    private function saveParameter(ParameterInterface $parameter, ?ParameterInterface $defaultParameter = null): bool
-    {
+    /**
+     * @phpstan-param array<string, TProperty> $properties
+     */
+    private function saveParameter(
+        array &$properties,
+        ParameterInterface $parameter,
+        ?ParameterInterface $defaultParameter = null
+    ): bool {
         $changed = false;
         $accessor = $this->getAccessor();
         $repository = $this->getRepository();
-        $properties = $this->loadProperties();
         $metaDatas = $this->getMetaDatas($parameter);
 
         foreach ($metaDatas as $metaData) {
-            $property = $this->findProperty($properties, $metaData->name);
+            $name = $metaData->name;
+            $property = $properties[$name] ?? null;
             $value = $this->getParameterPropertyValue($metaData, $parameter, $accessor);
             $defaultValue = $this->getDefaultPropertyValue($metaData, $defaultParameter, $accessor);
+
             if (null === $value || $value === $defaultValue) {
                 if ($property instanceof AbstractProperty) {
                     $repository->remove($property, false);
+                    unset($properties[$name]);
                     $changed = true;
                 }
                 continue;
             }
 
             if (!$property instanceof AbstractProperty) {
-                $property = $this->createProperty($metaData->name);
+                $property = $this->createProperty($name);
             }
             $oldValue = $property->getValue();
             $property->setValue($value);
             if ($oldValue !== $property->getValue()) {
                 $repository->persist($property, false);
+                $properties[$name] = $property;
                 $changed = true;
             }
         }

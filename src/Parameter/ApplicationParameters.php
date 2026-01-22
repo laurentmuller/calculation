@@ -21,6 +21,7 @@ use App\Entity\Product;
 use App\Interfaces\EntityInterface;
 use App\Model\CustomerInformation;
 use App\Repository\ApplicationPropertyRepository;
+use App\Traits\ArrayTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
@@ -34,6 +35,8 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 class ApplicationParameters extends AbstractParameters
 {
+    use ArrayTrait;
+
     #[Assert\Valid]
     private ?CustomerParameter $customer = null;
 
@@ -220,16 +223,18 @@ class ApplicationParameters extends AbstractParameters
     #[\Override]
     protected function loadProperties(): array
     {
-        return $this->getRepository()
-            ->findAll();
+        return $this->mapToKeyValue(
+            $this->getRepository()->findAll(),
+            static fn (ApplicationProperty $property): array => [$property->getName() => $property]
+        );
     }
 
     /**
      * @template TEntity of EntityInterface
      *
-     * @phpstan-param class-string<TEntity> $class
+     * @param class-string<TEntity> $class
      *
-     * @phpstan-return TEntity|null
+     * @return TEntity|null
      */
     private function findEntity(string $class, ?int $id): ?EntityInterface
     {

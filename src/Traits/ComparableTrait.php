@@ -30,7 +30,7 @@ trait ComparableTrait
      * @param bool                $reverse <code>true</code> to sort in descending (reverse) mode,
      *                                     <code>false</code> (default) to sort in ascending mode
      *
-     * @return bool true if the given array contains more than 1 values
+     * @return bool true if the given array contains more than one value
      */
     public function sortComparable(array &$values, bool $reverse = false): bool
     {

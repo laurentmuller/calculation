@@ -17,6 +17,7 @@ use App\Entity\User;
 use App\Entity\UserProperty;
 use App\Model\CustomerInformation;
 use App\Repository\UserPropertyRepository;
+use App\Traits\ArrayTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Target;
@@ -29,6 +30,8 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 class UserParameters extends AbstractParameters
 {
+    use ArrayTrait;
+
     public function __construct(
         #[Target('calculation.user')]
         CacheInterface $cache,
@@ -114,12 +117,7 @@ class UserParameters extends AbstractParameters
     #[\Override]
     protected function createProperty(string $name): UserProperty
     {
-        $user = $this->security->getUser();
-        if (!$user instanceof User) {
-            throw new \LogicException('User not found.');
-        }
-
-        return UserProperty::instance($name, $user);
+        return UserProperty::instance($name, $this->getUser());
     }
 
     #[\Override]
@@ -142,12 +140,19 @@ class UserParameters extends AbstractParameters
     #[\Override]
     protected function loadProperties(): array
     {
+        return $this->mapToKeyValue(
+            $this->getRepository()->findByUser($this->getUser()),
+            static fn (UserProperty $property): array => [$property->getName() => $property]
+        );
+    }
+
+    private function getUser(): User
+    {
         $user = $this->security->getUser();
         if (!$user instanceof User) {
-            return [];
+            throw new \DomainException('User not found.');
         }
 
-        return $this->getRepository()
-            ->findByUser($user);
+        return $user;
     }
 }

@@ -30,7 +30,8 @@ final class UserParametersTest extends TestCase
 {
     public function testGetApplication(): void
     {
-        $parameters = $this->createUserParameters();
+        $user = $this->createUser();
+        $parameters = $this->createUserParameters(user: $user);
         $application = $parameters->getApplication();
         $actual = $application->getDisplay()->isActionNone();
         $expected = $parameters->getDisplay()->isActionNone();
@@ -39,7 +40,8 @@ final class UserParametersTest extends TestCase
 
     public function testGetCustomerInformation(): void
     {
-        $parameters = $this->createUserParameters();
+        $user = $this->createUser();
+        $parameters = $this->createUserParameters(user: $user);
         $info = $parameters->getCustomerInformation();
         self::assertFalse($info->isPrintAddress());
     }
@@ -52,23 +54,12 @@ final class UserParametersTest extends TestCase
         self::assertNotEmpty($actual);
     }
 
-    public function testSaveNoUser(): void
+    public function testNoUserFound(): void
     {
-        $cache = new ArrayAdapter();
-        $manager = $this->createMockManager();
-        $security = $this->createMockSecurity();
-        $application = $this->createApplication();
-        $parameters = new UserParameters(
-            $cache,
-            $manager,
-            $security,
-            $application
-        );
-        $parameters->getDisplay()
-            ->setEditAction(EntityAction::NONE);
-
+        $parameters = $this->createUserParameters();
         self::expectException(\LogicException::class);
-        $parameters->save();
+        self::expectExceptionMessage('User not found.');
+        $parameters->getDisplay();
     }
 
     public function testSaveSuccess(): void
@@ -142,16 +133,11 @@ final class UserParametersTest extends TestCase
 
     private function createUserParameters(array $properties = [], ?User $user = null): UserParameters
     {
-        $cache = new ArrayAdapter();
-        $manager = $this->createMockManager($properties);
-        $security = $this->createMockSecurity($user);
-        $application = $this->createApplication();
-
         return new UserParameters(
-            $cache,
-            $manager,
-            $security,
-            $application
+            cache: new ArrayAdapter(),
+            manager: $this->createMockManager($properties),
+            security: $this->createMockSecurity($user),
+            application: $this->createApplication()
         );
     }
 }

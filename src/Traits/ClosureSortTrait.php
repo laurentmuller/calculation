@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+/**
+ * Trait to sort arrays or compare values using multiple closures.
+ */
 trait ClosureSortTrait
 {
     /**
@@ -45,7 +48,7 @@ trait ClosureSortTrait
      * @param array<TKey, TValue>           $array       the array to sort
      * @param \Closure(TValue, TValue): int ...$closures the closures to use for comparison
      *
-     * @return bool true if the given array contains more than 1 value and closures are not empty
+     * @return bool true if the given array contains more than one value and closures are not empty
      */
     public function sortByClosures(array &$array, \Closure ...$closures): bool
     {
@@ -65,7 +68,7 @@ trait ClosureSortTrait
      * @param array<TKey, TValue>       $array       the array to sort
      * @param \Closure(TKey, TKey): int ...$closures the closures to use for comparison
      *
-     * @return bool true if the given array contains more than 1 value and closures are not empty
+     * @return bool true if the given array contains more than one value and closures are not empty
      */
     public function sortKeysByClosures(array &$array, \Closure ...$closures): bool
     {

@@ -38,9 +38,6 @@ abstract class ParameterTestCase extends TestCase
 
     abstract public static function getParameterValues(): \Generator;
 
-    /**
-     * @throws \ReflectionException
-     */
     #[DataProvider('getParameterNames')]
     public function testParameterName(string $name, string $expected): void
     {
@@ -48,9 +45,6 @@ abstract class ParameterTestCase extends TestCase
         self::assertSame($expected, $attribute->name);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     #[DataProvider('getParameterValues')]
     public function testParameterValue(string $name, mixed $expected): void
     {
@@ -63,13 +57,13 @@ abstract class ParameterTestCase extends TestCase
      */
     abstract protected function createParameter(): ParameterInterface;
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function getAttribute(string $name): Parameter
     {
-        $attribute = Parameter::getAttributInstance($this->parameter, $name);
-        self::assertNotNull($attribute);
+        $class = new \ReflectionClass($this->parameter);
+        self::assertTrue($class->hasProperty($name));
+        $property = $class->getProperty($name);
+        $attribute = Parameter::getAttributeFromProperty($property);
+        self::assertInstanceOf(Parameter::class, $attribute);
 
         return $attribute;
     }

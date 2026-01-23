@@ -20,7 +20,6 @@ use App\Entity\Category;
 use App\Entity\Product;
 use App\Interfaces\EntityInterface;
 use App\Model\CustomerInformation;
-use App\Repository\ApplicationPropertyRepository;
 use App\Traits\ArrayTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -215,16 +214,12 @@ class ApplicationParameters extends AbstractParameters
     }
 
     #[\Override]
-    protected function getRepository(): ApplicationPropertyRepository
-    {
-        return $this->manager->getRepository(ApplicationProperty::class);
-    }
-
-    #[\Override]
     protected function loadProperties(): array
     {
+        $repository = $this->manager->getRepository(ApplicationProperty::class);
+
         return $this->mapToKeyValue(
-            $this->getRepository()->findAll(),
+            $repository->findAll(),
             static fn (ApplicationProperty $property): array => [$property->getName() => $property]
         );
     }

@@ -15,7 +15,6 @@ namespace App\Parameter;
 
 use App\Attribute\Parameter;
 use App\Entity\AbstractProperty;
-use App\Repository\AbstractRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -104,11 +103,10 @@ abstract class AbstractParameters
     {
         $saved = false;
         $properties = $this->loadProperties();
-        $repository = $this->getRepository();
         $defaultParameters = $this->getDefaultParameters();
         $parameters = \array_filter($this->getParameters());
         foreach ($parameters as $key => $parameter) {
-            if ($this->saveParameter($properties, $repository, $parameter, $defaultParameters[$key] ?? null)) {
+            if ($this->saveParameter($properties, $parameter, $defaultParameters[$key] ?? null)) {
                 $saved = true;
             }
         }
@@ -186,11 +184,6 @@ abstract class AbstractParameters
 
         return $values;
     }
-
-    /**
-     * @return AbstractRepository<TProperty>
-     */
-    abstract protected function getRepository(): AbstractRepository;
 
     /**
      * @return array<string, TProperty>
@@ -346,12 +339,10 @@ abstract class AbstractParameters
     }
 
     /**
-     * @param array<string, TProperty>      $properties
-     * @param AbstractRepository<TProperty> $repository
+     * @param array<string, TProperty> $properties
      */
     private function saveParameter(
         array &$properties,
-        AbstractRepository $repository,
         ParameterInterface $parameter,
         ?ParameterInterface $defaultParameter = null
     ): bool {
@@ -367,7 +358,7 @@ abstract class AbstractParameters
 
             if (null === $value || $value === $defaultValue) {
                 if ($property instanceof AbstractProperty) {
-                    $repository->remove($property, false);
+                    $this->manager->remove($property);
                     unset($properties[$name]);
                     $changed = true;
                 }
@@ -380,14 +371,14 @@ abstract class AbstractParameters
             $oldValue = $property->getValue();
             $property->setValue($value);
             if ($oldValue !== $property->getValue()) {
-                $repository->persist($property, false);
+                $this->manager->persist($property);
                 $properties[$name] = $property;
                 $changed = true;
             }
         }
 
         if ($changed) {
-            $repository->flush();
+            $this->manager->flush();
             $this->cache->delete($parameter::getCacheKey());
         }
 

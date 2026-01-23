@@ -16,7 +16,6 @@ namespace App\Parameter;
 use App\Entity\User;
 use App\Entity\UserProperty;
 use App\Model\CustomerInformation;
-use App\Repository\UserPropertyRepository;
 use App\Traits\ArrayTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -132,16 +131,12 @@ class UserParameters extends AbstractParameters
     }
 
     #[\Override]
-    protected function getRepository(): UserPropertyRepository
-    {
-        return $this->manager->getRepository(UserProperty::class);
-    }
-
-    #[\Override]
     protected function loadProperties(): array
     {
+        $repository = $this->manager->getRepository(UserProperty::class);
+
         return $this->mapToKeyValue(
-            $this->getRepository()->findByUser($this->getUser()),
+            $repository->findByUser($this->getUser()),
             static fn (UserProperty $property): array => [$property->getName() => $property]
         );
     }

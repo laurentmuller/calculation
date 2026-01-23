@@ -1,0 +1,13 @@
+{% from 'parameters/_parameters.html.twig' import renderHeader, renderDescription %}
+{{ renderHeader('display', 'display', expanded) }}
+<div id="display" class="card-body pt-0 collapse{% if expanded %} show{% endif %}" data-bs-parent=".card-parameter">
+    {{ renderDescription('display') }}
+    <div class="row">
+        <div class="col-md-7">
+            {{ form_row(form.displayMode) }}
+        </div>
+        <div class="col-md-5">
+            {{ form_row(form.editAction) }}
+        </div>
+    </div>
+</div>

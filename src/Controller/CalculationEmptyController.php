@@ -93,7 +93,7 @@ class CalculationEmptyController extends AbstractController
     {
         if (0 === $repository->countItemsEmpty()) {
             return $this->redirectToHomePage(
-                message: new TranslatableFlashMessage(
+                message: TranslatableFlashMessage::instance(
                     message: 'empty.empty',
                     type: FlashType::WARNING
                 )

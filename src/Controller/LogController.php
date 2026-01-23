@@ -70,7 +70,7 @@ class LogController extends AbstractController
                 }
 
                 return $this->redirectToHomePage(
-                    message: new TranslatableFlashMessage(
+                    message: TranslatableFlashMessage::instance(
                         message: 'log.delete.error',
                         type: FlashType::DANGER,
                     )
@@ -101,7 +101,7 @@ class LogController extends AbstractController
     {
         if (!$service->isFileValid()) {
             return $this->redirectToHomePage(
-                message: new TranslatableFlashMessage(
+                message: TranslatableFlashMessage::instance(
                     message: 'log.download.error',
                     type: FlashType::WARNING,
                 )
@@ -192,7 +192,7 @@ class LogController extends AbstractController
     private function getEmptyResponse(): RedirectResponse
     {
         return $this->redirectToHomePage(
-            message: new TranslatableFlashMessage(
+            message: TranslatableFlashMessage::instance(
                 message: 'log.list.empty',
                 type: FlashType::INFO,
             )

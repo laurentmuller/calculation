@@ -1,0 +1,16 @@
+{% from 'parameters/_parameters.html.twig' import renderHeader, renderDescription %}
+{{ renderHeader('default', 'file-code') }}
+<div id="default" class="card-body pt-0 collapse" data-bs-parent=".card-parameter">
+    {{ renderDescription('default') }}
+    <div class="row">
+        <div class="col-md-4">
+            {{ form_row(form.stateId) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_row(form.categoryId) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_row(form.minMargin) }}
+        </div>
+    </div>
+</div>

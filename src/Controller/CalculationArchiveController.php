@@ -40,7 +40,7 @@ class CalculationArchiveController extends AbstractController
         if (!$service->isEditableStates()) {
             return $this->redirectToHomePage(
                 request: $request,
-                message: new TranslatableFlashMessage(
+                message: TranslatableFlashMessage::instance(
                     message: 'archive.editable_empty',
                     type: FlashType::WARNING
                 )
@@ -49,7 +49,7 @@ class CalculationArchiveController extends AbstractController
         if (!$service->isNotEditableStates()) {
             return $this->redirectToHomePage(
                 request: $request,
-                message: new TranslatableFlashMessage(
+                message: TranslatableFlashMessage::instance(
                     message: 'archive.not_editable_empty',
                     type: FlashType::WARNING
                 )

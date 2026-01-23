@@ -155,7 +155,7 @@ class CommandController extends AbstractController
         $count = $service->count();
         if (0 === $count) {
             return $this->redirectToHomePage(
-                message: new TranslatableFlashMessage(
+                message: TranslatableFlashMessage::instance(
                     message: 'command.list.empty',
                     type: FlashType::WARNING,
                 )

@@ -93,7 +93,7 @@ class UserController extends AbstractEntityController
             return $this->redirectToDefaultRoute(
                 request: $request,
                 item: $item,
-                message: new TranslatableFlashMessage(
+                message: TranslatableFlashMessage::instance(
                     message: 'user.delete.connected',
                     parameters: ['%name%' => $item],
                     type: FlashType::WARNING,
@@ -154,7 +154,7 @@ class UserController extends AbstractEntityController
             return $this->redirectToDefaultRoute(
                 request: $request,
                 item: $user,
-                message: new TranslatableFlashMessage(
+                message: TranslatableFlashMessage::instance(
                     message: 'user.message.connected',
                     type: FlashType::WARNING,
                 )
@@ -170,7 +170,7 @@ class UserController extends AbstractEntityController
                 return $this->redirectToDefaultRoute(
                     request: $request,
                     item: $user,
-                    message: new TranslatableFlashMessage(
+                    message: TranslatableFlashMessage::instance(
                         message: 'user.message.success',
                         parameters: ['%name%' => $user]
                     )
@@ -233,7 +233,7 @@ class UserController extends AbstractEntityController
         if (0 === $count) {
             return $this->redirectToDefaultRoute(
                 request: $request,
-                message: new TranslatableFlashMessage(
+                message: TranslatableFlashMessage::instance(
                     message: 'user.reset_all.empty',
                     type: FlashType::WARNING,
                 )
@@ -259,7 +259,7 @@ class UserController extends AbstractEntityController
 
             return $this->redirectToDefaultRoute(
                 request: $request,
-                message: new TranslatableFlashMessage(
+                message: TranslatableFlashMessage::instance(
                     message: 'user.reset_all.success',
                     parameters: ['%count%' => \count($users)],
                 )
@@ -290,7 +290,7 @@ class UserController extends AbstractEntityController
             return $this->redirectToDefaultRoute(
                 request: $request,
                 item: $item,
-                message: new TranslatableFlashMessage(
+                message: TranslatableFlashMessage::instance(
                     message: $id,
                     parameters: ['%name%' => $item],
                     type: $type,
@@ -321,7 +321,7 @@ class UserController extends AbstractEntityController
             return $this->redirectToDefaultRoute(
                 request: $request,
                 item: $item,
-                message: new TranslatableFlashMessage(
+                message: TranslatableFlashMessage::instance(
                     message: 'user.rights.connected',
                     type: FlashType::WARNING,
                 )
@@ -406,7 +406,7 @@ class UserController extends AbstractEntityController
             return $this->redirectToDefaultRoute(
                 request: $request,
                 item: $item,
-                message: new TranslatableFlashMessage(
+                message: TranslatableFlashMessage::instance(
                     message: $id,
                     parameters: $parameters,
                     domain: 'security',

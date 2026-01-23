@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Trait to edit parameters (Global or User).
+ * Trait to edit global or user parameters.
  *
  * @phpstan-require-extends AbstractController
  */
@@ -42,8 +42,8 @@ trait EditParametersTrait
         Request $request,
         AbstractParameters $parameters,
         string $type,
-        string $message,
-        array $templateParameters
+        string $template,
+        string $message
     ): Response {
         $options = ['default_values' => $parameters->getDefaultValues()];
         $form = $this->createForm($type, $parameters, $options)
@@ -59,8 +59,6 @@ trait EditParametersTrait
             return $response;
         }
 
-        $templateParameters['form'] = $form;
-
-        return $this->render('parameters/parameters.html.twig', $templateParameters);
+        return $this->render($template, ['form' => $form]);
     }
 }

@@ -1,0 +1,20 @@
+{% from 'parameters/_parameters.html.twig' import renderHeader, renderDescription %}
+{{ renderHeader('security', 'lock') }}
+<div id="security" class="card-body pt-0 collapse" data-bs-parent=".card-parameter">
+    {{ renderDescription('security') }}
+    <div class="row">
+        <div class="col-md-6">
+            {{ form_row(form.captcha) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_row(form.level) }}
+        </div>
+    </div>
+    <span class="form-label">{{ 'user.fields.password'|trans }}</span>
+    {{ form_row(form.letter) }}
+    {{ form_row(form.caseDiff) }}
+    {{ form_row(form.number) }}
+    {{ form_row(form.specialChar) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.compromised) }}
+</div>

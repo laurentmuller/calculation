@@ -93,7 +93,7 @@ class CalculationDuplicateController extends AbstractController
     {
         if (0 === $repository->countItemsDuplicate()) {
             return $this->redirectToHomePage(
-                message: new TranslatableFlashMessage(
+                message: TranslatableFlashMessage::instance(
                     message: 'duplicate.empty',
                     type: FlashType::WARNING
                 )

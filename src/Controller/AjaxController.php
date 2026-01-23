@@ -87,8 +87,8 @@ class AjaxController extends AbstractController
     #[GetRoute(path: '/random/text', name: 'random_text')]
     public function randomText(FakerService $service, #[MapQueryParameter] int $maxNbChars = 150): JsonResponse
     {
-        $generator = $service->getGenerator();
-        $content = $generator->realText(\max($maxNbChars, 50));
+        $content = $service->getGenerator()
+            ->realText($maxNbChars);
 
         return $this->jsonTrue([
             'content' => $content,

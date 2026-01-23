@@ -57,7 +57,7 @@ final class UserParametersTest extends TestCase
     public function testNoUserFound(): void
     {
         $parameters = $this->createUserParameters();
-        self::expectException(\LogicException::class);
+        self::expectException(\DomainException::class);
         self::expectExceptionMessage('User not found.');
         $parameters->getDisplay();
     }

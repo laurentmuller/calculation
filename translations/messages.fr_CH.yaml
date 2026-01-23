@@ -833,7 +833,7 @@ parameters:
     default: Valeurs par défaut
     default_all: Toutes les préférences
     default_visible: Les préférences affichées
-    default_help: Restaurer les préférences à leur valeur par défaut
+    default_help: Restaurer les préférences à leurs valeurs par défaut
     display:
         hide: Masquer
         show: Afficher

@@ -1,0 +1,77 @@
+{% extends 'cards/card_edit.html.twig' %}
+{% from 'macros/_icons.html.twig' import icon %}
+{% form_theme form with _self %}
+{# parameters #}
+{%- set cancel_path = path('homepage') -%}
+{%- set form_attr = form_attr|default({})|merge({'data-random': url('ajax_random_text'), 'data-failure': 'parameters.failure'|trans}) -%}
+{% block card_body_class ' p-0' %}
+{# custom progress widget #}
+{% block _message_progress_widget -%}
+    <div class="input-group">
+        {{- block('choice_widget') -}}
+        <button type="button" class="btn btn-notify btn-outline-secondary d-print-none"
+                title="{{ 'parameters.action_test'|trans }}">
+            <i class="fa-regular fa-bell"></i>
+        </button>
+        <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split"
+                title="{{ 'parameters.action_test'|trans }}" data-bs-toggle="dropdown" aria-expanded="false">
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+            {% for type in enum_cases('App\\Enums\\FlashType') %}
+                <li>
+                    <button class="dropdown-item dropdown-notify" type="button" data-value="{{ type.value }}">
+                        <i class="me-1 {{ type.icon }} {{ type.color }}"></i>{{- type|trans -}}
+                    </button>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{%- endblock _message_progress_widget %}
+{# macros #}
+{% macro renderHeader(href, icon, expanded = false) %}
+    {%- set show = 'common.expand'|trans -%}
+    {%- set hide = 'common.collapse'|trans -%}
+    {%- set title = expanded ? hide : show -%}
+    <div class="card-header d-flex-wrap-center">
+        <a class="drop-down-icon-right card-title {% if expanded %} show{% endif %}" href="#{{ href }}"
+           data-bs-toggle="collapse" data-show="{{ show }}" data-hide="{{ hide }}" title="{{ title }}"
+           aria-expanded="{{ expanded|json_encode }}">
+            {{- icon(icon ~ ' fa-fw', 'parameters.group_' ~ href) -}}
+        </a>
+    </div>
+{% endmacro renderHeader %}
+{% macro renderDescription(key) %}
+    <p class="my-2 form-text">{{ ('parameters.group_' ~ key ~ '_help')|trans }}</p>
+{% endmacro renderDescription %}
+{# form #}
+{% block actions_form -%}
+    {{ parent() }}
+    <div class="dropdown">
+        <button class="btn btn-form btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false" title="{{ 'parameters.default_help'|trans }}">
+            {{- 'parameters.default'|trans -}}
+        </button>
+        <ul class="dropdown-menu">
+            <li>
+                <button type="button" class="dropdown-item btn-item-visible">
+                    {{- 'parameters.default_visible'|trans -}}
+                </button>
+            </li>
+            <li>
+                <button type="button" class="dropdown-item btn-item-all">
+                    {{- 'parameters.default_all'|trans -}}
+                </button>
+            </li>
+        </ul>
+    </div>
+{%- endblock actions_form %}
+{# javascripts #}
+{% block javascripts %}
+    {% if is_js_debug %}
+        {{ parent() }}
+        {{ asset_js('js/plugins/plugin-input-number.js') }}
+        {{ asset_js('js/application/parameters_edit.js') }}
+    {% else %}
+        {{ asset_js('js/compiled/parameters_edit.js') }}
+    {% endif %}
+{% endblock javascripts %}

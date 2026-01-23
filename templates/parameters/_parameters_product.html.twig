@@ -1,0 +1,14 @@
+{% from 'parameters/_parameters.html.twig' import renderHeader, renderDescription %}
+{{ renderHeader('product', 'file-alt') }}
+<div id="product" class="card-body pt-0 collapse" data-bs-parent=".card-parameter">
+    {{ renderDescription('product') }}
+    <div class="row">
+        <div class="col-md-8">
+            {{ form_row(form.productId) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_row(form.quantity) }}
+        </div>
+    </div>
+    {{ form_row(form.edit) }}
+</div>

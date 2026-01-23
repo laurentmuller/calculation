@@ -1,0 +1,7 @@
+{% from 'parameters/_parameters.html.twig' import renderHeader, renderDescription %}
+{{ renderHeader('options', 'list-check') }}
+<div id="options" class="card-body pt-0 collapse" data-bs-parent=".card-parameter">
+    {{ renderDescription('options') }}
+    {{ form_row(form.printAddress) }}
+    {{ form_row(form.qrCode) }}
+</div>

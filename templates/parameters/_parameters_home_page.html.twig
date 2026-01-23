@@ -1,0 +1,11 @@
+{% from 'parameters/_parameters.html.twig' import renderHeader, renderDescription %}
+{{ renderHeader('home', 'house-user') }}
+<div id="home" class="card-body pt-0 collapse" data-bs-parent=".card-parameter">
+    {{ renderDescription('home') }}
+    {{ form_row(form.calculations) }}
+    {{ form_row(form.panelState) }}
+    {{ form_row(form.panelMonth) }}
+    {{ form_row(form.panelCatalog) }}
+    {{ form_row(form.statusBar) }}
+    {{ form_row(form.darkNavigation) }}
+</div>

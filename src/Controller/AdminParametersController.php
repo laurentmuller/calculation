@@ -13,32 +13,32 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForUser;
+use App\Attribute\ForAdmin;
 use App\Attribute\GetPostRoute;
-use App\Form\Parameters\UserParametersType;
+use App\Form\Parameters\ApplicationParametersType;
 use App\Traits\EditParametersTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
- * Controller to edit user preferences.
+ * Controller to edit application preferences.
  */
-#[ForUser]
-#[Route(path: '/user', name: 'user_')]
-class UserParametersController extends AbstractController
+#[ForAdmin]
+#[Route(path: '/admin', name: 'admin_')]
+class AdminParametersController extends AbstractController
 {
     use EditParametersTrait;
 
     #[GetPostRoute(path: '/parameters', name: 'parameters')]
-    public function invoke(Request $request): Response
+    public function parameters(Request $request): Response
     {
         return $this->renderParameters(
             request: $request,
-            parameters: $this->getUserParameters(),
-            type: UserParametersType::class,
-            template: 'parameters/user_parameters.html.twig',
-            message: 'user.parameters.success'
+            parameters: $this->getApplicationParameters(),
+            type: ApplicationParametersType::class,
+            template: 'parameters/admin_parameters.html.twig',
+            message: 'parameters.success'
         );
     }
 }

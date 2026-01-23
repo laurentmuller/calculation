@@ -101,7 +101,7 @@ class CalculationBelowController extends AbstractController
     {
         if (0 === $repository->countItemsBelow($minMargin)) {
             return $this->redirectToHomePage(
-                message: new TranslatableFlashMessage(
+                message: TranslatableFlashMessage::instance(
                     message: 'below.empty',
                     type: FlashType::WARNING
                 )

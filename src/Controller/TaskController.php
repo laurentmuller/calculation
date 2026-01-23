@@ -85,7 +85,7 @@ class TaskController extends AbstractEntityController
         if (null === $task) {
             return $this->redirectToDefaultRoute(
                 request: $request,
-                message: new TranslatableFlashMessage(
+                message: TranslatableFlashMessage::instance(
                     message: 'task.list.empty',
                     type: FlashType::WARNING
                 )

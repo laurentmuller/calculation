@@ -54,7 +54,7 @@ trait TableTrait
         $message = $table->getEmptyMessage();
         if (null !== $message) {
             return $this->redirectToHomePage(
-                message: new TranslatableFlashMessage(
+                message: TranslatableFlashMessage::instance(
                     message: $message,
                     type: FlashType::INFO,
                 )

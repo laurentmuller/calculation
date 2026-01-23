@@ -241,7 +241,7 @@ final class AbstractControllerTest extends KernelTestCase
     {
         $controller = $this->createController();
         $response = $controller->redirectToHomePage(
-            message: new TranslatableFlashMessage(
+            message: TranslatableFlashMessage::instance(
                 message: 'log.list.empty',
                 parameters: ['key' => 'value'],
             )

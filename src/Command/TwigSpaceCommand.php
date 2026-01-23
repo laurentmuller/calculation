@@ -29,7 +29,7 @@ class TwigSpaceCommand
 {
     use WatchTrait;
 
-    private const PATTERN = '/(\S)([ ]{2,})(\S)/m';
+    private const PATTERN = '/(\S)( {2,})(\S)/';
     private const REPLACEMENT = '$1 $3';
 
     public function __construct(
@@ -53,6 +53,12 @@ class TwigSpaceCommand
             return Command::INVALID;
         }
 
+        if ($dryRun) {
+            $io->title(\sprintf('Find consecutive spaces: "%s"', $fullPath));
+        } else {
+            $io->title(\sprintf('Trim consecutive spaces: "%s"', $fullPath));
+        }
+
         $count = 0;
         $this->start();
         $finder = $this->createFinder($fullPath);
@@ -63,32 +69,41 @@ class TwigSpaceCommand
             }
             ++$count;
             $io->text($file->getRelativePathname());
+            $this->outputContent($io, $content);
             if ($dryRun) {
-                $this->outputContent($io, $content);
-            } elseif (!$this->updateContent($io, $file, $content)) {
+                continue;
+            }
+            if (!$this->updateContent($io, $file, $content)) {
                 return Command::FAILURE;
             }
         }
 
         if (0 === $count) {
-            $message = 'No template updated';
+            $message = 'No template updated from "%1$s" directory. %3$s.';
         } elseif ($dryRun) {
-            $message = 'Simulate updated %2$d template(s) successfully';
+            $message = 'Simulate updated %2$d template(s) successfully from "%1$s" directory. %3$s.';
         } else {
-            $message = 'Updated %2$d template(s) successfully';
+            $message = 'Updated %2$d template(s) successfully from "%1$s" directory. %3$s.';
         }
-        $io->success(\sprintf($message . ' from "%1$s" directory. %3$s.', $path, $count, $this->stop()));
+        $io->success(\sprintf($message, $path, $count, $this->stop()));
 
         return Command::SUCCESS;
     }
 
-    private function createFinder(string $fullPath): Finder
+    private function createFinder(string $path): Finder
     {
         return Finder::create()
             ->ignoreUnreadableDirs()
-            ->in($fullPath)
+            ->in($path)
             ->files()
             ->name('*.twig');
+    }
+
+    private function error(SymfonyStyle $io, string $message, string ...$values): false
+    {
+        $io->error(\sprintf($message, ...$values));
+
+        return false;
     }
 
     private function formatLine(int $key, string $line, array $matches): string
@@ -97,11 +112,11 @@ class TwigSpaceCommand
         foreach (\array_reverse($matches) as $match) {
             $offset = $match[1] + 1;
             $length = \strlen($match[0]) - 2;
-            $replace = \sprintf('<fg=red>%s</>', \str_repeat('·', $length));
+            $replace = \sprintf('<bg=red>%s</>', \str_repeat('·', $length));
             $line = \substr_replace($line, $replace, $offset, $length);
         }
 
-        return \sprintf('  - Line %-3d: %s', $key, \rtrim($line));
+        return \sprintf('  - Line %3d, Count %d: %s', $key + 1, \count($matches), \trim($line));
     }
 
     private function outputContent(SymfonyStyle $io, string $content): void
@@ -117,26 +132,20 @@ class TwigSpaceCommand
     private function updateContent(SymfonyStyle $io, SplFileInfo $file, string $content): bool
     {
         $content = StringUtils::pregReplace(self::PATTERN, self::REPLACEMENT, $content);
-        if (!FileUtils::dumpFile($file->getPathname(), $content)) {
-            $io->error(\sprintf('Unable to set content of the template "%s".', $file->getRelativePathname()));
-
-            return false;
+        if (FileUtils::dumpFile($file->getPathname(), $content)) {
+            return true;
         }
 
-        return true;
+        return $this->error($io, 'Unable to set content of the template "%s".', $file->getRelativePathname());
     }
 
     private function validateFullPath(SymfonyStyle $io, string $fullPath): bool
     {
         if (!FileUtils::exists($fullPath)) {
-            $io->error(\sprintf('Unable to find the template path: "%s".', $fullPath));
-
-            return false;
+            return $this->error($io, 'Unable to find the template path: "%s".', $fullPath);
         }
         if (!FileUtils::isDir($fullPath)) {
-            $io->error(\sprintf('The template path "%s" is not a directory.', $fullPath));
-
-            return false;
+            return $this->error($io, 'The template path "%s" is not a directory.', $fullPath);
         }
 
         return true;
@@ -145,9 +154,7 @@ class TwigSpaceCommand
     private function validateInputPath(SymfonyStyle $io, string $path): bool
     {
         if (!StringUtils::isString($path)) {
-            $io->error('The templates path can no be empty.');
-
-            return false;
+            return $this->error($io, 'The templates path can no be empty.');
         }
 
         return true;

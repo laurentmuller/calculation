@@ -34,4 +34,13 @@ class TranslatableFlashMessage extends TranslatableMessage
     {
         return $this->type;
     }
+
+    public static function instance(
+        string $message,
+        array $parameters = [],
+        ?string $domain = null,
+        FlashType $type = FlashType::SUCCESS
+    ): self {
+        return new self($message, $parameters, $domain, $type);
+    }
 }

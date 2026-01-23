@@ -1,0 +1,26 @@
+{% from 'parameters/_parameters.html.twig' import renderHeader, renderDescription %}
+{{ renderHeader('customer', 'user-tie', true) }}
+<div id="customer" class="card-body pt-0 collapse show" data-bs-parent=".card-parameter">
+    {{ renderDescription('customer') }}
+    {{ form_row(form.name) }}
+    <div class="row">
+        <div class="col-md-6">{{ form_row(form.address) }}</div>
+        <div class="col-md-6">{{ form_row(form.zipCity) }}</div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">{{ form_row(form.phone) }}</div>
+        <div class="col-md-6">{{ form_row(form.email) }}</div>
+    </div>
+</div>
+{{ renderHeader('social', 'network-wired') }}
+<div id="social" class="card-body pt-0 collapse" data-bs-parent=".card-parameter">
+    {{ renderDescription('social') }}
+    <div class="row">
+        <div class="col-lg-6">{{ form_row(form.url) }}</div>
+        <div class="col-lg-6">{{ form_row(form.instagram) }}</div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">{{ form_row(form.facebook) }}</div>
+        <div class="col-lg-6">{{ form_row(form.linkedin) }}</div>
+    </div>
+</div>

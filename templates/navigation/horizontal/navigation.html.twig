@@ -49,7 +49,7 @@
                 {% endif %}
             </ul>
             <ul class="navbar-nav">
-                {% if is_granted_data and app.current_route is not same as('search') -%}
+                {% if is_granted_data and app.current_route !== 'search' -%}
                     {{ include('navigation/horizontal/navigation_search.html.twig') }}
                 {% endif %}
                 {{ include('navigation/menu/_menu_theme.html.twig') }}

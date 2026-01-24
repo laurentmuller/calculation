@@ -338,11 +338,22 @@ abstract class AbstractParameters
         };
     }
 
+    private function removeProperty(?AbstractProperty $property): bool
+    {
+        if ($property instanceof AbstractProperty) {
+            $this->manager->remove($property);
+
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * @param array<string, TProperty> $properties
      */
     private function saveParameter(
-        array &$properties,
+        array $properties,
         ParameterInterface $parameter,
         ?ParameterInterface $defaultParameter = null
     ): bool {
@@ -355,33 +366,36 @@ abstract class AbstractParameters
             $property = $properties[$name] ?? null;
             $value = $this->getParameterPropertyValue($metaData, $parameter, $accessor);
             $defaultValue = $this->getDefaultPropertyValue($metaData, $defaultParameter, $accessor);
-
             if (null === $value || $value === $defaultValue) {
-                if ($property instanceof AbstractProperty) {
-                    $this->manager->remove($property);
-                    unset($properties[$name]);
+                if ($this->removeProperty($property)) {
                     $changed = true;
                 }
                 continue;
             }
-
-            if (!$property instanceof AbstractProperty) {
-                $property = $this->createProperty($name);
-            }
-            $oldValue = $property->getValue();
-            $property->setValue($value);
-            if ($oldValue !== $property->getValue()) {
-                $this->manager->persist($property);
-                $properties[$name] = $property;
+            if ($this->updateProperty($property, $name, $value)) {
                 $changed = true;
             }
         }
 
         if ($changed) {
-            $this->manager->flush();
             $this->cache->delete($parameter::getCacheKey());
+            $this->manager->flush();
         }
 
         return $changed;
+    }
+
+    private function updateProperty(?AbstractProperty $property, string $name, mixed $value): bool
+    {
+        $property ??= $this->createProperty($name);
+        $oldValue = $property->getValue();
+        $property->setValue($value);
+        if ($oldValue !== $property->getValue()) {
+            $this->manager->persist($property);
+
+            return true;
+        }
+
+        return false;
     }
 }

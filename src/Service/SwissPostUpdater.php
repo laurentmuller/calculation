@@ -32,17 +32,7 @@ use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 /**
- * Service to import zip codes, cities and streets from Switzerland.
- *
- * @phpstan-type SwissAddressType =  array{
- *      0: int,
- *      1: int,
- *      2: int,
- *      4: int,
- *      6: string,
- *      8: string,
- *      9: string
- * }
+ * Service to import zip codes, cities, and streets from Switzerland.
  */
 class SwissPostUpdater implements ServiceSubscriberInterface
 {
@@ -262,14 +252,14 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     }
 
     /**
-     * @phpstan-param SwissAddressType $data
+     * @param string[] $data
      */
     private function processCity(SwissDatabase $database, array $data): bool
     {
         return $this->validateLength($data, 9)
             && $database->insertCity([
-                $data[1],               // id
-                $data[4],               // zip code
+                (int) $data[1],         // id
+                (int) $data[4],         // zip code
                 $this->clean($data[8]), // city name
                 $data[9],               // state (canton)
             ]);
@@ -278,12 +268,11 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     private function processReader(SwissPostUpdateResult $result, SwissDatabase $database, CsvReader $reader): bool
     {
         $stop_process = false;
-        /** @phpstan-var SwissAddressType $data */
-        foreach ($reader as $data) { // @phpstan-ignore varTag.nativeType
+        foreach ($reader as $data) {
             if ($stop_process) {
                 break;
             }
-            switch ($data[0]) {
+            switch ((int) $data[0]) {
                 case self::REC_00_VALIDITY:
                     if (!$this->processValidity($result, $data)) {
                         return false;
@@ -330,25 +319,25 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     }
 
     /**
-     * @phpstan-param SwissAddressType $data
+     * @phpstan-param string[] $data
      */
     private function processStreet(SwissDatabase $database, array $data): bool
     {
         return $this->validateLength($data, 6)
             && $database->insertStreet([
-                $data[2],                         // city identifier
+                (int) $data[2],                   // city identifier
                 \ucfirst($this->clean($data[6])), // street name
             ]);
     }
 
     /**
-     * @phpstan-param SwissAddressType $data
+     * @param string[] $data
      */
     private function processValidity(SwissPostUpdateResult $result, array $data): bool
     {
         $validity = null;
         if ($this->validateLength($data, 1)) {
-            $validity = DatePoint::createFromFormat(self::DATE_PATTERN, (string) $data[1]);
+            $validity = DatePoint::createFromFormat(self::DATE_PATTERN, $data[1]);
             $validity = DateUtils::removeTime($validity);
         }
         if (!$validity instanceof DatePoint) {

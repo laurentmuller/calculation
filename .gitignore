@@ -21,8 +21,7 @@ symfony.lock
 ###< phpunit ###
 
 ###> databases ###
-/resources/data/swiss.sqlite
-/resources/data/openweather.sqlite
+/resources/data/*.sqlite
 ###< application ###
 
 ###> deploy ###

@@ -40,6 +40,49 @@ final class SwissDatabaseTest extends TestCase
         $this->database->close();
     }
 
+    public function testFind(): void
+    {
+        $parameters = [
+            'zip' => '',
+            'city' => '',
+            'street' => '',
+        ];
+        $actual = $this->database->find($parameters);
+        self::assertEmpty($actual);
+
+        $this->insertState();
+        $this->insertCity();
+        $this->insertStreet();
+
+        $parameters['zip'] = (string) self::CITY_ZIP;
+        $actual = $this->database->find($parameters);
+        self::assertCount(1, $actual);
+
+        $row = $actual[0];
+        self::assertSame(self::CITY_ZIP, $row['zip']);
+        self::assertSame(self::CITY_NAME, $row['city']);
+        self::assertSame(self::STATE_NAME, $row['state']);
+    }
+
+    public function testFindAll(): void
+    {
+        $this->insertState();
+        $this->insertCity();
+        $this->insertStreet();
+
+        $actual = $this->database->findAll('fake');
+        self::assertEmpty($actual);
+
+        $actual = $this->database->findAll(self::STREET_NAME);
+        self::assertCount(1, $actual);
+
+        $row = $actual[0];
+        self::assertSame(self::STREET_NAME, $row['street']);
+        self::assertSame(self::CITY_ZIP, $row['zip']);
+        self::assertSame(self::CITY_NAME, $row['city']);
+        self::assertSame(self::STATE_NAME, $row['state']);
+    }
+
     public function testFindCity(): void
     {
         $this->insertState();
@@ -74,21 +117,6 @@ final class SwissDatabaseTest extends TestCase
         self::assertSame(self::CITY_ZIP, $row['zip']);
         self::assertSame(self::CITY_NAME, $row['city']);
         self::assertSame(self::STATE_NAME, $row['state']);
-    }
-
-    public function testFindWhenEmpty(): void
-    {
-        $actual = $this->database->findAll(self::CITY_NAME);
-        self::assertEmpty($actual);
-
-        $actual = $this->database->findCity(self::CITY_NAME);
-        self::assertEmpty($actual);
-
-        $actual = $this->database->findZip((string) self::CITY_ZIP);
-        self::assertEmpty($actual);
-
-        $actual = $this->database->findStreet(self::STREET_NAME);
-        self::assertEmpty($actual);
     }
 
     public function testFindZip(): void
@@ -142,53 +170,29 @@ final class SwissDatabaseTest extends TestCase
         self::assertSame(1, $actual['street']);
     }
 
-    /**
-     * @phpstan-return array{0: int, 1: int, 2: string, 3:string}
-     */
-    private function getCity(): array
-    {
-        return [
-            self::CITY_ID,
-            self::CITY_ZIP,
-            self::CITY_NAME,
-            self::STATE_ABBREVIATION,
-        ];
-    }
-
-    /**
-     * @phpstan-return array{0: string, 1: string}
-     */
-    private function getState(): array
-    {
-        return [
-            self::STATE_ABBREVIATION,
-            self::STATE_NAME,
-        ];
-    }
-
-    /**
-     * @phpstan-return array{0: int, 1: string}
-     */
-    private function getStreet(): array
-    {
-        return [
-            self::CITY_ID,
-            self::STREET_NAME,
-        ];
-    }
-
     private function insertCity(): bool
     {
-        return $this->database->insertCity($this->getCity());
+        return $this->database->insertCity(
+            id: self::CITY_ID,
+            zip: self::CITY_ZIP,
+            name: self::CITY_NAME,
+            stateId: self::STATE_ABBREVIATION
+        );
     }
 
     private function insertState(): bool
     {
-        return $this->database->insertState($this->getState());
+        return $this->database->insertState(
+            id: self::STATE_ABBREVIATION,
+            name: self::STATE_NAME
+        );
     }
 
     private function insertStreet(): bool
     {
-        return $this->database->insertStreet($this->getStreet());
+        return $this->database->insertStreet(
+            cityId: self::CITY_ID,
+            name: self::STREET_NAME,
+        );
     }
 }

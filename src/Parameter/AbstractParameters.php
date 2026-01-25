@@ -127,8 +127,10 @@ abstract class AbstractParameters
      *
      * @return T
      */
-    protected function getCachedParameter(string $class, ?ParameterInterface $defaultParameter = null): ParameterInterface
-    {
+    protected function getCachedParameter(
+        string $class,
+        ?ParameterInterface $defaultParameter = null
+    ): ParameterInterface {
         return $this->cache->get(
             $class::getCacheKey(),
             fn (): ParameterInterface => $this->createParameter($class, $defaultParameter)
@@ -290,9 +292,10 @@ abstract class AbstractParameters
      */
     private function getMetaDatas(ParameterInterface|string $parameter): array
     {
-        $key = 'meta_data_' . $parameter::getCacheKey();
-
-        return $this->cache->get($key, fn (): array => $this->createMetaDatas($parameter));
+        return $this->cache->get(
+            'meta_data_' . $parameter::getCacheKey(),
+            fn (): array => $this->createMetaDatas($parameter)
+        );
     }
 
     /**
@@ -340,13 +343,12 @@ abstract class AbstractParameters
 
     private function removeProperty(?AbstractProperty $property): bool
     {
-        if ($property instanceof AbstractProperty) {
-            $this->manager->remove($property);
-
-            return true;
+        if (!$property instanceof AbstractProperty) {
+            return false;
         }
+        $this->manager->remove($property);
 
-        return false;
+        return true;
     }
 
     /**
@@ -390,12 +392,11 @@ abstract class AbstractParameters
         $property ??= $this->createProperty($name);
         $oldValue = $property->getValue();
         $property->setValue($value);
-        if ($oldValue !== $property->getValue()) {
-            $this->manager->persist($property);
-
-            return true;
+        if ($oldValue === $property->getValue()) {
+            return false;
         }
+        $this->manager->persist($property);
 
-        return false;
+        return true;
     }
 }

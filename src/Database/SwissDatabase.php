@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Database;
 
 /**
- * SQLite database for zip codes, cities and streets of Switzerland.
+ * SQLite database for zip codes, cities, and streets of Switzerland.
  *
  * @phpstan-type SearchStreetType = array{
  *       street: string,
@@ -96,7 +96,7 @@ class SwissDatabase extends AbstractDatabase
             city.zip,
             city.name as city,
             state.name as state,
-            printf('%s, %s %s', street.name, city.zip, city.name) as display
+            FORMAT('%s, %s %s', street.name, city.zip, city.name) as display
         FROM street
         INNER JOIN city on street.city_id = city.id
         INNER JOIN state on city.state_id = state.id
@@ -122,7 +122,7 @@ class SwissDatabase extends AbstractDatabase
             city.zip,
             city.name as city,
             state.name as state,
-            printf('%s, %s %s', street.name, city.zip, city.name) as display
+            FORMAT('%s, %s %s', street.name, city.zip, city.name) as display
         FROM street
         INNER JOIN city on street.city_id = city.id
         INNER JOIN state on city.state_id = state.id
@@ -147,7 +147,7 @@ class SwissDatabase extends AbstractDatabase
             city.zip,
             city.name as city,
             state.name as state,
-            printf('%s, %s', city.name, city.zip) as display
+            FORMAT('%s, %s', city.name, city.zip) as display
         FROM city
         INNER JOIN state on city.state_id = state.id
         WHERE city.name LIKE :value
@@ -168,7 +168,7 @@ class SwissDatabase extends AbstractDatabase
             city.zip,
             city.name as city,
             state.name as state,
-            printf('%s, %s %s', street.name, city.zip, city.name) as display
+            FORMAT('%s, %s %s', street.name, city.zip, city.name) as display
         FROM street
         INNER JOIN city on street.city_id = city.id
         INNER JOIN state on city.state_id = state.id
@@ -188,7 +188,7 @@ class SwissDatabase extends AbstractDatabase
             city.zip,
             city.name as city,
             state.name as state,
-            printf('%s %s', city.zip, city.name) as display
+            FORMAT('%s %s', city.zip, city.name) as display
         FROM city
         INNER JOIN state on city.state_id = state.id
         WHERE city.zip LIKE :value
@@ -199,7 +199,7 @@ class SwissDatabase extends AbstractDatabase
         sql;
 
     /**
-     * Finds values by the given parameters.
+     * Finds streets by the given parameters.
      *
      * @param array{zip:string, city: string, street: string} $parameters the search parameters
      * @param int                                             $limit      the maximum number of rows to return
@@ -226,7 +226,7 @@ class SwissDatabase extends AbstractDatabase
     }
 
     /**
-     * Finds values by searching in streets, zip codes and cities.
+     * Finds streets by the given value (search in street name, zip code, or city).
      *
      * @param string $value the value to search for
      * @param int    $limit the maximum number of rows to return
@@ -242,7 +242,7 @@ class SwissDatabase extends AbstractDatabase
     }
 
     /**
-     * Finds cities.
+     * Finds cities by the given city name.
      *
      * @param string $city  the name of the city to search for
      * @param int    $limit the maximum number of rows to return
@@ -258,7 +258,7 @@ class SwissDatabase extends AbstractDatabase
     }
 
     /**
-     * Finds streets.
+     * Finds streets by the given street name.
      *
      * @param string $street the name of the street to search for
      * @param int    $limit  the maximum number of rows to return
@@ -274,7 +274,7 @@ class SwissDatabase extends AbstractDatabase
     }
 
     /**
-     * Finds zip codes.
+     * Finds cities by the given zip code.
      *
      * @param string $zip   the zip code to search for
      * @param int    $limit the maximum number of rows to return
@@ -308,25 +308,23 @@ class SwissDatabase extends AbstractDatabase
      *
      * The data has the following meaning:
      *
-     * - 0: The city identifier (primary key).
-     * - 1: The zip code.
-     * - 2: The city name.
-     * - 3: The state (canton).
-     *
-     * @param array{0: int, 1: int, 2: string, 3:string} $data the data to insert
+     * @param int    $id      the city identifier (primary key)
+     * @param int    $zip     the zip code
+     * @param string $name    the city name
+     * @param string $stateId the state identifier (canton)
      *
      * @return bool true if success
      */
-    public function insertCity(array $data): bool
+    public function insertCity(int $id, int $zip, string $name, string $stateId): bool
     {
         /** @var \SQLite3Stmt $stmt */
         $stmt = $this->getStatement(self::INSERT_CITY);
 
         // parameters
-        $stmt->bindValue(':id', $data[0], \SQLITE3_INTEGER);
-        $stmt->bindValue(':zip', $data[1], \SQLITE3_INTEGER);
-        $stmt->bindValue(':name', $data[2]);
-        $stmt->bindValue(':state_id', $data[3]);
+        $stmt->bindValue(':id', $id, \SQLITE3_INTEGER);
+        $stmt->bindValue(':zip', $zip, \SQLITE3_INTEGER);
+        $stmt->bindValue(':name', $name);
+        $stmt->bindValue(':state_id', $stateId);
 
         // execute
         return false !== $stmt->execute();
@@ -335,23 +333,19 @@ class SwissDatabase extends AbstractDatabase
     /**
      * Insert a state.
      *
-     * The data has the following meaning:
-     *
-     *  - 0: The state identifier (primary key).
-     *  - 1: The state name.
-     *
-     * @phpstan-param array{0: string, 1: string} $data the data to insert
+     * @param string $id   the state identifier (primary key)
+     * @param string $name the state name
      *
      * @return bool true if success
      */
-    public function insertState(array $data): bool
+    public function insertState(string $id, string $name): bool
     {
         /** @var \SQLite3Stmt $stmt */
         $stmt = $this->getStatement(self::INSERT_STATE);
 
         // parameters
-        $stmt->bindValue(':id', $data[0]);
-        $stmt->bindValue(':name', $data[1]);
+        $stmt->bindValue(':id', $id);
+        $stmt->bindValue(':name', $name);
 
         // execute
         return false !== $stmt->execute();
@@ -360,23 +354,19 @@ class SwissDatabase extends AbstractDatabase
     /**
      * Insert a street.
      *
-     *  The data has the following meaning:
-     *
-     *  - 0: The city identifier (foreign key).
-     *  - 1: The street name.
-     *
-     * @phpstan-param array{0: int, 1: string} $data the data to insert
+     * @param int    $cityId the city identifier
+     * @param string $name   the street name
      *
      * @return bool true if success
      */
-    public function insertStreet(array $data): bool
+    public function insertStreet(int $cityId, string $name): bool
     {
         /** @var \SQLite3Stmt $stmt */
         $stmt = $this->getStatement(self::INSERT_STREET);
 
         // parameters
-        $stmt->bindValue(':city_id', $data[0], \SQLITE3_INTEGER);
-        $stmt->bindValue(':name', $data[1]);
+        $stmt->bindValue(':city_id', $cityId, \SQLITE3_INTEGER);
+        $stmt->bindValue(':name', $name);
 
         // execute
         return false !== $stmt->execute();

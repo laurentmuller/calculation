@@ -257,12 +257,12 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     private function processCity(SwissDatabase $database, array $data): bool
     {
         return $this->validateLength($data, 9)
-            && $database->insertCity([
-                (int) $data[1],         // id
-                (int) $data[4],         // zip code
-                $this->clean($data[8]), // city name
-                $data[9],               // state (canton)
-            ]);
+            && $database->insertCity(
+                id: (int) $data[1],
+                zip: (int) $data[4],
+                name: $this->clean($data[8]),
+                stateId: $data[9]
+            );
     }
 
     private function processReader(SwissPostUpdateResult $result, SwissDatabase $database, CsvReader $reader): bool
@@ -309,9 +309,10 @@ class SwissPostUpdater implements ServiceSubscriberInterface
         }
         $service = CsvService::instance(separator: self::SEPARATOR);
         $reader = CsvReader::instance($filename, $service);
-        /** @phpstan-var array{0: string, 1: string} $data */
         foreach ($reader as $data) {
-            $result->addState($database->insertState($data));
+            if ($database->insertState(id: $data[0], name: $data[1])) {
+                $result->addState(true);
+            }
         }
         $reader->close();
 
@@ -324,10 +325,10 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     private function processStreet(SwissDatabase $database, array $data): bool
     {
         return $this->validateLength($data, 6)
-            && $database->insertStreet([
-                (int) $data[2],                   // city identifier
-                \ucfirst($this->clean($data[6])), // street name
-            ]);
+            && $database->insertStreet(
+                cityId: (int) $data[2],
+                name: \ucfirst($this->clean($data[6]))
+            );
     }
 
     /**

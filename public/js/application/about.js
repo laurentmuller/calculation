@@ -70,15 +70,20 @@
          */
         displayDialogContent: function ($dialog, content) {
             const $this = $(this);
+            const $row = $this.parents('tr');
+            const $button = $this.parents('.dropdown').find('button[data-bs-toggle="dropdown"]');
             // content
             $dialog.find('.modal-data').html(content);
             // clipboard
             $dialog.find('.btn-copy').copyClipboard();
             // show modal dialog
-            $dialog.one('hidden.bs.modal', function () {
-                $this.trigger('focus');
+            $dialog.one('show.bs.modal', function () {
+                $row.addClass('table-primary');
+            }).one('hide.bs.modal', function () {
+                $row.removeClass('table-primary');
+            }).one('hidden.bs.modal', function () {
+                $button.trigger('focus');
             }).modal('show');
-            //$dialog.modal('show');
         },
 
         /**

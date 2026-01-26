@@ -32,7 +32,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      *
      * @see PdfStyle::getBulletStyle()
      */
-    public const BULLET = '·';
+    public const string BULLET = '·';
 
     /**
      * The border style.

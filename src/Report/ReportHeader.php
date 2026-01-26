@@ -30,7 +30,7 @@ class ReportHeader
     /**
      *  The default font size.
      */
-    private const DEFAULT_FONT_SIZE = PdfFont::DEFAULT_SIZE - 1.0;
+    private const float DEFAULT_FONT_SIZE = PdfFont::DEFAULT_SIZE - 1.0;
 
     /**
      * The default line height.
@@ -40,12 +40,12 @@ class ReportHeader
     /**
      * The line height for the customer address.
      */
-    private const SMALL_HEIGHT = PdfDocument::LINE_HEIGHT - 1.0;
+    private const float SMALL_HEIGHT = PdfDocument::LINE_HEIGHT - 1.0;
 
     /**
      * The title font size.
      */
-    private const TITLE_FONT_SIZE = PdfFont::DEFAULT_SIZE + 1.0;
+    private const float TITLE_FONT_SIZE = PdfFont::DEFAULT_SIZE + 1.0;
 
     /**
      * The customer information.

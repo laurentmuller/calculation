@@ -23,7 +23,7 @@ abstract class AbstractHeaderFooter
     /**
      * The document width.
      */
-    protected const TOTAL_WIDTH = 12_000;
+    protected const int TOTAL_WIDTH = 12_000;
 
     /**
      * @param AbstractWordDocument $parent the parent's document

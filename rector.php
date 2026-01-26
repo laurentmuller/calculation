@@ -98,7 +98,7 @@ return RectorConfig::configure()
         phpunit: true,
         symfony: true,
     )->withPhpSets(
-        php82: true
+        php83: true
     )->withAttributesSets(
         symfony: true,
         doctrine: true,

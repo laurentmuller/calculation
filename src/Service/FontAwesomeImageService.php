@@ -33,12 +33,12 @@ class FontAwesomeImageService
     /**
      * The default black color.
      */
-    public const BLACK_COLOR = 'black';
+    public const string BLACK_COLOR = 'black';
 
     /**
      * The SVG file extension (including the dot character).
      */
-    public const SVG_EXTENSION = '.svg';
+    public const string SVG_EXTENSION = '.svg';
 
     private const string IMAGE_FORMAT = 'png24';
     private const string SVG_PREFIX = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>';

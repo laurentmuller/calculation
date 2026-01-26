@@ -53,8 +53,8 @@ trait PdfBarChartTrait
     use ArrayTrait;
     use PdfRotationTrait;
 
-    private const SEP_BARS = 3.0;
-    private const TEXT_ANGLE = 45.0;
+    private const float SEP_BARS = 3.0;
+    private const float TEXT_ANGLE = 45.0;
 
     /**
      * Draw a bar chart.

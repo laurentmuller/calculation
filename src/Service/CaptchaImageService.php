@@ -41,7 +41,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
     /**
      * The default validation timeout in seconds (180 seconds = 3 minutes).
      */
-    public const DEFAULT_TIME_OUT = 180;
+    public const int DEFAULT_TIME_OUT = 180;
 
     /**
      * The allowed characters.

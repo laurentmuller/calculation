@@ -22,9 +22,9 @@ use Symfony\Component\Routing\Attribute\Route;
 class AboutLicenceController extends AbstractAboutController
 {
     /**
-     * The license file name (markdown).
+     * The license file name (Markdown).
      */
-    public const LICENCE_FILE = 'LICENSE.md';
+    public const string LICENCE_FILE = 'LICENSE.md';
 
     private const array TAGS = [
         ['h2', 'h4', 'bookmark'],

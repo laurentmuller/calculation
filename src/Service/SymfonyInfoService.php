@@ -33,17 +33,17 @@ readonly class SymfonyInfoService
     /**
      * The disabled label.
      */
-    public const LABEL_DISABLED = 'Disabled';
+    public const string LABEL_DISABLED = 'Disabled';
 
     /**
      * The enabled label.
      */
-    public const LABEL_ENABLED = 'Enabled';
+    public const string LABEL_ENABLED = 'Enabled';
 
     /**
      * The not installed label.
      */
-    public const LABEL_NOT_INSTALLED = 'Not installed';
+    public const string LABEL_NOT_INSTALLED = 'Not installed';
 
     // the release information URL
     private const string RELEASE_URL = 'https://symfony.com/releases/%s.%s.json';

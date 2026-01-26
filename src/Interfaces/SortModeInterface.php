@@ -21,10 +21,10 @@ interface SortModeInterface
     /**
      * The ascending sort order.
      */
-    final public const SORT_ASC = 'asc';
+    final public const string SORT_ASC = 'asc';
 
     /**
      * The descending sort order.
      */
-    final public const SORT_DESC = 'desc';
+    final public const string SORT_DESC = 'desc';
 }

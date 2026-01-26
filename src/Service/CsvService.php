@@ -21,17 +21,17 @@ readonly class CsvService
     /**
      * The default field enclosure character.
      */
-    public const DEFAULT_ENCLOSURE = '"';
+    public const string DEFAULT_ENCLOSURE = '"';
 
     /**
      * The default escape character.
      */
-    public const DEFAULT_ESCAPE = '\\';
+    public const string DEFAULT_ESCAPE = '\\';
 
     /**
      * The default field separator character.
      */
-    public const DEFAULT_SEPARATOR = ',';
+    public const string DEFAULT_SEPARATOR = ',';
 
     /**
      * @param string       $separator the field delimiter. It must be a single byte character.

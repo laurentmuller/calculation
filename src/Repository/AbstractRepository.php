@@ -35,42 +35,42 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sor
     /**
      * The alias for the calculation entity.
      */
-    final public const CALCULATION_ALIAS = 'c';
+    final public const string CALCULATION_ALIAS = 'c';
 
     /**
      * The alias for the category entity.
      */
-    final public const CATEGORY_ALIAS = 'c';
+    final public const string CATEGORY_ALIAS = 'c';
 
     /**
      * The default entity alias used to create the query builder (value = 'e').
      */
-    final public const DEFAULT_ALIAS = 'e';
+    final public const string DEFAULT_ALIAS = 'e';
 
     /**
      * The alias for the group entity.
      */
-    final public const GROUP_ALIAS = 'g';
+    final public const string GROUP_ALIAS = 'g';
 
     /**
      * The alias for the product entity.
      */
-    final public const PRODUCT_ALIAS = 'p';
+    final public const string PRODUCT_ALIAS = 'p';
 
     /**
      * The alias for the state entity.
      */
-    final public const STATE_ALIAS = 's';
+    final public const string STATE_ALIAS = 's';
 
     /**
      * The alias for the task entity.
      */
-    final public const TASK_ALIAS = 't';
+    final public const string TASK_ALIAS = 't';
 
     /**
      * The alias for the task item entity.
      */
-    final public const TASK_ITEM_ALIAS = 'i';
+    final public const string TASK_ITEM_ALIAS = 'i';
 
     /**
      * Creates a default query builder.

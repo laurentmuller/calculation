@@ -28,7 +28,7 @@ abstract class AbstractParametersType extends AbstractType
     /**
      * The default values option name.
      */
-    public const DEFAULT_VALUES = 'default_values';
+    public const string DEFAULT_VALUES = 'default_values';
 
     #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void

@@ -36,22 +36,22 @@ class OpenWeatherService extends AbstractHttpClientService
     /**
      * The number of daily results to return.
      */
-    public const DEFAULT_COUNT = 5;
+    public const int DEFAULT_COUNT = 5;
 
     /**
      * The number of search results to return.
      */
-    public const DEFAULT_LIMIT = 15;
+    public const int DEFAULT_LIMIT = 15;
 
     /**
      * The parameter value to exclude the current data.
      */
-    public const EXCLUDE_CURRENT = 'current';
+    public const string EXCLUDE_CURRENT = 'current';
 
     /**
      * The parameter value to exclude the daily data.
      */
-    public const EXCLUDE_DAILY = 'daily';
+    public const string EXCLUDE_DAILY = 'daily';
 
     /**
      * The parameter value to exclude the hourly data.
@@ -66,52 +66,52 @@ class OpenWeatherService extends AbstractHttpClientService
     /**
      * The maximum number of city identifiers to retrieve.
      */
-    public const MAX_GROUP = 20;
+    public const int MAX_GROUP = 20;
 
     /**
      * The count parameter name.
      */
-    public const PARAM_COUNT = 'cnt';
+    public const string PARAM_COUNT = 'cnt';
 
     /**
      * The excluded parameter name.
      */
-    public const PARAM_EXCLUDE = 'exclude';
+    public const string PARAM_EXCLUDE = 'exclude';
 
     /**
      * The city identifier parameter name.
      */
-    public const PARAM_ID = 'id';
+    public const string PARAM_ID = 'id';
 
     /**
      * The latitude parameter name.
      */
-    public const PARAM_LATITUDE = 'lat';
+    public const string PARAM_LATITUDE = 'lat';
 
     /**
      * The limit parameter name.
      */
-    public const PARAM_LIMIT = 'limit';
+    public const string PARAM_LIMIT = 'limit';
 
     /**
      * The latitude parameter name.
      */
-    public const PARAM_LONGITUDE = 'lon';
+    public const string PARAM_LONGITUDE = 'lon';
 
     /**
      * The query parameter name.
      */
-    public const PARAM_QUERY = 'query';
+    public const string PARAM_QUERY = 'query';
 
     /**
      * The unit's parameter name.
      */
-    public const PARAM_UNITS = 'units';
+    public const string PARAM_UNITS = 'units';
 
     /**
      * The cache timeout (15 minutes).
      */
-    private const CACHE_TIMEOUT = 60 * 15;
+    private const int CACHE_TIMEOUT = 60 * 15;
 
     /**
      * The host name version 2.5.

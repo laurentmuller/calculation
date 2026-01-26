@@ -36,7 +36,7 @@ class PdfLabelDocument extends PdfDocument
     use PdfStyleTrait;
 
     /** The encoding source. */
-    private const ENCODING_FROM = [
+    private const array ENCODING_FROM = [
         'ASCII',
         'UTF-8',
         'CP1252',
@@ -44,7 +44,7 @@ class PdfLabelDocument extends PdfDocument
     ];
 
     /** The encoding target. */
-    private const ENCODING_TO = 'CP1252';
+    private const string ENCODING_TO = 'CP1252';
 
     // the font mapping
     private const array FONT_CONVERSION = [

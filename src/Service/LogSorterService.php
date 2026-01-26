@@ -26,23 +26,23 @@ readonly class LogSorterService
     /**
      * The channel column name.
      */
-    public const COLUMN_CHANNEL = 'channel';
+    public const string COLUMN_CHANNEL = 'channel';
     /**
      * The created date column name.
      */
-    public const COLUMN_DATE = 'createdAt';
+    public const string COLUMN_DATE = 'createdAt';
     /**
      * The level column name.
      */
-    public const COLUMN_LEVEL = 'level';
+    public const string COLUMN_LEVEL = 'level';
     /**
      * The message column name.
      */
-    public const COLUMN_MESSAGE = 'message';
+    public const string COLUMN_MESSAGE = 'message';
     /**
      * The user column name.
      */
-    public const COLUMN_USER = 'user';
+    public const string COLUMN_USER = 'user';
 
     /**
      * @param string $field     the field to sort

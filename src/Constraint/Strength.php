@@ -25,7 +25,7 @@ class Strength extends Constraint
 {
     final public const string STRENGTH_ERROR = '6218da5e-12d8-481e-b0fc-9bc4cbaad2ef';
 
-    protected const ERROR_NAMES = [
+    protected const array ERROR_NAMES = [
         self::STRENGTH_ERROR => 'STRENGTH_ERROR',
     ];
 

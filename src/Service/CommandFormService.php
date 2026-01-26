@@ -31,17 +31,17 @@ readonly class CommandFormService
     /**
      * The priority for an argument text field.
      */
-    public const PRIORITY_ARGUMENT = 0;
+    public const int PRIORITY_ARGUMENT = 0;
 
     /**
      * The priority for an option boolean field.
      */
-    public const PRIORITY_BOOL = 2;
+    public const int PRIORITY_BOOL = 2;
 
     /**
      * The priority for an option text field.
      */
-    public const PRIORITY_TEXT = 1;
+    public const int PRIORITY_TEXT = 1;
 
     public function __construct(private FormFactoryInterface $factory)
     {

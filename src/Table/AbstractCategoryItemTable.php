@@ -37,7 +37,7 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
     /**
      * The category parameter name (int).
      */
-    final public const PARAM_CATEGORY = 'categoryId';
+    final public const string PARAM_CATEGORY = 'categoryId';
 
     /**
      * @phpstan-param TRepository $repository

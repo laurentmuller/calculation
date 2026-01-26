@@ -31,12 +31,12 @@ class MonthChart extends AbstractHighchart
     /**
      * The HTML color name for amounts.
      */
-    public const COLOR_AMOUNT = HtmlColorName::SEA_GREEN;
+    public const HtmlColorName COLOR_AMOUNT = HtmlColorName::SEA_GREEN;
 
     /**
      * The HTML color name for margins.
      */
-    public const COLOR_MARGIN = HtmlColorName::INDIAN_RED;
+    public const HtmlColorName COLOR_MARGIN = HtmlColorName::INDIAN_RED;
 
     private const string TEMPLATE_NAME = 'chart/_month_tooltip.js.twig';
 

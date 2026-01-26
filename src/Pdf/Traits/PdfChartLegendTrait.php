@@ -35,7 +35,7 @@ trait PdfChartLegendTrait
     /**
      * The width of separation between legends.
      */
-    private const SEP_WIDTH = 1.5;
+    private const float SEP_WIDTH = 1.5;
 
     /**
      * Gets the height for the given legends.

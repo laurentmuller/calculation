@@ -28,12 +28,12 @@ abstract class AbstractProperty extends AbstractEntity
     /**
      * The value used for FALSE value.
      */
-    final public const FALSE_VALUE = 0;
+    final public const int FALSE_VALUE = 0;
 
     /**
      * The value used for TRUE value.
      */
-    final public const TRUE_VALUE = 1;
+    final public const int TRUE_VALUE = 1;
 
     /**
      * The property value.

@@ -21,40 +21,40 @@ interface WeekDaysInterface
     /**
      * The number of week days.
      */
-    public const DAYS_COUNT = 7;
+    public const int DAYS_COUNT = 7;
 
     /**
      * ISO-8601 numeric representation of friday.
      */
-    public const FRIDAY = 5;
+    public const int FRIDAY = 5;
 
     /**
      * ISO-8601 numeric representation of monday.
      */
-    public const MONDAY = 1;
+    public const int MONDAY = 1;
 
     /**
      * ISO-8601 numeric representation of saturday.
      */
-    public const SATURDAY = 6;
+    public const int SATURDAY = 6;
 
     /**
      * ISO-8601 numeric representation of sunday.
      */
-    public const SUNDAY = 7;
+    public const int SUNDAY = 7;
 
     /**
      * ISO-8601 numeric representation of thursday.
      */
-    public const THURSDAY = 4;
+    public const int THURSDAY = 4;
 
     /**
      * ISO-8601 numeric representation of tuesday.
      */
-    public const TUESDAY = 2;
+    public const int TUESDAY = 2;
 
     /**
      * ISO-8601 numeric representation of wednesday.
      */
-    public const WEDNESDAY = 3;
+    public const int WEDNESDAY = 3;
 }

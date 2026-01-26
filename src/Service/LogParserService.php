@@ -29,12 +29,12 @@ class LogParserService
     /**
      * The date format.
      */
-    public const DATE_FORMAT = 'd.m.Y H:i:s.v';
+    public const string DATE_FORMAT = 'd.m.Y H:i:s.v';
 
     /**
      * The service formatter name.
      */
-    public const FORMATTER_NAME = 'monolog.application.formatter';
+    public const string FORMATTER_NAME = 'monolog.application.formatter';
 
     // the values separator.
     private const string SEPARATOR = '|';

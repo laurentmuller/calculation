@@ -34,7 +34,7 @@ class ImageResizer
     /**
      * The target image size.
      */
-    public const IMAGE_SIZE = 192;
+    public const int IMAGE_SIZE = 192;
 
     public function __construct(
         private readonly TranslatorInterface $translator,

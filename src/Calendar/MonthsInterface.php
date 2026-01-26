@@ -21,65 +21,65 @@ interface MonthsInterface
     /**
      * Numeric representation of April.
      */
-    public const APRIL = 4;
+    public const int APRIL = 4;
 
     /**
      * Numeric representation of August.
      */
-    public const AUGUST = 8;
+    public const int AUGUST = 8;
 
     /**
      * Numeric representation of December.
      */
-    public const DECEMBER = 12;
+    public const int DECEMBER = 12;
 
     /**
      * Numeric representation of February.
      */
-    public const FEBRUARY = 2;
+    public const int FEBRUARY = 2;
 
     /**
      * Numeric representation of January.
      */
-    public const JANUARY = 1;
+    public const int JANUARY = 1;
 
     /**
      * Numeric representation of July.
      */
-    public const JULY = 7;
+    public const int JULY = 7;
 
     /**
      * Numeric representation of June.
      */
-    public const JUNE = 6;
+    public const int JUNE = 6;
 
     /**
      * Numeric representation of March.
      */
-    public const MARCH = 3;
+    public const int MARCH = 3;
 
     /**
      * Numeric representation of May.
      */
-    public const MAY = 5;
+    public const int MAY = 5;
 
     /**
      * The number of months.
      */
-    public const MONTHS_COUNT = 12;
+    public const int MONTHS_COUNT = 12;
 
     /**
      * Numeric representation of November.
      */
-    public const NOVEMBER = 11;
+    public const int NOVEMBER = 11;
 
     /**
      * Numeric representation of October.
      */
-    public const OCTOBER = 10;
+    public const int OCTOBER = 10;
 
     /**
      * Numeric representation of September.
      */
-    public const SEPTEMBER = 9;
+    public const int SEPTEMBER = 9;
 }

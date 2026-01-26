@@ -55,7 +55,7 @@ class ExchangeRateService extends AbstractHttpClientService
     /**
      * The default cache timeout (15 minutes).
      */
-    private const CACHE_TIMEOUT = 60 * 15;
+    private const int CACHE_TIMEOUT = 60 * 15;
 
     /**
      * The host name.

@@ -43,7 +43,7 @@ readonly class TimelineService
     /**
      * The date format for HTML input.
      */
-    public const DATE_FORMAT = 'Y-m-d';
+    public const string DATE_FORMAT = 'Y-m-d';
 
     private const string DEFAULT_INTERVAL = 'P1W';
 

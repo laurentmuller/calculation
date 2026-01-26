@@ -27,7 +27,7 @@ class RecaptchaService
 {
     use MathTrait;
 
-    public const ERROR_PREFIX = 'recaptcha.';
+    public const string ERROR_PREFIX = 'recaptcha.';
 
     private int $challengeTimeout = 60;
     private string $expectedAction = 'login';

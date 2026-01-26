@@ -21,17 +21,17 @@ interface EntityInterface extends \Stringable
     /**
      * The extra lazy fetch mode.
      */
-    final public const EXTRA_LAZY = 'EXTRA_LAZY';
+    final public const string EXTRA_LAZY = 'EXTRA_LAZY';
 
     /**
      * The maximum length for a code property.
      */
-    final public const MAX_CODE_LENGTH = 30;
+    final public const int MAX_CODE_LENGTH = 30;
 
     /**
      * The maximum length for a string property.
      */
-    final public const MAX_STRING_LENGTH = 255;
+    final public const int MAX_STRING_LENGTH = 255;
 
     /**
      * Gets a string used to display in the user interface (UI).

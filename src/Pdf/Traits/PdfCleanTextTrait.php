@@ -23,7 +23,7 @@ use fpdf\PdfDocument;
 trait PdfCleanTextTrait
 {
     /** The encoding source. */
-    private const ENCODING_FROM = [
+    private const array ENCODING_FROM = [
         'ASCII',
         'UTF-8',
         'CP1252',
@@ -31,7 +31,7 @@ trait PdfCleanTextTrait
     ];
 
     /** The encoding target. */
-    private const ENCODING_TO = 'CP1252';
+    private const string ENCODING_TO = 'CP1252';
 
     protected function cleanText(string $str): string
     {

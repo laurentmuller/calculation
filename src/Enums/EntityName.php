@@ -96,7 +96,7 @@ enum EntityName: string implements ConstantsInterface, EnumSortableInterface, Tr
     /**
      * The entity prefix.
      */
-    private const ENTITY_PREFIX = 'Entity';
+    private const string ENTITY_PREFIX = 'Entity';
 
     /**
      * Gets this enumeration as constants.

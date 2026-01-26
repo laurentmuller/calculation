@@ -22,9 +22,9 @@ use Symfony\Component\Routing\Attribute\Route;
 class AboutPolicyController extends AbstractAboutController
 {
     /**
-     * The policy file name (markdown).
+     * The policy file name (Markdown).
      */
-    public const POLICY_FILE = 'POLICY.md';
+    public const string POLICY_FILE = 'POLICY.md';
 
     private const array TAGS = [
         ['h4', 'h6', 'bookmark bookmark-2'],

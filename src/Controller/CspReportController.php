@@ -35,7 +35,7 @@ class CspReportController extends AbstractController
     /**
      * The route name.
      */
-    public const ROUTE_NAME = 'log_csp';
+    public const string ROUTE_NAME = 'log_csp';
 
     #[GetRoute(path: '/csp', name: self::ROUTE_NAME)]
     public function invoke(Request $request, LoggerInterface $logger, MailerInterface $mailer): Response

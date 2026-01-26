@@ -35,27 +35,27 @@ abstract class AbstractHttpClientService
     /**
      * The base URI parameter name.
      */
-    final protected const BASE_URI = 'base_uri';
+    final protected const string BASE_URI = 'base_uri';
 
     /**
      * The body parameter name.
      */
-    final protected const BODY = 'body';
+    final protected const string BODY = 'body';
 
     /**
      * The header's parameter name.
      */
-    final protected const HEADERS = 'headers';
+    final protected const string HEADERS = 'headers';
 
     /**
      * The JSON parameter name.
      */
-    final protected const JSON = 'json';
+    final protected const string JSON = 'json';
 
     /**
      * The query parameter name.
      */
-    final protected const QUERY = 'query';
+    final protected const string QUERY = 'query';
 
     /**
      * The HTTP client.

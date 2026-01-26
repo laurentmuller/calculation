@@ -21,7 +21,7 @@ interface DateFormatInterface
     /**
      * The map between format names and values.
      */
-    public const DATE_FORMATS = [
+    public const array DATE_FORMATS = [
         self::FORMAT_NONE => \IntlDateFormatter::NONE,
         self::FORMAT_FULL => \IntlDateFormatter::FULL,
         self::FORMAT_LONG => \IntlDateFormatter::LONG,
@@ -32,25 +32,25 @@ interface DateFormatInterface
     /**
      * The full date or time format.
      */
-    final public const FORMAT_FULL = 'full';
+    final public const string FORMAT_FULL = 'full';
 
     /**
      * The long date or time format.
      */
-    final public const FORMAT_LONG = 'long';
+    final public const string FORMAT_LONG = 'long';
 
     /**
      * The medium date or time format.
      */
-    final public const FORMAT_MEDIUM = 'medium';
+    final public const string FORMAT_MEDIUM = 'medium';
 
     /**
      * The none date or time format.
      */
-    final public const FORMAT_NONE = 'none';
+    final public const string FORMAT_NONE = 'none';
 
     /**
      * The short date or time format.
      */
-    final public const FORMAT_SHORT = 'short';
+    final public const string FORMAT_SHORT = 'short';
 }

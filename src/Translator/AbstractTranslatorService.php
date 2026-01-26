@@ -29,12 +29,12 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     /**
      * The not found field status code.
      */
-    final protected const ERROR_NOT_FOUND = 199;
+    final protected const int ERROR_NOT_FOUND = 199;
 
     /**
      * The cache timeout (15 minutes).
      */
-    private const CACHE_TIMEOUT = 60 * 15;
+    private const int CACHE_TIMEOUT = 60 * 15;
 
     /**
      * The property accessor to get values.

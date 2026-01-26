@@ -49,7 +49,7 @@ class DatabaseInfoService
             $this->configuration = [];
 
             try {
-                /** @phpstan-var array<array{Variable_name: string, Value: string}> $entries */
+                /** @var array<array{Variable_name: string, Value: string}> $entries */
                 $entries = $this->executeQuery('SHOW VARIABLES', true);
                 foreach ($entries as $entry) {
                     $value = $entry['Value'];
@@ -80,20 +80,19 @@ class DatabaseInfoService
     public function getDatabase(): array
     {
         if (null === $this->database) {
-            $this->database = [
-                'Server' => 'MariaDB',
-            ];
+            $this->database = ['Server' => 'MariaDB'];
 
             try {
                 $params = $this->getConnection()->getParams();
                 foreach (['serverVersion', 'dbname', 'host', 'port', 'driver', 'charset'] as $key) {
-                    if (isset($params[$key]) && \is_scalar($params[$key])) {
+                    $value = $params[$key] ?? null;
+                    if (\is_scalar($value)) {
                         $key = match ($key) {
                             'dbname' => 'Name',
                             'serverVersion' => 'Version',
                             default => \ucfirst($key)
                         };
-                        $this->database[$key] = (string) $params[$key];
+                        $this->database[$key] = (string) $value;
                     }
                 }
             } catch (\Exception) {

@@ -109,7 +109,7 @@ final class DatabaseInfoServiceTest extends TestCase
     public function testGetDatabase(): void
     {
         $expected = [
-            'Server' => 'MySql',
+            'Server' => 'MariaDB',
             'Version' => '5.7.40',
             'Name' => 'database',
             'Host' => 'localhost',
@@ -126,7 +126,7 @@ final class DatabaseInfoServiceTest extends TestCase
     public function testGetDatabaseWithException(): void
     {
         $expected = [
-            'Server' => 'MySql',
+            'Server' => 'MariaDB',
         ];
 
         $manager = $this->createMock(EntityManagerInterface::class);

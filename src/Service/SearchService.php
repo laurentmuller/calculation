@@ -56,57 +56,57 @@ class SearchService implements ServiceSubscriberInterface
     /**
      * The action column name.
      */
-    final public const string COLUMN_ACTION = 'action';
+    public const string COLUMN_ACTION = 'action';
 
     /**
      * The content column name.
      */
-    final public const string COLUMN_CONTENT = 'content';
+    public const string COLUMN_CONTENT = 'content';
 
     /**
      * The entity column name.
      */
-    final public const string COLUMN_ENTITY_NAME = 'entityName';
+    public const string COLUMN_ENTITY_NAME = 'entityName';
 
     /**
      * The field column name.
      */
-    final public const string COLUMN_FIELD = 'field';
+    public const string COLUMN_FIELD = 'field';
 
     /**
      * The field column name.
      */
-    final public const string COLUMN_FIELD_NAME = 'fieldName';
+    public const string COLUMN_FIELD_NAME = 'fieldName';
 
     /**
      * The delete granted column name.
      */
-    final public const string COLUMN_GRANTED_DELETE = 'allowDelete';
+    public const string COLUMN_GRANTED_DELETE = 'allowDelete';
 
     /**
      * The edit granted column name.
      */
-    final public const string COLUMN_GRANTED_EDIT = 'allowEdit';
+    public const string COLUMN_GRANTED_EDIT = 'allowEdit';
 
     /**
      * The show granted column name.
      */
-    final public const string COLUMN_GRANTED_SHOW = 'allowShow';
+    public const string COLUMN_GRANTED_SHOW = 'allowShow';
 
     /**
      * The identifier column name.
      */
-    final public const string COLUMN_ID = 'id';
+    public const string COLUMN_ID = 'id';
 
     /**
      * The type column name.
      */
-    final public const string COLUMN_TYPE = 'type';
+    public const string COLUMN_TYPE = 'type';
 
     /**
      * Limit value to return all rows.
      */
-    final public const int NO_LIMIT = -1;
+    public const int NO_LIMIT = -1;
 
     /**
      * The column names and types.

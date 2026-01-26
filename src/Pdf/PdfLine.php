@@ -24,7 +24,7 @@ class PdfLine implements PdfDocumentUpdaterInterface
     /**
      * The default line width (0.2 mm).
      */
-    final public const float DEFAULT_WIDTH = 0.2;
+    public const float DEFAULT_WIDTH = 0.2;
 
     /**
      * @param float $width the line width

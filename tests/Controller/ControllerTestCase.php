@@ -24,7 +24,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 abstract class ControllerTestCase extends AuthenticateWebTestCase
 {
-    protected const DEFAULT_USERS = [
+    protected const array DEFAULT_USERS = [
         self::ROLE_USER,
         self::ROLE_ADMIN,
         self::ROLE_SUPER_ADMIN,

@@ -32,25 +32,25 @@ interface DateFormatInterface
     /**
      * The full date or time format.
      */
-    final public const string FORMAT_FULL = 'full';
+    public const string FORMAT_FULL = 'full';
 
     /**
      * The long date or time format.
      */
-    final public const string FORMAT_LONG = 'long';
+    public const string FORMAT_LONG = 'long';
 
     /**
      * The medium date or time format.
      */
-    final public const string FORMAT_MEDIUM = 'medium';
+    public const string FORMAT_MEDIUM = 'medium';
 
     /**
      * The none date or time format.
      */
-    final public const string FORMAT_NONE = 'none';
+    public const string FORMAT_NONE = 'none';
 
     /**
      * The short date or time format.
      */
-    final public const string FORMAT_SHORT = 'short';
+    public const string FORMAT_SHORT = 'short';
 }

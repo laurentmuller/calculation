@@ -44,7 +44,7 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
     /**
      * The group parameter name (int).
      */
-    final public const string PARAM_GROUP = 'groupId';
+    public const string PARAM_GROUP = 'groupId';
 
     public function __construct(
         CategoryRepository $repository,

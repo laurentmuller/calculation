@@ -34,17 +34,17 @@ class CategoryRepository extends AbstractRepository
     /**
      * The filter type to display all categories.
      */
-    final public const int FILTER_NONE = 0;
+    public const int FILTER_NONE = 0;
 
     /**
      * The filter's type to display only categories that contain one or more products.
      */
-    final public const int FILTER_PRODUCTS = 1;
+    public const int FILTER_PRODUCTS = 1;
 
     /**
      * The filter's type to display only categories that contain one or more tasks.
      */
-    final public const int FILTER_TASKS = 2;
+    public const int FILTER_TASKS = 2;
 
     public function __construct(ManagerRegistry $registry)
     {

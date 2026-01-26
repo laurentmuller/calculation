@@ -42,7 +42,7 @@ class UrlGeneratorService
     /**
      * The caller parameter name.
      */
-    final public const string PARAM_CALLER = 'caller';
+    public const string PARAM_CALLER = 'caller';
 
     /**
      * The parameter names.

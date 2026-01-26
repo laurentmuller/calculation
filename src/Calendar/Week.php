@@ -25,7 +25,7 @@ class Week extends AbstractCalendarItem implements \Stringable
     /**
      * The date format used to generate this key.
      */
-    final public const string KEY_FORMAT = 'Y.W';
+    public const string KEY_FORMAT = 'Y.W';
 
     /**
      * @param Calendar $calendar the parent calendar

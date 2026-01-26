@@ -33,12 +33,12 @@ class LogTable extends AbstractTable implements \Countable
     /**
      * The channel parameter name.
      */
-    final public const string PARAM_CHANNEL = LogSorterService::COLUMN_CHANNEL;
+    public const string PARAM_CHANNEL = LogSorterService::COLUMN_CHANNEL;
 
     /**
      * The level parameter name.
      */
-    final public const string PARAM_LEVEL = LogSorterService::COLUMN_LEVEL;
+    public const string PARAM_LEVEL = LogSorterService::COLUMN_LEVEL;
 
     public function __construct(private readonly LogService $service, private readonly Environment $twig)
     {

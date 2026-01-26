@@ -26,22 +26,22 @@ class CustomerRepository extends AbstractRepository
     /**
      * The first name, last name and company field name.
      */
-    final public const string NAME_COMPANY_FIELD = 'nameAndCompany';
+    public const string NAME_COMPANY_FIELD = 'nameAndCompany';
 
     /**
      * The first name, last name and company fields.
      */
-    final public const array NAME_COMPANY_FIELDS = ['lastName', 'firstName', 'company'];
+    public const array NAME_COMPANY_FIELDS = ['lastName', 'firstName', 'company'];
 
     /**
      * The zip and city field name.
      */
-    final public const string ZIP_CITY_FIELD = 'zipCity';
+    public const string ZIP_CITY_FIELD = 'zipCity';
 
     /**
      * The zip code and city fields.
      */
-    final public const array ZIP_CITY_FIELDS = ['zipCode', 'city'];
+    public const array ZIP_CITY_FIELDS = ['zipCode', 'city'];
 
     public function __construct(ManagerRegistry $registry)
     {

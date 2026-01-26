@@ -30,7 +30,7 @@ class OpenWeatherSearchService
     /**
      * The number of search results to return.
      */
-    final public const int DEFAULT_LIMIT = 15;
+    public const int DEFAULT_LIMIT = 15;
 
     public function __construct(
         #[Autowire('%kernel.project_dir%/resources/data/openweather.sqlite')]

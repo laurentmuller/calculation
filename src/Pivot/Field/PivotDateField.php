@@ -23,22 +23,22 @@ class PivotDateField extends PivotField
     /**
      * Numeric representation of a month, without leading zeros.
      */
-    final public const string PART_MONTH = 'n';
+    public const string PART_MONTH = 'n';
 
     /**
      * ISO-8601 week number of year, weeks starting on Monday.
      */
-    final public const string PART_WEEK = 'W';
+    public const string PART_WEEK = 'W';
 
     /**
      * ISO-8601 numeric representation of the day of the week. 1 (for Monday) through 7 (for Sunday).
      */
-    final public const string PART_WEEK_DAY = 'N';
+    public const string PART_WEEK_DAY = 'N';
 
     /**
      * A full numeric representation of a year, 4 digits.
      */
-    final public const string PART_YEAR = 'Y';
+    public const string PART_YEAR = 'Y';
 
     /**
      * @param string  $name   the field name

@@ -94,7 +94,7 @@ class HelpService
     /**
      * The image extension.
      */
-    final public const string IMAGES_EXT = '.png';
+    public const string IMAGES_EXT = '.png';
 
     /**
      * @param string $jsonPath  the absolute path to JSON files

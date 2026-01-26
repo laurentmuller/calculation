@@ -24,22 +24,22 @@ class HeaderFooter
     /**
      * The center section prefix.
      */
-    final public const string CENTER_SECTION = '&C';
+    public const string CENTER_SECTION = '&C';
 
     /**
      * The default font size.
      */
-    final public const int DEFAULT_FONT_SIZE = 9;
+    public const int DEFAULT_FONT_SIZE = 9;
 
     /**
      * The left section prefix.
      */
-    final public const string LEFT_SECTION = '&L';
+    public const string LEFT_SECTION = '&L';
 
     /**
      * The right section prefix.
      */
-    final public const string RIGHT_SECTION = '&R';
+    public const string RIGHT_SECTION = '&R';
 
     // the date and time format
     private const string DATE_AND_TIME = '&D - &T';

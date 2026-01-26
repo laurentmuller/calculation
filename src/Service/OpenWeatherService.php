@@ -56,12 +56,12 @@ class OpenWeatherService extends AbstractHttpClientService
     /**
      * The parameter value to exclude the hourly data.
      */
-    final public const string EXCLUDE_HOURLY = 'hourly';
+    public const string EXCLUDE_HOURLY = 'hourly';
 
     /**
      * The parameter value to exclude the minutely data.
      */
-    final public const string EXCLUDE_MINUTELY = 'minutely';
+    public const string EXCLUDE_MINUTELY = 'minutely';
 
     /**
      * The maximum number of city identifiers to retrieve.

@@ -59,12 +59,12 @@ abstract class AbstractController extends BaseController
     /**
      * The home page route name.
      */
-    final public const HOME_PAGE = 'homepage';
+    public const string HOME_PAGE = 'homepage';
 
     /**
      * The route requirement for an identifier.
      */
-    final public const ID_REQUIREMENT = ['id' => Requirement::DIGITS];
+    public const array ID_REQUIREMENT = ['id' => Requirement::DIGITS];
 
     // services
     private ?UrlGeneratorService $generatorService = null;

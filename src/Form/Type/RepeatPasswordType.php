@@ -32,12 +32,12 @@ class RepeatPasswordType extends AbstractType
     /**
      * The default translatable confirmation label.
      */
-    final public const string CONFIRM_LABEL = 'user.password.confirmation';
+    public const string CONFIRM_LABEL = 'user.password.confirmation';
 
     /**
      * The default translatable password label.
      */
-    final public const string PASSWORD_LABEL = 'user.password.label';
+    public const string PASSWORD_LABEL = 'user.password.label';
 
     #[\Override]
     public function configureOptions(OptionsResolver $resolver): void

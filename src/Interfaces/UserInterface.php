@@ -25,15 +25,15 @@ interface UserInterface extends BaseUserInterface, PasswordAuthenticatedUserInte
     /**
      * The maximum length for a username property.
      */
-    final public const int MAX_USERNAME_LENGTH = 180;
+    public const int MAX_USERNAME_LENGTH = 180;
 
     /**
      * The minimum length for the password.
      */
-    final public const int MIN_PASSWORD_LENGTH = 6;
+    public const int MIN_PASSWORD_LENGTH = 6;
 
     /**
      * The minimum length for a username property.
      */
-    final public const int MIN_USERNAME_LENGTH = 2;
+    public const int MIN_USERNAME_LENGTH = 2;
 }

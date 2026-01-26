@@ -28,7 +28,7 @@ class PolicyController extends AbstractController
 {
     use CookieTrait;
 
-    final public const string POLICY_ACCEPTED = 'POLICY_ACCEPTED';
+    public const string POLICY_ACCEPTED = 'POLICY_ACCEPTED';
 
     /**
      * Accept the license agreement.

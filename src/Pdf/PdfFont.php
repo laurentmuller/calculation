@@ -26,17 +26,17 @@ class PdfFont implements PdfDocumentUpdaterInterface
     /**
      * The default font name (Arial).
      */
-    final public const PdfFontName DEFAULT_NAME = PdfFontName::ARIAL;
+    public const PdfFontName DEFAULT_NAME = PdfFontName::ARIAL;
 
     /**
      * The default font size (9pt).
      */
-    final public const float DEFAULT_SIZE = 9.0;
+    public const float DEFAULT_SIZE = 9.0;
 
     /**
      * The default font style (Regular).
      */
-    final public const PdfFontStyle DEFAULT_STYLE = PdfFontStyle::REGULAR;
+    public const PdfFontStyle DEFAULT_STYLE = PdfFontStyle::REGULAR;
 
     public function __construct(
         private PdfFontName $name = self::DEFAULT_NAME,

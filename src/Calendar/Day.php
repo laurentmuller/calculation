@@ -25,7 +25,7 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
     /**
      * The date format used to generate this key.
      */
-    final public const string KEY_FORMAT = 'Y.m.d';
+    public const string KEY_FORMAT = 'Y.m.d';
 
     /**
      * @param Calendar  $calendar the parent calendar

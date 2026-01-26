@@ -25,7 +25,7 @@ class Month extends AbstractCalendarItem implements \Stringable
     /**
      * The date format used to generate this key.
      */
-    final public const string KEY_FORMAT = 'Y.m';
+    public const string KEY_FORMAT = 'Y.m';
 
     /**
      * @param Calendar $calendar the parent calendar

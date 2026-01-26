@@ -43,12 +43,12 @@ class IndexController extends AbstractController
     /**
      * The custom view query parameter.
      */
-    final public const string PARAM_CUSTOM = 'custom';
+    public const string PARAM_CUSTOM = 'custom';
 
     /**
      * The restriction query parameter.
      */
-    final public const string PARAM_RESTRICT = 'restrict';
+    public const string PARAM_RESTRICT = 'restrict';
 
     /**
      * The view parameter.

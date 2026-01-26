@@ -30,7 +30,7 @@ class ReportFooter
     /**
      * The footer offset in millimeters.
      */
-    final public const float FOOTER_OFFSET = 13.0;
+    public const float FOOTER_OFFSET = 13.0;
 
     /**
      * The content text.

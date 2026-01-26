@@ -24,7 +24,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
     /**
      * The in-memory database file name.
      */
-    final public const string IN_MEMORY = ':memory:';
+    public const string IN_MEMORY = ':memory:';
 
     /**
      * The opened statements.

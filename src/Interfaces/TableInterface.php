@@ -21,72 +21,72 @@ interface TableInterface
     /**
      * The allowed page sizes.
      */
-    final public const array PAGE_LIST = [5, 10, 15, 20, 25, 30, 50];
+    public const array PAGE_LIST = [5, 10, 15, 20, 25, 30, 50];
 
     /**
      * The column's parameter name (array of columns).
      */
-    final public const string PARAM_COLUMNS = 'columns';
+    public const string PARAM_COLUMNS = 'columns';
 
     /**
      * The identifier parameter name (int).
      */
-    final public const string PARAM_ID = 'id';
+    public const string PARAM_ID = 'id';
 
     /**
      * The limit parameter name (int).
      */
-    final public const string PARAM_LIMIT = 'limit';
+    public const string PARAM_LIMIT = 'limit';
 
     /**
      * The offset parameter name (int).
      */
-    final public const string PARAM_OFFSET = 'offset';
+    public const string PARAM_OFFSET = 'offset';
 
     /**
      * The order parameter name (string).
      */
-    final public const string PARAM_ORDER = 'order';
+    public const string PARAM_ORDER = 'order';
 
     /**
      * The page parameter name (int).
      */
-    final public const string PARAM_PAGE = 'page';
+    public const string PARAM_PAGE = 'page';
 
     /**
      * The page lists parameter name (array of integers).
      */
-    final public const string PARAM_PAGE_LIST = 'pageList';
+    public const string PARAM_PAGE_LIST = 'pageList';
 
     /**
      * The row's parameter name (array).
      */
-    final public const string PARAM_ROWS = 'rows';
+    public const string PARAM_ROWS = 'rows';
 
     /**
      * The search parameter name (string).
      */
-    final public const string PARAM_SEARCH = 'search';
+    public const string PARAM_SEARCH = 'search';
 
     /**
      * The sort parameter name (string).
      */
-    final public const string PARAM_SORT = 'sort';
+    public const string PARAM_SORT = 'sort';
 
     /**
      * The total parameter name (int).
      */
-    final public const string PARAM_TOTAL = 'total';
+    public const string PARAM_TOTAL = 'total';
 
     /**
      * The total not filtered parameter name (int).
      */
-    final public const string PARAM_TOTAL_NOT_FILTERED = 'totalNotFiltered';
+    public const string PARAM_TOTAL_NOT_FILTERED = 'totalNotFiltered';
 
     /**
      * The display view parameter name (string: 'table' or 'custom').
      *
      * @see TableView
      */
-    final public const string PARAM_VIEW = 'view';
+    public const string PARAM_VIEW = 'view';
 }

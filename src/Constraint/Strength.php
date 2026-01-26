@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Constraint;
 #[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 class Strength extends Constraint
 {
-    final public const string STRENGTH_ERROR = '6218da5e-12d8-481e-b0fc-9bc4cbaad2ef';
+    public const string STRENGTH_ERROR = '6218da5e-12d8-481e-b0fc-9bc4cbaad2ef';
 
     protected const array ERROR_NAMES = [
         self::STRENGTH_ERROR => 'STRENGTH_ERROR',

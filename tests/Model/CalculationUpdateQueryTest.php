@@ -103,10 +103,7 @@ final class CalculationUpdateQueryTest extends TestCase
         $context = $this->createMock(ExecutionContextInterface::class);
         if ($expectedViolation) {
             $violation = $this->createMock(ConstraintViolationBuilderInterface::class);
-            $violation->expects(self::any())
-                ->method('setParameter')
-                ->willReturn($violation);
-            $violation->expects(self::any())
+            $violation->expects(self::once())
                 ->method('atPath')
                 ->willReturn($violation);
             $violation->expects(self::once())
@@ -115,8 +112,7 @@ final class CalculationUpdateQueryTest extends TestCase
                 ->method('buildViolation')
                 ->willReturn($violation);
         } else {
-            $context
-                ->expects(self::never())
+            $context->expects(self::never())
                 ->method('buildViolation');
         }
 

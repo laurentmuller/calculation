@@ -18,14 +18,11 @@ about:
         message: Recherche des informations...
         error: Erreur lors du chargement des informations.
     database:
-        title: Configuration des données
-        version: Configuration des données v%version%
+        title: Configuration de MariaDB
     php:
         title: Configuration de PHP
-        version: Configuration de PHP v%version%
     symfony:
         title: Configuration de Symfony
-        version: Configuration de Symfony v%version%
     policy:
         title: Politique de confidentialité
     licence:

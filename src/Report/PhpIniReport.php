@@ -34,7 +34,7 @@ class PhpIniReport extends AbstractReport
     public function __construct(AbstractController $controller, private readonly PhpInfoService $service)
     {
         parent::__construct($controller);
-        $this->setTranslatedTitle('about.php.version', ['%version%' => $this->service->getVersion()]);
+        $this->setTranslatedTitle('about.php.title');
         $file = \php_ini_loaded_file();
         if (\is_string($file)) {
             $this->setTranslatedDescription('log.list.file', ['%file%' => $file]);
@@ -54,6 +54,7 @@ class PhpIniReport extends AbstractReport
         }
 
         $table = $this->createTable();
+        $this->outputSingleEntry($table, 'Version', $this->service->getVersion());
         foreach ($content as $key => $entries) {
             $this->outputEntries($table, $key, $entries);
         }

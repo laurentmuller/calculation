@@ -45,7 +45,7 @@ class SymfonyReport extends AbstractReport
         private readonly SymfonyInfoService $symfonyService
     ) {
         parent::__construct($controller);
-        $this->setTranslatedTitle('about.symfony.version', ['%version%' => $symfonyService->getVersion()]);
+        $this->setTranslatedTitle('about.symfony.title');
     }
 
     #[\Override]
@@ -127,6 +127,7 @@ class SymfonyReport extends AbstractReport
                 PdfColumn::left('Value', 85)
             );
         $table->setGroupKey('Kernel')->outputHeaders();
+        $this->outputRow($table, 'Version', $symfony->getVersion());
         $this->outputRow($table, 'Environment', $this->trans($kernel->getEnvironment()))
             ->outputRow($table, 'Running Mode', $this->trans($kernel->getMode()))
             ->outputRow($table, 'Version status', $symfony->getMaintenanceStatus())

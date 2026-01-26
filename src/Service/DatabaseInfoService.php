@@ -81,20 +81,19 @@ class DatabaseInfoService
     {
         if (null === $this->database) {
             $this->database = [
-                'Server' => $this->isMariaDB() ? 'MariaDB' : 'MySql',
+                'Server' => 'MariaDB',
             ];
 
             try {
                 $params = $this->getConnection()->getParams();
                 foreach (['serverVersion', 'dbname', 'host', 'port', 'driver', 'charset'] as $key) {
-                    $value = $params[$key] ?? null;
-                    if (\is_scalar($value)) {
+                    if (isset($params[$key]) && \is_scalar($params[$key])) {
                         $key = match ($key) {
                             'dbname' => 'Name',
                             'serverVersion' => 'Version',
                             default => \ucfirst($key)
                         };
-                        $this->database[$key] = (string) $value;
+                        $this->database[$key] = (string) $params[$key];
                     }
                 }
             } catch (\Exception) {
@@ -115,7 +114,8 @@ class DatabaseInfoService
             try {
                 $entries = $this->executeQuery('SHOW VARIABLES LIKE "version"', false);
                 if (false !== $entries) {
-                    $this->version = (string) $entries['Value'];
+                    $value = (string) $entries['Value'];
+                    $this->version = \explode('-', $value)[0];
                 }
             } catch (\Exception|Exception) {
             }
@@ -138,14 +138,6 @@ class DatabaseInfoService
     public function isEnabledValue(string $value): bool
     {
         return \in_array(\strtolower($value), self::ENABLED_VALUES, true);
-    }
-
-    /**
-     * Returns if the database is MariaDB (true) or MySql (false).
-     */
-    public function isMariaDB(): bool
-    {
-        return false !== \stripos($this->getVersion(), 'mariadb');
     }
 
     /**

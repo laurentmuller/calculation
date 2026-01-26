@@ -40,7 +40,7 @@ class DatabaseDocument extends AbstractDocument
             return false;
         }
 
-        $this->start($this->trans('about.database.version', ['%version%' => $service->getVersion()]));
+        $this->start($this->trans('about.database.title'));
         $sheet = $this->getActiveSheet();
         if ($this->outputArray($sheet, 'Database', $database)) {
             $sheet = $this->createSheet();

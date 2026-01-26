@@ -5,11 +5,7 @@
         <tbody>
             <tr class="h">
                 <td colspan="2" class="position-relative">
-                    {% if service.mariaDB %}
-                        {{- tools.content_header_link('https://mariadb.org', service.version, 'mariadb') -}}
-                    {% else %}
-                        {{- tools.content_header_link('https://www.mysql.com', service.version, 'mysql') -}}
-                    {% endif %}
+                    {{- tools.content_header_link('https://mariadb.org', service.version, 'mariadb') -}}
                 </td>
             </tr>
             {{ tools.headerInfo('Database') }}

@@ -45,8 +45,7 @@ class SymfonyDocument extends AbstractDocument
     #[\Override]
     public function render(): bool
     {
-        $symfonyService = $this->symfonyService;
-        $this->start($this->trans('about.symfony.version', ['%version%' => $symfonyService->getVersion()]));
+        $this->start($this->trans('about.symfony.title'));
         $this->setActiveTitle('Configuration', $this->controller);
         $this->outputInfo();
         $this->outputBundles();
@@ -125,6 +124,7 @@ class SymfonyDocument extends AbstractDocument
             'Value' => HeaderFormat::instance(),
         ]);
         $this->outputGroup($sheet, $row++, 'Kernel')
+            ->outputRow($sheet, $row++, 'Version', $symfony->getVersion())
             ->outputRow($sheet, $row++, 'Environment', $this->trans($kernel->getEnvironment()))
             ->outputRow($sheet, $row++, 'Running Mode', $this->trans($kernel->getMode()))
             ->outputRow($sheet, $row++, 'Version status', $symfony->getMaintenanceStatus())

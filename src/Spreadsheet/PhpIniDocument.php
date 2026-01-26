@@ -40,8 +40,7 @@ class PhpIniDocument extends AbstractDocument
     public function render(): bool
     {
         $content = $this->service->asArray();
-        $version = $this->service->getVersion();
-        $this->start($this->trans('about.php.version', ['%version%' => $version]));
+        $this->start($this->trans('about.php.title'));
         $this->setActiveTitle('Configuration', $this->controller);
         $sheet = $this->getActiveSheet();
 
@@ -54,6 +53,7 @@ class PhpIniDocument extends AbstractDocument
 
         $row = $this->outputHeaders($sheet);
         foreach ($content as $key => $entries) {
+            $this->outputSingleEntry($sheet, $row++, 'Version', $this->service->getVersion());
             $row = $this->outputGroup($sheet, $row, $key);
             $row = $this->outputEntries($sheet, $row, $entries);
         }

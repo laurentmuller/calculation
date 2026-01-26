@@ -25,7 +25,7 @@ class HtmlTextChunk extends AbstractHtmlChunk
     /**
      * The names of parents to use with multi-cell.
      */
-    private const PARENT_MULTI_CELL = [
+    private const array PARENT_MULTI_CELL = [
         HtmlTag::H1,
         HtmlTag::H2,
         HtmlTag::H3,

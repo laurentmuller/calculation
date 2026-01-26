@@ -15,7 +15,7 @@ namespace App\Tests\Command;
 
 final class FontAwesomeCommandTest extends CommandTestCase
 {
-    private const COMMAND_NAME = 'app:fontawesome';
+    private const string COMMAND_NAME = 'app:fontawesome';
 
     public function testInvalidJson(): void
     {

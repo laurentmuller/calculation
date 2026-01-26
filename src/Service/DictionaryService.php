@@ -18,7 +18,7 @@ namespace App\Service;
  */
 class DictionaryService
 {
-    private const DICTIONARY = [
+    private const array DICTIONARY = [
         'ACCOINTANCE',
         'AMPHIGOURI',
         'ANONCHALIR',

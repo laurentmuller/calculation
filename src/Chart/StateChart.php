@@ -27,7 +27,7 @@ use Twig\Environment;
  */
 class StateChart extends AbstractHighchart
 {
-    private const TEMPLATE_NAME = 'chart/_state_tooltip.js.twig';
+    private const string TEMPLATE_NAME = 'chart/_state_tooltip.js.twig';
 
     public function __construct(
         ApplicationParameters $parameters,

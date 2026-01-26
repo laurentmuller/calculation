@@ -37,9 +37,9 @@ use Symfony\Component\Routing\Requirement\Requirement;
  */
 final class RouteTest extends TestCase
 {
-    private const NAME_VALUE = 'value_edit';
-    private const PATH_VALUE = '/edit/{id}';
-    private const REQUIREMENTS = ['id' => Requirement::DIGITS];
+    private const string NAME_VALUE = 'value_edit';
+    private const string PATH_VALUE = '/edit/{id}';
+    private const array REQUIREMENTS = ['id' => Requirement::DIGITS];
 
     public static function getRoutes(): \Generator
     {

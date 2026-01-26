@@ -28,7 +28,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class CountryFlagType extends AbstractType
 {
-    private const FLAG_CLASS = 'flag-emoji';
+    private const string FLAG_CLASS = 'flag-emoji';
 
     public function __construct(private readonly CountryFlagService $service)
     {

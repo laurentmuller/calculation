@@ -29,22 +29,22 @@ class GoogleTranslatorService extends AbstractTranslatorService
     /**
      * The host name.
      */
-    private const HOST_NAME = 'https://translation.googleapis.com/language/translate/v2/';
+    private const string HOST_NAME = 'https://translation.googleapis.com/language/translate/v2/';
 
     /**
      * The detection language URI.
      */
-    private const URI_DETECT = 'detect';
+    private const string URI_DETECT = 'detect';
 
     /**
      * The languages URI.
      */
-    private const URI_LANGUAGE = 'languages';
+    private const string URI_LANGUAGE = 'languages';
 
     /**
      * The translation URI.
      */
-    private const URI_TRANSLATE = '';
+    private const string URI_TRANSLATE = '';
 
     /**
      * @throws \InvalidArgumentException if the API key is not defined, is null or is empty

@@ -33,8 +33,8 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(path: '/timeline', name: 'timeline_')]
 class TimelineController extends AbstractController
 {
-    private const KEY_DATE = 'timeline_date';
-    private const KEY_INTERVAL = 'timeline_interval';
+    private const string KEY_DATE = 'timeline_date';
+    private const string KEY_INTERVAL = 'timeline_interval';
 
     #[GetRoute(path: '/content', name: 'content')]
     public function content(

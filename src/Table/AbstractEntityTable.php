@@ -35,12 +35,12 @@ abstract class AbstractEntityTable extends AbstractTable
     /**
      * The group by part name of the query.
      */
-    private const GROUP_BY_PART = 'groupBy';
+    private const string GROUP_BY_PART = 'groupBy';
 
     /**
      * The join part name of the query.
      */
-    private const JOIN_PART = 'join';
+    private const string JOIN_PART = 'join';
 
     /**
      * @phpstan-param TRepository $repository

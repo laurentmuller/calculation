@@ -23,8 +23,8 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class DatabaseInfoService
 {
-    private const DISABLED_VALUES = ['off', 'no', 'false', 'disabled'];
-    private const ENABLED_VALUES = ['on', 'yes', 'true', 'enabled'];
+    private const array DISABLED_VALUES = ['off', 'no', 'false', 'disabled'];
+    private const array ENABLED_VALUES = ['on', 'yes', 'true', 'enabled'];
 
     /** @var array<string, string>|null */
     private ?array $configuration = null;

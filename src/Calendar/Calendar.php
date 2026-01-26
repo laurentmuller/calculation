@@ -28,17 +28,17 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     /**
      * The default day model class.
      */
-    final public const DEFAULT_DAY_MODEL = Day::class;
+    final public const string DEFAULT_DAY_MODEL = Day::class;
 
     /**
      * The default month model class.
      */
-    final public const DEFAULT_MONTH_MODEL = Month::class;
+    final public const string DEFAULT_MONTH_MODEL = Month::class;
 
     /**
      * The default week model class.
      */
-    final public const DEFAULT_WEEK_MODEL = Week::class;
+    final public const string DEFAULT_WEEK_MODEL = Week::class;
 
     /**
      * Array with instances of Month objects.

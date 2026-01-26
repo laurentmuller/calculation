@@ -31,7 +31,7 @@ class FontAwesomeReport extends AbstractReport
 {
     use PdfMemoryImageTrait;
 
-    private const COLUMNS = 3;
+    private const int COLUMNS = 3;
 
     public function __construct(AbstractController $controller, private readonly FontAwesomeImageService $service)
     {

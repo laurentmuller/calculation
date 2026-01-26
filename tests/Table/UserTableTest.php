@@ -38,9 +38,9 @@ final class UserTableTest extends EntityTableTestCase
 {
     use TranslatorMockTrait;
 
-    private const TOKEN_DEFAULT = 0;
-    private const TOKEN_NO_USER = 1;
-    private const TOKEN_USER = 2;
+    private const int TOKEN_DEFAULT = 0;
+    private const int TOKEN_NO_USER = 1;
+    private const int TOKEN_USER = 2;
 
     private int $state;
 

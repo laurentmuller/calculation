@@ -24,7 +24,7 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
     /**
      * The tags to keep with the next chunk.
      */
-    private const KEEP_WITH_NEXT = [
+    private const array KEEP_WITH_NEXT = [
         HtmlTag::H1,
         HtmlTag::H2,
         HtmlTag::H3,

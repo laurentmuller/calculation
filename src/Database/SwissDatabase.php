@@ -33,7 +33,7 @@ class SwissDatabase extends AbstractDatabase
     /**
      * SQL statement to create the city table.
      */
-    private const CREATE_CITY = <<<'sql'
+    private const string CREATE_CITY = <<<'sql'
         CREATE TABLE IF NOT EXISTS city (
             id       INTEGER PRIMARY KEY,
             zip      INTEGER NOT NULL,
@@ -45,7 +45,7 @@ class SwissDatabase extends AbstractDatabase
     /**
      * SQL statement to create the state (canton) table.
      */
-    private const CREATE_STATE = <<<'sql'
+    private const string CREATE_STATE = <<<'sql'
         CREATE TABLE IF NOT EXISTS state (
             id      TEXT PRIMARY KEY,
             name    TEXT NOT NULL
@@ -55,7 +55,7 @@ class SwissDatabase extends AbstractDatabase
     /**
      * SQL statement to create the street table.
      */
-    private const CREATE_STREET = <<<'sql'
+    private const string CREATE_STREET = <<<'sql'
         CREATE TABLE IF NOT EXISTS street (
             city_id INTEGER NOT NULL,
             name    TEXT NOT NULL,
@@ -66,7 +66,7 @@ class SwissDatabase extends AbstractDatabase
     /**
      * SQL statement to add a city into the table.
      */
-    private const INSERT_CITY = <<<'sql'
+    private const string INSERT_CITY = <<<'sql'
         INSERT INTO city(id, zip, name, state_id)
             VALUES(:id, :zip, :name, :state_id)
         sql;
@@ -74,7 +74,7 @@ class SwissDatabase extends AbstractDatabase
     /**
      * SQL statement to add a state into the table.
      */
-    private const INSERT_STATE = <<<'sql'
+    private const string INSERT_STATE = <<<'sql'
         INSERT INTO state(id, name)
             VALUES(:id, :name)
         sql;
@@ -82,7 +82,7 @@ class SwissDatabase extends AbstractDatabase
     /**
      * SQL statement to add a street into the table.
      */
-    private const INSERT_STREET = <<<'sql'
+    private const string INSERT_STREET = <<<'sql'
         INSERT INTO street(city_id, name)
             VALUES(:city_id, :name)
         sql;
@@ -90,7 +90,7 @@ class SwissDatabase extends AbstractDatabase
     /**
      * SQL statement to find by multiple criterias.
      */
-    private const SEARCH = <<<'sql'
+    private const string SEARCH = <<<'sql'
         SELECT
             street.name as street,
             city.zip,
@@ -116,7 +116,7 @@ class SwissDatabase extends AbstractDatabase
     /**
      * SQL statement to find all.
      */
-    private const SEARCH_ALL = <<<'sql'
+    private const string SEARCH_ALL = <<<'sql'
         SELECT
             street.name as street,
             city.zip,
@@ -142,7 +142,7 @@ class SwissDatabase extends AbstractDatabase
     /**
      * SQL statement to find a city.
      */
-    private const SEARCH_CITY = <<<'sql'
+    private const string SEARCH_CITY = <<<'sql'
         SELECT
             city.zip,
             city.name as city,
@@ -159,10 +159,8 @@ class SwissDatabase extends AbstractDatabase
 
     /**
      * SQL statement to find a street.
-     *
-     * @var string
      */
-    private const SEARCH_STREET = <<<'sql'
+    private const string SEARCH_STREET = <<<'sql'
         SELECT
             street.name as street,
             city.zip,
@@ -183,7 +181,7 @@ class SwissDatabase extends AbstractDatabase
     /**
      * SQL statement to find a zip code.
      */
-    private const SEARCH_ZIP = <<<'sql'
+    private const string SEARCH_ZIP = <<<'sql'
         SELECT
             city.zip,
             city.name as city,

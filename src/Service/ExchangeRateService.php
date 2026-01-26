@@ -60,32 +60,32 @@ class ExchangeRateService extends AbstractHttpClientService
     /**
      * The host name.
      */
-    private const HOST_NAME = 'https://v6.exchangerate-api.com/v6/%s/';
+    private const string HOST_NAME = 'https://v6.exchangerate-api.com/v6/%s/';
 
     /**
      * The success response code.
      */
-    private const RESPONSE_SUCCESS = 'success';
+    private const string RESPONSE_SUCCESS = 'success';
 
     /**
      * The URI for supported currency codes.
      */
-    private const URI_CODES = 'codes';
+    private const string URI_CODES = 'codes';
 
     /**
      * The URI for the latest exchange rates.
      */
-    private const URI_LATEST = 'latest/%s';
+    private const string URI_LATEST = 'latest/%s';
 
     /**
      * The URI for the quota.
      */
-    private const URI_QUOTA = 'quota';
+    private const string URI_QUOTA = 'quota';
 
     /**
      * The URI for exchange rate.
      */
-    private const URI_RATE = 'pair/%s/%s';
+    private const string URI_RATE = 'pair/%s/%s';
 
     /**
      * The base URI.

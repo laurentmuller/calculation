@@ -45,7 +45,7 @@ readonly class TimelineService
      */
     public const DATE_FORMAT = 'Y-m-d';
 
-    private const DEFAULT_INTERVAL = 'P1W';
+    private const string DEFAULT_INTERVAL = 'P1W';
 
     public function __construct(private CalculationRepository $repository)
     {

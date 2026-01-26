@@ -42,8 +42,8 @@ class AssetVersionService extends StaticVersionStrategy implements DisableListen
 {
     use DisableListenerTrait;
 
-    private const IMAGES_PATH = 'images/users/';
-    private const KEY_IMAGES = 'key_asset_images';
+    private const string IMAGES_PATH = 'images/users/';
+    private const string KEY_IMAGES = 'key_asset_images';
 
     private readonly string $imagesPath;
     private readonly string $imagesVersion;

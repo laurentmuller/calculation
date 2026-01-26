@@ -35,7 +35,7 @@ use Vich\UploaderBundle\Storage\StorageInterface;
  */
 class UsersReport extends AbstractArrayReport
 {
-    private const IMAGE_SIZE = 48;
+    private const int IMAGE_SIZE = 48;
 
     private ?PdfCell $defaultCell = null;
     private ?PdfStyle $disabledStyle = null;

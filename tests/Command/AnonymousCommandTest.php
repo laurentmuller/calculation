@@ -22,7 +22,7 @@ final class AnonymousCommandTest extends CommandTestCase
     use CalculationTrait;
     use DatabaseTrait;
 
-    private const COMMAND_NAME = 'app:anonymous';
+    private const string COMMAND_NAME = 'app:anonymous';
 
     #[\Override]
     protected function setUp(): void

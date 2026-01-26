@@ -42,7 +42,7 @@ class IndexService
 {
     use CacheKeyTrait;
 
-    private const CATALOG = [
+    private const array CATALOG = [
         'user' => User::class,
         'task' => Task::class,
         'group' => Group::class,

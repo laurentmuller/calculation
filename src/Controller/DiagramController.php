@@ -34,9 +34,9 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(path: '/diagram', name: 'diagram_')]
 class DiagramController extends AbstractController
 {
-    private const DEFAULT_DIAGRAM = 'entity_interface';
-    private const KEY_DIAGRAM = 'diagram.name';
-    private const KEY_ZOOM = 'diagram.zoom';
+    private const string DEFAULT_DIAGRAM = 'entity_interface';
+    private const string KEY_DIAGRAM = 'diagram.name';
+    private const string KEY_ZOOM = 'diagram.zoom';
 
     public function __construct(private readonly DiagramService $service)
     {

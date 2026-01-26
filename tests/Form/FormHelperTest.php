@@ -63,7 +63,7 @@ final class FormHelperTest extends TypeTestCase
     use ValidatorExtensionTrait;
     use VichImageTypeTrait;
 
-    private const FIELD = 'name';
+    private const string FIELD = 'name';
 
     public function testAutoCompleteEmpty(): void
     {

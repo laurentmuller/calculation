@@ -34,7 +34,7 @@ final class BorderExtension implements DisableListenerInterface
 {
     use DisableListenerTrait;
 
-    private const KEY_TEMPLATE = 'border_colors_template';
+    private const string KEY_TEMPLATE = 'border_colors_template';
 
     public function __construct(
         private readonly CalculationStateRepository $repository,

@@ -35,42 +35,42 @@ class AkismetService extends AbstractHttpClientService
     /**
      * The cache timeout (15 minutes).
      */
-    private const CACHE_TIMEOUT = 900;
+    private const int CACHE_TIMEOUT = 900;
 
     /**
      * The host name.
      */
-    private const HOST_NAME = 'https://rest.akismet.com';
+    private const string HOST_NAME = 'https://rest.akismet.com';
 
     /**
      * The activity key URI.
      */
-    private const URI_ACTIVITY = '1.2/key-sites';
+    private const string URI_ACTIVITY = '1.2/key-sites';
 
     /**
      * The spam check URI.
      */
-    private const URI_SPAM = '1.1/comment-check';
+    private const string URI_SPAM = '1.1/comment-check';
 
     /**
      * The usage key URI.
      */
-    private const URI_USAGE = '1.2/usage-limit';
+    private const string URI_USAGE = '1.2/usage-limit';
 
     /**
      * The URI to verify key.
      */
-    private const URI_VERIFY = '1.1/verify-key';
+    private const string URI_VERIFY = '1.1/verify-key';
 
     /**
      * The value returned when the comment is not spam.
      */
-    private const VALUE_FALSE = 'false';
+    private const string VALUE_FALSE = 'false';
 
     /**
      * The value returned when the API key is valid.
      */
-    private const VALUE_VALID = 'valid';
+    private const string VALUE_VALID = 'valid';
 
     /**
      * @throws \InvalidArgumentException if the API key is not defined, is null or empty

@@ -31,12 +31,12 @@ class SwitchUserListener implements ServiceSubscriberInterface
     /**
      * The exit value action.
      */
-    private const EXIT_VALUE = '_exit';
+    private const string EXIT_VALUE = '_exit';
 
     /**
      * The switch user parameter name.
      */
-    private const SWITCH_USER = '_switch_user';
+    private const string SWITCH_USER = '_switch_user';
 
     #[AsEventListener(event: SwitchUserEvent::class)]
     public function onSwitchUser(SwitchUserEvent $event): void

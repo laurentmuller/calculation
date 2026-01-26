@@ -25,12 +25,12 @@ class ProductUpdateQuery extends AbstractSimulateQuery
     /**
      * Update products with a fixed amount.
      */
-    final public const UPDATE_FIXED = 'fixed';
+    final public const string UPDATE_FIXED = 'fixed';
 
     /**
      * Update products with a percentage.
      */
-    final public const UPDATE_PERCENT = 'percent';
+    final public const string UPDATE_PERCENT = 'percent';
 
     private bool $allProducts = true;
     private ?Category $category = null;

@@ -33,7 +33,7 @@ class ItemsTable extends ReportGroupTable implements PdfGroupListenerInterface
     /**
      * The categories and items indent.
      */
-    private const INDENT = 4;
+    private const int INDENT = 4;
 
     private readonly Calculation $calculation;
     private readonly PdfStyle $groupStyle;

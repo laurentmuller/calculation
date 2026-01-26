@@ -31,7 +31,7 @@ final class StrengthValidatorTest extends ConstraintValidatorTestCase
 {
     use TranslatorMockTrait;
 
-    private const EMPTY_MESSAGE = 'empty';
+    private const string EMPTY_MESSAGE = 'empty';
 
     public static function getStrengthLevels(): \Generator
     {

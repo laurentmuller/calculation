@@ -33,12 +33,12 @@ class CalculationDocument extends AbstractDocument
     /**
      * The header background color.
      */
-    private const COLOR_BACKGROUND = 'F5F5F5';
+    private const string COLOR_BACKGROUND = 'F5F5F5';
 
     /**
      * The cell border color.
      */
-    private const COLOR_BORDER = 'DDDDDD';
+    private const string COLOR_BORDER = 'DDDDDD';
 
     /**
      * @param AbstractController $controller  the parent controller

@@ -47,7 +47,7 @@ class PdfLabelDocument extends PdfDocument
     private const ENCODING_TO = 'CP1252';
 
     // the font mapping
-    private const FONT_CONVERSION = [
+    private const array FONT_CONVERSION = [
         6 => 2.0,
         7 => 2.5,
         8 => 3.0,
@@ -61,7 +61,7 @@ class PdfLabelDocument extends PdfDocument
     ];
 
     // the padding inside labels
-    private const PADDING = 3.0;
+    private const float PADDING = 3.0;
 
     // the current column (0-based index)
     private int $currentCol;

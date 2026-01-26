@@ -24,37 +24,37 @@ final class FormatUtils
     /**
      * The default date and time type format.
      */
-    public const DATE_TIME_TYPE = \IntlDateFormatter::SHORT;
+    public const int DATE_TIME_TYPE = \IntlDateFormatter::SHORT;
 
     /**
      * The decimal separator character.
      */
-    public const DECIMAL_SEP = '.';
+    public const string DECIMAL_SEP = '.';
 
     /**
      * The default locale (Swiss French).
      */
-    public const DEFAULT_LOCALE = 'fr_CH';
+    public const string DEFAULT_LOCALE = 'fr_CH';
 
     /**
      * The default timezone (Europe/Zurich).
      */
-    public const DEFAULT_TIME_ZONE = 'Europe/Zurich';
+    public const string DEFAULT_TIME_ZONE = 'Europe/Zurich';
 
     /**
      * The fraction digits.
      */
-    public const FRACTION_DIGITS = 2;
+    public const int FRACTION_DIGITS = 2;
 
     /**
      * The percent symbol character.
      */
-    public const PERCENT_SYMBOL = '%';
+    public const string PERCENT_SYMBOL = '%';
 
     /**
      * The thousand-separator character.
      */
-    public const THOUSANDS_SEP = "'";
+    public const string THOUSANDS_SEP = "'";
 
     /**
      * The date formatters cache.

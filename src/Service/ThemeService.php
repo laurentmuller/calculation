@@ -30,7 +30,7 @@ class ThemeService
     /**
      * The key name for the selected theme cookie.
      */
-    private const KEY_THEME = 'THEME';
+    private const string KEY_THEME = 'THEME';
 
     public function __construct(
         #[Autowire('%cookie_path%')]

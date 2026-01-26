@@ -38,7 +38,7 @@ class MonthChart extends AbstractHighchart
      */
     public const COLOR_MARGIN = HtmlColorName::INDIAN_RED;
 
-    private const TEMPLATE_NAME = 'chart/_month_tooltip.js.twig';
+    private const string TEMPLATE_NAME = 'chart/_month_tooltip.js.twig';
 
     public function __construct(
         ApplicationParameters $parameters,

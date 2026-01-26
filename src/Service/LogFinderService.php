@@ -26,9 +26,9 @@ class LogFinderService
 {
     use ComparableTrait;
 
-    private const DATE_FORMAT = 'Y-m-d';
-    private const FILE_EXTENSION = '.log';
-    private const FILE_NAMES = [
+    private const string DATE_FORMAT = 'Y-m-d';
+    private const string FILE_EXTENSION = '.log';
+    private const array FILE_NAMES = [
         '{dev,test,prod}-????-??-??.log',
         'deprecations.log',
     ];

@@ -15,8 +15,8 @@ namespace App\Tests\Command;
 
 final class HeaderNameCommandTest extends CommandTestCase
 {
-    private const COMMAND_NAME = 'app:header:name';
-    private const DATA_PATH = '/tests/files/css';
+    private const string COMMAND_NAME = 'app:header:name';
+    private const string DATA_PATH = '/tests/files/css';
 
     #[\Override]
     protected function setUp(): void

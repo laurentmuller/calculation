@@ -21,7 +21,7 @@ use Doctrine\DBAL\Types\Type;
  */
 class FixedFloatType extends Type
 {
-    final public const NAME = 'fixed_float';
+    final public const string NAME = 'fixed_float';
 
     #[\Override]
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): float

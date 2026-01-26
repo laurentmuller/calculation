@@ -22,7 +22,7 @@ class IndexRoute extends GetRoute
     /**
      * This route path.
      */
-    final public const PATH = '';
+    final public const string PATH = '';
 
     public function __construct()
     {

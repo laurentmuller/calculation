@@ -23,9 +23,9 @@ use Symfony\Component\Validator\Constraint;
 #[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 class Captcha extends Constraint
 {
-    final public const INVALID_ERROR = '1a9a1094-3ae5-43c1-b016-6e96854bf144';
+    final public const string INVALID_ERROR = '1a9a1094-3ae5-43c1-b016-6e96854bf144';
 
-    final public const TIMEOUT_ERROR = 'dae83095-9da6-4d38-94b2-693a57d41313';
+    final public const string TIMEOUT_ERROR = 'dae83095-9da6-4d38-94b2-693a57d41313';
 
     protected const ERROR_NAMES = [
         self::INVALID_ERROR => 'INVALID_ERROR',

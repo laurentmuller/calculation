@@ -44,7 +44,7 @@ class SimpleEditorType extends AbstractType
 {
     use GroupByTrait;
 
-    private const ACTION_PREFIX = 'simple_editor.actions.';
+    private const string ACTION_PREFIX = 'simple_editor.actions.';
 
     public function __construct(
         #[Autowire('%kernel.project_dir%/resources/data/simple_editor_actions.json')]

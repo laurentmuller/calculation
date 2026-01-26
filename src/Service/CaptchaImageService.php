@@ -46,32 +46,32 @@ class CaptchaImageService implements ServiceSubscriberInterface
     /**
      * The allowed characters.
      */
-    private const ALLOWED_VALUES = 'abcdefghjkmnpqrstuvwxyz23456789';
+    private const string ALLOWED_VALUES = 'abcdefghjkmnpqrstuvwxyz23456789';
 
     /**
      * The space between characters.
      */
-    private const CHAR_SPACE = 3;
+    private const int CHAR_SPACE = 3;
 
     /**
      * The base 64 image data prefix.
      */
-    private const IMAGE_PREFIX = 'data:image/png;base64,';
+    private const string IMAGE_PREFIX = 'data:image/png;base64,';
 
     /**
      * The attribute name for the encoded image data.
      */
-    private const KEY_DATA = 'captcha_data';
+    private const string KEY_DATA = 'captcha_data';
 
     /**
      * The attribute name for the captcha text.
      */
-    private const KEY_TEXT = 'captcha_text';
+    private const string KEY_TEXT = 'captcha_text';
 
     /**
      * The attribute name for the captcha timeout.
      */
-    private const KEY_TIME = 'captcha_time';
+    private const string KEY_TIME = 'captcha_time';
 
     private int $timeout = self::DEFAULT_TIME_OUT;
 

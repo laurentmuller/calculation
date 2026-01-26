@@ -26,7 +26,7 @@ class PositionService
     /**
      * The directions.
      */
-    private const DIRECTIONS = [
+    private const array DIRECTIONS = [
         'N',
         'N / N-E',
         'N-E',
@@ -46,12 +46,12 @@ class PositionService
         'N',
     ];
 
-    private const GOOGLE_MAP_URL = 'https://www.google.ch/maps/place/%s,%s';
+    private const string GOOGLE_MAP_URL = 'https://www.google.ch/maps/place/%s,%s';
 
     /**
      * The search terms.
      */
-    private const SEARCH = [
+    private const array SEARCH = [
         'N',
         'S',
         'E',

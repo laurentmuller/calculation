@@ -26,12 +26,12 @@ class CommandDataService
     /**
      * The argument field prefix.
      */
-    private const ARGUMENT_PREFIX = 'argument-';
+    private const string ARGUMENT_PREFIX = 'argument-';
 
     /**
      * The option field prefix.
      */
-    private const OPTION_PREFIX = 'option-';
+    private const string OPTION_PREFIX = 'option-';
 
     /**
      * Create the model (names and default values) for the given command.

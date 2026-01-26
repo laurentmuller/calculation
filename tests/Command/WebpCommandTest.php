@@ -17,7 +17,7 @@ use App\Utils\FileUtils;
 
 final class WebpCommandTest extends CommandTestCase
 {
-    private const COMMAND_NAME = 'app:update-images';
+    private const string COMMAND_NAME = 'app:update-images';
 
     public function testExecuteDryRunNoImage(): void
     {

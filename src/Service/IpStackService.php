@@ -41,17 +41,17 @@ class IpStackService extends AbstractHttpClientService
     /**
      * The cache timeout (1 hour).
      */
-    private const CACHE_TIMEOUT = 3600;
+    private const int CACHE_TIMEOUT = 3600;
 
     /**
      * The host name.
      */
-    private const HOST_NAME = 'http://api.ipstack.com/';
+    private const string HOST_NAME = 'http://api.ipstack.com/';
 
     /**
      * The API endpoint for detecting the IP address.
      */
-    private const URI_CHECK = 'check';
+    private const string URI_CHECK = 'check';
 
     /**
      * @throws \InvalidArgumentException if the API key is not defined, is null or empty

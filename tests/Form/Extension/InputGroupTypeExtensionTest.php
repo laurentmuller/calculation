@@ -20,7 +20,7 @@ use Symfony\Component\Form\Test\TypeTestCase;
 
 final class InputGroupTypeExtensionTest extends TypeTestCase
 {
-    private const KEYS = [
+    private const array KEYS = [
         'prepend_icon',
         'prepend_title',
         'prepend_class',

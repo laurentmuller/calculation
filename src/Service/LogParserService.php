@@ -37,7 +37,7 @@ class LogParserService
     public const FORMATTER_NAME = 'monolog.application.formatter';
 
     // the values separator.
-    private const SEPARATOR = '|';
+    private const string SEPARATOR = '|';
 
     /**
      * Parse the given log file.

@@ -22,7 +22,7 @@ use Symfony\Component\Intl\Countries;
 class OpenWeatherFormatter
 {
     // date formats
-    private const DATE_FORMATS = [
+    private const array DATE_FORMATS = [
         'date' => [\IntlDateFormatter::SHORT, \IntlDateFormatter::NONE],
         'time' => [\IntlDateFormatter::NONE, \IntlDateFormatter::SHORT],
         'date_time' => [\IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT],
@@ -31,13 +31,13 @@ class OpenWeatherFormatter
     ];
 
     // the country flag URL
-    private const URL_COUNTRY = 'https://openweathermap.org/images/flags/%s.png';
+    private const string URL_COUNTRY = 'https://openweathermap.org/images/flags/%s.png';
 
     // the big icon URL
-    private const URL_ICON_BIG = 'https://openweathermap.org/img/wn/%s@4x.png';
+    private const string URL_ICON_BIG = 'https://openweathermap.org/img/wn/%s@4x.png';
 
     // the small icon URL
-    private const URL_ICON_SMALL = 'https://openweathermap.org/img/wn/%s@2x.png';
+    private const string URL_ICON_SMALL = 'https://openweathermap.org/img/wn/%s@2x.png';
 
     public function __construct(private readonly PositionService $service)
     {

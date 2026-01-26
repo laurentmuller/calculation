@@ -39,9 +39,9 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     use SessionAwareTrait;
     use TranslatorAwareTrait;
 
-    private const KEY_DATE = 'archive.date';
-    private const KEY_SOURCES = 'archive.sources';
-    private const KEY_TARGET = 'archive.target';
+    private const string KEY_DATE = 'archive.date';
+    private const string KEY_SOURCES = 'archive.sources';
+    private const string KEY_TARGET = 'archive.target';
 
     public function __construct(
         private readonly CalculationRepository $calculationRepository,

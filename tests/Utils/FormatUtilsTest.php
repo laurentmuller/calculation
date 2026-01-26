@@ -24,9 +24,9 @@ final class FormatUtilsTest extends TestCase
 {
     use PrivateInstanceTrait;
 
-    private const DATE_TIME = '2022-02-20 12:59:59';
-    private const PERCENT_SYMBOL = '%';
-    private const TIME_STAMP = 1_645_358_399;
+    private const string DATE_TIME = '2022-02-20 12:59:59';
+    private const string PERCENT_SYMBOL = '%';
+    private const int TIME_STAMP = 1_645_358_399;
 
     #[\Override]
     protected function setUp(): void

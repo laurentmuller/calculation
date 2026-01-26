@@ -48,8 +48,8 @@ class ResetPasswordController extends AbstractController
      */
     public const ROUTE_RESET = 'app_reset_password';
 
-    private const ROUTE_CHECK = 'app_check_email';
-    private const ROUTE_REQUEST = 'app_forgot_password_request';
+    private const string ROUTE_CHECK = 'app_check_email';
+    private const string ROUTE_REQUEST = 'app_forgot_password_request';
 
     public function __construct(
         private readonly ResetPasswordHelperInterface $helper,

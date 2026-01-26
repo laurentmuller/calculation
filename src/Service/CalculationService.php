@@ -40,37 +40,37 @@ class CalculationService implements ConstantsInterface
     /**
      * Empty row identifier.
      */
-    private const ROW_EMPTY = -1;
+    private const int ROW_EMPTY = -1;
 
     /**
      * Global margin row identifier.
      */
-    private const ROW_GLOBAL_MARGIN = -4;
+    private const int ROW_GLOBAL_MARGIN = -4;
 
     /**
      * Group row identifier.
      */
-    private const ROW_GROUP = -2;
+    private const int ROW_GROUP = -2;
 
     /**
      * Overall total row identifier.
      */
-    private const ROW_OVERALL_TOTAL = -7;
+    private const int ROW_OVERALL_TOTAL = -7;
 
     /**
      * Total group row identifier.
      */
-    private const ROW_TOTAL_GROUP = -3;
+    private const int ROW_TOTAL_GROUP = -3;
 
     /**
      * Total net row identifier.
      */
-    private const ROW_TOTAL_NET = -5;
+    private const int ROW_TOTAL_NET = -5;
 
     /**
      * User margin row identifier.
      */
-    private const ROW_USER_MARGIN = -6;
+    private const int ROW_USER_MARGIN = -6;
 
     public function __construct(
         private readonly GlobalMarginRepository $globalMarginRepository,

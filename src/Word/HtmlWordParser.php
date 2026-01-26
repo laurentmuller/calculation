@@ -28,12 +28,12 @@ class HtmlWordParser
     /**
      * The pattern to extract classes.
      */
-    private const CLASS_PATTERN = '/(class=")([^\"]*)\"/mi';
+    private const string CLASS_PATTERN = '/(class=")([^\"]*)\"/mi';
 
     /**
      * The map between class name and style.
      */
-    private const CLASSES_TO_STYLES = [
+    private const array CLASSES_TO_STYLES = [
         // alignment
         'text-start' => 'text-align:left;',
         'text-center' => 'text-align:center;',

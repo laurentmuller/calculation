@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 final class CsvServiceTest extends TestCase
 {
-    private const VALUES_SEP = '|';
+    private const string VALUES_SEP = '|';
 
     public function testInvalidEnclosure(): void
     {

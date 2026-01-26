@@ -24,9 +24,9 @@ use App\Utils\StringUtils;
  */
 class PhpInfoService
 {
-    private const DISABLED = ['off', 'no', 'disabled', 'not enabled'];
-    private const ENABLED = ['active', 'on', 'yes', 'enabled', 'supported'];
-    private const REDACTED = '********';
+    private const array DISABLED = ['off', 'no', 'disabled', 'not enabled'];
+    private const array ENABLED = ['active', 'on', 'yes', 'enabled', 'supported'];
+    private const string REDACTED = '********';
 
     /**
      * Gets PHP information as the array.

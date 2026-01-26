@@ -76,7 +76,7 @@ class CommandService implements \Countable
      */
     public const GLOBAL_GROUP = '_global';
 
-    private const CONSOLE_REPLACE = [
+    private const array CONSOLE_REPLACE = [
         // development
         '/development/public/index.php',
         '/bin/console/command',
@@ -88,7 +88,7 @@ class CommandService implements \Countable
         '/index.php/command',
     ];
 
-    private const HELP_REPLACE = [
+    private const array HELP_REPLACE = [
         '<info>' => '<span class="text-success">',
         '<error>' => '<span class="text-danger">',
         '<comment>' => '<span class="text-secondary">',
@@ -99,11 +99,11 @@ class CommandService implements \Countable
         '</>' => '</span>',
     ];
 
-    private const HREF_REPLACE = [
+    private const array HREF_REPLACE = [
         '/(<href=)(.*?)>(.*?)(<\/>)/m' => '<a href="$2" target="_blank" rel="noopener noreferrer">$3</a>',
     ];
 
-    private const USAGE_REPLACE = [
+    private const array USAGE_REPLACE = [
         '/(\[.*)( \[--\])/m' => '[options]$2',
     ];
 

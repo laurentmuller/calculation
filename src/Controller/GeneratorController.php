@@ -35,14 +35,14 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(path: '/generate', name: self::PREFIX)]
 class GeneratorController extends AbstractController
 {
-    private const KEY_COUNT = 'generate.count';
-    private const KEY_ENTITY = 'generate.entity';
-    private const KEY_SIMULATE = 'generate.simulate';
+    private const string KEY_COUNT = 'generate.count';
+    private const string KEY_ENTITY = 'generate.entity';
+    private const string KEY_SIMULATE = 'generate.simulate';
 
-    private const PREFIX = 'generate';
-    private const ROUTE_CALCULATION = '_calculation';
-    private const ROUTE_CUSTOMER = '_customer';
-    private const ROUTE_PRODUCT = '_product';
+    private const string PREFIX = 'generate';
+    private const string ROUTE_CALCULATION = '_calculation';
+    private const string ROUTE_CUSTOMER = '_customer';
+    private const string ROUTE_PRODUCT = '_product';
 
     #[GetPostRoute(path: IndexRoute::PATH, name: '')]
     public function generate(): Response

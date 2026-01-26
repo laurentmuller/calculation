@@ -42,12 +42,12 @@ class UrlGeneratorService
     /**
      * The caller parameter name.
      */
-    final public const PARAM_CALLER = 'caller';
+    final public const string PARAM_CALLER = 'caller';
 
     /**
      * The parameter names.
      */
-    private const PARAMETER_NAMES = [
+    private const array PARAMETER_NAMES = [
         // global
         self::PARAM_CALLER,
         // index page

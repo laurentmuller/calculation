@@ -31,8 +31,8 @@ final class AkismetServiceTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    private const ERROR_CODE = 1000;
-    private const ERROR_MESSAGE = 'Error Message';
+    private const int ERROR_CODE = 1000;
+    private const string ERROR_MESSAGE = 'Error Message';
 
     private MockObject&RequestStack $requestStack;
 

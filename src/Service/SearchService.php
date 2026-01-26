@@ -56,64 +56,64 @@ class SearchService implements ServiceSubscriberInterface
     /**
      * The action column name.
      */
-    final public const COLUMN_ACTION = 'action';
+    final public const string COLUMN_ACTION = 'action';
 
     /**
      * The content column name.
      */
-    final public const COLUMN_CONTENT = 'content';
+    final public const string COLUMN_CONTENT = 'content';
 
     /**
      * The entity column name.
      */
-    final public const COLUMN_ENTITY_NAME = 'entityName';
+    final public const string COLUMN_ENTITY_NAME = 'entityName';
 
     /**
      * The field column name.
      */
-    final public const COLUMN_FIELD = 'field';
+    final public const string COLUMN_FIELD = 'field';
 
     /**
      * The field column name.
      */
-    final public const COLUMN_FIELD_NAME = 'fieldName';
+    final public const string COLUMN_FIELD_NAME = 'fieldName';
 
     /**
      * The delete granted column name.
      */
-    final public const COLUMN_GRANTED_DELETE = 'allowDelete';
+    final public const string COLUMN_GRANTED_DELETE = 'allowDelete';
 
     /**
      * The edit granted column name.
      */
-    final public const COLUMN_GRANTED_EDIT = 'allowEdit';
+    final public const string COLUMN_GRANTED_EDIT = 'allowEdit';
 
     /**
      * The show granted column name.
      */
-    final public const COLUMN_GRANTED_SHOW = 'allowShow';
+    final public const string COLUMN_GRANTED_SHOW = 'allowShow';
 
     /**
      * The identifier column name.
      */
-    final public const COLUMN_ID = 'id';
+    final public const string COLUMN_ID = 'id';
 
     /**
      * The type column name.
      */
-    final public const COLUMN_TYPE = 'type';
+    final public const string COLUMN_TYPE = 'type';
 
     /**
      * Limit value to return all rows.
      */
-    final public const NO_LIMIT = -1;
+    final public const int NO_LIMIT = -1;
 
     /**
      * The column names and types.
      *
      * @var array<string,string>
      */
-    private const COLUMNS = [
+    private const array COLUMNS = [
         self::COLUMN_ID => Types::INTEGER,
         self::COLUMN_TYPE => Types::STRING,
         self::COLUMN_FIELD => Types::STRING,
@@ -123,7 +123,7 @@ class SearchService implements ServiceSubscriberInterface
     /**
      * The search parameter name.
      */
-    private const SEARCH_PARAM = 'search';
+    private const string SEARCH_PARAM = 'search';
 
     public function __construct(
         private readonly EntityManagerInterface $manager,

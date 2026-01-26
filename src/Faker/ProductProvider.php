@@ -23,7 +23,7 @@ use App\Repository\ProductRepository;
  */
 class ProductProvider extends EntityProvider
 {
-    private const ADJECTIVE = [
+    private const array ADJECTIVE = [
         'Petit',
         'Ergonomique',
         'Rustique',
@@ -42,7 +42,7 @@ class ProductProvider extends EntityProvider
         'Aérodynamique',
         'Durable'];
 
-    private const MATERIAL = [
+    private const array MATERIAL = [
         'acier',
         'bois',
         'béton',
@@ -61,7 +61,7 @@ class ProductProvider extends EntityProvider
         'aluminium',
         'papier'];
 
-    private const PRODUCT = [
+    private const array PRODUCT = [
         'tabouret',
         'camion',
         'ordinateur',

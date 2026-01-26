@@ -42,9 +42,9 @@ class Log extends AbstractEntity implements ComparableInterface
     use LogLevelTrait;
 
     // the doctrine channel name
-    private const DOCTRINE_CHANNEL = 'doctrine';
+    private const string DOCTRINE_CHANNEL = 'doctrine';
     // the doctrine prefix message
-    private const DOCTRINE_PREFIX = 'executing ';
+    private const string DOCTRINE_PREFIX = 'executing ';
 
     #[ORM\Column(nullable: true)]
     private ?array $context = null;

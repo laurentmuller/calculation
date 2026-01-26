@@ -32,7 +32,7 @@ final class TimestampableListenerTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    private const USER_NAME = 'user_name';
+    private const string USER_NAME = 'user_name';
 
     public function testDeleteDiff(): void
     {

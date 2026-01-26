@@ -39,11 +39,11 @@ class ProductUpdateService implements ServiceSubscriberInterface
     use SessionAwareTrait;
     use TranslatorAwareTrait;
 
-    private const KEY_CATEGORY = 'product.update.category';
-    private const KEY_FIXED = 'product.update.fixed';
-    private const KEY_PERCENT = 'product.update.percent';
-    private const KEY_ROUND = 'product.update.round';
-    private const KEY_TYPE = 'product.update.type';
+    private const string KEY_CATEGORY = 'product.update.category';
+    private const string KEY_FIXED = 'product.update.fixed';
+    private const string KEY_PERCENT = 'product.update.percent';
+    private const string KEY_ROUND = 'product.update.round';
+    private const string KEY_TYPE = 'product.update.type';
 
     public function __construct(
         private readonly ProductRepository $productRepository,

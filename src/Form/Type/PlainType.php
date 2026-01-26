@@ -59,22 +59,22 @@ class PlainType extends AbstractType implements DateFormatInterface
     /**
      * The amount number format.
      */
-    final public const NUMBER_AMOUNT = 'price';
+    final public const string NUMBER_AMOUNT = 'price';
 
     /**
      * The identifier number format.
      */
-    final public const NUMBER_IDENTIFIER = 'identifier';
+    final public const string NUMBER_IDENTIFIER = 'identifier';
 
     /**
      * The integer number format.
      */
-    final public const NUMBER_INTEGER = 'integer';
+    final public const string NUMBER_INTEGER = 'integer';
 
     /**
      * The percent number format.
      */
-    final public const NUMBER_PERCENT = 'percent';
+    final public const string NUMBER_PERCENT = 'percent';
 
     public function __construct(private readonly TranslatorInterface $translator)
     {

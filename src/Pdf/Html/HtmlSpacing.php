@@ -25,7 +25,7 @@ readonly class HtmlSpacing
     /**
      * The pattern to extract margins and paddings.
      */
-    private const MARGINS_PATTERN = '/^[mp]([tbsexy])?-(sm-|md-|lg-|xl-|xxl-)?([012345])/im';
+    private const string MARGINS_PATTERN = '/^[mp]([tbsexy])?-(sm-|md-|lg-|xl-|xxl-)?([012345])/im';
 
     /**
      * @param int  $size   the size

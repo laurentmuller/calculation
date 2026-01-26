@@ -41,9 +41,9 @@ class CalculationUpdateService implements ServiceSubscriberInterface
     use SessionAwareTrait;
     use TranslatorAwareTrait;
 
-    private const KEY_DATE = 'calculation.update.date';
-    private const KEY_INTERVAL = 'calculation.update.interval';
-    private const KEY_STATES = 'calculation.update.states';
+    private const string KEY_DATE = 'calculation.update.date';
+    private const string KEY_INTERVAL = 'calculation.update.interval';
+    private const string KEY_STATES = 'calculation.update.states';
 
     public function __construct(
         private readonly GlobalMarginRepository $globalMarginRepository,

@@ -48,7 +48,7 @@ class CommandController extends AbstractController
     use CacheKeyTrait;
     use FormExceptionTrait;
 
-    private const KEY_QUERY_COMMAND = 'last_command';
+    private const string KEY_QUERY_COMMAND = 'last_command';
 
     /**
      * Render a single command content.

@@ -46,7 +46,7 @@ class LogsReport extends AbstractReport
     /**
      * The delta date, in seconds, between log bookmarks.
      */
-    private const DELTA_DATE = 600;
+    private const int DELTA_DATE = 600;
 
     /**
      * @var array<string, PdfFontAwesomeCell|string>

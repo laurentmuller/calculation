@@ -44,8 +44,8 @@ use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 final class SchemaServiceTest extends TestCase
 {
-    private const TABLE_PROPERTY = 'property';
-    private const TABLE_USER = 'user';
+    private const string TABLE_PROPERTY = 'property';
+    private const string TABLE_USER = 'user';
 
     public function testCountAllWithoutDatabase(): void
     {

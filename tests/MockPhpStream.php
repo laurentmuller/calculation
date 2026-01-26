@@ -24,7 +24,7 @@ class MockPhpStream
     /**
      * The wrapper name protocol to be registered or unregistered.
      */
-    private const PROTOCOL = 'php';
+    private const string PROTOCOL = 'php';
 
     /**
      * The current content.

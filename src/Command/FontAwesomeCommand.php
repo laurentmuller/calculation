@@ -27,9 +27,9 @@ class FontAwesomeCommand
 {
     use WatchTrait;
 
-    private const DEFAULT_SOURCE = 'vendor/fortawesome/font-awesome/metadata/icons.json';
-    private const DEFAULT_TARGET = 'resources/fontawesome';
-    private const SVG_SOURCE = 'vendor/fortawesome/font-awesome/svgs-full';
+    private const string DEFAULT_SOURCE = 'vendor/fortawesome/font-awesome/metadata/icons.json';
+    private const string DEFAULT_TARGET = 'resources/fontawesome';
+    private const string SVG_SOURCE = 'vendor/fortawesome/font-awesome/svgs-full';
 
     public function __construct(
         #[Autowire('%kernel.project_dir%')]

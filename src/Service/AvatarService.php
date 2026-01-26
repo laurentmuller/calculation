@@ -20,8 +20,8 @@ use Twig\Attribute\AsTwigFunction;
  */
 class AvatarService
 {
-    private const ALLOWED_BACKGROUND = [1, 2];
-    private const ALLOWED_SET = [1, 2, 3, 4, 5];
+    private const array ALLOWED_BACKGROUND = [1, 2];
+    private const array ALLOWED_SET = [1, 2, 3, 4, 5];
 
     /**
      * Gets the avatar URL image for the given name.

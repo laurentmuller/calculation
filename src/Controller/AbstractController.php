@@ -193,8 +193,9 @@ abstract class AbstractController extends BaseController
      * Gets the translator.
      *
      * @throws \LogicException if the service cannot be found
+     *
+     * @phpstan-ignore method.missingOverride
      */
-    #[\Override]
     public function getTranslator(): TranslatorInterface
     {
         try {

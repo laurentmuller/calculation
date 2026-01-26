@@ -23,7 +23,7 @@ final class UcFirstCommandTest extends CommandTestCase
     use CalculationTrait;
     use DatabaseTrait;
 
-    private const COMMAND_NAME = 'app:uc-first';
+    private const string COMMAND_NAME = 'app:uc-first';
 
     #[\Override]
     protected function setUp(): void

@@ -35,7 +35,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 #[Route(path: '/chart/month', name: 'chart_month_')]
 class ChartMonthController extends AbstractController
 {
-    private const KEY_MONTHS = 'chart_months';
+    private const string KEY_MONTHS = 'chart_months';
 
     #[IndexRoute]
     public function index(

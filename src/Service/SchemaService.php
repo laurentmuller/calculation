@@ -72,7 +72,7 @@ class SchemaService
     use ClosureSortTrait;
 
     // Query to get records and sizes for MySQL platform
-    private const SQL_ALL = <<<SQL
+    private const string SQL_ALL = <<<SQL
             SELECT
                 TABLE_NAME AS name,
                 TABLE_ROWS AS records,

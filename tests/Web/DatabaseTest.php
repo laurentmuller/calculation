@@ -42,8 +42,8 @@ final class DatabaseTest extends KernelServiceTestCase
 {
     use DatabaseTrait;
 
-    private const PROPERTIES_COUNT = 1;
-    private const USERS_COUNT = 4;
+    private const int PROPERTIES_COUNT = 1;
+    private const int USERS_COUNT = 4;
 
     public static function getRepositories(): \Generator
     {

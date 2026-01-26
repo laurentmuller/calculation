@@ -19,11 +19,11 @@ use PHPUnit\Framework\TestCase;
 
 final class OpenWeatherDatabaseTest extends TestCase
 {
-    private const COUNTRY = 'USA';
-    private const ID = 1;
-    private const LATITUDE = -96.67;
-    private const LONGITUDE = 107.87;
-    private const NAME = 'New-York';
+    private const string COUNTRY = 'USA';
+    private const int ID = 1;
+    private const float LATITUDE = -96.67;
+    private const float LONGITUDE = 107.87;
+    private const string NAME = 'New-York';
 
     private OpenWeatherDatabase $database;
 

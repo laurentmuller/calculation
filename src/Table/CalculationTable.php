@@ -36,12 +36,12 @@ class CalculationTable extends AbstractEntityTable
     /**
      * The editable state parameter name (bool).
      */
-    final public const PARAM_EDITABLE = 'stateEditable';
+    final public const string PARAM_EDITABLE = 'stateEditable';
 
     /**
      * The state parameter name (int).
      */
-    final public const PARAM_STATE = 'stateId';
+    final public const string PARAM_STATE = 'stateId';
 
     public function __construct(
         CalculationRepository $repository,

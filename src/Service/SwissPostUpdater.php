@@ -43,42 +43,42 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     /**
      * The pattern to parse validity date.
      */
-    private const DATE_PATTERN = 'Ymd';
+    private const string DATE_PATTERN = 'Ymd';
 
     /**
      * The import file extension.
      */
-    private const FILE_EXTENSION = 'zip';
+    private const string FILE_EXTENSION = 'zip';
 
     /**
      * The record identifier containing the validity date.
      */
-    private const REC_00_VALIDITY = 0;
+    private const int REC_00_VALIDITY = 0;
 
     /**
      * The record identifier containing city data.
      */
-    private const REC_01_CITY = 1;
+    private const int REC_01_CITY = 1;
 
     /**
      * The record identifier containing street data.
      */
-    private const REC_04_STREET = 4;
+    private const int REC_04_STREET = 4;
 
     /**
      * The record identifier to stop processing data.
      */
-    private const REC_05_STOP_PROCESS = 5;
+    private const int REC_05_STOP_PROCESS = 5;
 
     /**
      * The CSV separator.
      */
-    private const SEPARATOR = ';';
+    private const string SEPARATOR = ';';
 
     /**
      * The states file.
      */
-    private const STATE_FILE = 'swiss_state.csv';
+    private const string STATE_FILE = 'swiss_state.csv';
 
     public function __construct(
         private readonly ApplicationParameters $parameters,

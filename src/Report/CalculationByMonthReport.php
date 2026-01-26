@@ -53,13 +53,13 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
     use PdfBarChartTrait;
     use PdfChartLegendTrait;
 
-    private const ARROW_DOWN = 116;
-    private const ARROW_RIGHT = 116; // same as down but with 90 degrees rotation
-    private const ARROW_UP = 115;
-    private const PATTERN_CHART = 'MMM Y';
-    private const PATTERN_TABLE = 'MMMM Y';
-    private const RECT_MARGIN = 1.25;
-    private const RECT_WIDTH = 4.5;
+    private const int ARROW_DOWN = 116;
+    private const int ARROW_RIGHT = 116; // same as down but with 90 degrees rotation
+    private const int ARROW_UP = 115;
+    private const string PATTERN_CHART = 'MMM Y';
+    private const string PATTERN_TABLE = 'MMMM Y';
+    private const float RECT_MARGIN = 1.25;
+    private const float RECT_WIDTH = 4.5;
 
     /** @phpstan-var \WeakMap<PdfColorInterface, PdfTextColor>  */
     private \WeakMap $colors;

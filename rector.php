@@ -61,7 +61,7 @@ $skip = [
 
 $sets = [
     // global
-    SetList::PHP_82,
+    SetList::PHP_83,
     SetList::CODE_QUALITY,
     SetList::CODING_STYLE,
     SetList::DEAD_CODE,

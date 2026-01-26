@@ -22,7 +22,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 abstract class CommandTestCase extends KernelTestCase
 {
-    private const OUTPUT_REPLACE = [
+    private const array OUTPUT_REPLACE = [
         '/\n/' => '',
         '/\s+/' => ' ',
     ];

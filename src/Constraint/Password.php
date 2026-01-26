@@ -26,7 +26,7 @@ class Password extends Constraint
     /**
      * The allowed option names.
      */
-    final public const ALLOWED_OPTIONS = [
+    final public const array ALLOWED_OPTIONS = [
         'letter',
         'caseDiff',
         'number',
@@ -34,11 +34,11 @@ class Password extends Constraint
         'email',
     ];
 
-    final public const CASE_DIFF_ERROR = '4c725240-da48-42df-ba9a-ce09a16ab1b5';
-    final public const EMAIL_ERROR = '85386dde-1b29-42d4-9b7c-de03693fb963';
-    final public const LETTER_ERROR = 'cc369ec9-ea3d-4d27-8f96-6e03bfb63323';
-    final public const NUMBER_ERROR = '902a620e-8cf9-42bd-9219-3938c3fea0c5';
-    final public const SPECIAL_CHAR_ERROR = '5c5998ca-d67b-45ed-b210-dda950c8ea09';
+    final public const string CASE_DIFF_ERROR = '4c725240-da48-42df-ba9a-ce09a16ab1b5';
+    final public const string EMAIL_ERROR = '85386dde-1b29-42d4-9b7c-de03693fb963';
+    final public const string LETTER_ERROR = 'cc369ec9-ea3d-4d27-8f96-6e03bfb63323';
+    final public const string NUMBER_ERROR = '902a620e-8cf9-42bd-9219-3938c3fea0c5';
+    final public const string SPECIAL_CHAR_ERROR = '5c5998ca-d67b-45ed-b210-dda950c8ea09';
 
     protected const ERROR_NAMES = [
         self::LETTER_ERROR => 'LETTER_ERROR',

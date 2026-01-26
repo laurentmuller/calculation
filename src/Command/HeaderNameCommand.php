@@ -30,7 +30,7 @@ class HeaderNameCommand
 {
     use WatchTrait;
 
-    private const HEADERS_MAPPING = [
+    private const array HEADERS_MAPPING = [
         'css' => '/* %path% */',
         'js' => '/* %path% */',
         'twig' => '{# %path% #}',

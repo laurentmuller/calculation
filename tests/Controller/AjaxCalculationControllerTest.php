@@ -26,7 +26,7 @@ final class AjaxCalculationControllerTest extends ControllerTestCase
 {
     use CalculationTrait;
 
-    private const UPDATE_ROUTE_NAME = '/calculation/update';
+    private const string UPDATE_ROUTE_NAME = '/calculation/update';
 
     #[\Override]
     protected function setUp(): void

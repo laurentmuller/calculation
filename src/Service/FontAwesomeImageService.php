@@ -40,11 +40,11 @@ class FontAwesomeImageService
      */
     public const SVG_EXTENSION = '.svg';
 
-    private const IMAGE_FORMAT = 'png24';
-    private const SVG_PREFIX = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>';
-    private const TARGET_SIZE = 64;
-    private const TRANSPARENT_COLOR = 'white';
-    private const VIEW_BOX_PATTERN = '/viewBox="(\d+\s+){2}(?\'width\'\d+)\s+(?\'height\'\d+)"/mi';
+    private const string IMAGE_FORMAT = 'png24';
+    private const string SVG_PREFIX = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>';
+    private const int TARGET_SIZE = 64;
+    private const string TRANSPARENT_COLOR = 'white';
+    private const string VIEW_BOX_PATTERN = '/viewBox="(\d+\s+){2}(?\'width\'\d+)\s+(?\'height\'\d+)"/mi';
 
     private ?\Imagick $imagick = null;
     private bool $imagickException = false;

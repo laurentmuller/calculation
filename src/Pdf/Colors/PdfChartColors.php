@@ -20,7 +20,7 @@ use fpdf\Color\PdfRgbColor;
  */
 class PdfChartColors implements \Countable
 {
-    private const COLORS = [
+    private const array COLORS = [
         [54, 162, 235], // blue
         [255, 99, 132], // red
         [255, 159, 64], // orange

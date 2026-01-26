@@ -33,27 +33,27 @@ class BingTranslatorService extends AbstractTranslatorService
     /**
      * The API version parameter.
      */
-    private const API_VERSION = '3.0';
+    private const string API_VERSION = '3.0';
 
     /**
      * The host name.
      */
-    private const HOST_NAME = 'https://api.cognitive.microsofttranslator.com/';
+    private const string HOST_NAME = 'https://api.cognitive.microsofttranslator.com/';
 
     /**
      * The detection language URI.
      */
-    private const URI_DETECT = 'detect';
+    private const string URI_DETECT = 'detect';
 
     /**
      * The languages URI.
      */
-    private const URI_LANGUAGE = 'languages';
+    private const string URI_LANGUAGE = 'languages';
 
     /**
      * The translation URI.
      */
-    private const URI_TRANSLATE = 'translate';
+    private const string URI_TRANSLATE = 'translate';
 
     /**
      * @throws \InvalidArgumentException if the API key is not defined, is null or is empty

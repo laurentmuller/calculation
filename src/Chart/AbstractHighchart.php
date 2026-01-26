@@ -39,29 +39,29 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     /**
      * The default identifier of the div where to render the chart.
      */
-    final public const CONTAINER = 'chartContainer';
+    final public const string CONTAINER = 'chartContainer';
 
     /**
      * The column chart type.
      */
-    final public const TYPE_COLUMN = 'column';
+    final public const string TYPE_COLUMN = 'column';
 
     /**
      * The line chart type.
      */
-    final public const TYPE_LINE = 'line';
+    final public const string TYPE_LINE = 'line';
 
     /**
      * The pie chart type.
      */
-    final public const TYPE_PIE = 'pie';
+    final public const string TYPE_PIE = 'pie';
 
     /**
      * The spline chart type.
      */
-    final public const TYPE_SP_LINE = 'spline';
+    final public const string TYPE_SP_LINE = 'spline';
 
-    private const COMMENT_REGEX = '/\/\*(.|[\r\n])*?\*\//m';
+    private const string COMMENT_REGEX = '/\/\*(.|[\r\n])*?\*\//m';
 
     public function __construct(
         protected readonly ApplicationParameters $parameters,

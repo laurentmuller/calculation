@@ -50,7 +50,7 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
     use ServiceMethodsSubscriberTrait;
     use TranslatorFlashMessageAwareTrait;
 
-    private const CLASS_NAMES = [
+    private const array CLASS_NAMES = [
         Calculation::class,
         CalculationState::class,
         Category::class,
@@ -62,22 +62,22 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
         User::class,
     ];
 
-    private const USER_LOGIN = [
+    private const array USER_LOGIN = [
         'lastLogin',
     ];
 
-    private const USER_PASSWORD = [
+    private const array USER_PASSWORD = [
         'password',
     ];
 
-    private const USER_RESET = [
+    private const array USER_RESET = [
         'selector',
         'expiresAt',
         'requestedAt',
         'hashedToken',
     ];
 
-    private const USER_RIGHTS = [
+    private const array USER_RIGHTS = [
         'rights',
         'overwrite',
     ];

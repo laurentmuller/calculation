@@ -19,7 +19,7 @@ namespace App\Service;
 class FontAwesomeIconService
 {
     // extracted from https://docs.fontawesome.com/web/style/style-cheatsheet
-    private const EXCLUDED = [
+    private const array EXCLUDED = [
         // General
         'fa-inverse', // Inverts the color of an icon to white
         // Sizing Icons
@@ -75,7 +75,7 @@ class FontAwesomeIconService
         'fa-sr-only-focusable', // Used alongside fa-sr-only to show the element again when it is focused
     ];
 
-    private const FOLDERS = [
+    private const array FOLDERS = [
         'brands',
         'regular',
         'solid',

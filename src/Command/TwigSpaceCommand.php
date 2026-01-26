@@ -29,8 +29,8 @@ class TwigSpaceCommand
 {
     use WatchTrait;
 
-    private const PATTERN = '/(\S)( {2,})(\S)/';
-    private const REPLACEMENT = '$1 $3';
+    private const string PATTERN = '/(\S)( {2,})(\S)/';
+    private const string REPLACEMENT = '$1 $3';
 
     public function __construct(
         #[Autowire('%kernel.project_dir%')]

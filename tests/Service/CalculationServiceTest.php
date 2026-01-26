@@ -42,10 +42,10 @@ final class CalculationServiceTest extends KernelServiceTestCase
     use IdTrait;
     use TranslatorMockTrait;
 
-    private const MARGIN_PERCENT = 1.1;
-    private const MARGIN_USER = 0.1;
-    private const PRODUCT_PRICE = 100.0;
-    private const QUANTITY = 10.0;
+    private const float MARGIN_PERCENT = 1.1;
+    private const float MARGIN_USER = 0.1;
+    private const float PRODUCT_PRICE = 100.0;
+    private const float QUANTITY = 10.0;
 
     public function testAdjustUserMargin(): void
     {

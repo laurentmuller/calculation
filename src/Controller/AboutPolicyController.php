@@ -26,7 +26,7 @@ class AboutPolicyController extends AbstractAboutController
      */
     public const POLICY_FILE = 'POLICY.md';
 
-    private const TAGS = [
+    private const array TAGS = [
         ['h4', 'h6', 'bookmark bookmark-2'],
         ['h3', 'h5', 'bookmark bookmark-1'],
         ['h2', 'h4', 'bookmark'],

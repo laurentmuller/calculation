@@ -43,10 +43,10 @@ class ResponseListener
     use ArrayTrait;
 
     // the CSP header key
-    private const CSP_HEADER = 'Content-Security-Policy';
+    private const string CSP_HEADER = 'Content-Security-Policy';
 
     // the default headers to add
-    private const DEFAULT_HEADERS = [
+    private const array DEFAULT_HEADERS = [
         'Referrer-Policy' => 'same-origin',
         'Cross-Origin-Opener-Policy' => 'same-origin',
         'X-Content-Type-Options' => 'nosniff',
@@ -54,13 +54,13 @@ class ResponseListener
     ];
 
     // the Nonce search parameter
-    private const NONCE_PARAMETER = '%nonce%';
+    private const string NONCE_PARAMETER = '%nonce%';
 
     // the Report search parameter
-    private const REPORT_PARAMETER = '%report%';
+    private const string REPORT_PARAMETER = '%report%';
 
     // the headers to add for secure request.
-    private const SECURE_HEADERS = [
+    private const array SECURE_HEADERS = [
         'Strict-Transport-Security' => 'max-age=63072000; includeSubDomains; preload',
     ];
 

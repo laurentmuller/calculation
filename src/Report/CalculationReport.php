@@ -39,7 +39,7 @@ class CalculationReport extends AbstractReport
 {
     use PdfMemoryImageTrait;
 
-    private const QR_CODE_SIZE = 38.0;
+    private const float QR_CODE_SIZE = 38.0;
 
     public function __construct(
         AbstractController $controller,

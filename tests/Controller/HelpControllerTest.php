@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class HelpControllerTest extends ControllerTestCase
 {
-    private const IMAGES_PATH = 'public/help/images';
+    private const string IMAGES_PATH = 'public/help/images';
 
     private HelpService $help;
 

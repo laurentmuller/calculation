@@ -46,7 +46,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 readonly class PackageInfoService implements \Countable
 {
-    private const LICENSE_PATTERN = '{license{*},LICENSE{*}}';
+    private const string LICENSE_PATTERN = '{license{*},LICENSE{*}}';
 
     public function __construct(
         #[Autowire('%kernel.project_dir%/composer.lock')]

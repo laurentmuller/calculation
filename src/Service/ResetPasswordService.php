@@ -41,8 +41,8 @@ readonly class ResetPasswordService
 {
     use LoggerTrait;
 
-    private const THROTTLE_MINUTES = 5;
-    private const THROTTLE_OFFSET = 'PT3300S';
+    private const int THROTTLE_MINUTES = 5;
+    private const string THROTTLE_OFFSET = 'PT3300S';
 
     public function __construct(
         private ResetPasswordHelperInterface $helper,

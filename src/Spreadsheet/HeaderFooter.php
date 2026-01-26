@@ -24,31 +24,31 @@ class HeaderFooter
     /**
      * The center section prefix.
      */
-    final public const CENTER_SECTION = '&C';
+    final public const string CENTER_SECTION = '&C';
 
     /**
      * The default font size.
      */
-    final public const DEFAULT_FONT_SIZE = 9;
+    final public const int DEFAULT_FONT_SIZE = 9;
 
     /**
      * The left section prefix.
      */
-    final public const LEFT_SECTION = '&L';
+    final public const string LEFT_SECTION = '&L';
 
     /**
      * The right section prefix.
      */
-    final public const RIGHT_SECTION = '&R';
+    final public const string RIGHT_SECTION = '&R';
 
     // the date and time format
-    private const DATE_AND_TIME = '&D - &T';
+    private const string DATE_AND_TIME = '&D - &T';
 
     // the initial font size
-    private const INITIAL_FONT_SIZE = 11;
+    private const int INITIAL_FONT_SIZE = 11;
 
     // the page/pages format
-    private const PAGE_AND_PAGES = 'Page &P / &N';
+    private const string PAGE_AND_PAGES = 'Page &P / &N';
 
     // the center text
     private string $centerText = '';

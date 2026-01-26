@@ -31,7 +31,7 @@ class Column implements \Stringable, SortModeInterface
     /**
      * The property name of the field formatter.
      */
-    private const FIELD_FORMATTER = 'fieldFormatter';
+    private const string FIELD_FORMATTER = 'fieldFormatter';
 
     /**
      * The shared property accessor to map JSON columns or values.

@@ -26,7 +26,7 @@ use function PHPUnit\Framework\assertSame;
 
 final class DatabaseInfoServiceTest extends TestCase
 {
-    private const PARAMS = [
+    private const array PARAMS = [
         'dbname' => 'database',
         'host' => 'localhost',
         'port' => 3008,

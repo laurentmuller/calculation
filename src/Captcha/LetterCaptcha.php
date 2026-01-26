@@ -18,7 +18,7 @@ namespace App\Captcha;
  */
 class LetterCaptcha extends AbstractAlphaCaptcha
 {
-    private const MAPPING = [
+    private const array MAPPING = [
         0 => 'first',
         1 => 'second',
         2 => 'third',

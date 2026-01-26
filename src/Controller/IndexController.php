@@ -43,17 +43,17 @@ class IndexController extends AbstractController
     /**
      * The custom view query parameter.
      */
-    final public const PARAM_CUSTOM = 'custom';
+    final public const string PARAM_CUSTOM = 'custom';
 
     /**
      * The restriction query parameter.
      */
-    final public const PARAM_RESTRICT = 'restrict';
+    final public const string PARAM_RESTRICT = 'restrict';
 
     /**
      * The view parameter.
      */
-    private const PARAM_VIEW = TableInterface::PARAM_VIEW;
+    private const string PARAM_VIEW = TableInterface::PARAM_VIEW;
 
     /**
      * Gets the displayed calculations.

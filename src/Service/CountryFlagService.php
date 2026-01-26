@@ -21,7 +21,7 @@ use Twig\Attribute\AsTwigFilter;
  */
 class CountryFlagService
 {
-    private const REGIONAL_OFFSET = 0x01F1A5;
+    private const int REGIONAL_OFFSET = 0x01F1A5;
 
     /**
      * Gets choice values used for the country type form.

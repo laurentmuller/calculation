@@ -41,8 +41,8 @@ class RegistrationController extends AbstractController
 {
     use LoggerTrait;
 
-    private const ROUTE_REGISTER = 'user_register';
-    private const ROUTE_VERIFY = 'user_verify';
+    private const string ROUTE_REGISTER = 'user_register';
+    private const string ROUTE_VERIFY = 'user_verify';
 
     public function __construct(
         private readonly EmailVerifier $verifier,

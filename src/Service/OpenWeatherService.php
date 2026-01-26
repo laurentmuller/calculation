@@ -56,12 +56,12 @@ class OpenWeatherService extends AbstractHttpClientService
     /**
      * The parameter value to exclude the hourly data.
      */
-    final public const EXCLUDE_HOURLY = 'hourly';
+    final public const string EXCLUDE_HOURLY = 'hourly';
 
     /**
      * The parameter value to exclude the minutely data.
      */
-    final public const EXCLUDE_MINUTELY = 'minutely';
+    final public const string EXCLUDE_MINUTELY = 'minutely';
 
     /**
      * The maximum number of city identifiers to retrieve.
@@ -116,37 +116,37 @@ class OpenWeatherService extends AbstractHttpClientService
     /**
      * The host name version 2.5.
      */
-    private const HOST_NAME_V_2_5 = 'https://api.openweathermap.org/data/2.5/';
+    private const string HOST_NAME_V_2_5 = 'https://api.openweathermap.org/data/2.5/';
 
     /**
      * The host name version 3.0 (used for one Api call).
      */
-    private const HOST_NAME_V_3_0 = 'https://api.openweathermap.org/data/3.0/';
+    private const string HOST_NAME_V_3_0 = 'https://api.openweathermap.org/data/3.0/';
 
     /**
      * Current condition URI.
      */
-    private const URI_CURRENT = 'weather';
+    private const string URI_CURRENT = 'weather';
 
     /**
      * The 16 days / daily forecast URI.
      */
-    private const URI_DAILY = 'forecast/daily';
+    private const string URI_DAILY = 'forecast/daily';
 
     /**
      * The 5 days / 3 hours forecast URI.
      */
-    private const URI_FORECAST = 'forecast';
+    private const string URI_FORECAST = 'forecast';
 
     /**
      * One call condition URI.
      */
-    private const URI_ONECALL = 'onecall';
+    private const string URI_ONECALL = 'onecall';
 
     /**
      * The user data parameter name.
      */
-    private const USER_DATA = 'user_data';
+    private const string USER_DATA = 'user_data';
 
     /**
      * @throws \InvalidArgumentException if the API key is not defined, is null or empty

@@ -30,8 +30,8 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 class DiagramService implements \Countable
 {
-    private const FILE_EXTENSION = '.mmd';
-    private const TITLE_PATTERN = '/title\s?:\s?(.*)/m';
+    private const string FILE_EXTENSION = '.mmd';
+    private const string TITLE_PATTERN = '/title\s?:\s?(.*)/m';
 
     public function __construct(
         #[Autowire('%kernel.project_dir%/resources/diagrams/')]

@@ -43,7 +43,7 @@ readonly class OpenWeatherCityUpdater
     /**
      * The import file extension.
      */
-    private const FILE_EXTENSION = 'gz';
+    private const string FILE_EXTENSION = 'gz';
 
     public function __construct(
         #[Autowire('%kernel.project_dir%/resources/data/openweather.sqlite')]

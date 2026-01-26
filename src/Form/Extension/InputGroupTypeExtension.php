@@ -29,7 +29,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class InputGroupTypeExtension extends AbstractTypeExtension
 {
-    private const OPTIONS = [
+    private const array OPTIONS = [
         'prepend_icon',
         'prepend_title',
         'prepend_class',

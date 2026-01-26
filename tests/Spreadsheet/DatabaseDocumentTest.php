@@ -20,13 +20,13 @@ use PHPUnit\Framework\TestCase;
 
 final class DatabaseDocumentTest extends TestCase
 {
-    public const CONFIGURATION = [
+    public const array CONFIGURATION = [
         'Key' => 'Value',
         'On' => 'on',
         'Off' => 'off',
     ];
 
-    public const DATABASE = [
+    public const array DATABASE = [
         'Name' => 'FixtureDatabase',
         'Version' => '5.7.32',
     ];

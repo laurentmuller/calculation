@@ -46,9 +46,9 @@ readonly class SymfonyInfoService
     public const LABEL_NOT_INSTALLED = 'Not installed';
 
     // the release information URL
-    private const RELEASE_URL = 'https://symfony.com/releases/%s.%s.json';
+    private const string RELEASE_URL = 'https://symfony.com/releases/%s.%s.json';
     // the unknown label
-    private const UNKNOWN = 'Unknown';
+    private const string UNKNOWN = 'Unknown';
 
     public function __construct(
         #[Target('calculation.symfony')]

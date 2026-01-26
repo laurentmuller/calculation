@@ -21,7 +21,7 @@ final class ArrayTraitTest extends TestCase
 {
     use ArrayTrait;
 
-    private const KEY = 'key';
+    private const string KEY = 'key';
 
     public static function getColumnFilterValues(): \Generator
     {

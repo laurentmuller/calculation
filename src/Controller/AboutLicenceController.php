@@ -26,7 +26,7 @@ class AboutLicenceController extends AbstractAboutController
      */
     public const LICENCE_FILE = 'LICENSE.md';
 
-    private const TAGS = [
+    private const array TAGS = [
         ['h2', 'h4', 'bookmark'],
         ['p', 'p', 'text-justify'],
     ];

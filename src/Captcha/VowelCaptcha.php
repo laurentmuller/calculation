@@ -18,14 +18,14 @@ namespace App\Captcha;
  */
 class VowelCaptcha extends AbstractAlphaCaptcha
 {
-    private const MAPPING = [
+    private const array MAPPING = [
         0 => 'first',
         1 => 'second',
         2 => 'third',
         -1 => 'last',
     ];
 
-    private const SOURCE = 'AEIOUY';
+    private const string SOURCE = 'AEIOUY';
 
     #[\Override]
     protected function getAnswer(string $word, int $letterIndex): string

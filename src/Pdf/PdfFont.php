@@ -31,7 +31,7 @@ class PdfFont implements PdfDocumentUpdaterInterface
     /**
      * The default font size (9pt).
      */
-    final public const DEFAULT_SIZE = 9.0;
+    final public const float DEFAULT_SIZE = 9.0;
 
     /**
      * The default font style (Regular).

@@ -19,12 +19,12 @@ use PHPUnit\Framework\TestCase;
 
 final class SwissDatabaseTest extends TestCase
 {
-    private const CITY_ID = 1;
-    private const CITY_NAME = 'New-York';
-    private const CITY_ZIP = 3001;
-    private const STATE_ABBREVIATION = 'CA';
-    private const STATE_NAME = 'California';
-    private const STREET_NAME = 'Palm Beach 2541';
+    private const int CITY_ID = 1;
+    private const string CITY_NAME = 'New-York';
+    private const int CITY_ZIP = 3001;
+    private const string STATE_ABBREVIATION = 'CA';
+    private const string STATE_NAME = 'California';
+    private const string STREET_NAME = 'Palm Beach 2541';
 
     private SwissDatabase $database;
 

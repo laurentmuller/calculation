@@ -24,7 +24,7 @@ final class RecaptchaServiceTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    private const SITE_KEY = 'site_key';
+    private const string SITE_KEY = 'site_key';
 
     public function testDefaultValues(): void
     {

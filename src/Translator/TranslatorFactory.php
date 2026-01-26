@@ -33,12 +33,12 @@ class TranslatorFactory implements ServiceSubscriberInterface
     /**
      * The default translator service class name (Bing).
      */
-    final public const DEFAULT_SERVICE = BingTranslatorService::class;
+    final public const string DEFAULT_SERVICE = BingTranslatorService::class;
 
     /**
      * The key to save/retrieve the last used service.
      */
-    private const KEY_LAST_SERVICE = 'translator_service';
+    private const string KEY_LAST_SERVICE = 'translator_service';
 
     /**
      * @param iterable<TranslatorServiceInterface> $translators

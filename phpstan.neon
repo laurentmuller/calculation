@@ -1,6 +1,5 @@
 parameters:
     level: 8
-    phpVersion: 80300 # to check missing override method attribute
     tmpDir: var/cache/phpstan
     paths:
         - src
@@ -24,11 +23,6 @@ parameters:
 
     strictRules:
         strictArrayFilter: false
-
-    type_coverage:
-        param: 99
-        return: 99
-        property: 100
 
     ignoreErrors:
         -

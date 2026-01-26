@@ -27,7 +27,7 @@ use Twig\Environment;
  */
 class HighlightExtension
 {
-    private const PHP_PATTERNS = [
+    private const array PHP_PATTERNS = [
         '/title="(.*?)"/i' => '',
         '/data-depth=\d+\s/i' => '',
         '/data-indent-pad="\s+/i' => '',
@@ -37,7 +37,7 @@ class HighlightExtension
         '/ \[/i' => '[',
     ];
 
-    private const SQL_REPLACES = [
+    private const array SQL_REPLACES = [
         'array{' => '[',
         '}' => ']',
         '"backtick"' => '"highlight-sql-backtick"',

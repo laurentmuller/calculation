@@ -61,7 +61,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class FormHelper
 {
-    private const DEFAULT_ROW_ATTRIBUTES = ['class' => 'mb-3 form-group'];
+    private const array DEFAULT_ROW_ATTRIBUTES = ['class' => 'mb-3 form-group'];
 
     /**
      * The attributes.

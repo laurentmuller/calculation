@@ -34,17 +34,17 @@ class DeeplTranslatorService extends AbstractTranslatorService
     /**
      * The host name.
      */
-    private const HOST_NAME = 'https://api-free.deepl.com/v2/';
+    private const string HOST_NAME = 'https://api-free.deepl.com/v2/';
 
     /**
      * The languages URI.
      */
-    private const URI_LANGUAGE = 'languages?type=target';
+    private const string URI_LANGUAGE = 'languages?type=target';
 
     /**
      * The translation URI.
      */
-    private const URI_TRANSLATE = 'translate';
+    private const string URI_TRANSLATE = 'translate';
 
     /**
      * @throws \InvalidArgumentException if the API key is not defined, is null or is empty

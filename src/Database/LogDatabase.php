@@ -25,10 +25,8 @@ class LogDatabase extends AbstractDatabase
 {
     /**
      * SQL statement to create the log table.
-     *
-     * @var string
      */
-    private const SQL_CREATE = <<<'sql'
+    private const string SQL_CREATE = <<<'sql'
         CREATE TABLE IF NOT EXISTS sy_Log (
             id         INTEGER PRIMARY KEY,
             created_at INTEGER NOT NULL,
@@ -42,10 +40,8 @@ class LogDatabase extends AbstractDatabase
 
     /**
      * SQL statement to add a log into the table.
-     *
-     * @var string
      */
-    private const SQL_INSERT = <<<'sql'
+    private const string SQL_INSERT = <<<'sql'
         INSERT INTO sy_Log(id, created_at, channel, level, user, message, context)
             VALUES(:id, :created_at, :channel, :level, :user, :message, :context)
         sql;

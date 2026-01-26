@@ -31,8 +31,8 @@ use fpdf\Enums\PdfTextAlignment;
  */
 class CommandsReport extends AbstractArrayReport
 {
-    private const CLASS_PATTERN = '/<span\s*class="(.*?)"\>([\s\S]*?)<\/span>/im';
-    private const LINK_PATTERN = '/<a href="(.*)">(.*)<\/a>/m';
+    private const string CLASS_PATTERN = '/<span\s*class="(.*?)"\>([\s\S]*?)<\/span>/im';
+    private const string LINK_PATTERN = '/<a href="(.*)">(.*)<\/a>/m';
 
     #[\Override]
     protected function doRender(array $entities): bool

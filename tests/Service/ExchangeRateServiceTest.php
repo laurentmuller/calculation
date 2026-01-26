@@ -27,8 +27,8 @@ final class ExchangeRateServiceTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    private const ERROR_CODE = 404;
-    private const ERROR_MESSAGE = 'Error Message';
+    private const int ERROR_CODE = 404;
+    private const string ERROR_MESSAGE = 'Error Message';
 
     public function testGetLatestError(): void
     {

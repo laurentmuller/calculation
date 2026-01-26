@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 
 final class CsvReaderTest extends TestCase
 {
-    private const VALUES_SEP = '|';
+    private const string VALUES_SEP = '|';
 
     public function testContent(): void
     {

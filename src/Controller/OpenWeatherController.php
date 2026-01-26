@@ -59,12 +59,12 @@ class OpenWeatherController extends AbstractController
     /**
      * The country parameter name.
      */
-    private const PARAM_COUNTRY = 'country';
+    private const string PARAM_COUNTRY = 'country';
 
     /**
      * The prefix key for cookies.
      */
-    private const PREFIX_KEY = 'openweather';
+    private const string PREFIX_KEY = 'openweather';
 
     public function __construct(private readonly OpenWeatherService $service)
     {

@@ -31,7 +31,7 @@ class PivotTableFactory
     /**
      * The title separator.
      */
-    private const SEPARATOR = '\\';
+    private const string SEPARATOR = '\\';
 
     /**
      * The aggregator class name.

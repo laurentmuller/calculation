@@ -24,16 +24,16 @@ final class StringUtils
     /**
      * The new line separator.
      */
-    public const NEW_LINE = "\n";
+    public const string NEW_LINE = "\n";
 
-    private const VAR_PATTERN = [
+    private const array VAR_PATTERN = [
         "/array \(/" => '[',
         "/^([ ]*)\)(,?)$/m" => '$1]$2',
         "/=>[ ]?\n[ ]+\[/" => '=> [',
         "/([ ]*)(\'[^\']+\') => ([\[\'])/" => '$1$2 => $3',
     ];
 
-    private const VAR_SEARCH = [
+    private const array VAR_SEARCH = [
         '\\\\' => '\\',
         ',' => '',
     ];

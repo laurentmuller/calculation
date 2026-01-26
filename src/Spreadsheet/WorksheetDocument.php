@@ -41,27 +41,27 @@ class WorksheetDocument extends Worksheet
     /**
      * The date time format ('dd/mm/yyyy hh:mm').
      */
-    private const FORMAT_DATE_TIME = 'dd/mm/yyyy hh:mm';
+    private const string FORMAT_DATE_TIME = 'dd/mm/yyyy hh:mm';
 
     /**
      * The identifier format.
      */
-    private const FORMAT_ID = '000000';
+    private const string FORMAT_ID = '000000';
 
     /**
      * The integer format.
      */
-    private const FORMAT_INT = '#,##0';
+    private const string FORMAT_INT = '#,##0';
 
     /**
      * The top margins when the customer header is present (21 millimeters).
      */
-    private const HEADER_CUSTOMER_MARGIN = 0.83;
+    private const float HEADER_CUSTOMER_MARGIN = 0.83;
 
     /**
      * The top and bottom margins when header and/or footer is present (12 millimeters).
      */
-    private const HEADER_FOOTER_MARGIN = 0.47;
+    private const float HEADER_FOOTER_MARGIN = 0.47;
 
     /**
      * The boolean formats.

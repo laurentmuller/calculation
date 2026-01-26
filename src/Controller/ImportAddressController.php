@@ -31,7 +31,7 @@ class ImportAddressController extends AbstractController
     /**
      * The URL to download data.
      */
-    private const DATA_URL = 'https://www.post.ch/fr/espace-clients/services-en-ligne/zopa/adress-und-geodaten/info';
+    private const string DATA_URL = 'https://www.post.ch/fr/espace-clients/services-en-ligne/zopa/adress-und-geodaten/info';
 
     #[GetPostRoute(path: '/import', name: 'import')]
     public function invoke(Request $request, SwissPostUpdater $updater): Response

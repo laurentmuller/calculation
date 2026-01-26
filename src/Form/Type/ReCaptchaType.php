@@ -35,7 +35,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ReCaptchaType extends AbstractType implements EventSubscriberInterface
 {
-    private const RECAPTCHA_URL = 'https://www.google.com/recaptcha/api.js?render=';
+    private const string RECAPTCHA_URL = 'https://www.google.com/recaptcha/api.js?render=';
 
     public function __construct(
         private readonly RecaptchaService $service,

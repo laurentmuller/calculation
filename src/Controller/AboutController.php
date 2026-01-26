@@ -36,7 +36,7 @@ use Symfony\Contracts\Cache\CacheInterface;
 #[Route(path: '/about', name: 'about_')]
 class AboutController extends AbstractController
 {
-    private const TAGS = [
+    private const array TAGS = [
         ['h4', 'h6', 'bookmark bookmark-3'],
         ['h3', 'h5', 'bookmark bookmark-2'],
         ['h2', 'h4', 'bookmark bookmark-1'],

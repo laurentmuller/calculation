@@ -17,7 +17,7 @@ use App\Utils\FileUtils;
 
 final class TwigSpaceCommandTest extends CommandTestCase
 {
-    private const COMMAND_NAME = 'app:twig-space';
+    private const string COMMAND_NAME = 'app:twig-space';
 
     public function testDryRunWithChange(): void
     {

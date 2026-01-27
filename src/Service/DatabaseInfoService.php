@@ -26,11 +26,11 @@ class DatabaseInfoService
     private const array DISABLED_VALUES = ['off', 'no', 'false', 'disabled'];
     private const array ENABLED_VALUES = ['on', 'yes', 'true', 'enabled'];
 
-    /** @var array<string, string>|null */
-    private ?array $configuration = null;
+    /** @var array<string, string> */
+    private array $configuration = [];
 
-    /** @var array<string, string>|null */
-    private ?array $database = null;
+    /** @var array<string, string> */
+    private array $database = [];
 
     private ?string $version = null;
 
@@ -39,31 +39,20 @@ class DatabaseInfoService
     }
 
     /**
-     * Gets database variables.
+     * Gets the database variables.
      *
      * @return array<string, string>
      */
     public function getConfiguration(): array
     {
-        if (null === $this->configuration) {
-            $this->configuration = [];
-
+        if ([] === $this->configuration) {
             try {
-                /** @var array<array{Variable_name: string, Value: string}> $entries */
-                $entries = $this->executeQuery('SHOW VARIABLES', true);
-                foreach ($entries as $entry) {
-                    $value = $entry['Value'];
-                    if ('' === $value) {
-                        continue;
+                $variables = $this->getVariables();
+                foreach ($variables as $variable) {
+                    $value = $variable['Value'];
+                    if ('' !== $value) {
+                        $this->configuration[$variable['Variable_name']] = $this->convertValue($value);
                     }
-                    $this->configuration[$entry['Variable_name']] = match ($value) {
-                        'ON', 'OFF',
-                        'YES', 'NO',
-                        'ENABLED', 'DISABLED',
-                        'AUTO',
-                        'AUTOMATIC' => StringUtils::capitalize($value),
-                        default => $value
-                    };
                 }
             } catch (\Exception|Exception) {
             }
@@ -73,29 +62,24 @@ class DatabaseInfoService
     }
 
     /**
-     * Gets the database information.
+     * Gets the database connection parameters.
      *
      * @return array<string, string>
      */
     public function getDatabase(): array
     {
-        if (null === $this->database) {
-            $this->database = ['Server' => 'MariaDB'];
-
-            try {
-                $params = $this->getConnection()->getParams();
-                foreach (['serverVersion', 'dbname', 'host', 'port', 'driver', 'charset'] as $key) {
-                    $value = $params[$key] ?? null;
-                    if (\is_scalar($value)) {
-                        $key = match ($key) {
-                            'dbname' => 'Name',
-                            'serverVersion' => 'Version',
-                            default => \ucfirst($key)
-                        };
-                        $this->database[$key] = (string) $value;
-                    }
+        if ([] === $this->database) {
+            $params = $this->getConnection()->getParams();
+            foreach (['serverVersion', 'dbname', 'host', 'port', 'driver', 'charset'] as $key) {
+                $value = $params[$key] ?? null;
+                if (\is_scalar($value)) {
+                    $key = match ($key) {
+                        'dbname' => 'Name',
+                        'serverVersion' => 'Version',
+                        default => \ucfirst($key)
+                    };
+                    $this->database[$key] = (string) $value;
                 }
-            } catch (\Exception) {
             }
         }
 
@@ -103,24 +87,11 @@ class DatabaseInfoService
     }
 
     /**
-     * Gets database version.
+     * Gets the database version.
      */
     public function getVersion(): string
     {
-        if (null === $this->version) {
-            $this->version = 'Unknown';
-
-            try {
-                $entries = $this->executeQuery('SHOW VARIABLES LIKE "version"', false);
-                if (false !== $entries) {
-                    $value = (string) $entries['Value'];
-                    $this->version = \explode('-', $value)[0];
-                }
-            } catch (\Exception|Exception) {
-            }
-        }
-
-        return $this->version;
+        return $this->version ??= \explode('-', $this->getConfiguration()['version'] ?? 'Unknown')[0];
     }
 
     /**
@@ -139,20 +110,15 @@ class DatabaseInfoService
         return \in_array(\strtolower($value), self::ENABLED_VALUES, true);
     }
 
-    /**
-     * Prepares an SQL statement and return the result.
-     *
-     * @throws Exception
-     */
-    private function executeQuery(string $sql, bool $all): array|false
+    private function convertValue(string $value): string
     {
-        $connection = $this->getConnection();
-        $statement = $connection->prepare($sql);
-        $result = $statement->executeQuery();
-        $entries = $all ? $result->fetchAllAssociative() : $result->fetchAssociative();
-        $result->free();
-
-        return $entries;
+        return match ($value) {
+            'ON', 'OFF',
+            'YES', 'NO',
+            'ENABLED', 'DISABLED',
+            'AUTO', 'AUTOMATIC' => StringUtils::capitalize($value),
+            default => $value
+        };
     }
 
     /**
@@ -161,5 +127,28 @@ class DatabaseInfoService
     private function getConnection(): Connection
     {
         return $this->manager->getConnection();
+    }
+
+    /**
+     * Gets the database variables.
+     *
+     * @return array<array{Variable_name: string, Value: string}>
+     *
+     * @throws Exception
+     */
+    private function getVariables(): array
+    {
+        $result = null;
+
+        try {
+            $connection = $this->getConnection();
+            $statement = $connection->prepare('SHOW VARIABLES;');
+            $result = $statement->executeQuery();
+
+            /** @phpstan-var array<array{Variable_name: string, Value: string}> */
+            return $result->fetchAllAssociative();
+        } finally {
+            $result?->free();
+        }
     }
 }

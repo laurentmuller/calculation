@@ -19,7 +19,6 @@ use Doctrine\DBAL\Result;
 use Doctrine\DBAL\Statement;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 use function PHPUnit\Framework\assertSame;
@@ -27,11 +26,11 @@ use function PHPUnit\Framework\assertSame;
 final class DatabaseInfoServiceTest extends TestCase
 {
     private const array PARAMS = [
+        'serverVersion' => '10.11.15',
         'dbname' => 'database',
         'host' => 'localhost',
         'port' => 3008,
         'driver' => 'pdo_mysql',
-        'serverVersion' => '5.7.40',
         'charset' => 'utf8mb4',
     ];
 
@@ -84,15 +83,15 @@ final class DatabaseInfoServiceTest extends TestCase
                 'Value' => 'ON',
             ],
             [
-                'Variable_name' => 'empty',
+                'Variable_name' => 'Variable empty',
                 'Value' => '',
             ],
             [
-                'Variable_name' => 'Variable Other',
+                'Variable_name' => 'Variable other',
                 'Value' => 'other',
             ],
         ];
-        $manager = $this->createEntityManager('fetchAllAssociative', $values);
+        $manager = $this->createEntityManager($values);
         $service = new DatabaseInfoService($manager);
         $actual = $service->getConfiguration();
         self::assertCount(2, $actual);
@@ -109,8 +108,7 @@ final class DatabaseInfoServiceTest extends TestCase
     public function testGetDatabase(): void
     {
         $expected = [
-            'Server' => 'MariaDB',
-            'Version' => '5.7.40',
+            'Version' => '10.11.15',
             'Name' => 'database',
             'Host' => 'localhost',
             'Port' => '3008',
@@ -123,26 +121,16 @@ final class DatabaseInfoServiceTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    public function testGetDatabaseWithException(): void
-    {
-        $expected = [
-            'Server' => 'MariaDB',
-        ];
-
-        $manager = $this->createMock(EntityManagerInterface::class);
-        $manager->method('getConnection')
-            ->willThrowException(new \Exception());
-
-        $service = new DatabaseInfoService($manager);
-        $actual = $service->getDatabase();
-        self::assertSame($expected, $actual);
-    }
-
     public function testGetVersion(): void
     {
-        $expected = '1.0.0';
-        $values = ['Value' => $expected];
-        $manager = $this->createEntityManager('fetchAssociative', $values);
+        $values = [
+            [
+                'Variable_name' => 'version',
+                'Value' => '10.11.15-MariaDB-deb11-log',
+            ],
+        ];
+        $expected = '10.11.15';
+        $manager = $this->createEntityManager($values);
         $service = new DatabaseInfoService($manager);
         $actual = $service->getVersion();
         self::assertSame($expected, $actual);
@@ -156,15 +144,15 @@ final class DatabaseInfoServiceTest extends TestCase
         self:assertSame('Unknown', $actual);
     }
 
-    private function createEntityManager(?string $method = null, array $values = []): MockObject&EntityManagerInterface
+    private function createEntityManager(array $values = []): EntityManagerInterface
     {
         $connection = $this->createMock(Connection::class);
         $connection->method('getParams')
             ->willReturn(self::PARAMS);
 
-        if (null !== $method) {
+        if ([] !== $values) {
             $result = $this->createMock(Result::class);
-            $result->method($method)
+            $result->method('fetchAllAssociative')
                 ->willReturn($values);
 
             $statement = $this->createMock(Statement::class);
@@ -182,7 +170,7 @@ final class DatabaseInfoServiceTest extends TestCase
         return $manager;
     }
 
-    private function createEntityManagerWithException(): MockObject&EntityManagerInterface
+    private function createEntityManagerWithException(): EntityManagerInterface
     {
         $connection = $this->createMock(Connection::class);
         $connection->method('prepare')

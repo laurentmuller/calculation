@@ -14,59 +14,41 @@ declare(strict_types=1);
 namespace App\Resolver;
 
 use App\Model\TaskComputeQuery;
+use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Validator\ConstraintViolationListInterface;
-use Symfony\Component\Validator\Exception\ValidationFailedException;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Value resolver for {@link TaskComputeQuery}.
  */
-final readonly class TaskComputeQueryValueResolver implements ValueResolverInterface
+final readonly class TaskComputeQueryValueResolver extends AbstractValueResolver
 {
-    public function __construct(private ValidatorInterface $validator)
-    {
-    }
-
     #[\Override]
-    public function resolve(Request $request, ArgumentMetadata $argument): iterable
+    public function resolve(Request $request, ArgumentMetadata $argument): array
     {
         if (TaskComputeQuery::class !== $argument->getType()) {
             return [];
         }
 
-        $query = $this->createQuery($request);
-        $errors = $this->validator->validate($query);
-        if (\count($errors) > 0) {
-            $message = $this->mapErrors($errors);
-            $previous = new ValidationFailedException($query, $errors);
-            throw new BadRequestHttpException($message, $previous);
-        }
+        $query = $this->createQuery($argument);
+        $this->updateQuery($query, $request->request);
+        $this->validate($query);
 
         return [$query];
     }
 
-    private function createQuery(Request $request): TaskComputeQuery
+    private function createQuery(ArgumentMetadata $argument): TaskComputeQuery
     {
-        $payload = $request->getPayload();
-        $id = $payload->getInt('id');
-        $quantity = (float) $payload->get('quantity', 1.0);
-        $items = \array_map(intval(...), $payload->all('items'));
-
-        return new TaskComputeQuery($id, $quantity, $items);
+        return $argument->hasDefaultValue() ? $argument->getDefaultValue() : new TaskComputeQuery();
     }
 
-    private function mapErrors(ConstraintViolationListInterface $errors): string
+    /**
+     * @phpstan-param InputBag<bool|float|int|string> $inputBag
+     */
+    private function updateQuery(TaskComputeQuery $query, InputBag $inputBag): void
     {
-        $str = '';
-        $class = TaskComputeQuery::class;
-        foreach ($errors as $error) {
-            $str .= \sprintf("%s.%s: %s\n", $class, $error->getPropertyPath(), $error->getMessage());
-        }
-
-        return \rtrim($str);
+        $query->id = $inputBag->getInt('id');
+        $query->quantity = (float) $inputBag->get('quantity', 1.0);
+        $query->items = \array_map(intval(...), $inputBag->all('items'));
     }
 }

@@ -26,9 +26,9 @@ final class AjaxControllerTest extends ControllerTestCase
     public static function getRoutes(): \Generator
     {
         // HTTP_BAD_REQUEST
-        yield ['/ajax/task', self::ROLE_USER, Response::HTTP_BAD_REQUEST, Request::METHOD_POST, true];
-        yield ['/ajax/task', self::ROLE_ADMIN, Response::HTTP_BAD_REQUEST, Request::METHOD_POST, true];
-        yield ['/ajax/task', self::ROLE_SUPER_ADMIN, Response::HTTP_BAD_REQUEST, Request::METHOD_POST, true];
+        yield ['/ajax/task', self::ROLE_USER, Response::HTTP_UNPROCESSABLE_ENTITY, Request::METHOD_POST, true];
+        yield ['/ajax/task', self::ROLE_ADMIN, Response::HTTP_UNPROCESSABLE_ENTITY, Request::METHOD_POST, true];
+        yield ['/ajax/task', self::ROLE_SUPER_ADMIN, Response::HTTP_UNPROCESSABLE_ENTITY, Request::METHOD_POST, true];
 
         yield ['/ajax/random/text', self::ROLE_USER];
         yield ['/ajax/random/text', self::ROLE_ADMIN];
@@ -42,7 +42,7 @@ final class AjaxControllerTest extends ControllerTestCase
             'quantity' => 1.0,
             'items' => [1],
         ];
-        $this->checkTaskRequest($parameters, Response::HTTP_BAD_REQUEST);
+        $this->checkTaskRequest($parameters, Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     public function testComputeTaskInvalidItems(): void
@@ -52,7 +52,7 @@ final class AjaxControllerTest extends ControllerTestCase
             'quantity' => 1.0,
             'items' => ['fake value'],
         ];
-        $this->checkTaskRequest($parameters, Response::HTTP_BAD_REQUEST);
+        $this->checkTaskRequest($parameters, Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     public function testComputeTaskItemsEmpty(): void
@@ -62,7 +62,7 @@ final class AjaxControllerTest extends ControllerTestCase
             'quantity' => 1.0,
             'items' => [],
         ];
-        $this->checkTaskRequest($parameters, Response::HTTP_BAD_REQUEST);
+        $this->checkTaskRequest($parameters, Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     public function testComputeTaskNegativeItems(): void
@@ -72,7 +72,7 @@ final class AjaxControllerTest extends ControllerTestCase
             'quantity' => 1.0,
             'items' => [-1],
         ];
-        $this->checkTaskRequest($parameters, Response::HTTP_BAD_REQUEST);
+        $this->checkTaskRequest($parameters, Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     public function testComputeTaskNoFound(): void
@@ -102,7 +102,7 @@ final class AjaxControllerTest extends ControllerTestCase
             'quantity' => -1.0,
             'items' => [1],
         ];
-        $this->checkTaskRequest($parameters, Response::HTTP_BAD_REQUEST);
+        $this->checkTaskRequest($parameters, Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     public function testComputeTaskSuccess(): void

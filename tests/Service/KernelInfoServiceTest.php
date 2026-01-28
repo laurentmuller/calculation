@@ -23,7 +23,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 final class KernelInfoServiceTest extends TestCase
 {
     private const string CHARSET = 'utf-8';
-    private const ENVIRONMENT = Environment::TEST;
+    private const Environment ENVIRONMENT = Environment::TEST;
 
     public function testGetBuildInfo(): void
     {

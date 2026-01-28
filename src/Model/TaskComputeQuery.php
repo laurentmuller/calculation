@@ -19,11 +19,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Contains parameters to compute a task.
  */
-readonly class TaskComputeQuery
+class TaskComputeQuery
 {
     public function __construct(
         #[Assert\Positive]
-        public int $id,
+        public int $id = 0,
         #[Assert\PositiveOrZero]
         public float $quantity = 1.0,
         /** @var int[] */

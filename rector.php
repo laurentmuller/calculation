@@ -72,7 +72,7 @@ $sets = [
     DoctrineSetList::DOCTRINE_CODE_QUALITY,
     DoctrineSetList::TYPED_COLLECTIONS,
     // PHP-Unit
-    PHPUnitSetList::PHPUNIT_110,
+    PHPUnitSetList::PHPUNIT_120,
     PHPUnitSetList::PHPUNIT_CODE_QUALITY,
     // twig
     TwigSetList::TWIG_24,

@@ -46,7 +46,7 @@ class ResetPasswordController extends AbstractController
     /**
      * The reset password route name.
      */
-    public const ROUTE_RESET = 'app_reset_password';
+    public const string ROUTE_RESET = 'app_reset_password';
 
     private const string ROUTE_CHECK = 'app_check_email';
     private const string ROUTE_REQUEST = 'app_forgot_password_request';

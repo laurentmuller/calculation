@@ -19,7 +19,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -57,9 +57,6 @@ final class TaskComputeQueryValueResolverTest extends TestCase
         self::assertEmpty($actual);
     }
 
-    /**
-     * @throws \JsonException
-     */
     public function testValid(): void
     {
         $values = [
@@ -67,8 +64,7 @@ final class TaskComputeQueryValueResolverTest extends TestCase
             'quantity' => 10.0,
             'items' => [1, 2, 3],
         ];
-        $content = \json_encode($values, \JSON_THROW_ON_ERROR);
-        $request = $this->createRequest($content);
+        $request = $this->createRequest($values);
         $argument = $this->createArgumentMetadata();
 
         $resolver = $this->createResolver();
@@ -93,7 +89,7 @@ final class TaskComputeQueryValueResolverTest extends TestCase
         $argument = $this->createArgumentMetadata();
 
         $resolver = $this->createResolver($violationList);
-        self::expectException(BadRequestHttpException::class);
+        self::expectException(UnprocessableEntityHttpException::class);
         $resolver->resolve($request, $argument);
     }
 
@@ -118,9 +114,13 @@ final class TaskComputeQueryValueResolverTest extends TestCase
         return $violation;
     }
 
-    private function createRequest(?string $content = null): Request
+    private function createRequest(array $parameters = []): Request
     {
-        return Request::create('/', content: $content);
+        return Request::create(
+            uri: '/',
+            method: Request::METHOD_POST,
+            parameters: $parameters
+        );
     }
 
     private function createResolver(

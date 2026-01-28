@@ -28,7 +28,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -90,7 +90,8 @@ final class DataQueryValueResolverTest extends TestCase
         $resolver = $this->createResolver();
         $request = $this->createRequest(['invalidKey' => 'value']);
         $argument = $this->createArgumentMetadata();
-        self::expectException(BadRequestHttpException::class);
+        self::expectException(UnprocessableEntityHttpException::class);
+        self::expectExceptionMessage('Invalid parameter: "invalidKey".');
         $resolver->resolve($request, $argument);
     }
 
@@ -252,7 +253,7 @@ final class DataQueryValueResolverTest extends TestCase
         $request = $this->createRequest();
         $argument = $this->createArgumentMetadata();
 
-        self::expectException(BadRequestHttpException::class);
+        self::expectException(UnprocessableEntityHttpException::class);
         $resolver->resolve($request, $argument);
     }
 
@@ -279,7 +280,10 @@ final class DataQueryValueResolverTest extends TestCase
 
     private function createRequest(array $parameters = []): Request
     {
-        return Request::create('/', parameters: $parameters);
+        return Request::create(
+            uri: '/',
+            parameters: $parameters
+        );
     }
 
     private function createResolver(?ConstraintViolationListInterface $violationList = null): DataQueryValueResolver

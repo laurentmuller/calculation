@@ -29,32 +29,30 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Validator\ConstraintViolationListInterface;
-use Symfony\Component\Validator\Exception\ValidationFailedException;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Value resolver for {@link DataQuery}.
  */
-final readonly class DataQueryValueResolver implements SortModeInterface, ValueResolverInterface
+final readonly class DataQueryValueResolver extends AbstractValueResolver implements SortModeInterface
 {
     use CookieTrait;
 
     public function __construct(
         #[Autowire('%cookie_path%')]
         private string $cookiePath,
-        private ValidatorInterface $validator
+        ValidatorInterface $validator
     ) {
+        parent::__construct($validator);
     }
 
     /**
      * @throws BadRequestException
      */
     #[\Override]
-    public function resolve(Request $request, ArgumentMetadata $argument): iterable
+    public function resolve(Request $request, ArgumentMetadata $argument): array
     {
         if (DataQuery::class !== $argument->getType()) {
             return [];
@@ -63,7 +61,7 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
         $query = $this->createQuery($argument);
         $this->updateQuery($query, $request->query);
         $this->updateParameters($query, $request);
-        $this->validateQuery($query);
+        $this->validate($query);
 
         return [$query];
     }
@@ -76,16 +74,7 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
 
     private function createQuery(ArgumentMetadata $argument): DataQuery
     {
-        if ($argument->hasDefaultValue()) {
-            return $argument->getDefaultValue();
-        }
-
-        return new DataQuery();
-    }
-
-    private function formatError(string $key, string|\Stringable $message): string
-    {
-        return \sprintf('%s.%s: %s', DataQuery::class, $key, $message);
+        return $argument->hasDefaultValue() ? $argument->getDefaultValue() : new DataQuery();
     }
 
     private function getLimit(Request $request, TableView $view, string $prefix): int
@@ -122,16 +111,6 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
         return $request->isXmlHttpRequest();
     }
 
-    private function mapErrors(ConstraintViolationListInterface $errors): string
-    {
-        $str = '';
-        foreach ($errors as $error) {
-            $str .= $this->formatError($error->getPropertyPath(), $error->getMessage()) . StringUtils::NEW_LINE;
-        }
-
-        return \rtrim($str);
-    }
-
     private function updateParameters(DataQuery $query, Request $request): void
     {
         $query->prefix = $this->getPrefix($request);
@@ -148,6 +127,8 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
 
     /**
      * @phpstan-param InputBag<string> $inputBag
+     *
+     * @throws UnprocessableEntityHttpException if a parameter in the input bag is unknown
      */
     private function updateQuery(DataQuery $query, InputBag $inputBag): void
     {
@@ -169,7 +150,7 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
                 LogTable::PARAM_LEVEL,
                 LogTable::PARAM_CHANNEL,
                 SearchTable::PARAM_ENTITY => $query->addParameter($key, $inputBag->getString($key)),
-                default => throw new BadRequestHttpException(\sprintf('Invalid parameter "%s".', $key)),
+                default => throw new UnprocessableEntityHttpException(\sprintf('Invalid parameter: "%s".', $key))
             };
         }
     }
@@ -180,18 +161,5 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
     private function validateOrder(string $order): string
     {
         return StringUtils::equalIgnoreCase(self::SORT_DESC, $order) ? self::SORT_DESC : self::SORT_ASC;
-    }
-
-    /**
-     * @throws BadRequestException
-     */
-    private function validateQuery(DataQuery $query): void
-    {
-        $errors = $this->validator->validate($query);
-        if (\count($errors) > 0) {
-            $message = $this->mapErrors($errors);
-            $previous = new ValidationFailedException($query, $errors);
-            throw new BadRequestHttpException($message, $previous);
-        }
     }
 }

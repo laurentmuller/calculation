@@ -7,7 +7,8 @@
         "phpstan/phpstan-doctrine": "^2.0",
         "phpstan/phpstan-phpunit": "^2.0",
         "phpstan/phpstan-strict-rules": "^2.0",
-        "phpstan/phpstan-symfony": "^2.0"
+        "phpstan/phpstan-symfony": "^2.0",
+        "tomasvotruba/type-coverage": "^2.0"
     },
     "config": {
         "preferred-install": {

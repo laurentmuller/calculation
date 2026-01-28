@@ -23,6 +23,14 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class DatabaseInfoService
 {
+    private const array DATABASE_PARAMETERS = [
+        'serverVersion' => 'Version',
+        'dbname' => 'Name',
+        'host' => 'Host',
+        'port' => 'Port',
+        'driver' => 'Driver',
+        'charset' => 'Charset',
+    ];
     private const array DISABLED_VALUES = ['off', 'no', 'false', 'disabled'];
     private const array ENABLED_VALUES = ['on', 'yes', 'true', 'enabled'];
 
@@ -39,7 +47,7 @@ class DatabaseInfoService
     }
 
     /**
-     * Gets the database variables.
+     * Gets the database configuration.
      *
      * @return array<string, string>
      */
@@ -70,15 +78,9 @@ class DatabaseInfoService
     {
         if ([] === $this->database) {
             $params = $this->getConnection()->getParams();
-            foreach (['serverVersion', 'dbname', 'host', 'port', 'driver', 'charset'] as $key) {
-                $value = $params[$key] ?? null;
-                if (\is_scalar($value)) {
-                    $key = match ($key) {
-                        'dbname' => 'Name',
-                        'serverVersion' => 'Version',
-                        default => \ucfirst($key)
-                    };
-                    $this->database[$key] = (string) $value;
+            foreach (self::DATABASE_PARAMETERS as $key => $name) {
+                if (isset($params[$key]) && \is_scalar($params[$key])) {
+                    $this->database[$name] = (string) $params[$key];
                 }
             }
         }

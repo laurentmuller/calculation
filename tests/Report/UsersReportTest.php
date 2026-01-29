@@ -65,10 +65,10 @@ final class UsersReportTest extends TestCase
 
     private function createReport(?string $imagePath = null): UsersReport
     {
-        $controller = $this->createMock(AbstractController::class);
-        $roleService = $this->createMock(RoleService::class);
-        $storage = $this->createMock(StorageInterface::class);
-        $fontService = $this->createMock(FontAwesomeService::class);
+        $controller = self::createStub(AbstractController::class);
+        $roleService = self::createStub(RoleService::class);
+        $storage = self::createStub(StorageInterface::class);
+        $fontService = self::createStub(FontAwesomeService::class);
 
         $user1 = new User();
         $user1->updateLastLogin();

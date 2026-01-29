@@ -50,7 +50,7 @@ final class CalculationCategoryTypeTest extends EntityTypeTestCase
     protected function getPreloadedExtensions(): array
     {
         return [
-            new CalculationCategoryType($this->createMock(CategoryRepository::class)),
+            new CalculationCategoryType(self::createStub(CategoryRepository::class)),
         ];
     }
 }

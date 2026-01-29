@@ -276,8 +276,8 @@ final class ProductUpdateServiceTest extends TestCase
         $container->method('has')
             ->willReturn(false);
 
-        $logger = $this->createMock(LoggerInterface::class);
-        $suspendEventListenerService = $this->createMock(SuspendEventListenerService::class);
+        $logger = self::createStub(LoggerInterface::class);
+        $suspendEventListenerService = self::createStub(SuspendEventListenerService::class);
         $productService = new ProductUpdateService(
             $productRepository,
             $categoryRepository,

@@ -28,14 +28,14 @@ final class SearchTableTest extends TestCase
 
     public function testEmptyMessage(): void
     {
-        $service = $this->createMock(SearchService::class);
+        $service = self::createStub(SearchService::class);
         $table = $this->createTable($service);
         self::assertNull($table->getEmptyMessage());
     }
 
     public function testEntityClassName(): void
     {
-        $service = $this->createMock(SearchService::class);
+        $service = self::createStub(SearchService::class);
         $table = $this->createTable($service);
         self::assertNull($table->getEntityClassName());
     }
@@ -70,7 +70,7 @@ final class SearchTableTest extends TestCase
 
     public function testWithEmptyQuery(): void
     {
-        $service = $this->createMock(SearchService::class);
+        $service = self::createStub(SearchService::class);
         $table = $this->createTable($service);
         $results = $table->processDataQuery(new DataQuery());
         self::assertSame(Response::HTTP_OK, $results->status);
@@ -82,7 +82,7 @@ final class SearchTableTest extends TestCase
         $query = new DataQuery();
         $query->search = 'fake';
 
-        $service = $this->createMock(SearchService::class);
+        $service = self::createStub(SearchService::class);
         $table = $this->createTable($service);
         $results = $table->processDataQuery($query);
         self::assertSame(Response::HTTP_OK, $results->status);
@@ -205,7 +205,7 @@ final class SearchTableTest extends TestCase
 
     private function createTable(SearchService $service): SearchTable
     {
-        $checker = $this->createMock(AuthorizationCheckerInterface::class);
+        $checker = self::createStub(AuthorizationCheckerInterface::class);
         $translator = $this->createMockTranslator();
         $table = new SearchTable($service);
 

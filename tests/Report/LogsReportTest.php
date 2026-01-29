@@ -30,11 +30,11 @@ final class LogsReportTest extends TestCase
 {
     public function testEmpty(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $logFile = $this->createMock(LogFile::class);
         $logFile->method('isEmpty')
             ->willReturn(true);
-        $service = $this->createMock(FontAwesomeService::class);
+        $service = self::createStub(FontAwesomeService::class);
         $report = new LogsReport($controller, $logFile, $service);
         $actual = $report->render();
         self::assertTrue($actual);
@@ -42,7 +42,7 @@ final class LogsReportTest extends TestCase
 
     public function testRender(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
 
         $log1 = Log::instance(1);
         $logLevel1 = new LogLevel($log1->getLevel());

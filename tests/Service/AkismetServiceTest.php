@@ -39,7 +39,6 @@ final class AkismetServiceTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        parent::setUp();
         $this->requestStack = $this->createMock(RequestStack::class);
     }
 
@@ -107,8 +106,8 @@ final class AkismetServiceTest extends TestCase
     {
         $key = '';
         $cache = new ArrayAdapter();
-        $logger = $this->createMock(LoggerInterface::class);
-        $security = $this->createMock(Security::class);
+        $logger = self::createStub(LoggerInterface::class);
+        $security = self::createStub(Security::class);
         $translator = $this->createMockTranslator();
 
         self::expectException(\InvalidArgumentException::class);
@@ -281,8 +280,8 @@ final class AkismetServiceTest extends TestCase
     {
         $key = 'fake';
         $cache = new ArrayAdapter();
-        $logger = $this->createMock(LoggerInterface::class);
-        $security = $this->createMock(Security::class);
+        $logger = self::createStub(LoggerInterface::class);
+        $security = self::createStub(Security::class);
         $translator = $this->createMockTranslator();
 
         return new AkismetService(

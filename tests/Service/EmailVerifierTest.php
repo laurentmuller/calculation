@@ -41,8 +41,8 @@ final class EmailVerifierTest extends TestCase
     public function testHandleEmail(): void
     {
         $helper = $this->createVerifyEmailHelper();
-        $mailer = $this->createMock(MailerInterface::class);
-        $repository = $this->createMock(UserRepository::class);
+        $mailer = self::createStub(MailerInterface::class);
+        $repository = self::createStub(UserRepository::class);
         $translator = $this->createMockTranslator();
         $service = new EmailVerifier($helper, $mailer, $repository, $translator);
 
@@ -58,8 +58,8 @@ final class EmailVerifierTest extends TestCase
     public function testSendEmail(): void
     {
         $helper = $this->createMockVerifyEmailHelper();
-        $mailer = $this->createMock(MailerInterface::class);
-        $repository = $this->createMock(UserRepository::class);
+        $mailer = self::createStub(MailerInterface::class);
+        $repository = self::createStub(UserRepository::class);
         $translator = $this->createMockTranslator();
         $service = new EmailVerifier($helper, $mailer, $repository, $translator);
 
@@ -91,13 +91,13 @@ final class EmailVerifierTest extends TestCase
 
     private function createVerifyEmailHelper(): VerifyEmailHelper
     {
-        $router = $this->createMock(UrlGeneratorInterface::class);
+        $router = self::createStub(UrlGeneratorInterface::class);
         $uriSigner = $this->createMock(UriSigner::class);
         $uriSigner->method('checkRequest')
             ->willReturn(true);
 
-        $queryUtility = $this->createMock(VerifyEmailQueryUtility::class);
-        $generator = $this->createMock(VerifyEmailTokenGenerator::class);
+        $queryUtility = self::createStub(VerifyEmailQueryUtility::class);
+        $generator = self::createStub(VerifyEmailTokenGenerator::class);
 
         return new VerifyEmailHelper(
             $router,

@@ -37,8 +37,8 @@ final class SimpleEditorTypeTest extends TypeTestCase
         $actionsPath = __DIR__ . '/../../files/json/fontawesome_invalid.json';
 
         $resolver = new OptionsResolver();
-        $view = $this->createMock(FormView::class);
-        $form = $this->createMock(FormInterface::class);
+        $view = self::createStub(FormView::class);
+        $form = self::createStub(FormInterface::class);
         $options = ['required' => false];
 
         $editor = new SimpleEditorType($actionsPath);

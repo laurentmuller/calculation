@@ -21,7 +21,6 @@ final class HeaderNameCommandTest extends CommandTestCase
     #[\Override]
     protected function setUp(): void
     {
-        parent::setUp();
         $this->replaceCssContents();
     }
 

@@ -36,7 +36,6 @@ final class TaskTableTest extends EntityTableTestCase
     #[\Override]
     protected function setUp(): void
     {
-        parent::setUp();
         $this->categoryId = 0;
         $this->groupId = 0;
     }

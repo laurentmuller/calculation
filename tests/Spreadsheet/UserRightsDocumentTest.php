@@ -35,7 +35,7 @@ final class UserRightsDocumentTest extends TestCase
         $controller->method('getApplicationParameters')
             ->willReturn($parameters);
 
-        $roleService = $this->createMock(RoleService::class);
+        $roleService = self::createStub(RoleService::class);
         $roleBuilderService = new RoleBuilderService();
 
         $users = [];
@@ -57,9 +57,9 @@ final class UserRightsDocumentTest extends TestCase
 
     public function testRenderEmpty(): void
     {
-        $controller = $this->createMock(AbstractController::class);
-        $roleService = $this->createMock(RoleService::class);
-        $roleBuilderService = $this->createMock(RoleBuilderService::class);
+        $controller = self::createStub(AbstractController::class);
+        $roleService = self::createStub(RoleService::class);
+        $roleBuilderService = self::createStub(RoleBuilderService::class);
 
         $report = new UserRightsDocument($controller, [], $roleService, $roleBuilderService);
         $actual = $report->render();

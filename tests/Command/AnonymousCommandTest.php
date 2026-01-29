@@ -27,7 +27,6 @@ final class AnonymousCommandTest extends CommandTestCase
     #[\Override]
     protected function setUp(): void
     {
-        parent::setUp();
         $this->deleteEntitiesByClass(Calculation::class);
     }
 

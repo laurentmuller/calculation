@@ -53,7 +53,7 @@ final class RoleRightsTypeTest extends TypeTestCase
     #[\Override]
     protected function getPreloadedExtensions(): array
     {
-        $security = $this->createMock(Security::class);
+        $security = self::createStub(Security::class);
         $rightsType = new RightsType(false, $security);
 
         $roleHierarchy = $this->createMock(RoleHierarchyInterface::class);

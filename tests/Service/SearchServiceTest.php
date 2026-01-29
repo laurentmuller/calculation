@@ -149,7 +149,7 @@ final class SearchServiceTest extends TestCase
         $manager->method('createNativeQuery')
             ->willReturn($nativeQuery);
 
-        $queryBuilder = $this->createMock(QueryBuilder::class);
+        $queryBuilder = self::createStub(QueryBuilder::class);
         $manager->method('createQueryBuilder')
             ->willReturn($queryBuilder);
 

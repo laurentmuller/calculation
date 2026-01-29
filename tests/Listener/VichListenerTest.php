@@ -73,9 +73,7 @@ final class VichListenerTest extends TestCase
 
     private function createListener(): VichListener
     {
-        $resizer = $this->createMock(ImageResizer::class);
-
-        return new VichListener($resizer);
+        return new VichListener(self::createStub(ImageResizer::class));
     }
 
     private function createPropertyMapping(?UserNamer $namer = null): PropertyMapping

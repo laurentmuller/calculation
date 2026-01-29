@@ -27,13 +27,11 @@ final class TranslatorFlashMessageAwareTraitTest extends AwareTraitTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
         $session = new Session();
         $requestStack = $this->createMock(RequestStack::class);
         $requestStack->method('getSession')
             ->willReturn($session);
         $this->setRequestStack($requestStack);
-
         $translator = $this->createMockTranslator();
         $this->setTranslator($translator);
     }

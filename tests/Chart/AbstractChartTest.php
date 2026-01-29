@@ -50,7 +50,7 @@ final class AbstractChartTest extends TestCase
 
     public function testGetClickExpression(): void
     {
-        $twig = $this->createMock(Environment::class);
+        $twig = self::createStub(Environment::class);
         $chart = $this->createChart(twig: $twig);
 
         $expected = 'function() {location.href = this.url;}';

@@ -47,15 +47,11 @@ abstract class AuthenticateWebTestCase extends WebTestCase
     #[\Override]
     protected function setUp(): void
     {
-        parent::setUp();
-
         $this->client = static::createClient();
-
         // get rights
         $builder = new RoleBuilderService();
         $userRight = $builder->getRoleUser()->getRights();
         $adminRight = $builder->getRoleAdmin()->getRights();
-
         $parameters = $this->getService(ApplicationParameters::class);
         $parameters->getRights()
             ->setAdminRights($adminRight)

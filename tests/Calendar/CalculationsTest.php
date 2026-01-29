@@ -27,7 +27,6 @@ final class CalculationsTest extends CalendarTestCase
     #[\Override]
     protected function setUp(): void
     {
-        parent::setUp();
         $this->calendar = $this->createCalendar();
     }
 

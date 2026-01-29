@@ -77,7 +77,7 @@ final class FunctionExtensionTest extends RuntimeTestCase
 
     private function createWebLinkExtension(): WebLinkExtension
     {
-        return new WebLinkExtension($this->createMock(RequestStack::class));
+        return new WebLinkExtension(self::createStub(RequestStack::class));
     }
 
     private function getPublicDir(): string

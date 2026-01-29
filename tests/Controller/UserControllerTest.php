@@ -258,11 +258,11 @@ final class UserControllerTest extends EntityControllerTestCase
 
         $service = new ResetPasswordService(
             $helper,
-            $this->createMock(UserRepository::class),
-            $this->createMock(UserExceptionService::class),
-            $this->createMock(TranslatorInterface::class),
-            $this->createMock(UrlGeneratorInterface::class),
-            $this->createMock(MailerInterface::class),
+            self::createStub(UserRepository::class),
+            self::createStub(UserExceptionService::class),
+            self::createStub(TranslatorInterface::class),
+            self::createStub(UrlGeneratorInterface::class),
+            self::createStub(MailerInterface::class),
             $this->getService(LoggerInterface::class),
             'test@test.com',
             'test'
@@ -291,10 +291,10 @@ final class UserControllerTest extends EntityControllerTestCase
 
         $service = new ResetPasswordService(
             $helper,
-            $this->createMock(UserRepository::class),
-            $this->createMock(UserExceptionService::class),
-            $this->createMock(TranslatorInterface::class),
-            $this->createMock(UrlGeneratorInterface::class),
+            self::createStub(UserRepository::class),
+            self::createStub(UserExceptionService::class),
+            self::createStub(TranslatorInterface::class),
+            self::createStub(UrlGeneratorInterface::class),
             $mailer,
             $this->getService(LoggerInterface::class),
             'test@test.com',

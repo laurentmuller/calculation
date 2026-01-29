@@ -27,7 +27,6 @@ final class CacheTraitTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        parent::setUp();
         $this->cacheItemPool = new ArrayAdapter();
     }
 

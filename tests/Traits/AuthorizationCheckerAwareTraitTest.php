@@ -26,7 +26,7 @@ final class AuthorizationCheckerAwareTraitTest extends AwareTraitTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->setChecker($this->createMock(AuthorizationCheckerInterface::class));
+        $this->setChecker(self::createStub(AuthorizationCheckerInterface::class));
     }
 
     public function testIsGranted(): void

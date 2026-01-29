@@ -47,7 +47,6 @@ final class UserTableTest extends EntityTableTestCase
     #[\Override]
     protected function setUp(): void
     {
-        parent::setUp();
         $this->state = self::TOKEN_DEFAULT;
     }
 
@@ -159,16 +158,16 @@ final class UserTableTest extends EntityTableTestCase
     protected function createTable(AbstractRepository $repository): UserTable
     {
         $translator = $this->createMockTranslator();
-        $roleService = $this->createMock(RoleService::class);
-        $twig = $this->createMock(Environment::class);
+        $roleService = self::createStub(RoleService::class);
+        $twig = self::createStub(Environment::class);
         $security = $this->createMockSecurity();
 
         return new UserTable($repository, $roleService, $translator, $twig, $security);
     }
 
-    private function createMockSecurity(): MockObject&Security
+    private function createMockSecurity(): Security
     {
-        $security = $this->createMock(Security::class);
+        $security = self::createStub(Security::class);
         if (self::TOKEN_DEFAULT === $this->state) {
             return $security;
         }
@@ -197,11 +196,11 @@ final class UserTableTest extends EntityTableTestCase
         ?RoleService $roleService = null,
     ): UserTable {
         return new UserTable(
-            $this->createMock(UserRepository::class),
-            $roleService ?? $this->createMock(RoleService::class),
+            self::createStub(UserRepository::class),
+            $roleService ?? self::createStub(RoleService::class),
             $this->createMockTranslator(),
-            $twig ?? $this->createMock(Environment::class),
-            $this->createMock(Security::class)
+            $twig ?? self::createStub(Environment::class),
+            self::createStub(Security::class)
         );
     }
 }

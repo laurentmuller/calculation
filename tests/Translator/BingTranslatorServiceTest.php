@@ -199,8 +199,8 @@ final class BingTranslatorServiceTest extends TestCase
     {
         $service = new BingTranslatorService(
             'apikey',
-            $this->createMock(CacheInterface::class),
-            $this->createMock(LoggerInterface::class),
+            self::createStub(CacheInterface::class),
+            self::createStub(LoggerInterface::class),
         );
         $actual = $service->getName();
         self::assertSame('Bing', $actual);

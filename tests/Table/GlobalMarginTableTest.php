@@ -29,7 +29,7 @@ final class GlobalMarginTableTest extends EntityTableTestCase
     public function testGetEntityClassName(): void
     {
         $expected = GlobalMargin::class;
-        $queryBuilder = $this->createMock(QueryBuilder::class);
+        $queryBuilder = self::createStub(QueryBuilder::class);
         $repository = $this->createMockRepository($queryBuilder);
         $repository->method('getClassName')
             ->willReturn($expected);
@@ -57,7 +57,7 @@ final class GlobalMarginTableTest extends EntityTableTestCase
     }
 
     #[\Override]
-    protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&GlobalMarginRepository
+    protected function createMockRepository(QueryBuilder $queryBuilder): MockObject&GlobalMarginRepository
     {
         $repository = $this->createMock(GlobalMarginRepository::class);
         $repository->method('createDefaultQueryBuilder')

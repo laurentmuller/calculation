@@ -66,8 +66,8 @@ final class CalculationTypeTest extends EntityTypeTestCase
         return [
             new EntityType($this->getCalculationStateRegistry()),
             new CalculationStateListType($this->createMockTranslator()),
-            new CalculationGroupType($this->createMock(GroupRepository::class)),
-            new CalculationCategoryType($this->createMock(CategoryRepository::class)),
+            new CalculationGroupType(self::createStub(GroupRepository::class)),
+            new CalculationCategoryType(self::createStub(CategoryRepository::class)),
         ];
     }
 }

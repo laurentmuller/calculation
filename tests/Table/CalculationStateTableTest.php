@@ -41,11 +41,11 @@ final class CalculationStateTableTest extends EntityTableTestCase
         $twig->method('render')
             ->willReturnArgument(0);
         $table = new CalculationStateTable(
-            $this->createMock(CalculationStateRepository::class),
+            self::createStub(CalculationStateRepository::class),
             $twig,
-            $this->createMock(IndexService::class)
+            self::createStub(IndexService::class)
         );
-        $table->setChecker($this->createMock(AuthorizationCheckerInterface::class));
+        $table->setChecker(self::createStub(AuthorizationCheckerInterface::class));
         $table->setTranslator($this->createMockTranslator());
 
         $expected = 'macros/_cell_table_link.html.twig';
@@ -56,11 +56,11 @@ final class CalculationStateTableTest extends EntityTableTestCase
     public function testFormatEditable(): void
     {
         $table = new CalculationStateTable(
-            $this->createMock(CalculationStateRepository::class),
-            $this->createMock(Environment::class),
-            $this->createMock(IndexService::class)
+            self::createStub(CalculationStateRepository::class),
+            self::createStub(Environment::class),
+            self::createStub(IndexService::class)
         );
-        $table->setChecker($this->createMock(AuthorizationCheckerInterface::class));
+        $table->setChecker(self::createStub(AuthorizationCheckerInterface::class));
         $table->setTranslator($this->createMockTranslator());
 
         $actual = $table->formatEditable(true);
@@ -109,9 +109,9 @@ final class CalculationStateTableTest extends EntityTableTestCase
     #[\Override]
     protected function createTable(AbstractRepository $repository): CalculationStateTable
     {
-        $twig = $this->createMock(Environment::class);
+        $twig = self::createStub(Environment::class);
         $translator = $this->createMockTranslator();
-        $checker = $this->createMock(AuthorizationCheckerInterface::class);
+        $checker = self::createStub(AuthorizationCheckerInterface::class);
         $service = $this->createMockIndexService();
 
         $table = new CalculationStateTable($repository, $twig, $service);

@@ -38,11 +38,11 @@ final class GroupTableTest extends EntityTableTestCase
         $twig->method('render')
             ->willReturnArgument(0);
         $table = new GroupTable(
-            $this->createMock(GroupRepository::class),
+            self::createStub(GroupRepository::class),
             $twig,
-            $this->createMock(IndexService::class),
+            self::createStub(IndexService::class),
         );
-        $table->setChecker($this->createMock(AuthorizationCheckerInterface::class));
+        $table->setChecker(self::createStub(AuthorizationCheckerInterface::class));
 
         $expected = 'macros/_cell_table_link.html.twig';
         $actual = $table->formatProducts(0, ['id' => 1]);
@@ -72,7 +72,7 @@ final class GroupTableTest extends EntityTableTestCase
     }
 
     #[\Override]
-    protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&GroupRepository
+    protected function createMockRepository(QueryBuilder $queryBuilder): MockObject&GroupRepository
     {
         $repository = $this->createMock(GroupRepository::class);
         $repository->method('getTableQueryBuilder')
@@ -87,10 +87,10 @@ final class GroupTableTest extends EntityTableTestCase
     #[\Override]
     protected function createTable(AbstractRepository $repository): GroupTable
     {
-        $twig = $this->createMock(Environment::class);
+        $twig = self::createStub(Environment::class);
         $service = $this->createMockIndexService();
         $table = new GroupTable($repository, $twig, $service);
-        $table->setChecker($this->createMock(AuthorizationCheckerInterface::class));
+        $table->setChecker(self::createStub(AuthorizationCheckerInterface::class));
 
         return $table;
     }

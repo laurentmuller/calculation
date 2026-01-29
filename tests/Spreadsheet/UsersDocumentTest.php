@@ -24,10 +24,10 @@ final class UsersDocumentTest extends TestCase
 {
     public function testRender(): void
     {
-        $controller = $this->createMock(AbstractController::class);
         $users = $this->createUsers();
-        $roleService = $this->createMock(RoleService::class);
-        $storage = $this->createMock(StorageInterface::class);
+        $controller = self::createStub(AbstractController::class);
+        $roleService = self::createStub(RoleService::class);
+        $storage = self::createStub(StorageInterface::class);
         $document = new UsersDocument($controller, $users, $roleService, $storage);
         $actual = $document->render();
         self::assertTrue($actual);

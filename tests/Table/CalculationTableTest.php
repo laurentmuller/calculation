@@ -38,7 +38,6 @@ final class CalculationTableTest extends EntityTableTestCase
     #[\Override]
     protected function setUp(): void
     {
-        parent::setUp();
         $this->id = 0;
         $this->stateId = 0;
     }
@@ -52,8 +51,8 @@ final class CalculationTableTest extends EntityTableTestCase
         $twig->method('render')
             ->willReturnArgument(0);
         $table = new CalculationTable(
-            $this->createMock(CalculationRepository::class),
-            $this->createMock(CalculationStateRepository::class),
+            self::createStub(CalculationRepository::class),
+            self::createStub(CalculationStateRepository::class),
             $twig,
         );
 
@@ -171,7 +170,7 @@ final class CalculationTableTest extends EntityTableTestCase
     protected function createTable(AbstractRepository $repository): CalculationTable
     {
         $stateRepository = $this->createMockCalculationStateRepository();
-        $twig = $this->createMock(Environment::class);
+        $twig = self::createStub(Environment::class);
 
         return new CalculationTable($repository, $stateRepository, $twig);
     }

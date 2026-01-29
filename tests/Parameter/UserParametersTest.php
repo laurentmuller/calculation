@@ -94,7 +94,7 @@ final class UserParametersTest extends TestCase
     private function createApplication(): ApplicationParameters
     {
         $cache = new ArrayAdapter();
-        $repository = $this->createMock(ApplicationPropertyRepository::class);
+        $repository = self::createStub(ApplicationPropertyRepository::class);
         $manager = $this->createMock(EntityManagerInterface::class);
         $manager->method('getRepository')
             ->willReturn($repository);

@@ -28,7 +28,7 @@ final class RoleServiceTest extends RuntimeTestCase
     protected function createService(): RoleService
     {
         return new RoleService(
-            $this->createMock(RoleHierarchyInterface::class),
+            self::createStub(RoleHierarchyInterface::class),
             $this->createMockTranslator()
         );
     }

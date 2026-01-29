@@ -161,8 +161,8 @@ final class GoogleTranslatorServiceTest extends TestCase
     {
         $service = new GoogleTranslatorService(
             'apikey',
-            $this->createMock(CacheInterface::class),
-            $this->createMock(LoggerInterface::class),
+            self::createStub(CacheInterface::class),
+            self::createStub(LoggerInterface::class),
         );
         $actual = $service->getName();
         self::assertSame('Google', $actual);
@@ -225,7 +225,7 @@ final class GoogleTranslatorServiceTest extends TestCase
     {
         $key = 'fake';
         $cache = new ArrayAdapter();
-        $logger = $this->createMock(LoggerInterface::class);
+        $logger = self::createStub(LoggerInterface::class);
 
         $service = new GoogleTranslatorService($key, $cache, $logger);
         if ([] !== $responses) {

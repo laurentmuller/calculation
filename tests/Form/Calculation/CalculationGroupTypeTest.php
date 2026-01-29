@@ -52,8 +52,8 @@ final class CalculationGroupTypeTest extends EntityTypeTestCase
     protected function getPreloadedExtensions(): array
     {
         return [
-            new CalculationGroupType($this->createMock(GroupRepository::class)),
-            new CalculationCategoryType($this->createMock(CategoryRepository::class)),
+            new CalculationGroupType(self::createStub(GroupRepository::class)),
+            new CalculationCategoryType(self::createStub(CategoryRepository::class)),
         ];
     }
 }

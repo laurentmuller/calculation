@@ -113,7 +113,7 @@ final class LoginFormAuthenticatorTest extends TestCase
 
     public function testAuthenticateWithSession(): void
     {
-        $userProvider = $this->createMock(UserRepository::class);
+        $userProvider = self::createStub(UserRepository::class);
         $authenticator = $this->createAuthenticator(repository: $userProvider);
 
         $values = [

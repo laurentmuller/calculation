@@ -64,8 +64,8 @@ final class DeeplTranslatorServiceTest extends TestCase
     {
         $service = new DeeplTranslatorService(
             'apikey',
-            $this->createMock(CacheInterface::class),
-            $this->createMock(LoggerInterface::class),
+            self::createStub(CacheInterface::class),
+            self::createStub(LoggerInterface::class),
         );
         $actual = $service->getName();
         self::assertSame('DeepL', $actual);

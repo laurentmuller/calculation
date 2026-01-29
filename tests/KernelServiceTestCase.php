@@ -29,7 +29,6 @@ abstract class KernelServiceTestCase extends KernelTestCase implements ServiceSu
     #[\Override]
     protected function setUp(): void
     {
-        parent::setUp();
         $this->container = static::getContainer();
     }
 

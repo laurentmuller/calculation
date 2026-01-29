@@ -36,9 +36,9 @@ final class UsersRightsReportTest extends TestCase
         $controller->method('getApplicationParameters')
             ->willReturn($parameters);
 
-        $roleService = $this->createMock(RoleService::class);
+        $roleService = self::createStub(RoleService::class);
         $roleBuilderService = new RoleBuilderService();
-        $fontAwesomeService = $this->createMock(FontAwesomeService::class);
+        $fontAwesomeService = self::createStub(FontAwesomeService::class);
 
         $users = [];
         foreach (\range(1, 5) as $index) {
@@ -60,10 +60,10 @@ final class UsersRightsReportTest extends TestCase
 
     public function testRenderEmpty(): void
     {
-        $controller = $this->createMock(AbstractController::class);
-        $roleService = $this->createMock(RoleService::class);
-        $fontAwesomeService = $this->createMock(FontAwesomeService::class);
-        $roleBuilderService = $this->createMock(RoleBuilderService::class);
+        $controller = self::createStub(AbstractController::class);
+        $roleService = self::createStub(RoleService::class);
+        $fontAwesomeService = self::createStub(FontAwesomeService::class);
+        $roleBuilderService = self::createStub(RoleBuilderService::class);
 
         $report = new UsersRightsReport(
             $controller,

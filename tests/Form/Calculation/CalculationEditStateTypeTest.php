@@ -27,7 +27,6 @@ use App\Tests\Form\CalculationState\CalculationStateTrait;
 use App\Tests\Form\EntityTypeTestCase;
 use App\Tests\TranslatorMockTrait;
 use App\Utils\DateUtils;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 /**
@@ -39,14 +38,6 @@ final class CalculationEditStateTypeTest extends EntityTypeTestCase
     use TranslatorMockTrait;
 
     private bool $marginBelow = false;
-    private MockObject&ApplicationParameters $parameters;
-
-    #[\Override]
-    protected function setUp(): void
-    {
-        $this->parameters = $this->createMock(ApplicationParameters::class);
-        parent::setUp();
-    }
 
     public function testSubmitValidDataNotMarginBelow(): void
     {
@@ -83,16 +74,17 @@ final class CalculationEditStateTypeTest extends EntityTypeTestCase
         $default = $this->createMock(DefaultParameter::class);
         $default->method('isMarginBelow')
             ->willReturnCallback(fn (): bool => $this->marginBelow);
-        $this->parameters->method('getDefault')
+        $parameters = $this->createMock(ApplicationParameters::class);
+        $parameters->method('getDefault')
             ->willReturn($default);
 
         return [
             new PlainType($translator),
             new EntityType($this->getCalculationStateRegistry()),
             new CalculationStateListType($translator),
-            new CalculationGroupType($this->createMock(GroupRepository::class)),
-            new CalculationCategoryType($this->createMock(CategoryRepository::class)),
-            new CalculationEditStateType($this->parameters, $translator),
+            new CalculationGroupType(self::createStub(GroupRepository::class)),
+            new CalculationCategoryType(self::createStub(CategoryRepository::class)),
+            new CalculationEditStateType($parameters, $translator),
         ];
     }
 }

@@ -69,8 +69,8 @@ final class LogTableTest extends TestCase
 
     public function testGetEntityClassName(): void
     {
-        $service = $this->createMock(LogService::class);
-        $twig = $this->createMock(Environment::class);
+        $service = self::createStub(LogService::class);
+        $twig = self::createStub(Environment::class);
         $table = new LogTable($service, $twig);
         $actual = $table->getEntityClassName();
         self::assertSame(Log::class, $actual);
@@ -87,8 +87,8 @@ final class LogTableTest extends TestCase
 
     public function testWithEmptyQuery(): void
     {
-        $service = $this->createMock(LogService::class);
-        $twig = $this->createMock(Environment::class);
+        $service = self::createStub(LogService::class);
+        $twig = self::createStub(Environment::class);
         $table = new LogTable($service, $twig);
 
         $query = $this->createDataQuery(limit: 0);
@@ -262,11 +262,11 @@ final class LogTableTest extends TestCase
         $file->method('count')
             ->willReturn($count);
 
-        $service = $this->createMock(LogService::class);
+        $service = self::createStub(LogService::class);
         $service->method('getLogFile')
             ->willReturn($file);
 
-        $twig = $this->createMock(Environment::class);
+        $twig = self::createStub(Environment::class);
 
         $table = new LogTable($service, $twig);
         $actual = $table->getEmptyMessage();

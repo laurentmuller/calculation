@@ -33,7 +33,6 @@ final class PdfCellTranslatorTraitTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        parent::setUp();
         $this->translator = $this->createMockTranslator();
     }
 

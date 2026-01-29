@@ -40,12 +40,12 @@ final class CategoryTableTest extends EntityTableTestCase
         $twig->method('render')
             ->willReturnArgument(0);
         $table = new CategoryTable(
-            $this->createMock(CategoryRepository::class),
+            self::createStub(CategoryRepository::class),
             $twig,
-            $this->createMock(GroupRepository::class),
-            $this->createMock(IndexService::class),
+            self::createStub(GroupRepository::class),
+            self::createStub(IndexService::class),
         );
-        $table->setChecker($this->createMock(AuthorizationCheckerInterface::class));
+        $table->setChecker(self::createStub(AuthorizationCheckerInterface::class));
 
         $expected = 'macros/_cell_table_link.html.twig';
         $actual = $table->formatProducts(0, ['id' => 1]);
@@ -111,9 +111,9 @@ final class CategoryTableTest extends EntityTableTestCase
     #[\Override]
     protected function createTable(AbstractRepository $repository): CategoryTable
     {
-        $twig = $this->createMock(Environment::class);
-        $groupRepository = $this->createMock(GroupRepository::class);
-        $checker = $this->createMock(AuthorizationCheckerInterface::class);
+        $twig = self::createStub(Environment::class);
+        $groupRepository = self::createStub(GroupRepository::class);
+        $checker = self::createStub(AuthorizationCheckerInterface::class);
         $service = $this->createMockIndexService();
 
         $table = new CategoryTable($repository, $twig, $groupRepository, $service);

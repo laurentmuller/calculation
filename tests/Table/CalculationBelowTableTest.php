@@ -36,7 +36,6 @@ final class CalculationBelowTableTest extends EntityTableTestCase
     #[\Override]
     protected function setUp(): void
     {
-        parent::setUp();
         $this->countItemsBelow = 10;
     }
 
@@ -106,8 +105,8 @@ final class CalculationBelowTableTest extends EntityTableTestCase
     #[\Override]
     protected function createTable(AbstractRepository $repository): CalculationBelowTable
     {
-        $stateRepository = $this->createMock(CalculationStateRepository::class);
-        $twig = $this->createMock(Environment::class);
+        $stateRepository = self::createStub(CalculationStateRepository::class);
+        $twig = self::createStub(Environment::class);
 
         $default = $this->createMock(DefaultParameter::class);
         $default->method('getMinMargin')

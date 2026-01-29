@@ -178,7 +178,7 @@ final class ColumnTest extends TestCase
 
     private function createTable(): GlobalMarginTable
     {
-        $repository = $this->createMock(GlobalMarginRepository::class);
+        $repository = self::createStub(GlobalMarginRepository::class);
         $service = $this->createMock(IndexService::class);
         $service->method('getCatalog')
             ->willReturn([

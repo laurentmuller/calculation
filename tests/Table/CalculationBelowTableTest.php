@@ -105,9 +105,6 @@ final class CalculationBelowTableTest extends EntityTableTestCase
     #[\Override]
     protected function createTable(AbstractRepository $repository): CalculationBelowTable
     {
-        $stateRepository = self::createStub(CalculationStateRepository::class);
-        $twig = self::createStub(Environment::class);
-
         $default = $this->createMock(DefaultParameter::class);
         $default->method('getMinMargin')
             ->willReturn(1.1);
@@ -115,7 +112,12 @@ final class CalculationBelowTableTest extends EntityTableTestCase
         $parameters->method('getDefault')
             ->willReturn($default);
 
-        return new CalculationBelowTable($repository, $stateRepository, $twig, $parameters);
+        return new CalculationBelowTable(
+            $repository,
+            self::createStub(CalculationStateRepository::class),
+            self::createStub(Environment::class),
+            $parameters
+        );
     }
 
     private function processCountItemsBelow(int $count, mixed $expected): void

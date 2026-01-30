@@ -223,11 +223,11 @@ final class GoogleTranslatorServiceTest extends TestCase
 
     private function createTranslator(JsonMockResponse ...$responses): GoogleTranslatorService
     {
-        $key = 'fake';
-        $cache = new ArrayAdapter();
-        $logger = self::createStub(LoggerInterface::class);
-
-        $service = new GoogleTranslatorService($key, $cache, $logger);
+        $service = new GoogleTranslatorService(
+            'fake',
+            new ArrayAdapter(),
+            self::createStub(LoggerInterface::class)
+        );
         if ([] !== $responses) {
             $client = new MockHttpClient($responses);
             $service->setClient($client);

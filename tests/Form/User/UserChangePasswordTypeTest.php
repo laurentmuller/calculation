@@ -59,6 +59,7 @@ final class UserChangePasswordTypeTest extends EntityTypeTestCase
         $this->strength = new Strength(StrengthLevel::WEAK);
         $this->translator = $this->createMockTranslator();
 
+        $contraint = new NotCompromisedPassword();
         $security = $this->createMock(SecurityParameter::class);
         $security->method('isPasswordConstraint')
             ->willReturnCallback(fn (): bool => $this->isPasswordConstraint());
@@ -71,7 +72,7 @@ final class UserChangePasswordTypeTest extends EntityTypeTestCase
         $security->method('isCompromised')
             ->willReturnCallback(fn (): bool => $this->compromisedPassword);
         $security->method('getNotCompromisedConstraint')
-            ->willReturn(new NotCompromisedPassword());
+            ->willReturn($contraint);
         $this->parameters = $this->createMock(ApplicationParameters::class);
         $this->parameters->method('getSecurity')
             ->willReturn($security);

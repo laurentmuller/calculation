@@ -41,7 +41,6 @@ final class FontAwesomeServiceTest extends TestCase
     public function testCellNotNull(): void
     {
         $image = self::createStub(FontAwesomeImage::class);
-
         $imageService = $this->createMock(FontAwesomeImageService::class);
         $imageService->method('getImage')
             ->willReturn($image);

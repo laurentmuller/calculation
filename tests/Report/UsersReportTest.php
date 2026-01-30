@@ -65,11 +65,6 @@ final class UsersReportTest extends TestCase
 
     private function createReport(?string $imagePath = null): UsersReport
     {
-        $controller = self::createStub(AbstractController::class);
-        $roleService = self::createStub(RoleService::class);
-        $storage = self::createStub(StorageInterface::class);
-        $fontService = self::createStub(FontAwesomeService::class);
-
         $user1 = new User();
         $user1->updateLastLogin();
 
@@ -80,11 +75,11 @@ final class UsersReportTest extends TestCase
             ->willReturn($imagePath);
 
         return new UsersReport(
-            $controller,
+            self::createStub(AbstractController::class),
             [$user1, $user2],
-            $storage,
-            $roleService,
-            $fontService
+            self::createStub(StorageInterface::class),
+            self::createStub(RoleService::class),
+            self::createStub(FontAwesomeService::class)
         );
     }
 }

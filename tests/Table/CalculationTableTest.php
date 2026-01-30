@@ -170,9 +170,12 @@ final class CalculationTableTest extends EntityTableTestCase
     protected function createTable(AbstractRepository $repository): CalculationTable
     {
         $stateRepository = $this->createMockCalculationStateRepository();
-        $twig = self::createStub(Environment::class);
 
-        return new CalculationTable($repository, $stateRepository, $twig);
+        return new CalculationTable(
+            $repository,
+            $stateRepository,
+            self::createStub(Environment::class)
+        );
     }
 
     private function createMockCalculationStateRepository(): MockObject&CalculationStateRepository

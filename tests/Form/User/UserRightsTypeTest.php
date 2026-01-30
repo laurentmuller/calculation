@@ -77,9 +77,7 @@ final class UserRightsTypeTest extends TypeTestCase
         $translator = $this->createMockTranslator();
         $service = new RoleService($roleHierarchy, $translator);
         $userRightsType = new UserRightsType($service);
-
-        $security = self::createStub(Security::class);
-        $rightsType = new RightsType(false, $security);
+        $rightsType = new RightsType(false, self::createStub(Security::class));
 
         return [
             $rightsType,

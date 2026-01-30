@@ -17,12 +17,11 @@ use App\Generator\AbstractEntityGenerator;
 use App\Service\FakerService;
 use App\Tests\DatabaseTrait;
 use App\Tests\KernelServiceTestCase;
+use App\Tests\TranslatorMockTrait;
 use App\Utils\StringUtils;
 use Doctrine\ORM\EntityManagerInterface;
-use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @template TGenerator of AbstractEntityGenerator
@@ -30,20 +29,17 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 abstract class GeneratorTestCase extends KernelServiceTestCase
 {
     use DatabaseTrait;
-
-    protected FakerService $fakerService;
-    protected MockObject&LoggerInterface $logger;
+    use TranslatorMockTrait;
     protected EntityManagerInterface $manager;
-    protected MockObject&TranslatorInterface $translator;
+
+    protected FakerService $service;
 
     #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
-        $this->logger = $this->createMock(LoggerInterface::class);
-        $this->translator = $this->createMock(TranslatorInterface::class);
         $this->manager = $this->getService(EntityManagerInterface::class);
-        $this->fakerService = $this->getService(FakerService::class);
+        $this->service = $this->getService(FakerService::class);
     }
 
     protected static function assertValidateResponse(JsonResponse $actual, bool $expected, int $count): array
@@ -72,16 +68,8 @@ abstract class GeneratorTestCase extends KernelServiceTestCase
      */
     abstract protected function createGenerator(): AbstractEntityGenerator;
 
-    /**
-     * @phpstan-param TGenerator $generator
-     *
-     * @phpstan-return TGenerator
-     */
-    protected function updateGenerator(AbstractEntityGenerator $generator): AbstractEntityGenerator
+    protected function createMockLogger(): LoggerInterface
     {
-        $generator->setTranslator($this->translator);
-        $generator->setLogger($this->logger);
-
-        return $generator;
+        return self::createStub(LoggerInterface::class);
     }
 }

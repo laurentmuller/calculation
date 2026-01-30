@@ -104,20 +104,14 @@ final class AkismetServiceTest extends TestCase
 
     public function testEmptyKey(): void
     {
-        $key = '';
-        $cache = new ArrayAdapter();
-        $logger = self::createStub(LoggerInterface::class);
-        $security = self::createStub(Security::class);
-        $translator = $this->createMockTranslator();
-
         self::expectException(\InvalidArgumentException::class);
         new AkismetService(
-            $key,
-            $cache,
-            $logger,
-            $security,
+            '',
+            new ArrayAdapter(),
+            self::createStub(LoggerInterface::class),
+            self::createStub(Security::class),
             $this->requestStack,
-            $translator
+            $this->createMockTranslator()
         );
     }
 
@@ -278,19 +272,13 @@ final class AkismetServiceTest extends TestCase
 
     private function createService(): AkismetService
     {
-        $key = 'fake';
-        $cache = new ArrayAdapter();
-        $logger = self::createStub(LoggerInterface::class);
-        $security = self::createStub(Security::class);
-        $translator = $this->createMockTranslator();
-
         return new AkismetService(
-            $key,
-            $cache,
-            $logger,
-            $security,
+            'fake',
+            new ArrayAdapter(),
+            self::createStub(LoggerInterface::class),
+            self::createStub(Security::class),
             $this->requestStack,
-            $translator
+            $this->createMockTranslator()
         );
     }
 

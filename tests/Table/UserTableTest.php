@@ -157,17 +157,18 @@ final class UserTableTest extends EntityTableTestCase
     #[\Override]
     protected function createTable(AbstractRepository $repository): UserTable
     {
-        $translator = $this->createMockTranslator();
-        $roleService = self::createStub(RoleService::class);
-        $twig = self::createStub(Environment::class);
-        $security = $this->createMockSecurity();
-
-        return new UserTable($repository, $roleService, $translator, $twig, $security);
+        return new UserTable(
+            $repository,
+            self::createStub(RoleService::class),
+            $this->createMockTranslator(),
+            self::createStub(Environment::class),
+            $this->createMockSecurity()
+        );
     }
 
     private function createMockSecurity(): Security
     {
-        $security = self::createStub(Security::class);
+        $security = $this->createMock(Security::class);
         if (self::TOKEN_DEFAULT === $this->state) {
             return $security;
         }

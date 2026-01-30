@@ -109,14 +109,13 @@ final class CalculationStateTableTest extends EntityTableTestCase
     #[\Override]
     protected function createTable(AbstractRepository $repository): CalculationStateTable
     {
-        $twig = self::createStub(Environment::class);
-        $translator = $this->createMockTranslator();
-        $checker = self::createStub(AuthorizationCheckerInterface::class);
-        $service = $this->createMockIndexService();
-
-        $table = new CalculationStateTable($repository, $twig, $service);
-        $table->setTranslator($translator);
-        $table->setChecker($checker);
+        $table = new CalculationStateTable(
+            $repository,
+            self::createStub(Environment::class),
+            $this->createMockIndexService()
+        );
+        $table->setChecker(self::createStub(AuthorizationCheckerInterface::class))
+            ->setTranslator($this->createMockTranslator());
 
         return $table;
     }

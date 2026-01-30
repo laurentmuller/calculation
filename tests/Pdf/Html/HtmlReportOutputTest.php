@@ -119,9 +119,10 @@ final class HtmlReportOutputTest extends TestCase
 
     private function createReport(): HtmlReport
     {
+        $translator = $this->createMockTranslator();
         $controller = $this->createMock(AbstractController::class);
         $controller->method('getTranslator')
-            ->willReturn($this->createMockTranslator());
+            ->willReturn($translator);
 
         $html = <<<HTML
                 <!DOCTYPE html>

@@ -165,7 +165,6 @@ final class SearchServiceTest extends TestCase
         $checker->method('isGranted')
             ->willReturn($granted);
         $cache = new ArrayAdapter();
-        // $manager = $this->getService(EntityManagerInterface::class);
         $manager = $this->createEntityManager($entity);
         $service = new SearchService($manager, $debug, $cache);
         $service->setChecker($checker);

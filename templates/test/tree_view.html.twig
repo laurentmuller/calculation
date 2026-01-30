@@ -153,7 +153,7 @@
     </div>
     <div class="col-md-8 offset-md-2 my-2">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <span class="form-label cursor-default">Position</span>
                 <div class="dropdown dropdown-position">
                     {% set current = user_params.message.position %}
@@ -166,7 +166,7 @@
                             {% for position in enum('App\\Enums\\MessagePosition').sorted() %}
                             <td>
                                 {% set id = 'btn-check-dropdown-' ~ position.value %}
-                                <div class="form-check ps-0">
+                                <div class="form-check ps-0 mb-0">
                                     <input type="radio" class="btn-check" name="btn-check" id="{{ id }}" value="{{ position.value }}" autocomplete="off"{% if current == position %} checked{% endif %}>
                                     <label class="btn btn-outline-secondary" for="{{ id }}" title="{{- position|trans -}}">
                                         <i class="{{ position.icon }}" data-rotate="{{ position.angle }}deg"></i>
@@ -179,7 +179,7 @@
                     </table>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-9">
                 <span class="form-label cursor-default">Modal</span>
                 <button type="button" class="btn btn-form btn-primary mb-3 bottom-border-gradient bottom-border-gradient-100 w-100" data-bs-toggle="modal" data-bs-target="#dragModal">Launch modal</button>
             </div>

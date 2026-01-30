@@ -276,17 +276,15 @@ final class ProductUpdateServiceTest extends TestCase
         $container->method('has')
             ->willReturn(false);
 
-        $logger = self::createStub(LoggerInterface::class);
-        $suspendEventListenerService = self::createStub(SuspendEventListenerService::class);
         $productService = new ProductUpdateService(
             $productRepository,
             $categoryRepository,
-            $suspendEventListenerService,
+            self::createStub(SuspendEventListenerService::class),
             $security,
         );
         $productService->setRequestStack($this->createRequestStack());
         $productService->setTranslator($this->createMockTranslator());
-        $productService->setLogger($logger);
+        $productService->setLogger(self::createStub(LoggerInterface::class));
 
         $class = new \ReflectionClass(ProductUpdateService::class);
         $property = $class->getProperty('container');

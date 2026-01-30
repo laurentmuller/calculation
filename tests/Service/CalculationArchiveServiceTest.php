@@ -289,15 +289,14 @@ final class CalculationArchiveServiceTest extends TestCase
 
     private function createService(): CalculationArchiveService
     {
-        $listenerService = self::createStub(SuspendEventListenerService::class);
         $service = new CalculationArchiveService(
             $this->calculationRepository,
             $this->stateRepository,
-            $listenerService
+            self::createStub(SuspendEventListenerService::class)
         );
-        $service->setTranslator($this->createMockTranslator());
-        $service->setLogger(self::createStub(LoggerInterface::class));
-        $service->setRequestStack($this->createRequestStack());
+        $service->setLogger(self::createStub(LoggerInterface::class))
+            ->setTranslator($this->createMockTranslator())
+            ->setRequestStack($this->createRequestStack());
 
         return $service;
     }

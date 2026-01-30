@@ -27,16 +27,14 @@ final class UserRightsDocumentTest extends TestCase
 {
     public function testRender(): void
     {
+        $parameter = new RightsParameter();
         $parameters = $this->createMock(ApplicationParameters::class);
         $parameters->method('getRights')
-            ->willReturn(new RightsParameter());
+            ->willReturn($parameter);
 
         $controller = $this->createMock(AbstractController::class);
         $controller->method('getApplicationParameters')
             ->willReturn($parameters);
-
-        $roleService = self::createStub(RoleService::class);
-        $roleBuilderService = new RoleBuilderService();
 
         $users = [];
         foreach (\range(1, 5) as $index) {
@@ -48,8 +46,8 @@ final class UserRightsDocumentTest extends TestCase
         $document = new UserRightsDocument(
             $controller,
             $users,
-            $roleService,
-            $roleBuilderService
+            self::createStub(RoleService::class),
+            new RoleBuilderService()
         );
         $actual = $document->render();
         self::assertTrue($actual);
@@ -57,11 +55,12 @@ final class UserRightsDocumentTest extends TestCase
 
     public function testRenderEmpty(): void
     {
-        $controller = self::createStub(AbstractController::class);
-        $roleService = self::createStub(RoleService::class);
-        $roleBuilderService = self::createStub(RoleBuilderService::class);
-
-        $report = new UserRightsDocument($controller, [], $roleService, $roleBuilderService);
+        $report = new UserRightsDocument(
+            self::createStub(AbstractController::class),
+            [],
+            self::createStub(RoleService::class),
+            self::createStub(RoleBuilderService::class)
+        );
         $actual = $report->render();
         self::assertFalse($actual);
     }

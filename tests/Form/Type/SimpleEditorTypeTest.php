@@ -37,13 +37,14 @@ final class SimpleEditorTypeTest extends TypeTestCase
         $actionsPath = __DIR__ . '/../../files/json/fontawesome_invalid.json';
 
         $resolver = new OptionsResolver();
-        $view = self::createStub(FormView::class);
-        $form = self::createStub(FormInterface::class);
         $options = ['required' => false];
-
         $editor = new SimpleEditorType($actionsPath);
         $editor->configureOptions($resolver);
-        $editor->buildView($view, $form, $options);
+        $editor->buildView(
+            self::createStub(FormView::class),
+            self::createStub(FormInterface::class),
+            $options
+        );
         self::assertSame(HiddenType::class, $editor->getParent());
     }
 

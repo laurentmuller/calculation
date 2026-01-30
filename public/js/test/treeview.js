@@ -262,10 +262,15 @@ $(function () {
     $('.dropdown-position .btn-position').on('show.bs.dropdown', function () {
         const $this = $(this);
         const value = $this.data('value');
-        const $radio = $(this).parents('.dropdown').find('.btn-check[value="' + value + '"]');
+        /** @type {jQuery|any} */
+        const $parent = $(this).parents('.dropdown');
+        //'.btn-check[value="' + value + '"]'
+        const $radio = $parent.find(`.btn-check[value="${value}"]`);
         $radio.prop('checked', true);
     }).on('shown.bs.dropdown', function () {
-        $(this).parents('.dropdown').find('.btn-check:checked').trigger('focus');
+        /** @type {jQuery|any} */
+        const $parent = $(this).parents('.dropdown');
+        $parent.find('.btn-check:checked').trigger('focus');
     });
     $('.dropdown-position label').on('click', function (e) {
         if (e.button === 0) {

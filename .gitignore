@@ -4,9 +4,12 @@
 symfony.lock
 /var/
 /vendor/
+###< symfony/framework-bundle ###
+
+###> vendor tools ###
 /vendor-bin/**/vendor/
 /vendor-bin/**/composer.lock
-###< symfony/framework-bundle ###
+###< vendor tools ###
 
 ###> resources ###
 /public/build/*

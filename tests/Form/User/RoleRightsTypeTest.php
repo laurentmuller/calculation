@@ -53,9 +53,7 @@ final class RoleRightsTypeTest extends TypeTestCase
     #[\Override]
     protected function getPreloadedExtensions(): array
     {
-        $security = self::createStub(Security::class);
-        $rightsType = new RightsType(false, $security);
-
+        $rightsType = new RightsType(false, self::createStub(Security::class));
         $roleHierarchy = $this->createMock(RoleHierarchyInterface::class);
         $roleHierarchy->method('getReachableRoleNames')
             ->willReturn([RoleInterface::ROLE_ADMIN]);

@@ -51,8 +51,11 @@ final class CustomerGeneratorTest extends GeneratorTestCase
     #[\Override]
     protected function createGenerator(): CustomerGenerator
     {
-        $generator = new CustomerGenerator($this->manager, $this->fakerService);
-
-        return $this->updateGenerator($generator);
+        return new CustomerGenerator(
+            service: $this->service,
+            manager: $this->manager,
+            translator: $this->createMockTranslator(),
+            logger: $this->createMockLogger()
+        );
     }
 }

@@ -27,13 +27,13 @@ final class CalculationGeneratorTest extends GeneratorTestCase
     use CalculationStateTrait;
     use ProductTrait;
 
-    private CalculationUpdateService $service;
+    private CalculationUpdateService $updateService;
 
     #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
-        $this->service = $this->getService(CalculationUpdateService::class);
+        $this->updateService = $this->getService(CalculationUpdateService::class);
     }
 
     public function testNegativeCount(): void
@@ -83,9 +83,13 @@ final class CalculationGeneratorTest extends GeneratorTestCase
     #[\Override]
     protected function createGenerator(): CalculationGenerator
     {
-        $generator = new CalculationGenerator($this->manager, $this->fakerService, $this->service);
-
-        return $this->updateGenerator($generator);
+        return new CalculationGenerator(
+            service: $this->service,
+            manager: $this->manager,
+            translator: $this->createMockTranslator(),
+            logger: $this->createMockLogger(),
+            updateService: $this->updateService
+        );
     }
 
     private function deleteCalculationState(): void

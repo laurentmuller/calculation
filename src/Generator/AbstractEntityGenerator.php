@@ -17,41 +17,39 @@ use App\Faker\Generator;
 use App\Interfaces\EntityInterface;
 use App\Interfaces\GeneratorInterface;
 use App\Service\FakerService;
-use App\Traits\LoggerAwareTrait;
-use App\Traits\TranslatorAwareTrait;
+use App\Traits\JsonResponseTrait;
+use App\Traits\LoggerTrait;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class to generate entities.
  *
  * @template TEntity of EntityInterface
  */
-abstract class AbstractEntityGenerator implements GeneratorInterface, ServiceSubscriberInterface
+abstract class AbstractEntityGenerator implements GeneratorInterface
 {
-    use LoggerAwareTrait;
-    use ServiceMethodsSubscriberTrait;
-    use TranslatorAwareTrait;
+    use JsonResponseTrait;
+    use LoggerTrait;
 
     private readonly Generator $generator;
 
     public function __construct(
+        FakerService $service,
         private readonly EntityManagerInterface $manager,
-        FakerService $fakerService
+        private readonly TranslatorInterface $translator,
+        private readonly LoggerInterface $logger
     ) {
-        $this->generator = $fakerService->getGenerator();
+        $this->generator = $service->getGenerator();
     }
 
     #[\Override]
     public function generate(int $count, bool $simulate): JsonResponse
     {
         if ($count <= 0) {
-            return new JsonResponse([
-                'result' => false,
-                'message' => $this->trans('generate.error.empty'),
-            ]);
+            return $this->jsonFalse(['message' => $this->trans('generate.error.empty')]);
         }
 
         try {
@@ -62,24 +60,25 @@ abstract class AbstractEntityGenerator implements GeneratorInterface, ServiceSub
                 $items = $this->saveAndMapEntities($entities, $simulate);
             }
 
-            return new JsonResponse([
-                'result' => true,
+            return $this->jsonTrue([
                 'items' => $items,
                 'count' => $count,
                 'simulate' => $simulate,
                 'message' => $this->getCountMessage($count),
             ]);
         } catch (\Exception $e) {
-            $message = $this->trans('generate.error.failed');
-            $context = $this->getExceptionContext($e);
-            $this->logError($message, $context);
-
-            return new JsonResponse([
-                'result' => false,
-                'message' => $message,
-                'exception' => $context,
-            ]);
+            return $this->jsonException(
+                exception: $e,
+                message: $this->trans('generate.error.failed'),
+                logger: $this->getLogger()
+            );
         }
+    }
+
+    #[\Override]
+    public function getLogger(): LoggerInterface
+    {
+        return $this->logger;
     }
 
     /**
@@ -97,6 +96,14 @@ abstract class AbstractEntityGenerator implements GeneratorInterface, ServiceSub
      * @return array<string, string|null>
      */
     abstract protected function mapEntity(EntityInterface $entity): array;
+
+    /**
+     * Translate the given message.
+     */
+    protected function trans(string $id, array $parameters = []): string
+    {
+        return $this->translator->trans($id, $parameters);
+    }
 
     /**
      * @param TEntity[] $entities

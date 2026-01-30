@@ -87,9 +87,11 @@ final class GroupTableTest extends EntityTableTestCase
     #[\Override]
     protected function createTable(AbstractRepository $repository): GroupTable
     {
-        $twig = self::createStub(Environment::class);
-        $service = $this->createMockIndexService();
-        $table = new GroupTable($repository, $twig, $service);
+        $table = new GroupTable(
+            $repository,
+            self::createStub(Environment::class),
+            $this->createMockIndexService()
+        );
         $table->setChecker(self::createStub(AuthorizationCheckerInterface::class));
 
         return $table;

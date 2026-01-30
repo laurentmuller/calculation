@@ -22,7 +22,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 trait TranslatorMockTrait
 {
-    private function createMockTranslator(?string $message = null): MockObject&TranslatorInterface
+    protected function createMockTranslator(?string $message = null): MockObject&TranslatorInterface
     {
         $translator = $this->createMock(TranslatorInterface::class);
         if (null !== $message) {

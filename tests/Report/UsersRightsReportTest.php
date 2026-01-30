@@ -36,10 +36,6 @@ final class UsersRightsReportTest extends TestCase
         $controller->method('getApplicationParameters')
             ->willReturn($parameters);
 
-        $roleService = self::createStub(RoleService::class);
-        $roleBuilderService = new RoleBuilderService();
-        $fontAwesomeService = self::createStub(FontAwesomeService::class);
-
         $users = [];
         foreach (\range(1, 5) as $index) {
             $users[] = (new User())
@@ -50,9 +46,9 @@ final class UsersRightsReportTest extends TestCase
         $report = new UsersRightsReport(
             $controller,
             $users,
-            $roleService,
-            $roleBuilderService,
-            $fontAwesomeService
+            self::createStub(RoleService::class),
+            new RoleBuilderService(),
+            self::createStub(FontAwesomeService::class)
         );
         $actual = $report->render();
         self::assertTrue($actual);
@@ -60,17 +56,12 @@ final class UsersRightsReportTest extends TestCase
 
     public function testRenderEmpty(): void
     {
-        $controller = self::createStub(AbstractController::class);
-        $roleService = self::createStub(RoleService::class);
-        $fontAwesomeService = self::createStub(FontAwesomeService::class);
-        $roleBuilderService = self::createStub(RoleBuilderService::class);
-
         $report = new UsersRightsReport(
-            $controller,
+            self::createStub(AbstractController::class),
             [],
-            $roleService,
-            $roleBuilderService,
-            $fontAwesomeService
+            self::createStub(RoleService::class),
+            self::createStub(RoleBuilderService::class),
+            self::createStub(FontAwesomeService::class)
         );
         $actual = $report->render();
         self::assertFalse($actual);

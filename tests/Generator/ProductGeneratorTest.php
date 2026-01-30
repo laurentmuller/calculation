@@ -17,6 +17,7 @@ use App\Faker\Generator;
 use App\Generator\ProductGenerator;
 use App\Service\FakerService;
 use App\Tests\EntityTrait\CategoryTrait;
+use App\Tests\TranslatorMockTrait;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
@@ -25,6 +26,7 @@ use Doctrine\ORM\EntityManagerInterface;
 final class ProductGeneratorTest extends GeneratorTestCase
 {
     use CategoryTrait;
+    use TranslatorMockTrait;
 
     public function testNegativeCount(): void
     {
@@ -61,11 +63,13 @@ final class ProductGeneratorTest extends GeneratorTestCase
                     default => null,
                 };
             });
-        $fakerService = $this->createMock(FakerService::class);
-        $fakerService->method('getGenerator')
+        $service = $this->createMock(FakerService::class);
+        $service->method('getGenerator')
             ->willReturn($generator);
+        $translator = $this->createMockTranslator();
+        $logger = $this->createMockLogger();
 
-        $productGenerator = new class($manager, $fakerService) extends ProductGenerator {
+        $productGenerator = new class($service, $manager, $translator, $logger) extends ProductGenerator {
             #[\Override]
             public function createEntities(int $count, bool $simulate, Generator $generator): array
             {
@@ -79,8 +83,11 @@ final class ProductGeneratorTest extends GeneratorTestCase
     #[\Override]
     protected function createGenerator(): ProductGenerator
     {
-        $generator = new ProductGenerator($this->manager, $this->fakerService);
-
-        return $this->updateGenerator($generator);
+        return new ProductGenerator(
+            service: $this->service,
+            manager: $this->manager,
+            translator: $this->createMockTranslator(),
+            logger: $this->createMockLogger()
+        );
     }
 }

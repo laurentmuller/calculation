@@ -111,13 +111,13 @@ final class CategoryTableTest extends EntityTableTestCase
     #[\Override]
     protected function createTable(AbstractRepository $repository): CategoryTable
     {
-        $twig = self::createStub(Environment::class);
-        $groupRepository = self::createStub(GroupRepository::class);
-        $checker = self::createStub(AuthorizationCheckerInterface::class);
-        $service = $this->createMockIndexService();
-
-        $table = new CategoryTable($repository, $twig, $groupRepository, $service);
-        $table->setChecker($checker);
+        $table = new CategoryTable(
+            $repository,
+            self::createStub(Environment::class),
+            self::createStub(GroupRepository::class),
+            $this->createMockIndexService()
+        );
+        $table->setChecker(self::createStub(AuthorizationCheckerInterface::class));
 
         return $table;
     }

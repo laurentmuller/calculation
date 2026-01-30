@@ -24,6 +24,8 @@ use App\Service\FakerService;
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class to generate calculations.
@@ -33,11 +35,13 @@ use Doctrine\ORM\EntityManagerInterface;
 class CalculationGenerator extends AbstractEntityGenerator
 {
     public function __construct(
+        FakerService $service,
         EntityManagerInterface $manager,
-        FakerService $fakerService,
-        private readonly CalculationUpdateService $service
+        TranslatorInterface $translator,
+        LoggerInterface $logger,
+        private readonly CalculationUpdateService $updateService
     ) {
-        parent::__construct($manager, $fakerService);
+        parent::__construct($service, $manager, $translator, $logger);
     }
 
     #[\Override]
@@ -81,7 +85,7 @@ class CalculationGenerator extends AbstractEntityGenerator
             ->setCustomer($generator->name())
             ->setState($generator->state())
             ->setDate($date);
-        $this->service->updateCalculation($entity);
+        $this->updateService->updateCalculation($entity);
 
         return $entity;
     }

@@ -40,11 +40,12 @@ final class EmailVerifierTest extends TestCase
 
     public function testHandleEmail(): void
     {
-        $helper = $this->createVerifyEmailHelper();
-        $mailer = self::createStub(MailerInterface::class);
-        $repository = self::createStub(UserRepository::class);
-        $translator = $this->createMockTranslator();
-        $service = new EmailVerifier($helper, $mailer, $repository, $translator);
+        $service = new EmailVerifier(
+            $this->createVerifyEmailHelper(),
+            self::createStub(MailerInterface::class),
+            self::createStub(UserRepository::class),
+            $this->createMockTranslator()
+        );
 
         $user = $this->createUser();
         $request = new Request(['expires' => \time() + 3600]);
@@ -57,11 +58,13 @@ final class EmailVerifierTest extends TestCase
      */
     public function testSendEmail(): void
     {
-        $helper = $this->createMockVerifyEmailHelper();
-        $mailer = self::createStub(MailerInterface::class);
-        $repository = self::createStub(UserRepository::class);
         $translator = $this->createMockTranslator();
-        $service = new EmailVerifier($helper, $mailer, $repository, $translator);
+        $service = new EmailVerifier(
+            $this->createMockVerifyEmailHelper(),
+            self::createStub(MailerInterface::class),
+            self::createStub(UserRepository::class),
+            $translator
+        );
 
         $user = $this->createUser();
         $email = NotificationEmail::instance($translator);
@@ -91,19 +94,15 @@ final class EmailVerifierTest extends TestCase
 
     private function createVerifyEmailHelper(): VerifyEmailHelper
     {
-        $router = self::createStub(UrlGeneratorInterface::class);
         $uriSigner = $this->createMock(UriSigner::class);
         $uriSigner->method('checkRequest')
             ->willReturn(true);
 
-        $queryUtility = self::createStub(VerifyEmailQueryUtility::class);
-        $generator = self::createStub(VerifyEmailTokenGenerator::class);
-
         return new VerifyEmailHelper(
-            $router,
+            self::createStub(UrlGeneratorInterface::class),
             $uriSigner,
-            $queryUtility,
-            $generator,
+            self::createStub(VerifyEmailQueryUtility::class),
+            self::createStub(VerifyEmailTokenGenerator::class),
             3600
         );
     }

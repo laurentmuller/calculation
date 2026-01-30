@@ -28,15 +28,13 @@ final class SearchTableTest extends TestCase
 
     public function testEmptyMessage(): void
     {
-        $service = self::createStub(SearchService::class);
-        $table = $this->createTable($service);
+        $table = $this->createTable(self::createStub(SearchService::class));
         self::assertNull($table->getEmptyMessage());
     }
 
     public function testEntityClassName(): void
     {
-        $service = self::createStub(SearchService::class);
-        $table = $this->createTable($service);
+        $table = $this->createTable(self::createStub(SearchService::class));
         self::assertNull($table->getEntityClassName());
     }
 
@@ -70,8 +68,7 @@ final class SearchTableTest extends TestCase
 
     public function testWithEmptyQuery(): void
     {
-        $service = self::createStub(SearchService::class);
-        $table = $this->createTable($service);
+        $table = $this->createTable(self::createStub(SearchService::class));
         $results = $table->processDataQuery(new DataQuery());
         self::assertSame(Response::HTTP_OK, $results->status);
         self::assertEmpty($results->rows);
@@ -82,8 +79,7 @@ final class SearchTableTest extends TestCase
         $query = new DataQuery();
         $query->search = 'fake';
 
-        $service = self::createStub(SearchService::class);
-        $table = $this->createTable($service);
+        $table = $this->createTable(self::createStub(SearchService::class));
         $results = $table->processDataQuery($query);
         self::assertSame(Response::HTTP_OK, $results->status);
         self::assertEmpty($results->rows);
@@ -205,11 +201,9 @@ final class SearchTableTest extends TestCase
 
     private function createTable(SearchService $service): SearchTable
     {
-        $checker = self::createStub(AuthorizationCheckerInterface::class);
-        $translator = $this->createMockTranslator();
         $table = new SearchTable($service);
 
-        return $table->setTranslator($translator)
-            ->setChecker($checker);
+        return $table->setTranslator($this->createMockTranslator())
+            ->setChecker(self::createStub(AuthorizationCheckerInterface::class));
     }
 }

@@ -25,14 +25,20 @@ use Faker\Provider\Person;
  */
 class CustomerGenerator extends AbstractEntityGenerator
 {
+    private const int STYLE_BOTH = 0;
+    private const int STYLE_COMPANY = 1;
+    private const int STYLE_CONTACT = 2;
+
     #[\Override]
     protected function createEntities(int $count, bool $simulate, Generator $generator): array
     {
         $entities = [];
-        $styles = [0, 1, 2];
-        $genders = [Person::GENDER_MALE, Person::GENDER_FEMALE];
         for ($i = 0; $i < $count; ++$i) {
-            $entities[] = $this->createEntity($styles, $genders, $generator);
+            $entities[] = $this->createEntity(
+                $this->randomStyle($generator),
+                $this->randomGender($generator),
+                $generator
+            );
         }
 
         return $entities;
@@ -54,37 +60,45 @@ class CustomerGenerator extends AbstractEntityGenerator
         ];
     }
 
-    private function createEntity(array $styles, array $genders, Generator $generator): Customer
-    {
-        $style = (int) $generator->randomElement($styles);
-        $gender = (string) $generator->randomElement($genders);
-
-        return $this->generateEntity($style, $gender, $generator)
-            ->setAddress($generator->streetAddress())
-            ->setZipCode($generator->postcode())
-            ->setCity($generator->city());
-    }
-
-    private function generateEntity(int $style, string $gender, Generator $generator): Customer
+    /**
+     * @phpstan-param self::STYLE_*    $style
+     * @phpstan-param Person::GENDER_* $gender
+     */
+    private function createEntity(int $style, string $gender, Generator $generator): Customer
     {
         $entity = new Customer();
-        match ($style) {
-            // company
-            0 => $entity->setCompany($generator->company())
+        $entity->setAddress($generator->streetAddress())
+            ->setZipCode($generator->postcode())
+            ->setCity($generator->city());
+
+        return match ($style) {
+            self::STYLE_COMPANY => $entity->setCompany($generator->company())
                 ->setEmail($generator->companyEmail()),
-            // contact
-            1 => $entity->setTitle($generator->title($gender))
+            self::STYLE_CONTACT => $entity->setTitle($generator->title($gender))
                 ->setFirstName($generator->firstName($gender))
                 ->setLastName($generator->lastName())
                 ->setEmail($generator->email()),
-            // both
             default => $entity->setCompany($generator->company())
                 ->setFirstName($generator->firstName($gender))
                 ->setTitle($generator->title($gender))
                 ->setLastName($generator->lastName())
                 ->setEmail($generator->email())
         };
+    }
 
-        return $entity;
+    /**
+     * @phpstan-return Person::GENDER_*
+     */
+    private function randomGender(Generator $generator): string
+    {
+        return $generator->randomElement([Person::GENDER_MALE, Person::GENDER_FEMALE]);
+    }
+
+    /**
+     * @phpstan-return self::STYLE_*
+     */
+    private function randomStyle(Generator $generator): int
+    {
+        return $generator->randomElement([self::STYLE_COMPANY, self::STYLE_CONTACT, self::STYLE_BOTH]);
     }
 }

@@ -98,8 +98,7 @@ final class TestControllerTest extends ControllerTestCase
 
     public function testExportFontAwesome(): void
     {
-        $service = self::createStub(FontAwesomeService::class);
-        $this->setService(FontAwesomeService::class, $service);
+        $this->setService(FontAwesomeService::class, self::createStub(FontAwesomeService::class));
         $this->checkRoute(
             url: '/test/fontawesome',
             username: self::ROLE_SUPER_ADMIN,

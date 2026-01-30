@@ -43,11 +43,11 @@ class AjaxCalculationController extends AbstractController
 
             return $this->json($parameters);
         } catch (\Exception $e) {
-            $message = $this->trans('calculation.edit.error.update_total');
-            $context = $this->getExceptionContext($e);
-            $logger->error($message, $context);
-
-            return $this->jsonException($e, $message);
+            return $this->jsonException(
+                exception: $e,
+                message: $this->trans('calculation.edit.error.update_total'),
+                logger: $logger
+            );
         }
     }
 

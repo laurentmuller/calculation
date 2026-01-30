@@ -136,16 +136,13 @@ final class ResetPasswordServiceTest extends TestCase
 
     private function createResetPasswordHelper(): ResetPasswordHelper
     {
-        $generator = self::createStub(ResetPasswordTokenGenerator::class);
-        $cleaner = self::createStub(ResetPasswordCleaner::class);
-        $repository = self::createStub(ResetPasswordRequestRepositoryInterface::class);
         $resetRequestLifetime = 3600;
         $requestThrottleTime = 3600;
 
         return new ResetPasswordHelper(
-            $generator,
-            $cleaner,
-            $repository,
+            self::createStub(ResetPasswordTokenGenerator::class),
+            self::createStub(ResetPasswordCleaner::class),
+            self::createStub(ResetPasswordRequestRepositoryInterface::class),
             $resetRequestLifetime,
             $requestThrottleTime
         );

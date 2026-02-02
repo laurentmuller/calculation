@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use App\Controller\AbstractController;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -79,10 +80,11 @@ trait JsonResponseTrait
      */
     private function createJsonResponse(bool $result, array $data = [], int $status = Response::HTTP_OK): JsonResponse
     {
-        return new JsonResponse(
-            data: \array_merge_recursive(['result' => $result], $data),
-            status: $status,
-            json: false
-        );
+        $data = \array_merge_recursive(['result' => $result], $data);
+        if ($this instanceof AbstractController) {
+            return $this->json($data, $status);
+        }
+
+        return new JsonResponse($data, $status);
     }
 }

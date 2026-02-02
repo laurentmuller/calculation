@@ -204,7 +204,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
      * @param positive-int $width
      * @param positive-int $height
      *
-     * throws \Exception
+     * @throws \Exception
      */
     private function createImage(string $text, int $width, int $height): ImageService
     {

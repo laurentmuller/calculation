@@ -60,13 +60,12 @@ class CaptchaController extends AbstractController
         ?string $captcha = null
     ): JsonResponse {
         if (!$service->validateTimeout()) {
-            $response = $this->trans('captcha.timeout', [], 'validators');
-        } elseif (!$service->validateToken($captcha)) {
-            $response = $this->trans('captcha.invalid', [], 'validators');
-        } else {
-            $response = true;
+            return $this->json($this->trans('captcha.timeout', [], 'validators'));
+        }
+        if (!$service->validateToken($captcha)) {
+            return $this->json($this->trans('captcha.invalid', [], 'validators'));
         }
 
-        return $this->json($response);
+        return $this->json(true);
     }
 }

@@ -16,7 +16,7 @@ namespace App\Tests\Entity;
 use App\Entity\AbstractProperty;
 use App\Entity\Category;
 use App\Enums\EntityPermission;
-use App\Enums\Theme;
+use App\Enums\TableView;
 use App\Tests\DateAssertTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
@@ -30,15 +30,32 @@ final class AbstractPropertyTest extends TestCase
     {
         $entity = $this->getEntity();
         self::assertNull($entity->getArray());
-        $expected = [1, 'string', true];
-        $entity->setArray($expected);
+        $entity->setArray([1, 'string', true]);
         $actual = $entity->getArray();
-        self::assertIsArray($actual); // @phpstan-ignore staticMethod.impossibleType
-        self::assertCount(3, $actual); // @phpstan-ignore staticMethod.impossibleType
-        self::assertSame($expected, $actual); // @phpstan-ignore staticMethod.impossibleType
+        self::assertIsArray($actual);
+        self::assertCount(3, $actual);
+        self::assertSame([1, 'string', true], $actual);
 
         $entity->setValue('{invalidJson');
         self::assertNull($entity->getArray());
+    }
+
+    public function testBackedEnumInt(): void
+    {
+        $entity = $this->getEntity();
+        self::assertNull($entity->getBackedEnumInt(EntityPermission::class));
+        $entity->setBackedEnum(EntityPermission::ADD);
+        $actual = $entity->getBackedEnumInt(EntityPermission::class);
+        self::assertSame(EntityPermission::ADD, $actual);
+    }
+
+    public function testBackedEnumString(): void
+    {
+        $entity = $this->getEntity();
+        self::assertNull($entity->getBackedEnumString(TableView::class));
+        $entity->setBackedEnum(TableView::CUSTOM);
+        $actual = $entity->getBackedEnumString(TableView::class);
+        self::assertSame(TableView::CUSTOM, $actual);
     }
 
     public function testBoolean(): void
@@ -72,7 +89,7 @@ final class AbstractPropertyTest extends TestCase
         self::assertNull($entity->getDate());
         $entity->setDate($date);
         $actual = $entity->getDate();
-        self::assertNotNull($actual); // @phpstan-ignore staticMethod.impossibleType
+        self::assertNotNull($actual);
         self::assertTimestampEquals($date, $actual);
     }
 
@@ -80,7 +97,7 @@ final class AbstractPropertyTest extends TestCase
     {
         $entity = $this->getEntity();
         self::assertSame(0.0, $entity->getFloat());
-        $entity->setFloat(1);
+        $entity->setFloat(1.0);
         self::assertSame(1.0, $entity->getFloat());
     }
 
@@ -98,23 +115,28 @@ final class AbstractPropertyTest extends TestCase
         self::assertNull($entity->getValue());
         $entity->setString('string');
         self::assertSame('string', $entity->getValue());
-        $entity->setString(null);
-        self::assertNull($entity->getValue());
     }
 
     public function testValue(): void
     {
         $entity = $this->getEntity();
 
-        $entity->setValue(true);
-        self::assertTrue($entity->getBoolean());
-
-        $entity->setValue(1);
-        self::assertSame(1, $entity->getInteger());
-
         $array = [1, 'string', true];
         $entity->setValue($array);
         self::assertSame($array, $entity->getArray());
+
+        $permission = EntityPermission::ADD;
+        $entity->setValue($permission);
+        self::assertSame($permission, $entity->getBackedEnumInt(EntityPermission::class));
+        self::assertSame($permission->value, $entity->getInteger());
+
+        $view = TableView::CUSTOM;
+        $entity->setValue($view);
+        self::assertSame($view, $entity->getBackedEnumString(TableView::class));
+        self::assertSame($view->value, $entity->getValue());
+
+        $entity->setValue(true);
+        self::assertTrue($entity->getBoolean());
 
         $date = new DatePoint();
         $entity->setValue($date);
@@ -122,18 +144,16 @@ final class AbstractPropertyTest extends TestCase
         self::assertNotNull($actual);
         self::assertTimestampEquals($date, $actual);
 
+        $entity->setValue(12);
+        self::assertSame(12, $entity->getInteger());
+
+        $entity->setValue(1.5);
+        self::assertSame(1.5, $entity->getFloat());
+
         $category = new Category();
         self::setId($category, 10);
         $entity->setValue($category);
         self::assertSame(10, $entity->getInteger());
-
-        $theme = Theme::AUTO;
-        $entity->setValue($theme);
-        self::assertSame($theme->value, $entity->getValue());
-
-        $permission = EntityPermission::ADD;
-        $entity->setValue($permission);
-        self::assertSame($permission->value, $entity->getInteger());
 
         $entity->setValue(null);
         self::assertSame('', $entity->getValue());

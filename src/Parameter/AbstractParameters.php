@@ -208,10 +208,11 @@ abstract class AbstractParameters
             if (!$attribute instanceof Parameter) {
                 continue;
             }
+
             $metaDatas[$attribute->name] = new MetaData(
                 $attribute->name,
                 $property->name,
-                \ltrim((string) $property->getType(), '?'),
+                $this->getPropertyType($property),
                 $attribute->default
             );
         }
@@ -252,22 +253,6 @@ abstract class AbstractParameters
     private function getAccessor(): PropertyAccessor
     {
         return $this->accessor ??= PropertyAccess::createPropertyAccessor();
-    }
-
-    /**
-     * @param class-string<\BackedEnum> $type
-     */
-    private function getBackedEnumInt(string $type, AbstractProperty $property): ?\BackedEnum
-    {
-        return $type::tryFrom($property->getInteger());
-    }
-
-    /**
-     * @param class-string<\BackedEnum> $type
-     */
-    private function getBackedEnumString(string $type, AbstractProperty $property): ?\BackedEnum
-    {
-        return $type::tryFrom((string) $property->getValue());
     }
 
     /**
@@ -323,6 +308,16 @@ abstract class AbstractParameters
         );
     }
 
+    private function getPropertyType(\ReflectionProperty $property): string
+    {
+        $type = \ltrim((string) $property->getType(), '?');
+        if (DatePoint::class === $type) {
+            return 'date_point';
+        }
+
+        return $type;
+    }
+
     /**
      * @phpstan-return TValue
      */
@@ -331,12 +326,12 @@ abstract class AbstractParameters
         return match (true) {
             'array' === $metaData->type => $property->getArray(),
             'bool' === $metaData->type => $property->getBoolean(),
+            'date_point' === $metaData->type => $property->getDate(),
             'float' === $metaData->type => $property->getFloat(),
             'int' === $metaData->type => $property->getInteger(),
             'string' === $metaData->type => $property->getValue(),
-            DatePoint::class === $metaData->type => $property->getDate(),
-            $metaData->isEnumTypeInt() => $this->getBackedEnumInt($metaData->type, $property),
-            $metaData->isEnumTypeString() => $this->getBackedEnumString($metaData->type, $property),
+            $metaData->isEnumTypeInt() => $property->getBackedEnumInt($metaData->type),
+            $metaData->isEnumTypeString() => $property->getBackedEnumString($metaData->type),
             default => throw new \LogicException(\sprintf('Unsupported type "%s" for property "%s".', $metaData->type, $metaData->property))
         };
     }

@@ -42,8 +42,7 @@ parameters:
             message: '#Call to static method .* will always evaluate to true.#'
             path: tests/*
         -
-            message: '#Call to static method PHPUnit\\Framework\\Assert::assertCount#'
             identifier: staticMethod.impossibleType
             paths:
+                - tests/Entity/AbstractPropertyTest.php
                 - tests/Entity/CalculationTest.php
-                - tests/Mime/NotificationEmailTest.php

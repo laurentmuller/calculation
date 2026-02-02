@@ -70,6 +70,22 @@ abstract class AbstractProperty extends AbstractEntity
     }
 
     /**
+     * @param class-string<\BackedEnum> $type
+     */
+    public function getBackedEnumInt(string $type): ?\BackedEnum
+    {
+        return $type::tryFrom($this->getInteger());
+    }
+
+    /**
+     * @param class-string<\BackedEnum> $type
+     */
+    public function getBackedEnumString(string $type): ?\BackedEnum
+    {
+        return $type::tryFrom((string) $this->getValue());
+    }
+
+    /**
      * Gets this property value as boolean.
      */
     public function getBoolean(): bool
@@ -137,6 +153,14 @@ abstract class AbstractProperty extends AbstractEntity
     }
 
     /**
+     * Sets the property value as backed enum.
+     */
+    public function setBackedEnum(\BackedEnum $value): static
+    {
+        return $this->setString((string) $value->value);
+    }
+
+    /**
      * Sets the property value as boolean.
      */
     public function setBoolean(bool $value): static
@@ -195,23 +219,26 @@ abstract class AbstractProperty extends AbstractEntity
      */
     public function setValue(mixed $value): static
     {
-        if (\is_bool($value)) {
-            return $this->setBoolean($value);
-        }
-        if (\is_int($value)) {
-            return $this->setInteger($value);
-        }
         if (\is_array($value)) {
             return $this->setArray($value);
+        }
+        if ($value instanceof \BackedEnum) {
+            return $this->setBackedEnum($value);
+        }
+        if (\is_bool($value)) {
+            return $this->setBoolean($value);
         }
         if ($value instanceof DatePoint) {
             return $this->setDate($value);
         }
+        if (\is_float($value)) {
+            return $this->setFloat($value);
+        }
+        if (\is_int($value)) {
+            return $this->setInteger($value);
+        }
         if ($value instanceof EntityInterface) {
             return $this->setInteger((int) $value->getId());
-        }
-        if ($value instanceof \BackedEnum) {
-            return $this->setString((string) $value->value);
         }
 
         return $this->setString((string) $value);

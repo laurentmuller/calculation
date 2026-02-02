@@ -63,21 +63,21 @@ final class NotificationEmailTest extends TestCase
     {
         $email = $this->createNotificationEmail();
         $email->attachFromUploadedFile(null);
-        self::assertEmpty($email->getAttachments());
+        self::assertCountAttachments($email, 0);
 
         $file = $this->createUploadedFile();
         $email->attachFromUploadedFile($file);
-        self::assertCount(1, $email->getAttachments());
+        self::assertCountAttachments($email, 1);
     }
 
     public function testAttachFromUploadedFiles(): void
     {
         $email = $this->createNotificationEmail();
-        self::assertEmpty($email->getAttachments());
+        self::assertCountAttachments($email, 0);
 
         $file = $this->createUploadedFile();
         $email->attachFromUploadedFiles(null, $file);
-        self::assertCount(1, $email->getAttachments());
+        self::assertCountAttachments($email, 1);
     }
 
     public function testBcc(): void
@@ -176,6 +176,11 @@ final class NotificationEmailTest extends TestCase
         $expected = '[LOW] user.comment.title';
         $actual = $headers->getHeaderBody('Subject');
         self::assertSame($expected, $actual);
+    }
+
+    protected static function assertCountAttachments(NotificationEmail $email, int $expected): void
+    {
+        self::assertCount($expected, $email->getAttachments());
     }
 
     private function createNotificationEmail(): NotificationEmail

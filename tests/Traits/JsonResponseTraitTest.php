@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Traits;
 
+use App\Controller\AbstractController;
 use App\Traits\JsonResponseTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 final class JsonResponseTraitTest extends TestCase
 {
@@ -40,6 +42,25 @@ final class JsonResponseTraitTest extends TestCase
     public function testJsonTrue(): void
     {
         $response = $this->jsonTrue();
+        $this->validateResponse($response, ['result' => true]);
+    }
+
+    public function testWithController(): void
+    {
+        $controller = new class extends AbstractController {
+            #[\Override]
+            protected function json(mixed $data, int $status = 200, array $headers = [], array $context = []): JsonResponse
+            {
+                return new JsonResponse($data, $status, $headers, false);
+            }
+
+            #[\Override]
+            public function jsonTrue(array $data = [], int $status = Response::HTTP_OK): JsonResponse
+            {
+                return parent::jsonTrue($data, $status);
+            }
+        };
+        $response = $controller->jsonTrue();
         $this->validateResponse($response, ['result' => true]);
     }
 

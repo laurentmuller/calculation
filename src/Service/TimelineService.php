@@ -121,7 +121,7 @@ readonly class TimelineService
      */
     private function getDates(): array
     {
-        $today = DateUtils::createDate('today');
+        $today = DateUtils::createDate();
         [$min_date, $max_date] = $this->getMinMaxDates($today);
         if ($today < $min_date || $today > $max_date) {
             $today = null;

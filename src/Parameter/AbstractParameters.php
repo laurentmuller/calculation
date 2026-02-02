@@ -195,7 +195,7 @@ abstract class AbstractParameters
     /**
      * @phpstan-param TParameter $parameter
      *
-     * @return MetaData[]
+     * @return array<string, MetaData>
      *
      * @throws \ReflectionException
      */
@@ -208,7 +208,7 @@ abstract class AbstractParameters
             if (!$attribute instanceof Parameter) {
                 continue;
             }
-            $metaDatas[] = new MetaData(
+            $metaDatas[$attribute->name] = new MetaData(
                 $attribute->name,
                 $property->name,
                 \ltrim((string) $property->getType(), '?'),
@@ -234,8 +234,8 @@ abstract class AbstractParameters
         $properties = $this->loadProperties();
         $metaDatas = $this->getMetaDatas($parameter);
 
-        foreach ($metaDatas as $metaData) {
-            $property = $properties[$metaData->name] ?? null;
+        foreach ($metaDatas as $name => $metaData) {
+            $property = $properties[$name] ?? null;
             if ($property instanceof AbstractProperty) {
                 $value = $this->getPropertyValue($metaData, $property);
             } else {
@@ -288,7 +288,7 @@ abstract class AbstractParameters
     /**
      * @phpstan-param TParameter $parameter
      *
-     * @return MetaData[]
+     * @return array<string, MetaData>
      */
     private function getMetaDatas(ParameterInterface|string $parameter): array
     {
@@ -303,10 +303,10 @@ abstract class AbstractParameters
      */
     private function getParameterPropertyValue(
         MetaData $metaData,
-        ParameterInterface $defaultParameter,
+        ParameterInterface $parameter,
         PropertyAccessor $accessor
     ): mixed {
-        return $accessor->getValue($defaultParameter, $metaData->property);
+        return $accessor->getValue($parameter, $metaData->property);
     }
 
     /**
@@ -363,8 +363,7 @@ abstract class AbstractParameters
         $accessor = $this->getAccessor();
         $metaDatas = $this->getMetaDatas($parameter);
 
-        foreach ($metaDatas as $metaData) {
-            $name = $metaData->name;
+        foreach ($metaDatas as $name => $metaData) {
             $property = $properties[$name] ?? null;
             $value = $this->getParameterPropertyValue($metaData, $parameter, $accessor);
             $defaultValue = $this->getDefaultPropertyValue($metaData, $defaultParameter, $accessor);

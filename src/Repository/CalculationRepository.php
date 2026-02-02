@@ -241,7 +241,7 @@ class CalculationRepository extends AbstractRepository
      */
     public function getByMonth(int $maxResults = 6): CalculationsMonth
     {
-        $builder = $this->createQueryBuilder('c')
+        $query = $this->createQueryBuilder('c')
             ->select('COUNT(c.id) as count')
             ->addSelect('ROUND(SUM(c.itemsTotal), 2) as items')
             ->addSelect('ROUND(SUM(c.overallTotal), 2) as total')
@@ -250,9 +250,10 @@ class CalculationRepository extends AbstractRepository
             ->groupBy('year', 'month')
             ->orderBy('year', self::SORT_DESC)
             ->addOrderBy('month', self::SORT_DESC)
-            ->setMaxResults($maxResults);
+            ->setMaxResults($maxResults)
+            ->getQuery();
 
-        $result = \array_reverse($builder->getQuery()->getArrayResult());
+        $result = \array_reverse($query->getArrayResult());
         $items = \array_map(static fn (array $row): CalculationsMonthItem => new CalculationsMonthItem(
             $row['count'],
             $row['items'],

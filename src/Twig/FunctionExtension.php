@@ -62,7 +62,7 @@ final readonly class FunctionExtension
             'rel' => 'stylesheet',
         ], $parameters);
 
-        return \sprintf('<link %s>', $this->reduceParams($parameters));
+        return $this->reduceParams($parameters, '<link ');
     }
 
     /**
@@ -104,7 +104,7 @@ final readonly class FunctionExtension
             'width' => $size->width,
         ], $parameters);
 
-        return \sprintf('<image %s>', $this->reduceParams($parameters));
+        return $this->reduceParams($parameters, '<image ');
     }
 
     /**
@@ -152,7 +152,7 @@ final readonly class FunctionExtension
             'nonce' => $this->getNonce(),
         ], $parameters);
 
-        return \sprintf('<script %s></script>', $this->reduceParams($parameters));
+        return $this->reduceParams($parameters, '<script ', '></script>');
     }
 
     /**
@@ -215,15 +215,14 @@ final readonly class FunctionExtension
      *
      * @param array<string, string|int> $parameters
      */
-    private function reduceParams(array $parameters): string
+    private function reduceParams(array $parameters, string $prefix, string $suffix = '>'): string
     {
-        return \implode(
-            ' ',
-            \array_map(
-                static fn (string $key, string|int $value): string => \sprintf('%s="%s"', $key, \htmlspecialchars((string) $value)),
-                \array_keys($parameters),
-                \array_values($parameters)
-            )
+        $parameters = \array_map(
+            static fn (string $key, string|int $value): string => \sprintf('%s="%s"', $key, $value),
+            \array_keys($parameters),
+            \array_values($parameters)
         );
+
+        return $prefix . \implode(' ', $parameters) . $suffix;
     }
 }

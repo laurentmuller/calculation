@@ -103,9 +103,9 @@ class PasswordService
         $result = $this->getService()->passwordStrength($query->password, $query->getInputs());
 
         return new PasswordResult(
-            $result['score'],
-            StringUtils::trim($result['feedback']['warning']),
-            $this->trimArray($result['feedback']['suggestions'])
+            score: $result['score'],
+            warning: StringUtils::trim($result['feedback']['warning']),
+            suggestions: $this->trimArray($result['feedback']['suggestions'])
         );
     }
 

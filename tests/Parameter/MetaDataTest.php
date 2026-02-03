@@ -57,8 +57,8 @@ final class MetaDataTest extends TestCase
         bool $expectedEnumInt = false,
         bool $expectedEnumString = false,
     ): void {
-        self::assertSame($expectedEnumInt, $actual->isEnumTypeInt());
-        self::assertSame($expectedEnumString, $actual->isEnumTypeString());
+        self::assertSame($expectedEnumInt, $actual->isIntEnum());
+        self::assertSame($expectedEnumString, $actual->isStringEnum());
     }
 
     private function createMetaData(string $type): MetaData

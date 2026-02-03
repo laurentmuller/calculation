@@ -40,24 +40,6 @@ final class AbstractPropertyTest extends TestCase
         self::assertNull($entity->getArray());
     }
 
-    public function testBackedEnumInt(): void
-    {
-        $entity = $this->getEntity();
-        self::assertNull($entity->getBackedEnumInt(EntityPermission::class));
-        $entity->setBackedEnum(EntityPermission::ADD);
-        $actual = $entity->getBackedEnumInt(EntityPermission::class);
-        self::assertSame(EntityPermission::ADD, $actual);
-    }
-
-    public function testBackedEnumString(): void
-    {
-        $entity = $this->getEntity();
-        self::assertNull($entity->getBackedEnumString(TableView::class));
-        $entity->setBackedEnum(TableView::CUSTOM);
-        $actual = $entity->getBackedEnumString(TableView::class);
-        self::assertSame(TableView::CUSTOM, $actual);
-    }
-
     public function testBoolean(): void
     {
         $entity = $this->getEntity();
@@ -109,12 +91,30 @@ final class AbstractPropertyTest extends TestCase
         self::assertSame(1, $entity->getInteger());
     }
 
+    public function testIntEnum(): void
+    {
+        $entity = $this->getEntity();
+        self::assertNull($entity->getIntEnum(EntityPermission::class));
+        $entity->setBackedEnum(EntityPermission::ADD);
+        $actual = $entity->getIntEnum(EntityPermission::class);
+        self::assertSame(EntityPermission::ADD, $actual);
+    }
+
     public function testString(): void
     {
         $entity = $this->getEntity();
         self::assertNull($entity->getValue());
         $entity->setString('string');
         self::assertSame('string', $entity->getValue());
+    }
+
+    public function testStringEnum(): void
+    {
+        $entity = $this->getEntity();
+        self::assertNull($entity->getStringEnum(TableView::class));
+        $entity->setBackedEnum(TableView::CUSTOM);
+        $actual = $entity->getStringEnum(TableView::class);
+        self::assertSame(TableView::CUSTOM, $actual);
     }
 
     public function testValue(): void
@@ -127,12 +127,12 @@ final class AbstractPropertyTest extends TestCase
 
         $permission = EntityPermission::ADD;
         $entity->setValue($permission);
-        self::assertSame($permission, $entity->getBackedEnumInt(EntityPermission::class));
+        self::assertSame($permission, $entity->getIntEnum(EntityPermission::class));
         self::assertSame($permission->value, $entity->getInteger());
 
         $view = TableView::CUSTOM;
         $entity->setValue($view);
-        self::assertSame($view, $entity->getBackedEnumString(TableView::class));
+        self::assertSame($view, $entity->getStringEnum(TableView::class));
         self::assertSame($view->value, $entity->getValue());
 
         $entity->setValue(true);

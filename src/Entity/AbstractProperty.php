@@ -28,12 +28,12 @@ abstract class AbstractProperty extends AbstractEntity
     /**
      * The value used for FALSE value.
      */
-    public const int FALSE_VALUE = 0;
+    private const int FALSE_VALUE = 0;
 
     /**
      * The value used for TRUE value.
      */
-    public const int TRUE_VALUE = 1;
+    private const int TRUE_VALUE = 1;
 
     /**
      * The property value.
@@ -70,22 +70,6 @@ abstract class AbstractProperty extends AbstractEntity
     }
 
     /**
-     * @param class-string<\BackedEnum> $type
-     */
-    public function getBackedEnumInt(string $type): ?\BackedEnum
-    {
-        return $type::tryFrom($this->getInteger());
-    }
-
-    /**
-     * @param class-string<\BackedEnum> $type
-     */
-    public function getBackedEnumString(string $type): ?\BackedEnum
-    {
-        return $type::tryFrom((string) $this->getValue());
-    }
-
-    /**
      * Gets this property value as boolean.
      */
     public function getBoolean(): bool
@@ -94,7 +78,7 @@ abstract class AbstractProperty extends AbstractEntity
     }
 
     /**
-     * Gets this property value as date.
+     * Gets this property value as a date.
      */
     public function getDate(): ?DatePoint
     {
@@ -129,11 +113,35 @@ abstract class AbstractProperty extends AbstractEntity
     }
 
     /**
+     * @template T of \BackedEnum
+     *
+     * @param class-string<T> $type
+     *
+     * @return T|null
+     */
+    public function getIntEnum(string $type): ?\BackedEnum
+    {
+        return $type::tryFrom($this->getInteger());
+    }
+
+    /**
      * Gets the property name.
      */
     public function getName(): string
     {
         return (string) $this->name;
+    }
+
+    /**
+     * @template T of \BackedEnum
+     *
+     * @param class-string<T> $type
+     *
+     * @return T|null
+     */
+    public function getStringEnum(string $type): ?\BackedEnum
+    {
+        return $type::tryFrom((string) $this->getValue());
     }
 
     /**
@@ -153,7 +161,7 @@ abstract class AbstractProperty extends AbstractEntity
     }
 
     /**
-     * Sets the property value as backed enum.
+     * Sets the property value as a backed enum.
      */
     public function setBackedEnum(\BackedEnum $value): static
     {

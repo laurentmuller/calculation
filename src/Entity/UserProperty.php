@@ -29,12 +29,18 @@ use Symfony\Component\Validator\Constraints as Assert;
 class UserProperty extends AbstractProperty
 {
     /**
-     * The parent's user.
+     * @param ?string $name the property name
+     * @param ?User   $user the parent's user
      */
-    #[Assert\NotNull]
-    #[ORM\ManyToOne(inversedBy: 'properties')]
-    #[ORM\JoinColumn(name: 'user_id', nullable: false, onDelete: 'cascade')]
-    private ?User $user = null;
+    public function __construct(
+        ?string $name = null,
+        #[Assert\NotNull]
+        #[ORM\ManyToOne(inversedBy: 'properties')]
+        #[ORM\JoinColumn(name: 'user_id', nullable: false, onDelete: 'cascade')]
+        private ?User $user = null
+    ) {
+        parent::__construct($name);
+    }
 
     /**
      * Gets the parent's user.
@@ -47,17 +53,17 @@ class UserProperty extends AbstractProperty
     /**
      * Create a new instance for the given name and user.
      */
-    public static function instance(string $name, UserInterface $user): self
+    public static function instance(string $name, User $user): self
     {
-        return (new self($name))->setUser($user);
+        return new self($name, $user);
     }
 
     /**
      * Sets the parent's user.
      */
-    public function setUser(?UserInterface $user): self
+    public function setUser(?User $user): self
     {
-        $this->user = $user instanceof User ? $user : null;
+        $this->user = $user;
 
         return $this;
     }

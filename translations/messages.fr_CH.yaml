@@ -915,7 +915,7 @@ parameters:
 password:
     input: Mot de passe
     title: Mot de passe
-    constraint: 'Contraintes du mot de passe :'
+    constraint: Contraintes du mot de passe
     success: 'Le mot de passe est valide. Les options suivantes ont été sélectionnées :'
     letter: Une lettre est obligatoire
     number: Un chiffre est obligatoire

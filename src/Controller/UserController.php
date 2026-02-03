@@ -187,7 +187,7 @@ class UserController extends AbstractEntityController
     }
 
     /**
-     * Change password for an existing user.
+     * Change the password for an existing user.
      */
     #[GetPostRoute(path: '/password/{id}', name: 'password', requirements: self::ID_REQUIREMENT)]
     public function password(Request $request, User $item, PasswordTooltipService $service): Response

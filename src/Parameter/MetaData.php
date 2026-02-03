@@ -41,7 +41,7 @@ readonly class MetaData
     /**
      * @phpstan-assert-if-true class-string<\BackedEnum> $this->type
      */
-    public function isEnumTypeInt(): bool
+    public function isIntEnum(): bool
     {
         return 'int' === $this->getBackingType();
     }
@@ -49,7 +49,7 @@ readonly class MetaData
     /**
      * @phpstan-assert-if-true class-string<\BackedEnum> $this->type
      */
-    public function isEnumTypeString(): bool
+    public function isStringEnum(): bool
     {
         return 'string' === $this->getBackingType();
     }

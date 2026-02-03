@@ -330,8 +330,8 @@ abstract class AbstractParameters
             'float' === $metaData->type => $property->getFloat(),
             'int' === $metaData->type => $property->getInteger(),
             'string' === $metaData->type => $property->getValue(),
-            $metaData->isEnumTypeInt() => $property->getBackedEnumInt($metaData->type),
-            $metaData->isEnumTypeString() => $property->getBackedEnumString($metaData->type),
+            $metaData->isIntEnum() => $property->getIntEnum($metaData->type),
+            $metaData->isStringEnum() => $property->getStringEnum($metaData->type),
             default => throw new \LogicException(\sprintf('Unsupported type "%s" for property "%s".', $metaData->type, $metaData->property))
         };
     }

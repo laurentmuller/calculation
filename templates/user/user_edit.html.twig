@@ -1,6 +1,5 @@
 {% extends 'cards/card_edit.html.twig' %}
 {% from 'macros/_timestampable.html.twig' import timestampable_footer %}
-{% from 'macros/_password_constraints.html.twig' import password_constraints %}
 {# parameters #}
 {%- set title = new ? 'user.add.title' : 'user.edit.title' -%}
 {%- set title_icon = ICON_USER -%}
@@ -11,35 +10,25 @@
     'data-equal_to': 'password.mismatch'|trans([], 'validators')}) -%}
 {# body #}
 {% block card_body %}
-    {{ form_row(form.username) }}
-    {{ form_row(form.email) }}
+    <div class="row">
+        <div class="col-md-6">{{ form_row(form.username) }}</div>
+        <div class="col-md-6">{{ form_row(form.email) }}</div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">{{ form_row(form.role) }}</div>
+        <div class="col-md-6">{{ form_row(form.enabled) }}</div>
+    </div>
     {% if new %}
-        {{ form_row(form.plainPassword) }}
         <div class="row">
-            <div class="col-md-8">
-                {{ form_row(form.role) }}
-            </div>
-            <div class="col-md-4">
-                {{ form_row(form.enabled) }}
-            </div>
+            <div class="col-md-6">{{ form_row(form.plainPassword.first) }}</div>
+            <div class="col-md-6">{{ form_row(form.plainPassword.second) }}</div>
         </div>
-    {% else %}
-        <div class="row">
-            <div class="col-md-4">
-                {{ form_row(form.role) }}
-            </div>
-            <div class="col-md-4">
-                {{ form_row(form.enabled) }}
-            </div>
-            <div class="col-md-4">
-                {{ form_row(form.lastLogin) }}
-            </div>
-        </div>
+        {% if tooltips is defined and tooltips|length %}
+            {% from 'macros/_password_constraints.html.twig' import password_constraints %}
+            <div class="mb-3">{{ password_constraints(tooltips) }}</div>
+        {% endif %}
     {% endif %}
     {{ form_row(form.imageFile) }}
-    {% if tooltips is defined and tooltips|length %}
-        {{ password_constraints(tooltips) }}
-    {% endif %}
 {% endblock card_body %}
 {# footer #}
 {% block card_footer -%}

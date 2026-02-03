@@ -41,7 +41,7 @@
     {{ link(encode_query('command_index', query), 'command.list.title', 'btn btn-form btn-primary') }}
     {{ link(encode_query('command_execute', query), 'command.result.re_run', 'btn btn-form btn-warning') }}
     {% if result.content %}
-        {{ button_copy('#result') }}
+        {{ button_copy(target: '#result') }}
     {% endif %}
 </div>
 {% endblock card_footer %}

@@ -83,7 +83,7 @@
 {# action form #}
 {% block actions_form -%}
     {{ parent() }}
-    {{ button_copy('#result') }}
+    {{ button_copy(target: '#result', disabled: true) }}
 {%- endblock actions_form %}
 {# stylesheets #}
 {% block stylesheets %}

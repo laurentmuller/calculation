@@ -16,8 +16,6 @@ namespace App\Form\User;
 use App\Entity\User;
 use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
-use App\Utils\FormatUtils;
-use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Form\Event\PreSetDataEvent;
 
 /**
@@ -55,31 +53,10 @@ class UserType extends AbstractEntityType
             ->updateOption('prepend_icon', 'fa-solid fa-user-check')
             ->addTrueFalseType('common.value_enabled', 'common.value_disabled');
 
-        $helper->field('lastLogin')
-            ->updateOptions([
-                'prepend_icon' => 'fa-solid fa-user-clock',
-                'value_transformer' => $this->formatLastLogin(...),
-                'empty_value' => 'common.value_none',
-            ])
-            ->widgetClass('text-center')
-            ->addPlainType();
-
         $helper->field('imageFile')
             ->addUserImageType();
 
         $helper->listenerPreSetData($this->onPreSetData(...));
-    }
-
-    /**
-     * Format the last login date.
-     */
-    private function formatLastLogin(DatePoint|string $lastLogin): ?string
-    {
-        if ($lastLogin instanceof DatePoint) {
-            return FormatUtils::formatDateTime($lastLogin);
-        }
-
-        return null;
     }
 
     /**

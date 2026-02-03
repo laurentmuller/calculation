@@ -101,7 +101,7 @@ $(function () {
 
         /**
          * Handle the drag enter event.
-         * @param {DragEnterEvent} e the source event.
+         * @param {DragEvent} e the source event.
          * @private
          */
         _dragEnter(e) {
@@ -113,7 +113,7 @@ $(function () {
 
         /**
          * Handle the drag over event.
-         * @param {DragOverEvent} e the source event.
+         * @param {DragEvent} e the source event.
          * @private
          */
         _dragOver(e) {
@@ -125,7 +125,7 @@ $(function () {
 
         /**
          * Handle the drop event.
-         * @param {DropEvent} e the source event.
+         * @param {DragEvent} e the source event.
          * @private
          */
         _drop(e) {
@@ -142,7 +142,7 @@ $(function () {
         /**
          * Handle the input file change event.
          *
-         * @param {Event} e - the source event.
+         * @param {DragEvent} e - the source event.
          * @private
          */
         _change(e) {
@@ -187,7 +187,7 @@ $(function () {
         /**
          * Find or create (if applicable) the HTML image
          * @param {boolean} createIfMissing true to create the HTML image if not found
-         * @return {jQuery|HTMLImageElement|null}
+         * @return {jQuery|HTMLImageElement|any|null}
          * @private
          */
         _findImage(createIfMissing) {
@@ -197,7 +197,7 @@ $(function () {
             }
             if (createIfMissing) {
                 $image = $('<img />', {
-                    alt: this.$preview.attr('title') || ''
+                    alt: this.$preview.attr('title') || '',
                 });
                 return $image.appendTo(this.$preview);
             }
@@ -221,7 +221,7 @@ $(function () {
 
         /**
          * Gets the data transfer, if applicable.
-         * @param {DragEnterEvent|DragOverEvent|DropEvent} e the event to get data transfer for.
+         * @param {DragEvent|Event|any} e the event to get data transfer for.
          * @return {DataTransfer|null} the data transfer or null if not found.
          * @private
          */
@@ -243,7 +243,7 @@ $(function () {
 
         /**
          * Sets the displayed image from the given list of files.
-         * @param {Event|DropEvent} e the source event.
+         * @param {DragEvent} e the source event.
          * @param {FileList} files the list of files.
          * @param {boolean} deleteOnError true to delete image if invalid.
          * @return {boolean} true if image is set; false otherwise.

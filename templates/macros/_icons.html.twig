@@ -179,8 +179,8 @@
 {% endif %}
 {% endmacro sitemap %}
 
-{% macro button_copy(target, class = 'btn-success', hide_modal = false) %}
-<button type="button" class="btn btn-copy btn-form {{ class }}"
+{% macro button_copy(target, class = 'btn-success', hide_modal = false, disabled = false) %}
+<button type="button" class="btn btn-copy btn-form {{ class }}"{% if disabled %} disabled{% endif %}
         data-success="{{ 'common.copy_success'|trans }}"
         data-error="{{ 'common.copy_error'|trans }}"
         data-title="{{ 'common.copy_title'|trans }}"

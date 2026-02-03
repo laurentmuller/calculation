@@ -4,7 +4,10 @@
     display: inline-block;
 }
 
-.image-input input[type=file] {
+.image-input input[type=file],
+.image-input.image-input-new .image-input-edit,
+.image-input.image-input-new .image-input-delete,
+.image-input.image-input-exists .image-input-browse {
     display: none;
 }
 
@@ -16,11 +19,14 @@
     width: 200px;
     height: 200px;
     cursor: pointer;
-    background-color: white;
-
+    background-color: transparent;
 }
 
-.image-input .img-thumbnail > img {
+.image-input.image-input-exists .img-thumbnail {
+    background-color: white;
+}
+
+.image-input.image-input-exists .img-thumbnail img {
     position: absolute;
     margin: 0;
     max-width: 100%;
@@ -28,10 +34,4 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-}
-
-.image-input.image-input-new .image-input-edit,
-.image-input.image-input-new .image-input-delete,
-.image-input.image-input-exists .image-input-browse {
-    display: none;
 }

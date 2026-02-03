@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f167ffc74b860b87070e147a4cf06b09",
+    "content-hash": "40f384f9542eb5a925740baee4ef6e24",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1890,20 +1890,20 @@
         },
         {
             "name": "laurentmuller/highcharts-bundle",
-            "version": "3.0.4",
+            "version": "4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/HighchartsBundle.git",
-                "reference": "79629d4c0d345334601d4e79112a2fa9624eb152"
+                "reference": "426d10395a7244ec9b2e0f0d11f4f925fd52ccef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/HighchartsBundle/zipball/79629d4c0d345334601d4e79112a2fa9624eb152",
-                "reference": "79629d4c0d345334601d4e79112a2fa9624eb152",
+                "url": "https://api.github.com/repos/laurentmuller/HighchartsBundle/zipball/426d10395a7244ec9b2e0f0d11f4f925fd52ccef",
+                "reference": "426d10395a7244ec9b2e0f0d11f4f925fd52ccef",
                 "shasum": ""
             },
             "require": {
-                "php": "^8.2",
+                "php": "^8.3",
                 "symfony/config": " ^7.0",
                 "symfony/dependency-injection": " ^7.0",
                 "symfony/http-kernel": " ^7.0",
@@ -1911,9 +1911,9 @@
             },
             "require-dev": {
                 "bamarni/composer-bin-plugin": "^1.0",
-                "phpunit/phpunit": "^11.0",
+                "phpunit/phpunit": "^12.0",
                 "symfony/framework-bundle": " ^7.0",
-                "symfony/phpunit-bridge": " ^7.0"
+                "symfony/phpunit-bridge": " ^8.0"
             },
             "type": "symfony-bundle",
             "extra": {
@@ -1956,7 +1956,7 @@
                 "issues": "https://github.com/laurentmuller/HighchartsBundle/issues",
                 "source": "https://github.com/laurentmuller/HighchartsBundle"
             },
-            "time": "2025-11-25T18:51:08+00:00"
+            "time": "2026-02-03T07:20:12+00:00"
         },
         {
             "name": "league/commonmark",

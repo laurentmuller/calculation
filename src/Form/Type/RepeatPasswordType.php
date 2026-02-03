@@ -56,12 +56,12 @@ class RepeatPasswordType extends AbstractType
     }
 
     /**
-     * Gets the default confirmation options (second options).
+     * Gets the confirmation options (second options).
      */
-    public static function getConfirmOptions(): array
+    public static function getConfirmOptions(string $label = self::CONFIRM_LABEL): array
     {
         return [
-            'label' => self::CONFIRM_LABEL,
+            'label' => $label,
             'attr' => [
                 'autocomplete' => 'new-password',
                 'maxlength' => EntityInterface::MAX_STRING_LENGTH,
@@ -76,12 +76,12 @@ class RepeatPasswordType extends AbstractType
     }
 
     /**
-     * Gets the default password options (first options).
+     * Gets the password options (first options).
      */
-    public static function getPasswordOptions(): array
+    public static function getPasswordOptions(string $label = self::PASSWORD_LABEL): array
     {
         return [
-            'label' => self::PASSWORD_LABEL,
+            'label' => $label,
             'hash_property_path' => 'password',
             'attr' => [
                 'minlength' => UserInterface::MIN_PASSWORD_LENGTH,

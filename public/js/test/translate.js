@@ -45,7 +45,7 @@ function handleSelection() {
 /**
  * Translate.
  *
- * @param {HTMLElement} form - the submitted form.
+ * @param {HTMLFormElement} form - the submitted form.
  * @param {boolean} notification - true to notify.
  */
 function translate(form, notification) {
@@ -149,9 +149,9 @@ function handleExchange() {
 function handleTextChange() {
     'use strict';
     const $from = $('#from');
-    /** @var {jQuery<HTMLInputElement>}  */
+    /** @var {jQuery<HTMLInputElement>|any}  */
     const $to = $('#to');
-    /** @var {jQuery<HTMLInputElement>}  */
+    /** @var {jQuery<HTMLInputElement>|any}  */
     const $text = $('#text');
 
     const oldFrom = $from.data('old-value');
@@ -242,10 +242,10 @@ function handleService() {
 $(function () {
     'use strict';
     const $text = $('#text');
-    const $fromTo = $('#from, #to');
+    const $fromAndTo = $('#from, #to');
 
     // initialize select
-    $fromTo.initSelect2();
+    $fromAndTo.initSelect2();
 
     // clipboard
     $('.btn-copy').copyClipboard();
@@ -254,7 +254,7 @@ $(function () {
     $('.btn-exchange').on('click', function () {
         handleExchange();
     });
-    $fromTo.on('input', function () {
+    $fromAndTo.on('input', function () {
         handleSelection();
     }).on('change', function () {
         $(this).createTimer(handleTextChange, 500);

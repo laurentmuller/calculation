@@ -34,7 +34,6 @@ class FontAwesomeCommand
 
     private const string DEFAULT_SOURCE = 'vendor/fortawesome/font-awesome/metadata/icons.json';
     private const string DEFAULT_TARGET = 'resources/fontawesome';
-    private const string SVG_SOURCE = 'vendor/fortawesome/font-awesome/svgs-full';
 
     public function __construct(
         #[Autowire('%kernel.project_dir%')]

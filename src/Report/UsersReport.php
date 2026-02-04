@@ -113,7 +113,7 @@ class UsersReport extends AbstractArrayReport
             return $this->defaultCell;
         }
         $color = PdfDrawColor::cellBorder()->asHex('#');
-        $this->defaultCell = $this->fontService->getFontAwesomeCell(
+        $this->defaultCell = $this->fontService->getCell(
             icon: 'fa-solid fa-user-slash',
             color: $color,
             size: self::IMAGE_SIZE
@@ -145,7 +145,7 @@ class UsersReport extends AbstractArrayReport
 
         $icon = $this->roleService->getRoleIcon($role);
         $text = $this->roleService->translateRole($role);
-        $cell = $this->fontService->getFontAwesomeCell(icon: $icon, text: $text) ?? new PdfCell($text);
+        $cell = $this->fontService->getCell(icon: $icon, text: $text) ?? new PdfCell($text);
 
         return $this->roleCells[$role] = $cell;
     }

@@ -121,13 +121,9 @@
 {%- endmacro rowDirectory %}
 {# content #}
 <div class="phpversion">
+    {{ tools.headerLink('symfony.com', symfonyService.version, 'symfony') }}
     <table id="data-table-symfony" class="table table-sm table-hover mb-0">
         <tbody>
-            <tr class="h">
-                <td colspan="2" class="position-relative">
-                    {{- tools.content_header_link('https://symfony.com', symfonyService.version, 'symfony') -}}
-                </td>
-            </tr>
             {{ tools.headerInfo('Kernel') }}
             {{ tools.rowInfo('Environment', kernelService.environment|trans) }}
             {{ tools.rowInfo('Running Mode', kernelService.mode|trans) }}

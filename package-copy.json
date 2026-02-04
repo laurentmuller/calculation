@@ -34,10 +34,6 @@
             "to": "public/build/font-awesome/css"
         },
         {
-            "from": "node_modules/font-mfizz/dist/*.{css,eot,svg,ttf,woff}",
-            "to": "public/build/font-mfizz/"
-        },
-        {
             "from": "node_modules/highcharts/highcharts.js",
             "to": "public/build/highcharts/"
         },

@@ -1,49 +1,54 @@
 {# macros #}
 {% macro headerInfo(name) -%}
-<tr class="h">
-    <th class="fw-bold" colspan="2">{{ name }}</th>
-</tr>
+    <tr class="h">
+        <th class="fw-bold" colspan="2">{{ name }}</th>
+    </tr>
 {%- endmacro headerInfo %}
 
 {% macro rowInfo(name, value, name_class = '', value_class = '') -%}
-{%- set name_class = ('e ' ~ name_class|default(''))|trim -%}
-{%- set value_class = ('v ' ~ value_class|default(''))|trim -%}
-<tr>
-    <td class="{{ name_class }}">{{ name }}</td>
-    <td class="{{ value_class }}">
-        {{- value -}}
-    </td>
-</tr>
+    {%- set name_class = ('e ' ~ name_class|default(''))|trim -%}
+    {%- set value_class = ('v ' ~ value_class|default(''))|trim -%}
+    <tr>
+        <td class="{{ name_class }}">{{ name }}</td>
+        <td class="{{ value_class }}">
+            {{- value -}}
+        </td>
+    </tr>
 {%- endmacro rowInfo %}
 
 {% macro rowInfoLink(name, value, href, name_class = '', value_class = '') -%}
-{%- set name_class = ('e ' ~ name_class|default(''))|trim -%}
-{%- set value_class = ('v ' ~ value_class|default(''))|trim -%}
-<tr>
-    <td class="{{ name_class }}">{{ name }}</td>
-    <td class="{{ value_class }}">
-        <a href="{{ href }}" class="card-link" target="_blank" rel="noopener noreferrer">
-            {{- value -}}
-        </a>
-    </td>
-</tr>
+    {%- set name_class = ('e ' ~ name_class|default(''))|trim -%}
+    {%- set value_class = ('v ' ~ value_class|default(''))|trim -%}
+    <tr>
+        <td class="{{ name_class }}">{{ name }}</td>
+        <td class="{{ value_class }}">
+            <a href="{{ href }}" class="card-link" target="_blank" rel="noopener noreferrer">
+                {{- value -}}
+            </a>
+        </td>
+    </tr>
 {%- endmacro rowInfoLink %}
 
 {% macro rowInfoBoolean(name, value, enabled) -%}
-{%- if value === true or value === false -%}
-    {%- set enabled = value -%}
-    {%- set value = value|boolean -%}
-{%- endif -%}
-{%- set class = enabled ? 'enabled' : 'disabled' -%}
-<tr>
-    <td class="e">{{ name }}</td>
-    <td class="v {{ class }}">{{ value }}</td>
-</tr>
+    {%- if value === true or value === false -%}
+        {%- set enabled = value -%}
+        {%- set value = value|boolean -%}
+    {%- endif -%}
+    {%- set class = enabled ? 'enabled' : 'disabled' -%}
+    <tr>
+        <td class="e">{{ name }}</td>
+        <td class="v {{ class }}">{{ value }}</td>
+    </tr>
 {%- endmacro rowInfoBoolean %}
 
-{% macro content_header_link(url, version, icon, margin_negative = false) -%}
-<i class="icon-about icon-{{ icon }}"></i>
-<a href="{{ url }}" target="_blank" rel="noopener noreferrer" class="stretched-link text-reset{% if margin_negative %} ms-n3{% endif %}" title="{{ 'about.extern_link'|trans }}">
-    <span class="h1">{{ 'about.version'|trans({'%version%': version}) }}</span>
-</a>
-{%- endmacro content_header_link %}
+{% macro headerLink(url, version, icon) -%}
+    <div class="border-bottom position-relative pb-1">
+        <div class="d-flex align-items-end about-icon">
+            {{ include('svg/' ~ icon ~ '.html.twig') }}
+            <a href="https://{{ url }}" target="_blank" rel="noopener noreferrer"
+               class="h1 stretched-link text-reset ms-1" title="{{ 'about.extern_link'|trans }}">
+                {{- 'about.version'|trans({'%version%': version}) -}}
+            </a>
+        </div>
+    </div>
+{%- endmacro headerLink %}

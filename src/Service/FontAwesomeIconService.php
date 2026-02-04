@@ -92,7 +92,7 @@ class FontAwesomeIconService
     public function getPath(string $icon): ?string
     {
         $parts = $this->splitIcon($icon);
-        if (2 !== \count($parts)) {
+        if (null === $parts) {
             return null;
         }
 
@@ -123,18 +123,18 @@ class FontAwesomeIconService
     }
 
     /**
-     * @return string[]
+     * @return string[]|null
      */
-    private function splitIcon(string $icon): array
+    private function splitIcon(string $icon): ?array
     {
         $values = \array_filter(\explode(' ', \strtolower($icon)));
         if (\count($values) < 2) {
-            return [];
+            return null;
         }
 
         $values = \array_diff($values, self::EXCLUDED);
         if (2 !== \count($values)) {
-            return [];
+            return null;
         }
 
         return \array_map(static fn (string $value): string => \str_replace('fa-', '', $value), \array_values($values));

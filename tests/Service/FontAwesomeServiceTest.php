@@ -34,7 +34,7 @@ final class FontAwesomeServiceTest extends TestCase
             ->willReturn('/');
 
         $service = $this->createService($imageService, $iconService);
-        $actual = $service->getFontAwesomeCell('fa-solid');
+        $actual = $service->getCell('fa-solid');
         self::assertNull($actual);
     }
 
@@ -50,14 +50,14 @@ final class FontAwesomeServiceTest extends TestCase
             ->willReturn('/');
 
         $service = $this->createService($imageService, $iconService);
-        $actual = $service->getFontAwesomeCell('fa-solid');
+        $actual = $service->getCell('fa-solid');
         self::assertInstanceOf(PdfFontAwesomeCell::class, $actual);
     }
 
     public function testCellNull(): void
     {
         $service = $this->createService();
-        $actual = $service->getFontAwesomeCell('fa-solid');
+        $actual = $service->getCell('fa-solid');
         self::assertNull($actual);
     }
 

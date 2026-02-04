@@ -116,7 +116,7 @@ class LogsReport extends AbstractReport
         if (isset($this->cells[$key])) {
             return $this->cells[$key];
         }
-        $cell = $this->service->getFontAwesomeCell(icon: $icon, color: $color, text: $text) ?? $text;
+        $cell = $this->service->getCell(icon: $icon, color: $color, text: $text) ?? $text;
 
         return $this->cells[$key] = $cell;
     }
@@ -149,7 +149,7 @@ class LogsReport extends AbstractReport
         }
 
         $alignment = PdfTextAlignment::CENTER;
-        $cell = $this->service->getFontAwesomeCell(
+        $cell = $this->service->getCell(
             icon: $icon,
             color: $color,
             text: $text,

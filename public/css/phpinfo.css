@@ -1,5 +1,4 @@
 @import 'style.css';
-@import '../build/font-mfizz/font-mfizz.css';
 
 .phpversion table {
     margin-bottom: 0;
@@ -81,11 +80,6 @@
     }
 }
 
-.icon-about {
-    font-size: 4rem;
-    line-height: 1rem;
-}
-
 .phpversion td.v.disabled {
     color: var(--bs-secondary);
 }
@@ -101,4 +95,9 @@
     content: '✗';
     font-weight: bold;
     margin-right: 0.25rem;
+}
+
+.about-icon svg {
+    width: 4em;
+    height: 4em;
 }

@@ -43,7 +43,7 @@ readonly class FontAwesomeService
      *
      * @return ?PdfFontAwesomeCell the cell, if icon found, <code>null</code> otherwise
      */
-    public function getFontAwesomeCell(
+    public function getCell(
         string $icon,
         ?string $color = null,
         int $size = 11,

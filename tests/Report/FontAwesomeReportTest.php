@@ -60,7 +60,7 @@ final class FontAwesomeReportTest extends TestCase
     {
         $svgDirectory = $this->getSvgDirectory();
         $service = $this->createMock(FontAwesomeImageService::class);
-        $service->method('getSvgDirectory')
+        $service->method('getDirectory')
             ->willReturn($svgDirectory);
         $service->method('getImage')
             ->willReturn($image);

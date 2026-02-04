@@ -37,7 +37,7 @@ final class FontAwesomeCommandTest extends CommandTestCase
         $output = $this->execute($input);
         self::assertOutputContainsString(
             $output,
-            'Generate images successfully: 2 files from 1 sources.',
+            'Generate images successfully: 1 files from 1 sources.',
             'fontawesome_raw_empty.json'
         );
     }

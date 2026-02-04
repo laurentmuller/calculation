@@ -27,6 +27,14 @@ final class FontAwesomeImageServiceTest extends TestCase
         self::assertSame($expectedHeight, $actual->height);
     }
 
+    public function testDirectory(): void
+    {
+        $expected = __DIR__;
+        $service = $this->createService($expected);
+        $actual = $service->getDirectory();
+        self::assertSame($expected, $actual);
+    }
+
     public function testInvalidDirectory(): void
     {
         $this->checkImageIsInvalid('fake', 'fake', false);
@@ -40,14 +48,6 @@ final class FontAwesomeImageServiceTest extends TestCase
     public function testInvalidFile(): void
     {
         $this->checkImageIsInvalid(__DIR__, 'fake');
-    }
-
-    public function testSvgDirectory(): void
-    {
-        $expected = __DIR__;
-        $service = $this->createService($expected);
-        $actual = $service->getSvgDirectory();
-        self::assertSame($expected, $actual);
     }
 
     public function testValidDirectory(): void
@@ -86,43 +86,43 @@ final class FontAwesomeImageServiceTest extends TestCase
         $this->checkImageIsValid(__DIR__ . '/../files/images', '448x512');
     }
 
-    private function checkImageIsInvalid(string $svgDirectory, string $relativePath, bool $realPath = true): void
+    private function checkImageIsInvalid(string $directory, string $relativePath, bool $realPath = true): void
     {
         if ($realPath) {
-            $svgDirectory = $this->validateDirectory($svgDirectory);
+            $directory = $this->validateDirectory($directory);
         }
-        $service = $this->createService($svgDirectory);
+        $service = $this->createService($directory);
         $actual = $service->getImage($relativePath);
         self::assertNull($actual);
     }
 
     private function checkImageIsValid(
-        string $svgDirectory,
+        string $directory,
         string $relativePath,
         ?string $color = null
     ): FontAwesomeImage {
-        $svgDirectory = $this->validateDirectory($svgDirectory);
-        $service = $this->createService($svgDirectory);
+        $directory = $this->validateDirectory($directory);
+        $service = $this->createService($directory);
         $actual = $service->getImage($relativePath, $color);
         self::assertNotNull($actual);
 
         return $actual;
     }
 
-    private function createService(string $svgDirectory): FontAwesomeImageService
+    private function createService(string $directory): FontAwesomeImageService
     {
         return new FontAwesomeImageService(
-            $svgDirectory,
+            $directory,
             new ArrayAdapter()
         );
     }
 
-    private function validateDirectory(string $svgDirectory): string
+    private function validateDirectory(string $directory): string
     {
-        $svgDirectory = \realpath($svgDirectory);
-        self::assertIsString($svgDirectory);
-        self::assertDirectoryExists($svgDirectory);
+        $directory = \realpath($directory);
+        self::assertIsString($directory);
+        self::assertDirectoryExists($directory);
 
-        return $svgDirectory;
+        return $directory;
     }
 }

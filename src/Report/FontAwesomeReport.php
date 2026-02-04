@@ -82,7 +82,7 @@ class FontAwesomeReport extends AbstractReport
      */
     private function getDirectories(): array
     {
-        $pattern = $this->service->getSvgDirectory() . '/*';
+        $pattern = $this->service->getDirectory() . '/*';
 
         /** @phpstan-var list<string> */
         return \glob($pattern, \GLOB_ONLYDIR);

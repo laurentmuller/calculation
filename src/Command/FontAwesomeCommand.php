@@ -22,6 +22,11 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
+/**
+ * @phpstan-type RawType = array{raw: string}
+ * @phpstan-type SvgType = array<string, RawType>
+ * @phpstan-type ContentType = array<array-key, array{styles: string[], svg: SvgType}>
+ */
 #[AsCommand(name: 'app:fontawesome', description: 'Copy SVG files and aliases from the font-awesome package.')]
 class FontAwesomeCommand
 {
@@ -53,7 +58,7 @@ class FontAwesomeCommand
         }
 
         try {
-            /** @phpstan-var array<array-key, array> $content */
+            /** @phpstan-var ContentType $content */
             $content = FileUtils::decodeJson($source);
         } catch (\InvalidArgumentException) {
             return $this->error($io, 'Unable to get content of the JSON source file: "%s".', $relativeSource);
@@ -74,13 +79,15 @@ class FontAwesomeCommand
             $this->start();
             $io->writeln([\sprintf('Generate files from "%s"...', $relativeSource), '']);
             foreach ($io->progressIterate($content, $count) as $key => $item) {
-                /** @phpstan-var string[] $styles */
                 $styles = $item['styles'];
                 foreach ($styles as $style) {
+                    $svg = $item['svg'][$style]['raw'] ?? '';
+                    if ('' === $svg) {
+                        continue;
+                    }
                     $svgFileName = $this->getSvgFileName($style, $key);
-                    $svgFilePath = $this->getSvgFilePath($svgFileName);
                     $svgTargetFile = FileUtils::buildPath($tempDir, $svgFileName);
-                    if (!FileUtils::copy($svgFilePath, $svgTargetFile)) {
+                    if (!FileUtils::dumpFile($svgTargetFile, $svg)) {
                         return $this->error($io, 'Unable to copy file: "%s".', $svgFileName);
                     }
                     ++$files;
@@ -131,11 +138,6 @@ class FontAwesomeCommand
     private function getSvgFileName(string $style, string|int $name): string
     {
         return \sprintf('%s/%s%s', $style, $name, FontAwesomeImageService::SVG_EXTENSION);
-    }
-
-    private function getSvgFilePath(string $svgFileName): string
-    {
-        return FileUtils::buildPath($this->projectDir, self::SVG_SOURCE, $svgFileName);
     }
 
     private function success(SymfonyStyle $io, string $message, string|int ...$parameters): int

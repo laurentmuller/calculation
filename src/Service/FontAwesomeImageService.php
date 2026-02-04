@@ -51,10 +51,18 @@ class FontAwesomeImageService
 
     public function __construct(
         #[Autowire('%kernel.project_dir%/resources/fontawesome')]
-        private readonly string $svgDirectory,
+        private readonly string $directory,
         #[Target('calculation.fontawesome')]
         private readonly CacheInterface $cache
     ) {
+    }
+
+    /**
+     * Gets the directory where SVG files are stored.
+     */
+    public function getDirectory(): string
+    {
+        return $this->directory;
     }
 
     /**
@@ -68,12 +76,12 @@ class FontAwesomeImageService
      */
     public function getImage(string $relativePath, ?string $color = null): ?FontAwesomeImage
     {
-        if (!$this->isCallable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
         $relativePath = $this->normalizePath($relativePath);
-        $path = FileUtils::buildPath($this->svgDirectory, $relativePath);
+        $path = FileUtils::buildPath($this->directory, $relativePath);
         if (!FileUtils::isFile($path)) {
             return null;
         }
@@ -88,22 +96,14 @@ class FontAwesomeImageService
     }
 
     /**
-     * Gets the directory where SVG files are stored.
-     */
-    public function getSvgDirectory(): string
-    {
-        return $this->svgDirectory;
-    }
-
-    /**
      * Gets a value indicating if images can be loaded.
      *
      * To allow loading images, the SVG directory must exist; the SVG format must be supported by the Imagick
      * library, and no Imagick exception has yet been raised.
      */
-    public function isCallable(): bool
+    public function isAvailable(): bool
     {
-        return $this->isSvgDirectory() && $this->isSvgSupported() && !$this->isImagickException();
+        return $this->isDirectory() && $this->isSvgSupported() && !$this->isImagickException();
     }
 
     /**
@@ -152,14 +152,16 @@ class FontAwesomeImageService
         if (!$result || $matches['width'] === $matches['height']) {
             return ImageSize::instance(self::TARGET_SIZE, self::TARGET_SIZE);
         }
+        $width = (int) $matches['width'];
+        $height = (int) $matches['height'];
 
-        return ImageSize::instance((int) $matches['width'], (int) $matches['height'])
+        return ImageSize::instance($width, $height)
             ->resize(self::TARGET_SIZE);
     }
 
-    private function isSvgDirectory(): bool
+    private function isDirectory(): bool
     {
-        return $this->cache->get('svg_directory', fn (): bool => FileUtils::isDir($this->svgDirectory));
+        return $this->cache->get('svg_directory', fn (): bool => FileUtils::isDir($this->directory));
     }
 
     private function loadImage(string $path, string $color, bool &$save): ?FontAwesomeImage
@@ -167,13 +169,15 @@ class FontAwesomeImageService
         try {
             $save = false;
             $content = (string) \file_get_contents($path);
-            $content = self::SVG_PREFIX . $this->replaceCurrentColor($content, $color);
+            $content = $this->updateContent($content, $color);
             $image = $this->convert($content);
             $save = true;
 
             return $image;
         } catch (\Exception $e) {
-            $this->imagickException = $e instanceof \ImagickException;
+            if (!$this->imagickException) {
+                $this->imagickException = $e instanceof \ImagickException;
+            }
 
             return null;
         }
@@ -188,8 +192,8 @@ class FontAwesomeImageService
         return FileUtils::normalize($path);
     }
 
-    private function replaceCurrentColor(string $content, string $color): string
+    private function updateContent(string $content, string $color): string
     {
-        return \str_replace('currentColor', $color, $content);
+        return self::SVG_PREFIX . \str_replace('currentColor', $color, $content);
     }
 }

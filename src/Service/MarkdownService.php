@@ -42,8 +42,8 @@ readonly class MarkdownService
     public function processFile(string $path, array $tags = [], bool $removeTitle = true): string
     {
         $content = FileUtils::readFile($path);
-        if ('' === $content) {
-            return $content;
+        if (null === $content) {
+            return '';
         }
         $content = $this->convert($content);
         if ($removeTitle) {

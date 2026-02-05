@@ -22,8 +22,8 @@ use App\Repository\GroupRepository;
 use App\Service\IndexService;
 use App\Traits\AuthorizationCheckerAwareTrait;
 use App\Traits\TableCellTrait;
-use App\Utils\FileUtils;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\Filesystem\Path;
 use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Twig\Environment;
@@ -122,6 +122,6 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
     #[\Override]
     protected function getColumnDefinitions(): string
     {
-        return FileUtils::buildPath(__DIR__, 'Definition', 'group.json');
+        return Path::join(__DIR__, 'Definition', 'group.json');
     }
 }

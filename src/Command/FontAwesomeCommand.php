@@ -21,6 +21,7 @@ use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Filesystem\Path;
 
 /**
  * @phpstan-type RawType = array{raw: string}
@@ -50,9 +51,9 @@ class FontAwesomeCommand
         #[Option(description: 'Run the command without making changes (simulate copying SVG files).', name: 'dry-run', shortcut: 'd')]
         bool $dryRun = false
     ): int {
-        $source = FileUtils::buildPath($this->projectDir, $source ?? self::DEFAULT_SOURCE);
+        $source = Path::join($this->projectDir, $source ?? self::DEFAULT_SOURCE);
         $relativeSource = $this->getRelativePath($source);
-        if (!FileUtils::isFile($source)) {
+        if (!\is_file($source)) {
             return $this->error($io, 'Unable to find JSON source file: "%s".', $relativeSource);
         }
 
@@ -85,7 +86,7 @@ class FontAwesomeCommand
                         continue;
                     }
                     $svgFileName = $this->getSvgFileName($style, $key);
-                    $svgTargetFile = FileUtils::buildPath($tempDir, $svgFileName);
+                    $svgTargetFile = Path::join($tempDir, $svgFileName);
                     if (!FileUtils::dumpFile($svgTargetFile, $svg)) {
                         return $this->error($io, 'Unable to copy file: "%s".', $svgFileName);
                     }
@@ -103,7 +104,7 @@ class FontAwesomeCommand
                 );
             }
 
-            $target = FileUtils::buildPath($this->projectDir, $target ?? self::DEFAULT_TARGET);
+            $target = Path::join($this->projectDir, $target ?? self::DEFAULT_TARGET);
             $relativeTarget = $this->getRelativePath($target);
             $io->writeln(\sprintf('Copy files to "%s"...', $relativeTarget));
             if (!FileUtils::mirror(origin: $tempDir, target: $target, delete: true)) {
@@ -122,9 +123,9 @@ class FontAwesomeCommand
         }
     }
 
-    private function error(SymfonyStyle $io, string $message, string|int ...$parameters): int
+    private function error(SymfonyStyle $io, string $format, string|int ...$parameters): int
     {
-        $io->error(\sprintf($message, ...$parameters));
+        $io->error(\sprintf($format, ...$parameters));
 
         return Command::FAILURE;
     }
@@ -139,9 +140,9 @@ class FontAwesomeCommand
         return \sprintf('%s/%s%s', $style, $name, FontAwesomeImageService::SVG_EXTENSION);
     }
 
-    private function success(SymfonyStyle $io, string $message, string|int ...$parameters): int
+    private function success(SymfonyStyle $io, string $format, string|int ...$parameters): int
     {
-        $io->success(\sprintf($message, ...$parameters));
+        $io->success(\sprintf($format, ...$parameters));
 
         return Command::SUCCESS;
     }

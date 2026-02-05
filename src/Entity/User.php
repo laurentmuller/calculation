@@ -21,7 +21,6 @@ use App\Traits\ResetPasswordRequestTrait;
 use App\Traits\RoleTrait;
 use App\Traits\TimestampableTrait;
 use App\Utils\DateUtils;
-use App\Utils\FileUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -213,7 +212,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     {
         try {
             $path = $storage->resolvePath($this);
-            if (null !== $path && FileUtils::isFile($path)) {
+            if (null !== $path && \is_file($path)) {
                 return $path;
             }
         } catch (MappingNotFoundException) {

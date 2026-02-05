@@ -16,7 +16,6 @@ namespace App\Pdf;
 use App\Model\ImageSize;
 use App\Traits\ImageSizeTrait;
 use App\Traits\MathTrait;
-use App\Utils\FileUtils;
 use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfException;
 
@@ -57,7 +56,7 @@ class PdfImageCell extends AbstractPdfImageCell
         string|int|null $link = null
     ) {
         parent::__construct($text, $cols, $style, $alignment, $link);
-        if (!FileUtils::exists($path)) {
+        if (!\file_exists($path)) {
             throw PdfException::format("The image '%s' does not exist.", $path);
         }
         $this->originalSize = $this->getImageSize($path);

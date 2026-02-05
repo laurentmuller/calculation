@@ -24,6 +24,7 @@ use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -58,7 +59,7 @@ class WebpCommand
             return Command::INVALID;
         }
 
-        $fullPath = FileUtils::buildPath($this->projectDir, $source);
+        $fullPath = Path::join($this->projectDir, $source);
         if (!$this->validateFullPath($io, $fullPath)) {
             return Command::INVALID;
         }
@@ -105,7 +106,7 @@ class WebpCommand
 
             $targetFile = $this->getTargetFile($file);
             $targetName = \basename($targetFile);
-            if (!$overwrite && FileUtils::exists($targetFile)) {
+            if (!$overwrite && \file_exists($targetFile)) {
                 $this->writeVerbose($io, \sprintf('Skip : %s - Image already exist.', $targetName));
                 \imagedestroy($image);
                 ++$skip;
@@ -183,7 +184,7 @@ class WebpCommand
 
     private function getTargetFile(SplFileInfo $info): string
     {
-        return FileUtils::changeExtension($info->getPathname(), ImageExtension::WEBP);
+        return ImageExtension::WEBP->changeExtension($info->getPathname());
     }
 
     private function isImage(string $path): bool
@@ -225,12 +226,12 @@ class WebpCommand
 
     private function validateFullPath(SymfonyStyle $io, string $path): bool
     {
-        if (!FileUtils::exists($path)) {
+        if (!\file_exists($path)) {
             $io->error(\sprintf('Unable to find the source directory: "%s".', $path));
 
             return false;
         }
-        if (!FileUtils::isDir($path)) {
+        if (!\is_dir($path)) {
             $io->error(\sprintf('The source "%s" is not a directory.', $path));
 
             return false;

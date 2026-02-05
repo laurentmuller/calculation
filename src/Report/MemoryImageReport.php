@@ -82,7 +82,7 @@ class MemoryImageReport extends AbstractReport
             return;
         }
         $data = FileUtils::readFile($this->iconFile);
-        if ('' === $data) {
+        if (null === $data) {
             throw PdfException::instance('Unable to get image content.');
         }
 
@@ -106,7 +106,7 @@ class MemoryImageReport extends AbstractReport
             return;
         }
         $data = FileUtils::readFile($this->logoFile);
-        if ('' === $data) {
+        if (null === $data) {
             throw PdfException::instance('Unable to get image content.');
         }
 
@@ -127,7 +127,7 @@ class MemoryImageReport extends AbstractReport
             return;
         }
         $data = FileUtils::readFile($this->transparencyFile);
-        if ('' === $data) {
+        if (null === $data) {
             throw PdfException::instance('Unable to get image content.');
         }
         $this->setAlpha(0.5);

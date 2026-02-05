@@ -17,7 +17,6 @@ use App\Database\AbstractDatabase;
 use App\Utils\FileUtils;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Filesystem\Path;
 
 /**
  * The database for tests with public methods.
@@ -82,7 +81,7 @@ class FixtureDatabase extends AbstractDatabase
     {
         static $fileName = null;
         if (null === $fileName) {
-            $fileName = Path::normalize(__DIR__ . '/db_test.sqlite');
+            $fileName = FileUtils::normalize(__DIR__ . '/db_test.sqlite');
         }
 
         return $fileName;
@@ -114,7 +113,7 @@ class FixtureDatabase extends AbstractDatabase
     {
         $file = __DIR__ . '/../files/sql/db_test.sql';
         $sql = FileUtils::readFile($file);
-        if ('' === $sql) {
+        if (null === $sql) {
             throw new \LogicException('Unable to find the schema.');
         }
 

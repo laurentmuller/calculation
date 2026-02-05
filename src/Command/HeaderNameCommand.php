@@ -64,7 +64,7 @@ class HeaderNameCommand
             return Command::INVALID;
         }
 
-        $fullPath = FileUtils::buildPath($this->projectDir, $path);
+        $fullPath = Path::join($this->projectDir, $path);
         $finder = $this->createFinder($fullPath, $patterns, $depth);
         if (!$this->hasResults($io, $finder, $path)) {
             return Command::SUCCESS;

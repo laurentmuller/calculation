@@ -19,6 +19,7 @@ use App\Utils\StringUtils;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Component\Filesystem\Path;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
@@ -125,7 +126,7 @@ readonly class PackageInfoService implements \Countable
      */
     private function getLicensePattern(array $package): string
     {
-        return FileUtils::buildPath($this->vendorPath, $package['name'], self::LICENSE_PATTERN);
+        return Path::join($this->vendorPath, $package['name'], self::LICENSE_PATTERN);
     }
 
     /**
@@ -149,7 +150,7 @@ readonly class PackageInfoService implements \Countable
      */
     private function packageExists(array $package): bool
     {
-        return FileUtils::exists(FileUtils::buildPath($this->vendorPath, $package['name']));
+        return \file_exists(Path::join($this->vendorPath, $package['name']));
     }
 
     /**

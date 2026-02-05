@@ -19,7 +19,6 @@ use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Service\HelpService;
 use App\Traits\ImageSizeTrait;
-use App\Utils\FileUtils;
 use fpdf\Enums\PdfTextAlignment;
 
 /**
@@ -577,7 +576,7 @@ class HelpReport extends AbstractReport
     private function outputImage(string $image): void
     {
         $file = $this->service->getImageFile($image);
-        if (!FileUtils::exists($file)) {
+        if (!\file_exists($file)) {
             return;
         }
         $width = $this->getImageSize($file)->width;

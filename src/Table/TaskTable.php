@@ -19,8 +19,8 @@ use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
 use App\Repository\TaskRepository;
 use App\Service\IndexService;
-use App\Utils\FileUtils;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\Filesystem\Path;
 
 /**
  * The task table.
@@ -53,7 +53,7 @@ class TaskTable extends AbstractCategoryItemTable
     #[\Override]
     protected function getColumnDefinitions(): string
     {
-        return FileUtils::buildPath(__DIR__, 'Definition', 'task.json');
+        return Path::join(__DIR__, 'Definition', 'task.json');
     }
 
     #[\Override]

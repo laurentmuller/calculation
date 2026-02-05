@@ -134,7 +134,7 @@ class ResponseListener
     private function loadCSP(bool &$save): ?string
     {
         $save = false;
-        if (!FileUtils::exists($this->file)) {
+        if (!\file_exists($this->file)) {
             return null;
         }
 

@@ -222,7 +222,7 @@ class HelpService
      */
     public function getImageFile(string $image): string
     {
-        return FileUtils::buildPath($this->imagePath, $image . self::IMAGES_EXT);
+        return Path::join($this->imagePath, $image . self::IMAGES_EXT);
     }
 
     /**

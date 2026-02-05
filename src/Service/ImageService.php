@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Enums\ImageExtension;
-use App\Utils\FileUtils;
+use Symfony\Component\Filesystem\Path;
 
 /**
  * Service to manipulate an image.
@@ -131,7 +131,7 @@ class ImageService
      */
     public static function fromFile(string $filename): self
     {
-        $fileExtension = FileUtils::getExtension($filename, true);
+        $fileExtension = Path::getExtension($filename, true);
         $imageExtension = ImageExtension::tryFrom($fileExtension);
         if (!$imageExtension instanceof ImageExtension) {
             throw new \InvalidArgumentException(\sprintf('Unsupported file image extension "%s".', $filename));

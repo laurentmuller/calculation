@@ -15,7 +15,7 @@ namespace App\Table;
 
 use App\Entity\Customer;
 use App\Repository\CustomerRepository;
-use App\Utils\FileUtils;
+use Symfony\Component\Filesystem\Path;
 
 /**
  * The customer table.
@@ -32,6 +32,6 @@ class CustomerTable extends AbstractEntityTable
     #[\Override]
     protected function getColumnDefinitions(): string
     {
-        return FileUtils::buildPath(__DIR__, 'Definition', 'customer.json');
+        return Path::join(__DIR__, 'Definition', 'customer.json');
     }
 }

@@ -53,8 +53,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
     public function __construct(protected string $filename, bool $readonly = false, string $encryptionKey = '')
     {
         // check creation state
-        $create = '' === $filename || self::IN_MEMORY === $filename
-            || !FileUtils::exists($filename) || FileUtils::empty($filename);
+        $create = self::IN_MEMORY === $filename || FileUtils::empty($filename);
 
         if ($create) {
             $flags = \SQLITE3_OPEN_READWRITE | \SQLITE3_OPEN_CREATE;

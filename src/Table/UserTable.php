@@ -18,11 +18,11 @@ use App\Interfaces\RoleInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\UserRepository;
 use App\Service\RoleService;
-use App\Utils\FileUtils;
 use App\Utils\FormatUtils;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Clock\DatePoint;
+use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
@@ -101,7 +101,7 @@ class UserTable extends AbstractEntityTable
     #[\Override]
     protected function getColumnDefinitions(): string
     {
-        return FileUtils::buildPath(__DIR__, 'Definition', 'user.json');
+        return Path::join(__DIR__, 'Definition', 'user.json');
     }
 
     #[\Override]

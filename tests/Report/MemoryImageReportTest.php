@@ -18,9 +18,9 @@ use App\Model\FontAwesomeImage;
 use App\Model\ImageSize;
 use App\Report\MemoryImageReport;
 use App\Service\FontAwesomeService;
-use App\Utils\FileUtils;
 use fpdf\PdfException;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Filesystem\Path;
 
 final class MemoryImageReportTest extends TestCase
 {
@@ -142,7 +142,7 @@ final class MemoryImageReportTest extends TestCase
     public function testRenderTransparencyImageInvalid(): void
     {
         self::expectException(PdfException::class);
-        $transparencyFile = FileUtils::buildPath(__DIR__, 'fake.txt');
+        $transparencyFile = Path::join(__DIR__, 'fake.txt');
         $controller = $this->createMock(AbstractController::class);
         $report = new MemoryImageReport(
             controller: $controller,

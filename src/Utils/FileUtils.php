@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Utils;
 
-use App\Enums\ImageExtension;
 use Symfony\Component\Console\Helper\Helper;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
@@ -34,58 +33,18 @@ final class FileUtils
     }
 
     /**
-     *  Joins two or more path strings into a canonical path.
-     */
-    public static function buildPath(string ...$paths): string
-    {
-        return Path::join(...$paths);
-    }
-
-    /**
-     * Changes the extension of the given file.
-     */
-    public static function changeExtension(string $file, string|ImageExtension $extension): string
-    {
-        if ($extension instanceof ImageExtension) {
-            $extension = $extension->value;
-        }
-
-        return Path::changeExtension(self::realPath($file), $extension);
-    }
-
-    /**
-     * Change mode for a file or a directory.
-     *
-     * @param string $filename  A file name to change mode
-     * @param int    $mode      The new mode (octal)
-     * @param bool   $recursive whether change the mod recursively or not
-     *
-     * @return bool true on success, false on error
-     */
-    public static function chmod(string $filename, int $mode, bool $recursive = true): bool
-    {
-        try {
-            self::getFilesystem()->chmod($filename, $mode, 0, $recursive);
-
-            return true;
-        } catch (IOException) {
-            return false;
-        }
-    }
-
-    /**
      * Copies a file.
      *
      * If the target file is older than the origin file, it is always overwritten.
      * If the target file is newer, it is overwritten only when the
-     * $overwriteNewerFiles option is set to true.
+     * $overwrite option is set to true.
      *
      * @return bool true on success, false on failure
      */
-    public static function copy(string $originFile, string $targetFile, bool $overwriteNewerFiles = false): bool
+    public static function copy(string $originFile, string $targetFile, bool $overwrite = false): bool
     {
         try {
-            self::getFilesystem()->copy($originFile, $targetFile, $overwriteNewerFiles);
+            self::getFilesystem()->copy($originFile, $targetFile, $overwrite);
 
             return true;
         } catch (IOException) {
@@ -107,14 +66,12 @@ final class FileUtils
      */
     public static function decodeJson(string $file, bool $assoc = true): array|\stdClass
     {
-        $file = self::realPath($file);
-
         // file or url?
-        if (!self::isFile($file) && !self::validateURL($file)) {
+        if (!\is_file($file) && !self::validateURL($file)) {
             throw new \InvalidArgumentException(\sprintf("The file '%s' cannot be found.", $file));
         }
         $content = self::readFile($file);
-        if ('' === $content) {
+        if (null === $content) {
             throw new \InvalidArgumentException(\sprintf("Unable to get content of the file '%s'.", $file));
         }
 
@@ -132,7 +89,7 @@ final class FileUtils
     public static function dumpFile(string $file, mixed $content): bool
     {
         try {
-            self::getFilesystem()->dumpFile(self::realPath($file), $content);
+            self::getFilesystem()->dumpFile($file, $content);
 
             return true;
         } catch (IOException) {
@@ -153,14 +110,6 @@ final class FileUtils
     }
 
     /**
-     * Checks the existence of the given file.
-     */
-    public static function exists(string $file): bool
-    {
-        return self::getFilesystem()->exists(self::realPath($file));
-    }
-
-    /**
      * Formats the size of the given path.
      *
      * @phpstan-param string|int $path
@@ -170,16 +119,6 @@ final class FileUtils
         $size = \is_int($path) ? $path : self::size($path);
 
         return Helper::formatMemory($size);
-    }
-
-    /**
-     * Returns the extension from a file path (without the leading dot).
-     *
-     * @param bool $forceLowerCase forces the extension to be lower-case
-     */
-    public static function getExtension(string $file, bool $forceLowerCase = false): string
-    {
-        return Path::getExtension(self::realPath($file), $forceLowerCase);
     }
 
     /**
@@ -200,7 +139,7 @@ final class FileUtils
      */
     public static function getLinesCount(string $filename, bool $skipEmpty = true): int
     {
-        if (!self::isFile($filename) || self::empty($filename)) {
+        if (!\is_file($filename) || self::empty($filename)) {
             return 0;
         }
         $flags = \SplFileObject::DROP_NEW_LINE;
@@ -215,25 +154,9 @@ final class FileUtils
     }
 
     /**
-     * Tells whether the given file is a directory.
-     */
-    public static function isDir(string $file): bool
-    {
-        return \is_dir(self::realPath($file));
-    }
-
-    /**
-     * Tells whether the given file is a regular file.
-     */
-    public static function isFile(string $file): bool
-    {
-        return \is_file(self::realPath($file));
-    }
-
-    /**
      * Given an existing end path, convert it to a path relative to a given starting path.
      *
-     * @throws \InvalidArgumentException if the end path or the start path is not absolute
+     * @throws \InvalidArgumentException if the end path or the start path are not absolute
      */
     public static function makePathRelative(string $endPath, string $startPath): string
     {
@@ -266,59 +189,37 @@ final class FileUtils
     }
 
     /**
-     * Creates a directory recursively.
+     * Normalizes the given path.
+     *
+     * During normalization, all slashes are replaced by forward slashes ("/").
+     * This method does not remove invalid or dot path segments. Consequently, it is much more efficient and should
+     * be used whenever the given path is known to be a valid, absolute system
+     * path.
+     * This method is able to deal with both UNIX and Windows paths.
      */
-    public static function mkdir(string|iterable $dirs, int $mode = 0o777): bool
+    public static function normalize(string $path): string
     {
-        try {
-            self::getFilesystem()->mkdir($dirs, $mode);
+        $realPath = \realpath($path);
 
-            return true;
-        } catch (IOException) {
-            return false;
-        }
+        return Path::normalize(\is_string($realPath) ? $realPath : $path);
     }
 
     /**
-     * Normalizes the given file.
+     * Returns the content of a file.
      *
-     * During normalization, all slashes are replaced by forward slashes ('/').
-     * This method does not remove invalid or dot path segments. Consequently, it is much
-     * more efficient and should be used whenever the given path is known to be a valid,
-     * absolute system path.
+     * @return ?string the content of the file; null on error
      */
-    public static function normalize(string $file): string
+    public static function readFile(string $file): ?string
     {
-        return Path::normalize(self::realPath($file));
-    }
-
-    /**
-     * Returns the content of a file as a string.
-     *
-     * @return string the content of the file; an empty string ("") on error
-     */
-    public static function readFile(string $file): string
-    {
-        $file = self::realPath($file);
-        if (!self::isFile($file) && !self::validateURL($file)) {
-            return '';
+        if (!\is_file($file) && !self::validateURL($file)) {
+            return null;
         }
 
         try {
             return self::getFilesystem()->readFile($file);
         } catch (IOException) {
-            return '';
+            return null;
         }
-    }
-
-    /**
-     * Gets the real path of the given file.
-     */
-    public static function realPath(string $file): string
-    {
-        $path = \realpath($file);
-
-        return \is_string($path) ? $path : $file;
     }
 
     /**
@@ -327,8 +228,7 @@ final class FileUtils
     public static function remove(string $file): bool
     {
         try {
-            $file = self::realPath($file);
-            if (self::exists($file)) {
+            if (\file_exists($file)) {
                 self::getFilesystem()->remove($file);
 
                 return true;
@@ -364,24 +264,15 @@ final class FileUtils
      */
     public static function size(string $file): int
     {
-        $file = self::realPath($file);
-        if (!self::exists($file)) {
+        if (!\file_exists($file)) {
             return 0;
         }
 
-        if (self::isFile($file)) {
+        if (\is_file($file)) {
             return (int) \filesize($file);
         }
 
-        $size = 0;
-        $finder = Finder::create()->in($file)->files();
-        foreach ($finder as $child) {
-            if ($child->isReadable()) {
-                $size += (int) $child->getSize();
-            }
-        }
-
-        return $size;
+        return self::sizeAndFiles($file)['size'];
     }
 
     /**
@@ -393,10 +284,10 @@ final class FileUtils
      */
     public static function sizeAndFiles(string $path): array
     {
-        if (!self::exists($path)) {
+        if (!\file_exists($path)) {
             throw new \InvalidArgumentException(\sprintf('Path "%s" does not exist.', $path));
         }
-        if (!self::isDir($path)) {
+        if (!\is_dir($path)) {
             throw new \InvalidArgumentException(\sprintf('Path "%s" is not a directory.', $path));
         }
 
@@ -431,10 +322,9 @@ final class FileUtils
         $dir ??= \sys_get_temp_dir();
         for ($i = 0; $i < 10; ++$i) {
             $path = \sprintf('%s/%s_%d', $dir, $prefix, \mt_rand());
-            if (self::exists($path) || !self::mkdir($path)) {
+            if (\file_exists($path) || !\mkdir(directory: $path, recursive: true)) {
                 continue;
             }
-            $path = self::realPath($path);
             if ($deleteOnExit) {
                 \register_shutdown_function(static fn (): bool => self::remove($path));
             }

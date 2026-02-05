@@ -21,9 +21,9 @@ use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Pdf\Traits\PdfMemoryImageTrait;
 use App\Service\FontAwesomeImageService;
-use App\Utils\FileUtils;
 use fpdf\Enums\PdfMove;
 use fpdf\PdfException;
+use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -90,7 +90,7 @@ class FontAwesomeReport extends AbstractReport
 
     private function renderImage(PdfTable $table, int $index, string $directory, string $name): void
     {
-        $relativePath = FileUtils::buildPath($directory, $name);
+        $relativePath = Path::join($directory, $name);
         $image = $this->service->getImage($relativePath);
         if (!$image instanceof FontAwesomeImage) {
             throw PdfException::format('Unable to get image: "%s".', $relativePath);

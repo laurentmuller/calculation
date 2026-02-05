@@ -17,7 +17,6 @@ use App\Controller\AbstractController;
 use App\Entity\User;
 use App\Service\RoleService;
 use App\Traits\ImageSizeTrait;
-use App\Utils\FileUtils;
 use App\Utils\FormatUtils;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
@@ -77,7 +76,7 @@ class UsersDocument extends AbstractArrayDocument
                 $this->formatLastLogin($entity->getLastLogin()),
             ]);
             $path = $entity->getImagePath($this->storage);
-            if (null !== $path && FileUtils::exists($path)) {
+            if (null !== $path && \file_exists($path)) {
                 $size = $this->getImageSize($path)
                     ->resize(32);
                 $sheet->setCellImage($path, 'A' . $row, $size);

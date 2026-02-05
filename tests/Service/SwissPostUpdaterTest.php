@@ -18,6 +18,7 @@ use App\Parameter\DatesParameter;
 use App\Service\SwissPostService;
 use App\Service\SwissPostUpdater;
 use App\Tests\TranslatorMockTrait;
+use App\Utils\FileUtils;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -38,7 +39,7 @@ final class SwissPostUpdaterTest extends TestCase
     {
         $source = __DIR__ . '/../files/sqlite/swiss_test_empty.sqlite';
         $this->databaseName = __DIR__ . '/../files/csv/swiss_test_model.sqlite';
-        \copy($source, $this->databaseName);
+        FileUtils::copy($source, $this->databaseName);
 
         $this->parameters = $this->createMock(ApplicationParameters::class);
         $factory = $this->createMock(FormFactoryInterface::class);

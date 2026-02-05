@@ -23,9 +23,9 @@ use App\Report\HtmlReport;
 use App\Response\PdfResponse;
 use App\Response\WordResponse;
 use App\Service\MarkdownService;
-use App\Utils\FileUtils;
 use App\Word\HtmlDocument;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Filesystem\Path;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -127,7 +127,7 @@ abstract class AbstractAboutController extends AbstractController
         return $this->cache->get(
             $fileName,
             fn (): string => $this->service->processFile(
-                FileUtils::buildPath($this->projectDir, $fileName),
+                Path::join($this->projectDir, $fileName),
                 $this->getTags()
             )
         );

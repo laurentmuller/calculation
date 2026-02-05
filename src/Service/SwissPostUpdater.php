@@ -25,6 +25,7 @@ use App\Utils\FileUtils;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
 use Symfony\Component\Clock\DatePoint;
+use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -186,7 +187,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
 
     private function getLastImport(SwissPostUpdateResult $result): ?DatePoint
     {
-        if ($result->isOverwrite() || !FileUtils::exists($this->getDatabaseName())) {
+        if ($result->isOverwrite() || !\file_exists($this->getDatabaseName())) {
             return null;
         }
 
@@ -303,8 +304,8 @@ class SwissPostUpdater implements ServiceSubscriberInterface
 
     private function processStates(SwissPostUpdateResult $result, SwissDatabase $database): bool
     {
-        $filename = FileUtils::buildPath(\dirname($this->getDatabaseName()), self::STATE_FILE);
-        if (!FileUtils::exists($filename) || FileUtils::empty($filename)) {
+        $filename = Path::join(\dirname($this->getDatabaseName()), self::STATE_FILE);
+        if (FileUtils::empty($filename)) {
             return $this->setError($result, 'file_states');
         }
         $service = CsvService::instance(separator: self::SEPARATOR);
@@ -432,7 +433,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
         }
         $result->setSourceFile($sourceFile);
 
-        if (!FileUtils::exists($sourceFile)) {
+        if (!\file_exists($sourceFile)) {
             return $this->setError($result, 'file_not_exist');
         }
         if (FileUtils::empty($sourceFile)) {

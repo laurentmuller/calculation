@@ -23,7 +23,6 @@ use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Service\FontAwesomeService;
 use App\Service\RoleService;
-use App\Utils\FileUtils;
 use App\Utils\FormatUtils;
 use Symfony\Component\Clock\DatePoint;
 use Vich\UploaderBundle\Storage\StorageInterface;
@@ -128,7 +127,7 @@ class UsersReport extends AbstractArrayReport
     private function getImageCell(User $user): PdfCell
     {
         $path = $user->getImagePath($this->storage);
-        if (null === $path || !FileUtils::exists($path)) {
+        if (null === $path || !\file_exists($path)) {
             return $this->getDefaultImageCell();
         }
         $cell = new PdfImageCell($path);

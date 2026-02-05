@@ -21,6 +21,7 @@ use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -48,7 +49,7 @@ class TwigSpaceCommand
         if (!$this->validateInputPath($io, $path)) {
             return Command::INVALID;
         }
-        $fullPath = FileUtils::buildPath($this->projectDir, $path);
+        $fullPath = Path::join($this->projectDir, $path);
         if (!$this->validateFullPath($io, $fullPath)) {
             return Command::INVALID;
         }
@@ -141,10 +142,10 @@ class TwigSpaceCommand
 
     private function validateFullPath(SymfonyStyle $io, string $fullPath): bool
     {
-        if (!FileUtils::exists($fullPath)) {
+        if (!\file_exists($fullPath)) {
             return $this->error($io, 'Unable to find the template path: "%s".', $fullPath);
         }
-        if (!FileUtils::isDir($fullPath)) {
+        if (!\is_dir($fullPath)) {
             return $this->error($io, 'The template path "%s" is not a directory.', $fullPath);
         }
 

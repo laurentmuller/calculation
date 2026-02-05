@@ -22,9 +22,9 @@ use App\Response\PdfResponse;
 use App\Response\WordResponse;
 use App\Service\EnvironmentService;
 use App\Service\MarkdownService;
-use App\Utils\FileUtils;
 use App\Word\HtmlDocument;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Filesystem\Path;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -88,7 +88,7 @@ class AboutController extends AbstractController
         return $this->cache->get('about-controller-deploy', function (): int {
             $file = $this->environment->isProduction() ? '.htdeployment' : 'composer.lock';
 
-            return (int) \filemtime(FileUtils::buildPath($this->projectDir, $file));
+            return (int) \filemtime(Path::join($this->projectDir, $file));
         });
     }
 
@@ -105,6 +105,6 @@ class AboutController extends AbstractController
 
     private function processFile(string $name): string
     {
-        return $this->service->processFile(FileUtils::buildPath($this->projectDir, $name), self::TAGS, false);
+        return $this->service->processFile(Path::join($this->projectDir, $name), self::TAGS, false);
     }
 }

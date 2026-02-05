@@ -140,7 +140,7 @@ readonly class OpenWeatherCityUpdater
         }
 
         $content = FileUtils::readFile($file->getPathname());
-        if ('' === $content) {
+        if (null === $content) {
             return false;
         }
         $content = \gzdecode($content);

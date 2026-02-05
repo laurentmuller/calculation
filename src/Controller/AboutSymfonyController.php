@@ -166,7 +166,8 @@ class AboutSymfonyController extends AbstractController
      */
     private function getMarkdownLicense(MarkdownInterface $markdown, array $package): string
     {
-        $license = FileUtils::readFile((string) $package['license']);
+        $file = (string) $package['license'];
+        $license = (string) FileUtils::readFile($file);
         $license = StringUtils::pregReplace('/#{1,4} /', '##### ', $license);
         $content = $this->implodeHeader($package) . $license;
         $content = $markdown->convert($content);

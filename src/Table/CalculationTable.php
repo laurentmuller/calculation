@@ -19,9 +19,9 @@ use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
 use App\Traits\MathTrait;
-use App\Utils\FileUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\Filesystem\Path;
 use Twig\Environment;
 
 /**
@@ -103,7 +103,7 @@ class CalculationTable extends AbstractEntityTable
     #[\Override]
     protected function getColumnDefinitions(): string
     {
-        return FileUtils::buildPath(__DIR__, 'Definition', 'calculation.json');
+        return Path::join(__DIR__, 'Definition', 'calculation.json');
     }
 
     #[\Override]

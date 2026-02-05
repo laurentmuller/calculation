@@ -23,6 +23,7 @@ use App\Utils\StringUtils;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Symfony\Bridge\Twig\Extension\WebLinkExtension;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Filesystem\Path;
 use Twig\Attribute\AsTwigFunction;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
@@ -195,9 +196,9 @@ final readonly class FunctionExtension
         if (!StringUtils::isString($path)) {
             return null;
         }
-        $file = FileUtils::buildPath($this->publicDir, $path);
+        $file = Path::join($this->publicDir, $path);
 
-        return FileUtils::exists($file) ? $file : null;
+        return \file_exists($file) ? $file : null;
     }
 
     /**

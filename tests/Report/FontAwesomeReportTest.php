@@ -43,7 +43,7 @@ final class FontAwesomeReportTest extends TestCase
     private function createImage(): FontAwesomeImage
     {
         $file = $this->getSvgDirectory() . '/example.png';
-        $content = FileUtils::readFile($file);
+        $content = (string) FileUtils::readFile($file);
 
         return new FontAwesomeImage($content, ImageSize::instance(124, 147), 96);
     }

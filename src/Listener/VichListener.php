@@ -16,7 +16,6 @@ namespace App\Listener;
 use App\Entity\User;
 use App\Enums\ImageExtension;
 use App\Service\ImageResizer;
-use App\Utils\FileUtils;
 use App\Utils\StringUtils;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -60,7 +59,7 @@ class VichListener
 
         // rename extension if not PNG
         if (ImageExtension::PNG->value !== $this->getFileExtension($file)) {
-            $newName = FileUtils::changeExtension($name, ImageExtension::PNG);
+            $newName = ImageExtension::PNG->changeExtension($name);
             $mapping->setFileName($user, $newName);
         }
     }

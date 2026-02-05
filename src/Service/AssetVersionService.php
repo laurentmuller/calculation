@@ -16,13 +16,13 @@ namespace App\Service;
 use App\Entity\User;
 use App\Interfaces\DisableListenerInterface;
 use App\Traits\DisableListenerTrait;
-use App\Utils\FileUtils;
 use App\Utils\StringUtils;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Events;
 use Symfony\Component\Asset\VersionStrategy\StaticVersionStrategy;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -61,7 +61,7 @@ class AssetVersionService extends StaticVersionStrategy implements DisableListen
         );
         $this->imagesPath = $this->cache->get(
             'key_images_path',
-            static fn (): string => FileUtils::buildPath($projectDir, 'public', self::IMAGES_PATH)
+            static fn (): string => Path::join($projectDir, 'public', self::IMAGES_PATH)
         );
         $this->imagesVersion = $this->cache->get(
             'key_images_version',
@@ -90,7 +90,7 @@ class AssetVersionService extends StaticVersionStrategy implements DisableListen
     {
         $file = $service->isProduction() ? '.htdeployment' : 'composer.lock';
 
-        return $this->getFileTime(FileUtils::buildPath($projectDir, $file), Kernel::VERSION);
+        return $this->getFileTime(Path::join($projectDir, $file), Kernel::VERSION);
     }
 
     private function getFileTime(string $path, string $default): string

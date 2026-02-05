@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Table;
 
 use App\Repository\CalculationRepository;
-use App\Utils\FileUtils;
+use Symfony\Component\Filesystem\Path;
 
 /**
  * Abstract Calculation table to display items.
@@ -56,7 +56,7 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
     #[\Override]
     protected function getColumnDefinitions(): string
     {
-        return FileUtils::buildPath(__DIR__, 'Definition', 'calculation_items.json');
+        return Path::join(__DIR__, 'Definition', 'calculation_items.json');
     }
 
     /**

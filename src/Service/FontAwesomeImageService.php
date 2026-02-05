@@ -20,6 +20,7 @@ use App\Utils\FileUtils;
 use App\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Component\Filesystem\Path;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 
@@ -81,8 +82,8 @@ class FontAwesomeImageService
         }
 
         $relativePath = $this->normalizePath($relativePath);
-        $path = FileUtils::buildPath($this->directory, $relativePath);
-        if (!FileUtils::isFile($path)) {
+        $path = Path::join($this->directory, $relativePath);
+        if (!\is_file($path)) {
             return null;
         }
 
@@ -161,7 +162,7 @@ class FontAwesomeImageService
 
     private function isDirectory(): bool
     {
-        return $this->cache->get('svg_directory', fn (): bool => FileUtils::isDir($this->directory));
+        return $this->cache->get('svg_directory', fn (): bool => \is_dir($this->directory));
     }
 
     private function loadImage(string $path, string $color, bool &$save): ?FontAwesomeImage

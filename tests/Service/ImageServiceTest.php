@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\ImageService;
+use App\Utils\FileUtils;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Filesystem\Path;
 
 final class ImageServiceTest extends TestCase
 {
@@ -43,14 +43,14 @@ final class ImageServiceTest extends TestCase
 
     public function testFromFile(): void
     {
-        $file = Path::normalize(__DIR__ . '/../files/images/example.png');
+        $file = FileUtils::normalize(__DIR__ . '/../files/images/example.png');
         $service = ImageService::fromFile($file);
         self::assertSame($file, $service->getFilename());
     }
 
     public function testFromFileInvalidImage(): void
     {
-        $file = Path::normalize(__DIR__ . '/../files/images/example_invalid.png');
+        $file = FileUtils::normalize(__DIR__ . '/../files/images/example_invalid.png');
         self::expectException(\InvalidArgumentException::class);
         self::expectExceptionMessage('Unable to load image from "' . $file . '".');
         @ImageService::fromFile($file);
@@ -58,7 +58,7 @@ final class ImageServiceTest extends TestCase
 
     public function testFromFileInvalidName(): void
     {
-        $file = Path::normalize(__FILE__);
+        $file = FileUtils::normalize(__FILE__);
         self::expectException(\InvalidArgumentException::class);
         self::expectExceptionMessage('Unsupported file image extension "' . $file . '".');
         ImageService::fromFile($file);
@@ -116,7 +116,7 @@ final class ImageServiceTest extends TestCase
     public function testTtfSizeInvalid(): void
     {
         $service = $this->createService();
-        $actual = @$service->ttfSize(10.0, 0.0, Path::normalize(__FILE__), 'text');
+        $actual = @$service->ttfSize(10.0, 0.0, FileUtils::normalize(__FILE__), 'text');
         self::assertNotEmpty($actual);
         self::assertCount(2, $actual);
         self::assertSame(0, $actual[0]);
@@ -144,6 +144,6 @@ final class ImageServiceTest extends TestCase
 
     private function getFont(): string
     {
-        return Path::normalize(__DIR__ . '/../../resources/fonts/captcha.ttf');
+        return FileUtils::normalize(__DIR__ . '/../../resources/fonts/captcha.ttf');
     }
 }

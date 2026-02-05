@@ -20,8 +20,8 @@ use App\Model\LogLevel;
 use App\Service\LogFilterService;
 use App\Service\LogService;
 use App\Service\LogSorterService;
-use App\Utils\FileUtils;
 use Symfony\Component\Clock\DatePoint;
+use Symfony\Component\Filesystem\Path;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
@@ -89,7 +89,7 @@ class LogTable extends AbstractTable implements \Countable
     #[\Override]
     protected function getColumnDefinitions(): string
     {
-        return FileUtils::buildPath(__DIR__, 'Definition', 'log.json');
+        return Path::join(__DIR__, 'Definition', 'log.json');
     }
 
     #[\Override]

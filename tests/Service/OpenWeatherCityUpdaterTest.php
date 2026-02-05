@@ -17,6 +17,7 @@ use App\Service\OpenWeatherCityUpdater;
 use App\Tests\TranslatorMockTrait;
 use App\Utils\FileUtils;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -94,7 +95,7 @@ final class OpenWeatherCityUpdaterTest extends TestCase
     public function testImportFileIsInvalid(): void
     {
         $originalName = 'test.txt';
-        $path = FileUtils::buildPath($this->tempPath, $originalName);
+        $path = Path::join($this->tempPath, $originalName);
         $file = new UploadedFile($path, $originalName, error: \UPLOAD_ERR_NO_FILE);
         $service = $this->createService();
         $actual = $service->import($file);
@@ -154,10 +155,10 @@ final class OpenWeatherCityUpdaterTest extends TestCase
 
     private function copy(string $fileName): string
     {
-        $path = FileUtils::realPath(__DIR__ . '/../files');
-        $originFile = FileUtils::buildPath($path, $fileName);
-        $targetFile = FileUtils::buildPath($this->tempPath, \basename($originFile));
-        FileUtils::copy($originFile, $targetFile);
+        $path = (string) \realpath(__DIR__ . '/../files');
+        $originFile = Path::join($path, $fileName);
+        $targetFile = Path::join($this->tempPath, \basename($originFile));
+        self::assertTrue(FileUtils::copy($originFile, $targetFile));
 
         return $targetFile;
     }
@@ -173,6 +174,6 @@ final class OpenWeatherCityUpdaterTest extends TestCase
 
     private function getDatabaseName(): string
     {
-        return FileUtils::buildPath($this->tempPath, 'database.sqlite');
+        return Path::join($this->tempPath, 'database.sqlite');
     }
 }

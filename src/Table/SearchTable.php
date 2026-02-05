@@ -17,7 +17,7 @@ use App\Interfaces\TableInterface;
 use App\Service\SearchService;
 use App\Traits\AuthorizationCheckerAwareTrait;
 use App\Traits\TranslatorAwareTrait;
-use App\Utils\FileUtils;
+use Symfony\Component\Filesystem\Path;
 use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
@@ -59,7 +59,7 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
     #[\Override]
     protected function getColumnDefinitions(): string
     {
-        return FileUtils::buildPath(__DIR__, 'Definition', 'search.json');
+        return Path::join(__DIR__, 'Definition', 'search.json');
     }
 
     #[\Override]

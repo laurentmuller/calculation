@@ -17,6 +17,7 @@ use App\Utils\FileUtils;
 use App\Utils\FormatUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Component\Filesystem\Path;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -59,7 +60,7 @@ readonly class BundleInfoService
     private function loadBundles(): array
     {
         $bundles = [];
-        $vendorDir = FileUtils::buildPath($this->projectDir, 'vendor');
+        $vendorDir = Path::join($this->projectDir, 'vendor');
         foreach ($this->kernel->getBundles() as $name => $bundle) {
             $bundles[$name] = $this->parseBundle($name, $bundle, $vendorDir);
         }

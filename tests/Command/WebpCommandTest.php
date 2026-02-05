@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Command;
 
 use App\Utils\FileUtils;
+use Symfony\Component\Filesystem\Path;
 
 final class WebpCommandTest extends CommandTestCase
 {
@@ -49,8 +50,8 @@ final class WebpCommandTest extends CommandTestCase
         $name = 'example_invalid.png';
         $path = FileUtils::tempDir(__DIR__);
         self::assertIsString($path);
-        $source = FileUtils::buildPath(__DIR__, '/../files/images', $name);
-        $target = FileUtils::buildPath($path, $name);
+        $source = Path::join(__DIR__, '/../files/images', $name);
+        $target = Path::join($path, $name);
         self::assertTrue(FileUtils::copy($source, $target));
         $source = FileUtils::makePathRelative($path, __DIR__ . '/../..');
         $input = ['source' => $source];
@@ -103,8 +104,8 @@ final class WebpCommandTest extends CommandTestCase
         $name = 'example.png';
         $path = FileUtils::tempDir(__DIR__);
         self::assertIsString($path);
-        $source = FileUtils::buildPath(__DIR__, '/../files/images', $name);
-        $target = FileUtils::buildPath($path, $name);
+        $source = Path::join(__DIR__, '/../files/images', $name);
+        $target = Path::join($path, $name);
         self::assertTrue(FileUtils::copy($source, $target));
         $source = FileUtils::makePathRelative($path, __DIR__ . '/../..');
         $input = ['source' => $source];

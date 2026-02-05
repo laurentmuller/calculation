@@ -23,29 +23,6 @@ final class FileUtilsTest extends TestCase
 {
     use PrivateInstanceTrait;
 
-    public static function getBuildPaths(): \Generator
-    {
-        yield ['', ''];
-        yield ['/', '/'];
-        yield ['c:/', 'c:'];
-        yield ['c:/home', 'c:', 'home'];
-        yield ['home', 'home'];
-        yield ['home', '', 'home', ''];
-        yield ['home/test', 'home', 'test'];
-        yield ['home/test/value', 'home', 'test', 'value'];
-        yield ['home/test/value', 'home', 'test', 'value/'];
-    }
-
-    public static function getExtension(): \Generator
-    {
-        yield ['', ''];
-        yield ['file', ''];
-        yield ['file.', ''];
-        yield ['file.txt', 'txt'];
-        yield ['file.TXT', 'TXT'];
-        yield ['file.TXT', 'txt', true];
-    }
-
     public static function getFormatSize(): \Generator
     {
         $kb = 1024;
@@ -91,51 +68,6 @@ final class FileUtilsTest extends TestCase
         yield [__FILE__, $thisText];
     }
 
-    public static function getRealPath(): \Generator
-    {
-        yield [__DIR__, __DIR__];
-        yield [__FILE__, __FILE__];
-    }
-
-    #[DataProvider('getBuildPaths')]
-    public function testBuildPath(string $expected, string ...$segments): void
-    {
-        $actual = FileUtils::buildPath(...$segments);
-        self::assertSame($expected, $actual);
-    }
-
-    public function testChangeExtension(): void
-    {
-        $expected = 'test.png';
-        $old_name = 'test.jpeg';
-        $actual = FileUtils::changeExtension($old_name, 'png');
-        self::assertSame($expected, $actual);
-
-        $expected = 'test.bmp';
-        $actual = FileUtils::changeExtension($old_name, ImageExtension::BMP);
-        self::assertSame($expected, $actual);
-    }
-
-    public function testChmod(): void
-    {
-        $file = FileUtils::tempFile();
-        self::assertIsString($file);
-
-        try {
-            $actual = FileUtils::chmod($file, 1);
-            self::assertTrue($actual);
-        } finally {
-            FileUtils::remove($file);
-        }
-    }
-
-    public function testChmodInvalid(): void
-    {
-        $file = __DIR__ . '/fake.txt';
-        $actual = FileUtils::chmod($file, 1);
-        self::assertFalse($actual);
-    }
-
     public function testDecodeJsonEmptyFile(): void
     {
         self::expectException(\InvalidArgumentException::class);
@@ -168,12 +100,6 @@ final class FileUtilsTest extends TestCase
         $file = '///.txt';
         $actual = FileUtils::dumpFile($file, 'fake');
         self::assertFalse($actual);
-    }
-
-    public function testExist(): void
-    {
-        self::assertTrue(FileUtils::exists(__DIR__));
-        self::assertTrue(FileUtils::exists(__FILE__));
     }
 
     public function testFileCopyFail(): void
@@ -212,25 +138,6 @@ final class FileUtilsTest extends TestCase
     {
         $actual = FileUtils::formatSize($path);
         self::assertSame($expected, $actual);
-    }
-
-    #[DataProvider('getExtension')]
-    public function testGetExtension(string $file, string $expected, bool $forceLowerCase = false): void
-    {
-        $actual = FileUtils::getExtension($file, $forceLowerCase);
-        self::assertSame($expected, $actual);
-    }
-
-    public function testIsDir(): void
-    {
-        self::assertTrue(FileUtils::isDir(__DIR__));
-        self::assertFalse(FileUtils::isDir(__FILE__));
-    }
-
-    public function testIsFile(): void
-    {
-        self::assertFalse(FileUtils::isFile(__DIR__));
-        self::assertTrue(FileUtils::isFile(__FILE__));
     }
 
     public function testLineCount(): void
@@ -281,13 +188,6 @@ final class FileUtilsTest extends TestCase
         self::assertFalse($actual);
     }
 
-    public function testMkdirInvalid(): void
-    {
-        $file = '///.txt';
-        $actual = FileUtils::mkdir($file);
-        self::assertFalse($actual);
-    }
-
     public function testNormalize(): void
     {
         $expected = 'C:/Temp/';
@@ -302,29 +202,20 @@ final class FileUtilsTest extends TestCase
 
     public function testReadFileInvalidDirectory(): void
     {
-        $expected = '';
         $actual = FileUtils::readFile(__DIR__);
-        self::assertSame($expected, $actual);
+        self::assertNull($actual);
     }
 
     public function testReadFileInvalidUrl(): void
     {
-        $expected = '';
         $actual = FileUtils::readFile('https://example.com/fake.txt');
-        self::assertSame($expected, $actual);
+        self::assertNull($actual);
     }
 
     public function testReadFileValid(): void
     {
         $content = FileUtils::readFile($this->getJsonFile());
         self::assertNotEmpty($content);
-    }
-
-    #[DataProvider('getRealPath')]
-    public function testRealPath(string $file, string $expected): void
-    {
-        $actual = FileUtils::realPath($file);
-        self::assertSame($expected, $actual);
     }
 
     public function testRemove(): void
@@ -346,7 +237,7 @@ final class FileUtilsTest extends TestCase
         $actual = FileUtils::rename($file, $file);
         self::assertFalse($actual);
 
-        $target = FileUtils::changeExtension($file, 'png');
+        $target = ImageExtension::PNG->changeExtension($file);
         $actual = FileUtils::rename($file, $target);
         FileUtils::remove($target);
         self::assertTrue($actual);

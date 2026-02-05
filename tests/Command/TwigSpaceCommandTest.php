@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Command;
 
 use App\Utils\FileUtils;
+use Symfony\Component\Filesystem\Path;
 
 final class TwigSpaceCommandTest extends CommandTestCase
 {
@@ -56,7 +57,7 @@ final class TwigSpaceCommandTest extends CommandTestCase
     public function testFullPathIsNotDirectory(): void
     {
         $baseName = \basename(__FILE__);
-        $path = FileUtils::buildPath('tests/Command', $baseName);
+        $path = Path::join('tests/Command', $baseName);
         $input = [
             'path' => $path,
         ];
@@ -137,10 +138,10 @@ final class TwigSpaceCommandTest extends CommandTestCase
     private function copyTemplate(string $template): string
     {
         $tempDirectory = $this->createTempDirectory();
-        $originFile = FileUtils::buildPath(__DIR__, '/../files/twig/', $template);
-        $targetFile = FileUtils::buildPath($tempDirectory, $template);
+        $originFile = Path::join(__DIR__, '/../files/twig/', $template);
+        $targetFile = Path::join($tempDirectory, $template);
         self::assertTrue(FileUtils::copy($originFile, $targetFile, true));
 
-        return FileUtils::buildPath('tests/Command', \basename($tempDirectory));
+        return Path::join('tests/Command', \basename($tempDirectory));
     }
 }

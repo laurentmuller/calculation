@@ -16,7 +16,7 @@ namespace App\Table;
 use App\Entity\GlobalMargin;
 use App\Repository\GlobalMarginRepository;
 use App\Service\IndexService;
-use App\Utils\FileUtils;
+use Symfony\Component\Filesystem\Path;
 
 /**
  * The global margins table.
@@ -41,7 +41,7 @@ class GlobalMarginTable extends AbstractEntityTable
     #[\Override]
     protected function getColumnDefinitions(): string
     {
-        return FileUtils::buildPath(__DIR__, 'Definition', 'global_margin.json');
+        return Path::join(__DIR__, 'Definition', 'global_margin.json');
     }
 
     #[\Override]

@@ -31,6 +31,7 @@ final class TwigSpaceCommandTest extends CommandTestCase
         self::assertOutputContainsString(
             $output,
             '[OK]',
+            'Find consecutive spaces:',
             'Simulate updated 1 template(s) successfully',
             'Line',
             '··',
@@ -49,6 +50,7 @@ final class TwigSpaceCommandTest extends CommandTestCase
         self::assertOutputContainsString(
             $output,
             '[OK]',
+            'Find consecutive spaces:',
             'No template updated',
             \basename($path)
         );
@@ -56,8 +58,7 @@ final class TwigSpaceCommandTest extends CommandTestCase
 
     public function testFullPathIsNotDirectory(): void
     {
-        $baseName = \basename(__FILE__);
-        $path = Path::join('tests/Command', $baseName);
+        $path = __FILE__;
         $input = [
             'path' => $path,
         ];
@@ -67,7 +68,7 @@ final class TwigSpaceCommandTest extends CommandTestCase
             '[ERROR]',
             'The template path',
             'is not a directory',
-            $baseName
+            $path
         );
     }
 
@@ -83,19 +84,6 @@ final class TwigSpaceCommandTest extends CommandTestCase
             '[ERROR]',
             'Unable to find the template path',
             $path
-        );
-    }
-
-    public function testPathEmpty(): void
-    {
-        $input = [
-            'path' => '',
-        ];
-        $output = $this->executeInvalid($input);
-        self::assertOutputContainsString(
-            $output,
-            '[ERROR]',
-            'The templates path can no be empty.'
         );
     }
 
@@ -142,6 +130,6 @@ final class TwigSpaceCommandTest extends CommandTestCase
         $targetFile = Path::join($tempDirectory, $template);
         self::assertTrue(FileUtils::copy($originFile, $targetFile, true));
 
-        return Path::join('tests/Command', \basename($tempDirectory));
+        return $tempDirectory;
     }
 }

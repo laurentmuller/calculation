@@ -44,15 +44,15 @@ class FontAwesomeCommand
 
     public function __invoke(
         SymfonyStyle $io,
-        #[Argument(description: 'The JSON source file, relative to the project directory, where to get metadata informations.', )]
+        #[Argument('The absolute path to the JSON source file where to get metadata information; null to use the default file.', )]
         ?string $source = null,
-        #[Argument(description: 'The target directory, relative to the project directory, where to copy SVG files.', )]
+        #[Argument('The absolute path to the target directory where to copy SVG files; null to use the default directory.', )]
         ?string $target = null,
         #[Option(description: 'Run the command without making changes (simulate copying SVG files).', name: 'dry-run', shortcut: 'd')]
         bool $dryRun = false
     ): int {
-        $source = Path::join($this->projectDir, $source ?? self::DEFAULT_SOURCE);
-        $relativeSource = $this->getRelativePath($source);
+        $source ??= Path::join($this->projectDir, self::DEFAULT_SOURCE);
+        $relativeSource = \basename($source);
         if (!\is_file($source)) {
             return $this->error($io, 'Unable to find JSON source file: "%s".', $relativeSource);
         }
@@ -77,7 +77,7 @@ class FontAwesomeCommand
         try {
             $files = 0;
             $this->start();
-            $io->writeln([\sprintf('Generate files from "%s"...', $relativeSource), '']);
+            $io->title(\sprintf('Generate files from "%s"', $source));
             foreach ($io->progressIterate($content, $count) as $key => $item) {
                 $styles = $item['styles'];
                 foreach ($styles as $style) {
@@ -97,23 +97,23 @@ class FontAwesomeCommand
             if ($dryRun) {
                 return $this->success(
                     $io,
-                    'Simulate command successfully: %d files from %d sources. %s.',
+                    'Simulate command successfully: %d file(s) from %d source(s). %s.',
                     $files,
                     $count,
                     $this->stop()
                 );
             }
 
-            $target = Path::join($this->projectDir, $target ?? self::DEFAULT_TARGET);
-            $relativeTarget = $this->getRelativePath($target);
+            $target ??= Path::join($this->projectDir, self::DEFAULT_TARGET);
+            $relativeTarget = \basename($target);
             $io->writeln(\sprintf('Copy files to "%s"...', $relativeTarget));
             if (!FileUtils::mirror(origin: $tempDir, target: $target, delete: true)) {
-                return $this->error($io, 'Unable to copy %d files to the directory: "%s".', $count, $relativeTarget);
+                return $this->error($io, 'Unable to copy %d file(s) to the directory: "%s".', $count, $relativeTarget);
             }
 
             return $this->success(
                 $io,
-                'Generate images successfully: %d files from %d sources. %s.',
+                'Generate images successfully: %d file(s) from %d source(s). %s.',
                 $files,
                 $count,
                 $this->stop()
@@ -128,11 +128,6 @@ class FontAwesomeCommand
         $io->error(\sprintf($format, ...$parameters));
 
         return Command::FAILURE;
-    }
-
-    private function getRelativePath(string $path): string
-    {
-        return FileUtils::makePathRelative($path, $this->projectDir);
     }
 
     private function getSvgFileName(string $style, string|int $name): string

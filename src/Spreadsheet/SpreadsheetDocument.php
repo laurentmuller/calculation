@@ -361,7 +361,7 @@ class SpreadsheetDocument extends Spreadsheet
     {
         $customer = $controller->getCustomer();
         $userName = $controller->getUserIdentifier();
-        $application = $controller->getApplicationName();
+        $application = $controller->getApplicationFull();
         $title = $this->trans($title);
 
         $sheet = $this->getActiveSheet()

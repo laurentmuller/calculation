@@ -295,7 +295,7 @@ final class FileUtilsTest extends TestCase
 
     public function testTempDirInvalid(): void
     {
-        $actual = FileUtils::tempDir('///.txt');
+        $actual = @FileUtils::tempDir('///.txt');
         self::assertNull($actual);
     }
 

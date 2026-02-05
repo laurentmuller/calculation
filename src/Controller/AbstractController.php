@@ -93,12 +93,12 @@ abstract class AbstractController extends BaseController
     }
 
     /**
-     * Gets the application name and the version.
+     * Gets the application name and version.
      */
-    public function getApplicationName(): string
+    public function getApplicationFull(): string
     {
         /** @phpstan-var string */
-        return $this->getParameter('app_name_version');
+        return $this->getParameter('app_name_full');
     }
 
     /**

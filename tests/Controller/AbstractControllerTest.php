@@ -45,7 +45,7 @@ final class AbstractControllerTest extends KernelTestCase
     public function testGetApplicationName(): void
     {
         $controller = $this->createController();
-        $actual = $controller->getApplicationName();
+        $actual = $controller->getApplicationFull();
         self::assertNotEmpty($actual);
     }
 

@@ -129,7 +129,7 @@ final class AbstractWordDocumentTest extends TestCase
             ->willReturn('User');
         $controller->method('getApplicationOwnerUrl')
             ->willReturnCallback(static fn (): string => $customerInformation->getUrl() ?? '');
-        $controller->method('getApplicationName')
+        $controller->method('getApplicationFull')
             ->willReturn('Calculation');
         $controller->method('getApplicationParameters')
             ->willReturn($application);

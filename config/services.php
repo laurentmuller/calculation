@@ -24,11 +24,11 @@ return App::config([
         // application
         'app_name' => 'Calculation',
         'app_version' => '3.0.0',
+        'app_name_full' => '%app_name% v%app_version%',
         'app_owner_name' => 'bibi.nu',
         'app_owner_url' => 'https://www.bibi.nu',
         'app_owner_city' => 'Montévraz',
         'app_description' => "Programme de calcul basé sur l'environnement de développement Symfony 7.x.",
-        'app_name_version' => '%app_name% v%app_version%',
         'app_secret' => '%env(string:APP_SECRET)%',
         'app_mode' => '%env(string:APP_MODE)%',
         // mailer

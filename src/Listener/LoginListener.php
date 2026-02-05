@@ -32,8 +32,8 @@ class LoginListener implements ServiceSubscriberInterface
 
     public function __construct(
         private readonly UserRepository $repository,
-        #[Autowire('%app_name_version%')]
-        private readonly string $appNameVersion
+        #[Autowire('%app_name_full%')]
+        private readonly string $appName
     ) {
     }
 
@@ -50,7 +50,7 @@ class LoginListener implements ServiceSubscriberInterface
     {
         $params = [
             '%user_name%' => $user->getUserIdentifier(),
-            '%app_name%' => $this->appNameVersion,
+            '%app_name%' => $this->appName,
         ];
         $this->successTrans('security.login.success', $params);
     }

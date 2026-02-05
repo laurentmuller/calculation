@@ -31,7 +31,6 @@ abstract class CommandTestCase extends KernelTestCase
     public static function setUpBeforeClass(): void
     {
         \putenv('COLUMNS=360');
-        parent::setUpBeforeClass();
     }
 
     protected static function assertOutputContainsString(string $actual, string ...$expected): void
@@ -44,10 +43,10 @@ abstract class CommandTestCase extends KernelTestCase
 
     protected function createTempDirectory(): string
     {
-        $tempDir = (string) FileUtils::tempDir(__DIR__);
-        $startPath = \dirname(__DIR__, 2);
+        $path = FileUtils::tempDir(__DIR__);
+        self::assertIsString($path);
 
-        return FileUtils::makePathRelative($tempDir, $startPath);
+        return $path;
     }
 
     protected function execute(array $input = [], array $options = [], int $statusCode = Command::SUCCESS): string

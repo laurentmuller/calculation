@@ -160,7 +160,7 @@ class UserController extends AbstractEntityController
                 )
             );
         }
-        $comment = UserComment::instance($this->getApplicationName(), $from, $user);
+        $comment = UserComment::instance($this->getApplicationFull(), $from, $user);
         $form = $this->createForm(UserCommentType::class, $comment)
             ->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

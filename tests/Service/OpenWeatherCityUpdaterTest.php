@@ -53,7 +53,7 @@ final class OpenWeatherCityUpdaterTest extends TestCase
         try {
             $file = new UploadedFile($targetFile, \basename($targetFile), test: true);
             $service = $this->createService();
-            $actual = $service->import($file);
+            $actual = @$service->import($file);
             $this->assertHasKeys($actual);
             $this->assertInvalid($actual, 'swisspost.error.open_archive');
         } finally {

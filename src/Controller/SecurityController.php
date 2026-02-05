@@ -59,7 +59,7 @@ class SecurityController extends AbstractController
     #[GetRoute(path: '/logout/success', name: SecurityAttributes::LOGOUT_SUCCESS_ROUTE)]
     public function logoutSuccess(): RedirectResponse
     {
-        $this->successTrans('security.logout.success', ['%app_name%' => $this->getApplicationName()]);
+        $this->successTrans('security.logout.success', ['%app_name%' => $this->getApplicationFull()]);
 
         return $this->redirectToRoute(SecurityAttributes::LOGIN_ROUTE);
     }

@@ -28,6 +28,7 @@ return App::config([
         'date' => [
             'format' => 'd.m.Y H:i:s',
             'interval_format' => '%%d jours',
+            'timezone' => FormatUtils::DEFAULT_TIME_ZONE,
         ],
         'number_format' => [
             'decimals' => FormatUtils::FRACTION_DIGITS,
@@ -35,21 +36,22 @@ return App::config([
             'thousands_separator' => FormatUtils::THOUSANDS_SEP,
         ],
         'globals' => [
+            'app_mode' => '%app_mode%',
             'app_name' => '%app_name%',
             'app_version' => '%app_version%',
-            'app_name_version' => '%app_name_version%',
+            'app_name_full' => '%app_name_full%',
             'app_owner_name' => '%app_owner_name%',
             'app_owner_url' => '%app_owner_url%',
             'app_owner_city' => '%app_owner_city%',
             'app_description' => '%app_description%',
-            'app_mode' => '%app_mode%',
+
             'cookie_path' => '%cookie_path%',
             'mailer_user_email' => '%mailer_user_email%',
             'link_dev' => '%link_dev%',
             'link_prod' => '%link_prod%',
+            'index_service' => '@' . IndexService::class,
             'user_params' => '@' . UserParameters::class,
             'app_params' => '@' . ApplicationParameters::class,
-            'index_service' => '@' . IndexService::class,
         ],
     ],
     'when@test' => [

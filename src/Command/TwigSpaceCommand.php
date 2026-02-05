@@ -30,6 +30,7 @@ class TwigSpaceCommand
 {
     use WatchTrait;
 
+    private const string DEFAULT_DIRECTORY = 'templates';
     private const string PATTERN = '/(\S)( {2,})(\S)/';
     private const string REPLACEMENT = '$1 $3';
 
@@ -41,28 +42,25 @@ class TwigSpaceCommand
 
     public function __invoke(
         SymfonyStyle $io,
-        #[Argument(description: 'The path, relative to the project directory, where to search templates for.', )]
-        string $path = 'templates',
+        #[Argument(description: 'The absolute path where to search templates for; null to use default the directory.', )]
+        ?string $path = null,
         #[Option(description: 'Run the command without making changes.', name: 'dry-run', shortcut: 'd')]
         bool $dryRun = false
     ): int {
+        $path ??= Path::join($this->projectDir, self::DEFAULT_DIRECTORY);
         if (!$this->validateInputPath($io, $path)) {
-            return Command::INVALID;
-        }
-        $fullPath = Path::join($this->projectDir, $path);
-        if (!$this->validateFullPath($io, $fullPath)) {
             return Command::INVALID;
         }
 
         if ($dryRun) {
-            $io->title(\sprintf('Find consecutive spaces: "%s"', $fullPath));
+            $io->title(\sprintf('Find consecutive spaces: "%s"', $path));
         } else {
-            $io->title(\sprintf('Trim consecutive spaces: "%s"', $fullPath));
+            $io->title(\sprintf('Trim consecutive spaces: "%s"', $path));
         }
 
         $count = 0;
         $this->start();
-        $finder = $this->createFinder($fullPath);
+        $finder = $this->createFinder($path);
         foreach ($finder as $file) {
             $content = $file->getContents();
             if (!StringUtils::pregMatch(self::PATTERN, $content)) {
@@ -107,9 +105,11 @@ class TwigSpaceCommand
         return false;
     }
 
+    /**
+     * @param array<array{string, int}> $matches
+     */
     private function formatLine(int $key, string $line, array $matches): string
     {
-        /** @phpstan-var array{string, int} $match */
         foreach (\array_reverse($matches) as $match) {
             $offset = $match[1] + 1;
             $length = \strlen($match[0]) - 2;
@@ -140,22 +140,13 @@ class TwigSpaceCommand
         return $this->error($io, 'Unable to set content of the template "%s".', $file->getRelativePathname());
     }
 
-    private function validateFullPath(SymfonyStyle $io, string $fullPath): bool
-    {
-        if (!\file_exists($fullPath)) {
-            return $this->error($io, 'Unable to find the template path: "%s".', $fullPath);
-        }
-        if (!\is_dir($fullPath)) {
-            return $this->error($io, 'The template path "%s" is not a directory.', $fullPath);
-        }
-
-        return true;
-    }
-
     private function validateInputPath(SymfonyStyle $io, string $path): bool
     {
-        if (!StringUtils::isString($path)) {
-            return $this->error($io, 'The templates path can no be empty.');
+        if (!\file_exists($path)) {
+            return $this->error($io, 'Unable to find the template path: "%s".', $path);
+        }
+        if (!\is_dir($path)) {
+            return $this->error($io, 'The template path "%s" is not a directory.', $path);
         }
 
         return true;

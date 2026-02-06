@@ -26,8 +26,8 @@ use function PHPUnit\Framework\assertSame;
 final class DatabaseInfoServiceTest extends TestCase
 {
     private const array PARAMS = [
-        'serverVersion' => '10.11.15',
         'dbname' => 'database',
+        'serverVersion' => '10.11.15',
         'host' => 'localhost',
         'port' => 3008,
         'driver' => 'pdo_mysql',
@@ -108,8 +108,8 @@ final class DatabaseInfoServiceTest extends TestCase
     public function testGetDatabase(): void
     {
         $expected = [
-            'Version' => '10.11.15',
             'Name' => 'database',
+            'Version' => '10.11.15',
             'Host' => 'localhost',
             'Port' => '3008',
             'Driver' => 'pdo_mysql',
@@ -129,7 +129,7 @@ final class DatabaseInfoServiceTest extends TestCase
                 'Value' => '10.11.15-MariaDB-deb11-log',
             ],
         ];
-        $expected = '10.11.15';
+        $expected = '10.11.15-MariaDB-deb11-log';
         $manager = $this->createEntityManager($values);
         $service = new DatabaseInfoService($manager);
         $actual = $service->getVersion();

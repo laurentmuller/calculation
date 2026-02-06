@@ -1,6 +1,6 @@
 {%- set margin_text = margin|percent -%}
-{%- if not empty and app_params.marginBelow(margin) -%}
-    {%- set minimum_text = app_params.minMargin|percent -%}
+{%- if not empty and application_parameters.marginBelow(margin) -%}
+    {%- set minimum_text = application_parameters.minMargin|percent -%}
     {%- set overall_title = 'calculation.list.margin_below'|trans({'%margin%': margin_text, '%minimum%': minimum_text}) -%}
     <span class="has-tooltip text-danger" title="{{ overall_title }}">{{- margin_text -}}</span>
 {%- else -%}

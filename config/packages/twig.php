@@ -15,6 +15,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use App\Parameter\ApplicationParameters;
 use App\Parameter\UserParameters;
+use App\Service\ApplicationService;
 use App\Service\IndexService;
 use App\Utils\FormatUtils;
 
@@ -37,21 +38,15 @@ return App::config([
         ],
         'globals' => [
             'app_mode' => '%app_mode%',
-            'app_name' => '%app_name%',
-            'app_version' => '%app_version%',
-            'app_name_full' => '%app_name_full%',
-            'app_owner_name' => '%app_owner_name%',
-            'app_owner_url' => '%app_owner_url%',
-            'app_owner_city' => '%app_owner_city%',
-            'app_description' => '%app_description%',
-
-            'cookie_path' => '%cookie_path%',
-            'mailer_user_email' => '%mailer_user_email%',
             'link_dev' => '%link_dev%',
             'link_prod' => '%link_prod%',
+            'cookie_path' => '%cookie_path%',
+            // services
             'index_service' => '@' . IndexService::class,
-            'user_params' => '@' . UserParameters::class,
-            'app_params' => '@' . ApplicationParameters::class,
+            'application_service' => '@' . ApplicationService::class,
+            // parameters
+            'user_parameters' => '@' . UserParameters::class,
+            'application_parameters' => '@' . ApplicationParameters::class,
         ],
     ],
     'when@test' => [

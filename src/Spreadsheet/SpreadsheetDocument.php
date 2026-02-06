@@ -361,7 +361,7 @@ class SpreadsheetDocument extends Spreadsheet
     {
         $customer = $controller->getCustomer();
         $userName = $controller->getUserIdentifier();
-        $application = $controller->getApplicationFull();
+        $applicationName = $controller->getApplicationService()->getFullName();
         $title = $this->trans($title);
 
         $sheet = $this->getActiveSheet()
@@ -375,7 +375,7 @@ class SpreadsheetDocument extends Spreadsheet
         return $this->setTitle($title)
             ->setCompany($customer->getName())
             ->setUserName($userName)
-            ->setCategory($application);
+            ->setCategory($applicationName);
     }
 
     /**

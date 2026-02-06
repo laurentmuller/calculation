@@ -1303,7 +1303,7 @@ theme:
             Le thème système fait passer l'apparence de claire à sombre en fonction des préférences de l'utilisateur
             dans le système d'exploitation.<br>
             Sur Microsoft® Windows® 10 et 11, il se trouve dans les paramètres de la section :<br>
-            <i>Personalisation</i> &gt; <i>Couleurs</i> &gt; <i>Choisir votre mode</i>.
+            <i>Personalisation</i> &gt; <i>Couleurs</i> &gt; <i>Choisir votre mode d'application par défaut</i>.
     dark:
         name: Thème sombre
         success: Le <b>thème sombre</b> a été sélectionné avec succès.

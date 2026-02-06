@@ -116,7 +116,7 @@ class RegistrationController extends AbstractController
         return NotificationEmail::instance($this->getTranslator(), 'notification/registration.html.twig')
             ->subject(new TranslatableMessage('registration.subject'))
             ->importance(Importance::MEDIUM)
-            ->from($this->getAddressFrom())
+            ->from($this->getApplicationService()->getMailerAddress())
             ->to($user->getAddress());
     }
 

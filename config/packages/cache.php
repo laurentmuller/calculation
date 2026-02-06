@@ -28,9 +28,14 @@ return App::config([
                 // ApplicationService
                 $prefix . 'application' => [
                     'adapter' => $adapter,
+                    'default_lifetime' => $oneMonth,
+                ],
+                // ApplicationParameters
+                $prefix . 'parameters' => [
+                    'adapter' => $adapter,
                     'default_lifetime' => $oneHour,
                 ],
-                // UserService
+                // UserParameters
                 $prefix . 'user' => [
                     'adapter' => $adapter,
                     'default_lifetime' => $oneHour,

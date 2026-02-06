@@ -18,6 +18,7 @@ use App\Model\CustomerInformation;
 use App\Parameter\ApplicationParameters;
 use App\Parameter\OptionsParameter;
 use App\Parameter\UserParameters;
+use App\Service\ApplicationService;
 use App\Tests\TranslatorMockTrait;
 use App\Word\AbstractWordDocument;
 use App\Word\HtmlDocument;
@@ -111,30 +112,34 @@ final class AbstractWordDocumentTest extends TestCase
 
     private function createMockController(CustomerInformation $customerInformation): AbstractController
     {
-        $application = $this->createMock(ApplicationParameters::class);
-        $application->method('getCustomerInformation')
+        $applicationParameters = $this->createMock(ApplicationParameters::class);
+        $applicationParameters->method('getCustomerInformation')
             ->willReturn($customerInformation);
 
         $options = $this->createMock(OptionsParameter::class);
         $options->method('isPrintAddress')
             ->willReturn(true);
-        $service = $this->createMock(UserParameters::class);
-        $service->method('getOptions')
+        $userParameters = $this->createMock(UserParameters::class);
+        $userParameters->method('getOptions')
             ->willReturn($options);
-        $service->method('getCustomerInformation')
+        $userParameters->method('getCustomerInformation')
             ->willReturn($customerInformation);
+
+        $applicationService = $this->createMock(ApplicationService::class);
+        $applicationService->method('getName')
+            ->willReturn('Calculation');
+        $applicationService->method('getFullName')
+            ->willReturn('Calculation');
 
         $controller = $this->createMock(AbstractController::class);
         $controller->method('getUserIdentifier')
             ->willReturn('User');
-        $controller->method('getApplicationOwnerUrl')
-            ->willReturnCallback(static fn (): string => $customerInformation->getUrl() ?? '');
-        $controller->method('getApplicationFull')
-            ->willReturn('Calculation');
+        $controller->method('getApplicationService')
+            ->willReturn($applicationService);
         $controller->method('getApplicationParameters')
-            ->willReturn($application);
+            ->willReturn($applicationParameters);
         $controller->method('getUserParameters')
-            ->willReturn($service);
+            ->willReturn($userParameters);
         $controller->method('getCustomer')
             ->willReturn($customerInformation);
 

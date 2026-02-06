@@ -207,7 +207,7 @@ final class FileUtils
     /**
      * Returns the content of a file.
      *
-     * @return ?string the content of the file; null on error
+     * @return ?string the content of the file; null on error or if empty
      */
     public static function readFile(string $file): ?string
     {
@@ -216,7 +216,9 @@ final class FileUtils
         }
 
         try {
-            return self::getFilesystem()->readFile($file);
+            $content = self::getFilesystem()->readFile($file);
+
+            return '' === $content ? null : $content;
         } catch (IOException) {
             return null;
         }

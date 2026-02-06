@@ -42,9 +42,9 @@
 {# parameters #}
 {%- set title = 'test.notification' -%}
 {%- set title_icon = 'bell far' -%}
-{%- set timeout = user_params.message.timeout -%}
-{%- set position = user_params.message.position %}
-{%- set progress = user_params.message.progress %}
+{%- set timeout = user_parameters.message.timeout -%}
+{%- set position = user_parameters.message.position %}
+{%- set progress = user_parameters.message.progress %}
 {# body #}
 {% block card_body %}
 <span class="form-label horizontal-line">Type de message</span>
@@ -94,10 +94,10 @@
 </div>
 <span class="form-label horizontal-line">{{ 'parameters.group_options'|trans }}</span>
 <div class="d-flex-wrap-center">
-    {{ _self.checkbox('title', 'parameters.fields.message_title', user_params.message.title) }}
-    {{ _self.checkbox('icon', 'parameters.fields.message_icon', user_params.message.icon) }}
-    {{ _self.checkbox('subtitle', 'parameters.fields.message_sub_title', user_params.message.subTitle) }}
-    {{ _self.checkbox('close', 'parameters.fields.message_close', user_params.message.close) }}
+    {{ _self.checkbox('title', 'parameters.fields.message_title', user_parameters.message.title) }}
+    {{ _self.checkbox('icon', 'parameters.fields.message_icon', user_parameters.message.icon) }}
+    {{ _self.checkbox('subtitle', 'parameters.fields.message_sub_title', user_parameters.message.subTitle) }}
+    {{ _self.checkbox('close', 'parameters.fields.message_close', user_parameters.message.close) }}
     {{ _self.checkbox('autohide', 'parameters.fields.message_auto_close') }}
 </div>
 {% endblock card_body %}

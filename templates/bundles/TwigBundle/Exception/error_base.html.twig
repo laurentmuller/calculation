@@ -25,7 +25,7 @@
 {%- endblock error_message %}
 </p>
 <div class="d-flex-wrap-center d-print-none">
-    <p class="mb-0 me-auto">{{ 'error_page.link'|trans({'%mailto%': mailer_user_email, '%subject%': app_name_full|url_encode})|raw }}</p>
+    <p class="mb-0 me-auto">{{ 'error_page.link'|trans({'%mailto%': application_service.mailerEmail, '%subject%': application_service.fullName|url_encode})|raw }}</p>
     {% if is_exception %}
         <a data-bs-toggle="collapse" href="#exception-detail" class="drop-down-icon-right text-end" aria-expanded="false" aria-controls="exception-detail">
             {{- 'error_page.details'|trans -}}

@@ -107,7 +107,7 @@
             <tr class="border">
                 <td class="bg-body-tertiary text-nowrap fw-bold">{{ 'calculation.fields.overallTotal'|trans }}</td>
                 <td class="bg-body-tertiary fw-bold text-currency">{{ item.groupsAmount|amount }}</td>
-                {%- if app_params.marginBelow(item) -%}
+                {%- if application_parameters.marginBelow(item) -%}
                     {%- set overall_title = 'calculation.list.margin_below'|trans({'%margin%': item.overallMargin|percent, '%minimum%': min_margin|percent}) -%}
                     <td class="bg-body-tertiary fw-bold text-currency text-danger has-tooltip" data-bs-html="true" data-bs-title="{{ overall_title }}">{{ item.overallMargin|percent }}</td>
                 {%- else -%}

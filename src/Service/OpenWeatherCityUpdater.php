@@ -91,18 +91,18 @@ readonly class OpenWeatherCityUpdater
                 ]);
             }
 
-            $temp_name = FileUtils::tempFile();
-            if (null === $temp_name) {
+            $tempFile = FileUtils::tempFile();
+            if (null === $tempFile) {
                 return $this->falseResult('swisspost.error.temp_file');
             }
 
-            $db = new OpenWeatherDatabase($temp_name);
+            $db = new OpenWeatherDatabase($tempFile);
             [$valid, $error] = $this->insertCities($db, $cities);
             $db->close();
             if (0 === $valid) {
                 return $this->falseResult('openweather.error.empty_city');
             }
-            if (!FileUtils::rename($temp_name, $this->databaseName, true)) {
+            if (!FileUtils::rename($tempFile, $this->databaseName, true)) {
                 return $this->falseResult('swisspost.error.rename_database');
             }
 

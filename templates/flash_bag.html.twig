@@ -4,10 +4,10 @@
     <p class="flash" data-type="{{ key }}" data-title="{{ ('flash_bag.' ~ key)|trans }}">{{ message }}</p>
 {%- endmacro addFlashbag %}
 {# add all flash messages #}
-{%- set flash_attributes = user_params.message.attributes|merge({
+{%- set flash_attributes = user_parameters.message.attributes|merge({
     dataset: '#flashes',
     target: '.page-content',
-    subtitle: app_name_full,
+    subtitle: application_service.fullName,
     'close-title': 'common.button_close'|trans}) -%}
 <div id="flashes" class="d-none"{{ attributes(flash_attributes, 'data-') }}>
     {% for key, messages in app.flashes %}

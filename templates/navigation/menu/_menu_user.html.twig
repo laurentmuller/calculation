@@ -30,9 +30,9 @@
         {{ dropdownItem(path('help_index'), 'help.title', 'question-circle') }}
     {% endif %}
     {{ dropdownItem(path('user_comment'), 'user.comment.title', 'envelope far') }}
-    {% if not user_params.homePage.statusBar %}
+    {% if not user_parameters.homePage.statusBar %}
         {{ dropdownSeparator() }}
-        {{ dropdownItem(path('about_index'), 'index.menu_info', 'info-circle', {'%app_name%': app_name}) }}
+        {{ dropdownItem(path('about_index'), 'index.menu_info', 'info-circle', {'%app_name%': application_service.name}) }}
     {% endif %}
     {% if is_granted(IS_IMPERSONATOR) -%}
         {{ dropdownSeparator() }}

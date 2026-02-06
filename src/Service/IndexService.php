@@ -58,7 +58,7 @@ class IndexService
     /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
     public function __construct(
         private readonly EntityManagerInterface $manager,
-        #[Target('calculation.application')]
+        #[Target('calculation.parameters')]
         CacheItemPoolInterface&CacheInterface&NamespacedPoolInterface $cache
     ) {
         $this->cache = $cache->withSubNamespace('counters');

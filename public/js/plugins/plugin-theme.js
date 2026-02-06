@@ -371,7 +371,7 @@ $(function () {
 
         /**
          * Gets the preferred theme.
-         * @return {string} the preferred theme if found; an empty string otherwise.
+         * @return {string} the preferred theme.
          * @private
          */
         _getPreferredTheme() {
@@ -383,7 +383,7 @@ $(function () {
         }
 
         /**
-         * Sets the theme document element.
+         * Sets the theme to the document.
          * @param {string} theme - the theme to apply.
          * @private
          */
@@ -391,9 +391,24 @@ $(function () {
             if (!theme || theme === THEME_AUTO) {
                 theme = this._isMediaDark() ? THEME_DARK : THEME_LIGHT;
             }
-            if (this._getTheme() !== theme) {
-                document.documentElement.setAttribute(THEME_ATTRIBUTE, theme);
+            if (this._getTheme() === theme) {
+                return;
             }
+            const callback = () => document.documentElement.setAttribute(THEME_ATTRIBUTE, theme);
+            if (this._supportTransition()) {
+                document.startViewTransition(callback);
+            } else {
+                callback();
+            }
+        }
+
+        /**
+         * Gets a value indicating if start view transition is supported.
+         * @return {boolean} true if supported.
+         * @private
+         */
+        _supportTransition() {
+            return document.startViewTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         }
 
         /**
@@ -444,28 +459,17 @@ $(function () {
      */
     ThemeListener.DEFAULTS = {
         // the URL to get dialog
-        url: null,
-        // the dialog identifier
-        dialogId: '#theme_modal',
-        // the target selector where to add dialog
-        targetId: 'body',
-        // the radio inputs selector
-        input: '.form-check-input',
-        // the title message selector in the modal dialog
-        title: '.modal-title',
-        // the success data message selector in the dialog
-        success: 'success',
-        // the OK button selector in the modal dialog
-        ok: '.btn-ok',
-        // the choosing color mode selector in the modal dialog
-        settings: '.btn-settings',
-        // the data key for the icon class
-        icon: 'class',
-        // the data key for the text content
-        text: 'text',
-        // the theme switcher text selector
-        switcherText: '.theme-switcher .theme-text',
-        // the theme switcher icon selector
+        url: null, // the dialog identifier
+        dialogId: '#theme_modal', // the target selector where to add dialog
+        targetId: 'body', // the radio inputs selector
+        input: '.form-check-input', // the title message selector in the modal dialog
+        title: '.modal-title', // the success data message selector in the dialog
+        success: 'success', // the OK button selector in the modal dialog
+        ok: '.btn-ok', // the choosing color mode selector in the modal dialog
+        settings: '.btn-settings', // the data key for the icon class
+        icon: 'class', // the data key for the text content
+        text: 'text', // the theme switcher text selector
+        switcherText: '.theme-switcher .theme-text', // the theme switcher icon selector
         switcherIcon: '.theme-switcher .theme-icon'
     };
 

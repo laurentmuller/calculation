@@ -76,8 +76,9 @@ abstract class AbstractWordDocument extends WordDocument
      */
     protected function addDefaultFooter(Section $section): static
     {
-        $this->footer->setUrl($this->controller->getApplicationOwnerUrl())
-            ->setName($this->controller->getApplicationFull())
+        $service = $this->controller->getApplicationService();
+        $this->footer->setUrl($service->getOwnerUrl())
+            ->setName($service->getFullName())
             ->output($section);
 
         return $this;
@@ -121,7 +122,7 @@ abstract class AbstractWordDocument extends WordDocument
     {
         parent::initialize();
         $properties = $this->getDocInfo();
-        $properties->setCategory($this->controller->getApplicationFull());
+        $properties->setCategory($this->controller->getApplicationService()->getFullName());
         $user = $this->controller->getUserIdentifier();
         if (null !== $user) {
             $properties->setCreator($user);

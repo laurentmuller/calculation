@@ -24,8 +24,8 @@ use Doctrine\ORM\EntityManagerInterface;
 class DatabaseInfoService
 {
     private const array DATABASE_PARAMETERS = [
-        'serverVersion' => 'Version',
         'dbname' => 'Name',
+        'serverVersion' => 'Version',
         'host' => 'Host',
         'port' => 'Port',
         'driver' => 'Driver',
@@ -93,7 +93,7 @@ class DatabaseInfoService
      */
     public function getVersion(): string
     {
-        return $this->version ??= \explode('-', $this->getConfiguration()['version'] ?? 'Unknown')[0];
+        return $this->version ??= $this->getConfiguration()['version'] ?? 'Unknown';
     }
 
     /**

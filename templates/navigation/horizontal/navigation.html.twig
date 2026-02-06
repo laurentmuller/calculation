@@ -11,7 +11,7 @@
     or is_granted(PERMISSION_LIST, ENTITY_CALCULATION_STATE)
     or is_granted(PERMISSION_LIST, ENTITY_GLOBAL_MARGIN)
 -%}
-{%- set is_dark_navigation = app.user and user_params.homePage.darkNavigation -%}
+{%- set is_dark_navigation = app.user and user_parameters.homePage.darkNavigation -%}
 {# horizontal navigation #}
 <nav class="navbar navbar-horizontal navbar-expand-lg bg-body-tertiary d-print-none border-bottom ps-2 z-3"{% if is_dark_navigation %} data-bs-theme="dark"{% endif %}>
     <div class="container-fluid ps-0">

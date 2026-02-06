@@ -24,6 +24,7 @@ use App\Report\AbstractReport;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Response\WordResponse;
+use App\Service\ApplicationService;
 use App\Service\UrlGeneratorService;
 use App\Spreadsheet\AbstractDocument;
 use App\Spreadsheet\SpreadsheetDocument;
@@ -41,7 +42,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Contracts\Translation\TranslatableInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -67,48 +67,9 @@ abstract class AbstractController extends BaseController
     public const array ID_REQUIREMENT = ['id' => Requirement::DIGITS];
 
     // services
+    private ?ApplicationService $applicationService = null;
     private ?UrlGeneratorService $generatorService = null;
     private ?UserParameters $userParameters = null;
-
-    /**
-     * Gets the address from (email and name) used to send email.
-     */
-    public function getAddressFrom(): Address
-    {
-        /** @phpstan-var string $email */
-        $email = $this->getParameter('mailer_user_email');
-        /** @phpstan-var string $name */
-        $name = $this->getParameter('mailer_user_name');
-
-        return new Address($email, $name);
-    }
-
-    /**
-     * Gets the application name (without the version).
-     */
-    public function getApplication(): string
-    {
-        /** @phpstan-var string */
-        return $this->getParameter('app_name');
-    }
-
-    /**
-     * Gets the application name and version.
-     */
-    public function getApplicationFull(): string
-    {
-        /** @phpstan-var string */
-        return $this->getParameter('app_name_full');
-    }
-
-    /**
-     * Gets the application owner URL.
-     */
-    public function getApplicationOwnerUrl(): string
-    {
-        /** @phpstan-var string */
-        return $this->getParameter('app_owner_url');
-    }
 
     /**
      * Gets the application parameters.
@@ -118,6 +79,18 @@ abstract class AbstractController extends BaseController
     public function getApplicationParameters(): ApplicationParameters
     {
         return $this->getUserParameters()->getApplication();
+    }
+
+    /**
+     * Gets the application service.
+     */
+    public function getApplicationService(): ApplicationService
+    {
+        try {
+            return $this->applicationService ??= $this->container->get(ApplicationService::class);
+        } catch (ContainerExceptionInterface $e) {
+            throw new \LogicException(\sprintf('Unable to get the "%s" service,', ApplicationService::class), $e->getCode(), $e);
+        }
     }
 
     /**
@@ -183,8 +156,9 @@ abstract class AbstractController extends BaseController
     {
         return [
             ...parent::getSubscribedServices(),
-            UserParameters::class,
+            ApplicationService::class,
             TranslatorInterface::class,
+            UserParameters::class,
             UrlGeneratorService::class,
         ];
     }

@@ -107,10 +107,11 @@ class CspReportController extends AbstractController
      */
     private function sendNotification(array $context, MailerInterface $mailer): void
     {
+        $address = $this->getApplicationService()->getMailerAddress();
         $notification = NotificationEmail::instance($this->getTranslator(), 'notification/csp_violation.html.twig')
             ->subject(new TranslatableMessage('notification.csp_title'))
-            ->to($this->getAddressFrom())
-            ->from($this->getAddressFrom())
+            ->from($address)
+            ->to($address)
             ->context(['context' => $context])
             ->action($this->trans('index.title'), $this->getActionUrl())
             ->importance(Importance::HIGH);

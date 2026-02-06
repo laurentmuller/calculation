@@ -156,7 +156,7 @@
             <div class="col-md-3">
                 <span class="form-label cursor-default">Position</span>
                 <div class="dropdown dropdown-position">
-                    {% set current = user_params.message.position %}
+                    {% set current = user_parameters.message.position %}
                     <button type="button" class="btn-position form-control d-flex align-items-center dropdown-toggle" data-value="{{ current.value }}" data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="position-icon me-2"><i class="{{ current.icon }}" data-rotate="{{ current.angle }}deg"></i></span>
                         <span class="position-text flex-fill text-start">{{- current|trans -}}</span>

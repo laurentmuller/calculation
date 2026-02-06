@@ -133,10 +133,11 @@ class UserParameters extends AbstractParameters
     #[\Override]
     protected function loadProperties(): array
     {
+        $user = $this->getUser();
         $repository = $this->manager->getRepository(UserProperty::class);
 
         return $this->mapToKeyValue(
-            $repository->findByUser($this->getUser()),
+            $repository->findByUser($user),
             static fn (UserProperty $property): array => [$property->getName() => $property]
         );
     }

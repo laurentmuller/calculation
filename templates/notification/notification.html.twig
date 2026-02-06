@@ -1,6 +1,6 @@
 {# vendor/symfony/twig-bridge/Resources/views/Email/zurb_2/notification/body.html.twig #}
 {% extends '@email/default/notification/body.html.twig' %}
-{% set footer_text = 'notification.footer'|trans({'%app_name%': app_name_full}) %}
+{% set footer_text = 'notification.footer'|trans({'%app_name%': application_service.fullName}) %}
 {# style #}
 {% block style %}
     {{ parent() }}
@@ -11,7 +11,7 @@
     <container>
         <row>
             <columns large="1" small="2" valign="middle">
-                <img src="{{ email.image('@images/icons/favicon-36x36.png') }}" alt="{{ app_description }}">
+                <img src="{{ email.image('@images/icons/favicon-36x36.png') }}" alt="{{ application_service.description }}">
             </columns>
             <columns large="11" small="10" valign="middle">
                 {% if importance_text is defined and importance_text %}
@@ -28,7 +28,7 @@
 {% block action %}
     <spacer size="8"></spacer>
     Cordialement,<br>
-    L'équipe de {{ app_name }}
+    L'équipe de {{ application_service.name }}
     {{ parent() }}
 {% endblock action %}
 {# exception #}

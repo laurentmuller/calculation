@@ -63,15 +63,15 @@ abstract class AbstractReport extends PdfDocument
         $this->header = new ReportHeader($this);
         $this->footer = new ReportFooter($this);
 
-        $name = $controller->getApplicationFull();
-        $this->setCreator($name);
+        $service = $controller->getApplicationService();
+        $this->setCreator($service->getFullName());
         $user = $controller->getUserIdentifier();
         if (null !== $user) {
             $this->setAuthor($user);
         }
 
         $this->header->setCustomer($controller->getCustomer());
-        $this->footer->setContent($name, $controller->getApplicationOwnerUrl());
+        $this->footer->setContent($service->getFullName(), $service->getOwnerUrl());
     }
 
     /**

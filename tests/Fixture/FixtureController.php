@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Fixture;
 
 use App\Controller\AbstractController;
+use App\Form\FormHelper;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Response\WordResponse;
@@ -30,6 +31,24 @@ class FixtureController extends AbstractController
     public function __construct(ContainerInterface $container)
     {
         $this->setContainer($container);
+    }
+
+    #[\Override]
+    public function createFormHelper(?string $labelPrefix = null, mixed $data = null, array $options = []): FormHelper
+    {
+        return parent::createFormHelper($labelPrefix, $data, $options);
+    }
+
+    #[\Override]
+    public function denyAccessUnlessGranted(mixed $attribute, mixed $subject = null, ?string $message = null): void
+    {
+        parent::denyAccessUnlessGranted($attribute, $subject, $message);
+    }
+
+    #[\Override]
+    public function getCookiePath(): string
+    {
+        return parent::getCookiePath();
     }
 
     #[\Override]

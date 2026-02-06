@@ -13,10 +13,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Controller\AbstractController;
+use App\Entity\User;
+use App\Enums\EntityPermission;
+use App\Form\FormHelper;
 use App\Model\TranslatableFlashMessage;
+use App\Parameter\ApplicationParameters;
 use App\Parameter\UserParameters;
 use App\Report\AbstractReport;
+use App\Service\ApplicationService;
 use App\Service\UrlGeneratorService;
 use App\Spreadsheet\AbstractDocument;
 use App\Tests\DatabaseTrait;
@@ -25,53 +29,109 @@ use App\Word\AbstractWordDocument;
 use Faker\Container\ContainerException;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\TestBrowserToken;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class AbstractControllerTest extends KernelTestCase
 {
     use DatabaseTrait;
 
-    public function testGetAddressFrom(): void
+    public function testApplicationParameters(): void
     {
-        $controller = $this->createController();
-        $actual = $controller->getAddressFrom();
-        self::assertSame('Calculation', $actual->getName());
-        self::assertSame('calculation@bibi.nu', $actual->getAddress());
+        $this->handleService(
+            static fn (FixtureController $controller): ApplicationParameters => $controller->getApplicationParameters(),
+            ApplicationParameters::class
+        );
     }
 
-    public function testGetApplicationName(): void
+    public function testApplicationService(): void
     {
-        $controller = $this->createController();
-        $actual = $controller->getApplicationFull();
-        self::assertNotEmpty($actual);
+        $this->handleService(
+            static fn (FixtureController $controller): ApplicationService => $controller->getApplicationService(),
+            ApplicationService::class
+        );
     }
 
-    public function testGetApplicationOwnerUrl(): void
+    public function testApplicationServiceWithException(): void
     {
-        $controller = $this->createController();
-        $actual = $controller->getApplicationOwnerUrl();
-        self::assertNotEmpty($actual);
+        $this->handleServiceWithException(
+            static fn (FixtureController $controller): ApplicationService => $controller->getApplicationService()
+        );
     }
 
-    public function testGetApplicationParameters(): void
+    public function testCookiePath(): void
     {
         $controller = $this->createController();
-        $parameters = $controller->getApplicationParameters();
-        $actual = $parameters->getMinMargin();
-        self::assertSame(1.1, $actual);
+        $actual = $controller->getCookiePath();
+        self::assertStringStartsWith('/', $actual);
     }
 
-    public function testGetMinMargin(): void
+    public function testCreateFormHelper(): void
+    {
+        $controller = $this->createController();
+        $actual = $controller->createFormHelper();
+        self::assertSameClass(FormHelper::class, $actual);
+    }
+
+    public function testDenyAccessUnlessGranted(): void
+    {
+        self::expectException(AccessDeniedException::class);
+        $controller = $this->createController();
+        $controller->denyAccessUnlessGranted(
+            attribute: EntityPermission::ADD,
+            subject: User::class,
+        );
+    }
+
+    public function testMinMargin(): void
     {
         $controller = $this->createController();
         $actual = $controller->getMinMargin();
         self::assertSame(1.1, $actual);
     }
 
-    public function testGetRelativePathFound(): void
+    public function testRedirectToHomePage(): void
+    {
+        $controller = $this->createController();
+        $response = $controller->redirectToHomePage();
+        self::assertTrue($response->isRedirect());
+    }
+
+    public function testRedirectToHomePageWithMessage(): void
+    {
+        $controller = $this->createController();
+        $response = $controller->redirectToHomePage(
+            message: 'log.list.empty'
+        );
+        self::assertTrue($response->isRedirect());
+    }
+
+    public function testRedirectToHomePageWithRequest(): void
+    {
+        $request = new Request();
+        $controller = $this->createController();
+        $response = $controller->redirectToHomePage(request: $request);
+        self::assertTrue($response->isRedirect());
+    }
+
+    public function testRedirectToHomePageWithTranslatableMessage(): void
+    {
+        $controller = $this->createController();
+        $response = $controller->redirectToHomePage(
+            message: TranslatableFlashMessage::instance(
+                message: 'log.list.empty',
+                parameters: ['key' => 'value'],
+            )
+        );
+        self::assertTrue($response->isRedirect());
+    }
+
+    public function testRelativePathFound(): void
     {
         $expected = 'tests/Controller';
         $controller = $this->createController();
@@ -79,7 +139,7 @@ final class AbstractControllerTest extends KernelTestCase
         self::assertSame($expected, $actual);
     }
 
-    public function testGetRelativePathNotFound(): void
+    public function testRelativePathNotFound(): void
     {
         $path = 'fake_dir/fake.txt';
         $controller = $this->createController();
@@ -87,116 +147,7 @@ final class AbstractControllerTest extends KernelTestCase
         self::assertSame($path, $actual);
     }
 
-    public function testGetRequestStack(): void
-    {
-        $controller = $this->createController();
-        $actual = $controller->getRequestStack();
-        $this->assertSameClass(RequestStack::class, $actual);
-
-        // second time for test caching
-        $actual = $controller->getRequestStack();
-        $this->assertSameClass(RequestStack::class, $actual);
-    }
-
-    public function testGetRequestStackException(): void
-    {
-        $controller = $this->createMockController();
-        self::expectException(\LogicException::class);
-        $controller->getRequestStack();
-    }
-
-    public function testGetRequestStackWithException(): void
-    {
-        self::expectException(\LogicException::class);
-        $controller = $this->createMockController();
-        $controller->getRequestStack();
-    }
-
-    public function testGetSubscribedServices(): void
-    {
-        $controller = $this->createController();
-        $actual = $controller::getSubscribedServices();
-        self::assertContains(UserParameters::class, $actual);
-        self::assertContains(TranslatorInterface::class, $actual);
-        self::assertContains(UrlGeneratorService::class, $actual);
-    }
-
-    public function testGetTranslator(): void
-    {
-        $controller = $this->createController();
-        $actual = $controller->getTranslator();
-        $this->assertSameClass(TranslatorInterface::class, $actual);
-
-        // second time for test caching
-        $actual = $controller->getTranslator();
-        $this->assertSameClass(TranslatorInterface::class, $actual);
-    }
-
-    public function testGetTranslatorException(): void
-    {
-        $controller = $this->createMockController();
-        self::expectException(\LogicException::class);
-        $controller->getTranslator();
-    }
-
-    public function testGetTranslatorWithException(): void
-    {
-        self::expectException(\LogicException::class);
-        $controller = $this->createMockController();
-        $controller->getTranslator();
-    }
-
-    public function testGetUrlGenerator(): void
-    {
-        $controller = $this->createController();
-        $actual = $controller->getUrlGenerator();
-        $this->assertSameClass(UrlGeneratorService::class, $actual);
-
-        // second time for test caching
-        $actual = $controller->getUrlGenerator();
-        $this->assertSameClass(UrlGeneratorService::class, $actual);
-    }
-
-    public function testGetUrlGeneratorException(): void
-    {
-        $controller = $this->createMockController();
-        self::expectException(\LogicException::class);
-        $controller->getUrlGenerator();
-    }
-
-    public function testGetUrlGeneratorWithException(): void
-    {
-        self::expectException(\LogicException::class);
-        $controller = $this->createMockController();
-        $controller->getUrlGenerator();
-    }
-
-    public function testGetUserIdentifier(): void
-    {
-        $controller = $this->createController();
-        $actual = $controller->getUserIdentifier();
-        self::assertNull($actual);
-    }
-
-    public function testGetUserParameters(): void
-    {
-        $controller = $this->createController();
-        $actual = $controller->getUserParameters();
-        $this->assertSameClass(UserParameters::class, $actual);
-
-        // second time for test caching
-        $actual = $controller->getUserParameters();
-        $this->assertSameClass(UserParameters::class, $actual);
-    }
-
-    public function testGetUserParametersWithException(): void
-    {
-        self::expectException(\LogicException::class);
-        $controller = $this->createMockController();
-        $controller->getUserParameters();
-    }
-
-    public function testPdfDocumentWithException(): void
+    public function testRenderPdfDocumentWithException(): void
     {
         self::expectException(NotFoundHttpException::class);
         $controller = $this->createController();
@@ -210,7 +161,7 @@ final class AbstractControllerTest extends KernelTestCase
         $controller->renderPdfDocument($report);
     }
 
-    public function testPdfDocumentWithTitle(): void
+    public function testRenderPdfDocumentWithTitle(): void
     {
         $controller = $this->createController();
         $report = new class($controller) extends AbstractReport {
@@ -230,34 +181,7 @@ final class AbstractControllerTest extends KernelTestCase
         self::assertTrue($response->isOk());
     }
 
-    public function testRedirectToHomePage(): void
-    {
-        $controller = $this->createController();
-        $response = $controller->redirectToHomePage();
-        self::assertTrue($response->isRedirect());
-    }
-
-    public function testRedirectToHomePageWithMessage(): void
-    {
-        $controller = $this->createController();
-        $response = $controller->redirectToHomePage(
-            message: TranslatableFlashMessage::instance(
-                message: 'log.list.empty',
-                parameters: ['key' => 'value'],
-            )
-        );
-        self::assertTrue($response->isRedirect());
-    }
-
-    public function testRedirectToHomePageWithRequest(): void
-    {
-        $request = new Request();
-        $controller = $this->createController();
-        $response = $controller->redirectToHomePage(request: $request);
-        self::assertTrue($response->isRedirect());
-    }
-
-    public function testSpreadsheetDocumentWithException(): void
+    public function testRenderSpreadsheetDocumentWithException(): void
     {
         self::expectException(NotFoundHttpException::class);
         $controller = $this->createController();
@@ -271,7 +195,7 @@ final class AbstractControllerTest extends KernelTestCase
         $controller->renderSpreadsheetDocument($doc);
     }
 
-    public function testSpreadsheetDocumentWithTitle(): void
+    public function testRenderSpreadsheetDocumentWithTitle(): void
     {
         $controller = $this->createController();
         $doc = new class($controller) extends AbstractDocument {
@@ -291,7 +215,7 @@ final class AbstractControllerTest extends KernelTestCase
         self::assertTrue($response->isOk());
     }
 
-    public function testWordDocumentWithException(): void
+    public function testRenderWordDocumentWithException(): void
     {
         self::expectException(NotFoundHttpException::class);
         $controller = $this->createController();
@@ -305,7 +229,7 @@ final class AbstractControllerTest extends KernelTestCase
         $controller->renderWordDocument($doc);
     }
 
-    public function testWordDocumentWithTitle(): void
+    public function testRenderWordDocumentWithTitle(): void
     {
         $controller = $this->createController();
         $doc = new class($controller) extends AbstractWordDocument {
@@ -325,30 +249,138 @@ final class AbstractControllerTest extends KernelTestCase
         self::assertTrue($response->isOk());
     }
 
+    public function testRequestStack(): void
+    {
+        $this->handleService(
+            static fn (FixtureController $controller): RequestStack => $controller->getRequestStack(),
+            RequestStack::class
+        );
+    }
+
+    public function testRequestStackWithException(): void
+    {
+        $this->handleServiceWithException(
+            static fn (FixtureController $controller): RequestStack => $controller->getRequestStack()
+        );
+    }
+
+    public function testSubscribedServices(): void
+    {
+        $controller = $this->createController();
+        $actual = $controller::getSubscribedServices();
+        self::assertContains(ApplicationService::class, $actual);
+        self::assertContains(TranslatorInterface::class, $actual);
+        self::assertContains(UrlGeneratorService::class, $actual);
+        self::assertContains(UserParameters::class, $actual);
+    }
+
+    public function testTranslator(): void
+    {
+        $this->handleService(
+            static fn (FixtureController $controller): TranslatorInterface => $controller->getTranslator(),
+            TranslatorInterface::class
+        );
+    }
+
+    public function testTranslatorWithException(): void
+    {
+        $this->handleServiceWithException(
+            static fn (FixtureController $controller): TranslatorInterface => $controller->getTranslator()
+        );
+    }
+
+    public function testUrlGenerator(): void
+    {
+        $this->handleService(
+            static fn (FixtureController $controller): UrlGeneratorService => $controller->getUrlGenerator(),
+            UrlGeneratorService::class
+        );
+    }
+
+    public function testUrlGeneratorWithException(): void
+    {
+        $this->handleServiceWithException(
+            static fn (FixtureController $controller): UrlGeneratorService => $controller->getUrlGenerator()
+        );
+    }
+
+    public function testUserIdentifier(): void
+    {
+        $controller = $this->createController();
+        $actual = $controller->getUserIdentifier();
+        self::assertNotNull($actual);
+    }
+
+    public function testUserParameters(): void
+    {
+        $this->handleService(
+            static fn (FixtureController $controller): UserParameters => $controller->getUserParameters(),
+            UserParameters::class
+        );
+    }
+
+    public function testUserParametersWithException(): void
+    {
+        $this->handleServiceWithException(
+            static fn (FixtureController $controller): UserParameters => $controller->getUserParameters()
+        );
+    }
+
     /**
      * @phpstan-param class-string $expected
      */
-    private function assertSameClass(string $expected, object $actual): void
+    protected static function assertSameClass(string $expected, object $actual): void
     {
         self::assertInstanceOf($expected, $actual);
     }
 
     private function createController(): FixtureController
     {
+        $this->login();
+
         return new FixtureController(self::getContainer());
     }
 
-    private function createMockController(): AbstractController
+    private function createMockController(): FixtureController
     {
         $container = $this->createMock(ContainerInterface::class);
         $container->method('get')
             ->willThrowException(new ContainerException());
 
-        return new class($container) extends AbstractController {
-            public function __construct(ContainerInterface $container)
-            {
-                $this->setContainer($container);
-            }
-        };
+        return new FixtureController($container);
+    }
+
+    /**
+     * @template TService
+     *
+     * @param callable(FixtureController): TService $callback
+     * @param class-string<TService>                $expected
+     */
+    private function handleService(callable $callback, string $expected): void
+    {
+        $controller = $this->createController();
+        $actual = $callback($controller);
+        self::assertSameClass($expected, $actual);
+    }
+
+    /**
+     * @template TService
+     *
+     * @param callable(FixtureController): TService $callback
+     */
+    private function handleServiceWithException(callable $callback): void
+    {
+        self::expectException(\LogicException::class);
+        $controller = $this->createMockController();
+        $callback($controller);
+    }
+
+    private function login(): void
+    {
+        $user = (new User())->setUsername('test');
+        $token = new TestBrowserToken($user->getRoles(), $user);
+        /** @phpstan-var TokenStorageInterface $storage */
+        $storage = self::getContainer()->get(TokenStorageInterface::class);
+        $storage->setToken($token);
     }
 }

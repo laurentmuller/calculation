@@ -55,7 +55,7 @@ class ApplicationParameters extends AbstractParameters
     private ?SecurityParameter $security = null;
 
     public function __construct(
-        #[Target('calculation.application')]
+        #[Target('calculation.parameters')]
         CacheInterface $cache,
         EntityManagerInterface $manager,
         #[Autowire('%kernel.debug%')]

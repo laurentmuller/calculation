@@ -16,8 +16,10 @@ namespace App\Tests\Form\Dialog;
 use App\Form\Dialog\EditItemDialogType;
 use App\Tests\Form\Category\CategoryTrait;
 use App\Tests\Form\PreloadedExtensionsTrait;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Test\TypeTestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 final class EditItemDialogTypeTest extends TypeTestCase
 {
     use CategoryTrait;

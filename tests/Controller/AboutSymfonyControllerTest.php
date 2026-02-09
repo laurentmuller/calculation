@@ -92,20 +92,18 @@ final class AboutSymfonyControllerTest extends ControllerTestCase
             ->willReturn($packages);
         $service->method('getDebugPackages')
             ->willReturn($packages);
-
         $service->method('hasPackage')
-            ->willReturnMap([
-                ['symfony/finder', true],
-                ['symfony/asset', true],
-                ['symfony/fake', false],
-            ]);
-
+            ->willReturnCallback(static fn (string $name): bool => match ($name) {
+                'symfony/finder',
+                'symfony/asset' => true,
+                default => false,
+            });
         $service->method('getPackage')
-            ->willReturnMap([
-                ['symfony/finder', $finderPackage],
-                ['symfony/asset', $assetPackage],
-                ['symfony/fake', []],
-            ]);
+            ->willReturnCallback(static fn (string $name): array => match ($name) {
+                'symfony/finder' => $finderPackage,
+                'symfony/asset' => $assetPackage,
+                default => [],
+            });
 
         return $service;
     }

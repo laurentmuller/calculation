@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Parameter;
 
+use App\Constant\CacheAttributes;
 use App\Entity\User;
 use App\Entity\UserProperty;
 use App\Model\CustomerInformation;
@@ -32,7 +33,7 @@ class UserParameters extends AbstractParameters
     use ArrayTrait;
 
     public function __construct(
-        #[Target('calculation.user')]
+        #[Target(CacheAttributes::CACHE_USER)]
         CacheInterface $cache,
         EntityManagerInterface $manager,
         private readonly Security $security,

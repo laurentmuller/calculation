@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Constant\CacheAttributes;
 use App\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -25,7 +26,7 @@ readonly class CacheService
 {
     public function __construct(
         private CommandService $service,
-        #[Target('calculation.cache')]
+        #[Target(CacheAttributes::CACHE_CACHE)]
         private CacheInterface $cache
     ) {
     }

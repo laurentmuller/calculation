@@ -15,12 +15,14 @@ namespace App\Tests\Form\Type;
 
 use App\Form\Type\SimpleEditorType;
 use App\Tests\Form\PreloadedExtensionsTrait;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+#[AllowMockObjectsWithoutExpectations]
 final class SimpleEditorTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;

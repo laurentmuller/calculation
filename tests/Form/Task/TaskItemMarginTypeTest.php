@@ -16,10 +16,12 @@ namespace App\Tests\Form\Task;
 use App\Entity\TaskItemMargin;
 use App\Form\Task\TaskItemMarginType;
 use App\Tests\Form\EntityTypeTestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * @extends EntityTypeTestCase<TaskItemMargin, TaskItemMarginType>
  */
+#[AllowMockObjectsWithoutExpectations]
 final class TaskItemMarginTypeTest extends EntityTypeTestCase
 {
     #[\Override]

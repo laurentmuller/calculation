@@ -290,10 +290,9 @@ final class PersistenceListenerTest extends TestCase
 
     private function createRequestStack(): MockObject&RequestStack
     {
-        $session = $this->createMock(SessionInterface::class);
         $requestStack = $this->createMock(RequestStack::class);
         $requestStack->method('getSession')
-            ->willReturn($session);
+            ->willReturn(self::createStub(SessionInterface::class));
 
         return $requestStack;
     }

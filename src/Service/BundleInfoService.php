@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Constant\CacheAttributes;
 use App\Utils\FileUtils;
 use App\Utils\FormatUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -37,7 +38,7 @@ readonly class BundleInfoService
 {
     public function __construct(
         private KernelInterface $kernel,
-        #[Target('calculation.symfony')]
+        #[Target(CacheAttributes::CACHE_SYMFONY)]
         private CacheInterface $cache,
         #[Autowire('%kernel.project_dir%')]
         private string $projectDir,

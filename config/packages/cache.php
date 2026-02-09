@@ -13,87 +13,81 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-$oneHour = 3_600;
-$oneDay = 86_400;
-$oneMonth = 2_592_000;
-$fifteenMinutes = 900;
-
-$prefix = 'calculation.';
-$adapter = 'cache.adapter.filesystem';
+use App\Constant\CacheAttributes;
 
 return App::config([
     'framework' => [
         'cache' => [
             'pools' => [
                 // ApplicationService
-                $prefix . 'application' => [
-                    'adapter' => $adapter,
-                    'default_lifetime' => $oneMonth,
+                CacheAttributes::CACHE_APPLICATION => [
+                    'adapter' => 'cache.adapter.filesystem',
+                    'default_lifetime' => CacheAttributes::LIFE_TIME_ONE_MONTH,
                 ],
                 // ApplicationParameters
-                $prefix . 'parameters' => [
-                    'adapter' => $adapter,
-                    'default_lifetime' => $oneHour,
+                CacheAttributes::CACHE_PARAMETERS => [
+                    'adapter' => 'cache.adapter.filesystem',
+                    'default_lifetime' => CacheAttributes::LIFE_TIME_ONE_HOUR,
                 ],
                 // UserParameters
-                $prefix . 'user' => [
-                    'adapter' => $adapter,
-                    'default_lifetime' => $oneHour,
+                CacheAttributes::CACHE_USER => [
+                    'adapter' => 'cache.adapter.filesystem',
+                    'default_lifetime' => CacheAttributes::LIFE_TIME_ONE_HOUR,
                 ],
                 // SymfonyInfoService
-                $prefix . 'symfony' => [
-                    'adapter' => $adapter,
-                    'default_lifetime' => $oneDay,
+                CacheAttributes::CACHE_SYMFONY => [
+                    'adapter' => 'cache.adapter.filesystem',
+                    'default_lifetime' => CacheAttributes::LIFE_TIME_ONE_DAY,
                 ],
                 // ConstantExtension
-                $prefix . 'constant' => [
-                    'adapter' => $adapter,
-                    'default_lifetime' => $oneDay,
+                CacheAttributes::CACHE_CONSTANT => [
+                    'adapter' => 'cache.adapter.filesystem',
+                    'default_lifetime' => CacheAttributes::LIFE_TIME_ONE_DAY,
                 ],
                 // HelpService
-                $prefix . 'help' => [
-                    'adapter' => $adapter,
-                    'default_lifetime' => $oneDay,
+                CacheAttributes::CACHE_HELP => [
+                    'adapter' => 'cache.adapter.filesystem',
+                    'default_lifetime' => CacheAttributes::LIFE_TIME_ONE_DAY,
                 ],
                 // CommandService
-                $prefix . 'command' => [
-                    'adapter' => $adapter,
-                    'default_lifetime' => $oneDay,
+                CacheAttributes::CACHE_COMMAND => [
+                    'adapter' => 'cache.adapter.filesystem',
+                    'default_lifetime' => CacheAttributes::LIFE_TIME_ONE_DAY,
                 ],
                 // CacheService
-                $prefix . 'cache' => [
-                    'adapter' => $adapter,
-                    'default_lifetime' => $oneDay,
+                CacheAttributes::CACHE_CACHE => [
+                    'adapter' => 'cache.adapter.filesystem',
+                    'default_lifetime' => CacheAttributes::LIFE_TIME_ONE_DAY,
                 ],
                 // AssetVersionService
-                $prefix . 'asset' => [
-                    'adapter' => $adapter,
-                    'default_lifetime' => $oneDay,
+                CacheAttributes::CACHE_ASSET => [
+                    'adapter' => 'cache.adapter.filesystem',
+                    'default_lifetime' => CacheAttributes::LIFE_TIME_ONE_DAY,
                 ],
                 // ResponseListener
-                $prefix . 'response' => [
-                    'adapter' => $adapter,
-                    'default_lifetime' => $oneDay,
+                CacheAttributes::CACHE_RESPONSE => [
+                    'adapter' => 'cache.adapter.filesystem',
+                    'default_lifetime' => CacheAttributes::LIFE_TIME_ONE_DAY,
                 ],
                 // SearchService
-                $prefix . 'search' => [
-                    'adapter' => $adapter,
-                    'default_lifetime' => $oneDay,
+                CacheAttributes::CACHE_SEARCH => [
+                    'adapter' => 'cache.adapter.filesystem',
+                    'default_lifetime' => CacheAttributes::LIFE_TIME_ONE_DAY,
                 ],
                 // LogService
-                $prefix . 'log' => [
-                    'adapter' => $adapter,
-                    'default_lifetime' => $fifteenMinutes,
+                CacheAttributes::CACHE_LOG => [
+                    'adapter' => 'cache.adapter.filesystem',
+                    'default_lifetime' => CacheAttributes::LIFE_TIME_FIFTEEN_MINUTES,
                 ],
                 // SchemaService
-                $prefix . 'schema' => [
-                    'adapter' => $adapter,
-                    'default_lifetime' => $oneDay,
+                CacheAttributes::CACHE_SCHEMA => [
+                    'adapter' => 'cache.adapter.filesystem',
+                    'default_lifetime' => CacheAttributes::LIFE_TIME_ONE_DAY,
                 ],
                 // FontAwesomeImageService
-                $prefix . 'fontawesome' => [
-                    'adapter' => $adapter,
-                    'default_lifetime' => $oneMonth,
+                CacheAttributes::CACHE_FONT_AWESOME => [
+                    'adapter' => 'cache.adapter.filesystem',
+                    'default_lifetime' => CacheAttributes::LIFE_TIME_ONE_MONTH,
                 ],
             ],
         ],

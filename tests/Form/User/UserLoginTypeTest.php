@@ -21,10 +21,12 @@ use App\Parameter\ApplicationParameters;
 use App\Parameter\SecurityParameter;
 use App\Service\CaptchaImageService;
 use App\Tests\Form\PreloadedExtensionsTrait;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
+#[AllowMockObjectsWithoutExpectations]
 final class UserLoginTypeTest extends TypeTestCase
 {
     use PasswordHasherExtensionTrait;
@@ -47,7 +49,6 @@ final class UserLoginTypeTest extends TypeTestCase
     #[\Override]
     protected function getPreloadedExtensions(): array
     {
-        $generator = $this->createMock(UrlGeneratorInterface::class);
         $service = $this->createMock(CaptchaImageService::class);
         $service->method('generateImage')
             ->willReturn('fake_content');
@@ -60,7 +61,7 @@ final class UserLoginTypeTest extends TypeTestCase
 
         return [
             new CurrentPasswordType(),
-            new CaptchaImageType($generator),
+            new CaptchaImageType(self::createStub(UrlGeneratorInterface::class)),
             new UserLoginType($service, $parameters),
         ];
     }

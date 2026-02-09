@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace App\Form\User;
 
+use App\Constant\SecurityAttributes;
 use App\Constraint\Captcha;
 use App\Form\AbstractHelperType;
 use App\Form\FormHelper;
 use App\Form\Type\CaptchaImageType;
 use App\Parameter\ApplicationParameters;
-use App\Security\SecurityAttributes;
 use App\Service\CaptchaImageService;
 use Symfony\Component\Validator\Constraints\NotBlank;
 

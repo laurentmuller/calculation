@@ -16,10 +16,12 @@ namespace App\Tests\Form\Calculation;
 use App\Entity\CalculationItem;
 use App\Form\Calculation\CalculationItemType;
 use App\Tests\Form\EntityTypeTestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * @extends EntityTypeTestCase<CalculationItem, CalculationItemType>
  */
+#[AllowMockObjectsWithoutExpectations]
 final class CalculationItemTypeTest extends EntityTypeTestCase
 {
     #[\Override]

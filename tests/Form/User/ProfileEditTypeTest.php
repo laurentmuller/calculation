@@ -16,10 +16,12 @@ namespace App\Tests\Form\User;
 use App\Entity\User;
 use App\Form\User\ProfileEditType;
 use App\Tests\Form\EntityTypeTestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * @extends EntityTypeTestCase<User, ProfileEditType>
  */
+#[AllowMockObjectsWithoutExpectations]
 final class ProfileEditTypeTest extends EntityTypeTestCase
 {
     use VichImageTypeTrait;

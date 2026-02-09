@@ -261,11 +261,11 @@ final class BingTranslatorServiceTest extends TestCase
 
     private function createTranslator(JsonMockResponse ...$responses): BingTranslatorService
     {
-        $key = 'fake';
-        $cache = new ArrayAdapter();
-        $logger = $this->createMock(LoggerInterface::class);
-
-        $service = new BingTranslatorService($key, $cache, $logger);
+        $service = new BingTranslatorService(
+            'fake',
+            new ArrayAdapter(),
+            self::createStub(LoggerInterface::class)
+        );
         if ([] !== $responses) {
             $client = new MockHttpClient($responses);
             $service->setClient($client);

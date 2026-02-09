@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Constant\CacheAttributes;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Category;
@@ -58,7 +59,7 @@ class IndexService
     /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
     public function __construct(
         private readonly EntityManagerInterface $manager,
-        #[Target('calculation.parameters')]
+        #[Target(CacheAttributes::CACHE_PARAMETERS)]
         CacheItemPoolInterface&CacheInterface&NamespacedPoolInterface $cache
     ) {
         $this->cache = $cache->withSubNamespace('counters');

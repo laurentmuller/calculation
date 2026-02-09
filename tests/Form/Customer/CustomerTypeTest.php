@@ -18,10 +18,12 @@ use App\Form\Customer\CustomerType;
 use App\Form\Type\CountryFlagType;
 use App\Service\CountryFlagService;
 use App\Tests\Form\EntityTypeTestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * @extends EntityTypeTestCase<Customer, CustomerType>
  */
+#[AllowMockObjectsWithoutExpectations]
 final class CustomerTypeTest extends EntityTypeTestCase
 {
     #[\Override]

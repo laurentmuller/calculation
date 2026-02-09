@@ -17,8 +17,10 @@ use App\Enums\EntityAction;
 use App\Form\Parameters\AbstractParametersType;
 use App\Tests\Fixture\FixtureParameter;
 use App\Tests\Fixture\FixtureParametersType;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Test\TypeTestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 final class AbstractParameterTypeTest extends TypeTestCase
 {
     public function testWithAllOptions(): void

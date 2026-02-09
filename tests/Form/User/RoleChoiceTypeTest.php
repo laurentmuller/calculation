@@ -17,9 +17,11 @@ use App\Entity\User;
 use App\Form\User\RoleChoiceType;
 use App\Interfaces\RoleInterface;
 use App\Tests\Form\PreloadedExtensionsTrait;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Test\TypeTestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 final class RoleChoiceTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;

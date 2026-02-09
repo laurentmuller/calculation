@@ -17,8 +17,10 @@ use App\Form\Dialog\EditTaskDialogType;
 use App\Tests\Form\Category\CategoryTrait;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\Form\Task\TaskTrait;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Test\TypeTestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 final class EditTaskDialogTypeTest extends TypeTestCase
 {
     use CategoryTrait;

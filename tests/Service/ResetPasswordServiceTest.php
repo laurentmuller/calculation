@@ -167,9 +167,7 @@ final class ResetPasswordServiceTest extends TestCase
         }
         $translator = $this->createMockTranslator();
         $service = new UserExceptionService($translator);
-        $generator = $this->createMock(UrlGeneratorInterface::class);
-        $mailer ??= $this->createMock(MailerInterface::class);
-        $logger = $this->createMock(LoggerInterface::class);
+        $mailer ??= self::createStub(MailerInterface::class);
         $mailerUserEmail = 'mailer_user_name@example.com';
         $mailerUserName = 'mailer_user_name';
 
@@ -178,9 +176,9 @@ final class ResetPasswordServiceTest extends TestCase
             $repository,
             $service,
             $translator,
-            $generator,
+            self::createStub(UrlGeneratorInterface::class),
             $mailer,
-            $logger,
+            self::createStub(LoggerInterface::class),
             $mailerUserEmail,
             $mailerUserName
         );

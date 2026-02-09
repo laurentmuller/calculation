@@ -16,12 +16,14 @@ namespace App\Tests\Form\Type;
 use App\Form\Type\ReCaptchaType;
 use App\Service\RecaptchaService;
 use App\Tests\Form\PreloadedExtensionsTrait;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReCaptcha\Response;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
+#[AllowMockObjectsWithoutExpectations]
 final class ReCaptchaTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;

@@ -143,10 +143,10 @@ final class AbstractChartTest extends TestCase
 
     private function createChart(?ApplicationParameters $parameters = null, ?Environment $twig = null): FixtureChart
     {
-        $parameters ??= $this->createMock(ApplicationParameters::class);
-        $generator = $this->createMock(UrlGeneratorInterface::class);
-        $twig ??= $this->createMock(Environment::class);
-
-        return new FixtureChart($parameters, $generator, $twig);
+        return new FixtureChart(
+            $parameters ?? self::createStub(ApplicationParameters::class),
+            self::createStub(UrlGeneratorInterface::class),
+            $twig ?? self::createStub(Environment::class)
+        );
     }
 }

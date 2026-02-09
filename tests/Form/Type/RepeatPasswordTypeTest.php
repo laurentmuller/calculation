@@ -15,8 +15,10 @@ namespace App\Tests\Form\Type;
 
 use App\Form\Type\RepeatPasswordType;
 use App\Tests\Form\User\PasswordHasherExtensionTrait;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Test\TypeTestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 final class RepeatPasswordTypeTest extends TypeTestCase
 {
     use PasswordHasherExtensionTrait;

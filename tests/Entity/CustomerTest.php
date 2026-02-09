@@ -16,12 +16,14 @@ namespace App\Tests\Entity;
 use App\Entity\Customer;
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Validator\Constraints\IsNullValidator;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
 /**
  * @extends ConstraintValidatorTestCase<IsNullValidator>
  */
+#[AllowMockObjectsWithoutExpectations]
 final class CustomerTest extends ConstraintValidatorTestCase
 {
     use IdTrait;

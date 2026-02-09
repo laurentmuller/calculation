@@ -13,10 +13,11 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use App\Constant\CacheAttributes;
+use App\Constant\SecurityAttributes;
 use App\Interfaces\RoleInterface;
 use App\Repository\UserRepository;
 use App\Security\LoginFormAuthenticator;
-use App\Security\SecurityAttributes;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -88,7 +89,7 @@ return App::config([
                     'remember_me_parameter' => SecurityAttributes::REMEMBER_FIELD,
                     'secret' => '%app_secret%',
                     'path' => '%cookie_path%',
-                    'lifetime' => 2_592_000, // 30 days
+                    'lifetime' => CacheAttributes::LIFE_TIME_ONE_MONTH,
                     'samesite' => Cookie::SAMESITE_LAX,
                     'secure' => true,
                 ],

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Constant\CacheAttributes;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mime\Address;
@@ -25,7 +26,7 @@ readonly class ApplicationService
 {
     public function __construct(
         private ParameterBagInterface $parameters,
-        #[Target('calculation.application')]
+        #[Target(CacheAttributes::CACHE_APPLICATION)]
         private CacheInterface $cache,
     ) {
     }

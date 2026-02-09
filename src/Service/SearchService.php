@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Constant\CacheAttributes;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Category;
@@ -129,7 +130,7 @@ class SearchService implements ServiceSubscriberInterface
         private readonly EntityManagerInterface $manager,
         #[Autowire('%kernel.debug%')]
         private readonly bool $debug,
-        #[Target('calculation.search')]
+        #[Target(CacheAttributes::CACHE_SEARCH)]
         private readonly CacheInterface $cache,
     ) {
     }

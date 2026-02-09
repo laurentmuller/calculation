@@ -19,6 +19,7 @@ use App\Enums\StrengthLevel;
 use App\Service\PasswordService;
 use App\Tests\TranslatorMockTrait;
 use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
@@ -27,6 +28,7 @@ use ZxcvbnPhp\Zxcvbn;
 /**
  * @extends ConstraintValidatorTestCase<StrengthValidator>
  */
+#[AllowMockObjectsWithoutExpectations]
 final class StrengthValidatorTest extends ConstraintValidatorTestCase
 {
     use TranslatorMockTrait;

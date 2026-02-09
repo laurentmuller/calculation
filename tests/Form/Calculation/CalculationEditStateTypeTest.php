@@ -27,11 +27,13 @@ use App\Tests\Form\CalculationState\CalculationStateTrait;
 use App\Tests\Form\EntityTypeTestCase;
 use App\Tests\TranslatorMockTrait;
 use App\Utils\DateUtils;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 /**
  * @extends EntityTypeTestCase<Calculation, CalculationEditStateType>
  */
+#[AllowMockObjectsWithoutExpectations]
 final class CalculationEditStateTypeTest extends EntityTypeTestCase
 {
     use CalculationStateTrait;

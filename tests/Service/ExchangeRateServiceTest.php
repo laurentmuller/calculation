@@ -279,12 +279,12 @@ final class ExchangeRateServiceTest extends TestCase
 
     private function createService(): ExchangeRateService
     {
-        $key = 'fake';
-        $cache = new ArrayAdapter();
-        $logger = $this->createMock(LoggerInterface::class);
-        $translator = $this->createMockTranslator();
-
-        return new ExchangeRateService($key, $cache, $logger, $translator);
+        return new ExchangeRateService(
+            'fake',
+            new ArrayAdapter(),
+            self::createStub(LoggerInterface::class),
+            $this->createMockTranslator()
+        );
     }
 
     private function getErrorResponse(): JsonMockResponse

@@ -18,11 +18,13 @@ use App\Form\Type\PlainType;
 use App\Interfaces\DateFormatInterface;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\Test\TypeTestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 final class PlainTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;

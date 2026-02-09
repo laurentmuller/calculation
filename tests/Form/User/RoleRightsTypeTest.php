@@ -21,10 +21,12 @@ use App\Interfaces\RoleInterface;
 use App\Service\RoleService;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
+#[AllowMockObjectsWithoutExpectations]
 final class RoleRightsTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;

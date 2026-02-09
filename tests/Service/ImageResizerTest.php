@@ -77,10 +77,10 @@ final class ImageResizerTest extends TestCase
 
     private function createService(): ImageResizer
     {
-        $translator = $this->createMockTranslator();
-        $logger = $this->createMock(LoggerInterface::class);
-
-        return new ImageResizer($translator, $logger);
+        return new ImageResizer(
+            $this->createMockTranslator(),
+            self::createStub(LoggerInterface::class)
+        );
     }
 
     private function getSource(): string

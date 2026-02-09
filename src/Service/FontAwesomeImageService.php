@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Constant\CacheAttributes;
 use App\Model\FontAwesomeImage;
 use App\Model\ImageSize;
 use App\Traits\CacheKeyTrait;
@@ -53,7 +54,7 @@ class FontAwesomeImageService
     public function __construct(
         #[Autowire('%kernel.project_dir%/resources/fontawesome')]
         private readonly string $directory,
-        #[Target('calculation.fontawesome')]
+        #[Target(CacheAttributes::CACHE_FONT_AWESOME)]
         private readonly CacheInterface $cache
     ) {
     }

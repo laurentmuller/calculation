@@ -17,11 +17,13 @@ use App\Entity\Category;
 use App\Form\Category\CategoryType;
 use App\Tests\Form\EntityTypeTestCase;
 use App\Tests\Form\Group\GroupTrait;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 /**
  * @extends EntityTypeTestCase<Category, CategoryType>
  */
+#[AllowMockObjectsWithoutExpectations]
 final class CategoryTypeTest extends EntityTypeTestCase
 {
     use GroupTrait;

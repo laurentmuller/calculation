@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Constant\CacheAttributes;
 use App\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Routing\Route;
@@ -32,7 +33,7 @@ readonly class RouteInfoService
 {
     public function __construct(
         private RouterInterface $router,
-        #[Target('calculation.symfony')]
+        #[Target(CacheAttributes::CACHE_SYMFONY)]
         private CacheInterface $cache,
     ) {
     }

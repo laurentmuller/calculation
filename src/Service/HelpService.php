@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Constant\CacheAttributes;
 use App\Traits\ArrayTrait;
 use App\Traits\ClosureSortTrait;
 use App\Traits\TranslatorTrait;
@@ -105,7 +106,7 @@ class HelpService
         private readonly string $jsonPath,
         #[Autowire('%kernel.project_dir%/public/help/images')]
         private readonly string $imagePath,
-        #[Target('calculation.help')]
+        #[Target(CacheAttributes::CACHE_HELP)]
         private readonly CacheInterface $cache,
         private readonly TranslatorInterface $translator
     ) {

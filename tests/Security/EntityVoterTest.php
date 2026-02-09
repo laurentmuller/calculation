@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Security;
 
+use App\Constant\SecurityAttributes;
 use App\Entity\Calculation;
 use App\Entity\User;
 use App\Enums\EntityName;
@@ -22,7 +23,6 @@ use App\Model\Role;
 use App\Parameter\ApplicationParameters;
 use App\Parameter\RightsParameter;
 use App\Security\EntityVoter;
-use App\Security\SecurityAttributes;
 use App\Service\RoleBuilderService;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;

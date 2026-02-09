@@ -16,8 +16,10 @@ namespace App\Tests\Form\Type;
 use App\Form\Type\CountryFlagType;
 use App\Service\CountryFlagService;
 use App\Tests\Form\PreloadedExtensionsTrait;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Test\TypeTestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 final class CountryFlagTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;

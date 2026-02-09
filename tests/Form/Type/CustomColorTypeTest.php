@@ -15,8 +15,10 @@ namespace App\Tests\Form\Type;
 
 use App\Form\Type\CustomColorType;
 use App\Tests\Form\PreloadedExtensionsTrait;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Test\TypeTestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 final class CustomColorTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;

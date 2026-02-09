@@ -16,11 +16,13 @@ namespace App\Tests\Constraint;
 use App\Constraint\Captcha;
 use App\Constraint\CaptchaValidator;
 use App\Service\CaptchaImageService;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
 /**
  * @extends ConstraintValidatorTestCase<CaptchaValidator>
  */
+#[AllowMockObjectsWithoutExpectations]
 final class CaptchaValidatorTest extends ConstraintValidatorTestCase
 {
     public function testEmptyIsValid(): void

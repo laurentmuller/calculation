@@ -42,15 +42,16 @@ final class SwissPostUpdaterTest extends TestCase
         FileUtils::copy($source, $this->databaseName);
 
         $this->parameters = $this->createMock(ApplicationParameters::class);
-        $factory = $this->createMock(FormFactoryInterface::class);
         $service = new SwissPostService($this->databaseName);
 
-        $logger = $this->createMock(LoggerInterface::class);
-        $translator = $this->createMockTranslator();
-
-        $this->service = new SwissPostUpdater($this->parameters, $factory, $service);
-        $this->service->setTranslator($translator)
-            ->setLogger($logger);
+        $this->service = new SwissPostUpdater(
+            $this->parameters,
+            self::createStub(FormFactoryInterface::class),
+            $service
+        );
+        $this->service
+            ->setTranslator($this->createMockTranslator())
+            ->setLogger(self::createStub(LoggerInterface::class));
     }
 
     #[\Override]

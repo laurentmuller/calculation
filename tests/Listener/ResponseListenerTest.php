@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Listener;
 
+use App\Constant\SecurityAttributes;
 use App\Controller\CspReportController;
 use App\Listener\ResponseListener;
-use App\Security\SecurityAttributes;
 use App\Service\NonceService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -145,11 +145,12 @@ final class ResponseListenerTest extends TestCase
         ?Request $request = null,
         ?Response $response = null
     ): ResponseEvent {
-        $kernel = $this->createMock(HttpKernelInterface::class);
-        $request ??= new Request();
-        $response ??= new Response();
-
-        return new ResponseEvent($kernel, $request, $requestType, $response);
+        return new ResponseEvent(
+            self::createStub(HttpKernelInterface::class),
+            $request ?? new Request(),
+            $requestType,
+            $response ?? new Response()
+        );
     }
 
     private function createListener(

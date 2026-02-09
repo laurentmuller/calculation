@@ -17,10 +17,12 @@ use App\Entity\Product;
 use App\Form\Product\ProductType;
 use App\Tests\Form\Category\CategoryTrait;
 use App\Tests\Form\EntityTypeTestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * @extends EntityTypeTestCase<Product, ProductType>
  */
+#[AllowMockObjectsWithoutExpectations]
 final class ProductTypeTest extends EntityTypeTestCase
 {
     use CategoryTrait;

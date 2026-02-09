@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Constant\CacheAttributes;
 use App\Entity\Log;
 use App\Model\LogFile;
 use App\Traits\CacheKeyTrait;
@@ -35,7 +36,7 @@ class LogService
     public function __construct(
         #[Autowire('%kernel.logs_dir%/%kernel.environment%.log')]
         string $fileName,
-        #[Target('calculation.log')]
+        #[Target(CacheAttributes::CACHE_LOG)]
         private readonly CacheInterface $cache
     ) {
         $this->fileName = FileUtils::normalize($fileName);

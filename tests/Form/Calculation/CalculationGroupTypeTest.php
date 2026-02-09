@@ -20,10 +20,12 @@ use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
 use App\Tests\Form\EntityTypeTestCase;
 use Doctrine\Common\Collections\ArrayCollection;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * @extends EntityTypeTestCase<CalculationGroup, CalculationGroupType>
  */
+#[AllowMockObjectsWithoutExpectations]
 final class CalculationGroupTypeTest extends EntityTypeTestCase
 {
     #[\Override]

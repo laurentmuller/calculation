@@ -15,6 +15,7 @@ namespace App\Tests\Constraint;
 
 use App\Constraint\Password;
 use App\Constraint\PasswordValidator;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Validator\Exception\InvalidOptionsException;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
@@ -22,6 +23,7 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 /**
  * @extends ConstraintValidatorTestCase<PasswordValidator>
  */
+#[AllowMockObjectsWithoutExpectations]
 final class PasswordValidatorTest extends ConstraintValidatorTestCase
 {
     public static function getInvalidValues(): \Generator

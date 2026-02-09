@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Constant\CacheAttributes;
 use App\Model\CommandResult;
 use App\Utils\StringUtils;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -109,7 +110,7 @@ class CommandService implements \Countable
 
     public function __construct(
         private readonly KernelInterface $kernel,
-        #[Target('calculation.command')]
+        #[Target(CacheAttributes::CACHE_COMMAND)]
         private readonly CacheInterface $cache
     ) {
     }

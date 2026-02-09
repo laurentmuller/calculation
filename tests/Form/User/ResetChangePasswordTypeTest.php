@@ -21,10 +21,12 @@ use App\Parameter\SecurityParameter;
 use App\Service\CaptchaImageService;
 use App\Tests\Entity\IdTrait;
 use App\Tests\Form\PreloadedExtensionsTrait;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
+#[AllowMockObjectsWithoutExpectations]
 final class ResetChangePasswordTypeTest extends TypeTestCase
 {
     use IdTrait;
@@ -66,7 +68,6 @@ final class ResetChangePasswordTypeTest extends TypeTestCase
     #[\Override]
     protected function getPreloadedExtensions(): array
     {
-        $generator = $this->createMock(UrlGeneratorInterface::class);
         $service = $this->createMock(CaptchaImageService::class);
         $service->method('generateImage')
             ->willReturn('fake_content');
@@ -78,7 +79,7 @@ final class ResetChangePasswordTypeTest extends TypeTestCase
             ->willReturn($security);
 
         return [
-            new CaptchaImageType($generator),
+            new CaptchaImageType(self::createStub(UrlGeneratorInterface::class)),
             new ResetChangePasswordType($service, $parameters),
         ];
     }

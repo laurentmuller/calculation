@@ -18,10 +18,12 @@ use App\Form\Calculation\CalculationCategoryType;
 use App\Repository\CategoryRepository;
 use App\Tests\Form\EntityTypeTestCase;
 use Doctrine\Common\Collections\ArrayCollection;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * @extends EntityTypeTestCase<CalculationCategory, CalculationCategoryType>
  */
+#[AllowMockObjectsWithoutExpectations]
 final class CalculationCategoryTypeTest extends EntityTypeTestCase
 {
     #[\Override]

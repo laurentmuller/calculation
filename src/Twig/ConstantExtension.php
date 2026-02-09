@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Twig;
 
+use App\Constant\CacheAttributes;
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Interfaces\ConstantsInterface;
@@ -30,7 +31,7 @@ use Twig\Extension\GlobalsInterface;
 final class ConstantExtension extends AbstractExtension implements ConstantsInterface, GlobalsInterface
 {
     public function __construct(
-        #[Target('calculation.constant')]
+        #[Target(CacheAttributes::CACHE_CONSTANT)]
         private readonly CacheInterface $cache
     ) {
     }

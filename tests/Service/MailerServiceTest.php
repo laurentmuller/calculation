@@ -72,16 +72,11 @@ final class MailerServiceTest extends TestCase
 
     private function createService(): MailerService
     {
-        $generator = $this->createMock(UrlGeneratorInterface::class);
-        $markdown = $this->createMock(MarkdownInterface::class);
-        $mailer = $this->createMock(MailerInterface::class);
-        $translator = $this->createMockTranslator();
-
         return new MailerService(
-            $generator,
-            $markdown,
-            $mailer,
-            $translator
+            self::createStub(UrlGeneratorInterface::class),
+            self::createStub(MarkdownInterface::class),
+            self::createStub(MailerInterface::class),
+            $this->createMockTranslator()
         );
     }
 }

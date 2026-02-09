@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Constant\CacheAttributes;
 use App\Entity\User;
 use App\Interfaces\DisableListenerInterface;
 use App\Traits\DisableListenerTrait;
@@ -52,7 +53,7 @@ class AssetVersionService extends StaticVersionStrategy implements DisableListen
         #[Autowire('%kernel.project_dir%')]
         string $projectDir,
         EnvironmentService $service,
-        #[Target('calculation.asset')]
+        #[Target(CacheAttributes::CACHE_ASSET)]
         private readonly CacheInterface $cache,
     ) {
         $version = $this->cache->get(

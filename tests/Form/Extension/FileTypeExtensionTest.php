@@ -14,12 +14,14 @@ declare(strict_types=1);
 namespace App\Tests\Form\Extension;
 
 use App\Form\Extension\FileTypeExtension;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 
+#[AllowMockObjectsWithoutExpectations]
 final class FileTypeExtensionTest extends TypeTestCase
 {
     public function testFormViewWithMaxFiles(): void

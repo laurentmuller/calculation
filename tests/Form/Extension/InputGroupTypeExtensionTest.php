@@ -14,10 +14,12 @@ declare(strict_types=1);
 namespace App\Tests\Form\Extension;
 
 use App\Form\Extension\InputGroupTypeExtension;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\Test\TypeTestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 final class InputGroupTypeExtensionTest extends TypeTestCase
 {
     private const array KEYS = [

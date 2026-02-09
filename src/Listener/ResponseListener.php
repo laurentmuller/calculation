@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace App\Listener;
 
+use App\Constant\CacheAttributes;
+use App\Constant\SecurityAttributes;
 use App\Controller\CspReportController;
-use App\Security\SecurityAttributes;
 use App\Service\NonceService;
 use App\Traits\ArrayTrait;
 use App\Utils\FileUtils;
@@ -69,7 +70,7 @@ class ResponseListener
         private readonly string $file,
         #[Autowire('%kernel.debug%')]
         private readonly bool $debug,
-        #[Target('calculation.response')]
+        #[Target(CacheAttributes::CACHE_RESPONSE)]
         private readonly CacheInterface $cache,
         private readonly UrlGeneratorInterface $generator,
         private readonly NonceService $service,

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Constant\CacheAttributes;
 use App\Utils\FileUtils;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
@@ -54,7 +55,7 @@ readonly class PackageInfoService implements \Countable
         private string $jsonPath,
         #[Autowire('%kernel.project_dir%/vendor')]
         private string $vendorPath,
-        #[Target('calculation.symfony')]
+        #[Target(CacheAttributes::CACHE_SYMFONY)]
         private CacheInterface $cache,
     ) {
     }

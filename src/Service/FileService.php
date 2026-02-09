@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Traits\LoggerTrait;
 use App\Utils\StringUtils;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Helper\Helper;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
@@ -25,8 +27,12 @@ use Symfony\Component\Finder\Finder;
  */
 readonly class FileService
 {
-    public function __construct(private Filesystem $fs = new Filesystem())
-    {
+    use LoggerTrait;
+
+    public function __construct(
+        private Filesystem $fs,
+        private LoggerInterface $logger,
+    ) {
     }
 
     /**
@@ -60,7 +66,9 @@ readonly class FileService
             $this->fs->copy($originFile, $targetFile, $overwrite);
 
             return true;
-        } catch (IOException) {
+        } catch (IOException $e) {
+            $this->logException($e);
+
             return false;
         }
     }
@@ -105,7 +113,9 @@ readonly class FileService
             $this->fs->dumpFile($file, $content);
 
             return true;
-        } catch (IOException) {
+        } catch (IOException $e) {
+            $this->logException($e);
+
             return false;
         }
     }
@@ -158,6 +168,12 @@ readonly class FileService
         return $file->key();
     }
 
+    #[\Override]
+    public function getLogger(): LoggerInterface
+    {
+        return $this->logger;
+    }
+
     /**
      * Given an existing end path, convert it to a path relative to a given starting path.
      *
@@ -188,7 +204,9 @@ readonly class FileService
             $this->fs->mirror(originDir: $origin, targetDir: $target, options: $options);
 
             return true;
-        } catch (IOException) {
+        } catch (IOException $e) {
+            $this->logException($e);
+
             return false;
         }
     }
@@ -205,8 +223,12 @@ readonly class FileService
         }
 
         try {
-            return $this->fs->readFile($file);
-        } catch (IOException) {
+            $content = $this->fs->readFile($file);
+
+            return '' === $content ? null : $content;
+        } catch (IOException $e) {
+            $this->logException($e);
+
             return null;
         }
     }
@@ -222,7 +244,8 @@ readonly class FileService
 
                 return true;
             }
-        } catch (IOException) {
+        } catch (IOException $e) {
+            $this->logException($e);
         }
 
         return false;
@@ -243,7 +266,9 @@ readonly class FileService
             $this->fs->rename($origin, $target, $overwrite);
 
             return true;
-        } catch (IOException) {
+        } catch (IOException $e) {
+            $this->logException($e);
+
             return false;
         }
     }
@@ -350,7 +375,9 @@ readonly class FileService
             }
 
             return $file;
-        } catch (IOException) {
+        } catch (IOException $e) {
+            $this->logException($e);
+
             return null;
         }
     }

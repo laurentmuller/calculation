@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Parameter;
 
+use App\Constant\CacheAttributes;
 use App\Entity\ApplicationProperty;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
@@ -55,7 +56,7 @@ class ApplicationParameters extends AbstractParameters
     private ?SecurityParameter $security = null;
 
     public function __construct(
-        #[Target('calculation.parameters')]
+        #[Target(CacheAttributes::CACHE_PARAMETERS)]
         CacheInterface $cache,
         EntityManagerInterface $manager,
         #[Autowire('%kernel.debug%')]

@@ -22,10 +22,12 @@ use App\Parameter\SecurityParameter;
 use App\Service\CaptchaImageService;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
+#[AllowMockObjectsWithoutExpectations]
 final class UserRegistrationTypeTest extends TypeTestCase
 {
     use PasswordHasherExtensionTrait;
@@ -81,7 +83,6 @@ final class UserRegistrationTypeTest extends TypeTestCase
     #[\Override]
     protected function getPreloadedExtensions(): array
     {
-        $generator = $this->createMock(UrlGeneratorInterface::class);
         $service = $this->createMock(CaptchaImageService::class);
         $service->method('generateImage')
             ->willReturn('fake_content');
@@ -91,11 +92,14 @@ final class UserRegistrationTypeTest extends TypeTestCase
         $parameters = $this->createMock(ApplicationParameters::class);
         $parameters->method('getSecurity')
             ->willReturn($security);
-        $translator = $this->createMockTranslator();
 
         return [
-            new UserRegistrationType($service, $parameters, $translator),
-            new CaptchaImageType($generator),
+            new UserRegistrationType(
+                $service,
+                $parameters,
+                $this->createMockTranslator()
+            ),
+            new CaptchaImageType(self::createStub(UrlGeneratorInterface::class)),
         ];
     }
 

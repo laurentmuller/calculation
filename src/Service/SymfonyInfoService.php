@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Constant\CacheAttributes;
 use App\Utils\DateUtils;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
@@ -51,7 +52,7 @@ readonly class SymfonyInfoService
     private const string UNKNOWN = 'Unknown';
 
     public function __construct(
-        #[Target('calculation.symfony')]
+        #[Target(CacheAttributes::CACHE_SYMFONY)]
         private CacheInterface $cache,
     ) {
     }

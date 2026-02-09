@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Listener;
 
+use App\Constant\SecurityAttributes;
 use App\Entity\User;
 use App\Listener\SwitchUserListener;
-use App\Security\SecurityAttributes;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\InputBag;
@@ -92,11 +92,10 @@ final class SwitchUserListenerTest extends TestCase
 
     private function createRequestStack(): RequestStack
     {
-        $session = $this->createMock(SessionInterface::class);
         $requestStack = $this->createMock(RequestStack::class);
         $requestStack->expects(self::once())
             ->method('getSession')
-            ->willReturn($session);
+            ->willReturn(self::createStub(SessionInterface::class));
 
         return $requestStack;
     }

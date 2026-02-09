@@ -17,6 +17,7 @@ use App\Constraint\AbstractConstraintValidator;
 use App\Constraint\Password;
 use App\Constraint\Strength;
 use App\Tests\Fixture\FixtureStringable;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
@@ -24,6 +25,7 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 /**
  * @extends ConstraintValidatorTestCase<AbstractConstraintValidator>
  */
+#[AllowMockObjectsWithoutExpectations]
 final class AbstractConstraintValidatorTest extends ConstraintValidatorTestCase
 {
     public function testEmptyIsValid(): void

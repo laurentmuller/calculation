@@ -19,6 +19,7 @@ use App\Form\Extension\UrlTypeExtension;
 use App\Form\Extension\VichImageTypeExtension;
 use App\Interfaces\EntityInterface;
 use App\Tests\DateAssertTrait;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
@@ -28,6 +29,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
  * @template TEntity of EntityInterface
  * @template TForm of \App\Form\AbstractEntityType<TEntity>
  */
+#[AllowMockObjectsWithoutExpectations]
 abstract class EntityTypeTestCase extends TypeTestCase
 {
     use DateAssertTrait;

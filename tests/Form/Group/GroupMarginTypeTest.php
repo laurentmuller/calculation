@@ -16,10 +16,12 @@ namespace App\Tests\Form\Group;
 use App\Entity\GroupMargin;
 use App\Form\Group\GroupMarginType;
 use App\Tests\Form\EntityTypeTestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * @extends EntityTypeTestCase<GroupMargin, GroupMarginType>
  */
+#[AllowMockObjectsWithoutExpectations]
 final class GroupMarginTypeTest extends EntityTypeTestCase
 {
     #[\Override]

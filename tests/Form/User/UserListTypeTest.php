@@ -16,9 +16,11 @@ namespace App\Tests\Form\User;
 use App\Form\User\UserListType;
 use App\Tests\Fixture\FixtureDataForm;
 use App\Tests\Form\PreloadedExtensionsTrait;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 final class UserListTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;

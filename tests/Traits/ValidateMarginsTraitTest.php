@@ -15,12 +15,14 @@ namespace App\Tests\Traits;
 
 use App\Entity\GlobalMargin;
 use App\Model\GlobalMargins;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Validator\Constraints\LengthValidator;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
 /**
  * @extends ConstraintValidatorTestCase<LengthValidator>
  */
+#[AllowMockObjectsWithoutExpectations]
 final class ValidateMarginsTraitTest extends ConstraintValidatorTestCase
 {
     public function testMaximumGreaterMinimum(): void

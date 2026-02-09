@@ -16,9 +16,11 @@ namespace App\Tests\Form\Group;
 use App\Form\Group\GroupListType;
 use App\Tests\Fixture\FixtureDataForm;
 use App\Tests\Form\PreloadedExtensionsTrait;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 final class GroupListTypeTest extends TypeTestCase
 {
     use GroupTrait;

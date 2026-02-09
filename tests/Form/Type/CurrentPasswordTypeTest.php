@@ -14,8 +14,10 @@ declare(strict_types=1);
 namespace App\Tests\Form\Type;
 
 use App\Form\Type\CurrentPasswordType;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Test\TypeTestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 final class CurrentPasswordTypeTest extends TypeTestCase
 {
     public function testFormView(): void

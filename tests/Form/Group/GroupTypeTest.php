@@ -17,10 +17,12 @@ use App\Entity\Group;
 use App\Form\Group\GroupType;
 use App\Tests\Form\EntityTypeTestCase;
 use Doctrine\Common\Collections\ArrayCollection;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * @extends EntityTypeTestCase<Group, GroupType>
  */
+#[AllowMockObjectsWithoutExpectations]
 final class GroupTypeTest extends EntityTypeTestCase
 {
     #[\Override]

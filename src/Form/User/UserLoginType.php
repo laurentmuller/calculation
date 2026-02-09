@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Form\User;
 
+use App\Constant\SecurityAttributes;
 use App\Form\FormHelper;
-use App\Security\SecurityAttributes;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**

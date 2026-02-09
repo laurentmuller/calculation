@@ -182,11 +182,11 @@ final class DeeplTranslatorServiceTest extends TestCase
 
     private function createTranslator(MockResponse ...$responses): DeeplTranslatorService
     {
-        $key = 'fake';
-        $cache = new ArrayAdapter();
-        $logger = $this->createMock(LoggerInterface::class);
-
-        $service = new DeeplTranslatorService($key, $cache, $logger);
+        $service = new DeeplTranslatorService(
+            'fake',
+            new ArrayAdapter(),
+            self::createStub(LoggerInterface::class)
+        );
         if ([] !== $responses) {
             $client = new MockHttpClient($responses);
             $service->setClient($client);

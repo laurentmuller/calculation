@@ -15,9 +15,11 @@ namespace App\Tests\Form\Type;
 
 use App\Form\Type\CaptchaImageType;
 use App\Tests\Form\PreloadedExtensionsTrait;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
+#[AllowMockObjectsWithoutExpectations]
 final class CaptchaImageTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;
@@ -40,10 +42,8 @@ final class CaptchaImageTypeTest extends TypeTestCase
     #[\Override]
     protected function getPreloadedExtensions(): array
     {
-        $generator = $this->createMock(UrlGeneratorInterface::class);
-
         return [
-            new CaptchaImageType($generator),
+            new CaptchaImageType(self::createStub(UrlGeneratorInterface::class)),
         ];
     }
 }

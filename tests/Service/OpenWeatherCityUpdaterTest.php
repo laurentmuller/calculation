@@ -165,11 +165,11 @@ final class OpenWeatherCityUpdaterTest extends TestCase
 
     private function createService(): OpenWeatherCityUpdater
     {
-        $databaseName = $this->getDatabaseName();
-        $factory = $this->createMock(FormFactoryInterface::class);
-        $translator = $this->createMockTranslator();
-
-        return new OpenWeatherCityUpdater($databaseName, $factory, $translator);
+        return new OpenWeatherCityUpdater(
+            $this->getDatabaseName(),
+            self::createStub(FormFactoryInterface::class),
+            $this->createMockTranslator()
+        );
     }
 
     private function getDatabaseName(): string

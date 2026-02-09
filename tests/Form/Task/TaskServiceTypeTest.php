@@ -17,8 +17,10 @@ use App\Form\Task\TaskServiceType;
 use App\Form\Type\PlainType;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Test\TypeTestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 final class TaskServiceTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;

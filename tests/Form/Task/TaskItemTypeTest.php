@@ -17,10 +17,12 @@ use App\Entity\TaskItem;
 use App\Form\Task\TaskItemType;
 use App\Tests\Form\EntityTypeTestCase;
 use Doctrine\Common\Collections\ArrayCollection;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * @extends EntityTypeTestCase<TaskItem, TaskItemType>
  */
+#[AllowMockObjectsWithoutExpectations]
 final class TaskItemTypeTest extends EntityTypeTestCase
 {
     #[\Override]

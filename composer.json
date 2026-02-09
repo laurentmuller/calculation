@@ -47,7 +47,7 @@
         "fakerphp/faker": "^1.0",
         "google/recaptcha": "^1.0",
         "imagine/imagine": "^1.0",
-        "laurentmuller/fpdf2": "^3.0",
+        "laurentmuller/fpdf2": "^4.0",
         "laurentmuller/highcharts-bundle": "^4.0",
         "league/commonmark": "^2.0",
         "phpdocumentor/type-resolver": "^2.0",

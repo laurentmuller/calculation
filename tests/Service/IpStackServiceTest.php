@@ -100,16 +100,13 @@ final class IpStackServiceTest extends TestCase
 
     private function createService(): IpStackService
     {
-        $key = 'fake';
-        $cache = new ArrayAdapter();
         $translator = $this->createMockTranslator();
-        $logger = $this->createMock(LoggerInterface::class);
         $service = new PositionService($translator);
 
         return new IpStackService(
-            $key,
-            $cache,
-            $logger,
+            'fake',
+            new ArrayAdapter(),
+            self::createStub(LoggerInterface::class),
             $service,
             $translator
         );

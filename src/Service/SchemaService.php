@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Constant\CacheAttributes;
 use App\Traits\ArrayTrait;
 use App\Traits\ClosureSortTrait;
 use App\Utils\StringUtils;
@@ -92,7 +93,7 @@ class SchemaService
 
     public function __construct(
         private readonly EntityManagerInterface $manager,
-        #[Target('calculation.schema')]
+        #[Target(CacheAttributes::CACHE_SCHEMA)]
         private readonly CacheInterface $cache
     ) {
     }

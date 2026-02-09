@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "40f384f9542eb5a925740baee4ef6e24",
+    "content-hash": "d91535860254bf7f98aa5dc64a8ee9ad",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1302,16 +1302,16 @@
         },
         {
             "name": "doctrine/sql-formatter",
-            "version": "1.5.3",
+            "version": "1.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/sql-formatter.git",
-                "reference": "a8af23a8e9d622505baa2997465782cbe8bb7fc7"
+                "reference": "9563949f5cd3bd12a17d12fb980528bc141c5806"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/sql-formatter/zipball/a8af23a8e9d622505baa2997465782cbe8bb7fc7",
-                "reference": "a8af23a8e9d622505baa2997465782cbe8bb7fc7",
+                "url": "https://api.github.com/repos/doctrine/sql-formatter/zipball/9563949f5cd3bd12a17d12fb980528bc141c5806",
+                "reference": "9563949f5cd3bd12a17d12fb980528bc141c5806",
                 "shasum": ""
             },
             "require": {
@@ -1351,9 +1351,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/sql-formatter/issues",
-                "source": "https://github.com/doctrine/sql-formatter/tree/1.5.3"
+                "source": "https://github.com/doctrine/sql-formatter/tree/1.5.4"
             },
-            "time": "2025-10-26T09:35:14+00:00"
+            "time": "2026-02-08T16:21:46+00:00"
         },
         {
             "name": "egulias/email-validator",
@@ -1826,16 +1826,16 @@
         },
         {
             "name": "laurentmuller/fpdf2",
-            "version": "3.2.2",
+            "version": "4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/fpdf2.git",
-                "reference": "33088182d3990fbdf58c31f2e3a3102cc7886ce5"
+                "reference": "f481583f99f38978378b2a29be7b261efac56099"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/33088182d3990fbdf58c31f2e3a3102cc7886ce5",
-                "reference": "33088182d3990fbdf58c31f2e3a3102cc7886ce5",
+                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/f481583f99f38978378b2a29be7b261efac56099",
+                "reference": "f481583f99f38978378b2a29be7b261efac56099",
                 "shasum": ""
             },
             "require": {
@@ -1845,11 +1845,11 @@
                 "ext-intl": "*",
                 "ext-mbstring": "*",
                 "ext-zlib": "*",
-                "php": "^8.2"
+                "php": "^8.3"
             },
             "require-dev": {
                 "bamarni/composer-bin-plugin": "^1.0",
-                "phpunit/phpunit": "^11.0"
+                "phpunit/phpunit": "^12.0"
             },
             "type": "library",
             "extra": {
@@ -1886,7 +1886,7 @@
                 "issues": "https://github.com/laurentmuller/fpdf2/issues",
                 "source": "https://github.com/laurentmuller/fpdf2"
             },
-            "time": "2025-10-16T14:43:18+00:00"
+            "time": "2026-02-08T13:51:34+00:00"
         },
         {
             "name": "laurentmuller/highcharts-bundle",

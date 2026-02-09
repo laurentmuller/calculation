@@ -16,10 +16,12 @@ namespace App\Tests\Form\GlobalMargin;
 use App\Entity\GlobalMargin;
 use App\Form\GlobalMargin\GlobalMarginType;
 use App\Tests\Form\EntityTypeTestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * @extends EntityTypeTestCase<GlobalMargin, GlobalMarginType>
  */
+#[AllowMockObjectsWithoutExpectations]
 final class GlobalMarginTypeTest extends EntityTypeTestCase
 {
     #[\Override]

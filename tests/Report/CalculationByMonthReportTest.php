@@ -84,9 +84,11 @@ final class CalculationByMonthReportTest extends TestCase
         $controller = $this->createMock(AbstractController::class);
         $controller->method('getMinMargin')
             ->willReturn(1.1);
-        $generator = $this->createMock(UrlGeneratorInterface::class);
-        $month = new CalculationsMonth($items);
 
-        return new CalculationByMonthReport($controller, $month, $generator);
+        return new CalculationByMonthReport(
+            $controller,
+            new CalculationsMonth($items),
+            self::createStub(UrlGeneratorInterface::class),
+        );
     }
 }

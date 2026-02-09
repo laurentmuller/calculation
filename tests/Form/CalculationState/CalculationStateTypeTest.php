@@ -17,10 +17,12 @@ use App\Entity\CalculationState;
 use App\Form\CalculationState\CalculationStateType;
 use App\Form\Type\CustomColorType;
 use App\Tests\Form\EntityTypeTestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * @extends EntityTypeTestCase<CalculationState, CalculationStateType>
  */
+#[AllowMockObjectsWithoutExpectations]
 final class CalculationStateTypeTest extends EntityTypeTestCase
 {
     #[\Override]

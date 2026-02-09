@@ -98,11 +98,11 @@ final class TranslatorFactoryTest extends TestCase
 
     private function createBingTranslator(): BingTranslatorService
     {
-        $key = 'key';
-        $cache = $this->createMock(CacheInterface::class);
-        $logger = $this->createMock(LoggerInterface::class);
-
-        return new BingTranslatorService($key, $cache, $logger);
+        return new BingTranslatorService(
+            'key',
+            self::createStub(CacheInterface::class),
+            self::createStub(LoggerInterface::class)
+        );
     }
 
     /**

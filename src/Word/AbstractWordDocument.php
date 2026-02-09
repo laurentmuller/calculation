@@ -15,6 +15,7 @@ namespace App\Word;
 
 use App\Controller\AbstractController;
 use App\Model\CustomerInformation;
+use App\Service\ApplicationService;
 use App\Traits\TranslatorTrait;
 use PhpOffice\PhpWord\Element\Section;
 use PhpOffice\PhpWord\Shared\Converter;
@@ -76,9 +77,8 @@ abstract class AbstractWordDocument extends WordDocument
      */
     protected function addDefaultFooter(Section $section): static
     {
-        $service = $this->controller->getApplicationService();
-        $this->footer->setUrl($service->getOwnerUrl())
-            ->setName($service->getFullName())
+        $this->footer->setUrl(ApplicationService::OWNER_URL)
+            ->setName(ApplicationService::APP_FULL_NAME)
             ->output($section);
 
         return $this;
@@ -122,7 +122,7 @@ abstract class AbstractWordDocument extends WordDocument
     {
         parent::initialize();
         $properties = $this->getDocInfo();
-        $properties->setCategory($this->controller->getApplicationService()->getFullName());
+        $properties->setCategory(ApplicationService::APP_FULL_NAME);
         $user = $this->controller->getUserIdentifier();
         if (null !== $user) {
             $properties->setCreator($user);

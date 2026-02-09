@@ -1,8 +1,8 @@
 <meta charset="utf-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="application-name" content="{{ application_service.name }}">
-<meta name="description" content="{{ application_service.description }}">
+<meta name="application-name" content="{{ app_name }}">
+<meta name="description" content="{{ app_description }}">
 <meta name="theme-color" content="#212529">
 <meta name="msapplication-TileColor" content="#212529">
 <meta name="msapplication-TileImage" content="{{ asset_icon(144) }}">
@@ -10,5 +10,5 @@
 <meta property="og:title" content="{{ page_title }}"/>
 <meta property="og:image" content="{{ asset_icon(144) }}"/>
 <meta property="og:url" content="{{ app.request.uri }}"/>
-<meta property="og:description" content="{{ application_service.description }}">
+<meta property="og:description" content="{{ app_description }}">
 <meta property="og:type" content="website"/>

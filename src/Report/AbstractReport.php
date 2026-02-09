@@ -19,6 +19,7 @@ use App\Pdf\PdfTable;
 use App\Pdf\Traits\PdfCleanTextTrait;
 use App\Pdf\Traits\PdfColumnTranslatorTrait;
 use App\Pdf\Traits\PdfStyleTrait;
+use App\Service\ApplicationService;
 use App\Traits\MathTrait;
 use fpdf\Enums\PdfLayout;
 use fpdf\Enums\PdfOrientation;
@@ -60,18 +61,17 @@ abstract class AbstractReport extends PdfDocument
             ->setZoom(PdfZoom::FULL_PAGE);
 
         $this->translator = $controller->getTranslator();
-        $this->header = new ReportHeader($this);
-        $this->footer = new ReportFooter($this);
 
-        $service = $controller->getApplicationService();
-        $this->setCreator($service->getFullName());
+        $this->header = ReportHeader::instance($this)
+            ->setCustomer($controller->getCustomer());
+        $this->footer = ReportFooter::instance($this)
+            ->setContent(ApplicationService::APP_FULL_NAME, ApplicationService::OWNER_URL);
+
+        $this->setCreator(ApplicationService::APP_FULL_NAME);
         $user = $controller->getUserIdentifier();
         if (null !== $user) {
             $this->setAuthor($user);
         }
-
-        $this->header->setCustomer($controller->getCustomer());
-        $this->footer->setContent($service->getFullName(), $service->getOwnerUrl());
     }
 
     /**
@@ -146,8 +146,7 @@ abstract class AbstractReport extends PdfDocument
         string|\Stringable|TranslatableInterface $id,
         array $parameters = []
     ): static {
-        $description = $this->trans($id, $parameters);
-        $this->getHeader()->setDescription($description);
+        $this->getHeader()->setDescription($this->trans($id, $parameters));
 
         return $this;
     }

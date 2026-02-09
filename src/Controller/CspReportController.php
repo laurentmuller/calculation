@@ -17,6 +17,7 @@ use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
 use App\Enums\Importance;
 use App\Mime\NotificationEmail;
+use App\Service\ApplicationService;
 use App\Utils\StringUtils;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -107,7 +108,7 @@ class CspReportController extends AbstractController
      */
     private function sendNotification(array $context, MailerInterface $mailer): void
     {
-        $address = $this->getApplicationService()->getMailerAddress();
+        $address = ApplicationService::getOwnerAddress();
         $notification = NotificationEmail::instance($this->getTranslator(), 'notification/csp_violation.html.twig')
             ->subject(new TranslatableMessage('notification.csp_title'))
             ->from($address)

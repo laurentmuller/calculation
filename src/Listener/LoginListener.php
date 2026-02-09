@@ -15,8 +15,8 @@ namespace App\Listener;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Service\ApplicationService;
 use App\Traits\TranslatorFlashMessageAwareTrait;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
@@ -32,8 +32,6 @@ class LoginListener implements ServiceSubscriberInterface
 
     public function __construct(
         private readonly UserRepository $repository,
-        #[Autowire('%app_name_full%')]
-        private readonly string $appName
     ) {
     }
 
@@ -50,7 +48,7 @@ class LoginListener implements ServiceSubscriberInterface
     {
         $params = [
             '%user_name%' => $user->getUserIdentifier(),
-            '%app_name%' => $this->appName,
+            '%app_name%' => ApplicationService::APP_FULL_NAME,
         ];
         $this->successTrans('security.login.success', $params);
     }

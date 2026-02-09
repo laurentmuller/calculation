@@ -24,7 +24,6 @@ use App\Report\AbstractReport;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Response\WordResponse;
-use App\Service\ApplicationService;
 use App\Service\UrlGeneratorService;
 use App\Spreadsheet\AbstractDocument;
 use App\Spreadsheet\SpreadsheetDocument;
@@ -67,7 +66,6 @@ abstract class AbstractController extends BaseController
     public const array ID_REQUIREMENT = ['id' => Requirement::DIGITS];
 
     // services
-    private ?ApplicationService $applicationService = null;
     private ?UrlGeneratorService $generatorService = null;
     private ?UserParameters $userParameters = null;
 
@@ -79,18 +77,6 @@ abstract class AbstractController extends BaseController
     public function getApplicationParameters(): ApplicationParameters
     {
         return $this->getUserParameters()->getApplication();
-    }
-
-    /**
-     * Gets the application service.
-     */
-    public function getApplicationService(): ApplicationService
-    {
-        try {
-            return $this->applicationService ??= $this->container->get(ApplicationService::class);
-        } catch (ContainerExceptionInterface $e) {
-            throw new \LogicException(\sprintf('Unable to get the "%s" service,', ApplicationService::class), $e->getCode(), $e);
-        }
     }
 
     /**
@@ -156,7 +142,6 @@ abstract class AbstractController extends BaseController
     {
         return [
             ...parent::getSubscribedServices(),
-            ApplicationService::class,
             TranslatorInterface::class,
             UserParameters::class,
             UrlGeneratorService::class,

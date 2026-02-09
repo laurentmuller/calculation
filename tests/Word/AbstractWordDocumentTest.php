@@ -18,7 +18,6 @@ use App\Model\CustomerInformation;
 use App\Parameter\ApplicationParameters;
 use App\Parameter\OptionsParameter;
 use App\Parameter\UserParameters;
-use App\Service\ApplicationService;
 use App\Tests\TranslatorMockTrait;
 use App\Word\AbstractWordDocument;
 use App\Word\HtmlDocument;
@@ -125,17 +124,9 @@ final class AbstractWordDocumentTest extends TestCase
         $userParameters->method('getCustomerInformation')
             ->willReturn($customerInformation);
 
-        $applicationService = $this->createMock(ApplicationService::class);
-        $applicationService->method('getName')
-            ->willReturn('Calculation');
-        $applicationService->method('getFullName')
-            ->willReturn('Calculation');
-
         $controller = $this->createMock(AbstractController::class);
         $controller->method('getUserIdentifier')
             ->willReturn('User');
-        $controller->method('getApplicationService')
-            ->willReturn($applicationService);
         $controller->method('getApplicationParameters')
             ->willReturn($applicationParameters);
         $controller->method('getUserParameters')

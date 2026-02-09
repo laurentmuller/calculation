@@ -18,6 +18,7 @@ use App\Attribute\GetPostRoute;
 use App\Entity\User;
 use App\Form\User\UserCommentType;
 use App\Model\UserComment;
+use App\Service\ApplicationService;
 use App\Service\MailerService;
 use App\Traits\FormExceptionTrait;
 use Psr\Log\LoggerInterface;
@@ -47,11 +48,10 @@ class CommentController extends AbstractController
         MailerService $service,
         LoggerInterface $logger
     ): Response {
-        $application = $this->getApplicationService();
         $comment = UserComment::instance(
-            subject: $application->getFullName(),
+            subject: ApplicationService::APP_FULL_NAME,
             from: $from,
-            to: $application->getMailerAddress()
+            to: ApplicationService::getOwnerAddress()
         );
         $form = $this->createForm(UserCommentType::class, $comment)
             ->handleRequest($request);

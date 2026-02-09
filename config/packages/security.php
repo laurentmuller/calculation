@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use App\Constant\CacheAttributes;
-use App\Constant\SecurityAttributes;
+use App\Constants\CacheAttributes;
+use App\Constants\SecurityAttributes;
 use App\Interfaces\RoleInterface;
 use App\Repository\UserRepository;
 use App\Security\LoginFormAuthenticator;

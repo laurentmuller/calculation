@@ -40,7 +40,7 @@ final class LoginListenerTest extends TestCase
 
     private function createListener(): LoginListener
     {
-        $listener = new LoginListener(self::createStub(UserRepository::class), 'Calculation');
+        $listener = new LoginListener(self::createStub(UserRepository::class));
         $listener->setTranslator($this->createMockTranslator());
         $listener->setRequestStack($this->createRequestStack());
 

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Listener;
 
-use App\Constant\SecurityAttributes;
+use App\Constants\SecurityAttributes;
 use App\Controller\CspReportController;
 use App\Listener\ResponseListener;
 use App\Service\NonceService;

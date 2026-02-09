@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use App\Service\ApplicationService;
 use App\Service\AssetVersionService;
 use App\Utils\FormatUtils;
 
@@ -30,7 +31,7 @@ return App::config([
         'mailer' => [
             'dsn' => '%env(MAILER_DSN)%',
             'envelope' => [
-                'sender' => '%mailer_user_email%',
+                'sender' => ApplicationService::OWNER_EMAIL,
             ],
         ],
         'assets' => [

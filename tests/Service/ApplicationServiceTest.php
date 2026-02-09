@@ -14,24 +14,23 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\ApplicationService;
-use App\Tests\KernelServiceTestCase;
+use PHPUnit\Framework\TestCase;
 
-final class ApplicationServiceTest extends KernelServiceTestCase
+final class ApplicationServiceTest extends TestCase
 {
     public function testService(): void
     {
-        $service = $this->getService(ApplicationService::class);
-        self::assertNotEmpty($service->getDescription());
-        self::assertNotEmpty($service->getFullName());
-        self::assertSame('calculation@bibi.nu', $service->getMailerEmail());
-        self::assertSame('Calculation', $service->getMailerName());
-        self::assertSame('Calculation', $service->getName());
-        self::assertSame('Montévraz', $service->getOwnerCity());
-        self::assertSame('bibi.nu', $service->getOwnerName());
-        self::assertSame('https://www.bibi.nu', $service->getOwnerUrl());
-        self::assertNotEmpty($service->getVersion());
+        self::assertNotEmpty(ApplicationService::APP_DESCRIPTION);
+        self::assertSame('Calculation v3.0.0', ApplicationService::APP_FULL_NAME);
+        self::assertSame('Calculation', ApplicationService::APP_NAME);
+        self::assertSame('3.0.0', ApplicationService::APP_VERSION);
 
-        $actual = $service->getMailerAddress();
+        self::assertSame('Montévraz', ApplicationService::OWNER_CITY);
+        self::assertSame('calculation@bibi.nu', ApplicationService::OWNER_EMAIL);
+        self::assertSame('bibi.nu', ApplicationService::OWNER_NAME);
+        self::assertSame('https://www.bibi.nu', ApplicationService::OWNER_URL);
+
+        $actual = ApplicationService::getOwnerAddress();
         self::assertSame('calculation@bibi.nu', $actual->getAddress());
         self::assertSame('Calculation', $actual->getName());
     }

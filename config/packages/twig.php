@@ -37,14 +37,23 @@ return App::config([
             'thousands_separator' => FormatUtils::THOUSANDS_SEP,
         ],
         'globals' => [
+            // application
             'app_mode' => '%app_mode%',
+            'app_name' => ApplicationService::APP_NAME,
+            'app_version' => ApplicationService::APP_VERSION,
+            'app_full_name' => ApplicationService::APP_FULL_NAME,
+            'app_description' => ApplicationService::APP_DESCRIPTION,
+            // owner
+            'app_owner_name' => ApplicationService::OWNER_NAME,
+            'app_owner_email' => ApplicationService::OWNER_EMAIL,
+            'app_owner_url' => ApplicationService::OWNER_URL,
+            // links
             'link_dev' => '%link_dev%',
             'link_prod' => '%link_prod%',
+            // cokies
             'cookie_path' => '%cookie_path%',
-            // services
+            // services and parameters
             'index_service' => '@' . IndexService::class,
-            'application_service' => '@' . ApplicationService::class,
-            // parameters
             'user_parameters' => '@' . UserParameters::class,
             'application_parameters' => '@' . ApplicationParameters::class,
         ],

@@ -99,6 +99,11 @@ class ReportHeader
         return $height;
     }
 
+    public static function instance(AbstractReport $report): self
+    {
+        return new self($report);
+    }
+
     /**
      * Output this content to the parent document.
      */

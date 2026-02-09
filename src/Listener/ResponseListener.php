@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Listener;
 
-use App\Constant\CacheAttributes;
-use App\Constant\SecurityAttributes;
+use App\Constants\CacheAttributes;
+use App\Constants\SecurityAttributes;
 use App\Controller\CspReportController;
 use App\Service\NonceService;
 use App\Traits\ArrayTrait;

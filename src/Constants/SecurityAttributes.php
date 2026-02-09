@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace App\Constant;
+namespace App\Constants;
 
 /**
  * Contains security constants.

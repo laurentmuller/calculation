@@ -22,18 +22,8 @@ $path = __DIR__ . '/../src/';
 return App::config([
     'parameters' => [
         // application
-        'app_name' => 'Calculation',
-        'app_version' => '3.0.0',
-        'app_name_full' => '%app_name% v%app_version%',
-        'app_owner_name' => 'bibi.nu',
-        'app_owner_url' => 'https://www.bibi.nu',
-        'app_owner_city' => 'Montévraz',
-        'app_description' => "Programme de calcul basé sur l'environnement de développement Symfony 7.x.",
-        'app_secret' => '%env(string:APP_SECRET)%',
         'app_mode' => '%env(string:APP_MODE)%',
-        // mailer
-        'mailer_user_name' => '%app_name%',
-        'mailer_user_email' => 'calculation@bibi.nu',
+        'app_secret' => '%env(string:APP_SECRET)%',
         // cookies
         'cookie_path' => '%env(string:COOKIE_PATH)%',
         // keys
@@ -70,7 +60,6 @@ return App::config([
                 $path . 'Entity',
                 $path . 'Enums',
                 $path . 'Faker',
-                $path . 'Migrations',
                 $path . 'Model',
                 $path . 'Pdf',
                 $path . 'Report',

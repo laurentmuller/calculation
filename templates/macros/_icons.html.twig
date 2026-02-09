@@ -128,8 +128,8 @@
 {%- endmacro button_word %}
 
 {% macro copyright_link(class = null) -%}
-{%- set parameters = {'%year%': 'now'|date('Y'), '%owner%': application_service.ownerName} -%}
-{{- _self.linkExternal(application_service.ownerUrl, 'footer.copyright', class, null, 'footer.copyright_title', parameters) -}}
+{%- set parameters = {'%year%': 'now'|date('Y'), '%owner%': app_owner_name} -%}
+{{- _self.linkExternal(app_owner_url, 'footer.copyright', class, null, 'footer.copyright_title', parameters) -}}
 {%- endmacro copyright_link %}
 
 {% macro modal_title(id, title_icon, title_text, data_target = false, header_class = null) %}
@@ -161,7 +161,7 @@
 {% macro footer_center() -%}
 <hr class="mb-2 mx-n3">
 <div class="d-flex-wrap-center">
-    <small class="me-auto">{{ application_service.fullName }}</small>
+    <small class="me-auto">{{ app_full_name }}</small>
     <small>{{ _self.copyright_link() }}</small>
 </div>
 {%- endmacro footer_center %}

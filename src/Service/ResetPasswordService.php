@@ -22,7 +22,6 @@ use App\Traits\LoggerTrait;
 use App\Utils\DateUtils;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Clock\DatePoint;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
@@ -52,10 +51,6 @@ readonly class ResetPasswordService
         private UrlGeneratorInterface $generator,
         private MailerInterface $mailer,
         private LoggerInterface $logger,
-        #[Autowire('%mailer_user_email%')]
-        private string $mailerUserEmail,
-        #[Autowire('%mailer_user_name%')]
-        private string $mailerUserName
     ) {
     }
 
@@ -181,7 +176,7 @@ readonly class ResetPasswordService
 
     private function getAddressFrom(): Address
     {
-        return new Address($this->mailerUserEmail, $this->mailerUserName);
+        return ApplicationService::getOwnerAddress();
     }
 
     private function getExpiresAt(ResetPasswordToken $token): DatePoint

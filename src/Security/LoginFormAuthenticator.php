@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Security;
 
-use App\Constant\SecurityAttributes;
+use App\Constants\SecurityAttributes;
 use App\Parameter\ApplicationParameters;
 use App\Repository\UserRepository;
 use App\Service\CaptchaImageService;

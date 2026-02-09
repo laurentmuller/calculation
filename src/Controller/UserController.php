@@ -42,6 +42,7 @@ use App\Repository\UserRepository;
 use App\Resolver\DataQueryValueResolver;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
+use App\Service\ApplicationService;
 use App\Service\FontAwesomeService;
 use App\Service\MailerService;
 use App\Service\PasswordTooltipService;
@@ -160,7 +161,7 @@ class UserController extends AbstractEntityController
                 )
             );
         }
-        $comment = UserComment::instance($this->getApplicationService()->getFullName(), $from, $user);
+        $comment = UserComment::instance(ApplicationService::APP_FULL_NAME, $from, $user);
         $form = $this->createForm(UserCommentType::class, $comment)
             ->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

@@ -7,7 +7,7 @@
 {%- set flash_attributes = user_parameters.message.attributes|merge({
     dataset: '#flashes',
     target: '.page-content',
-    subtitle: application_service.fullName,
+    subtitle: app_full_name,
     'close-title': 'common.button_close'|trans}) -%}
 <div id="flashes" class="d-none"{{ attributes(flash_attributes, 'data-') }}>
     {% for key, messages in app.flashes %}

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Security;
 
-use App\Constant\SecurityAttributes;
+use App\Constants\SecurityAttributes;
 use App\Entity\Calculation;
 use App\Entity\User;
 use App\Enums\EntityName;

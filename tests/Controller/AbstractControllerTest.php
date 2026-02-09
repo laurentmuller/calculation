@@ -20,7 +20,6 @@ use App\Model\TranslatableFlashMessage;
 use App\Parameter\ApplicationParameters;
 use App\Parameter\UserParameters;
 use App\Report\AbstractReport;
-use App\Service\ApplicationService;
 use App\Service\UrlGeneratorService;
 use App\Spreadsheet\AbstractDocument;
 use App\Tests\DatabaseTrait;
@@ -46,21 +45,6 @@ final class AbstractControllerTest extends KernelTestCase
         $this->handleService(
             static fn (FixtureController $controller): ApplicationParameters => $controller->getApplicationParameters(),
             ApplicationParameters::class
-        );
-    }
-
-    public function testApplicationService(): void
-    {
-        $this->handleService(
-            static fn (FixtureController $controller): ApplicationService => $controller->getApplicationService(),
-            ApplicationService::class
-        );
-    }
-
-    public function testApplicationServiceWithException(): void
-    {
-        $this->handleServiceWithException(
-            static fn (FixtureController $controller): ApplicationService => $controller->getApplicationService()
         );
     }
 
@@ -268,7 +252,6 @@ final class AbstractControllerTest extends KernelTestCase
     {
         $controller = $this->createController();
         $actual = $controller::getSubscribedServices();
-        self::assertContains(ApplicationService::class, $actual);
         self::assertContains(TranslatorInterface::class, $actual);
         self::assertContains(UrlGeneratorService::class, $actual);
         self::assertContains(UserParameters::class, $actual);

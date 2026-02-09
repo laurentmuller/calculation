@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use App\Constant\CacheAttributes;
+use App\Constants\CacheAttributes;
 
 return App::config([
     'framework' => [

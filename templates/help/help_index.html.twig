@@ -114,7 +114,7 @@
 {%- endblock help_title %}
 {# body #}
 {% block help_body -%}
-    <p class="mb-1">{{ 'help.description'|trans({'%app_name%': application_service.fullName})|raw }}</p>
+    <p class="mb-1">{{ 'help.description'|trans({'%app_name%': app_full_name})|raw }}</p>
     <hr class="mt-1">
     <div class="row">
         {# main menu #}

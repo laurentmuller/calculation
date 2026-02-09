@@ -22,6 +22,7 @@ use App\Form\User\UserRegistrationType;
 use App\Mime\NotificationEmail;
 use App\Model\TranslatableFlashMessage;
 use App\Repository\UserRepository;
+use App\Service\ApplicationService;
 use App\Service\EmailVerifier;
 use App\Service\UserExceptionService;
 use App\Traits\LoggerTrait;
@@ -116,7 +117,7 @@ class RegistrationController extends AbstractController
         return NotificationEmail::instance($this->getTranslator(), 'notification/registration.html.twig')
             ->subject(new TranslatableMessage('registration.subject'))
             ->importance(Importance::MEDIUM)
-            ->from($this->getApplicationService()->getMailerAddress())
+            ->from(ApplicationService::getOwnerAddress())
             ->to($user->getAddress());
     }
 

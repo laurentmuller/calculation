@@ -9,7 +9,7 @@
 {# footer #}
 {% block card_body -%}
 {{ parent() }}
-<input type="hidden" name="{{ constant('App\\Security\\SecurityAttributes::LOGIN_TOKEN') }}" value="{{ csrf_token(constant('App\\Security\\SecurityAttributes::AUTHENTICATE_TOKEN')) }}">
+<input type="hidden" name="{{ constant('App\\Constants\\SecurityAttributes::LOGIN_TOKEN') }}" value="{{ csrf_token(constant('App\\Constants\\SecurityAttributes::AUTHENTICATE_TOKEN')) }}">
 {% endblock card_body %}
 {# actions #}
 {% block actions_form %}

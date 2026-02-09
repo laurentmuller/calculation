@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Twig;
 
-use App\Constant\CacheAttributes;
+use App\Constants\CacheAttributes;
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Interfaces\ConstantsInterface;

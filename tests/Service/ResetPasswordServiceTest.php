@@ -168,8 +168,6 @@ final class ResetPasswordServiceTest extends TestCase
         $translator = $this->createMockTranslator();
         $service = new UserExceptionService($translator);
         $mailer ??= self::createStub(MailerInterface::class);
-        $mailerUserEmail = 'mailer_user_name@example.com';
-        $mailerUserName = 'mailer_user_name';
 
         return new ResetPasswordService(
             $helper,
@@ -179,8 +177,6 @@ final class ResetPasswordServiceTest extends TestCase
             self::createStub(UrlGeneratorInterface::class),
             $mailer,
             self::createStub(LoggerInterface::class),
-            $mailerUserEmail,
-            $mailerUserName
         );
     }
 

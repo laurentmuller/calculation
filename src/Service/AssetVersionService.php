@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Constant\CacheAttributes;
+use App\Constants\CacheAttributes;
 use App\Entity\User;
 use App\Interfaces\DisableListenerInterface;
 use App\Traits\DisableListenerTrait;

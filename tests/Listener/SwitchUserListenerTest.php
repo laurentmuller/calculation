@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Listener;
 
-use App\Constant\SecurityAttributes;
+use App\Constants\SecurityAttributes;
 use App\Entity\User;
 use App\Listener\SwitchUserListener;
 use App\Tests\TranslatorMockTrait;

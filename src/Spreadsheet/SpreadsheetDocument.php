@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
+use App\Service\ApplicationService;
 use App\Traits\TranslatorTrait;
 use App\Utils\StringUtils;
 use PhpOffice\PhpSpreadsheet\Exception;
@@ -361,7 +362,6 @@ class SpreadsheetDocument extends Spreadsheet
     {
         $customer = $controller->getCustomer();
         $userName = $controller->getUserIdentifier();
-        $applicationName = $controller->getApplicationService()->getFullName();
         $title = $this->trans($title);
 
         $sheet = $this->getActiveSheet()
@@ -375,7 +375,7 @@ class SpreadsheetDocument extends Spreadsheet
         return $this->setTitle($title)
             ->setCompany($customer->getName())
             ->setUserName($userName)
-            ->setCategory($applicationName);
+            ->setCategory(ApplicationService::APP_FULL_NAME);
     }
 
     /**

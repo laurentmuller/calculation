@@ -264,8 +264,6 @@ final class UserControllerTest extends EntityControllerTestCase
             self::createStub(UrlGeneratorInterface::class),
             self::createStub(MailerInterface::class),
             $this->getService(LoggerInterface::class),
-            'test@test.com',
-            'test'
         );
         $this->setService(ResetPasswordService::class, $service);
 
@@ -297,8 +295,6 @@ final class UserControllerTest extends EntityControllerTestCase
             self::createStub(UrlGeneratorInterface::class),
             $mailer,
             $this->getService(LoggerInterface::class),
-            'test@test.com',
-            'test'
         );
         $this->setService(ResetPasswordService::class, $service);
 

@@ -32,7 +32,7 @@
     {{ dropdownItem(path('user_comment'), 'user.comment.title', 'envelope far') }}
     {% if not user_parameters.homePage.statusBar %}
         {{ dropdownSeparator() }}
-        {{ dropdownItem(path('about_index'), 'index.menu_info', 'info-circle', {'%app_name%': application_service.name}) }}
+        {{ dropdownItem(path('about_index'), 'index.menu_info', 'info-circle', {'%app_name%': app_name}) }}
     {% endif %}
     {% if is_granted(IS_IMPERSONATOR) -%}
         {{ dropdownSeparator() }}

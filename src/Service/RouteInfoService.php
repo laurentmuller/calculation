@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Constant\CacheAttributes;
+use App\Constants\CacheAttributes;
 use App\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Routing\Route;

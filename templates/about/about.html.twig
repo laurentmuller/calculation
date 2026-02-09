@@ -25,7 +25,7 @@
 {# parameters #}
 {%- set title = 'index.menu_info' -%}
 {%- set title_icon = 'info-circle' -%}
-{%- set title_parameters = {'%app_name%': application_service.name} -%}
+{%- set title_parameters = {'%app_name%': app_name} -%}
 {% set customer = application_parameters.customerInformation %}
 {# class #}
 {% block card_class ' mb-2' %}
@@ -41,18 +41,18 @@
                 <td colspan="2">
                     <div class="d-inline-flex align-items-end">
                         <img alt="{{ 'application.name'|trans }}" width="64" height="64" class="rounded-1 me-2" src="{{ asset_icon(72) }}">
-                        <h1>{{ 'about.version'|trans({'%version%': application_service.version}) }}</h1>
+                        <h1>{{ 'about.version'|trans({'%version%': app_version}) }}</h1>
                     </div>
                 </td>
             </tr>
-            {{ tools.rowInfo('application.name'|trans, application_service.name) }}
-            {{ tools.rowInfo('application.version'|trans, application_service.version) }}
-            {{ tools.rowInfo('application.description'|trans, application_service.description) }}
+            {{ tools.rowInfo('application.name'|trans, app_name) }}
+            {{ tools.rowInfo('application.version'|trans, app_version) }}
+            {{ tools.rowInfo('application.description'|trans, app_description) }}
             {{ tools.rowInfo('application.environment'|trans, enum('App\\Enums\\Environment').from(app.environment)|trans) }}
             {{ tools.rowInfo('application.mode'|trans, enum('App\\Enums\\Environment').from(app_mode)|trans) }}
             {{ tools.rowInfo('application.deploy'|trans, deploy|locale_date('long')) }}
             {{ tools.rowInfoLink('application.customer'|trans, customer.name, customer.url) }}
-            {{ tools.rowInfoLink('application.owner'|trans, application_service.ownerName, application_service.ownerUrl) }}
+            {{ tools.rowInfoLink('application.owner'|trans, app_owner_name, app_owner_url) }}
             {{ tools.rowInfoLink('application.github'|trans, 'application.github_url'|trans, 'https://github.com/laurentmuller/calculation') }}
         </tbody>
     </table>

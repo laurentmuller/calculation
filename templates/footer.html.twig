@@ -6,7 +6,7 @@
             {{- 'common.data_changed'|trans -}}
         </span>
         <a class="nav-link text-truncate border-end border-secondary{% if app.current_route == 'about' %} active{% endif %}" href="{{ path('about_index') }}" title="{{ 'footer.about_title'|trans }}">
-            {{- application_service.fullName -}}
+            {{- app_full_name -}}
         </a>
         <span class="navbar-text text-truncate border-end border-secondary" title="{{ 'footer.environment_title'|trans }}">
             {{- ('environment.' ~ app_mode)|trans -}}

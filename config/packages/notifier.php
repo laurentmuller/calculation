@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use App\Enums\Importance;
+use App\Service\ApplicationService;
 
 /** @var array<string, string> $channel_policy */
 $channel_policy = \array_reduce(
@@ -28,7 +29,7 @@ return App::config([
             'channel_policy' => $channel_policy,
             'admin_recipients' => [
                 [
-                    'email' => '%mailer_user_email%',
+                    'email' => ApplicationService::OWNER_EMAIL,
                 ],
             ],
         ],

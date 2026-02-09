@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Parameter;
 
-use App\Constant\CacheAttributes;
+use App\Constants\CacheAttributes;
 use App\Entity\User;
 use App\Entity\UserProperty;
 use App\Model\CustomerInformation;

@@ -20,6 +20,7 @@ use App\Attribute\WordRoute;
 use App\Report\HtmlReport;
 use App\Response\PdfResponse;
 use App\Response\WordResponse;
+use App\Service\ApplicationService;
 use App\Service\EnvironmentService;
 use App\Service\MarkdownService;
 use App\Word\HtmlDocument;
@@ -66,7 +67,7 @@ class AboutController extends AbstractController
     {
         $content = $this->loadContent();
         $report = new HtmlReport($this, $content);
-        $parameters = ['%app_name%' => $this->getApplicationService()->getName()];
+        $parameters = ['%app_name%' => ApplicationService::APP_NAME];
         $report->setTranslatedTitle('index.menu_info', $parameters, true);
 
         return $this->renderPdfDocument($report);
@@ -77,7 +78,7 @@ class AboutController extends AbstractController
     {
         $content = $this->loadContent();
         $doc = new HtmlDocument($this, $content);
-        $parameters = ['%app_name%' => $this->getApplicationService()->getName()];
+        $parameters = ['%app_name%' => ApplicationService::APP_NAME];
         $doc->setTranslatedTitle('index.menu_info', $parameters);
 
         return $this->renderWordDocument($doc);

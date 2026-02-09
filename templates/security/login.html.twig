@@ -8,22 +8,24 @@
 {%- set cancel_path = false -%}
 {# footer #}
 {% block card_body -%}
-{{ parent() }}
-<input type="hidden" name="{{ constant('App\\Constants\\SecurityAttributes::LOGIN_TOKEN') }}" value="{{ csrf_token(constant('App\\Constants\\SecurityAttributes::AUTHENTICATE_TOKEN')) }}">
+    {{ parent() }}
+    <input type="hidden" name="{{ constant('App\\Constants\\SecurityAttributes::LOGIN_TOKEN') }}"
+           value="{{ csrf_token(constant('App\\Constants\\SecurityAttributes::AUTHENTICATE_TOKEN')) }}">
 {% endblock card_body %}
 {# actions #}
 {% block actions_form %}
-{{ parent() }}
-<a href="{{ path('app_forgot_password_request') }}" class="align-self-center" title="{{ 'resetting.request.description'|trans }}">{{ 'resetting.link'|trans }}</a>
+    {{ parent() }}
+    <a href="{{ path('app_forgot_password_request') }}" class="align-self-center"
+       title="{{ 'resetting.request.description'|trans }}">{{ 'resetting.link'|trans }}</a>
 {% endblock actions_form %}
 {# javascripts #}
 {% block javascripts %}
-{% if is_js_debug %}
-    {{ parent() }}
-    {{ asset_js('js/extensions/password-extensions.js') }}
-    {{ asset_js('js/application/user_recaptcha.js') }}
-    {{ asset_js('js/application/user_login.js') }}
-{% else %}
-    {{ asset_js('js/compiled/user_login.js') }}
-{%- endif %}
+    {% if is_js_debug %}
+        {{ parent() }}
+        {{ asset_js('js/extensions/password-extensions.js') }}
+        {{ asset_js('js/application/user_recaptcha.js') }}
+        {{ asset_js('js/application/user_login.js') }}
+    {% else %}
+        {{ asset_js('js/compiled/user_login.js') }}
+    {%- endif %}
 {% endblock javascripts %}

@@ -19,9 +19,7 @@ namespace App\Constants;
 final class CacheAttributes
 {
     // cache names
-    public const string CACHE_APPLICATION = 'calculation.application';
     public const string CACHE_ASSET = 'calculation.asset';
-    public const string CACHE_CACHE = 'calculation.cache';
     public const string CACHE_COMMAND = 'calculation.command';
     public const string CACHE_CONSTANT = 'calculation.constant';
     public const string CACHE_FONT_AWESOME = 'calculation.fontawesome';
@@ -31,6 +29,7 @@ final class CacheAttributes
     public const string CACHE_RESPONSE = 'calculation.response';
     public const string CACHE_SCHEMA = 'calculation.schema';
     public const string CACHE_SEARCH = 'calculation.search';
+    public const string CACHE_SERVICE = 'calculation.service';
     public const string CACHE_SYMFONY = 'calculation.symfony';
     public const string CACHE_USER = 'calculation.user';
 

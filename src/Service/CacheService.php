@@ -26,7 +26,7 @@ readonly class CacheService
 {
     public function __construct(
         private CommandService $service,
-        #[Target(CacheAttributes::CACHE_CACHE)]
+        #[Target(CacheAttributes::CACHE_SERVICE)]
         private CacheInterface $cache
     ) {
     }

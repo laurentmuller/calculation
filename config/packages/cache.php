@@ -19,11 +19,6 @@ return App::config([
     'framework' => [
         'cache' => [
             'pools' => [
-                // ApplicationService
-                CacheAttributes::CACHE_APPLICATION => [
-                    'adapter' => 'cache.adapter.filesystem',
-                    'default_lifetime' => CacheAttributes::LIFE_TIME_ONE_MONTH,
-                ],
                 // ApplicationParameters
                 CacheAttributes::CACHE_PARAMETERS => [
                     'adapter' => 'cache.adapter.filesystem',
@@ -55,7 +50,7 @@ return App::config([
                     'default_lifetime' => CacheAttributes::LIFE_TIME_ONE_DAY,
                 ],
                 // CacheService
-                CacheAttributes::CACHE_CACHE => [
+                CacheAttributes::CACHE_SERVICE => [
                     'adapter' => 'cache.adapter.filesystem',
                     'default_lifetime' => CacheAttributes::LIFE_TIME_ONE_DAY,
                 ],

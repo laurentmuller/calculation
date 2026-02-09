@@ -67,6 +67,14 @@ final class FileServiceTest extends TestCase
         yield [__FILE__, $thisText];
     }
 
+    public function testCanonicalize(): void
+    {
+        $service = $this->createFileService();
+        $expected = \str_replace('\\', '/', __DIR__);
+        $actual = $service->canonicalize(__DIR__);
+        self::assertSame($expected, $actual);
+    }
+
     public function testDecodeJsonEmptyFile(): void
     {
         self::expectException(\InvalidArgumentException::class);

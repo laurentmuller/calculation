@@ -96,7 +96,7 @@ abstract class AbstractWordDocument extends WordDocument
     }
 
     /**
-     * Create a section with the default header, footer and margins.
+     * Create a section with the default header, footer, and margins.
      *
      * @param array $style the section style
      */

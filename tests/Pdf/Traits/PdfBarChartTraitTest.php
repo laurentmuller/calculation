@@ -24,7 +24,7 @@ final class PdfBarChartTraitTest extends TestCase
 {
     public function testEmpty(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $report = new class($controller) extends AbstractReport implements PdfChartInterface {
             use PdfBarChartTrait;
 
@@ -44,7 +44,7 @@ final class PdfBarChartTraitTest extends TestCase
 
     public function testRenderWithRotation(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $report = new class($controller) extends AbstractReport implements PdfChartInterface {
             use PdfBarChartTrait;
 
@@ -81,7 +81,7 @@ final class PdfBarChartTraitTest extends TestCase
 
     public function testRenderWithRow(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $report = new class($controller) extends AbstractReport implements PdfChartInterface {
             use PdfBarChartTrait;
 

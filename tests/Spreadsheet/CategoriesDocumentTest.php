@@ -30,7 +30,7 @@ final class CategoriesDocumentTest extends TestCase
         $category->setCode('Category');
         $group->addCategory($category);
 
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $document = new CategoriesDocument($controller, [$category]);
         $actual = $document->render();
         self::assertTrue($actual);

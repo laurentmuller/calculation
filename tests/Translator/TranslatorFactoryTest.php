@@ -16,6 +16,7 @@ namespace App\Tests\Translator;
 use App\Translator\BingTranslatorService;
 use App\Translator\TranslatorFactory;
 use App\Translator\TranslatorServiceInterface;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -25,6 +26,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Contracts\Cache\CacheInterface;
 
+#[AllowMockObjectsWithoutExpectations]
 final class TranslatorFactoryTest extends TestCase
 {
     private MockObject&RequestStack $requestStack;

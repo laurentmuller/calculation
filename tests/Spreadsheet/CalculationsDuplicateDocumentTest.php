@@ -37,7 +37,7 @@ final class CalculationsDuplicateDocumentTest extends TestCase
                 ],
             ],
         ];
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $document = new CalculationsDuplicateDocument($controller, [$data]);
         $actual = $document->render();
         self::assertTrue($actual);

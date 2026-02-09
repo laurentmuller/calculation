@@ -37,7 +37,7 @@ final class CustomersDocumentTest extends TestCase
             ->setLastName('')
             ->setEmail('email@email.com');
 
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $document = new CustomersDocument($controller, [$customer1, $customer2, $customer3]);
         $actual = $document->render();
         self::assertTrue($actual);

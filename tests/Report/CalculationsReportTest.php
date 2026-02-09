@@ -22,7 +22,7 @@ final class CalculationsReportTest extends TestCase
 {
     public function testRender(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
 
         $calculation1 = $this->createMock(Calculation::class);
         $calculation1->method('isMarginBelow')

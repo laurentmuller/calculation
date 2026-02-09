@@ -21,7 +21,7 @@ final class HtmlColorsReportTest extends TestCase
 {
     public function testReport(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $report = new HtmlColorsReport($controller);
         $actual = $report->render();
         self::assertTrue($actual);

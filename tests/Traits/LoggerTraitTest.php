@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Traits;
 
 use App\Traits\LoggerTrait;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
@@ -23,12 +22,12 @@ final class LoggerTraitTest extends TestCase
 {
     use LoggerTrait;
 
-    private MockObject&LoggerInterface $logger;
+    private LoggerInterface $logger;
 
     #[\Override]
     protected function setUp(): void
     {
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->logger = self::createStub(LoggerInterface::class);
     }
 
     #[\Override]

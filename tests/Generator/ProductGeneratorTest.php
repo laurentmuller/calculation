@@ -53,7 +53,7 @@ final class ProductGeneratorTest extends GeneratorTestCase
     public function testProductExist(): void
     {
         $count = 0;
-        $manager = $this->createMock(EntityManagerInterface::class);
+        $manager = self::createStub(EntityManagerInterface::class);
         $generator = $this->createMock(Generator::class);
         $generator->method('__call')
             ->willReturnCallback(static function (string $name) use (&$count): string|bool|null {

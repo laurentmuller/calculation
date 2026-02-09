@@ -60,7 +60,7 @@ final class DatabaseInfoServiceTest extends TestCase
     #[DataProvider('getDisabledValues')]
     public function testDisabledValue(string $value, bool $expected): void
     {
-        $manager = $this->createMock(EntityManagerInterface::class);
+        $manager = self::createStub(EntityManagerInterface::class);
         $service = new DatabaseInfoService($manager);
         $actual = $service->isDisabledValue($value);
         self::assertSame($expected, $actual);
@@ -69,7 +69,7 @@ final class DatabaseInfoServiceTest extends TestCase
     #[DataProvider('getEnabledValues')]
     public function testEnabledValue(string $value, bool $expected): void
     {
-        $manager = $this->createMock(EntityManagerInterface::class);
+        $manager = self::createStub(EntityManagerInterface::class);
         $service = new DatabaseInfoService($manager);
         $actual = $service->isEnabledValue($value);
         self::assertSame($expected, $actual);

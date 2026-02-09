@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Web;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Unit test for users and routes.
  */
-#[\PHPUnit\Framework\Attributes\CoversNothing]
+#[CoversNothing]
 final class RoutesTest extends AuthenticateWebTestCase
 {
     public static function getRoutes(): \Generator

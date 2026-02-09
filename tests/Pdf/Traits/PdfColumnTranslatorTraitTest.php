@@ -23,7 +23,7 @@ final class PdfColumnTranslatorTraitTest extends TestCase
 {
     public function testColumns(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $report = new class($controller) extends AbstractReport {
             #[\Override]
             public function render(): bool

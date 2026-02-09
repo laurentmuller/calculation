@@ -22,7 +22,7 @@ final class CalculationsEmptyReportTest extends TestCase
 {
     public function testRender(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $data = [
             'id' => 1,
             'date' => new DatePoint(),

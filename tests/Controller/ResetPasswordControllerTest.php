@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use App\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use SymfonyCasts\Bundle\ResetPassword\Exception\FakeRepositoryException;
@@ -70,6 +71,7 @@ final class ResetPasswordControllerTest extends ControllerTestCase
 
     public function testResetWithToken(): void
     {
+        /** @var User $user */
         $user = $this->loadUser(self::ROLE_SUPER_ADMIN);
         $helper = $this->createMock(ResetPasswordHelperInterface::class);
         $helper->method('validateTokenAndFetchUser')

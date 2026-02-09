@@ -27,7 +27,7 @@ final class MemoryImageReportTest extends TestCase
     public function testImageEmpty(): void
     {
         self::expectException(PdfException::class);
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $image = __DIR__ . '/../files/txt/empty.txt';
         $report = new MemoryImageReport($controller, $image);
         $report->render();
@@ -36,14 +36,14 @@ final class MemoryImageReportTest extends TestCase
     public function testImageInvalid(): void
     {
         self::expectException(PdfException::class);
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $report = new MemoryImageReport($controller, __FILE__);
         $report->render();
     }
 
     public function testRender(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $image = $this->getTestFile();
         $report = new MemoryImageReport($controller, $image);
         $actual = $report->render();
@@ -52,7 +52,7 @@ final class MemoryImageReportTest extends TestCase
 
     public function testRenderIconFile(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $iconFile = $this->getImageFile('icons/favicon-114x114.png');
         $report = new MemoryImageReport($controller, iconFile: $iconFile);
         $actual = $report->render();
@@ -62,14 +62,14 @@ final class MemoryImageReportTest extends TestCase
     public function testRenderIconFileInvalid(): void
     {
         self::expectException(PdfException::class);
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $report = new MemoryImageReport($controller, iconFile: 'fake');
         $report->render();
     }
 
     public function testRenderLogoFile(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $logoFile = $this->getImageFile('icons/favicon-114x114.png');
         $report = new MemoryImageReport($controller, logoFile: $logoFile);
         $actual = $report->render();
@@ -78,7 +78,7 @@ final class MemoryImageReportTest extends TestCase
 
     public function testRenderScreenshot(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $screenshotFile = $this->getImageFile('screenshots/home_light.png');
         $report = new MemoryImageReport($controller, screenshotFile: $screenshotFile);
         $actual = $report->render();
@@ -95,7 +95,7 @@ final class MemoryImageReportTest extends TestCase
         $service->method('getImage')
             ->willReturn($image);
 
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $report = new MemoryImageReport(controller: $controller, service: $service);
         $actual = $report->render();
         self::assertTrue($actual);
@@ -108,7 +108,7 @@ final class MemoryImageReportTest extends TestCase
         $service->method('getPath')
             ->willReturn($path);
 
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $report = new MemoryImageReport(controller: $controller, service: $service);
         $actual = $report->render();
         self::assertTrue($actual);
@@ -121,7 +121,7 @@ final class MemoryImageReportTest extends TestCase
         $service->method('getImage')
             ->willReturn($image);
 
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $report = new MemoryImageReport(controller: $controller, service: $service);
         $actual = $report->render();
         self::assertTrue($actual);
@@ -130,7 +130,7 @@ final class MemoryImageReportTest extends TestCase
     public function testRenderTransparencyImage(): void
     {
         $transparencyFile = $this->getImageFile('icons/favicon-114x114.png');
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $report = new MemoryImageReport(
             controller: $controller,
             transparencyFile: $transparencyFile
@@ -143,7 +143,7 @@ final class MemoryImageReportTest extends TestCase
     {
         self::expectException(PdfException::class);
         $transparencyFile = Path::join(__DIR__, 'fake.txt');
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $report = new MemoryImageReport(
             controller: $controller,
             transparencyFile: $transparencyFile
@@ -156,7 +156,7 @@ final class MemoryImageReportTest extends TestCase
         $logoFile = $this->getImageFile('logo/logo-customer-148x148.png');
         $iconFile = $this->getImageFile('icons/favicon-144x144.png');
         $screenshotFile = $this->getImageFile('screenshots/home_light.png');
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $report = new MemoryImageReport(
             controller: $controller,
             logoFile: $logoFile,
@@ -170,7 +170,7 @@ final class MemoryImageReportTest extends TestCase
 
     public function testWithNoArgument(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $report = new MemoryImageReport($controller);
         $actual = $report->render();
         self::assertTrue($actual);

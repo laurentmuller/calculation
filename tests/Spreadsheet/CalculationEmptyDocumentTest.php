@@ -37,7 +37,7 @@ final class CalculationEmptyDocumentTest extends TestCase
                 ],
             ],
         ];
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $document = new CalculationsEmptyDocument($controller, [$data]);
         $actual = $document->render();
         self::assertTrue($actual);

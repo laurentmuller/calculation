@@ -21,7 +21,7 @@ final class HtmlDocumentTest extends TestCase
 {
     public function testEmptyContent(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $doc = new HtmlDocument($controller, '');
         $actual = $doc->render();
         self::assertFalse($actual);
@@ -33,7 +33,7 @@ final class HtmlDocumentTest extends TestCase
             <i>Test</i>
             <div>Text</div>
             XML;
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $doc = new HtmlDocument($controller, $content);
         $actual = $doc->render();
         self::assertTrue($actual);
@@ -45,7 +45,7 @@ final class HtmlDocumentTest extends TestCase
             <i>Test</i>
             <div>Text</div>
             XML;
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $doc = new HtmlDocument($controller, $content);
         $doc->setTitle('Title');
         $actual = $doc->render();
@@ -58,7 +58,7 @@ final class HtmlDocumentTest extends TestCase
             <i>Test</i>
             <div>Text</div>
             XML;
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $doc = new HtmlDocument($controller, $content);
         $doc->setTitle('Title');
         $actual = $doc->render();

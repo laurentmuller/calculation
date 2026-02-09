@@ -29,7 +29,7 @@ final class CalculationStatesDocumentTest extends TestCase
         $state2->setCode('Code2')
             ->setColor('');
 
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $document = new CalculationStatesDocument($controller, [$state1, $state2]);
         $actual = $document->render();
         self::assertTrue($actual);

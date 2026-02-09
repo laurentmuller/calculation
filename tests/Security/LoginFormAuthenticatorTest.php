@@ -18,6 +18,7 @@ use App\Parameter\SecurityParameter;
 use App\Repository\UserRepository;
 use App\Security\LoginFormAuthenticator;
 use App\Service\CaptchaImageService;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -35,6 +36,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordC
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\HttpUtils;
 
+#[AllowMockObjectsWithoutExpectations]
 final class LoginFormAuthenticatorTest extends TestCase
 {
     public static function getSupports(): \Generator
@@ -245,7 +247,7 @@ final class LoginFormAuthenticatorTest extends TestCase
         $authenticator = $this->createAuthenticator(httpUtils: $httpUtils);
 
         $request = self::createRequest();
-        $token = $this->createMock(TokenInterface::class);
+        $token = self::createStub(TokenInterface::class);
         $actual = $authenticator->onAuthenticationSuccess($request, $token, 'fake');
         self::assertNull($actual);
     }

@@ -36,7 +36,7 @@ final class ProductsDocumentTest extends TestCase
         $group->addCategory($category);
         $category->addProduct($product);
 
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $document = new ProductsDocument($controller, [$product]);
         $actual = $document->render();
         self::assertTrue($actual);

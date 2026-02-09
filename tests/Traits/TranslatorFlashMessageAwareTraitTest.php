@@ -15,9 +15,11 @@ namespace App\Tests\Traits;
 
 use App\Tests\TranslatorMockTrait;
 use App\Traits\TranslatorFlashMessageAwareTrait;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 
+#[AllowMockObjectsWithoutExpectations]
 final class TranslatorFlashMessageAwareTraitTest extends AwareTraitTestCase
 {
     use TranslatorFlashMessageAwareTrait;

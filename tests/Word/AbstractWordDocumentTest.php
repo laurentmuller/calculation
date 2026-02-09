@@ -30,7 +30,7 @@ final class AbstractWordDocumentTest extends TestCase
 
     public function testDefault(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $doc = new class($controller) extends AbstractWordDocument {
             #[\Override]
             public function render(): bool

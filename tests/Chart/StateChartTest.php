@@ -29,19 +29,19 @@ final class StateChartTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    private MockObject&UrlGeneratorInterface $generator;
-    private MockObject&ApplicationParameters $parameters;
+    private UrlGeneratorInterface $generator;
+    private ApplicationParameters $parameters;
     private MockObject&CalculationStateRepository $repository;
     private MockObject&TranslatorInterface $translator;
-    private MockObject&Environment $twig;
+    private Environment $twig;
 
     #[\Override]
     protected function setUp(): void
     {
-        $this->parameters = $this->createMock(ApplicationParameters::class);
+        $this->parameters = self::createStub(ApplicationParameters::class);
         $this->repository = $this->createMock(CalculationStateRepository::class);
-        $this->generator = $this->createMock(UrlGeneratorInterface::class);
-        $this->twig = $this->createMock(Environment::class);
+        $this->generator = self::createStub(UrlGeneratorInterface::class);
+        $this->twig = self::createStub(Environment::class);
         $this->translator = $this->createMockTranslator();
     }
 

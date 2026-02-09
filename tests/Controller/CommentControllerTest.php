@@ -50,7 +50,7 @@ final class CommentControllerTest extends ControllerTestCase
         $mailer = $this->createMock(MailerInterface::class);
         $mailer->method('send')
             ->willThrowException(new TransportException());
-        $markdown = $this->createMock(MarkdownInterface::class);
+        $markdown = self::createStub(MarkdownInterface::class);
         $service = new MailerService(
             $this->getService(UrlGeneratorInterface::class),
             $markdown,

@@ -30,7 +30,7 @@ final class CalculationsDocumentTest extends TestCase
             ->setDescription('Description');
         self::setId($calculation);
 
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $document = new CalculationsDocument($controller, [$calculation]);
         $actual = $document->render();
         self::assertTrue($actual);

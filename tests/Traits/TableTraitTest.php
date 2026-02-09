@@ -135,7 +135,7 @@ final class TableTraitTest extends TestCase
             ->method('getEntityClassName')
             ->willReturn(CalculationState::class);
 
-        $logger = $this->createMock(LoggerInterface::class);
+        $logger = self::createStub(LoggerInterface::class);
         $query = new DataQuery();
         $template = '';
         self::expectException(AccessDeniedException::class);
@@ -153,7 +153,7 @@ final class TableTraitTest extends TestCase
         $table->expects(self::once())
             ->method('getEmptyMessage')
             ->willReturn('Empty Message');
-        $logger = $this->createMock(LoggerInterface::class);
+        $logger = self::createStub(LoggerInterface::class);
         $query = new DataQuery();
         $template = '';
         $actual = $this->handleTableRequest(
@@ -168,8 +168,8 @@ final class TableTraitTest extends TestCase
     public function testThrowException(): void
     {
         $this->throwException = true;
-        $table = $this->createMock(AbstractTable::class);
-        $logger = $this->createMock(LoggerInterface::class);
+        $table = self::createStub(AbstractTable::class);
+        $logger = self::createStub(LoggerInterface::class);
         $query = new DataQuery();
         $template = '';
         $this->handleTableRequest(
@@ -184,8 +184,8 @@ final class TableTraitTest extends TestCase
     public function testThrowExceptionJson(): void
     {
         $this->throwException = true;
-        $table = $this->createMock(AbstractTable::class);
-        $logger = $this->createMock(LoggerInterface::class);
+        $table = self::createStub(AbstractTable::class);
+        $logger = self::createStub(LoggerInterface::class);
         $query = new DataQuery();
         $query->callback = true;
         $template = '';
@@ -200,8 +200,8 @@ final class TableTraitTest extends TestCase
 
     public function testValidJsonResponse(): void
     {
-        $table = $this->createMock(AbstractTable::class);
-        $logger = $this->createMock(LoggerInterface::class);
+        $table = self::createStub(AbstractTable::class);
+        $logger = self::createStub(LoggerInterface::class);
         $query = new DataQuery();
         $query->callback = true;
         $template = '';
@@ -217,8 +217,8 @@ final class TableTraitTest extends TestCase
 
     public function testValidResponse(): void
     {
-        $table = $this->createMock(AbstractTable::class);
-        $logger = $this->createMock(LoggerInterface::class);
+        $table = self::createStub(AbstractTable::class);
+        $logger = self::createStub(LoggerInterface::class);
         $query = new DataQuery();
         $template = '';
         $this->handleTableRequest(

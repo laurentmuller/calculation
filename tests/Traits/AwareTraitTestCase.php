@@ -25,7 +25,12 @@ abstract class AwareTraitTestCase extends TestCase implements ServiceSubscriberI
     #[\Override]
     protected function setUp(): void
     {
-        $this->container = $this->createMock(ContainerInterface::class);
+        $this->container = self::createMock(ContainerInterface::class);
+    }
+
+    public function getContainer(): MockObject&ContainerInterface
+    {
+        return $this->container;
     }
 
     #[\Override]

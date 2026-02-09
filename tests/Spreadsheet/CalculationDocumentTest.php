@@ -45,7 +45,7 @@ final class CalculationDocumentTest extends TestCase
         $category->addItem($item);
         $calculation->addGroup($group);
 
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $document = new CalculationDocument($controller, $calculation);
         $actual = $document->render();
         self::assertTrue($actual);
@@ -61,7 +61,7 @@ final class CalculationDocumentTest extends TestCase
             ->setItemsTotal(1000.0)
             ->setUserMargin(0.1);
 
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $document = new CalculationDocument($controller, $calculation);
         $actual = $document->render();
         self::assertTrue($actual);
@@ -88,7 +88,7 @@ final class CalculationDocumentTest extends TestCase
         $category->addItem($item);
         $calculation->addGroup($group);
 
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $document = new CalculationDocument($controller, $calculation);
         $actual = $document->render();
         self::assertTrue($actual);

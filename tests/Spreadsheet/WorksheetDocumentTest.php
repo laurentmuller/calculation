@@ -79,7 +79,7 @@ final class WorksheetDocumentTest extends TestCase
 
     public function testSetActiveTitle(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $doc = new SpreadsheetDocument($this->createMockTranslator());
         $doc->setActiveTitle('My Title', $controller);
         $sheet = $doc->getActiveSheet();

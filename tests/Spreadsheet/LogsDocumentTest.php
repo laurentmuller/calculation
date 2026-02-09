@@ -27,7 +27,7 @@ final class LogsDocumentTest extends TestCase
 {
     public function testEmpty(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $logFile = $this->createMock(LogFile::class);
         $logFile->method('isEmpty')
             ->willReturn(true);
@@ -39,7 +39,7 @@ final class LogsDocumentTest extends TestCase
 
     public function testRender(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
 
         $log1 = Log::instance(1);
         $level1 = new LogLevel($log1->getLevel());

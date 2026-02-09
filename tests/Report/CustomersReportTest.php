@@ -22,7 +22,7 @@ final class CustomersReportTest extends TestCase
 {
     public function testRenderGrouped(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $customer1 = new Customer();
         $customer1->setFirstName('First Name')
             ->setLastName('A Last Name')
@@ -45,7 +45,7 @@ final class CustomersReportTest extends TestCase
 
     public function testRenderNotGrouped(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $customer = new Customer();
         $customer->setFirstName('First Name')
             ->setLastName('Last Name')

@@ -24,6 +24,7 @@ use App\Parameter\RightsParameter;
 use App\Security\EntityVoter;
 use App\Security\SecurityAttributes;
 use App\Service\RoleBuilderService;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -32,6 +33,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
+#[AllowMockObjectsWithoutExpectations]
 final class EntityVoterTest extends TestCase
 {
     private RoleBuilderService $builder;
@@ -132,7 +134,7 @@ final class EntityVoterTest extends TestCase
 
     public function testNotUserInstance(): void
     {
-        $token = $this->createMock(TokenInterface::class);
+        $token = self::createStub(TokenInterface::class);
         $subject = EntityName::PRODUCT;
         $attribute = EntityPermission::LIST;
         $actual = $this->voter->vote($token, $subject, [$attribute], new Vote());

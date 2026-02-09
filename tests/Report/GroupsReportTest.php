@@ -23,7 +23,7 @@ final class GroupsReportTest extends TestCase
 {
     public function testRender(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
 
         $group1 = new Group();
         $group1->setCode('Group1');

@@ -136,9 +136,9 @@ final class SwissPostUpdaterTest extends TestCase
     {
         $this->databaseName = __DIR__ . '/../files/sqlite/not_exist.sqlite';
         $this->parameters = $this->createMock(ApplicationParameters::class);
-        $factory = $this->createMock(FormFactoryInterface::class);
+        $factory = self::createStub(FormFactoryInterface::class);
         $service = new SwissPostService($this->databaseName);
-        $logger = $this->createMock(LoggerInterface::class);
+        $logger = self::createStub(LoggerInterface::class);
         $translator = $this->createMockTranslator();
 
         $this->service = new SwissPostUpdater($this->parameters, $factory, $service);

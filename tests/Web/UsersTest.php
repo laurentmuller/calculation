@@ -14,12 +14,13 @@ declare(strict_types=1);
 namespace App\Tests\Web;
 
 use App\Interfaces\RoleInterface;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for user's roles.
  */
-#[\PHPUnit\Framework\Attributes\CoversNothing]
+#[CoversNothing]
 final class UsersTest extends AuthenticateWebTestCase
 {
     public static function getUserExist(): \Generator

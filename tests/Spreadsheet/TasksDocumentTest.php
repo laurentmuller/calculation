@@ -65,7 +65,7 @@ final class TasksDocumentTest extends TestCase
         $task3->setName('Task3');
         $category->addTask($task3);
 
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $document = new TasksDocument($controller, [$task1, $task2, $task3]);
         $actual = $document->render();
         self::assertTrue($actual);

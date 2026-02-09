@@ -63,7 +63,7 @@ final class SpreadsheetDocumentTest extends TestCase
 
     public function testCreateSheetAndTitle(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $doc = $this->createDocument();
         $actual = $doc->createSheetAndTitle($controller, 'My Title');
         self::assertSame('My Title', $actual->getTitle());
@@ -93,7 +93,7 @@ final class SpreadsheetDocumentTest extends TestCase
                 parent::initialize($controller, $title, $landscape);
             }
         };
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $doc->runInitialize($controller, $expected, true);
         self::assertSame($expected, $doc->getTitle());
     }
@@ -123,7 +123,7 @@ final class SpreadsheetDocumentTest extends TestCase
     public function testSetActiveTitle(): void
     {
         $expected = 'Active Title';
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $doc = $this->createDocument();
         $doc->setActiveTitle($expected, $controller);
         $actual = $doc->getActiveSheet()->getTitle();

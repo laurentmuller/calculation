@@ -14,9 +14,11 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Service\EmailVerifier;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\UnexpectedResponseException;
 
+#[AllowMockObjectsWithoutExpectations]
 final class RegistrationControllerTest extends ControllerTestCase
 {
     private bool $throwOnHandleEmail = false;

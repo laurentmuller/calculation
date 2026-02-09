@@ -22,7 +22,7 @@ final class CalculationStatesReportTest extends TestCase
 {
     public function testRender(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
 
         $state1 = new CalculationState();
         $state1->setCode('Code1');

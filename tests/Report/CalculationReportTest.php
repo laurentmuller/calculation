@@ -36,7 +36,7 @@ final class CalculationReportTest extends TestCase
             ->setGlobalMargin(1.0)
             ->setItemsTotal(1000.0)
             ->setUserMargin(0.1);
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $report = new CalculationReport($controller, $calculation, 1.1, '');
         $actual = $report->render();
         self::assertTrue($actual);
@@ -59,7 +59,7 @@ final class CalculationReportTest extends TestCase
         $group->setCode('Group');
         $calculation->addGroup($group);
 
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $report = new CalculationReport($controller, $calculation, 1.1, 'qrcode');
         $actual = $report->render();
         self::assertTrue($actual);
@@ -92,7 +92,7 @@ final class CalculationReportTest extends TestCase
         $group->addCategory($category);
         $calculation->addGroup($group);
 
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $report = new CalculationReport($controller, $calculation, 2.0, 'qrcode');
         $actual = $report->render();
         self::assertTrue($actual);
@@ -125,7 +125,7 @@ final class CalculationReportTest extends TestCase
         $group->addCategory($category);
         $calculation->addGroup($group);
 
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $report = new CalculationReport($controller, $calculation, 2.0, '');
         $actual = $report->render();
         self::assertTrue($actual);

@@ -25,7 +25,7 @@ final class CommandsReportTest extends TestCase
 {
     public function testRender(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
 
         $argument1 = [
             'name' => 'Argument',

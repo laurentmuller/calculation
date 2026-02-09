@@ -19,10 +19,12 @@ use App\Parameter\ApplicationParameters;
 use App\Parameter\SecurityParameter;
 use App\Service\PasswordTooltipService;
 use App\Tests\TranslatorMockTrait;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+#[AllowMockObjectsWithoutExpectations]
 final class PasswordTooltipServiceTest extends TestCase
 {
     use TranslatorMockTrait;

@@ -20,12 +20,14 @@ use App\Form\User\ProfilePasswordType;
 use App\Parameter\ApplicationParameters;
 use App\Parameter\SecurityParameter;
 use App\Tests\Form\EntityTypeTestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 
 /**
  * @extends EntityTypeTestCase<User, ProfilePasswordType>
  */
+#[AllowMockObjectsWithoutExpectations]
 final class ProfilePasswordTypeTest extends EntityTypeTestCase
 {
     use PasswordHasherExtensionTrait;

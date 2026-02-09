@@ -23,7 +23,7 @@ final class CategoriesReportTest extends TestCase
 {
     public function testRender(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $group = new Group();
         $group->setCode('Group');
         $category = new Category();

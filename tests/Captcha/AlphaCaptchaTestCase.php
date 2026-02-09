@@ -16,6 +16,7 @@ namespace App\Tests\Captcha;
 use App\Captcha\AbstractAlphaCaptcha;
 use App\Service\DictionaryService;
 use App\Tests\TranslatorMockTrait;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -23,6 +24,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * @template TCaptcha as AbstractAlphaCaptcha
  */
+#[AllowMockObjectsWithoutExpectations]
 abstract class AlphaCaptchaTestCase extends TestCase
 {
     use TranslatorMockTrait;

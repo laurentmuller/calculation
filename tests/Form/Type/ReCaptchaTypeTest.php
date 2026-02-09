@@ -26,7 +26,7 @@ final class ReCaptchaTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;
 
-    private MockObject&Request $request;
+    private Request $request;
     private MockObject&RequestStack $requestStack;
     private MockObject&RecaptchaService $service;
 
@@ -34,7 +34,7 @@ final class ReCaptchaTypeTest extends TypeTestCase
     protected function setUp(): void
     {
         $this->service = $this->createService();
-        $this->request = $this->createMock(Request::class);
+        $this->request = self::createStub(Request::class);
         $this->requestStack = $this->createRequestStack();
         parent::setUp();
     }

@@ -22,9 +22,13 @@ use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\ClassMethod\RemoveParentDelegatingConstructorRector;
 use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
+use Rector\PHPUnit\CodeQuality\Rector\Class_\InlineStubPropertyToCreateStubMethodCallRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\SingleMockPropertyTypeRector;
+use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\BareCreateMockAssignToDirectUseRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\NoSetupWithParentCallOverrideRector;
+use Rector\PHPUnit\CodeQuality\Rector\Expression\DecorateWillReturnMapWithExpectsMockRector;
+use Rector\PHPUnit\PHPUnit120\Rector\Class_\AllowMockObjectsWhereParentClassRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\TwigSetList;
@@ -60,6 +64,14 @@ $skip = [
     RemoveParentDelegatingConstructorRector::class,
     // allow override attribute for setUp method in tests
     NoSetupWithParentCallOverrideRector::class,
+    // stub rules (v2.3.6)
+    BareCreateMockAssignToDirectUseRector::class,
+    AllowMockObjectsWhereParentClassRector::class,
+    InlineStubPropertyToCreateStubMethodCallRector::class,
+    // allow a return map without a count
+    DecorateWillReturnMapWithExpectsMockRector::class => [
+        __DIR__ . '/tests/Controller/AboutSymfonyControllerTest.php',
+    ],
 ];
 
 $sets = [

@@ -22,7 +22,7 @@ final class CalculationsBelowReportTest extends TestCase
 {
     public function testRender(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $calculation = new Calculation();
 
         $report = new CalculationsBelowReport($controller, [$calculation]);

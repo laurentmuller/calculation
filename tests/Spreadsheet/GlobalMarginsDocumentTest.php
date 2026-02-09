@@ -26,7 +26,7 @@ final class GlobalMarginsDocumentTest extends TestCase
         $margins->setMaximum(100.0)
             ->setMargin(1.1);
 
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $document = new GlobalMarginsDocument($controller, [$margins]);
         $actual = $document->render();
         self::assertTrue($actual);
@@ -34,7 +34,7 @@ final class GlobalMarginsDocumentTest extends TestCase
 
     public function testRenderEmpty(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $document = new GlobalMarginsDocument($controller, []);
         $actual = $document->render();
         self::assertFalse($actual);

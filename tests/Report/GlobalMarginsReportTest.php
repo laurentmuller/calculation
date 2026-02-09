@@ -22,7 +22,7 @@ final class GlobalMarginsReportTest extends TestCase
 {
     public function testRender(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $margin = new GlobalMargin();
         $margin->setMinimum(0.0)
             ->setMaximum(100.0)

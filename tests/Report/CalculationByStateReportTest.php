@@ -27,7 +27,7 @@ final class CalculationByStateReportTest extends TestCase
         $controller = $this->createMock(AbstractController::class);
         $controller->method('getMinMargin')
             ->willReturn(1.1);
-        $generator = $this->createMock(UrlGeneratorInterface::class);
+        $generator = self::createStub(UrlGeneratorInterface::class);
         $items = [
             new CalculationsStateItem(
                 id: 1,

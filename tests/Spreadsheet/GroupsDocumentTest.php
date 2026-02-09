@@ -28,7 +28,7 @@ final class GroupsDocumentTest extends TestCase
         $group->addMargin(new GroupMargin())
             ->addMargin(new GroupMargin());
 
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $document = new GroupsDocument($controller, [$group]);
         $actual = $document->render();
         self::assertTrue($actual);
@@ -39,7 +39,7 @@ final class GroupsDocumentTest extends TestCase
         $group = new Group();
         $group->setCode('Group');
 
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $document = new GroupsDocument($controller, [$group]);
         $actual = $document->render();
         self::assertTrue($actual);

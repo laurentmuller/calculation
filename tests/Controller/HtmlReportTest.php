@@ -30,7 +30,7 @@ final class HtmlReportTest extends TestCase
                     </body>
                 </html>
             HTML;
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $report = new HtmlReport($controller, $html);
         $report->addPage();
         $report->updateLeftMargin($report->getLeftMargin());
@@ -48,7 +48,7 @@ final class HtmlReportTest extends TestCase
 
     public function testRenderEmpty(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $report = new HtmlReport($controller, '');
         $actual = $report->render();
         self::assertFalse($actual);
@@ -85,7 +85,7 @@ final class HtmlReportTest extends TestCase
                 </html>
             HTML;
 
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $report = new HtmlReport($controller, $html);
         $report->addPage();
         $actual = $report->render();
@@ -94,7 +94,7 @@ final class HtmlReportTest extends TestCase
 
     public function testRenderSpace(): void
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $report = new HtmlReport($controller, ' ');
         $actual = $report->render();
         self::assertFalse($actual);

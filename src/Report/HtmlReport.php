@@ -16,40 +16,35 @@ namespace App\Report;
 use App\Controller\AbstractController;
 use App\Pdf\Html\HtmlParentChunk;
 use App\Pdf\Html\HtmlParser;
-use fpdf\Enums\PdfOrientation;
+use fpdf\PdfMargins;
 
 /**
  * Report outputting HTML content.
  */
 class HtmlReport extends AbstractReport
 {
-    private readonly float $defaultLeftMargin;
-    private readonly float $defaultRightMargin;
+    private readonly PdfMargins $defaultMargins;
 
-    public function __construct(
-        AbstractController $controller,
-        private readonly string $html,
-        PdfOrientation $orientation = PdfOrientation::PORTRAIT
-    ) {
-        parent::__construct($controller, $orientation);
-        $this->defaultLeftMargin = $this->getLeftMargin();
-        $this->defaultRightMargin = $this->getRightMargin();
+    public function __construct(AbstractController $controller, private readonly string $html)
+    {
+        parent::__construct($controller);
+        $this->defaultMargins = $this->getMargins();
     }
 
     #[\Override]
     public function footer(): void
     {
-        $previousMargins = $this->applyDefaultMargins();
+        $margins = $this->applyDefaultMargins();
         parent::footer();
-        $this->applyPreviousMargins($previousMargins);
+        $this->applyPreviousMargins($margins);
     }
 
     #[\Override]
     public function header(): void
     {
-        $previousMargins = $this->applyDefaultMargins();
+        $margins = $this->applyDefaultMargins();
         parent::header();
-        $this->applyPreviousMargins($previousMargins);
+        $this->applyPreviousMargins($margins);
     }
 
     #[\Override]
@@ -95,34 +90,17 @@ class HtmlReport extends AbstractReport
         return $this;
     }
 
-    /**
-     * @return array{0: float, 1: float}
-     */
-    private function applyDefaultMargins(): array
+    private function applyDefaultMargins(): PdfMargins
     {
-        $leftMargin = $this->getLeftMargin();
-        $rightMargin = $this->getRightMargin();
-        if ($this->defaultLeftMargin !== $leftMargin) {
-            $this->updateLeftMargin($this->defaultLeftMargin);
-        }
-        if ($this->defaultRightMargin !== $rightMargin) {
-            $this->updateRightMargin($this->defaultRightMargin);
-        }
+        $margins = $this->getMargins();
+        $this->updateMargins($margins, $this->defaultMargins);
 
-        return [$leftMargin, $rightMargin];
+        return $margins;
     }
 
-    /**
-     * @param array{0: float, 1: float} $previousMargins
-     */
-    private function applyPreviousMargins(array $previousMargins): void
+    private function applyPreviousMargins(PdfMargins $previousMargins): void
     {
-        if ($previousMargins[0] !== $this->getLeftMargin()) {
-            $this->updateLeftMargin($previousMargins[0]);
-        }
-        if ($previousMargins[1] !== $this->getRightMargin()) {
-            $this->updateRightMargin($previousMargins[1]);
-        }
+        $this->updateMargins($this->getMargins(), $previousMargins);
     }
 
     private function parseContent(): ?HtmlParentChunk
@@ -130,5 +108,15 @@ class HtmlReport extends AbstractReport
         $parser = new HtmlParser($this->html);
 
         return $parser->parse();
+    }
+
+    private function updateMargins(PdfMargins $oldMargins, PdfMargins $newMargins): void
+    {
+        if ($newMargins->left !== $oldMargins->left) {
+            $this->updateLeftMargin($newMargins->left);
+        }
+        if ($newMargins->right !== $oldMargins->right) {
+            $this->updateRightMargin($newMargins->right);
+        }
     }
 }

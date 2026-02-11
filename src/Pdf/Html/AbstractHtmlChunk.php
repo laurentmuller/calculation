@@ -232,22 +232,25 @@ abstract class AbstractHtmlChunk
     /**
      * Apply the given font (if any), call the callback and restore the previous font.
      *
-     * @param HtmlReport $report   the report to set and restore font
-     * @param ?PdfFont   $font     the font to apply
-     * @param callable   $callback the callback to call after the font has been set.
-     *                             The report is passed as the argument.
+     * @template TResult
      *
-     * @phpstan-param callable(HtmlReport):void $callback
+     * @param HtmlReport                    $report   the report to set and restore font
+     * @param ?PdfFont                      $font     the font to apply
+     * @param callable(HtmlReport): TResult $callback the callback to call after the font has been set
+     *
+     * @return TResult the result of the callback
      */
-    protected function applyFont(HtmlReport $report, ?PdfFont $font, callable $callback): void
+    protected function applyFont(HtmlReport $report, ?PdfFont $font, callable $callback): mixed
     {
-        if ($font instanceof PdfFont) {
-            $oldFont = $report->applyFont($font);
-            $callback($report);
-            $report->applyFont($oldFont);
-        } else {
-            $callback($report);
+        if (!$font instanceof PdfFont) {
+            return $callback($report);
         }
+
+        $oldFont = $report->applyFont($font);
+        $value = $callback($report);
+        $report->applyFont($oldFont);
+
+        return $value;
     }
 
     /**

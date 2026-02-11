@@ -14,96 +14,50 @@ declare(strict_types=1);
 namespace App\Pdf\Html;
 
 use App\Utils\StringUtils;
+use fpdf\PdfBorder;
 
 /**
  * Class to parse margins and paddings from an HTML Boostrap class.
  *
  * @see https://getbootstrap.com/docs/5.3/utilities/spacing/
  */
-readonly class HtmlSpacing
+class HtmlSpacing extends PdfBorder
 {
     /**
-     * The pattern to extract margins and paddings.
+     * The pattern to extract margins or paddings.
      */
     private const string MARGINS_PATTERN = '/^[mp]([tbsexy])?-(sm-|md-|lg-|xl-|xxl-)?([012345])/im';
 
-    /**
-     * @param int  $size   the size
-     * @param bool $top    the top side state
-     * @param bool $bottom the bottom side state
-     * @param bool $left   the left side state
-     * @param bool $right  the right side state
-     */
     public function __construct(
         public int $size = 0,
-        public bool $top = false,
-        public bool $bottom = false,
-        public bool $left = false,
-        public bool $right = false,
+        bool $left = false,
+        bool $top = false,
+        bool $right = false,
+        bool $bottom = false,
     ) {
+        parent::__construct($left, $top, $right, $bottom);
     }
 
     /**
-     * Parse the given HTML class and returns a spacing instance; returns <code>null</code> if
-     * the class cannot be parsed.
+     * Parse the given HTML class and returns a new instance; if success. Return <code>null</code> if the class cannot
+     * be parsed.
      */
-    public static function instance(string $class): ?self
+    public static function parse(string $class): ?self
     {
-        if (!StringUtils::pregMatchAll(self::MARGINS_PATTERN, $class, $matches, \PREG_SET_ORDER)) {
+        if (!StringUtils::pregMatch(self::MARGINS_PATTERN, \strtolower($class), $matches)) {
             return null;
         }
 
-        $match = $matches[0];
-        $size = (int) $match[3];
-        $top = false;
-        $bottom = false;
-        $left = false;
-        $right = false;
-        switch ($match[1]) {
-            case 't':
-                $top = true;
-                break;
-            case 'b':
-                $bottom = true;
-                break;
-            case 's': // start
-                $left = true;
-                break;
-            case 'e': // end
-                $right = true;
-                break;
-            case 'x':
-                $left = true;
-                $right = true;
-                break;
-            case 'y':
-                $top = true;
-                $bottom = true;
-                break;
-            default: // all
-                $left = true;
-                $right = true;
-                $top = true;
-                $bottom = true;
-                break;
-        }
+        $size = (int) $matches[3];
 
-        return new self($size, $top, $bottom, $left, $right);
-    }
-
-    /**
-     * Returns if all four sides are set.
-     */
-    public function isAll(): bool
-    {
-        return $this->left && $this->right && $this->top && $this->bottom;
-    }
-
-    /**
-     * Returns if no one side is set.
-     */
-    public function isNone(): bool
-    {
-        return !$this->left && !$this->right && !$this->top && !$this->bottom;
+        return match ($matches[1]) {
+            's' => new self($size, left: true),
+            't' => new self($size, top: true),
+            'e' => new self($size, right: true),
+            'b' => new self($size, bottom: true),
+            'x' => new self($size, left: true, right: true),
+            'y' => new self($size, top: true, bottom: true),
+            default => new self($size, left: true, top: true, right: true, bottom: true),
+        };
     }
 }

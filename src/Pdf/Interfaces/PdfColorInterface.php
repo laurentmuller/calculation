@@ -47,7 +47,7 @@ interface PdfColorInterface
     /**
      * Gets this value converted to RGB.
      *
-     * @return array{0: int, 1: int, 2: int}
+     * @return array{0: int<0, 255>, 1: int<0, 255>, 2: int<0, 255>}
      */
     public function asRGB(): array;
 

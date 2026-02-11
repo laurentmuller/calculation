@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Pdf\Html;
 
 use App\Pdf\Html\HtmlSpacing;
+use fpdf\PdfBorder;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -56,74 +57,73 @@ final class HtmlSpacingTest extends TestCase
 
     public static function getValidClasses(): \Generator
     {
-        yield ['m-0', 0, true, true, true, true];
-        yield ['M-0', 0, true, true, true, true];
-        yield ['m-1', 1, true, true, true, true];
-        yield ['m-2', 2, true, true, true, true];
-        yield ['m-3', 3, true, true, true, true];
-        yield ['m-4', 4, true, true, true, true];
-        yield ['m-5', 5, true, true, true, true];
+        yield ['m-0', 0, PdfBorder::all()];
+        yield ['M-0', 0, PdfBorder::all()];
+        yield ['m-1', 1, PdfBorder::all()];
+        yield ['m-2', 2, PdfBorder::all()];
+        yield ['m-3', 3, PdfBorder::all()];
+        yield ['m-4', 4, PdfBorder::all()];
+        yield ['m-5', 5, PdfBorder::all()];
 
-        yield ['mt-1', 1, true, false, false, false];
-        yield ['mb-1', 1, false, true, false, false];
+        yield ['mt-1', 1, PdfBorder::top()];
+        yield ['mb-1', 1, PdfBorder::bottom()];
+        yield ['MB-1', 1, PdfBorder::bottom()];
 
-        yield ['ms-0', 0, false, false, true, false];
-        yield ['me-0', 0, false, false, false, true];
+        yield ['ms-0', 0, PdfBorder::left()];
+        yield ['me-0', 0, PdfBorder::right()];
 
-        yield ['mx-0', 0, false, false, true, true];
-        yield ['my-0', 0, true, true, false, false];
+        yield ['mx-0', 0, PdfBorder::leftRight()];
+        yield ['my-0', 0, PdfBorder::topBottom()];
+        yield ['MY-0', 0, PdfBorder::topBottom()];
     }
 
     public function testDefault(): void
     {
-        $spacing = new HtmlSpacing();
-        self::assertFalse($spacing->top);
-        self::assertFalse($spacing->bottom);
-        self::assertFalse($spacing->left);
-        self::assertFalse($spacing->right);
-        self::assertFalse($spacing->isAll());
-        self::assertTrue($spacing->isNone());
-        self::assertSame(0, $spacing->size);
+        $actual = new HtmlSpacing();
+        self::assertSame(0, $actual->size);
+        self::assertFalse($actual->left);
+        self::assertFalse($actual->top);
+        self::assertFalse($actual->right);
+        self::assertFalse($actual->bottom);
+        self::assertFalse($actual->isAll());
+        self::assertTrue($actual->isNone());
     }
 
     #[DataProvider('getInvalidClasses')]
     public function testInvalidClass(string $class): void
     {
-        $spacing = HtmlSpacing::instance($class);
-        self::assertNull($spacing);
+        $actual = HtmlSpacing::parse($class);
+        self::assertNull($actual);
     }
 
     #[DataProvider('getIsAll')]
     public function testIsAll(string $class, bool $expected): void
     {
-        $spacing = HtmlSpacing::instance($class);
-        self::assertNotNull($spacing);
-        self::assertSame($expected, $spacing->isAll());
+        $actual = HtmlSpacing::parse($class);
+        self::assertNotNull($actual);
+        self::assertSame($expected, $actual->isAll());
     }
 
     #[DataProvider('getIsNone')]
     public function testIsNone(string $class): void
     {
-        $spacing = HtmlSpacing::instance($class);
-        self::assertNotNull($spacing);
-        self::assertFalse($spacing->isNone());
+        $actual = HtmlSpacing::parse($class);
+        self::assertNotNull($actual);
+        self::assertFalse($actual->isNone());
     }
 
     #[DataProvider('getValidClasses')]
     public function testValidClass(
         string $class,
         int $size,
-        bool $top,
-        bool $bottom,
-        bool $left,
-        bool $right,
+        PdfBorder $expected,
     ): void {
-        $spacing = HtmlSpacing::instance($class);
-        self::assertNotNull($spacing);
-        self::assertSame($size, $spacing->size);
-        self::assertSame($top, $spacing->top);
-        self::assertSame($bottom, $spacing->bottom);
-        self::assertSame($left, $spacing->left);
-        self::assertSame($right, $spacing->right);
+        $actual = HtmlSpacing::parse($class);
+        self::assertNotNull($actual);
+        self::assertSame($size, $actual->size);
+        self::assertSame($expected->left, $actual->left);
+        self::assertSame($expected->top, $actual->top);
+        self::assertSame($expected->right, $actual->right);
+        self::assertSame($expected->bottom, $actual->bottom);
     }
 }

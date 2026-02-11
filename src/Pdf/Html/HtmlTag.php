@@ -195,6 +195,34 @@ enum HtmlTag: string
         return $document->getElementsByTagName($this->value)->item(0);
     }
 
+    public function getBottomMargin(): float
+    {
+        return $this->getExtraFloat('bottom-margin');
+    }
+
+    public function getFont(): PdfFont
+    {
+        $font = PdfFont::default()
+            ->setSize($this->getFontSize())
+            ->setName($this->getFontName());
+        if ($this->getExtraBool('font-bold')) {
+            $font->bold(true);
+        }
+        if ($this->getExtraBool('font-italic')) {
+            $font->italic(true);
+        }
+        if ($this->getExtraBool('font-underline')) {
+            $font->underline(true);
+        }
+
+        return $font;
+    }
+
+    public function getFontName(): PdfFontName
+    {
+        return $this->getExtraEnum('font-name', PdfFont::DEFAULT_NAME);
+    }
+
     /**
      * Gets the font size, if applicable; the default size otherwise.
      */
@@ -203,12 +231,24 @@ enum HtmlTag: string
         return PdfFont::DEFAULT_SIZE * $this->getExtraFloat('font-size', 1.0);
     }
 
+    public function getLeftMargin(): float
+    {
+        return $this->getExtraFloat('left-margin');
+    }
+
     /**
      * Creates a style for the given tag name, ignoring case consideration.
      */
     public static function getStyle(string $value): ?HtmlStyle
     {
         return HtmlTag::tryFrom(\strtolower($value))?->style();
+    }
+
+    public function getTextColor(): ?PdfTextColor
+    {
+        $textColor = $this->getExtraString('text-color');
+
+        return '' !== $textColor ? PdfTextColor::create($textColor) : null;
     }
 
     /**
@@ -229,8 +269,8 @@ enum HtmlTag: string
         }
 
         $style = new HtmlStyle();
-        $style->setBottomMargin($this->getExtraFloat('bottom-margin'))
-            ->setLeftMargin($this->getExtraFloat('left-margin'))
+        $style->setBottomMargin($this->getBottomMargin())
+            ->setLeftMargin($this->getLeftMargin())
             ->setFont($this->getFont());
 
         $color = $this->getTextColor();
@@ -239,35 +279,5 @@ enum HtmlTag: string
         }
 
         return $style;
-    }
-
-    private function getFont(): PdfFont
-    {
-        $font = PdfFont::default()
-            ->setSize($this->getFontSize())
-            ->setName($this->getFontName());
-        if ($this->getExtraBool('font-bold')) {
-            $font->bold(true);
-        }
-        if ($this->getExtraBool('font-italic')) {
-            $font->italic(true);
-        }
-        if ($this->getExtraBool('font-underline')) {
-            $font->underline(true);
-        }
-
-        return $font;
-    }
-
-    private function getFontName(): PdfFontName
-    {
-        return $this->getExtraEnum('font-name', PdfFont::DEFAULT_NAME);
-    }
-
-    private function getTextColor(): ?PdfTextColor
-    {
-        $textColor = $this->getExtraString('text-color');
-
-        return '' !== $textColor ? PdfTextColor::create($textColor) : null;
     }
 }

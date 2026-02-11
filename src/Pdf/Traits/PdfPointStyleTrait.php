@@ -79,31 +79,17 @@ trait PdfPointStyleTrait
         float $width,
         float $height,
         string|int|null $link = null
-    ): void {
-        switch ($style) {
-            case PdfPointStyle::CIRCLE:
-                $this->outputPointStyleCircle($x, $y, $width, $height, $link);
-                break;
-            case PdfPointStyle::CROSS:
-                $this->outputPointStyleCross($x, $y, $width, $height, $link);
-                break;
-            case PdfPointStyle::CROSS_ROTATION:
-                $this->outputPointStyleCrossRotation($x, $y, $width, $height, $link);
-                break;
-            case PdfPointStyle::DIAMOND:
-                $this->outputPointStyleDiamond($x, $y, $width, $height, $link);
-                break;
-            case PdfPointStyle::ELLIPSE:
-                $this->outputPointStyleEllipse($x, $y, $width, $height, $link);
-                break;
-            case PdfPointStyle::RECTANGLE:
-            case PdfPointStyle::SQUARE:
-                $this->outputPointStyleRectangle($x, $y, $width, $height, $link);
-                break;
-            case PdfPointStyle::TRIANGLE:
-                $this->outputPointStyleTriangle($x, $y, $width, $height, $link);
-                break;
-        }
+    ): static {
+        return match ($style) {
+            PdfPointStyle::CIRCLE => $this->outputPointStyleCircle($x, $y, $width, $height, $link),
+            PdfPointStyle::CROSS => $this->outputPointStyleCross($x, $y, $width, $height, $link),
+            PdfPointStyle::CROSS_ROTATION => $this->outputPointStyleCrossRotation($x, $y, $width, $height, $link),
+            PdfPointStyle::DIAMOND => $this->outputPointStyleDiamond($x, $y, $width, $height, $link),
+            PdfPointStyle::ELLIPSE => $this->outputPointStyleEllipse($x, $y, $width, $height, $link),
+            PdfPointStyle::RECTANGLE,
+            PdfPointStyle::SQUARE => $this->outputPointStyleRectangle($x, $y, $width, $height, $link),
+            PdfPointStyle::TRIANGLE => $this->outputPointStyleTriangle($x, $y, $width, $height, $link),
+        };
     }
 
     /**
@@ -122,12 +108,13 @@ trait PdfPointStyleTrait
         string $text,
         PdfMove $move = PdfMove::RIGHT,
         string|int|null $link = null
-    ): void {
+    ): static {
         $width = $this->getPointStyleWidth($style);
         $height = $this->getPointStyleWidth($style);
         $this->outputPointStyle($style, $x, $y + $this->cellMargin, $width, $height, $link);
         $this->setXY($x + $width, $y);
-        $this->cell(
+
+        return $this->cell(
             width: $this->getStringWidth($text),
             text: $text,
             move: $move,
@@ -150,7 +137,7 @@ trait PdfPointStyleTrait
         float $width,
         float $height,
         string|int|null $link = null
-    ): void {
+    ): static {
         $radius = \min($width, $height) / 2.0;
         $this->circle(
             $x + $width / 2.0,
@@ -158,7 +145,8 @@ trait PdfPointStyleTrait
             $radius,
             PdfRectangleStyle::BOTH
         );
-        $this->outputPointStyleLink($x, $y, $width, $height, $link);
+
+        return $this->outputPointStyleLink($x, $y, $width, $height, $link);
     }
 
     /**
@@ -176,7 +164,7 @@ trait PdfPointStyleTrait
         float $width,
         float $height,
         string|int|null $link = null
-    ): void {
+    ): static {
         $size = .5;
         $oldLine = $this->lineWidth;
         $this->setLineWidth($size);
@@ -195,7 +183,8 @@ trait PdfPointStyleTrait
             $y + $height - $size / 2.0
         );
         $this->setLineWidth($oldLine);
-        $this->outputPointStyleLink($x, $y, $width, $height, $link);
+
+        return $this->outputPointStyleLink($x, $y, $width, $height, $link);
     }
 
     /**
@@ -213,7 +202,7 @@ trait PdfPointStyleTrait
         float $width,
         float $height,
         string|int|null $link = null
-    ): void {
+    ): static {
         $size = .5;
         $oldLine = $this->getLineWidth();
         $this->setLineWidth($size);
@@ -230,7 +219,8 @@ trait PdfPointStyleTrait
             $y + $size
         );
         $this->setLineWidth($oldLine);
-        $this->outputPointStyleLink($x, $y, $width, $height, $link);
+
+        return $this->outputPointStyleLink($x, $y, $width, $height, $link);
     }
 
     /**
@@ -248,7 +238,7 @@ trait PdfPointStyleTrait
         float $width,
         float $height,
         string|int|null $link = null
-    ): void {
+    ): static {
         $points = [
             new PdfPoint($x + $width / 2.0, $y),
             new PdfPoint($x + $width, $y + $height / 2.0),
@@ -256,7 +246,8 @@ trait PdfPointStyleTrait
             new PdfPoint($x, $y + $height / 2.0),
         ];
         $this->polygon($points, PdfRectangleStyle::BOTH);
-        $this->outputPointStyleLink($x, $y, $width, $height, $link);
+
+        return $this->outputPointStyleLink($x, $y, $width, $height, $link);
     }
 
     /**
@@ -274,7 +265,7 @@ trait PdfPointStyleTrait
         float $width,
         float $height,
         string|int|null $link = null
-    ): void {
+    ): static {
         $rx = $width / 2.0;
         $ry = $height / 2.0;
         $this->ellipse(
@@ -284,7 +275,8 @@ trait PdfPointStyleTrait
             $ry,
             PdfRectangleStyle::BOTH
         );
-        $this->outputPointStyleLink($x, $y, $width, $height, $link);
+
+        return $this->outputPointStyleLink($x, $y, $width, $height, $link);
     }
 
     /**
@@ -302,7 +294,7 @@ trait PdfPointStyleTrait
         float $width,
         float $height,
         string|int|null $link = null
-    ): void {
+    ): static {
         $this->rect(
             $x,
             $y,
@@ -310,7 +302,8 @@ trait PdfPointStyleTrait
             $height,
             PdfRectangleStyle::BOTH
         );
-        $this->outputPointStyleLink($x, $y, $width, $height, $link);
+
+        return $this->outputPointStyleLink($x, $y, $width, $height, $link);
     }
 
     /**
@@ -328,14 +321,15 @@ trait PdfPointStyleTrait
         float $width,
         float $height,
         string|int|null $link = null
-    ): void {
+    ): static {
         $points = [
             new PdfPoint($x + $width / 2.0, $y),
             new PdfPoint($x + $width, $y + $height),
             new PdfPoint($x, $y + $height),
         ];
         $this->polygon($points, PdfRectangleStyle::BOTH);
-        $this->outputPointStyleLink($x, $y, $width, $height, $link);
+
+        return $this->outputPointStyleLink($x, $y, $width, $height, $link);
     }
 
     private function outputPointStyleLink(
@@ -344,9 +338,11 @@ trait PdfPointStyleTrait
         float $width,
         float $height,
         string|int|null $link = null
-    ): void {
+    ): static {
         if (PdfDocument::isLink($link)) {
-            $this->link($x, $y, $width, $height, $link);
+            return $this->link($x, $y, $width, $height, $link);
         }
+
+        return $this;
     }
 }

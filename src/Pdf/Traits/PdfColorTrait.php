@@ -41,15 +41,12 @@ trait PdfColorTrait
         $this->getTextColor()->apply($doc);
     }
 
-    /**
-     * @return array{0: int<0, 255>, 1: int<0, 255>, 2: int<0, 255>}
-     */
     public function asRGB(): array
     {
         return [
-            $this->hexdec($this->value, 1),
-            $this->hexdec($this->value, 3),
-            $this->hexdec($this->value, 5),
+            $this->hexdec(1),
+            $this->hexdec(3),
+            $this->hexdec(5),
         ];
     }
 
@@ -79,9 +76,9 @@ trait PdfColorTrait
     /**
      * @return int<0, 255>
      */
-    private function hexdec(string $value, int $offset): int
+    private function hexdec(int $offset): int
     {
         /** @phpstan-var int<0, 255> */
-        return (int) \hexdec(\substr($value, $offset, 2));
+        return (int) \hexdec(\substr($this->value, $offset, 2));
     }
 }

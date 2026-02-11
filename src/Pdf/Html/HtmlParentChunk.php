@@ -36,7 +36,7 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
     ];
 
     /**
-     * @var AbstractHtmlChunk[]
+     * @var array<int, AbstractHtmlChunk>
      */
     private array $children = [];
 
@@ -111,7 +111,6 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
      */
     public function indexOf(AbstractHtmlChunk $chunk): int
     {
-        /** @phpstan-var int|false $index */
         $index = \array_search($chunk, $this->children, true);
 
         return false === $index ? -1 : $index;

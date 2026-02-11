@@ -90,7 +90,6 @@ enum EntityPermission: int implements ConstantsInterface, EnumSortableInterface,
      */
     public static function getAllPermission(): FlagBag
     {
-        // @phpstan-ignore return.type
         return FlagBag::from(...EntityPermission::sorted());
     }
 
@@ -101,7 +100,6 @@ enum EntityPermission: int implements ConstantsInterface, EnumSortableInterface,
      */
     public static function getDefaultPermission(): FlagBag
     {
-        // @phpstan-ignore return.type
         return FlagBag::from(
             EntityPermission::LIST,
             EntityPermission::EXPORT,

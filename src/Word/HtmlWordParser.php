@@ -179,7 +179,7 @@ class HtmlWordParser
      */
     private function parseMargins(string $class): string
     {
-        $spacing = HtmlSpacing::instance($class);
+        $spacing = HtmlSpacing::parse($class);
         if (!$spacing instanceof HtmlSpacing || $spacing->isNone()) {
             return $class;
         }

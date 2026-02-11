@@ -15,7 +15,6 @@ namespace App\Pdf\Html;
 
 use App\Pdf\PdfFont;
 use App\Report\HtmlReport;
-use App\Utils\StringUtils;
 use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfDocument;
 
@@ -52,16 +51,20 @@ class HtmlLiChunk extends HtmlParentChunk
     #[\Override]
     protected function outputText(HtmlReport $report, string $text): void
     {
-        $this->applyFont($report, $this->findFont(), function (HtmlReport $report) use ($text): void {
-            $width = $this->getBulletMargin($report);
-            $height = \max($report->getFontSize(), PdfDocument::LINE_HEIGHT);
-            $report->cell(
-                width: $width,
-                height: $height,
-                text: $text,
-                align: PdfTextAlignment::RIGHT
-            );
-        });
+        $this->applyFont(
+            $report,
+            $this->findFont(),
+            function (HtmlReport $report) use ($text): void {
+                $width = $this->getBulletMargin($report);
+                $height = \max($report->getFontSize(), PdfDocument::LINE_HEIGHT);
+                $report->cell(
+                    width: $width,
+                    height: $height,
+                    text: $text,
+                    align: PdfTextAlignment::RIGHT
+                );
+            }
+        );
     }
 
     /**
@@ -82,19 +85,15 @@ class HtmlLiChunk extends HtmlParentChunk
      */
     private function getBulletMargin(HtmlReport $report): float
     {
-        $width = 0.0;
-        $text = null;
         $parent = $this->getParent();
-        if ($parent instanceof AbstractHtmlListChunk) {
-            $text = $parent->getLastBulletText();
+        if (!$parent instanceof AbstractHtmlListChunk) {
+            return 0.0;
         }
 
-        if (StringUtils::isString($text)) {
-            $this->applyFont($report, $this->findFont(), static function (HtmlReport $report) use (&$width, $text): void {
-                $width = $report->getStringWidth($text);
-            });
-        }
-
-        return $width;
+        return $this->applyFont(
+            $report,
+            $this->findFont(),
+            static fn (HtmlReport $report): float => $report->getStringWidth($parent->getLastBulletText())
+        );
     }
 }

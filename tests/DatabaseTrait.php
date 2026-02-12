@@ -23,9 +23,7 @@ use Doctrine\Persistence\ObjectManager;
  */
 trait DatabaseTrait
 {
-    /**
-     * The database.
-     */
+    /** The database. */
     protected static ?FixtureDatabase $database = null;
 
     public static function setUpBeforeClass(): void

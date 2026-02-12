@@ -32,14 +32,10 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
     use ServiceMethodsSubscriberTrait;
     use TranslatorAwareTrait;
 
-    /**
-     * The entity parameter name.
-     */
+    /** The entity parameter name. */
     public const string PARAM_ENTITY = 'entity';
 
-    /**
-     * The default sort columns order.
-     */
+    /** The default sort columns order. */
     private const array SORT_COLUMNS = [
         SearchService::COLUMN_CONTENT,
         SearchService::COLUMN_ENTITY_NAME,

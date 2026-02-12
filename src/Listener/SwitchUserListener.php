@@ -28,14 +28,10 @@ class SwitchUserListener implements ServiceSubscriberInterface
     use ServiceMethodsSubscriberTrait;
     use TranslatorFlashMessageAwareTrait;
 
-    /**
-     * The exit value action.
-     */
+    /** The exit value action. */
     private const string EXIT_VALUE = '_exit';
 
-    /**
-     * The switch user parameter name.
-     */
+    /** The switch user parameter name. */
     private const string SWITCH_USER = '_switch_user';
 
     #[AsEventListener(event: SwitchUserEvent::class)]

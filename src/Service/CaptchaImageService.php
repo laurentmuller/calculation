@@ -38,39 +38,25 @@ class CaptchaImageService implements ServiceSubscriberInterface
     use ServiceMethodsSubscriberTrait;
     use SessionAwareTrait;
 
-    /**
-     * The default validation timeout in seconds (180 seconds = 3 minutes).
-     */
+    /** The default validation timeout in seconds (180 seconds = 3 minutes). */
     public const int DEFAULT_TIME_OUT = 180;
 
-    /**
-     * The allowed characters.
-     */
+    /** The allowed characters. */
     private const string ALLOWED_VALUES = 'abcdefghjkmnpqrstuvwxyz23456789';
 
-    /**
-     * The space between characters.
-     */
+    /** The space between characters. */
     private const int CHAR_SPACE = 3;
 
-    /**
-     * The base 64 image data prefix.
-     */
+    /** The base 64 image data prefix. */
     private const string IMAGE_PREFIX = 'data:image/png;base64,';
 
-    /**
-     * The attribute name for the encoded image data.
-     */
+    /** The attribute name for the encoded image data. */
     private const string KEY_DATA = 'captcha_data';
 
-    /**
-     * The attribute name for the captcha text.
-     */
+    /** The attribute name for the captcha text. */
     private const string KEY_TEXT = 'captcha_text';
 
-    /**
-     * The attribute name for the captcha timeout.
-     */
+    /** The attribute name for the captcha timeout. */
     private const string KEY_TIME = 'captcha_time';
 
     private int $timeout = self::DEFAULT_TIME_OUT;

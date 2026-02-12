@@ -31,14 +31,10 @@ class CalculationsBelowReport extends AbstractArrayReport
 {
     use MathTrait;
 
-    /**
-     * The sum of items calculations.
-     */
+    /** The sum of items calculations. */
     private float $items = 0.0;
 
-    /**
-     * The sum of overall calculations.
-     */
+    /** The sum of overall calculations. */
     private float $overall = 0.0;
 
     /**

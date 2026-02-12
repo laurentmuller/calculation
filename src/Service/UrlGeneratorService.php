@@ -39,14 +39,10 @@ class UrlGeneratorService
     use ArrayTrait;
     use RequestTrait;
 
-    /**
-     * The caller parameter name.
-     */
+    /** The caller parameter name. */
     public const string PARAM_CALLER = 'caller';
 
-    /**
-     * The parameter names.
-     */
+    /** The parameter names. */
     private const array PARAMETER_NAMES = [
         // global
         self::PARAM_CALLER,

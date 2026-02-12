@@ -27,14 +27,10 @@ class PdfImageCell extends AbstractPdfImageCell
     use ImageSizeTrait;
     use MathTrait;
 
-    /**
-     * The original image size.
-     */
+    /** The original image size. */
     private ImageSize $originalSize;
 
-    /**
-     * The image size.
-     */
+    /** The image size. */
     private ImageSize $size;
 
     /**

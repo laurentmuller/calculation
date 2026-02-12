@@ -29,9 +29,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[UniqueEntity(fields: 'code', message: 'category.unique_code')]
 class Category extends AbstractCodeEntity
 {
-    /**
-     * The parent group.
-     */
+    /** The parent group. */
     #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'categories')]
     #[ORM\JoinColumn(name: 'group_id', nullable: false)]

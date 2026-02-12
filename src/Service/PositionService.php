@@ -23,9 +23,7 @@ class PositionService
 {
     use TranslatorTrait;
 
-    /**
-     * The directions.
-     */
+    /** The directions. */
     private const array DIRECTIONS = [
         'N',
         'N / N-E',
@@ -48,9 +46,7 @@ class PositionService
 
     private const string GOOGLE_MAP_URL = 'https://www.google.ch/maps/place/%s,%s';
 
-    /**
-     * The search terms.
-     */
+    /** The search terms. */
     private const array SEARCH = [
         'N',
         'S',

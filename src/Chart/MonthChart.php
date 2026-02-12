@@ -28,14 +28,10 @@ use Twig\Environment;
  */
 class MonthChart extends AbstractHighchart
 {
-    /**
-     * The HTML color name for amounts.
-     */
+    /** The HTML color name for amounts. */
     public const HtmlColorName COLOR_AMOUNT = HtmlColorName::SEA_GREEN;
 
-    /**
-     * The HTML color name for margins.
-     */
+    /** The HTML color name for margins. */
     public const HtmlColorName COLOR_MARGIN = HtmlColorName::INDIAN_RED;
 
     private const string TEMPLATE_NAME = 'chart/_month_tooltip.js.twig';

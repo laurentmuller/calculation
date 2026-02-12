@@ -22,19 +22,13 @@ use App\Utils\FormatUtils;
  */
 enum HtmlListType: string
 {
-    /**
-     * Numbered list with lowercase letters.
-     */
+    /** Numbered list with lowercase letters. */
     case LETTER_LOWER = 'a';
 
-    /**
-     * Numbered list with uppercase letters.
-     */
+    /** Numbered list with uppercase letters. */
     case LETTER_UPPER = 'A';
 
-    /**
-     * Numbered list with numbers (default).
-     */
+    /** Numbered list with numbers (default). */
     case NUMBER = '1';
 
     /**

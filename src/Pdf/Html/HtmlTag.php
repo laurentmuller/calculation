@@ -27,151 +27,101 @@ enum HtmlTag: string
 {
     use EnumExtrasTrait;
 
-    /**
-     * The body tag name.
-     */
+    /** The body tag name. */
     #[EnumCase(extras: ['style' => false])]
     case BODY = 'body';
 
-    /**
-     * The bold element.
-     */
+    /** The bold element. */
     #[EnumCase(extras: ['font-bold' => true])]
     case BOLD = 'b';
 
-    /**
-     * The inline code element.
-     */
+    /** The inline code element. */
     #[EnumCase(extras: ['font-name' => PdfFontName::COURIER, 'text-color' => '#FF0000'])]
     case CODE = 'code';
 
-    /**
-     * The description details tag name.
-     */
+    /** The description details tag name. */
     #[EnumCase(extras: ['bottom-margin' => 2.0])]
     case DESCRIPTION_DETAIL = 'dd';
 
-    /**
-     * The description list tag name.
-     */
+    /** The description list tag name. */
     case DESCRIPTION_LIST = 'dl';
 
-    /**
-     * The description term tag name.
-     */
+    /** The description term tag name. */
     #[EnumCase(extras: ['font-bold' => true])]
     case DESCRIPTION_TERM = 'dt';
 
-    /**
-     * The emphasis element.
-     */
+    /** The emphasis element. */
     #[EnumCase(extras: ['font-italic' => true])]
     case EMPHASIS = 'em';
 
-    /**
-     * The H1 tag name.
-     */
+    /** The H1 tag name. */
     #[EnumCase(extras: ['font-bold' => true, 'font-size' => 2.5, 'bottom-margin' => 2.0])]
     case H1 = 'h1';
 
-    /**
-     * The H2 tag name.
-     */
+    /** The H2 tag name. */
     #[EnumCase(extras: ['font-bold' => true, 'font-size' => 2.0, 'bottom-margin' => 2.0])]
     case H2 = 'h2';
 
-    /**
-     * The H3 tag name.
-     */
+    /** The H3 tag name. */
     #[EnumCase(extras: ['font-bold' => true, 'font-size' => 1.75, 'bottom-margin' => 2.0])]
     case H3 = 'h3';
 
-    /**
-     * The H4 tag name.
-     */
+    /** The H4 tag name. */
     #[EnumCase(extras: ['font-bold' => true, 'font-size' => 1.5, 'bottom-margin' => 2.0])]
     case H4 = 'h4';
 
-    /**
-     * The H5 tag name.
-     */
+    /** The H5 tag name. */
     #[EnumCase(extras: ['font-bold' => true, 'font-size' => 1.25, 'bottom-margin' => 2.0])]
     case H5 = 'h5';
 
-    /**
-     * The H6 tag name.
-     */
+    /** The H6 tag name. */
     #[EnumCase(extras: ['font-bold' => true, 'font-size' => 1.1, 'bottom-margin' => 2.0])]
     case H6 = 'h6';
 
-    /**
-     * The italic element.
-     */
+    /** The italic element. */
     #[EnumCase(extras: ['font-italic' => true])]
     case ITALIC = 'i';
 
-    /**
-     * The keyboard input element.
-     */
+    /** The keyboard input element. */
     #[EnumCase(extras: ['font-name' => PdfFontName::COURIER])]
     case KEYBOARD = 'kbd';
 
-    /**
-     * The line-break tag name.
-     */
+    /** The line-break tag name. */
     #[EnumCase(extras: ['style' => false])]
     case LINE_BREAK = 'br';
 
-    /**
-     * The list item tag name.
-     */
+    /** The list item tag name. */
     #[EnumCase(extras: ['style' => false])]
     case LIST_ITEM = 'li';
 
-    /**
-     * The ordered list tag name.
-     */
+    /** The ordered list tag name. */
     #[EnumCase(extras: ['bottom-margin' => 1.0, 'left-margin' => 2.0])]
     case LIST_ORDERED = 'ol';
 
-    /**
-     * The unordered list tag name.
-     */
+    /** The unordered list tag name. */
     #[EnumCase(extras: ['bottom-margin' => 1.0, 'left-margin' => 2.0])]
     case LIST_UNORDERED = 'ul';
 
-    /**
-     * The page-break class name.
-     */
+    /** The page-break class name. */
     #[EnumCase(extras: ['style' => false])]
     case PAGE_BREAK = 'page-break';
 
-    /**
-     * The paragraph tag name.
-     */
+    /** The paragraph tag name. */
     #[EnumCase(extras: ['bottom-margin' => 2.0])]
     case PARAGRAPH = 'p';
-    /**
-     * The sample output element.
-     */
+    /** The sample output element. */
     #[EnumCase(extras: ['font-name' => PdfFontName::COURIER])]
     case SAMPLE = 'samp';
 
-    /**
-     * The span tag name.
-     */
+    /** The span tag name. */
     #[EnumCase(extras: ['style' => false])]
     case SPAN = 'span';
 
-    /**
-     * The strong importance element.
-     */
+    /** The strong importance element. */
     #[EnumCase(extras: ['font-bold' => true])]
     case STRONG = 'strong';
 
-    /**
-     * The text chunk.
-     */
+    /** The text chunk. */
     #[EnumCase(extras: ['style' => false])]
     case TEXT = '#text';
 
@@ -181,9 +131,7 @@ enum HtmlTag: string
     #[EnumCase(extras: ['font-underline' => true])]
     case UNDERLINE = 'u';
 
-    /**
-     * The variable element.
-     */
+    /** The variable element. */
     #[EnumCase(extras: ['font-name' => PdfFontName::COURIER, 'font-italic' => true])]
     case VARIABLE = 'var';
 

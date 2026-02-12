@@ -41,44 +41,28 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     use ServiceMethodsSubscriberTrait;
     use TranslatorAwareTrait;
 
-    /**
-     * The pattern to parse validity date.
-     */
+    /** The pattern to parse validity date. */
     private const string DATE_PATTERN = 'Ymd';
 
-    /**
-     * The import file extension.
-     */
+    /** The import file extension. */
     private const string FILE_EXTENSION = 'zip';
 
-    /**
-     * The record identifier containing the validity date.
-     */
+    /** The record identifier containing the validity date. */
     private const int REC_00_VALIDITY = 0;
 
-    /**
-     * The record identifier containing city data.
-     */
+    /** The record identifier containing city data. */
     private const int REC_01_CITY = 1;
 
-    /**
-     * The record identifier containing street data.
-     */
+    /** The record identifier containing street data. */
     private const int REC_04_STREET = 4;
 
-    /**
-     * The record identifier to stop processing data.
-     */
+    /** The record identifier to stop processing data. */
     private const int REC_05_STOP_PROCESS = 5;
 
-    /**
-     * The CSV separator.
-     */
+    /** The CSV separator. */
     private const string SEPARATOR = ';';
 
-    /**
-     * The states file.
-     */
+    /** The states file. */
     private const string STATE_FILE = 'swiss_state.csv';
 
     public function __construct(

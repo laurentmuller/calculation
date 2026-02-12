@@ -70,9 +70,7 @@ class FormHelper
      */
     private array $attributes = [];
 
-    /**
-     * The field identifier.
-     */
+    /** The field identifier. */
     private string $field = '';
 
     /**
@@ -89,9 +87,7 @@ class FormHelper
      */
     private array $labelAttributes = [];
 
-    /**
-     * The labels prefix.
-     */
+    /** The labels prefix. */
     private readonly ?string $labelPrefix;
 
     /**

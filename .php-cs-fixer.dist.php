@@ -65,6 +65,12 @@ $rules = [
         'allow_before_return_statement' => true,
         'ignored_tags' => ['phpstan-var', 'phpstan-param', 'phpstan-ignore'],
     ],
+    'phpdoc_line_span' => [
+        'case' => 'single',
+        'const' => 'single',
+        'property' => 'single',
+        'other' => 'single',
+    ],
 ];
 
 $paths = [

@@ -20,19 +20,13 @@ use App\Utils\StringUtils;
  */
 enum HtmlAttribute: string
 {
-    /**
-     * The class attribute name.
-     */
+    /** The class attribute name. */
     case CLASS_NAME = 'class';
 
-    /**
-     * The start ordered-list attribute name.
-     */
+    /** The start ordered-list attribute name. */
     case LIST_START = 'start';
 
-    /**
-     * The list type attribute name.
-     */
+    /** The list type attribute name. */
     case LIST_TYPE = 'type';
 
     /**

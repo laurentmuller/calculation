@@ -24,19 +24,13 @@ class LogFile implements \Countable
 {
     use ComparableTrait;
 
-    /**
-     * @var array<string, LogChannel>
-     */
+    /** @var array<string, LogChannel> */
     private array $channels = [];
 
-    /**
-     * @var array<string, LogLevel>
-     */
+    /** @var array<string, LogLevel> */
     private array $levels = [];
 
-    /**
-     * @var Log[]
-     */
+    /** @var Log[] */
     private array $logs = [];
 
     public function __construct(private readonly string $file)

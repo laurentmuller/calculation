@@ -56,24 +56,16 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class PlainType extends AbstractType implements DateFormatInterface
 {
-    /**
-     * The amount number format.
-     */
+    /** The amount number format. */
     public const string NUMBER_AMOUNT = 'price';
 
-    /**
-     * The identifier number format.
-     */
+    /** The identifier number format. */
     public const string NUMBER_IDENTIFIER = 'identifier';
 
-    /**
-     * The integer number format.
-     */
+    /** The integer number format. */
     public const string NUMBER_INTEGER = 'integer';
 
-    /**
-     * The percent number format.
-     */
+    /** The percent number format. */
     public const string NUMBER_PERCENT = 'percent';
 
     public function __construct(private readonly TranslatorInterface $translator)

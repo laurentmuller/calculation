@@ -32,25 +32,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[UniqueEntity(fields: 'description', message: 'product.unique_description')]
 class Product extends AbstractCategoryItemEntity implements ComparableInterface
 {
-    /**
-     * The parent's category.
-     */
+    /** The parent's category. */
     #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(name: 'category_id', nullable: false)]
     protected ?Category $category = null;
 
-    /**
-     * The description.
-     */
+    /** The description. */
     #[Assert\NotBlank]
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(unique: true)]
     private ?string $description = null;
 
-    /**
-     * The price.
-     */
+    /** The price. */
     #[Assert\NotBlank]
     #[ORM\Column(type: FixedFloatType::NAME)]
     private float $price = 0.0;

@@ -32,14 +32,10 @@ use Doctrine\ORM\Tools\Pagination\CountWalker;
  */
 abstract class AbstractEntityTable extends AbstractTable
 {
-    /**
-     * The group by part name of the query.
-     */
+    /** The group by part name of the query. */
     private const string GROUP_BY_PART = 'groupBy';
 
-    /**
-     * The join part name of the query.
-     */
+    /** The join part name of the query. */
     private const string JOIN_PART = 'join';
 
     /**

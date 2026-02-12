@@ -19,9 +19,7 @@ namespace App\Attribute;
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD)]
 class IndexRoute extends GetRoute
 {
-    /**
-     * This route path.
-     */
+    /** This route path. */
     public const string PATH = '';
 
     public function __construct()

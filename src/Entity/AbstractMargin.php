@@ -25,24 +25,18 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\MappedSuperclass]
 abstract class AbstractMargin extends AbstractEntity implements MarginInterface
 {
-    /**
-     * The margin in percent (1.0 = 100%) to use when an amount is within this range.
-     */
+    /** The margin in percent (1.0 = 100%) to use when an amount is within this range. */
     #[Assert\GreaterThanOrEqual(1.0)]
     #[ORM\Column(type: FixedFloatType::NAME)]
     private float $margin = 1.0;
 
-    /**
-     * The maximum amount (exclusive) to apply within this margin.
-     */
+    /** The maximum amount (exclusive) to apply within this margin. */
     #[Assert\GreaterThanOrEqual(0)]
     #[Assert\GreaterThan(propertyPath: 'minimum', message: 'margin.maximum_greater_minimum')]
     #[ORM\Column(type: FixedFloatType::NAME)]
     private float $maximum = 0.0;
 
-    /**
-     * The minimum amount (inclusive) to apply within this margin.
-     */
+    /** The minimum amount (inclusive) to apply within this margin. */
     #[Assert\GreaterThanOrEqual(0)]
     #[ORM\Column(type: FixedFloatType::NAME)]
     private float $minimum = 0.0;

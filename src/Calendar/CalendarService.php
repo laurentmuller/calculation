@@ -22,9 +22,7 @@ class CalendarService
 {
     use ModelTrait;
 
-    /**
-     * The default calendar model class.
-     */
+    /** The default calendar model class. */
     public const string DEFAULT_CALENDAR_MODEL = Calendar::class;
 
     /**

@@ -20,9 +20,7 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
  */
 enum ColumnFormat
 {
-    /**
-     * The amount format ('#,##0.00').
-     */
+    /** The amount format ('#,##0.00'). */
     case AMOUNT;
     /**
      * The amount format ('#,##0.00') and the red foreground color when values
@@ -30,33 +28,19 @@ enum ColumnFormat
      */
     case AMOUNT_ZERO;
 
-    /**
-     * The date format ('dd/mm/yyyy').
-     */
+    /** The date format ('dd/mm/yyyy'). */
     case DATE;
-    /**
-     * The date and time format ('dd/mm/yyyy hh:mm').
-     */
+    /** The date and time format ('dd/mm/yyyy hh:mm'). */
     case DATE_TIME;
-    /**
-     * The identifier format ('000000').
-     */
+    /** The identifier format ('000000'). */
     case ID;
-    /**
-     * The integer format ('#,##0').
-     */
+    /** The integer format ('#,##0'). */
     case INT;
-    /**
-     * The percent format without decimal ('0%').
-     */
+    /** The percent format without decimal ('0%'). */
     case PERCENT;
-    /**
-     * The percent format with 2 decimals ('0.00%').
-     */
+    /** The percent format with 2 decimals ('0.00%'). */
     case PERCENT_DECIMALS;
-    /**
-     * The translated 'Yes/No' boolean format.
-     */
+    /** The translated 'Yes/No' boolean format. */
     case YES_NO;
 
     /**

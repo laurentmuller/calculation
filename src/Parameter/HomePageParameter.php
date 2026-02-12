@@ -21,9 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class HomePageParameter implements ParameterInterface
 {
-    /**
-     * The displayed calculations range.
-     */
+    /** The displayed calculations range. */
     public const array CALCULATIONS_RANGE = [4, 8, 12, 16, 20];
 
     #[Assert\Choice(choices: self::CALCULATIONS_RANGE)]

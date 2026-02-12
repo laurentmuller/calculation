@@ -25,9 +25,7 @@ use fpdf\PdfDocument;
  */
 class PdfGroup implements PdfDocumentUpdaterInterface
 {
-    /**
-     * The style.
-     */
+    /** The style. */
     private PdfStyle $style;
 
     /**

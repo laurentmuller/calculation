@@ -22,9 +22,7 @@ use Symfony\Component\Clock\DatePoint;
  */
 class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
 {
-    /**
-     * The date format used to generate this key.
-     */
+    /** The date format used to generate this key. */
     public const string KEY_FORMAT = 'Y.m.d';
 
     /**

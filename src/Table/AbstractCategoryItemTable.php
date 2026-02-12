@@ -34,9 +34,7 @@ use Doctrine\ORM\QueryBuilder;
  */
 abstract class AbstractCategoryItemTable extends AbstractEntityTable
 {
-    /**
-     * The category parameter name (int).
-     */
+    /** The category parameter name (int). */
     public const string PARAM_CATEGORY = 'categoryId';
 
     /**

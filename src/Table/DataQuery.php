@@ -23,26 +23,18 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class DataQuery implements SortModeInterface
 {
-    /**
-     * The callback state (XMLHttpRequest).
-     */
+    /** The callback state (XMLHttpRequest). */
     public bool $callback = false;
 
-    /**
-     * The selected identifier.
-     */
+    /** The selected identifier. */
     #[Assert\PositiveOrZero]
     public int $id = 0;
 
-    /**
-     * The maximum number of results to retrieve (the "limit").
-     */
+    /** The maximum number of results to retrieve (the "limit"). */
     #[Assert\PositiveOrZero]
     public int $limit = 0;
 
-    /**
-     * The position of the first result to retrieve (the "offset").
-     */
+    /** The position of the first result to retrieve (the "offset"). */
     #[Assert\PositiveOrZero]
     public int $offset = 0;
 
@@ -54,32 +46,22 @@ class DataQuery implements SortModeInterface
     #[Assert\Choice(choices: [self::SORT_ASC, self::SORT_DESC])]
     public string $order = self::SORT_ASC;
 
-    /**
-     * @var array<string, int|string>
-     */
+    /** @var array<string, int|string> */
     public array $parameters = [];
 
-    /**
-     * The cookie prefix.
-     */
+    /** The cookie prefix. */
     #[Assert\NotNull]
     public string $prefix = '';
 
-    /**
-     * The search term.
-     */
+    /** The search term. */
     #[Assert\NotNull]
     public string $search = '';
 
-    /**
-     * The sorted field.
-     */
+    /** The sorted field. */
     #[Assert\NotNull]
     public string $sort = '';
 
-    /**
-     * The view.
-     */
+    /** The view. */
     public TableView $view = TableView::TABLE;
 
     /**

@@ -27,49 +27,31 @@ use fpdf\PdfDocument;
  */
 class ReportHeader
 {
-    /**
-     *  The default font size.
-     */
+    /** The default font size. */
     private const float DEFAULT_FONT_SIZE = PdfFont::DEFAULT_SIZE - 1.0;
 
-    /**
-     * The default line height.
-     */
+    /** The default line height. */
     private const float LINE_HEIGHT = PdfDocument::LINE_HEIGHT;
 
-    /**
-     * The line height for the customer address.
-     */
+    /** The line height for the customer address. */
     private const float SMALL_HEIGHT = PdfDocument::LINE_HEIGHT - 1.0;
 
-    /**
-     * The title font size.
-     */
+    /** The title font size. */
     private const float TITLE_FONT_SIZE = PdfFont::DEFAULT_SIZE + 1.0;
 
-    /**
-     * The customer information.
-     */
+    /** The customer information. */
     private ?CustomerInformation $customer = null;
 
-    /**
-     * The document description.
-     */
+    /** The document description. */
     private ?string $description = null;
 
-    /**
-     * The style for the customer name.
-     */
+    /** The style for the customer name. */
     private ?PdfStyle $nameStyle = null;
 
-    /**
-     * The style for customer address, contact and description.
-     */
+    /** The style for customer address, contact and description. */
     private ?PdfStyle $smallStyle = null;
 
-    /**
-     * The style for the document title.
-     */
+    /** The style for the document title. */
     private ?PdfStyle $titleStyle = null;
 
     public function __construct(private readonly AbstractReport $parent)

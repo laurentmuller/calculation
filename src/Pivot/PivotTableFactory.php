@@ -28,9 +28,7 @@ class PivotTableFactory
 {
     use CheckSubClassTrait;
 
-    /**
-     * The title separator.
-     */
+    /** The title separator. */
     private const string SEPARATOR = '\\';
 
     /**
@@ -47,14 +45,10 @@ class PivotTableFactory
      */
     private array $columnFields = [];
 
-    /**
-     * The data field.
-     */
+    /** The data field. */
     private ?PivotField $dataField = null;
 
-    /**
-     * The key field.
-     */
+    /** The key field. */
     private ?PivotField $keyField = null;
 
     /**

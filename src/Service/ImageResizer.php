@@ -31,9 +31,7 @@ class ImageResizer
     use LoggerTrait;
     use TranslatorTrait;
 
-    /**
-     * The target image size.
-     */
+    /** The target image size. */
     public const int IMAGE_SIZE = 192;
 
     public function __construct(

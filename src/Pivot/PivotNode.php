@@ -32,9 +32,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      */
     private array $children = [];
 
-    /**
-     * The parent node.
-     */
+    /** The parent node. */
     private ?PivotNode $parent = null;
 
     /**
@@ -44,9 +42,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      */
     private string $sortMode = self::SORT_ASC;
 
-    /**
-     * The title.
-     */
+    /** The title. */
     private ?string $title = null;
 
     /**

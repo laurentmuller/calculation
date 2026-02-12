@@ -27,21 +27,15 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity implements Time
 {
     use TimestampableTrait;
 
-    /**
-     * The parent's category.
-     */
+    /** The parent's category. */
     protected ?Category $category = null;
 
-    /**
-     * The supplier.
-     */
+    /** The supplier. */
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
     private ?string $supplier = null;
 
-    /**
-     * The unit.
-     */
+    /** The unit. */
     #[Assert\Length(max: 15)]
     #[ORM\Column(length: 15, nullable: true)]
     private ?string $unit = null;

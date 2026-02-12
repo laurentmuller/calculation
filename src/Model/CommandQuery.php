@@ -16,21 +16,13 @@ namespace App\Model;
 class CommandQuery
 {
     public function __construct(
-        /**
-         * The command name.
-         */
+        /** The command name. */
         public ?string $name = null,
-        /**
-         * Expanded arguments.
-         */
+        /** Expanded arguments. */
         public bool $arguments = false,
-        /**
-         * Expanded options.
-         */
+        /** Expanded options. */
         public bool $options = false,
-        /**
-         * Expanded help.
-         */
+        /** Expanded help. */
         public bool $help = false,
     ) {
     }

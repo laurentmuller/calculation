@@ -52,49 +52,31 @@ class ExchangeRateService extends AbstractHttpClientService
 {
     use ArrayTrait;
 
-    /**
-     * The default cache timeout (15 minutes).
-     */
+    /** The default cache timeout (15 minutes). */
     private const int CACHE_TIMEOUT = 60 * 15;
 
-    /**
-     * The host name.
-     */
+    /** The host name. */
     private const string HOST_NAME = 'https://v6.exchangerate-api.com/v6/%s/';
 
-    /**
-     * The success response code.
-     */
+    /** The success response code. */
     private const string RESPONSE_SUCCESS = 'success';
 
-    /**
-     * The URI for supported currency codes.
-     */
+    /** The URI for supported currency codes. */
     private const string URI_CODES = 'codes';
 
-    /**
-     * The URI for the latest exchange rates.
-     */
+    /** The URI for the latest exchange rates. */
     private const string URI_LATEST = 'latest/%s';
 
-    /**
-     * The URI for the quota.
-     */
+    /** The URI for the quota. */
     private const string URI_QUOTA = 'quota';
 
-    /**
-     * The URI for exchange rate.
-     */
+    /** The URI for exchange rate. */
     private const string URI_RATE = 'pair/%s/%s';
 
-    /**
-     * The base URI.
-     */
+    /** The base URI. */
     private readonly string $endpoint;
 
-    /**
-     * The cache timeout.
-     */
+    /** The cache timeout. */
     private int $timeout = 600;
 
     /**

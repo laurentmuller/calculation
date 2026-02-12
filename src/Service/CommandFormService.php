@@ -28,19 +28,13 @@ use Symfony\Component\Form\FormView;
  */
 readonly class CommandFormService
 {
-    /**
-     * The priority for an argument text field.
-     */
+    /** The priority for an argument text field. */
     public const int PRIORITY_ARGUMENT = 0;
 
-    /**
-     * The priority for an option boolean field.
-     */
+    /** The priority for an option boolean field. */
     public const int PRIORITY_BOOL = 2;
 
-    /**
-     * The priority for an option text field.
-     */
+    /** The priority for an option text field. */
     public const int PRIORITY_TEXT = 1;
 
     public function __construct(private FormFactoryInterface $factory)

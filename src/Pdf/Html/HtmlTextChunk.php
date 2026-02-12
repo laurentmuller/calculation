@@ -22,9 +22,7 @@ use fpdf\PdfDocument;
  */
 class HtmlTextChunk extends AbstractHtmlChunk
 {
-    /**
-     * The names of parents to use with multi-cell.
-     */
+    /** The names of parents to use with multi-cell. */
     private const array PARENT_MULTI_CELL = [
         HtmlTag::H1,
         HtmlTag::H2,

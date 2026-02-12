@@ -44,9 +44,7 @@ class SchemaReport extends AbstractReport
     private ?PdfCell $manyToOneCell = null;
     private ?PdfCell $oneToManyCell = null;
 
-    /**
-     * @phpstan-var array<string, int>
-     */
+    /** @phpstan-var array<string, int> */
     private array $tableLinks = [];
 
     public function __construct(

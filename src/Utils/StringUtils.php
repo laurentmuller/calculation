@@ -21,9 +21,7 @@ use Symfony\Component\String\UnicodeString;
  */
 final class StringUtils
 {
-    /**
-     * The new line separator.
-     */
+    /** The new line separator. */
     public const string NEW_LINE = "\n";
 
     private const array VAR_PATTERN = [

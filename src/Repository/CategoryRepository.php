@@ -31,19 +31,13 @@ class CategoryRepository extends AbstractRepository
 {
     use GroupByTrait;
 
-    /**
-     * The filter type to display all categories.
-     */
+    /** The filter type to display all categories. */
     public const int FILTER_NONE = 0;
 
-    /**
-     * The filter's type to display only categories that contain one or more products.
-     */
+    /** The filter's type to display only categories that contain one or more products. */
     public const int FILTER_PRODUCTS = 1;
 
-    /**
-     * The filter's type to display only categories that contain one or more tasks.
-     */
+    /** The filter's type to display only categories that contain one or more tasks. */
     public const int FILTER_TASKS = 2;
 
     public function __construct(ManagerRegistry $registry)

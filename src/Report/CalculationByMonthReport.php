@@ -61,7 +61,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
     private const float RECT_MARGIN = 1.25;
     private const float RECT_WIDTH = 4.5;
 
-    /** @phpstan-var \WeakMap<PdfColorInterface, PdfTextColor>  */
+    /** @phpstan-var \WeakMap<PdfColorInterface, PdfTextColor> */
     private \WeakMap $colors;
     private ?CalculationsMonthItem $currentItem = null;
     private bool $drawHeaders = false;

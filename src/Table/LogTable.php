@@ -30,14 +30,10 @@ use Twig\Environment;
  */
 class LogTable extends AbstractTable implements \Countable
 {
-    /**
-     * The channel parameter name.
-     */
+    /** The channel parameter name. */
     public const string PARAM_CHANNEL = LogSorterService::COLUMN_CHANNEL;
 
-    /**
-     * The level parameter name.
-     */
+    /** The level parameter name. */
     public const string PARAM_LEVEL = LogSorterService::COLUMN_LEVEL;
 
     public function __construct(private readonly LogService $service, private readonly Environment $twig)

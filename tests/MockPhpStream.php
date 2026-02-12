@@ -21,14 +21,10 @@ namespace App\Tests;
 #[\AllowDynamicProperties]
 class MockPhpStream
 {
-    /**
-     * The wrapper name protocol to be registered or unregistered.
-     */
+    /** The wrapper name protocol to be registered or unregistered. */
     private const string PROTOCOL = 'php';
 
-    /**
-     * The current content.
-     */
+    /** The current content. */
     private string $content = '';
 
     /**
@@ -38,19 +34,13 @@ class MockPhpStream
      */
     private static array $data = [];
 
-    /**
-     * The current position in the content.
-     */
+    /** The current position in the content. */
     private int $index = 0;
 
-    /**
-     * The length of the current content.
-     */
+    /** The length of the current content. */
     private int $length = 0;
 
-    /**
-     * The current file path.
-     */
+    /** The current file path. */
     private string $path = '';
 
     /**

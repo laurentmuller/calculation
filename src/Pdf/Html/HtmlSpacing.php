@@ -23,9 +23,7 @@ use fpdf\PdfBorder;
  */
 class HtmlSpacing extends PdfBorder
 {
-    /**
-     * The pattern to extract margins or paddings.
-     */
+    /** The pattern to extract margins or paddings. */
     private const string MARGINS_PATTERN = '/^[mp]([tbsexy])?-(sm-|md-|lg-|xl-|xxl-)?([012345])/im';
 
     public function __construct(

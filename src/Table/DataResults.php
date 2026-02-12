@@ -43,9 +43,7 @@ class DataResults implements \JsonSerializable
      */
     public array $customData = [];
 
-    /**
-     * The number of filtered rows.
-     */
+    /** The number of filtered rows. */
     public int $filtered = 0;
 
     /**
@@ -69,14 +67,10 @@ class DataResults implements \JsonSerializable
      */
     public array $rows = [];
 
-    /**
-     * The response status.
-     */
+    /** The response status. */
     public int $status = Response::HTTP_OK;
 
-    /**
-     * The number of unfiltered rows.
-     */
+    /** The number of unfiltered rows. */
     public int $totalNotFiltered = 0;
 
     /**

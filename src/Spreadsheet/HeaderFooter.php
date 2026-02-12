@@ -21,24 +21,16 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
  */
 class HeaderFooter
 {
-    /**
-     * The center section prefix.
-     */
+    /** The center section prefix. */
     public const string CENTER_SECTION = '&C';
 
-    /**
-     * The default font size.
-     */
+    /** The default font size. */
     public const int DEFAULT_FONT_SIZE = 9;
 
-    /**
-     * The left section prefix.
-     */
+    /** The left section prefix. */
     public const string LEFT_SECTION = '&L';
 
-    /**
-     * The right section prefix.
-     */
+    /** The right section prefix. */
     public const string RIGHT_SECTION = '&R';
 
     // the date and time format

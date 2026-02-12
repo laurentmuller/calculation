@@ -26,9 +26,7 @@ abstract class AbstractRepositoryTestCase extends KernelServiceTestCase
 {
     use DatabaseTrait;
 
-    /**
-     * @var TRepository
-     */
+    /** @var TRepository */
     protected AbstractRepository $repository;
 
     #[\Override]

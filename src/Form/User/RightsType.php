@@ -56,9 +56,7 @@ class RightsType extends AbstractType
             EntityPermissionType::class,
             [
                 'label' => $entity,
-                /**
-                 * @phpstan-param int[] $object
-                 */
+                /** @phpstan-param int[] $object */
                 'getter' => fn (array $object): FlagBag => $this->getOffsetValue($offset, $object),
                 /**
                  * @phpstan-param int[]                     $object

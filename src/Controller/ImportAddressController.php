@@ -28,9 +28,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(path: '/admin', name: 'admin_')]
 class ImportAddressController extends AbstractController
 {
-    /**
-     * The URL to download data.
-     */
+    /** The URL to download data. */
     private const string DATA_URL = 'https://www.post.ch/fr/espace-clients/services-en-ligne/zopa/adress-und-geodaten/info';
 
     #[GetPostRoute(path: '/import', name: 'import')]

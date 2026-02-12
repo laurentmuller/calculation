@@ -21,9 +21,7 @@ use App\Utils\StringUtils;
  */
 abstract class AbstractDatabase extends \SQLite3 implements \Stringable
 {
-    /**
-     * The in-memory database file name.
-     */
+    /** The in-memory database file name. */
     public const string IN_MEMORY = ':memory:';
 
     /**
@@ -33,9 +31,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      */
     private array $statements = [];
 
-    /**
-     * The transaction state.
-     */
+    /** The transaction state. */
     private bool $transaction = false;
 
     /**

@@ -32,39 +32,25 @@ abstract class AbstractHttpClientService
     use CacheKeyTrait;
     use LoggerTrait;
 
-    /**
-     * The base URI parameter name.
-     */
+    /** The base URI parameter name. */
     final protected const string BASE_URI = 'base_uri';
 
-    /**
-     * The body parameter name.
-     */
+    /** The body parameter name. */
     final protected const string BODY = 'body';
 
-    /**
-     * The header's parameter name.
-     */
+    /** The header's parameter name. */
     final protected const string HEADERS = 'headers';
 
-    /**
-     * The JSON parameter name.
-     */
+    /** The JSON parameter name. */
     final protected const string JSON = 'json';
 
-    /**
-     * The query parameter name.
-     */
+    /** The query parameter name. */
     final protected const string QUERY = 'query';
 
-    /**
-     * The HTTP client.
-     */
+    /** The HTTP client. */
     private ?HttpClientInterface $client = null;
 
-    /**
-     * The last client error.
-     */
+    /** The last client error. */
     private ?HttpClientError $lastError = null;
 
     /**

@@ -33,50 +33,32 @@ enum MessagePosition: string implements EnumSortableInterface, PdfEnumDefaultInt
     use PdfEnumDefaultTrait;
     use TranslatableEnumTrait;
 
-    /**
-     * Bottom center position.
-     */
+    /** Bottom center position. */
     case BOTTOM_CENTER = 'bottom-center';
 
-    /**
-     * Bottom left position.
-     */
+    /** Bottom left position. */
     case BOTTOM_LEFT = 'bottom-left';
 
-    /**
-     * Bottom right position.
-     */
+    /** Bottom right position. */
     #[EnumCase(extras: [PdfEnumDefaultInterface::NAME => true])]
     case BOTTOM_RIGHT = 'bottom-right';
 
-    /**
-     * Center position.
-     */
+    /** Center position. */
     case CENTER_CENTER = 'center-center';
 
-    /**
-     * Center left position.
-     */
+    /** Center left position. */
     case CENTER_LEFT = 'center-left';
 
-    /**
-     * Center right position.
-     */
+    /** Center right position. */
     case CENTER_RIGHT = 'center-right';
 
-    /**
-     * Top center position.
-     */
+    /** Top center position. */
     case TOP_CENTER = 'top-center';
 
-    /**
-     * Top left position.
-     */
+    /** Top left position. */
     case TOP_LEFT = 'top-left';
 
-    /**
-     * Top right position.
-     */
+    /** Top right position. */
     case TOP_RIGHT = 'top-right';
 
     /**

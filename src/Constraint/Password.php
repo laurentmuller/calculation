@@ -23,9 +23,7 @@ use Symfony\Component\Validator\Exception\InvalidOptionsException;
 #[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 class Password extends Constraint
 {
-    /**
-     * The allowed option names.
-     */
+    /** The allowed option names. */
     public const array ALLOWED_OPTIONS = [
         'letter',
         'caseDiff',
@@ -48,29 +46,19 @@ class Password extends Constraint
         self::EMAIL_ERROR => 'EMAIL_ERROR',
     ];
 
-    /**
-     * Case diff error message.
-     */
+    /** Case diff error message. */
     public string $caseDiffMessage = 'password.caseDiff';
 
-    /**
-     * Email error message.
-     */
+    /** Email error message. */
     public string $emailMessage = 'password.email';
 
-    /**
-     * Letters error message.
-     */
+    /** Letters error message. */
     public string $letterMessage = 'password.letter';
 
-    /**
-     * Numbers error message.
-     */
+    /** Numbers error message. */
     public string $numberMessage = 'password.number';
 
-    /**
-     * Special char error message.
-     */
+    /** Special char error message. */
     public string $specialCharMessage = 'password.specialChar';
 
     /**

@@ -22,18 +22,12 @@ use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
  */
 interface UserInterface extends BaseUserInterface, PasswordAuthenticatedUserInterface, ResetPasswordRequestInterface, RoleInterface
 {
-    /**
-     * The maximum length for a username property.
-     */
+    /** The maximum length for a username property. */
     public const int MAX_USERNAME_LENGTH = 180;
 
-    /**
-     * The minimum length for the password.
-     */
+    /** The minimum length for the password. */
     public const int MIN_PASSWORD_LENGTH = 6;
 
-    /**
-     * The minimum length for a username property.
-     */
+    /** The minimum length for a username property. */
     public const int MIN_USERNAME_LENGTH = 2;
 }

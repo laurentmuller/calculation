@@ -23,9 +23,7 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class ParameterTestCase extends TestCase
 {
-    /**
-     * @phpstan-var T ParameterInterface
-     */
+    /** @phpstan-var T ParameterInterface */
     protected ParameterInterface $parameter;
 
     #[\Override]

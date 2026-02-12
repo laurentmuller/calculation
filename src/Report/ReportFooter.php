@@ -27,14 +27,10 @@ use fpdf\PdfDocument;
  */
 class ReportFooter
 {
-    /**
-     * The footer offset in millimeters.
-     */
+    /** The footer offset in millimeters. */
     public const float FOOTER_OFFSET = 13.0;
 
-    /**
-     * The content text.
-     */
+    /** The content text. */
     private ?string $content = null;
 
     /*
@@ -42,9 +38,7 @@ class ReportFooter
      */
     private ?string $date = null;
 
-    /**
-     * The link.
-     */
+    /** The link. */
     private ?string $url = null;
 
     public function __construct(private readonly AbstractReport $parent)

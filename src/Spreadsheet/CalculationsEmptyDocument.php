@@ -25,14 +25,10 @@ class CalculationsEmptyDocument extends AbstractCalculationItemsDocument
 {
     use EmptyItemsTrait;
 
-    /**
-     * The price label.
-     */
+    /** The price label. */
     private readonly string $priceLabel;
 
-    /**
-     * The quantity label.
-     */
+    /** The quantity label. */
     private readonly string $quantityLabel;
 
     /**

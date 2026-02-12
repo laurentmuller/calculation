@@ -23,25 +23,15 @@ readonly class LogSorterService
 {
     use ClosureSortTrait;
 
-    /**
-     * The channel column name.
-     */
+    /** The channel column name. */
     public const string COLUMN_CHANNEL = 'channel';
-    /**
-     * The created date column name.
-     */
+    /** The created date column name. */
     public const string COLUMN_DATE = 'createdAt';
-    /**
-     * The level column name.
-     */
+    /** The level column name. */
     public const string COLUMN_LEVEL = 'level';
-    /**
-     * The message column name.
-     */
+    /** The message column name. */
     public const string COLUMN_MESSAGE = 'message';
-    /**
-     * The user column name.
-     */
+    /** The user column name. */
     public const string COLUMN_USER = 'user';
 
     /**

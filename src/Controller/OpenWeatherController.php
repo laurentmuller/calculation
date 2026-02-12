@@ -56,14 +56,10 @@ class OpenWeatherController extends AbstractController
 {
     use CookieTrait;
 
-    /**
-     * The country parameter name.
-     */
+    /** The country parameter name. */
     private const string PARAM_COUNTRY = 'country';
 
-    /**
-     * The prefix key for cookies.
-     */
+    /** The prefix key for cookies. */
     private const string PREFIX_KEY = 'openweather';
 
     public function __construct(private readonly OpenWeatherService $service)

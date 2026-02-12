@@ -32,44 +32,28 @@ use Doctrine\ORM\QueryBuilder;
  */
 abstract class AbstractRepository extends ServiceEntityRepository implements SortModeInterface
 {
-    /**
-     * The alias for the calculation entity.
-     */
+    /** The alias for the calculation entity. */
     public const string CALCULATION_ALIAS = 'c';
 
-    /**
-     * The alias for the category entity.
-     */
+    /** The alias for the category entity. */
     public const string CATEGORY_ALIAS = 'c';
 
-    /**
-     * The default entity alias used to create the query builder (value = 'e').
-     */
+    /** The default entity alias used to create the query builder (value = 'e'). */
     public const string DEFAULT_ALIAS = 'e';
 
-    /**
-     * The alias for the group entity.
-     */
+    /** The alias for the group entity. */
     public const string GROUP_ALIAS = 'g';
 
-    /**
-     * The alias for the product entity.
-     */
+    /** The alias for the product entity. */
     public const string PRODUCT_ALIAS = 'p';
 
-    /**
-     * The alias for the state entity.
-     */
+    /** The alias for the state entity. */
     public const string STATE_ALIAS = 's';
 
-    /**
-     * The alias for the task entity.
-     */
+    /** The alias for the task entity. */
     public const string TASK_ALIAS = 't';
 
-    /**
-     * The alias for the task item entity.
-     */
+    /** The alias for the task item entity. */
     public const string TASK_ITEM_ALIAS = 'i';
 
     /**

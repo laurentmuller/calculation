@@ -20,9 +20,7 @@ use PhpOffice\PhpWord\Element\Section;
  */
 abstract class AbstractHeaderFooter
 {
-    /**
-     * The document width.
-     */
+    /** The document width. */
     protected const int TOTAL_WIDTH = 12_000;
 
     /**

@@ -18,43 +18,27 @@ namespace App\Calendar;
  */
 interface WeekDaysInterface
 {
-    /**
-     * The number of week days.
-     */
+    /** The number of week days. */
     public const int DAYS_COUNT = 7;
 
-    /**
-     * ISO-8601 numeric representation of friday.
-     */
+    /** ISO-8601 numeric representation of friday. */
     public const int FRIDAY = 5;
 
-    /**
-     * ISO-8601 numeric representation of monday.
-     */
+    /** ISO-8601 numeric representation of monday. */
     public const int MONDAY = 1;
 
-    /**
-     * ISO-8601 numeric representation of saturday.
-     */
+    /** ISO-8601 numeric representation of saturday. */
     public const int SATURDAY = 6;
 
-    /**
-     * ISO-8601 numeric representation of sunday.
-     */
+    /** ISO-8601 numeric representation of sunday. */
     public const int SUNDAY = 7;
 
-    /**
-     * ISO-8601 numeric representation of thursday.
-     */
+    /** ISO-8601 numeric representation of thursday. */
     public const int THURSDAY = 4;
 
-    /**
-     * ISO-8601 numeric representation of tuesday.
-     */
+    /** ISO-8601 numeric representation of tuesday. */
     public const int TUESDAY = 2;
 
-    /**
-     * ISO-8601 numeric representation of wednesday.
-     */
+    /** ISO-8601 numeric representation of wednesday. */
     public const int WEDNESDAY = 3;
 }

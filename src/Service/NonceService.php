@@ -20,9 +20,7 @@ use Twig\Attribute\AsTwigFunction;
  */
 class NonceService
 {
-    /**
-     *  The generated nonce.
-     */
+    /** The generated nonce. */
     private ?string $nonce = null;
 
     /**

@@ -43,19 +43,13 @@ class LogsReport extends AbstractReport
 {
     use PdfMemoryImageTrait;
 
-    /**
-     * The delta date, in seconds, between log bookmarks.
-     */
+    /** The delta date, in seconds, between log bookmarks. */
     private const int DELTA_DATE = 600;
 
-    /**
-     * @var array<string, PdfFontAwesomeCell|string>
-     */
+    /** @var array<string, PdfFontAwesomeCell|string> */
     private array $cells = [];
 
-    /**
-     * @var array<string, string>
-     */
+    /** @var array<string, string> */
     private array $colors = [];
 
     public function __construct(

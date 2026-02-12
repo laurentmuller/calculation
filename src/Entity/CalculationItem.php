@@ -37,37 +37,27 @@ class CalculationItem extends AbstractEntity implements ComparableInterface, Par
     use MathTrait;
     use PositionTrait;
 
-    /**
-     * The parent's category.
-     */
+    /** The parent's category. */
     #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'items')]
     #[ORM\JoinColumn(name: 'category_id', nullable: false, onDelete: 'cascade')]
     private ?CalculationCategory $category = null;
 
-    /**
-     * The description.
-     */
+    /** The description. */
     #[Assert\NotBlank]
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column]
     private ?string $description = null;
 
-    /**
-     * The price.
-     */
+    /** The price. */
     #[ORM\Column(type: FixedFloatType::NAME)]
     private float $price = 0.0;
 
-    /**
-     * The quantity.
-     */
+    /** The quantity. */
     #[ORM\Column(type: FixedFloatType::NAME)]
     private float $quantity = 0.0;
 
-    /**
-     * The unit.
-     */
+    /** The unit. */
     #[Assert\Length(max: 15)]
     #[ORM\Column(length: 15, nullable: true)]
     private ?string $unit = null;

@@ -27,9 +27,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: GroupMarginRepository::class)]
 class GroupMargin extends AbstractMargin implements ParentTimestampableInterface
 {
-    /**
-     * The parent's group.
-     */
+    /** The parent's group. */
     #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'margins')]
     #[ORM\JoinColumn(name: 'group_id', nullable: false, onDelete: 'cascade')]

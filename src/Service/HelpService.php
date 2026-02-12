@@ -92,9 +92,7 @@ class HelpService
     use ClosureSortTrait;
     use TranslatorTrait;
 
-    /**
-     * The image extension.
-     */
+    /** The image extension. */
     public const string IMAGES_EXT = '.png';
 
     /**

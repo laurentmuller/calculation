@@ -30,9 +30,7 @@ use fpdf\PdfDocument;
  */
 class ItemsTable extends ReportGroupTable implements PdfGroupListenerInterface
 {
-    /**
-     * The categories and items indent.
-     */
+    /** The categories and items indent. */
     private const int INDENT = 4;
 
     private readonly Calculation $calculation;

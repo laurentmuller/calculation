@@ -27,9 +27,7 @@ class OpenWeatherSearchService
 {
     use CacheKeyTrait;
 
-    /**
-     * The number of search results to return.
-     */
+    /** The number of search results to return. */
     public const int DEFAULT_LIMIT = 15;
 
     public function __construct(

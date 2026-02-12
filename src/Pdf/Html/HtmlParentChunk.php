@@ -21,9 +21,7 @@ use fpdf\PdfDocument;
  */
 class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
 {
-    /**
-     * The tags to keep with the next chunk.
-     */
+    /** The tags to keep with the next chunk. */
     private const array KEEP_WITH_NEXT = [
         HtmlTag::H1,
         HtmlTag::H2,
@@ -35,9 +33,7 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
         HtmlTag::LIST_UNORDERED,
     ];
 
-    /**
-     * @var array<int, AbstractHtmlChunk>
-     */
+    /** @var array<int, AbstractHtmlChunk> */
     private array $children = [];
 
     /**

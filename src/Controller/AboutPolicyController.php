@@ -21,9 +21,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(path: '/about/policy', name: 'about_policy_')]
 class AboutPolicyController extends AbstractAboutController
 {
-    /**
-     * The policy file name (Markdown).
-     */
+    /** The policy file name (Markdown). */
     public const string POLICY_FILE = 'POLICY.md';
 
     private const array TAGS = [

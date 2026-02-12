@@ -37,39 +37,25 @@ class CalculationService implements ConstantsInterface
 {
     use MathTrait;
 
-    /**
-     * Empty row identifier.
-     */
+    /** Empty row identifier. */
     private const int ROW_EMPTY = -1;
 
-    /**
-     * Global margin row identifier.
-     */
+    /** Global margin row identifier. */
     private const int ROW_GLOBAL_MARGIN = -4;
 
-    /**
-     * Group row identifier.
-     */
+    /** Group row identifier. */
     private const int ROW_GROUP = -2;
 
-    /**
-     * Overall total row identifier.
-     */
+    /** Overall total row identifier. */
     private const int ROW_OVERALL_TOTAL = -7;
 
-    /**
-     * Total group row identifier.
-     */
+    /** Total group row identifier. */
     private const int ROW_TOTAL_GROUP = -3;
 
-    /**
-     * Total net row identifier.
-     */
+    /** Total net row identifier. */
     private const int ROW_TOTAL_NET = -5;
 
-    /**
-     * User margin row identifier.
-     */
+    /** User margin row identifier. */
     private const int ROW_USER_MARGIN = -6;
 
     public function __construct(

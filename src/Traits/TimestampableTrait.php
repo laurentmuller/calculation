@@ -30,28 +30,20 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 trait TimestampableTrait
 {
-    /**
-     * The creation date.
-     */
+    /** The creation date. */
     #[ORM\Column(type: DatePointType::NAME, nullable: true)]
     private ?DatePoint $createdAt = null;
 
-    /**
-     * The creation username.
-     */
+    /** The creation username. */
     #[Assert\Length(max: UserInterface::MAX_USERNAME_LENGTH)]
     #[ORM\Column(length: UserInterface::MAX_USERNAME_LENGTH, nullable: true)]
     private ?string $createdBy = null;
 
-    /**
-     * The updated date.
-     */
+    /** The updated date. */
     #[ORM\Column(type: DatePointType::NAME, nullable: true)]
     private ?DatePoint $updatedAt = null;
 
-    /**
-     * The updated username.
-     */
+    /** The updated username. */
     #[Assert\Length(max: UserInterface::MAX_USERNAME_LENGTH)]
     #[ORM\Column(length: UserInterface::MAX_USERNAME_LENGTH, nullable: true)]
     private ?string $updatedBy = null;

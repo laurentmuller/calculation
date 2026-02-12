@@ -21,9 +21,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(path: '/about/licence', name: 'about_licence_')]
 class AboutLicenceController extends AbstractAboutController
 {
-    /**
-     * The license file name (Markdown).
-     */
+    /** The license file name (Markdown). */
     public const string LICENCE_FILE = 'LICENSE.md';
 
     private const array TAGS = [

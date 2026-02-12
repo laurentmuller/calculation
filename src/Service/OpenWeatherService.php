@@ -33,119 +33,73 @@ class OpenWeatherService extends AbstractHttpClientService
 {
     use ClosureSortTrait;
 
-    /**
-     * The number of daily results to return.
-     */
+    /** The number of daily results to return. */
     public const int DEFAULT_COUNT = 5;
 
-    /**
-     * The number of search results to return.
-     */
+    /** The number of search results to return. */
     public const int DEFAULT_LIMIT = 15;
 
-    /**
-     * The parameter value to exclude the current data.
-     */
+    /** The parameter value to exclude the current data. */
     public const string EXCLUDE_CURRENT = 'current';
 
-    /**
-     * The parameter value to exclude the daily data.
-     */
+    /** The parameter value to exclude the daily data. */
     public const string EXCLUDE_DAILY = 'daily';
 
-    /**
-     * The parameter value to exclude the hourly data.
-     */
+    /** The parameter value to exclude the hourly data. */
     public const string EXCLUDE_HOURLY = 'hourly';
 
-    /**
-     * The parameter value to exclude the minutely data.
-     */
+    /** The parameter value to exclude the minutely data. */
     public const string EXCLUDE_MINUTELY = 'minutely';
 
-    /**
-     * The maximum number of city identifiers to retrieve.
-     */
+    /** The maximum number of city identifiers to retrieve. */
     public const int MAX_GROUP = 20;
 
-    /**
-     * The count parameter name.
-     */
+    /** The count parameter name. */
     public const string PARAM_COUNT = 'cnt';
 
-    /**
-     * The excluded parameter name.
-     */
+    /** The excluded parameter name. */
     public const string PARAM_EXCLUDE = 'exclude';
 
-    /**
-     * The city identifier parameter name.
-     */
+    /** The city identifier parameter name. */
     public const string PARAM_ID = 'id';
 
-    /**
-     * The latitude parameter name.
-     */
+    /** The latitude parameter name. */
     public const string PARAM_LATITUDE = 'lat';
 
-    /**
-     * The limit parameter name.
-     */
+    /** The limit parameter name. */
     public const string PARAM_LIMIT = 'limit';
 
-    /**
-     * The latitude parameter name.
-     */
+    /** The latitude parameter name. */
     public const string PARAM_LONGITUDE = 'lon';
 
-    /**
-     * The query parameter name.
-     */
+    /** The query parameter name. */
     public const string PARAM_QUERY = 'query';
 
-    /**
-     * The unit's parameter name.
-     */
+    /** The unit's parameter name. */
     public const string PARAM_UNITS = 'units';
 
-    /**
-     * The cache timeout (15 minutes).
-     */
+    /** The cache timeout (15 minutes). */
     private const int CACHE_TIMEOUT = 60 * 15;
 
-    /**
-     * The host name version 2.5.
-     */
+    /** The host name version 2.5. */
     private const string HOST_NAME_V_2_5 = 'https://api.openweathermap.org/data/2.5/';
 
-    /**
-     * The host name version 3.0 (used for one Api call).
-     */
+    /** The host name version 3.0 (used for one Api call). */
     private const string HOST_NAME_V_3_0 = 'https://api.openweathermap.org/data/3.0/';
 
-    /**
-     * Current condition URI.
-     */
+    /** Current condition URI. */
     private const string URI_CURRENT = 'weather';
 
-    /**
-     * The 16 days / daily forecast URI.
-     */
+    /** The 16 days / daily forecast URI. */
     private const string URI_DAILY = 'forecast/daily';
 
-    /**
-     * The 5 days / 3 hours forecast URI.
-     */
+    /** The 5 days / 3 hours forecast URI. */
     private const string URI_FORECAST = 'forecast';
 
-    /**
-     * One call condition URI.
-     */
+    /** One call condition URI. */
     private const string URI_ONECALL = 'onecall';
 
-    /**
-     * The user data parameter name.
-     */
+    /** The user data parameter name. */
     private const string USER_DATA = 'user_data';
 
     /**

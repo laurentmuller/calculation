@@ -28,39 +28,25 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
  */
 class Column implements \Stringable, SortModeInterface
 {
-    /**
-     * The property name of the field formatter.
-     */
+    /** The property name of the field formatter. */
     private const string FIELD_FORMATTER = 'fieldFormatter';
 
-    /**
-     * The shared property accessor to map JSON columns or values.
-     */
+    /** The shared property accessor to map JSON columns or values. */
     private static ?PropertyAccessorInterface $accessor = null;
 
-    /**
-     * The field alias name.
-     */
+    /** The field alias name. */
     private ?string $alias = null;
 
-    /**
-     * The cell formatter (client side).
-     */
+    /** The cell formatter (client side). */
     private ?string $cellFormatter = null;
 
-    /**
-     * The cell class.
-     */
+    /** The cell class. */
     private ?string $class = null;
 
-    /**
-     * The default sorted column.
-     */
+    /** The default sorted column. */
     private bool $default = false;
 
-    /**
-     * The field name.
-     */
+    /** The field name. */
     private string $field = '';
 
     /**
@@ -70,9 +56,7 @@ class Column implements \Stringable, SortModeInterface
      */
     private $fieldFormatter;
 
-    /**
-     * The value indicating if this column is displayed as a numeric value.
-     */
+    /** The value indicating if this column is displayed as a numeric value. */
     private bool $numeric = false;
 
     /**
@@ -82,34 +66,22 @@ class Column implements \Stringable, SortModeInterface
      */
     private string $order = self::SORT_ASC;
 
-    /**
-     * The property path for an array object.
-     */
+    /** The property path for an array object. */
     private string $property = '';
 
-    /**
-     * The searchable behavior.
-     */
+    /** The searchable behavior. */
     private bool $searchable = true;
 
-    /**
-     * The sortable behavior.
-     */
+    /** The sortable behavior. */
     private bool $sortable = true;
 
-    /**
-     * The style formatter (client side).
-     */
+    /** The style formatter (client side). */
     private ?string $styleFormatter = null;
 
-    /**
-     * The column title to be translated.
-     */
+    /** The column title to be translated. */
     private ?string $title = null;
 
-    /**
-     * The visible behavior.
-     */
+    /** The visible behavior. */
     private bool $visible = true;
 
     #[\Override]

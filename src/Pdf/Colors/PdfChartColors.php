@@ -37,9 +37,7 @@ class PdfChartColors implements \Countable
      */
     private array $colors = [];
 
-    /**
-     * The current color index.
-     */
+    /** The current color index. */
     private int $index = 0;
 
     /**

@@ -22,19 +22,13 @@ use Elao\Enum\FlagBag;
  */
 interface RoleInterface
 {
-    /**
-     * The administrator role name.
-     */
+    /** The administrator role name. */
     public const string ROLE_ADMIN = 'ROLE_ADMIN';
 
-    /**
-     * The site administrator role name.
-     */
+    /** The site administrator role name. */
     public const string ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
 
-    /**
-     * The user role name (default).
-     */
+    /** The user role name (default). */
     public const string ROLE_USER = 'ROLE_USER';
 
     /**

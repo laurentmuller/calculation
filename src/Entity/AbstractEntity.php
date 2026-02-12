@@ -25,9 +25,7 @@ abstract class AbstractEntity implements \Stringable, EntityInterface
 {
     use MathTrait;
 
-    /**
-     * The primary key identifier.
-     */
+    /** The primary key identifier. */
     #[ORM\Id]
     #[ORM\Column]
     #[ORM\GeneratedValue]

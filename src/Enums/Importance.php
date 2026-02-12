@@ -34,25 +34,17 @@ enum Importance: string implements EnumSortableInterface, PdfEnumDefaultInterfac
     use PdfEnumDefaultTrait;
     use TranslatableEnumTrait;
 
-    /**
-     * High importance.
-     */
+    /** High importance. */
     case HIGH = 'high';
 
-    /**
-     * Low importance (default value).
-     */
+    /** Low importance (default value). */
     #[EnumCase(extras: [PdfEnumDefaultInterface::NAME => true])]
     case LOW = 'low';
 
-    /**
-     * Medium importance.
-     */
+    /** Medium importance. */
     case MEDIUM = 'medium';
 
-    /**
-     * Urgente importance.
-     */
+    /** Urgente importance. */
     case URGENT = 'urgent';
 
     /**

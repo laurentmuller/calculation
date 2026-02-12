@@ -25,19 +25,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\MappedSuperclass]
 abstract class AbstractProperty extends AbstractEntity
 {
-    /**
-     * The value used for FALSE value.
-     */
+    /** The value used for FALSE value. */
     private const int FALSE_VALUE = 0;
 
-    /**
-     * The value used for TRUE value.
-     */
+    /** The value used for TRUE value. */
     private const int TRUE_VALUE = 1;
 
-    /**
-     * The property value.
-     */
+    /** The property value. */
     #[Assert\NotBlank]
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]

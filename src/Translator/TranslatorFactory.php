@@ -30,14 +30,10 @@ class TranslatorFactory implements ServiceSubscriberInterface
     use ServiceMethodsSubscriberTrait;
     use SessionAwareTrait;
 
-    /**
-     * The default translator service class name (Bing).
-     */
+    /** The default translator service class name (Bing). */
     public const string DEFAULT_SERVICE = BingTranslatorService::class;
 
-    /**
-     * The key to save/retrieve the last used service.
-     */
+    /** The key to save/retrieve the last used service. */
     private const string KEY_LAST_SERVICE = 'translator_service';
 
     /**

@@ -22,9 +22,7 @@ use fpdf\PdfDocument;
  */
 class PdfGroupTable extends PdfTable
 {
-    /**
-     * The current group.
-     */
+    /** The current group. */
     private PdfGroup $group;
 
     /*
@@ -32,14 +30,10 @@ class PdfGroupTable extends PdfTable
      */
     private bool $groupBeforeHeader = false;
 
-    /**
-     * The group render listener.
-     */
+    /** The group render listener. */
     private ?PdfGroupListenerInterface $groupListener = null;
 
-    /**
-     * The outputting group state.
-     */
+    /** The outputting group state. */
     private bool $inProgress = false;
 
     /**

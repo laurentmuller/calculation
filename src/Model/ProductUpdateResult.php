@@ -20,9 +20,7 @@ namespace App\Model;
  */
 class ProductUpdateResult implements \Countable
 {
-    /**
-     * @phpstan-var ProductType[]
-     */
+    /** @phpstan-var ProductType[] */
     private array $products = [];
 
     /**

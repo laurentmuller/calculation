@@ -38,29 +38,19 @@ use Symfony\Component\Clock\DatePoint;
  */
 class WorksheetDocument extends Worksheet
 {
-    /**
-     * The date time format ('dd/mm/yyyy hh:mm').
-     */
+    /** The date time format ('dd/mm/yyyy hh:mm'). */
     private const string FORMAT_DATE_TIME = 'dd/mm/yyyy hh:mm';
 
-    /**
-     * The identifier format.
-     */
+    /** The identifier format. */
     private const string FORMAT_ID = '000000';
 
-    /**
-     * The integer format.
-     */
+    /** The integer format. */
     private const string FORMAT_INT = '#,##0';
 
-    /**
-     * The top margins when the customer header is present (21 millimeters).
-     */
+    /** The top margins when the customer header is present (21 millimeters). */
     private const float HEADER_CUSTOMER_MARGIN = 0.83;
 
-    /**
-     * The top and bottom margins when header and/or footer is present (12 millimeters).
-     */
+    /** The top and bottom margins when header and/or footer is present (12 millimeters). */
     private const float HEADER_FOOTER_MARGIN = 0.47;
 
     /**

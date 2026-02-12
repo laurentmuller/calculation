@@ -40,19 +40,13 @@ class IndexController extends AbstractController
 {
     use ParameterTrait;
 
-    /**
-     * The custom view query parameter.
-     */
+    /** The custom view query parameter. */
     public const string PARAM_CUSTOM = 'custom';
 
-    /**
-     * The restriction query parameter.
-     */
+    /** The restriction query parameter. */
     public const string PARAM_RESTRICT = 'restrict';
 
-    /**
-     * The view parameter.
-     */
+    /** The view parameter. */
     private const string PARAM_VIEW = TableInterface::PARAM_VIEW;
 
     /**

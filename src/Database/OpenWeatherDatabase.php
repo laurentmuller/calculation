@@ -25,9 +25,7 @@ namespace App\Database;
  */
 class OpenWeatherDatabase extends AbstractDatabase implements \Countable
 {
-    /**
-     * SQL statement to create the city table.
-     */
+    /** SQL statement to create the city table. */
     private const string CREATE_CITY = <<<'SQL'
         CREATE TABLE IF NOT EXISTS city (
             id        INTEGER PRIMARY KEY,
@@ -38,22 +36,16 @@ class OpenWeatherDatabase extends AbstractDatabase implements \Countable
         )
         SQL;
 
-    /**
-     * SQL statement to delete all cities.
-     */
+    /** SQL statement to delete all cities. */
     private const string DELETE_CITIES = 'DELETE FROM city';
 
-    /**
-     * SQL statement to add a city into the table.
-     */
+    /** SQL statement to add a city into the table. */
     private const string INSERT_CITY = <<<'SQL'
         INSERT INTO city(id, name, country, latitude, longitude)
             VALUES(:id, :name, :country, :latitude, :longitude)
         SQL;
 
-    /**
-     * SQL statement to find a city for the given identifier.
-     */
+    /** SQL statement to find a city for the given identifier. */
     private const string SEARCH_BY_ID = <<<'SQL'
         SELECT
             id,
@@ -65,9 +57,7 @@ class OpenWeatherDatabase extends AbstractDatabase implements \Countable
         WHERE id = :id
         SQL;
 
-    /**
-     * SQL statement to find a city.
-     */
+    /** SQL statement to find a city. */
     private const string SEARCH_CITY = <<<'SQL'
         SELECT
             id,
@@ -82,9 +72,7 @@ class OpenWeatherDatabase extends AbstractDatabase implements \Countable
         LIMIT :limit
         SQL;
 
-    /**
-     * SQL statement to find a city.
-     */
+    /** SQL statement to find a city. */
     private const string SEARCH_CITY_COUNTRY = <<<'SQL'
         SELECT
             id,

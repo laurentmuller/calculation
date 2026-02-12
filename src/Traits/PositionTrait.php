@@ -22,9 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 trait PositionTrait
 {
-    /**
-     * The position index.
-     */
+    /** The position index. */
     #[ORM\Column(options: ['default' => 0])]
     private int $position = 0;
 

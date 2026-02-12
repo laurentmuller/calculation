@@ -26,24 +26,16 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
  */
 abstract class AbstractTranslatorService extends AbstractHttpClientService implements TranslatorServiceInterface
 {
-    /**
-     * The not found field status code.
-     */
+    /** The not found field status code. */
     final protected const int ERROR_NOT_FOUND = 199;
 
-    /**
-     * The cache timeout (15 minutes).
-     */
+    /** The cache timeout (15 minutes). */
     private const int CACHE_TIMEOUT = 60 * 15;
 
-    /**
-     * The property accessor to get values.
-     */
+    /** The property accessor to get values. */
     private ?PropertyAccessorInterface $accessor = null;
 
-    /**
-     * The key to cache language.
-     */
+    /** The key to cache language. */
     private ?string $cacheKey = null;
 
     /**

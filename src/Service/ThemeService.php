@@ -27,9 +27,7 @@ class ThemeService
 {
     use CookieTrait;
 
-    /**
-     * The key name for the selected theme cookie.
-     */
+    /** The key name for the selected theme cookie. */
     private const string KEY_THEME = 'THEME';
 
     public function __construct(

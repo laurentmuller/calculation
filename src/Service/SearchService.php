@@ -54,59 +54,37 @@ class SearchService implements ServiceSubscriberInterface
     use AuthorizationCheckerAwareTrait;
     use ServiceMethodsSubscriberTrait;
 
-    /**
-     * The action column name.
-     */
+    /** The action column name. */
     public const string COLUMN_ACTION = 'action';
 
-    /**
-     * The content column name.
-     */
+    /** The content column name. */
     public const string COLUMN_CONTENT = 'content';
 
-    /**
-     * The entity column name.
-     */
+    /** The entity column name. */
     public const string COLUMN_ENTITY_NAME = 'entityName';
 
-    /**
-     * The field column name.
-     */
+    /** The field column name. */
     public const string COLUMN_FIELD = 'field';
 
-    /**
-     * The field column name.
-     */
+    /** The field column name. */
     public const string COLUMN_FIELD_NAME = 'fieldName';
 
-    /**
-     * The delete granted column name.
-     */
+    /** The delete granted column name. */
     public const string COLUMN_GRANTED_DELETE = 'allowDelete';
 
-    /**
-     * The edit granted column name.
-     */
+    /** The edit granted column name. */
     public const string COLUMN_GRANTED_EDIT = 'allowEdit';
 
-    /**
-     * The show granted column name.
-     */
+    /** The show granted column name. */
     public const string COLUMN_GRANTED_SHOW = 'allowShow';
 
-    /**
-     * The identifier column name.
-     */
+    /** The identifier column name. */
     public const string COLUMN_ID = 'id';
 
-    /**
-     * The type column name.
-     */
+    /** The type column name. */
     public const string COLUMN_TYPE = 'type';
 
-    /**
-     * Limit value to return all rows.
-     */
+    /** Limit value to return all rows. */
     public const int NO_LIMIT = -1;
 
     /**
@@ -121,9 +99,7 @@ class SearchService implements ServiceSubscriberInterface
         self::COLUMN_CONTENT => Types::STRING,
     ];
 
-    /**
-     * The search parameter name.
-     */
+    /** The search parameter name. */
     private const string SEARCH_PARAM = 'search';
 
     public function __construct(

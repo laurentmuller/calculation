@@ -62,16 +62,12 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     #[ORM\Column(options: ['default' => true])]
     private bool $enabled = true;
 
-    /**
-     * The image file. NB: This is not a mapped field of entity metadata, just a simple property.
-     */
+    /** The image file. NB: This is not a mapped field of entity metadata, just a simple property. */
     #[Assert\Image(maxSize: 10_485_760)]
     #[Vich\UploadableField(mapping: 'user_image', fileNameProperty: 'imageName')]
     private ?File $imageFile = null;
 
-    /**
-     * The image file name.
-     */
+    /** The image file name. */
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
     private ?string $imageName = null;
@@ -83,9 +79,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     #[ORM\Column]
     private ?string $password = null;
 
-    /**
-     * @var Collection<int, UserProperty>
-     */
+    /** @var Collection<int, UserProperty> */
     #[ORM\OneToMany(
         targetEntity: UserProperty::class,
         mappedBy: 'user',

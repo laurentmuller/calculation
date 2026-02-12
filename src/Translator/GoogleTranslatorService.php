@@ -26,24 +26,16 @@ use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
  */
 class GoogleTranslatorService extends AbstractTranslatorService
 {
-    /**
-     * The host name.
-     */
+    /** The host name. */
     private const string HOST_NAME = 'https://translation.googleapis.com/language/translate/v2/';
 
-    /**
-     * The detection language URI.
-     */
+    /** The detection language URI. */
     private const string URI_DETECT = 'detect';
 
-    /**
-     * The languages URI.
-     */
+    /** The languages URI. */
     private const string URI_LANGUAGE = 'languages';
 
-    /**
-     * The translation URI.
-     */
+    /** The translation URI. */
     private const string URI_TRANSLATE = '';
 
     /**

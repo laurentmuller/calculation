@@ -53,14 +53,10 @@ abstract class AbstractEntityController extends AbstractController
      */
     private readonly string $className;
 
-    /**
-     * The lower case entity class name without name space.
-     */
+    /** The lower case entity class name without name space. */
     private readonly string $lowerName;
 
-    /**
-     * The entity class name without name space.
-     */
+    /** The entity class name without name space. */
     private readonly string $shortName;
 
     /**

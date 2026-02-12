@@ -26,14 +26,10 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
 {
     use EmptyItemsTrait;
 
-    /**
-     * The price label.
-     */
+    /** The price label. */
     private readonly string $priceLabel;
 
-    /**
-     * The quantity label.
-     */
+    /** The quantity label. */
     private readonly string $quantityLabel;
 
     public function __construct(CalculationRepository $repository, TranslatorInterface $translator)

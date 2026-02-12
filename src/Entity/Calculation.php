@@ -41,32 +41,24 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     use MathTrait;
     use TimestampableTrait;
 
-    /**
-     * The customer name.
-     */
+    /** The customer name. */
     #[Assert\NotBlank]
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column]
     private ?string $customer = null;
 
-    /**
-     * The date.
-     */
+    /** The date. */
     #[Assert\NotNull]
     #[ORM\Column(type: DayPointType::NAME)]
     private DatePoint $date;
 
-    /**
-     * The description.
-     */
+    /** The description. */
     #[Assert\NotBlank]
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column]
     private ?string $description = null;
 
-    /**
-     * The global margin in percent (%).
-     */
+    /** The global margin in percent (%). */
     #[ORM\Column(type: FixedFloatType::NAME)]
     private float $globalMargin = 0.0;
 
@@ -86,29 +78,21 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     #[ORM\OrderBy(['position' => SortModeInterface::SORT_ASC])]
     private Collection $groups;
 
-    /**
-     * The total of all items.
-     */
+    /** The total of all items. */
     #[ORM\Column(type: FixedFloatType::NAME)]
     private float $itemsTotal = 0.0;
 
-    /**
-     * The overall total.
-     */
+    /** The overall total. */
     #[ORM\Column(type: FixedFloatType::NAME)]
     private float $overallTotal = 0.0;
 
-    /**
-     * The state.
-     */
+    /** The state. */
     #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'calculations')]
     #[ORM\JoinColumn(name: 'state_id', nullable: false)]
     private ?CalculationState $state = null;
 
-    /**
-     * The user margin in percent (%).
-     */
+    /** The user margin in percent (%). */
     #[ORM\Column(type: FixedFloatType::NAME)]
     private float $userMargin = 0.0;
 

@@ -32,14 +32,10 @@ class FontAwesomeImageService
 {
     use CacheKeyTrait;
 
-    /**
-     * The default black color.
-     */
+    /** The default black color. */
     public const string BLACK_COLOR = 'black';
 
-    /**
-     * The SVG file extension (including the dot character).
-     */
+    /** The SVG file extension (including the dot character). */
     public const string SVG_EXTENSION = '.svg';
 
     private const string IMAGE_FORMAT = 'png24';

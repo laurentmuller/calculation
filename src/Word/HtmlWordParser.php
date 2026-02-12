@@ -25,14 +25,10 @@ class HtmlWordParser
 {
     use ArrayTrait;
 
-    /**
-     * The pattern to extract classes.
-     */
+    /** The pattern to extract classes. */
     private const string CLASS_PATTERN = '/(class=")([^\"]*)\"/mi';
 
-    /**
-     * The map between class name and style.
-     */
+    /** The map between class name and style. */
     private const array CLASSES_TO_STYLES = [
         // alignment
         'text-start' => 'text-align:left;',

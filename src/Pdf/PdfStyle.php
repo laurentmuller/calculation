@@ -34,39 +34,25 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      */
     public const string BULLET = '·';
 
-    /**
-     * The border style.
-     */
+    /** The border style. */
     private ?PdfBorder $border;
 
-    /**
-     * The draw color.
-     */
+    /** The draw color. */
     private PdfDrawColor $drawColor;
 
-    /**
-     * The fill color.
-     */
+    /** The fill color. */
     private PdfFillColor $fillColor;
 
-    /**
-     * The font style.
-     */
+    /** The font style. */
     private PdfFont $font;
 
-    /**
-     * The left indent.
-     */
+    /** The left indent. */
     private float $indent = 0.0;
 
-    /**
-     * The line style.
-     */
+    /** The line style. */
     private PdfLine $line;
 
-    /**
-     * The text color.
-     */
+    /** The text color. */
     private PdfTextColor $textColor;
 
     public function __construct()

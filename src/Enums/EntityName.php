@@ -33,69 +33,47 @@ enum EntityName: string implements ConstantsInterface, EnumSortableInterface, Tr
     use EnumExtrasTrait;
     use TranslatableEnumTrait;
 
-    /**
-     * The calculation rights.
-     */
+    /** The calculation rights. */
     #[EnumCase('calculation', ['offset' => 0])]
     case CALCULATION = 'EntityCalculation';
 
-    /**
-     * The calculation state rights.
-     */
+    /** The calculation state rights. */
     #[EnumCase('calculationstate', ['offset' => 1])]
     case CALCULATION_STATE = 'EntityCalculationState';
 
-    /**
-     * The category rights.
-     */
+    /** The category rights. */
     #[EnumCase('category', ['offset' => 2])]
     case CATEGORY = 'EntityCategory';
 
-    /**
-     * The customer rights.
-     */
+    /** The customer rights. */
     #[EnumCase('customer', ['offset' => 3])]
     case CUSTOMER = 'EntityCustomer';
 
-    /**
-     * The global margin rights.
-     */
+    /** The global margin rights. */
     #[EnumCase('globalmargin', ['offset' => 4])]
     case GLOBAL_MARGIN = 'EntityGlobalMargin';
 
-    /**
-     * The group rights.
-     */
+    /** The group rights. */
     #[EnumCase('group', ['offset' => 5])]
     case GROUP = 'EntityGroup';
 
-    /**
-     * The log rights.
-     */
+    /** The log rights. */
     #[EnumCase('log', ['offset' => 6])]
     case LOG = 'EntityLog';
 
-    /**
-     * The product rights.
-     */
+    /** The product rights. */
     #[EnumCase('product', ['offset' => 7])]
     case PRODUCT = 'EntityProduct';
 
-    /**
-     * The task rights.
-     */
+    /** The task rights. */
     #[EnumCase('task', ['offset' => 8])]
     case TASK = 'EntityTask';
 
-    /**
-     * The user rights.
-     */
+    /** The user rights. */
     #[EnumCase('user', ['offset' => 9])]
     case USER = 'EntityUser';
 
-    /**
-     * The entity prefix.
-     */
+    /** The entity prefix. */
     private const string ENTITY_PREFIX = 'Entity';
 
     /**

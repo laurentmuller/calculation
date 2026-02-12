@@ -72,9 +72,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 class CommandService implements \Countable
 {
-    /**
-     * The group name for commands without name space.
-     */
+    /** The group name for commands without name space. */
     public const string GLOBAL_GROUP = '_global';
 
     private const array CONSOLE_REPLACE = [

@@ -33,14 +33,10 @@ class CalculationTable extends AbstractEntityTable
 {
     use MathTrait;
 
-    /**
-     * The editable state parameter name (bool).
-     */
+    /** The editable state parameter name (bool). */
     public const string PARAM_EDITABLE = 'stateEditable';
 
-    /**
-     * The state parameter name (int).
-     */
+    /** The state parameter name (int). */
     public const string PARAM_STATE = 'stateId';
 
     public function __construct(

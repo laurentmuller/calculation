@@ -33,9 +33,7 @@ use Symfony\Component\Translation\TranslatableMessage;
 #[ForUser]
 class CspReportController extends AbstractController
 {
-    /**
-     * The route name.
-     */
+    /** The route name. */
     public const string ROUTE_NAME = 'log_csp';
 
     #[GetRoute(path: '/csp', name: self::ROUTE_NAME)]

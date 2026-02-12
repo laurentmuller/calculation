@@ -40,9 +40,7 @@ readonly class TimelineService
 {
     use GroupByTrait;
 
-    /**
-     * The date format for HTML input.
-     */
+    /** The date format for HTML input. */
     public const string DATE_FORMAT = 'Y-m-d';
 
     private const string DEFAULT_INTERVAL = 'P1W';

@@ -28,9 +28,7 @@ use App\Entity\TaskItem;
  */
 class TaskComputeResult implements \JsonSerializable
 {
-    /**
-     * @phpstan-var ItemType[]
-     */
+    /** @phpstan-var ItemType[] */
     private array $items = [];
     private float $overall = 0;
 

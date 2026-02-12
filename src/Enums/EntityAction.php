@@ -33,20 +33,14 @@ enum EntityAction: string implements EnumSortableInterface, PdfEnumDefaultInterf
     use PdfEnumDefaultTrait;
     use TranslatableEnumTrait;
 
-    /**
-     * Edit the entity (default value).
-     */
+    /** Edit the entity (default value). */
     #[EnumCase(extras: [PdfEnumDefaultInterface::NAME => true])]
     case EDIT = 'edit';
 
-    /**
-     * No action.
-     */
+    /** No action. */
     case NONE = 'none';
 
-    /**
-     * Show the entity.
-     */
+    /** Show the entity. */
     case SHOW = 'show';
 
     /**

@@ -18,19 +18,13 @@ namespace App\Pivot\Field;
  */
 enum PivotMethod
 {
-    /**
-     * Convert values as float.
-     */
+    /** Convert values as float. */
     case FLOAT;
 
-    /**
-     * Convert values as integer.
-     */
+    /** Convert values as integer. */
     case INTEGER;
 
-    /**
-     * Convert values as string.
-     */
+    /** Convert values as string. */
     case STRING;
 
     /**

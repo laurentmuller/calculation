@@ -20,9 +20,7 @@ use Symfony\Component\Clock\DatePoint;
  */
 class PivotQuarterField extends PivotDateField
 {
-    /**
-     * @var callable(int): string|null
-     */
+    /** @var callable(int): string|null */
     private $formatter;
 
     public function __construct(protected string $name, protected ?string $title = null)

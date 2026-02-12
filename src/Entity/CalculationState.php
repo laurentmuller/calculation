@@ -30,9 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[UniqueEntity(fields: 'code', message: 'state.unique_code')]
 class CalculationState extends AbstractCodeEntity
 {
-    /**
-     * The default color (black).
-     */
+    /** The default color (black). */
     public const string DEFAULT_COLOR = '#000000';
 
     /**
@@ -43,18 +41,14 @@ class CalculationState extends AbstractCodeEntity
     #[ORM\OneToMany(targetEntity: Calculation::class, mappedBy: 'state', fetch: self::EXTRA_LAZY)]
     private Collection $calculations;
 
-    /**
-     * The color used in the user interface (UI).
-     */
+    /** The color used in the user interface (UI). */
     #[Assert\CssColor]
     #[Assert\NotBlank]
     #[Assert\Length(max: 10)]
     #[ORM\Column(length: 10, options: ['default' => self::DEFAULT_COLOR])]
     private string $color = self::DEFAULT_COLOR;
 
-    /**
-     * The editable state.
-     */
+    /** The editable state. */
     #[ORM\Column(options: ['default' => true])]
     private bool $editable = true;
 

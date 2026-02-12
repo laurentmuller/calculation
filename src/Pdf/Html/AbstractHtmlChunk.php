@@ -28,9 +28,7 @@ abstract class AbstractHtmlChunk
 {
     use ArrayTrait;
 
-    /**
-     * The bookmark.
-     */
+    /** The bookmark. */
     private bool $bookmark = false;
 
     /**
@@ -47,9 +45,7 @@ abstract class AbstractHtmlChunk
      */
     private array $classes = [];
 
-    /**
-     * The style.
-     */
+    /** The style. */
     private ?HtmlStyle $style = null;
 
     /**

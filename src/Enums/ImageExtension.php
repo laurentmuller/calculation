@@ -39,50 +39,32 @@ enum ImageExtension: string implements PdfEnumDefaultInterface
 {
     use PdfEnumDefaultTrait;
 
-    /**
-     * The Device-Independent Bitmap (DIB) graphic extension.
-     */
+    /** The Device-Independent Bitmap (DIB) graphic extension. */
     case BMP = 'bmp';
 
-    /**
-     * The Graphical Interchange Format (GIF) extension.
-     */
+    /** The Graphical Interchange Format (GIF) extension. */
     case GIF = 'gif';
 
-    /**
-     * The Joint Photographic Experts Group (JPEG) extension.
-     */
+    /** The Joint Photographic Experts Group (JPEG) extension. */
     case JPEG = 'jpeg';
 
-    /**
-     * The Joint Photographic Group (JPG) extension.
-     */
+    /** The Joint Photographic Group (JPG) extension. */
     case JPG = 'jpg';
 
-    /**
-     * The Portable Network Graphics (PNG) extension (default value).
-     */
+    /** The Portable Network Graphics (PNG) extension (default value). */
     #[EnumCase(extras: [PdfEnumDefaultInterface::NAME => true])]
     case PNG = 'png';
 
-    /**
-     *The Wireless Application Protocol Bitmap Format.
-     */
+    /** The Wireless Application Protocol Bitmap Format. */
     case WBMP = 'wbmp';
 
-    /**
-     * The Webp extension.
-     */
+    /** The Webp extension. */
     case WEBP = 'webp';
 
-    /**
-     * The X Window System bitmap (XBM) extension.
-     */
+    /** The X Window System bitmap (XBM) extension. */
     case XBM = 'xbm';
 
-    /**
-     * The X11 pixmap extension (XPM).
-     */
+    /** The X11 pixmap extension (XPM). */
     case XPM = 'xpm';
 
     /**

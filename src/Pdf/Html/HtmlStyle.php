@@ -27,14 +27,10 @@ use fpdf\PdfMargins;
  */
 class HtmlStyle extends PdfStyle
 {
-    /**
-     * The alignment.
-     */
+    /** The alignment. */
     private PdfTextAlignment $alignment = PdfTextAlignment::LEFT;
 
-    /**
-     * The margins.
-     */
+    /** The margins. */
     private readonly PdfMargins $margins;
 
     public function __construct()

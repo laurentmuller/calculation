@@ -23,14 +23,10 @@ use App\Utils\StringUtils;
  */
 class CommandDataService
 {
-    /**
-     * The argument field prefix.
-     */
+    /** The argument field prefix. */
     private const string ARGUMENT_PREFIX = 'argument-';
 
-    /**
-     * The option field prefix.
-     */
+    /** The option field prefix. */
     private const string OPTION_PREFIX = 'option-';
 
     /**

@@ -23,19 +23,13 @@ use fpdf\PdfDocument;
  */
 class PdfFont implements PdfDocumentUpdaterInterface
 {
-    /**
-     * The default font name (Arial).
-     */
+    /** The default font name (Arial). */
     public const PdfFontName DEFAULT_NAME = PdfFontName::ARIAL;
 
-    /**
-     * The default font size (9pt).
-     */
+    /** The default font size (9pt). */
     public const float DEFAULT_SIZE = 9.0;
 
-    /**
-     * The default font style (Regular).
-     */
+    /** The default font style (Regular). */
     public const PdfFontStyle DEFAULT_STYLE = PdfFontStyle::REGULAR;
 
     public function __construct(

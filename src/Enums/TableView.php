@@ -35,15 +35,11 @@ enum TableView: string implements EnumSortableInterface, PdfEnumDefaultInterface
     use PdfEnumDefaultTrait;
     use TranslatableEnumTrait;
 
-    /**
-     * Show values as cards.
-     */
+    /** Show values as cards. */
     #[EnumCase(extras: ['page-size' => 15])]
     case CUSTOM = 'custom';
 
-    /**
-     * Show values within a table (default value).
-     */
+    /** Show values within a table (default value). */
     #[EnumCase(extras: ['page-size' => 20, PdfEnumDefaultInterface::NAME => true])]
     case TABLE = 'table';
 

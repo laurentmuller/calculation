@@ -71,7 +71,11 @@ class TestEditorController extends AbstractController
             ->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             /**
-             * @var array{email: string, message: string, importance: Importance, attachments: UploadedFile[]} $data
+             * @var array{
+             *     email: string,
+             *     message: string,
+             *     importance: Importance,
+             *     attachments: UploadedFile[]} $data
              */
             $data = $form->getData();
 

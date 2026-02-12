@@ -22,9 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 trait LogLevelTrait
 {
-    /**
-     * @phpstan-var PsrLevel::*
-     */
+    /** @phpstan-var PsrLevel::* */
     #[Assert\NotBlank]
     #[Assert\Length(max: 20)]
     #[ORM\Column(length: 20)]

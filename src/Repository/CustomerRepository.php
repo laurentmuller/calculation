@@ -23,24 +23,16 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CustomerRepository extends AbstractRepository
 {
-    /**
-     * The first name, last name and company field name.
-     */
+    /** The first name, last name and company field name. */
     public const string NAME_COMPANY_FIELD = 'nameAndCompany';
 
-    /**
-     * The first name, last name and company fields.
-     */
+    /** The first name, last name and company fields. */
     public const array NAME_COMPANY_FIELDS = ['lastName', 'firstName', 'company'];
 
-    /**
-     * The zip and city field name.
-     */
+    /** The zip and city field name. */
     public const string ZIP_CITY_FIELD = 'zipCity';
 
-    /**
-     * The zip code and city fields.
-     */
+    /** The zip code and city fields. */
     public const array ZIP_CITY_FIELDS = ['zipCode', 'city'];
 
     public function __construct(ManagerRegistry $registry)

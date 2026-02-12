@@ -41,9 +41,7 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
     use ServiceMethodsSubscriberTrait;
     use TableCellTrait;
 
-    /**
-     * The group parameter name (int).
-     */
+    /** The group parameter name (int). */
     public const string PARAM_GROUP = 'groupId';
 
     public function __construct(

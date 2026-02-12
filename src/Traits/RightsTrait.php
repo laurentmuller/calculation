@@ -27,9 +27,7 @@ use Elao\Enum\FlagBag;
  */
 trait RightsTrait
 {
-    /**
-     * The overwritten rights flag.
-     */
+    /** The overwritten rights flag. */
     #[ORM\Column(options: ['default' => false])]
     private bool $overwrite = false;
 

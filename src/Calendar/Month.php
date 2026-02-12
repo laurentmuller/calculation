@@ -22,9 +22,7 @@ class Month extends AbstractCalendarItem implements \Stringable
 {
     use DaysTrait;
 
-    /**
-     * The date format used to generate this key.
-     */
+    /** The date format used to generate this key. */
     public const string KEY_FORMAT = 'Y.m';
 
     /**

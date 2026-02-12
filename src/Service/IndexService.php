@@ -56,7 +56,9 @@ class IndexService
 
     private readonly CacheItemPoolInterface&CacheInterface&NamespacedPoolInterface $cache;
 
-    /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
+    /**
+     * @noinspection PhpFieldAssignmentTypeMismatchInspection
+     */
     public function __construct(
         private readonly EntityManagerInterface $manager,
         #[Target(CacheAttributes::CACHE_PARAMETERS)]

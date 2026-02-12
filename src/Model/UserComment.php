@@ -33,9 +33,7 @@ class UserComment
     #[Assert\All([new Assert\File(maxSize: 10_485_760)])]
     private ?array $attachments = null;
 
-    /**
-     * The address from.
-     */
+    /** The address from. */
     #[Assert\NotNull]
     private ?Address $from = null;
 
@@ -45,21 +43,15 @@ class UserComment
     #[Assert\NotNull]
     private Importance $importance;
 
-    /**
-     * The message.
-     */
+    /** The message. */
     #[Assert\NotNull]
     private ?string $message = null;
 
-    /**
-     * The subject.
-     */
+    /** The subject. */
     #[Assert\NotNull]
     private ?string $subject = null;
 
-    /**
-     * The address to.
-     */
+    /** The address to. */
     #[Assert\NotNull]
     private ?Address $to = null;
 

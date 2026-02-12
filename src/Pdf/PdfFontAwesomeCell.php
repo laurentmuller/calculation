@@ -23,14 +23,10 @@ use fpdf\Enums\PdfTextAlignment;
  */
 class PdfFontAwesomeCell extends AbstractPdfImageCell
 {
-    /**
-     * The image data.
-     */
+    /** The image data. */
     private readonly ImageData $imageData;
 
-    /**
-     * The image size.
-     */
+    /** The image size. */
     private readonly ImageSize $size;
 
     /**

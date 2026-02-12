@@ -25,19 +25,13 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     use DaysTrait;
     use ModelTrait;
 
-    /**
-     * The default day model class.
-     */
+    /** The default day model class. */
     public const string DEFAULT_DAY_MODEL = Day::class;
 
-    /**
-     * The default month model class.
-     */
+    /** The default month model class. */
     public const string DEFAULT_MONTH_MODEL = Month::class;
 
-    /**
-     * The default week model class.
-     */
+    /** The default week model class. */
     public const string DEFAULT_WEEK_MODEL = Week::class;
 
     /**
@@ -47,9 +41,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
      */
     private array $months = [];
 
-    /**
-     * The today day.
-     */
+    /** The today day. */
     private ?Day $today = null;
 
     /**
@@ -59,9 +51,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
      */
     private array $weeks = [];
 
-    /**
-     * Year for the calendar.
-     */
+    /** Year for the calendar. */
     private ?int $year = null;
 
     /**

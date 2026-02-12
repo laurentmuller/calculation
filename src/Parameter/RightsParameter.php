@@ -22,17 +22,13 @@ use App\Service\RoleBuilderService;
  */
 class RightsParameter implements ParameterInterface
 {
-    /**
-     * @var int[]|null
-     */
+    /** @var int[]|null */
     #[Parameter('admin_rights')]
     private ?array $adminRights = null;
 
     private ?RoleBuilderService $service = null;
 
-    /**
-     * @var int[]|null
-     */
+    /** @var int[]|null */
     #[Parameter('user_rights')]
     private ?array $userRights = null;
 

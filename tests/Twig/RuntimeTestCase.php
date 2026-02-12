@@ -23,9 +23,7 @@ use Twig\RuntimeLoader\RuntimeLoaderInterface;
  */
 abstract class RuntimeTestCase extends IntegrationTestCase implements RuntimeLoaderInterface
 {
-    /**
-     * @var TService
-     */
+    /** @var TService */
     private object $service;
 
     #[\Override]

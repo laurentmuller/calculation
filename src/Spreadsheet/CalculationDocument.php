@@ -30,14 +30,10 @@ class CalculationDocument extends AbstractDocument
     use CalculationDocumentMarginTrait;
     use MathTrait;
 
-    /**
-     * The header background color.
-     */
+    /** The header background color. */
     private const string COLOR_BACKGROUND = 'F5F5F5';
 
-    /**
-     * The cell border color.
-     */
+    /** The cell border color. */
     private const string COLOR_BORDER = 'DDDDDD';
 
     /**

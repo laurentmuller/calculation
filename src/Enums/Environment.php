@@ -26,19 +26,13 @@ enum Environment: string implements TranslatableEnumInterface
 {
     use TranslatableEnumTrait;
 
-    /**
-     * The development environment.
-     */
+    /** The development environment. */
     case DEVELOPMENT = 'dev';
 
-    /**
-     * The production environment.
-     */
+    /** The production environment. */
     case PRODUCTION = 'prod';
 
-    /**
-     * The test environment.
-     */
+    /** The test environment. */
     case TEST = 'test';
 
     /**

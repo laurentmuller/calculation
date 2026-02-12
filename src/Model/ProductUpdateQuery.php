@@ -22,14 +22,10 @@ use App\Utils\FormatUtils;
  */
 class ProductUpdateQuery extends AbstractSimulateQuery
 {
-    /**
-     * Update products with a fixed amount.
-     */
+    /** Update products with a fixed amount. */
     public const string UPDATE_FIXED = 'fixed';
 
-    /**
-     * Update products with a percentage.
-     */
+    /** Update products with a percentage. */
     public const string UPDATE_PERCENT = 'percent';
 
     private bool $allProducts = true;

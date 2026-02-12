@@ -35,15 +35,11 @@ enum OpenWeatherUnits: string implements EnumSortableInterface, PdfEnumDefaultIn
     use PdfEnumDefaultTrait;
     use TranslatableEnumTrait;
 
-    /**
-     * Imperial unit.
-     */
+    /** Imperial unit. */
     #[EnumCase(extras: ['degree' => '°F', 'speed' => 'mph'])]
     case IMPERIAL = 'imperial';
 
-    /**
-     * Metric unit.
-     */
+    /** Metric unit. */
     #[EnumCase(extras: ['degree' => '°C', 'speed' => 'm/s', PdfEnumDefaultInterface::NAME => true])]
     case METRIC = 'metric';
 

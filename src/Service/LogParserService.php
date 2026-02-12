@@ -26,14 +26,10 @@ use Symfony\Component\Clock\DatePoint;
  */
 class LogParserService
 {
-    /**
-     * The date format.
-     */
+    /** The date format. */
     public const string DATE_FORMAT = 'd.m.Y H:i:s.v';
 
-    /**
-     * The service formatter name.
-     */
+    /** The service formatter name. */
     public const string FORMATTER_NAME = 'monolog.application.formatter';
 
     // the values separator.

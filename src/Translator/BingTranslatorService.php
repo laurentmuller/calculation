@@ -30,29 +30,19 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  */
 class BingTranslatorService extends AbstractTranslatorService
 {
-    /**
-     * The API version parameter.
-     */
+    /** The API version parameter. */
     private const string API_VERSION = '3.0';
 
-    /**
-     * The host name.
-     */
+    /** The host name. */
     private const string HOST_NAME = 'https://api.cognitive.microsofttranslator.com/';
 
-    /**
-     * The detection language URI.
-     */
+    /** The detection language URI. */
     private const string URI_DETECT = 'detect';
 
-    /**
-     * The languages URI.
-     */
+    /** The languages URI. */
     private const string URI_LANGUAGE = 'languages';
 
-    /**
-     * The translation URI.
-     */
+    /** The translation URI. */
     private const string URI_TRANSLATE = 'translate';
 
     /**

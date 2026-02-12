@@ -33,39 +33,27 @@ enum StrengthLevel: int implements EnumSortableInterface, PdfEnumDefaultInterfac
     use PdfEnumDefaultTrait;
     use TranslatableEnumTrait;
 
-    /**
-     * Medium level.
-     */
+    /** Medium level. */
     #[EnumCase('medium')]
     case MEDIUM = 2;
 
-    /**
-     * No validation level (default value).
-     */
+    /** No validation level (default value). */
     #[EnumCase('none', [PdfEnumDefaultInterface::NAME => true])]
     case NONE = -1;
 
-    /**
-     * Strong level.
-     */
+    /** Strong level. */
     #[EnumCase('strong')]
     case STRONG = 3;
 
-    /**
-     * Very strong level.
-     */
+    /** Very strong level. */
     #[EnumCase('very_strong')]
     case VERY_STRONG = 4;
 
-    /**
-     * Very weak level.
-     */
+    /** Very weak level. */
     #[EnumCase('very_weak')]
     case VERY_WEAK = 0;
 
-    /**
-     * Weak level.
-     */
+    /** Weak level. */
     #[EnumCase('weak')]
     case WEAK = 1;
 

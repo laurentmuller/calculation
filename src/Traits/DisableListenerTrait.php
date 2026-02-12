@@ -20,9 +20,7 @@ namespace App\Traits;
  */
 trait DisableListenerTrait
 {
-    /**
-     * The enabled state.
-     */
+    /** The enabled state. */
     private bool $enabled = true;
 
     public function isEnabled(): bool

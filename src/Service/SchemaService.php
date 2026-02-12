@@ -86,9 +86,7 @@ class SchemaService
 
     private ?Connection $connection = null;
 
-    /**
-     * @phpstan-var AbstractSchemaManager<\Doctrine\DBAL\Platforms\AbstractPlatform>
-     */
+    /** @phpstan-var AbstractSchemaManager<\Doctrine\DBAL\Platforms\AbstractPlatform> */
     private ?AbstractSchemaManager $schemaManager = null;
 
     public function __construct(

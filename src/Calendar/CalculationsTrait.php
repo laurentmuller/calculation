@@ -20,9 +20,7 @@ use App\Entity\Calculation;
  */
 trait CalculationsTrait
 {
-    /**
-     * @var Calculation[]
-     */
+    /** @var Calculation[] */
     private array $calculations = [];
 
     /**

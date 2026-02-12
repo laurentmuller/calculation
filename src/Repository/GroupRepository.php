@@ -26,9 +26,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class GroupRepository extends AbstractRepository
 {
-    /**
-     * The alias for the group margin entity.
-     */
+    /** The alias for the group margin entity. */
     private const string MARGIN_ALIAS = 'm';
 
     public function __construct(ManagerRegistry $registry)

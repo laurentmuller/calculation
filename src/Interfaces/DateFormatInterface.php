@@ -18,9 +18,7 @@ namespace App\Interfaces;
  */
 interface DateFormatInterface
 {
-    /**
-     * The map between format names and values.
-     */
+    /** The map between format names and values. */
     public const array DATE_FORMATS = [
         self::FORMAT_NONE => \IntlDateFormatter::NONE,
         self::FORMAT_FULL => \IntlDateFormatter::FULL,
@@ -29,28 +27,18 @@ interface DateFormatInterface
         self::FORMAT_SHORT => \IntlDateFormatter::SHORT,
     ];
 
-    /**
-     * The full date or time format.
-     */
+    /** The full date or time format. */
     public const string FORMAT_FULL = 'full';
 
-    /**
-     * The long date or time format.
-     */
+    /** The long date or time format. */
     public const string FORMAT_LONG = 'long';
 
-    /**
-     * The medium date or time format.
-     */
+    /** The medium date or time format. */
     public const string FORMAT_MEDIUM = 'medium';
 
-    /**
-     * The none date or time format.
-     */
+    /** The none date or time format. */
     public const string FORMAT_NONE = 'none';
 
-    /**
-     * The short date or time format.
-     */
+    /** The short date or time format. */
     public const string FORMAT_SHORT = 'short';
 }

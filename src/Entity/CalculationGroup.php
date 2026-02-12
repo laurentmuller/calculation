@@ -40,15 +40,11 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
     use CollectionTrait;
     use PositionTrait;
 
-    /**
-     * The total amount.
-     */
+    /** The total amount. */
     #[ORM\Column(type: FixedFloatType::NAME)]
     private float $amount = 0.0;
 
-    /**
-     * The parent's calculation.
-     */
+    /** The parent's calculation. */
     #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'groups')]
     #[ORM\JoinColumn(name: 'calculation_id', nullable: false, onDelete: 'cascade')]
@@ -69,24 +65,18 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
     #[ORM\OrderBy(['position' => SortModeInterface::SORT_ASC])]
     private Collection $categories;
 
-    /**
-     * The code.
-     */
+    /** The code. */
     #[Assert\NotBlank]
     #[Assert\Length(max: self::MAX_CODE_LENGTH)]
     #[ORM\Column(length: self::MAX_CODE_LENGTH)]
     private ?string $code = null;
 
-    /**
-     * The parent's group.
-     */
+    /** The parent's group. */
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(name: 'group_id', nullable: false)]
     private ?Group $group = null;
 
-    /**
-     * The margin in percent (%).
-     */
+    /** The margin in percent (%). */
     #[ORM\Column(type: FixedFloatType::NAME)]
     private float $margin = 0.0;
 

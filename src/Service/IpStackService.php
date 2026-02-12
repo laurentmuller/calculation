@@ -38,19 +38,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class IpStackService extends AbstractHttpClientService
 {
-    /**
-     * The cache timeout (1 hour).
-     */
+    /** The cache timeout (1 hour). */
     private const int CACHE_TIMEOUT = 3600;
 
-    /**
-     * The host name.
-     */
+    /** The host name. */
     private const string HOST_NAME = 'http://api.ipstack.com/';
 
-    /**
-     * The API endpoint for detecting the IP address.
-     */
+    /** The API endpoint for detecting the IP address. */
     private const string URI_CHECK = 'check';
 
     /**

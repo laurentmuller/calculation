@@ -33,25 +33,15 @@ class PdfLabel implements \Stringable
      * @var positive-int
      */
     public int $fontSize = 9;
-    /**
-     * The height of labels.
-     */
+    /** The height of labels. */
     public float $height = 0.0;
-    /**
-     * The left margin.
-     */
+    /** The left margin. */
     public float $marginLeft = 0.0;
-    /**
-     * The top margin.
-     */
+    /** The top margin. */
     public float $marginTop = 0.0;
-    /**
-     * The label's name.
-     */
+    /** The label's name. */
     public string $name = '';
-    /**
-     * The page size.
-     */
+    /** The page size. */
     public PdfPageSize $pageSize = PdfPageSize::A4;
     /**
      * The number of vertical labels (rows).
@@ -59,21 +49,13 @@ class PdfLabel implements \Stringable
      * @var positive-int
      */
     public int $rows = 1;
-    /**
-     * The horizontal space between 2 labels.
-     */
+    /** The horizontal space between 2 labels. */
     public float $spaceX = 0.0;
-    /**
-     * The vertical space between 2 labels.
-     */
+    /** The vertical space between 2 labels. */
     public float $spaceY = 0.0;
-    /**
-     * The layout unit.
-     */
+    /** The layout unit. */
     public PdfUnit $unit = PdfUnit::MILLIMETER;
-    /**
-     * The width of labels.
-     */
+    /** The width of labels. */
     public float $width = 0.0;
 
     #[\Override]

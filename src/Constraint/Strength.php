@@ -29,9 +29,7 @@ class Strength extends Constraint
         self::STRENGTH_ERROR => 'STRENGTH_ERROR',
     ];
 
-    /**
-     * The password strength error message.
-     */
+    /** The password strength error message. */
     public string $message = 'password.strength_level';
 
     /**

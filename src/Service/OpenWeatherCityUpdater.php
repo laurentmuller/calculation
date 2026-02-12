@@ -40,9 +40,7 @@ readonly class OpenWeatherCityUpdater
 {
     use TranslatorTrait;
 
-    /**
-     * The import file extension.
-     */
+    /** The import file extension. */
     private const string FILE_EXTENSION = 'gz';
 
     public function __construct(

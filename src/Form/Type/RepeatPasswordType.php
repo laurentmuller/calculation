@@ -29,14 +29,10 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  */
 class RepeatPasswordType extends AbstractType
 {
-    /**
-     * The default translatable confirmation label.
-     */
+    /** The default translatable confirmation label. */
     public const string CONFIRM_LABEL = 'user.password.confirmation';
 
-    /**
-     * The default translatable password label.
-     */
+    /** The default translatable password label. */
     public const string PASSWORD_LABEL = 'user.password.label';
 
     #[\Override]

@@ -25,9 +25,7 @@ class PivotTable extends AbstractPivotAggregator
 {
     use ArrayTrait;
 
-    /**
-     * The default path separator.
-     */
+    /** The default path separator. */
     public const string PATH_SEPARATOR = \DIRECTORY_SEPARATOR;
 
     /**
@@ -44,24 +42,16 @@ class PivotTable extends AbstractPivotAggregator
      */
     private array $columnFields = [];
 
-    /**
-     * The data field.
-     */
+    /** The data field. */
     private ?PivotField $dataField = null;
 
-    /**
-     * The key field.
-     */
+    /** The key field. */
     private ?PivotField $keyField = null;
 
-    /**
-     * The root column.
-     */
+    /** The root column. */
     private readonly PivotNode $rootColumn;
 
-    /**
-     * The root row.
-     */
+    /** The root row. */
     private readonly PivotNode $rootRow;
 
     /**
@@ -71,9 +61,7 @@ class PivotTable extends AbstractPivotAggregator
      */
     private array $rowFields = [];
 
-    /**
-     * The total title.
-     */
+    /** The total title. */
     private ?string $totalTitle = null;
 
     /**

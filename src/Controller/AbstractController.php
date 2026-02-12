@@ -55,14 +55,10 @@ abstract class AbstractController extends BaseController
     use RequestTrait;
     use TranslatorFlashMessageAwareTrait;
 
-    /**
-     * The home page route name.
-     */
+    /** The home page route name. */
     public const string HOME_PAGE = 'homepage';
 
-    /**
-     * The route requirement for an identifier.
-     */
+    /** The route requirement for an identifier. */
     public const array ID_REQUIREMENT = ['id' => Requirement::DIGITS];
 
     // services

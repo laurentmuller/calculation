@@ -31,24 +31,16 @@ class CalculationsReport extends AbstractArrayReport
 {
     use MathTrait;
 
-    /**
-     * The sum of items calculations.
-     */
+    /** The sum of items calculations. */
     private float $items = 0.0;
 
-    /**
-     * The minimum margin style.
-     */
+    /** The minimum margin style. */
     private ?PdfStyle $marginStyle = null;
 
-    /**
-     * The minimum margin.
-     */
+    /** The minimum margin. */
     private readonly float $minMargin;
 
-    /**
-     * The sum of overall calculations.
-     */
+    /** The sum of overall calculations. */
     private float $overall = 0.0;
 
     /**

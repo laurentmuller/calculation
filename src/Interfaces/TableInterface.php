@@ -18,69 +18,43 @@ namespace App\Interfaces;
  */
 interface TableInterface
 {
-    /**
-     * The allowed page sizes.
-     */
+    /** The allowed page sizes. */
     public const array PAGE_LIST = [5, 10, 15, 20, 25, 30, 50];
 
-    /**
-     * The column's parameter name (array of columns).
-     */
+    /** The column's parameter name (array of columns). */
     public const string PARAM_COLUMNS = 'columns';
 
-    /**
-     * The identifier parameter name (int).
-     */
+    /** The identifier parameter name (int). */
     public const string PARAM_ID = 'id';
 
-    /**
-     * The limit parameter name (int).
-     */
+    /** The limit parameter name (int). */
     public const string PARAM_LIMIT = 'limit';
 
-    /**
-     * The offset parameter name (int).
-     */
+    /** The offset parameter name (int). */
     public const string PARAM_OFFSET = 'offset';
 
-    /**
-     * The order parameter name (string).
-     */
+    /** The order parameter name (string). */
     public const string PARAM_ORDER = 'order';
 
-    /**
-     * The page parameter name (int).
-     */
+    /** The page parameter name (int). */
     public const string PARAM_PAGE = 'page';
 
-    /**
-     * The page lists parameter name (array of integers).
-     */
+    /** The page lists parameter name (array of integers). */
     public const string PARAM_PAGE_LIST = 'pageList';
 
-    /**
-     * The row's parameter name (array).
-     */
+    /** The row's parameter name (array). */
     public const string PARAM_ROWS = 'rows';
 
-    /**
-     * The search parameter name (string).
-     */
+    /** The search parameter name (string). */
     public const string PARAM_SEARCH = 'search';
 
-    /**
-     * The sort parameter name (string).
-     */
+    /** The sort parameter name (string). */
     public const string PARAM_SORT = 'sort';
 
-    /**
-     * The total parameter name (int).
-     */
+    /** The total parameter name (int). */
     public const string PARAM_TOTAL = 'total';
 
-    /**
-     * The total not filtered parameter name (int).
-     */
+    /** The total not filtered parameter name (int). */
     public const string PARAM_TOTAL_NOT_FILTERED = 'totalNotFiltered';
 
     /**

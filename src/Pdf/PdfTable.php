@@ -39,24 +39,16 @@ class PdfTable
 {
     use MathTrait;
 
-    /**
-     * The table alignment when not is full width.
-     */
+    /** The table alignment when not is full width. */
     private PdfTextAlignment $alignment = PdfTextAlignment::LEFT;
 
-    /**
-     * The draw cell background listener.
-     */
+    /** The draw cell background listener. */
     private ?PdfDrawCellBackgroundInterface $backgroundListener = null;
 
-    /**
-     * The default cell border.
-     */
+    /** The default cell border. */
     private PdfBorder $border;
 
-    /**
-     * The draw cell border listener.
-     */
+    /** The draw cell border listener. */
     private ?PdfDrawCellBorderInterface $borderListener = null;
 
     /**
@@ -66,9 +58,7 @@ class PdfTable
      */
     private array $cells = [];
 
-    /**
-     * The default cell style.
-     */
+    /** The default cell style. */
     private ?PdfStyle $cellStyle = null;
 
     /**
@@ -78,34 +68,22 @@ class PdfTable
      */
     private array $columns = [];
 
-    /**
-     * The draw headers listener.
-     */
+    /** The draw headers listener. */
     private ?PdfDrawHeadersInterface $headersListener = null;
 
-    /**
-     * The default header style.
-     */
+    /** The default header style. */
     private ?PdfStyle $headerStyle = null;
 
-    /**
-     * The output headers state.
-     */
+    /** The output headers state. */
     private bool $isHeaders = false;
 
-    /**
-     * Print headers when a new page is added.
-     */
+    /** Print headers when a new page is added. */
     private bool $repeatHeader = true;
 
-    /**
-     * The current row style.
-     */
+    /** The current row style. */
     private ?PdfStyle $rowStyle = null;
 
-    /**
-     * The draw cell text listener.
-     */
+    /** The draw cell text listener. */
     private ?PdfDrawCellTextInterface $textListener = null;
 
     /**

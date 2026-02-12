@@ -33,9 +33,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[UniqueEntity(fields: 'name', message: 'task.unique_name')]
 class Task extends AbstractCategoryItemEntity implements \Countable, ComparableInterface
 {
-    /**
-     * The parent's category.
-     */
+    /** The parent's category. */
     #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'tasks')]
     #[ORM\JoinColumn(name: 'category_id', nullable: false)]
@@ -56,9 +54,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
     #[ORM\OrderBy(['position' => SortModeInterface::SORT_ASC])]
     private Collection $items;
 
-    /**
-     * The name.
-     */
+    /** The name. */
     #[Assert\NotBlank]
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column]

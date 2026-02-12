@@ -32,9 +32,7 @@ trait PdfChartLegendTrait
 {
     use PdfPointStyleTrait;
 
-    /**
-     * The width of separation between legends.
-     */
+    /** The width of separation between legends. */
     private const float SEP_WIDTH = 1.5;
 
     /**

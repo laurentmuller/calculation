@@ -25,9 +25,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 abstract class AbstractParametersType extends AbstractType
 {
-    /**
-     * The default values option name.
-     */
+    /** The default values option name. */
     public const string DEFAULT_VALUES = 'default_values';
 
     #[\Override]

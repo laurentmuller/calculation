@@ -30,9 +30,7 @@ namespace App\Database;
  */
 class SwissDatabase extends AbstractDatabase
 {
-    /**
-     * SQL statement to create the city table.
-     */
+    /** SQL statement to create the city table. */
     private const string CREATE_CITY = <<<'sql'
         CREATE TABLE IF NOT EXISTS city (
             id       INTEGER PRIMARY KEY,
@@ -42,9 +40,7 @@ class SwissDatabase extends AbstractDatabase
         )
         sql;
 
-    /**
-     * SQL statement to create the state (canton) table.
-     */
+    /** SQL statement to create the state (canton) table. */
     private const string CREATE_STATE = <<<'sql'
         CREATE TABLE IF NOT EXISTS state (
             id      TEXT PRIMARY KEY,
@@ -52,9 +48,7 @@ class SwissDatabase extends AbstractDatabase
         )
         sql;
 
-    /**
-     * SQL statement to create the street table.
-     */
+    /** SQL statement to create the street table. */
     private const string CREATE_STREET = <<<'sql'
         CREATE TABLE IF NOT EXISTS street (
             city_id INTEGER NOT NULL,
@@ -63,33 +57,25 @@ class SwissDatabase extends AbstractDatabase
         )
         sql;
 
-    /**
-     * SQL statement to add a city into the table.
-     */
+    /** SQL statement to add a city into the table. */
     private const string INSERT_CITY = <<<'sql'
         INSERT INTO city(id, zip, name, state_id)
             VALUES(:id, :zip, :name, :state_id)
         sql;
 
-    /**
-     * SQL statement to add a state into the table.
-     */
+    /** SQL statement to add a state into the table. */
     private const string INSERT_STATE = <<<'sql'
         INSERT INTO state(id, name)
             VALUES(:id, :name)
         sql;
 
-    /**
-     * SQL statement to add a street into the table.
-     */
+    /** SQL statement to add a street into the table. */
     private const string INSERT_STREET = <<<'sql'
         INSERT INTO street(city_id, name)
             VALUES(:city_id, :name)
         sql;
 
-    /**
-     * SQL statement to find by multiple criterias.
-     */
+    /** SQL statement to find by multiple criterias. */
     private const string SEARCH = <<<'sql'
         SELECT
             street.name as street,
@@ -113,9 +99,7 @@ class SwissDatabase extends AbstractDatabase
         LIMIT :limit
         sql;
 
-    /**
-     * SQL statement to find all.
-     */
+    /** SQL statement to find all. */
     private const string SEARCH_ALL = <<<'sql'
         SELECT
             street.name as street,
@@ -139,9 +123,7 @@ class SwissDatabase extends AbstractDatabase
         LIMIT :limit
         sql;
 
-    /**
-     * SQL statement to find a city.
-     */
+    /** SQL statement to find a city. */
     private const string SEARCH_CITY = <<<'sql'
         SELECT
             city.zip,
@@ -157,9 +139,7 @@ class SwissDatabase extends AbstractDatabase
         LIMIT :limit
         sql;
 
-    /**
-     * SQL statement to find a street.
-     */
+    /** SQL statement to find a street. */
     private const string SEARCH_STREET = <<<'sql'
         SELECT
             street.name as street,
@@ -178,9 +158,7 @@ class SwissDatabase extends AbstractDatabase
         LIMIT :limit
         sql;
 
-    /**
-     * SQL statement to find a zip code.
-     */
+    /** SQL statement to find a zip code. */
     private const string SEARCH_ZIP = <<<'sql'
         SELECT
             city.zip,

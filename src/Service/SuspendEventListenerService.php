@@ -24,9 +24,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
  */
 class SuspendEventListenerService
 {
-    /**
-     * The disabled state.
-     */
+    /** The disabled state. */
     private bool $disabled = false;
 
     /**

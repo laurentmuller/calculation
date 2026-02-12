@@ -32,44 +32,28 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class AkismetService extends AbstractHttpClientService
 {
-    /**
-     * The cache timeout (15 minutes).
-     */
+    /** The cache timeout (15 minutes). */
     private const int CACHE_TIMEOUT = 900;
 
-    /**
-     * The host name.
-     */
+    /** The host name. */
     private const string HOST_NAME = 'https://rest.akismet.com';
 
-    /**
-     * The activity key URI.
-     */
+    /** The activity key URI. */
     private const string URI_ACTIVITY = '1.2/key-sites';
 
-    /**
-     * The spam check URI.
-     */
+    /** The spam check URI. */
     private const string URI_SPAM = '1.1/comment-check';
 
-    /**
-     * The usage key URI.
-     */
+    /** The usage key URI. */
     private const string URI_USAGE = '1.2/usage-limit';
 
-    /**
-     * The URI to verify key.
-     */
+    /** The URI to verify key. */
     private const string URI_VERIFY = '1.1/verify-key';
 
-    /**
-     * The value returned when the comment is not spam.
-     */
+    /** The value returned when the comment is not spam. */
     private const string VALUE_FALSE = 'false';
 
-    /**
-     * The value returned when the API key is valid.
-     */
+    /** The value returned when the API key is valid. */
     private const string VALUE_VALID = 'valid';
 
     /**

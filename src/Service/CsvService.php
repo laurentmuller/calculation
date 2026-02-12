@@ -18,19 +18,13 @@ namespace App\Service;
  */
 readonly class CsvService
 {
-    /**
-     * The default field enclosure character.
-     */
+    /** The default field enclosure character. */
     public const string DEFAULT_ENCLOSURE = '"';
 
-    /**
-     * The default escape character.
-     */
+    /** The default escape character. */
     public const string DEFAULT_ESCAPE = '\\';
 
-    /**
-     * The default field separator character.
-     */
+    /** The default field separator character. */
     public const string DEFAULT_SEPARATOR = ',';
 
     /**

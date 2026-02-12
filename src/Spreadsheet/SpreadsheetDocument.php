@@ -30,9 +30,7 @@ class SpreadsheetDocument extends Spreadsheet
 {
     use TranslatorTrait;
 
-    /**
-     * The file title.
-     */
+    /** The file title. */
     private ?string $title = null;
 
     public function __construct(private readonly TranslatorInterface $translator)

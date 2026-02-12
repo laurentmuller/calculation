@@ -18,36 +18,20 @@ namespace App\Pdf\Enums;
  */
 enum PdfPointStyle
 {
-    /**
-     * The circle shape.
-     */
+    /** The circle shape. */
     case CIRCLE;
-    /**
-     * The cross-shape.
-     */
+    /** The cross-shape. */
     case CROSS;
-    /**
-     * The cross-rotation shape.
-     */
+    /** The cross-rotation shape. */
     case CROSS_ROTATION;
-    /**
-     * The diamond shape.
-     */
+    /** The diamond shape. */
     case DIAMOND;
-    /**
-     * The ellipse shape.
-     */
+    /** The ellipse shape. */
     case ELLIPSE;
-    /**
-     * The rectangle shape.
-     */
+    /** The rectangle shape. */
     case RECTANGLE;
-    /**
-     * The square shape.
-     */
+    /** The square shape. */
     case SQUARE;
-    /**
-     * The triangle shape.
-     */
+    /** The triangle shape. */
     case TRIANGLE;
 }

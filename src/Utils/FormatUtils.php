@@ -21,39 +21,25 @@ use Twig\Attribute\AsTwigFilter;
  */
 final class FormatUtils
 {
-    /**
-     * The default date and time type format.
-     */
+    /** The default date and time type format. */
     public const int DATE_TIME_TYPE = \IntlDateFormatter::SHORT;
 
-    /**
-     * The decimal separator character.
-     */
+    /** The decimal separator character. */
     public const string DECIMAL_SEP = '.';
 
-    /**
-     * The default locale (Swiss French).
-     */
+    /** The default locale (Swiss French). */
     public const string DEFAULT_LOCALE = 'fr_CH';
 
-    /**
-     * The default timezone (Europe/Zurich).
-     */
+    /** The default timezone (Europe/Zurich). */
     public const string DEFAULT_TIME_ZONE = 'Europe/Zurich';
 
-    /**
-     * The fraction digits.
-     */
+    /** The fraction digits. */
     public const int FRACTION_DIGITS = 2;
 
-    /**
-     * The percent symbol character.
-     */
+    /** The percent symbol character. */
     public const string PERCENT_SYMBOL = '%';
 
-    /**
-     * The thousand-separator character.
-     */
+    /** The thousand-separator character. */
     public const string THOUSANDS_SEP = "'";
 
     /**
@@ -70,9 +56,7 @@ final class FormatUtils
      */
     private static array $numberFormatters = [];
 
-    /**
-     * The formatter for a roman numeral.
-     */
+    /** The formatter for a roman numeral. */
     private static ?\NumberFormatter $romanFormatter = null;
 
     // prevent instance creation

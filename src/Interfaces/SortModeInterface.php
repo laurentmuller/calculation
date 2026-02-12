@@ -18,13 +18,9 @@ namespace App\Interfaces;
  */
 interface SortModeInterface
 {
-    /**
-     * The ascending sort order.
-     */
+    /** The ascending sort order. */
     public const string SORT_ASC = 'asc';
 
-    /**
-     * The descending sort order.
-     */
+    /** The descending sort order. */
     public const string SORT_DESC = 'desc';
 }

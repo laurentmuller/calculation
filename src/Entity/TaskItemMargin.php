@@ -29,32 +29,24 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: TaskItemMarginRepository::class)]
 class TaskItemMargin extends AbstractEntity implements MarginInterface, ParentTimestampableInterface
 {
-    /**
-     * The maximum quantity (exclusive) to apply within this value.
-     */
+    /** The maximum quantity (exclusive) to apply within this value. */
     #[Assert\GreaterThanOrEqual(0)]
     #[Assert\GreaterThan(propertyPath: 'minimum', message: 'margin.maximum_greater_minimum')]
     #[ORM\Column(type: FixedFloatType::NAME)]
     private float $maximum = 0.0;
 
-    /**
-     * The minimum quantity (inclusive) to apply within this value.
-     */
+    /** The minimum quantity (inclusive) to apply within this value. */
     #[Assert\GreaterThanOrEqual(0)]
     #[ORM\Column(type: FixedFloatType::NAME)]
     private float $minimum = 0.0;
 
-    /**
-     * The parent task item.
-     */
+    /** The parent task item. */
     #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'margins')]
     #[ORM\JoinColumn(name: 'task_item_id', nullable: false)]
     private ?TaskItem $taskItem = null;
 
-    /**
-     * The value to use when a quantity is within this range.
-     */
+    /** The value to use when a quantity is within this range. */
     #[Assert\GreaterThanOrEqual(0)]
     #[ORM\Column(type: FixedFloatType::NAME)]
     private float $value = 0.0;

@@ -31,19 +31,13 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 readonly class SymfonyInfoService
 {
-    /**
-     * The disabled label.
-     */
+    /** The disabled label. */
     public const string LABEL_DISABLED = 'Disabled';
 
-    /**
-     * The enabled label.
-     */
+    /** The enabled label. */
     public const string LABEL_ENABLED = 'Enabled';
 
-    /**
-     * The not installed label.
-     */
+    /** The not installed label. */
     public const string LABEL_NOT_INSTALLED = 'Not installed';
 
     // the release information URL

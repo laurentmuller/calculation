@@ -30,17 +30,13 @@ abstract class AbstractCodeEntity extends AbstractEntity implements ComparableIn
 {
     use TimestampableTrait;
 
-    /**
-     * The unique code.
-     */
+    /** The unique code. */
     #[Assert\NotBlank]
     #[Assert\Length(max: self::MAX_CODE_LENGTH)]
     #[ORM\Column(length: self::MAX_CODE_LENGTH, unique: true)]
     protected ?string $code = null;
 
-    /**
-     * The description.
-     */
+    /** The description. */
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
     protected ?string $description = null;

@@ -40,30 +40,22 @@ class CalculationCategory extends AbstractEntity implements \Countable, Comparab
     use CollectionTrait;
     use PositionTrait;
 
-    /**
-     * The total amount.
-     */
+    /** The total amount. */
     #[ORM\Column(type: FixedFloatType::NAME)]
     private float $amount = 0.0;
 
-    /**
-     * The parent's category.
-     */
+    /** The parent's category. */
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(name: 'category_id', nullable: false)]
     private ?Category $category = null;
 
-    /**
-     * The code.
-     */
+    /** The code. */
     #[Assert\NotBlank]
     #[Assert\Length(max: self::MAX_CODE_LENGTH)]
     #[ORM\Column(length: self::MAX_CODE_LENGTH)]
     private ?string $code = null;
 
-    /**
-     * The parent's group.
-     */
+    /** The parent's group. */
     #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'categories')]
     #[ORM\JoinColumn(name: 'group_id', nullable: false, onDelete: 'cascade')]

@@ -10,9 +10,7 @@
     {%- set value_class = ('v ' ~ value_class|default(''))|trim -%}
     <tr>
         <td class="{{ name_class }}">{{ name }}</td>
-        <td class="{{ value_class }}">
-            {{- value -}}
-        </td>
+        <td class="{{ value_class }}">{{- value -}}</td>
     </tr>
 {%- endmacro rowInfo %}
 
@@ -42,13 +40,13 @@
 {%- endmacro rowInfoBoolean %}
 
 {% macro headerLink(url, version, icon) -%}
-    <div class="border-bottom position-relative pb-1">
-        <div class="d-flex align-items-end about-icon">
-            {{ include('svg/' ~ icon ~ '.html.twig') }}
-            <a href="https://{{ url }}" target="_blank" rel="noopener noreferrer"
-               class="h1 stretched-link text-reset ms-1" title="{{ 'about.extern_link'|trans }}">
-                {{- 'about.version'|trans({'%version%': version}) -}}
-            </a>
-        </div>
+    <div class="border-bottom pb-1">
+        <a href="https://{{ url }}" target="_blank" rel="noopener noreferrer" title="{{ 'about.extern_link'|trans }}"
+           class="h1 d-flex align-items-baseline">
+            <svg class="about-icon" aria-hidden="true">
+                <use href="#svg-{{ icon }}"></use>
+            </svg>
+            {{- 'about.version'|trans({'%version%': version}) -}}
+        </a>
     </div>
 {%- endmacro headerLink %}

@@ -20,7 +20,7 @@ ECHO ----- PHP-TWIG-CS-FIXER ---------------------------------------------------
 .\vendor-bin\twig-cs-fixer\vendor\bin\twig-cs-fixer.bat lint --config=.twig-cs-fixer.php && ^
 php bin/console app:twig-space -d                                                        && ^
 ECHO ----- PHP-UNIT -------------------------------------------------------------------- && ^
-.\vendor\bin\phpunit.bat
+.\vendor\bin\phpunit.bat --testsuite test-full
 SET STA__TIME=%TIME: =0%
 ECHO ----- END BATCH %STA__TIME% -------------------------------------------------------
 cls

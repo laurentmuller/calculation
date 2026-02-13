@@ -159,7 +159,8 @@ final class CalculationRepositoryTest extends AbstractRepositoryTestCase
 
     public function testGetItemsBelow(): void
     {
-        $actual = $this->repository->getItemsBelow(1.1);
+        $iterable = $this->repository->getItemsBelow(1.1);
+        $actual = \iterator_to_array($iterable);
         self::assertEmpty($actual);
     }
 

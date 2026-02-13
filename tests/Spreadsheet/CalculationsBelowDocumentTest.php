@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Report;
+namespace App\Tests\Spreadsheet;
 
 use App\Controller\AbstractController;
-use App\Report\CalculationsBelowReport;
+use App\Spreadsheet\CalculationsBelowDocument;
 use App\Utils\DateUtils;
 use PHPUnit\Framework\TestCase;
 
-final class CalculationsBelowReportTest extends TestCase
+final class CalculationsBelowDocumentTest extends TestCase
 {
     public function testRender(): void
     {
@@ -33,8 +33,8 @@ final class CalculationsBelowReportTest extends TestCase
             'code' => 'State 1',
             'editable' => true,
         ];
-        $report = new CalculationsBelowReport($controller, [$calculation]);
-        $actual = $report->render();
+        $document = new CalculationsBelowDocument($controller, [$calculation]);
+        $actual = $document->render();
         self::assertTrue($actual);
     }
 }

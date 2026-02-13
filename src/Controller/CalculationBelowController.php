@@ -17,17 +17,15 @@ use App\Attribute\ExcelRoute;
 use App\Attribute\ForAdmin;
 use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
-use App\Entity\Calculation;
 use App\Enums\FlashType;
 use App\Model\TranslatableFlashMessage;
 use App\Report\CalculationsBelowReport;
 use App\Repository\CalculationRepository;
 use App\Resolver\DataQueryValueResolver;
-use App\Spreadsheet\CalculationsDocument;
+use App\Spreadsheet\CalculationsBelowDocument;
 use App\Table\CalculationBelowTable;
 use App\Table\DataQuery;
 use App\Traits\TableTrait;
-use App\Utils\FormatUtils;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,17 +47,10 @@ class CalculationBelowController extends AbstractController
     #[ExcelRoute]
     public function excel(CalculationRepository $repository): Response
     {
-        $minMargin = $this->getMinMargin();
-        $response = $this->getEmptyResponse($repository, $minMargin);
-        if ($response instanceof RedirectResponse) {
-            return $response;
-        }
-        $items = $this->getItems($repository, $minMargin);
-        $doc = new CalculationsDocument($this, $items);
-        $doc->setTranslatedDescription('below.description', ['%margin%' => FormatUtils::formatPercent($minMargin)])
-            ->setTranslatedTitle('below.title');
-
-        return $this->renderSpreadsheetDocument($doc);
+        return $this->export(
+            $repository,
+            fn (iterable $entities): Response => $this->renderSpreadsheetDocument(new CalculationsBelowDocument($this, $entities))
+        );
     }
 
     /**
@@ -81,17 +72,24 @@ class CalculationBelowController extends AbstractController
     #[PdfRoute]
     public function pdf(CalculationRepository $repository): Response
     {
+        return $this->export(
+            $repository,
+            fn (iterable $entities): Response => $this->renderPdfDocument(new CalculationsBelowReport($this, $entities))
+        );
+    }
+
+    /**
+     * @param callable(iterable): Response $callback
+     */
+    private function export(CalculationRepository $repository, callable $callback): Response
+    {
         $minMargin = $this->getMinMargin();
         $response = $this->getEmptyResponse($repository, $minMargin);
         if ($response instanceof RedirectResponse) {
             return $response;
         }
-        $items = $this->getItems($repository, $minMargin);
-        $doc = new CalculationsBelowReport($this, $items);
-        $doc->setTranslatedDescription('below.description', ['%margin%' => FormatUtils::formatPercent($minMargin)])
-            ->setTranslatedTitle('below.title');
 
-        return $this->renderPdfDocument($doc);
+        return $callback($repository->getItemsBelow($minMargin));
     }
 
     /**
@@ -109,15 +107,5 @@ class CalculationBelowController extends AbstractController
         }
 
         return null;
-    }
-
-    /**
-     * Gets items to display.
-     *
-     * @return Calculation[]
-     */
-    private function getItems(CalculationRepository $repository, float $minMargin): array
-    {
-        return $repository->getItemsBelow($minMargin);
     }
 }

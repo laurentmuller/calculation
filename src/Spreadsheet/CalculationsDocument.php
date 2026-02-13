@@ -13,52 +13,85 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
+use App\Controller\AbstractController;
+use App\Repository\CalculationRepository;
 use App\Traits\CalculationDocumentMarginTrait;
+use App\Traits\MathTrait;
 
 /**
  * Spreadsheet document for the list of calculations.
  *
- * @extends AbstractArrayDocument<\App\Entity\Calculation>
+ * @phpstan-import-type ExportType from CalculationRepository
  */
-class CalculationsDocument extends AbstractArrayDocument
+class CalculationsDocument extends AbstractDocument
 {
     use CalculationDocumentMarginTrait;
+    use MathTrait;
+
+    private readonly float $minMargin;
 
     /**
-     * @param \App\Entity\Calculation[] $entities
+     * @param AbstractController $controller the parent controller
+     * @param iterable<array>    $entities   the calculations to render
+     *
+     * @phpstan-param iterable<ExportType> $entities
      */
-    #[\Override]
-    protected function doRender(array $entities): bool
+    public function __construct(AbstractController $controller, private readonly iterable $entities)
     {
-        $title = $this->getTitle() ?? 'calculation.list.title';
-        $this->start($title, true);
+        parent::__construct($controller);
+        $this->minMargin = $controller->getMinMargin();
+    }
 
-        $sheet = $this->getActiveSheet();
-        $row = $sheet->setHeaders([
+    #[\Override]
+    public function render(): bool
+    {
+        $sheet = $this->start('calculation.list.title', true)
+            ->getActiveSheet();
+
+        $row = $this->renderHeaders($sheet);
+        foreach ($this->entities as $entity) {
+            $row = $this->renderEntity($sheet, $entity, $row);
+        }
+        $sheet->finish();
+
+        return $row > 1;
+    }
+
+    /**
+     * @phpstan-param ExportType $entity
+     */
+    private function renderEntity(WorksheetDocument $sheet, array $entity, int $row): int
+    {
+        $itemsTotal = $entity['itemsTotal'];
+        $overallTotal = $entity['overallTotal'];
+        $margins = $this->getSafeMargin($overallTotal, $itemsTotal);
+        $sheet->setRowValues($row++, [
+            $entity['id'],
+            $entity['date'],
+            $entity['code'],
+            $entity['customer'],
+            $entity['description'],
+            $itemsTotal,
+            $margins,
+            $overallTotal,
+        ]);
+
+        return $row;
+    }
+
+    private function renderHeaders(WorksheetDocument $sheet): int
+    {
+        $marginFormat = $this->getMarginFormat($sheet, $this->minMargin);
+
+        return $sheet->setHeaders([
             'calculation.fields.id' => HeaderFormat::id(),
             'calculation.fields.date' => HeaderFormat::date(),
             'calculation.fields.state' => HeaderFormat::instance(),
             'calculation.fields.customer' => HeaderFormat::instance(),
             'calculation.fields.description' => HeaderFormat::instance(),
             'calculationgroup.fields.amount' => HeaderFormat::amount(),
-            'calculation.fields.margin' => HeaderFormat::percentCustom($this->getMarginFormat()),
+            'calculation.fields.margin' => HeaderFormat::percentCustom($marginFormat),
             'calculation.fields.total' => HeaderFormat::amount(),
         ]);
-
-        foreach ($entities as $entity) {
-            $sheet->setRowValues($row++, [
-                $entity->getId(),
-                $entity->getDate(),
-                $entity->getStateCode(),
-                $entity->getCustomer(),
-                $entity->getDescription(),
-                $entity->getItemsTotal(),
-                $entity->getOverallMargin(),
-                $entity->getOverallTotal(),
-            ]);
-        }
-        $sheet->finish();
-
-        return true;
     }
 }

@@ -179,7 +179,7 @@
         "app-twig": "vendor-bin/twig-cs-fixer/vendor/bin/twig-cs-fixer lint --config=.twig-cs-fixer.php",
         "app-twig-fix": "vendor-bin/twig-cs-fixer/vendor/bin/twig-cs-fixer lint --fix --config=.twig-cs-fixer.php",
         "app-stan": "vendor-bin/phpstan/vendor/bin/phpstan analyse --configuration phpstan.neon --memory-limit 2G",
-        "app-test": "vendor/bin/phpunit",
+        "app-test": "vendor/bin/phpunit --testsuite test-full",
         "app-markdown": "markdownlint-cli2",
         "app-dump-dev": "composer dump-autoload --dev",
         "app-all": [

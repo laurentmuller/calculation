@@ -126,6 +126,13 @@ final class MathTraitTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    public function testIsBelow(): void
+    {
+        self::assertFalse($this->isBelow(1.0, 0.0));
+        self::assertFalse($this->isBelow(1.0, 1.0));
+        self::assertTrue($this->isBelow(1.0, 0.5));
+    }
+
     #[DataProvider('getIsBitSet')]
     public function testIsBitSet(int $value, int $mask, bool $expected = true): void
     {
@@ -159,6 +166,15 @@ final class MathTraitTest extends TestCase
     {
         $actual = $this->safeDivide($dividend, $divisor, $default);
         self::assertSame($expected, $actual);
+    }
+
+    public function testSafeMargin(): void
+    {
+        self::assertSame(0.0, $this->getSafeMargin(1.0, 0.0));
+        self::assertSame(1.0, $this->getSafeMargin(1.0, 1.0));
+        self::assertSame(2.0, $this->getSafeMargin(2.0, 1.0));
+        self::assertSame(2.0, $this->getSafeMargin(3.0, 1.5));
+        self::assertSame(1.09, $this->getSafeMargin(14_553.84, 13_350.45));
     }
 
     #[DataProvider('getValidateFloatRange')]

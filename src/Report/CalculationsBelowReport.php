@@ -14,22 +14,26 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
-use App\Entity\Calculation;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfStyle;
 use App\Report\Table\ReportTable;
+use App\Repository\CalculationRepository;
 use App\Traits\MathTrait;
+use App\Utils\FormatUtils;
 use fpdf\Enums\PdfOrientation;
 use fpdf\Enums\PdfTextAlignment;
 
 /**
- * Report for the list of calculations.
+ * Report for the list of calculations with margin below.
  *
- * @extends AbstractArrayReport<Calculation>
+ * @phpstan-import-type ExportType from CalculationRepository
  */
-class CalculationsBelowReport extends AbstractArrayReport
+class CalculationsBelowReport extends AbstractReport
 {
     use MathTrait;
+
+    /** The number of calculations */
+    private int $count = 0;
 
     /** The sum of items calculations. */
     private float $items = 0.0;
@@ -39,22 +43,27 @@ class CalculationsBelowReport extends AbstractArrayReport
 
     /**
      * @param AbstractController $controller the parent controller
-     * @param Calculation[]      $entities   the calculations to render
+     * @param iterable<array>    $entities   the iterable calculations to render
+     *
+     * @phpstan-param iterable<ExportType> $entities
      */
-    public function __construct(AbstractController $controller, array $entities)
+    public function __construct(AbstractController $controller, private readonly iterable $entities)
     {
-        parent::__construct($controller, $entities, PdfOrientation::LANDSCAPE);
+        parent::__construct(controller: $controller, orientation: PdfOrientation::LANDSCAPE);
+        $margin = FormatUtils::formatPercent($controller->getMinMargin());
+        $this->setTranslatedTitle('below.title')
+            ->setTranslatedDescription('below.description', ['%margin%' => $margin]);
     }
 
     #[\Override]
-    protected function doRender(array $entities): bool
+    public function render(): bool
     {
         $this->addPage();
         $table = $this->createTable();
-        $this->outputEntities($table, $entities);
-        $this->outputTotal($table, $entities);
+        $this->outputEntities($table);
+        $this->outputTotal($table);
 
-        return true;
+        return $this->count > 0;
     }
 
     private function createTable(): ReportTable
@@ -72,42 +81,46 @@ class CalculationsBelowReport extends AbstractArrayReport
             )->outputHeaders();
     }
 
-    /**
-     * @param Calculation[] $entities
-     */
-    private function outputEntities(ReportTable $table, array $entities): void
+    private function outputEntities(ReportTable $table): void
     {
+        $this->count = 0;
         $this->items = 0.0;
         $this->overall = 0.0;
         $style = PdfStyle::getCellStyle()->setTextColor(PdfTextColor::red());
-        foreach ($entities as $entity) {
+        foreach ($this->entities as $entity) {
             $this->outputEntity($table, $entity, $style);
         }
     }
 
-    private function outputEntity(ReportTable $table, Calculation $entity, PdfStyle $style): void
+    /**
+     * @phpstan-param ExportType $entity
+     */
+    private function outputEntity(ReportTable $table, array $entity, PdfStyle $style): void
     {
-        $items = $entity->getItemsTotal();
-        $overall = $entity->getOverallTotal();
+        $itemsTotal = $entity['itemsTotal'];
+        $overallTotal = $entity['overallTotal'];
+        $margins = $this->getSafeMargin($overallTotal, $itemsTotal);
+
         $table->startRow()
-            ->add($entity->getFormattedId())
-            ->add($entity->getFormattedDate())
-            ->add($entity->getStateCode())
-            ->add($entity->getCustomer())
-            ->add($entity->getDescription())
-            ->addCellAmount($items)
-            ->addCellPercent($entity->getOverallMargin(), style: $style)
-            ->addCellAmount($overall)
+            ->add(FormatUtils::formatId($entity['id']))
+            ->add(FormatUtils::formatDate($entity['date']))
+            ->add($entity['code'])
+            ->add($entity['customer'])
+            ->add($entity['description'])
+            ->addCellAmount($itemsTotal)
+            ->addCellPercent($margins, style: $style)
+            ->addCellAmount($overallTotal)
             ->endRow();
 
-        $this->items += $items;
-        $this->overall += $overall;
+        ++$this->count;
+        $this->items += $itemsTotal;
+        $this->overall += $overallTotal;
     }
 
-    private function outputTotal(ReportTable $table, array $entities): void
+    private function outputTotal(ReportTable $table): void
     {
         $margins = $this->safeDivide($this->overall, $this->items);
-        $text = $this->translateCount($entities, 'counters.calculations');
+        $text = $this->translateCount($this->count, 'counters.calculations');
         $style = PdfStyle::getHeaderStyle()->setTextColor(PdfTextColor::red());
         /** @var positive-int $cols */
         $cols = $table->getColumnsCount() - 3;

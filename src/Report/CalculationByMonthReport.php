@@ -34,6 +34,7 @@ use App\Pdf\PdfStyle;
 use App\Pdf\Traits\PdfBarChartTrait;
 use App\Pdf\Traits\PdfChartLegendTrait;
 use App\Report\Table\ReportTable;
+use App\Traits\MathTrait;
 use App\Utils\FormatUtils;
 use fpdf\Enums\PdfFontName;
 use fpdf\Enums\PdfOrientation;
@@ -50,6 +51,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class CalculationByMonthReport extends AbstractArrayReport implements PdfChartInterface, PdfDrawCellBackgroundInterface, PdfDrawCellTextInterface, PdfDrawHeadersInterface
 {
+    use MathTrait;
     use PdfBarChartTrait;
     use PdfChartLegendTrait;
 
@@ -230,7 +232,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
     private function getPercentStyle(float $value, bool $bold = false): PdfStyle
     {
         $style = $bold ? PdfStyle::getHeaderStyle() : PdfStyle::getCellStyle();
-        if ($this->isMinMargin($value)) {
+        if ($this->isBelow($this->minMargin, $value)) {
             $style->setTextColor(PdfTextColor::red());
         }
 
@@ -242,11 +244,6 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         $parameters = ['search' => $item->getSearchDate()];
 
         return $this->generator->generate('calculation_index', $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
-    }
-
-    private function isMinMargin(float $value): bool
-    {
-        return !$this->isFloatZero($value) && $value < $this->minMargin;
     }
 
     private function outputArrow(

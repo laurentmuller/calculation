@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace App\Tests\Report;
 
 use App\Controller\AbstractController;
-use App\Entity\Calculation;
 use App\Report\CalculationsReport;
+use App\Utils\DateUtils;
 use PHPUnit\Framework\TestCase;
 
 final class CalculationsReportTest extends TestCase
@@ -23,28 +23,29 @@ final class CalculationsReportTest extends TestCase
     public function testRender(): void
     {
         $controller = self::createStub(AbstractController::class);
-
-        $calculation1 = $this->createMock(Calculation::class);
-        $calculation1->method('isMarginBelow')
-            ->willReturn(true);
-
-        $calculation2 = $this->createMock(Calculation::class);
-        $calculation2->method('isMarginBelow')
-            ->willReturn(false);
-        $calculation2->method('isEditable')
-            ->willReturn(true);
-        $calculation2->method('getStateCode')
-            ->willReturn('state1');
-
-        $calculation3 = $this->createMock(Calculation::class);
-        $calculation3->method('isMarginBelow')
-            ->willReturn(true);
-        $calculation3->method('isEditable')
-            ->willReturn(true);
-        $calculation3->method('getStateCode')
-            ->willReturn('state1');
-
-        $report = new CalculationsReport($controller, [$calculation1, $calculation2, $calculation3]);
+        $controller->method('getMinMargin')
+            ->willReturn(1.1);
+        $calculation1 = [
+            'id' => 1,
+            'date' => DateUtils::createDate('2019-01-01'),
+            'customer' => 'Customer 1',
+            'description' => 'Description 1',
+            'itemsTotal' => 1300.0,
+            'overallTotal' => 1350.0,
+            'code' => 'State 1',
+            'editable' => true,
+        ];
+        $calculation2 = [
+            'id' => 2,
+            'date' => DateUtils::createDate('2019-01-03'),
+            'customer' => 'Customer 2',
+            'description' => 'Description 2',
+            'itemsTotal' => 8.0,
+            'overallTotal' => 30.0,
+            'code' => 'State 1',
+            'editable' => true,
+        ];
+        $report = new CalculationsReport($controller, [$calculation1, $calculation2]);
         $actual = $report->render();
         self::assertTrue($actual);
     }

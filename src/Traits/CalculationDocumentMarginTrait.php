@@ -13,21 +13,25 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use App\Spreadsheet\WorksheetDocument;
+
 /**
  * Trait to get the overall margin format.
- *
- * @phpstan-require-extends \App\Spreadsheet\AbstractDocument
  */
 trait CalculationDocumentMarginTrait
 {
     /**
      * Gets the overall margin format.
+     *
+     * @param WorksheetDocument $sheet     the worksheet to get the percent format
+     * @param float             $minMargin the minimum margin
      */
-    protected function getMarginFormat(): string
+    protected function getMarginFormat(WorksheetDocument $sheet, float $minMargin): string
     {
-        $minMargin = $this->controller->getMinMargin();
-        $format = $this->getActiveSheet()->getPercentFormat();
-
-        return \sprintf('[Black][=0]%1$s;[Red][<%2$s]%1$s;%1$s', $format, $minMargin);
+        return \sprintf(
+            '[Black][=0]%1$s;[Red][<%2$s]%1$s;%1$s',
+            $sheet->getPercentFormat(),
+            $minMargin
+        );
     }
 }

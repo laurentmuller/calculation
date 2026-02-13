@@ -14,23 +14,25 @@ declare(strict_types=1);
 namespace App\Tests\Spreadsheet;
 
 use App\Controller\AbstractController;
-use App\Entity\Calculation;
 use App\Spreadsheet\CalculationsDocument;
-use App\Tests\Entity\IdTrait;
+use App\Utils\DateUtils;
 use PHPUnit\Framework\TestCase;
 
 final class CalculationsDocumentTest extends TestCase
 {
-    use IdTrait;
-
     public function testRender(): void
     {
-        $calculation = new Calculation();
-        $calculation->setCustomer('Customer')
-            ->setDescription('Description');
-        self::setId($calculation);
-
         $controller = self::createStub(AbstractController::class);
+        $calculation = [
+            'id' => 1,
+            'date' => DateUtils::createDate('2019-01-01'),
+            'customer' => 'Customer 1',
+            'description' => 'Description 1',
+            'itemsTotal' => 1300.0,
+            'overallTotal' => 1350.0,
+            'code' => 'State 1',
+            'editable' => true,
+        ];
         $document = new CalculationsDocument($controller, [$calculation]);
         $actual = $document->render();
         self::assertTrue($actual);

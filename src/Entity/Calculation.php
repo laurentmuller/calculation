@@ -455,9 +455,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function getOverallMargin(): float
     {
-        $value = $this->safeDivide($this->overallTotal, $this->itemsTotal);
-
-        return $this->floor($value);
+        return $this->getSafeMargin($this->overallTotal, $this->itemsTotal);
     }
 
     /**
@@ -635,11 +633,11 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function isMarginBelow(float $margin): bool
     {
-        if ($this->isEmpty() || $this->isFloatZero($this->getOverallTotal())) {
+        if ($this->isEmpty() || $this->isFloatZero($this->overallTotal)) {
             return false;
         }
 
-        return $this->getOverallMargin() < $margin;
+        return $this->isBelow($margin, $this->getOverallMargin());
     }
 
     /**

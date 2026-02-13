@@ -97,7 +97,8 @@
     margin-right: 0.25rem;
 }
 
-.about-icon svg {
+svg.about-icon {
     width: 4em;
     height: 4em;
+    fill: currentcolor;
 }

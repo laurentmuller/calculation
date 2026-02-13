@@ -22,21 +22,13 @@ final class CalculationDocumentMarginTraitTest extends TestCase
 {
     public function testMarginFormat(): void
     {
-        $controller = $this->createMock(AbstractController::class);
-        $controller->method('getMinMargin')
-            ->willReturn(1.1);
-
+        $controller = self::createStub(AbstractController::class);
         $document = new class($controller) extends AbstractDocument {
             use CalculationDocumentMarginTrait;
 
-            public function __construct(AbstractController $controller)
-            {
-                parent::__construct($controller);
-            }
-
             public function getFormat(): string
             {
-                return $this->getMarginFormat();
+                return $this->getMarginFormat($this->getActiveSheet(), 1.1);
             }
 
             #[\Override]

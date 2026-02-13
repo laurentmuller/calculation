@@ -2,107 +2,105 @@
 {% from 'macros/_icons.html.twig' import linkExternal, link, icon, dropdownEllipsis, dropdownItemExternal, dropdownItemWithClass, dropdownSeparator %}
 {# macros #}
 {% macro headerLinkInfo(title, id, countable = null) -%}
-<div class="border-bottom" id="{{ id }}-header">
-    <a href="#{{ id }}" class="drop-down-icon-left d-flex text-body my-1" data-bs-toggle="collapse" aria-expanded="false" aria-controls="{{ id }}" title="{{ 'common.expand'|trans }}">
-        <span class="flex-fill">{{- title -}}</span>
-        {% if countable %}
-            <span class="badge text-bg-secondary rounded-pill">{{- countable|integer -}}</span>
-        {% endif %}
-    </a>
-</div>
+    <div class="border-bottom" id="{{ id }}-header">
+        <a href="#{{ id }}" class="drop-down-icon-left d-flex text-body my-1" data-bs-toggle="collapse"
+           aria-expanded="false" aria-controls="{{ id }}" title="{{ 'common.expand'|trans }}">
+            <span class="flex-fill">{{- title -}}</span>
+            {% if countable %}
+                <span class="badge text-bg-secondary rounded-pill">{{- countable|integer -}}</span>
+            {% endif %}
+        </a>
+    </div>
 {%- endmacro headerLinkInfo %}
 {% macro rowBundle(bundle) -%}
-<tr>
-    <td class="e">{{ bundle.name }}</td>
-    <td class="v">{{ bundle.path }}</td>
-    <td class="v text-percent">{{ bundle.files }}</td>
-    <td class="v text-percent">{{ bundle.size }}</td>
-</tr>
+    <tr>
+        <td class="e">{{ bundle.name }}</td>
+        <td class="v">{{ bundle.path }}</td>
+        <td class="v text-percent">{{ bundle.files }}</td>
+        <td class="v text-percent">{{ bundle.size }}</td>
+    </tr>
 {%- endmacro rowBundle %}
 {% macro headerPackage() %}
-<thead>
+    <thead>
     <tr>
         <th>Name</th>
         <th class="text-id">Version</th>
         <th colspan="2">Description</th>
     </tr>
-</thead>
+    </thead>
 {% endmacro headerPackage %}
 {% macro rowPackage(package) -%}
-<tr>
-    <td class="e">{{ package.name }}</td>
-    <td class="text-id">{{ package.version }}</td>
-    <td class="text">{{ package.description }}</td>
-    <td>
-        {%- set is_info = package.homepage or package.license -%}
-        {%- set is_dependance = package.production|length or package.development|length -%}
-        {%- if is_info or is_dependance -%}
-            <div class="dropdown">
-                {{ dropdownEllipsis() }}
-                <ul class="dropdown-menu dropdown-menu-end">
-                    {%- if package.homepage -%}
-                        {{- dropdownItemExternal(
-                            href: package.homepage,
-                            text: 'about.extern_link',
-                            icon: 'arrow-up-right-from-square fa-fw')
-                        -}}
+    <tr>
+        <td class="e">{{ package.name }}</td>
+        <td class="text-id">{{ package.version }}</td>
+        <td class="text">{{ package.description }}</td>
+        <td>
+            {%- set is_info = package.homepage or package.license -%}
+            {%- set is_dependance = package.production|length or package.development|length -%}
+            {%- if is_info or is_dependance -%}
+                <div class="dropdown">
+                    {{ dropdownEllipsis() }}
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        {%- if package.homepage -%}
+                            {{- dropdownItemExternal(
+                                href: package.homepage,
+                                text: 'about.extern_link',
+                                icon: 'arrow-up-right-from-square fa-fw') -}}
 
-                    {% endif %}
-                    {%- if package.license -%}
-                        {{- dropdownItemWithClass(
-                            href: path('about_symfony_license', {name: package.name}),
-                            text: 'about.licence.title',
-                            icon: 'book-open-reader fa-fw',
-                            class: 'link-license')
-                        -}}
-                    {% endif %}
-                    {%- if is_info and is_dependance -%}
-                        {{ dropdownSeparator() }}
-                    {% endif %}
-                    {%- if is_dependance -%}
-                        {{- dropdownItemWithClass(
-                            href: path('about_symfony_dependency', {name: package.name}),
-                            text: 'about.package.title',
-                            icon: 'file-code fa-fw',
-                            class: 'link-package')
-                        -}}
-                    {% endif %}
-                </ul>
-            </div>
-        {%- else -%}
-            &nbsp;
-        {% endif %}
-    </td>
-</tr>
+                        {% endif %}
+                        {%- if package.license -%}
+                            {{- dropdownItemWithClass(
+                                href: path('about_symfony_license', {name: package.name}),
+                                text: 'about.licence.title',
+                                icon: 'book-open-reader fa-fw',
+                                class: 'link-license') -}}
+                        {% endif %}
+                        {%- if is_info and is_dependance -%}
+                            {{ dropdownSeparator() }}
+                        {% endif %}
+                        {%- if is_dependance -%}
+                            {{- dropdownItemWithClass(
+                                href: path('about_symfony_dependency', {name: package.name}),
+                                text: 'about.package.title',
+                                icon: 'file-code fa-fw',
+                                class: 'link-package') -}}
+                        {% endif %}
+                    </ul>
+                </div>
+            {%- else -%}
+                &nbsp;
+            {% endif %}
+        </td>
+    </tr>
 {%- endmacro rowPackage %}
 {% macro headerRoute() -%}
-<thead>
+    <thead>
     <tr>
         <th class="w-40">Name</th>
         <th class="w-50">Path</th>
         <th class="text-category">Method</th>
     </tr>
-</thead>
+    </thead>
 {%- endmacro headerRoute %}
 {% macro rowRoute(route) -%}
-<tr>
-    <td class="w-40">{{ route.name }}</td>
-    <td class="w-50">{{ route.path }}</td>
-    <td class="text-category">
-        {% for method in route.methods %}
-            {% switch method %}
-            {% case 'GET' %}
-                <span class="badge rounded me-1 text-bg-success">{{ method }}</span>
-            {% case 'POST' %}
-                <span class="badge rounded me-1 text-bg-secondary">{{ method }}</span>
-            {% case 'DELETE' %}
-                <span class="badge rounded me-1 text-bg-danger">{{ method }}</span>
-            {% default %}
-                <span class="badge rounded me-1 text-bg-light">{{ method }}</span>
-            {% endswitch %}
-        {% endfor %}
-    </td>
-</tr>
+    <tr>
+        <td class="w-40">{{ route.name }}</td>
+        <td class="w-50">{{ route.path }}</td>
+        <td class="text-category">
+            {% for method in route.methods %}
+                {% switch method %}
+                {% case 'GET' %}
+                    <span class="badge rounded me-1 text-bg-success">{{ method }}</span>
+                {% case 'POST' %}
+                    <span class="badge rounded me-1 text-bg-secondary">{{ method }}</span>
+                {% case 'DELETE' %}
+                    <span class="badge rounded me-1 text-bg-danger">{{ method }}</span>
+                {% default %}
+                    <span class="badge rounded me-1 text-bg-light">{{ method }}</span>
+                {% endswitch %}
+            {% endfor %}
+        </td>
+    </tr>
 {%- endmacro rowRoute %}
 {% macro headerNameValue() %}
     <thead>
@@ -124,14 +122,14 @@
     {{ tools.headerLink('symfony.com', symfonyService.version, 'symfony') }}
     <table id="data-table-symfony" class="table table-sm table-hover mb-0">
         <tbody>
-            {{ tools.headerInfo('Kernel') }}
-            {{ tools.rowInfo('Environment', kernelService.environment|trans) }}
-            {{ tools.rowInfo('Running Mode', kernelService.mode|trans) }}
-            {{ tools.rowInfo('Status', symfonyService.maintenanceStatus) }}
-            {{ tools.rowInfo('Release', symfonyService.releaseDate) }}
-            {{ tools.rowInfoBoolean('Long-Term support', symfonyService.longTermSupport) }}
-            {{ tools.rowInfo('End of maintenance', symfonyService.endOfMaintenance) }}
-            {{ tools.rowInfo('End of product life', symfonyService.endOfLife) }}
+        {{ tools.headerInfo('Kernel') }}
+        {{ tools.rowInfo('Environment', kernelService.environment|trans) }}
+        {{ tools.rowInfo('Running Mode', kernelService.mode|trans) }}
+        {{ tools.rowInfo('Status', symfonyService.maintenanceStatus) }}
+        {{ tools.rowInfo('Release', symfonyService.releaseDate) }}
+        {{ tools.rowInfoBoolean('Long-Term support', symfonyService.longTermSupport) }}
+        {{ tools.rowInfo('End of maintenance', symfonyService.endOfMaintenance) }}
+        {{ tools.rowInfo('End of product life', symfonyService.endOfLife) }}
         </tbody>
     </table>
     {# Configuration #}
@@ -139,7 +137,8 @@
     <div id="symfonyAccordion">
         {# parameters #}
         {{ _self.headerLinkInfo('Parameters', 'parameters') }}
-        <div class="collapse ps-lg-3" id="parameters" aria-labelledby="parameters-header" data-bs-parent="#symfonyAccordion">
+        <div class="collapse ps-lg-3" id="parameters" aria-labelledby="parameters-header"
+             data-bs-parent="#symfonyAccordion">
             <table class="table table-sm table-hover mb-0">
                 {{ _self.headerNameValue() }}
                 <tbody>
@@ -153,7 +152,8 @@
         </div>
         {# extensions #}
         {{ _self.headerLinkInfo('Extensions', 'extensions') }}
-        <div class="collapse ps-lg-3" id="extensions" aria-labelledby="extensions-header" data-bs-parent="#symfonyAccordion">
+        <div class="collapse ps-lg-3" id="extensions" aria-labelledby="extensions-header"
+             data-bs-parent="#symfonyAccordion">
             <table class="table table-sm table-hover mb-0">
                 {{ _self.headerNameValue() }}
                 <tbody>
@@ -165,7 +165,8 @@
         </div>
         {# directories #}
         {{ _self.headerLinkInfo('Directories', 'directories') }}
-        <div class="collapse ps-lg-3" id="directories" aria-labelledby="directories-header" data-bs-parent="#symfonyAccordion">
+        <div class="collapse ps-lg-3" id="directories" aria-labelledby="directories-header"
+             data-bs-parent="#symfonyAccordion">
             <table class="table table-sm table-hover mb-0">
                 <thead>
                 <tr>
@@ -189,15 +190,16 @@
         {%- set bundles = bundleService.bundles -%}
         {% if bundles|length %}
             {{ _self.headerLinkInfo('Bundles', 'bundles', bundles) }}
-            <div class="collapse ps-lg-3" id="bundles" aria-labelledby="bundles-header" data-bs-parent="#symfonyAccordion">
+            <div class="collapse ps-lg-3" id="bundles" aria-labelledby="bundles-header"
+                 data-bs-parent="#symfonyAccordion">
                 <table class="table table-sm table-hover mb-0">
                     <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Path</th>
-                            <th class="text-percent">Files</th>
-                            <th class="text-percent">Size</th>
-                        </tr>
+                    <tr>
+                        <th>Name</th>
+                        <th>Path</th>
+                        <th class="text-percent">Files</th>
+                        <th class="text-percent">Size</th>
+                    </tr>
                     </thead>
                     <tbody>
                     {% for bundle in bundles %}
@@ -211,7 +213,8 @@
         {%- set packages = packageService.runtimePackages -%}
         {% if packages|length %}
             {{ _self.headerLinkInfo('Packages', 'runtime-packages', packages) }}
-            <div class="accordion-collapse collapse ps-lg-3 table-responsive" id="runtime-packages" aria-labelledby="runtime-packages-header" data-bs-parent="#symfonyAccordion">
+            <div class="accordion-collapse collapse ps-lg-3 table-responsive" id="runtime-packages"
+                 aria-labelledby="runtime-packages-header" data-bs-parent="#symfonyAccordion">
                 <table class="table table-no-end-line table-sm table-hover mb-0">
                     {{ _self.headerPackage() }}
                     <tbody>
@@ -226,7 +229,8 @@
         {%- set packages = packageService.debugPackages -%}
         {% if packages|length %}
             {{ _self.headerLinkInfo('Debug Packages', 'dev-packages', packages) }}
-            <div class="accordion-collapse collapse ps-lg-3" id="dev-packages" aria-labelledby="dev-packages-header" data-bs-parent="#symfonyAccordion">
+            <div class="accordion-collapse collapse ps-lg-3" id="dev-packages" aria-labelledby="dev-packages-header"
+                 data-bs-parent="#symfonyAccordion">
                 <table class="table table-no-end-line table-sm table-hover mb-0">
                     {{ _self.headerPackage() }}
                     <tbody>
@@ -241,7 +245,8 @@
         {%- set routes = routeService.runtimeRoutes -%}
         {% if routes|length %}
             {{ _self.headerLinkInfo('Routes', 'runtime-routes', routes) }}
-            <div class="accordion-collapse collapse ps-lg-3" id="runtime-routes" aria-labelledby="runtime-routes-header" data-bs-parent="#symfonyAccordion">
+            <div class="accordion-collapse collapse ps-lg-3" id="runtime-routes" aria-labelledby="runtime-routes-header"
+                 data-bs-parent="#symfonyAccordion">
                 <table class="table table-no-end-line table-sm table-hover mb-0">
                     {{ _self.headerRoute() }}
                     <tbody>
@@ -256,7 +261,8 @@
         {%- set routes = routeService.debugRoutes -%}
         {% if routes|length %}
             {{ _self.headerLinkInfo('Debug Routes', 'debug-routes', routes) }}
-            <div class="accordion-collapse collapse ps-lg-3" id="debug-routes" aria-labelledby="debug-routes-header" data-bs-parent="#symfonyAccordion">
+            <div class="accordion-collapse collapse ps-lg-3" id="debug-routes" aria-labelledby="debug-routes-header"
+                 data-bs-parent="#symfonyAccordion">
                 <table class="table table-no-end-line table-sm table-hover mb-0">
                     {{ _self.headerRoute() }}
                     <tbody>
@@ -267,7 +273,12 @@
                 </table>
             </div>
         {% endif %}
-     </div>
+    </div>
 </div>
 {{ include('dialog/dialog_license.html.twig') }}
 {{ include('dialog/dialog_package.html.twig') }}
+<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+    <symbol id="svg-symfony" viewBox="0 0 24 24">
+        <path d="M12 2A10 10 0 0 0 2 12a10 10 0 0 0 10 10a10 10 0 0 0 10-10A10 10 0 0 0 12 2m4.37 3.7c1.02-.03 1.78.43 1.84 1.14c.01.31-.17.91-.79.93c-.47.02-.79-.27-.8-.68c-.01-.16.26-.67.26-.76c-.01-.27-.41-.28-.52-.27c-1.5.05-1.9 2.07-2.22 3.72l-.14.87c.84.13 1.46-.03 1.8-.25c.48-.31-.14-.63-.06-.99c.08-.37.41-.54.67-.55c.37-.01.63.37.62.76c-.03.64-.86 1.52-2.53 1.48c-.22 0-.41-.02-.59-.04c-.61 3.1-.99 4.94-2.35 6.52c-1.17 1.39-2.36 1.6-2.89 1.62c-1 .04-1.67-.49-1.67-1.2c-.03-.68.57-1.06.97-1.07c.53-.02.9.37.91.81c.02.37-.18.49-.31.56c-.07.07-.22.15-.21.3c0 .07.07.22.29.21c.42-.01.69-.22.89-.36c.96-.8 1.34-2.21 1.83-4.77c.26-1.45.45-2.38.73-3.3c-.68-.51-1.1-1.15-2.01-1.38c-.63-.19-1.01-.04-1.28.3c-.31.41-.21.93.09 1.24c1.15 1.28 1.49 1.84 1.36 2.6c-.2 1.21-1.64 2.13-3.34 1.61c-1.45-.45-1.72-1.47-1.55-2.04c.16-.49.55-.59.94-.47c.42.13.58.63.46 1.02c-.02.04-.22.41-.27.53c-.09.31.33.52.62.61c.65.2 1.28-.14 1.43-.67c.15-.48-.15-.82-.28-.95c-.89-.98-1.51-1.85-1.21-2.83c.12-.37.36-.77.72-1.04c.75-.55 1.57-.65 2.34-.41c1.01.27 1.49.94 2.12 1.45c.35-1.02.84-2.03 1.57-2.88c.66-.77 1.54-1.33 2.56-1.37"/>
+    </symbol>
+</svg>

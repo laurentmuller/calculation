@@ -36,6 +36,8 @@ class CalculationDocument extends AbstractDocument
     /** The cell border color. */
     private const string COLOR_BORDER = 'DDDDDD';
 
+    private readonly float $minMargin;
+
     /**
      * @param AbstractController $controller  the parent controller
      * @param Calculation        $calculation the calculation to render
@@ -43,6 +45,7 @@ class CalculationDocument extends AbstractDocument
     public function __construct(AbstractController $controller, private readonly Calculation $calculation)
     {
         parent::__construct($controller);
+        $this->minMargin = $controller->getMinMargin();
     }
 
     #[\Override]
@@ -288,9 +291,10 @@ class CalculationDocument extends AbstractDocument
 
     private function renderOverallTotal(WorksheetDocument $sheet, Calculation $calculation, int $row): void
     {
+        $marginFormat = $this->getMarginFormat($sheet, $this->minMargin);
         $this->cellBold($sheet, 1, $row, $this->trans('calculation.fields.overallTotal'))
             ->cellAmount($sheet, 2, $row, $calculation->getItemsTotal(), true)
-            ->cellPercent($sheet, $row, $calculation->getOverallMargin(), true, $this->getMarginFormat())
+            ->cellPercent($sheet, $row, $calculation->getOverallMargin(), true, $marginFormat)
             ->cellAmount($sheet, 4, $row, $calculation->getOverallMarginAmount(), true)
             ->cellAmount($sheet, 5, $row, $calculation->getOverallTotal(), true)
             ->fillBackground($sheet, $row)

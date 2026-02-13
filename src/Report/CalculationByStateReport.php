@@ -30,6 +30,7 @@ use App\Pdf\Traits\PdfChartLegendTrait;
 use App\Pdf\Traits\PdfPieChartTrait;
 use App\Report\Table\ReportTable;
 use App\Table\CalculationTable;
+use App\Traits\MathTrait;
 use App\Utils\FormatUtils;
 use fpdf\Enums\PdfRectangleStyle;
 use fpdf\Enums\PdfTextAlignment;
@@ -42,6 +43,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class CalculationByStateReport extends AbstractArrayReport implements PdfChartInterface, PdfDrawCellTextInterface, PdfDrawHeadersInterface
 {
+    use MathTrait;
     use PdfChartLegendTrait;
     use PdfPieChartTrait;
 
@@ -184,7 +186,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
     ): PdfCell {
         $text = FormatUtils::formatPercent($value, true, $decimals);
         $style = $bold ? PdfStyle::getHeaderStyle() : PdfStyle::getCellStyle();
-        if ($useStyle && $this->isMinMargin($value)) {
+        if ($useStyle && $this->isBelow($this->minMargin, $value)) {
             $style->setTextColor(PdfTextColor::red());
         }
 
@@ -194,11 +196,6 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
     private function getURL(int $id): string
     {
         return $this->generator->generate('calculation_index', [CalculationTable::PARAM_STATE => $id]);
-    }
-
-    private function isMinMargin(float $value): bool
-    {
-        return !$this->isFloatZero($value) && $value < $this->minMargin;
     }
 
     /**

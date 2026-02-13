@@ -29,7 +29,6 @@ use App\Entity\CalculationState;
 use App\Entity\Product;
 use App\Form\Calculation\CalculationEditStateType;
 use App\Interfaces\EntityInterface;
-use App\Interfaces\SortModeInterface;
 use App\Report\CalculationReport;
 use App\Report\CalculationsReport;
 use App\Repository\CalculationRepository;
@@ -111,14 +110,12 @@ class CalculationController extends AbstractEntityController
      * Export the calculations to a Spreadsheet document.
      */
     #[ExcelRoute]
-    public function excel(): SpreadsheetResponse
+    public function excel(): Response
     {
-        $entities = $this->getEntities(['id' => SortModeInterface::SORT_DESC]);
-        if ([] === $entities) {
-            throw $this->createTranslatedNotFoundException('calculation.list.empty');
-        }
-
-        return $this->renderSpreadsheetDocument(new CalculationsDocument($this, $entities));
+        return $this->export(
+            true,
+            fn (iterable $entities): Response => $this->renderSpreadsheetDocument(new CalculationsDocument($this, $entities))
+        );
     }
 
     /**
@@ -147,18 +144,12 @@ class CalculationController extends AbstractEntityController
      * Export calculations to a PDF document.
      */
     #[PdfRoute]
-    public function pdf(): PdfResponse
+    public function pdf(): Response
     {
-        $entities = $this->getEntities([
-            'editable' => SortModeInterface::SORT_DESC,
-            'code' => SortModeInterface::SORT_ASC,
-            'id' => SortModeInterface::SORT_DESC,
-        ]);
-        if ([] === $entities) {
-            throw $this->createTranslatedNotFoundException('calculation.list.empty');
-        }
-
-        return $this->renderPdfDocument(new CalculationsReport($this, $entities));
+        return $this->export(
+            false,
+            fn (iterable $entities): Response => $this->renderPdfDocument(new CalculationsReport($this, $entities))
+        );
     }
 
     /**
@@ -257,6 +248,20 @@ class CalculationController extends AbstractEntityController
         }
 
         return $calculation;
+    }
+
+    /**
+     * @param callable(iterable): Response $callback
+     */
+    private function export(bool $forExcel, callable $callback): Response
+    {
+        if (0 === $this->getRepository()->count()) {
+            throw $this->createTranslatedNotFoundException('calculation.list.empty');
+        }
+        $entities = $this->getRepository()
+            ->getExportEntities($forExcel);
+
+        return $callback($entities);
     }
 
     /**

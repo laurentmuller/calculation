@@ -37,6 +37,28 @@ trait MathTrait
     }
 
     /**
+     * Gets the floor margins.
+     *
+     * @param float $overallTotal the overall total (dividend)
+     * @param float $itemsTotal   the items total (divisor)
+     */
+    protected function getSafeMargin(float $overallTotal, float $itemsTotal): float
+    {
+        return $this->floor($this->safeDivide($overallTotal, $itemsTotal));
+    }
+
+    /**
+     * Returns if the given value is not equal to 0.0 and below the given minimum margin.
+     *
+     * @param float $minMargin the minimum margin
+     * @param float $value     the value to be tested
+     */
+    protected function isBelow(float $minMargin, float $value): bool
+    {
+        return !$this->isFloatZero($value) && $value < $minMargin;
+    }
+
+    /**
      * Checks if the given value contains the bit mask.
      *
      * @param int $value the value to be tested

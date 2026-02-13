@@ -19,6 +19,7 @@ use App\Model\CalculationsMonth;
 use App\Model\CalculationsMonthItem;
 use App\Utils\DateUtils;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Types\DatePointType;
@@ -55,6 +56,15 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *        item_quantity: float,
  *        item_total: float,
  *        item_overall: float}
+ * @phpstan-type ExportType = array{
+ *        id: int,
+ *        date: DatePoint,
+ *        customer: string,
+ *        description: string,
+ *        itemsTotal: float,
+ *        overallTotal: float,
+ *        code: string,
+ *        editable: bool}
  */
 class CalculationRepository extends AbstractRepository
 {
@@ -334,6 +344,22 @@ class CalculationRepository extends AbstractRepository
     }
 
     /**
+     * Gets iterable calculations, as array, for export.
+     *
+     * @param bool $forExcel true for Excel, false for PDF
+     *
+     * @return iterable<array> the iterable calculations
+     *
+     * @phpstan-return iterable<ExportType>
+     */
+    public function getExportEntities(bool $forExcel): iterable
+    {
+        return $this->getIterableBuilder($forExcel)
+            ->getQuery()
+            ->toIterable(hydrationMode: AbstractQuery::HYDRATE_ARRAY);
+    }
+
+    /**
      * Gets calculations for the given year and month.
      *
      * @param int $year  the year
@@ -386,20 +412,21 @@ class CalculationRepository extends AbstractRepository
     }
 
     /**
-     * Gets calculations with the overall margin below the given value.
+     * Gets iterable calculations with the overall margin below the given value.
      *
      * @param float $minMargin the minimum margin in percent
      *
-     * @return Calculation[] the below calculations
+     * @return iterable<array> the iterable below calculations, as array
+     *
+     * @phpstan-return iterable<ExportType>
      */
-    public function getItemsBelow(float $minMargin): array
+    public function getItemsBelow(float $minMargin): iterable
     {
-        $builder = $this->createQueryBuilder('c')
-            ->addOrderBy('c.id', self::SORT_DESC);
+        $builder = $this->getIterableBuilder(true);
+        $builder = self::addBelowFilter($builder, $minMargin);
 
-        return self::addBelowFilter($builder, $minMargin)
-            ->getQuery()
-            ->getResult();
+        return $builder->getQuery()
+            ->toIterable(hydrationMode: AbstractQuery::HYDRATE_ARRAY);
     }
 
     /**
@@ -682,8 +709,7 @@ class CalculationRepository extends AbstractRepository
             ->addSelect(self::STATE_ALIAS . '.code as stateCode')
             ->addSelect(self::STATE_ALIAS . '.color as stateColor')
             ->addSelect(self::STATE_ALIAS . '.editable as stateEditable')
-            ->innerJoin($alias . '.state', self::STATE_ALIAS)
-            ->groupBy($alias . '.id');
+            ->innerJoin($alias . '.state', self::STATE_ALIAS);
     }
 
     /**
@@ -700,6 +726,37 @@ class CalculationRepository extends AbstractRepository
             ->addOrderBy('c.id', self::SORT_DESC)
             ->where('YEAR(c.date) = :year')
             ->setParameter('year', $year, Types::INTEGER);
+    }
+
+    /**
+     * Gets the query builder for iterable calculations.
+     *
+     * @param bool $forExcel true for Excel, false for PDF
+     */
+    private function getIterableBuilder(bool $forExcel): QueryBuilder
+    {
+        $builder = $this->createQueryBuilder('e')
+            // calculation
+            ->select('e.id')
+            ->addSelect('e.date')
+            ->addSelect('e.customer')
+            ->addSelect('e.description')
+            ->addSelect('e.itemsTotal')
+            ->addSelect('e.overallTotal')
+            // state
+            ->addSelect('s.code')
+            ->addSelect('s.editable')
+            ->innerJoin('e.state', 's');
+        // order
+        if ($forExcel) {
+            $builder->orderBy('e.id', self::SORT_DESC);
+        } else {
+            $builder->orderBy('s.editable', self::SORT_DESC)
+                ->addOrderBy('s.code', self::SORT_ASC)
+                ->addOrderBy('e.id', self::SORT_ASC);
+        }
+
+        return $builder;
     }
 
     /**

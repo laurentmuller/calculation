@@ -44,8 +44,8 @@ final class CalculationByStateReportTest extends TestCase
                 editable: false,
                 color: 'black',
                 count: 1,
-                items: 1.0,
-                total: 2.0
+                items: 1000.0,
+                total: 1050.0
             ),
         ];
         $state = new CalculationsState($items);

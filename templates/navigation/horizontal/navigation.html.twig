@@ -21,14 +21,14 @@
         </button>
         {# home page #}
         <a class="navbar-brand me-1" href="{{ path('homepage') }}" title="{{ 'index.title_help'|trans }}">
-            {{- icon('home') -}}
+            <i class="fa-solid fa-home" style=""></i>
         </a>
         {# navigation toggler #}
         <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-horizontal-menu" aria-controls="navbarContent" aria-expanded="false" aria-label="{{ 'index.toggle_navigation'|trans }}">
             <span class="navbar-toggler-icon"></span>
         </button>
         {# menus #}
-        <div class="navbar-collapse collapse bg-body-tertiary ps-3 ps-lg-0" id="navbar-horizontal-menu">
+        <div class="navbar-collapse collapse bg-body-tertiary ps-3 ps-lg-0 mt-1" id="navbar-horizontal-menu">
             <ul class="navbar-nav me-auto">
                 {% if is_granted_calculation -%}
                     <li class="nav-item">

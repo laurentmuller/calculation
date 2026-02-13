@@ -50,23 +50,9 @@ final class CalculationByMonthReportTest extends TestCase
                 month: 1
             ),
             new CalculationsMonthItem(
-                count: 10,
-                items: 20.0,
-                total: 40.0,
-                year: 2024,
-                month: 2
-            ),
-            new CalculationsMonthItem(
                 count: 5,
-                items: 15.0,
-                total: 35.0,
-                year: 2024,
-                month: 3
-            ),
-            new CalculationsMonthItem(
-                count: 5,
-                items: 15.0,
-                total: 35.0,
+                items: 3000.0,
+                total: 3050.0,
                 year: 2024,
                 month: 3
             ),

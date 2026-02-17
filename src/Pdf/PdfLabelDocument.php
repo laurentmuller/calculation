@@ -35,17 +35,6 @@ class PdfLabelDocument extends PdfDocument
     use PdfDashTrait;
     use PdfStyleTrait;
 
-    /** The encoding source. */
-    private const array ENCODING_FROM = [
-        'ASCII',
-        'UTF-8',
-        'CP1252',
-        'ISO-8859-1',
-    ];
-
-    /** The encoding target. */
-    private const string ENCODING_TO = 'CP1252';
-
     // the font mapping
     private const array FONT_CONVERSION = [
         6 => 2.0,
@@ -101,9 +90,40 @@ class PdfLabelDocument extends PdfDocument
     }
 
     /**
-     * Output a label.
+     * This implementation skips the output footer.
      */
-    public function addLabel(string $text): static
+    #[\Override]
+    final public function footer(): void
+    {
+    }
+
+    /**
+     * Gets the current position as a zero-based column and row.
+     *
+     * @return array{column: int, row: int}
+     */
+    public function getCurrentPosition(): array
+    {
+        return [
+            'column' => $this->currentCol,
+            'row' => $this->currentRow,
+        ];
+    }
+
+    /**
+     * This implementation skips the output header.
+     */
+    #[\Override]
+    final public function header(): void
+    {
+    }
+
+    /**
+     * Output a label.
+     *
+     * @param string[]|string $text the text or an array of lines
+     */
+    public function outputLabel(array|string $text): static
     {
         if (0 === $this->page) {
             $this->addPage();
@@ -111,7 +131,10 @@ class PdfLabelDocument extends PdfDocument
             $this->currentRow = 0;
             $this->addPage();
         }
-        if ('' !== $text) {
+        if (\is_array($text)) {
+            $text = \implode(StringUtils::NEW_LINE, $text);
+        }
+        if (StringUtils::isString($text)) {
             $this->outputLabelText($text);
         }
         if ($this->labelBorder) {
@@ -126,22 +149,6 @@ class PdfLabelDocument extends PdfDocument
     }
 
     /**
-     * This implementation skips the output footer.
-     */
-    #[\Override]
-    final public function footer(): void
-    {
-    }
-
-    /**
-     * This implementation skips the output header.
-     */
-    #[\Override]
-    final public function header(): void
-    {
-    }
-
-    /**
      * Sets a value indicating if a dash border is draw around labels.
      */
     public function setLabelBorder(bool $labelBorder): static
@@ -152,7 +159,7 @@ class PdfLabelDocument extends PdfDocument
     }
 
     /**
-     * Sets the draw label listener.
+     * Sets the output label listener.
      */
     public function setLabelTextListener(?PdfLabelTextListenerInterface $labelTextListener): static
     {
@@ -225,11 +232,8 @@ class PdfLabelDocument extends PdfDocument
      */
     private function updateFont(int $pt): static
     {
-        if (!isset(self::FONT_CONVERSION[$pt])) {
-            $sizes = \implode(', ', \array_keys(self::FONT_CONVERSION));
-            throw PdfException::format('Invalid font size: %d. Allowed sizes: [%s]', $pt, $sizes);
-        }
-        $this->lineHeight = self::FONT_CONVERSION[$pt];
+        $this->lineHeight = self::FONT_CONVERSION[$pt]
+            ?? throw PdfException::format('Invalid font size: %d. Allowed sizes: [%s]', $pt, \implode(', ', \array_keys(self::FONT_CONVERSION)));
 
         return $this->setFontSizeInPoint($pt)
             ->setFont(PdfFontName::ARIAL);

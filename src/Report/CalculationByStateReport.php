@@ -20,7 +20,7 @@ use App\Model\CalculationsTotal;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Events\PdfCellTextEvent;
-use App\Pdf\Events\PdfPdfDrawHeadersEvent;
+use App\Pdf\Events\PdfDrawHeadersEvent;
 use App\Pdf\Interfaces\PdfChartInterface;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\Interfaces\PdfDrawHeadersInterface;
@@ -79,7 +79,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
     }
 
     #[\Override]
-    public function drawHeaders(PdfPdfDrawHeadersEvent $event): bool
+    public function drawHeaders(PdfDrawHeadersEvent $event): bool
     {
         $cells = [];
         $table = $event->table;

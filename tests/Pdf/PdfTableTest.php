@@ -16,7 +16,7 @@ namespace App\Tests\Pdf;
 use App\Pdf\Events\PdfCellBackgroundEvent;
 use App\Pdf\Events\PdfCellBorderEvent;
 use App\Pdf\Events\PdfCellTextEvent;
-use App\Pdf\Events\PdfPdfDrawHeadersEvent;
+use App\Pdf\Events\PdfDrawHeadersEvent;
 use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
 use App\Pdf\Interfaces\PdfDrawCellBorderInterface;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
@@ -299,7 +299,7 @@ final class PdfTableTest extends TestCase
         $table->getParent()->addPage();
         $listener = new class implements PdfDrawHeadersInterface {
             #[\Override]
-            public function drawHeaders(PdfPdfDrawHeadersEvent $event): bool
+            public function drawHeaders(PdfDrawHeadersEvent $event): bool
             {
                 $columns = $event->getColumns();
                 TestCase::assertCount(1, $columns);

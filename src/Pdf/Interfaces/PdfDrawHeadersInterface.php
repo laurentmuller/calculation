@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Pdf\Interfaces;
 
-use App\Pdf\Events\PdfPdfDrawHeadersEvent;
+use App\Pdf\Events\PdfDrawHeadersEvent;
 
 /**
  * Class implementing this interface handles the draw table headers event.
@@ -23,9 +23,9 @@ interface PdfDrawHeadersInterface
     /**
      * Called when headers must be drawn.
      *
-     * @param PdfPdfDrawHeadersEvent $event the event
+     * @param PdfDrawHeadersEvent $event the event
      *
      * @return bool true if the listener handles the draw function; false to call the default behavior
      */
-    public function drawHeaders(PdfPdfDrawHeadersEvent $event): bool;
+    public function drawHeaders(PdfDrawHeadersEvent $event): bool;
 }

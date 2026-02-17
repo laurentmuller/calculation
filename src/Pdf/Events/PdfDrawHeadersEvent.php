@@ -21,7 +21,7 @@ use fpdf\PdfDocument;
 /**
  * The event raised when headers must be drawn.
  */
-class PdfPdfDrawHeadersEvent
+class PdfDrawHeadersEvent
 {
     /**
      * @param PdfTable $table       the parent's table

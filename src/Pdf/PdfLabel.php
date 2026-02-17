@@ -19,49 +19,79 @@ use fpdf\Enums\PdfUnit;
 /**
  * Contains label layout.
  */
-class PdfLabel implements \Stringable
+readonly class PdfLabel implements \Stringable
 {
     /**
-     * The number of horizontal labels (columns).
-     *
-     * @var positive-int
+     * @param string       $name       the label's name
+     * @param PdfUnit      $unit       the layout unit
+     * @param positive-int $cols       the number of horizontal labels (columns)
+     * @param positive-int $rows       the number of vertical labels (rows)
+     * @param float        $width      the width of a label
+     * @param float        $height     the height of a label
+     * @param float        $marginLeft the left margin
+     * @param float        $marginTop  the top margin
+     * @param float        $spaceX     the horizontal space between labels
+     * @param float        $spaceY     the vertical space between labels
+     * @param int<6, 15>   $fontSize   the font size in points
+     * @param PdfPageSize  $pageSize   the page size
      */
-    public int $cols = 1;
-    /**
-     * The font size in points.
-     *
-     * @var positive-int
-     */
-    public int $fontSize = 9;
-    /** The height of labels. */
-    public float $height = 0.0;
-    /** The left margin. */
-    public float $marginLeft = 0.0;
-    /** The top margin. */
-    public float $marginTop = 0.0;
-    /** The label's name. */
-    public string $name = '';
-    /** The page size. */
-    public PdfPageSize $pageSize = PdfPageSize::A4;
-    /**
-     * The number of vertical labels (rows).
-     *
-     * @var positive-int
-     */
-    public int $rows = 1;
-    /** The horizontal space between 2 labels. */
-    public float $spaceX = 0.0;
-    /** The vertical space between 2 labels. */
-    public float $spaceY = 0.0;
-    /** The layout unit. */
-    public PdfUnit $unit = PdfUnit::MILLIMETER;
-    /** The width of labels. */
-    public float $width = 0.0;
+    public function __construct(
+        public string $name,
+        public int $cols,
+        public int $rows,
+        public float $width,
+        public float $height,
+        public float $marginLeft = 0.0,
+        public float $marginTop = 0.0,
+        public float $spaceX = 0.0,
+        public float $spaceY = 0.0,
+        public int $fontSize = 9,
+        public PdfUnit $unit = PdfUnit::MILLIMETER,
+        public PdfPageSize $pageSize = PdfPageSize::A4
+    ) {
+    }
 
     #[\Override]
     public function __toString(): string
     {
         return $this->name;
+    }
+
+    /**
+     * Creates a copy of this instance with the desired new values.
+     *
+     * @param positive-int|null $cols     the number of horizontal labels (columns)
+     * @param positive-int|null $rows     the number of vertical labels (rows)
+     * @param int<6, 15>|null   $fontSize the font size in points
+     */
+    public function copy(
+        ?string $name = null,
+        ?int $cols = null,
+        ?int $rows = null,
+        ?float $width = null,
+        ?float $height = null,
+        ?float $marginLeft = null,
+        ?float $marginTop = null,
+        ?float $spaceX = null,
+        ?float $spaceY = null,
+        ?int $fontSize = null,
+        ?PdfUnit $unit = null,
+        ?PdfPageSize $pageSize = null
+    ): self {
+        return new self(
+            name: $name ?? $this->name,
+            cols: $cols ?? $this->cols,
+            rows: $rows ?? $this->rows,
+            width: $width ?? $this->width,
+            height: $height ?? $this->height,
+            marginLeft: $marginLeft ?? $this->marginLeft,
+            marginTop: $marginTop ?? $this->marginTop,
+            spaceX: $spaceX ?? $this->spaceX,
+            spaceY: $spaceY ?? $this->spaceY,
+            fontSize: $fontSize ?? $this->fontSize,
+            unit: $unit ?? $this->unit,
+            pageSize: $pageSize ?? $this->pageSize
+        );
     }
 
     /**
@@ -105,16 +135,20 @@ class PdfLabel implements \Stringable
 
         $factor = $this->unit->getScaleFactor() / $targetUnit->getScaleFactor();
 
-        $copy = clone $this;
-        $copy->unit = PdfUnit::MILLIMETER;
-        $copy->marginLeft *= $factor;
-        $copy->marginTop *= $factor;
-        $copy->spaceX *= $factor;
-        $copy->spaceY *= $factor;
-        $copy->width *= $factor;
-        $copy->height *= $factor;
-
-        return $copy;
+        return new self(
+            name: $this->name,
+            cols: $this->cols,
+            rows: $this->rows,
+            width: $this->width * $factor,
+            height: $this->height * $factor,
+            marginLeft: $this->marginLeft * $factor,
+            marginTop: $this->marginTop * $factor,
+            spaceX: $this->spaceX * $factor,
+            spaceY: $this->spaceY * $factor,
+            fontSize: $this->fontSize,
+            unit: $targetUnit,
+            pageSize: $this->pageSize
+        );
     }
 
     /**

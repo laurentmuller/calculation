@@ -16,7 +16,7 @@ namespace App\Pdf;
 use App\Pdf\Events\PdfCellBackgroundEvent;
 use App\Pdf\Events\PdfCellBorderEvent;
 use App\Pdf\Events\PdfCellTextEvent;
-use App\Pdf\Events\PdfPdfDrawHeadersEvent;
+use App\Pdf\Events\PdfDrawHeadersEvent;
 use App\Pdf\Interfaces\PdfCellOutputInterface;
 use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
 use App\Pdf\Interfaces\PdfDrawCellBorderInterface;
@@ -425,7 +425,7 @@ class PdfTable
         }
 
         if ($this->headersListener instanceof PdfDrawHeadersInterface) {
-            $event = new PdfPdfDrawHeadersEvent($this, $this->getHeaderStyle());
+            $event = new PdfDrawHeadersEvent($this, $this->getHeaderStyle());
             $this->isHeaders = true;
             $result = $this->headersListener->drawHeaders($event);
             $this->isHeaders = false;

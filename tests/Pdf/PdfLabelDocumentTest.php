@@ -33,21 +33,6 @@ final class PdfLabelDocumentTest extends TestCase
         $this->service = new PdfLabelService(new ArrayAdapter());
     }
 
-    public function testAddLabels(): void
-    {
-        $label = $this->getLabel('5160');
-        $doc = new PdfLabelDocument($label);
-        $doc->setLabelBorder(true);
-        $doc->addLabel('');
-        self::assertSame(1, $doc->getPage());
-
-        $doc->setLabelBorder(false);
-        for ($i = 0, $size = $label->size(); $i < $size; ++$i) {
-            $doc->addLabel('text');
-        }
-        self::assertSame(2, $doc->getPage());
-    }
-
     public function testConstructor(): void
     {
         $label = $this->getLabel('3422');
@@ -74,8 +59,9 @@ final class PdfLabelDocumentTest extends TestCase
     public function testInvalidFontSize(): void
     {
         self::expectException(PdfException::class);
-        $label = clone $this->getLabel('3422');
-        $label->fontSize = 1;
+        self::expectExceptionMessageMatches('/Invalid font size: 1.*/');
+        $label = $this->getLabel('3422')
+            ->copy(fontSize: 1); // @phpstan-ignore argument.type
         new PdfLabelDocument($label);
     }
 
@@ -93,9 +79,26 @@ final class PdfLabelDocumentTest extends TestCase
         $doc = new PdfLabelDocument($label);
         $doc->setLabelTextListener($listener);
         for ($i = 0; $i < 3; ++$i) {
-            $doc->addLabel(\sprintf('text %d', $i));
+            $doc->outputLabel(\sprintf('text %d', $i));
         }
         self::assertSame(1, $doc->getPage());
+    }
+
+    public function testOutputLabel(): void
+    {
+        $label = $this->getLabel('5160');
+        $doc = new PdfLabelDocument($label);
+        $doc->setLabelBorder(true);
+        self::assertSame(['column' => 0, 'row' => 0], $doc->getCurrentPosition());
+        $doc->outputLabel('');
+        self::assertSame(1, $doc->getPage());
+        self::assertSame(['column' => 1, 'row' => 0], $doc->getCurrentPosition());
+
+        $doc->setLabelBorder(false);
+        for ($i = 0, $size = $label->size(); $i < $size; ++$i) {
+            $doc->outputLabel(['Text1', 'Text1']);
+        }
+        self::assertSame(2, $doc->getPage());
     }
 
     private function getLabel(string $name): PdfLabel

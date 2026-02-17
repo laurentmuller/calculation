@@ -241,25 +241,6 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sor
     }
 
     /**
-     * Concat fields.
-     *
-     * @param string   $alias   the entity prefix
-     * @param string[] $fields  the fields to concat
-     * @param string   $default the default value to use when a field is null
-     *
-     * @return string the concatenated fields
-     */
-    protected function concat(string $alias, array $fields, string $default = ''): string
-    {
-        $values = \array_map(
-            static fn (string $field): string => \sprintf("COALESCE(%s.%s, '%s')", $alias, $field, $default),
-            $fields
-        );
-
-        return \sprintf('CONCAT(%s)', \implode(',', $values));
-    }
-
-    /**
      * Gets the count distinct clause.
      *
      * @param string $alias the table alias

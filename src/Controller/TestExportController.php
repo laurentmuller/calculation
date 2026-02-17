@@ -70,19 +70,17 @@ class TestExportController extends AbstractController
             #[\Override]
             public function drawLabelText(PdfLabelTextEvent $event): bool
             {
-                if ($event->index !== $event->lines - 1 && $event->index > 2) {
+                if (0 !== $event->index && $event->lines - 1 !== $event->index) {
                     return false;
                 }
 
-                if ('' === $event->text) {
-                    return true;
+                if (StringUtils::isString($event->text)) {
+                    $parent = $event->parent;
+                    $font = $parent->getCurrentFont();
+                    $parent->setFont(style: PdfFontStyle::BOLD);
+                    $parent->cell($event->width, $event->height, $event->text);
+                    $font->apply($parent);
                 }
-
-                $parent = $event->parent;
-                $font = $parent->getCurrentFont();
-                $parent->setFont(style: PdfFontStyle::BOLD);
-                $parent->cell($event->width, $event->height, $event->text);
-                $font->apply($parent);
 
                 return true;
             }
@@ -98,7 +96,7 @@ class TestExportController extends AbstractController
         /** @phpstan-var \App\Entity\Customer[] $customers */
         $customers = $repository->createDefaultQueryBuilder()
             ->orderBy($sortField, SortModeInterface::SORT_ASC)
-            ->setMaxResults(29)
+            ->setMaxResults(40)
             ->getQuery()
             ->getResult();
 
@@ -110,8 +108,7 @@ class TestExportController extends AbstractController
                 $customer->getAddress(),
                 $customer->getZipCity(),
             ]);
-            $text = \implode(StringUtils::NEW_LINE, $values);
-            $report->addLabel($text);
+            $report->outputLabel($values);
         }
 
         return $this->renderPdfDocument($report);

@@ -43,7 +43,7 @@ readonly class PdfLabelService
      */
     public function all(?string $file = null): array
     {
-        $key = $this->cleanKey(\sprintf('service.labels.%s', $file ?? 'default'));
+        $key = $this->cleanKey(\sprintf('service.labels.%s', \basename($file ?? 'default')));
 
         return $this->cache->get($key, fn (): array => $this->loadLabels($file));
     }
@@ -78,37 +78,30 @@ readonly class PdfLabelService
         $file ??= __DIR__ . '/../../resources/data/labels.json';
 
         try {
-            return \array_reduce(
-                FileUtils::decodeJson($file),
-                fn (array $carry, array $source): array => $carry + $this->mapSource($source),
-                []
-            );
+            $content = FileUtils::decodeJson($file);
+            $labels = \array_map($this->mapSource(...), $content);
+
+            return \array_combine(\array_column($labels, 'name'), $labels);
         } catch (\Exception $e) {
             throw PdfException::instance(\sprintf('Unable to deserialize the content of the file "%s".', $file), $e);
         }
     }
 
-    private function mapSource(array $source): array
+    private function mapSource(array $source): PdfLabel
     {
-        $label = new PdfLabel();
-        $label->name = $source['name'];
-        $label->unit = PdfUnit::from($source['unit']);
-        $label->pageSize = PdfPageSize::from($source['pageSize']);
-
-        $label->marginLeft = $source['marginLeft'];
-        $label->marginTop = $source['marginTop'];
-
-        $label->cols = $source['cols'];
-        $label->rows = $source['rows'];
-
-        $label->spaceX = $source['spaceX'];
-        $label->spaceY = $source['spaceY'];
-
-        $label->width = $source['width'];
-        $label->height = $source['height'];
-
-        $label->fontSize = $source['fontSize'];
-
-        return [$label->name => $label];
+        return new PdfLabel(
+            name: $source['name'],
+            cols: $source['cols'],
+            rows: $source['rows'],
+            width: $source['width'],
+            height: $source['height'],
+            marginLeft: $source['marginLeft'],
+            marginTop: $source['marginTop'],
+            spaceX: $source['spaceX'],
+            spaceY: $source['spaceY'],
+            fontSize: $source['fontSize'],
+            unit: PdfUnit::from($source['unit']),
+            pageSize: PdfPageSize::from($source['pageSize'])
+        );
     }
 }

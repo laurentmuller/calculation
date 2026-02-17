@@ -21,7 +21,7 @@ use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Events\PdfCellBackgroundEvent;
 use App\Pdf\Events\PdfCellTextEvent;
-use App\Pdf\Events\PdfPdfDrawHeadersEvent;
+use App\Pdf\Events\PdfDrawHeadersEvent;
 use App\Pdf\Html\HtmlBootstrapColor;
 use App\Pdf\Html\HtmlColorName;
 use App\Pdf\Interfaces\PdfChartInterface;
@@ -135,7 +135,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
     }
 
     #[\Override]
-    public function drawHeaders(PdfPdfDrawHeadersEvent $event): true
+    public function drawHeaders(PdfDrawHeadersEvent $event): true
     {
         $cells = [];
         $table = $event->table;

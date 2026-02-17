@@ -23,10 +23,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CustomerRepository extends AbstractRepository
 {
-    /** The first name, last name and company field name. */
+    /** The first name, last name, and company field name. */
     public const string NAME_COMPANY_FIELD = 'nameAndCompany';
 
-    /** The first name, last name and company fields. */
+    /** The first name, last name, and company fields. */
     public const array NAME_COMPANY_FIELDS = ['lastName', 'firstName', 'company'];
 
     /** The zip and city field name. */
@@ -73,5 +73,24 @@ class CustomerRepository extends AbstractRepository
             self::ZIP_CITY_FIELD => $this->concat($alias, self::ZIP_CITY_FIELDS),
             default => parent::getSortField($field, $alias),
         };
+    }
+
+    /**
+     * Concat fields.
+     *
+     * @param string   $alias   the entity prefix
+     * @param string[] $fields  the fields to concat
+     * @param string   $default the default value to use when a field is null
+     *
+     * @return string the concatenated fields
+     */
+    protected function concat(string $alias, array $fields, string $default = ''): string
+    {
+        $values = \array_map(
+            static fn (string $field): string => \sprintf("COALESCE(%s.%s, '%s')", $alias, $field, $default),
+            $fields
+        );
+
+        return \sprintf('CONCAT(%s)', \implode(',', $values));
     }
 }

@@ -41,12 +41,8 @@
 
 {% macro headerLink(url, version, icon) -%}
     <div class="border-bottom pb-1">
-        <a href="https://{{ url }}" target="_blank" rel="noopener noreferrer" title="{{ 'about.extern_link'|trans }}"
-           class="h1 d-flex align-items-baseline">
-            <svg class="about-icon" aria-hidden="true">
-                <use href="#svg-{{ icon }}"></use>
-            </svg>
-            {{- 'about.version'|trans({'%version%': version}) -}}
+        <a href="https://{{ url }}" target="_blank" rel="noopener noreferrer" title="{{ 'about.extern_link'|trans }}" class="h1 d-flex align-items-baseline">
+            {{- source('about/' ~ icon ~ '.svg') }}{{ 'about.version'|trans({'%version%': version}) -}}
         </a>
     </div>
 {%- endmacro headerLink %}

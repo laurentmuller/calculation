@@ -7,21 +7,6 @@
      */
     $(function () {
         /**
-         * -------------- Expression extensions --------------
-         */
-        $.extend($.expr[':'], {
-            /**
-             * Contains case-insensitive
-             */
-            icontains: $.expr.createPseudo(function (toFind) {
-                return function (elem) {
-                    const text = (elem.textContent || elem.innerText || '').clean();
-                    return text.length && text.indexOf(toFind) !== -1;
-                };
-            })
-        });
-
-        /**
          * -------------- Core extensions --------------
          */
         $.extend({
@@ -36,26 +21,6 @@
             },
 
             /**
-             * Returns if the given data is an object.
-             *
-             * @param {any} data - The data to evaluate.
-             * @return {boolean} true if an object.
-             */
-            isObject: function (data) {
-                return typeof data === 'object';
-            },
-
-            /**
-             * Returns if the given data is boolean.
-             *
-             * @param {any} data - The data to evaluate.
-             * @return {boolean} true if boolean.
-             */
-            isBoolean: function (data) {
-                return typeof data === 'boolean';
-            },
-
-            /**
              * Returns if the given data is undefined.
              *
              * @param {any} data - The data to evaluate.
@@ -63,6 +28,18 @@
              */
             isUndefined: function (data) {
                 return typeof data === 'undefined';
+            },
+
+            /**
+             * Returns if the given data is a function.
+             *
+             * Note. Must be removed when context menu is updated to jQuery v4.0.
+             *
+             * @param {any} data - The data to evaluate.
+             * @return {boolean} true if a function.
+             */
+            isFunction: function (data) {
+                return typeof data === 'function';
             },
 
             /**
@@ -186,24 +163,12 @@
                 if ($this.length) {
                     return $this.addClass(className).stop().delay(1500).queue(function () {
                         $this.removeClass(className).dequeue();
-                        if (typeof callback === 'function') {
+                        if ($.isFunction(callback)) {
                             callback();
                         }
                     });
                 }
                 return $this;
-            },
-
-            /**
-             * Sets the given attribute class name to the element.
-             *
-             * @param {string} className - The class name to set.
-             * @return {jQuery} The element for chaining.
-             */
-            setClass: function (className) {
-                return $(this).each(function () {
-                    $(this).attr('class', className);
-                });
             },
 
             /**
@@ -323,8 +288,8 @@
              * @return {jQuery} The element for chaining.
              */
             selectFocus: function () {
-                $(this).focus().select();
-                return $(this);
+                return $(this).trigger('focus')
+                    .trigger('select');
             },
 
             /**
@@ -440,6 +405,18 @@
                         $this.css('display', 'none').removeClass('d-none');
                     }
                 });
+            },
+
+            /**
+             * Sort these array of elements.
+             *
+             * @param {function(HTMLElement, HTMLElement): number} compareFn the function used to compare elements.
+             * @return {jQuery} the sorted elements.
+             */
+            sortElements: function (compareFn) {
+                /** @type {array.<HTMLElement>} */
+                const array = $(this).toArray();
+                return $(array.sort(compareFn));
             }
         });
 

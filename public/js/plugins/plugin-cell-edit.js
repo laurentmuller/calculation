@@ -117,12 +117,11 @@ $(function () {
                 'data-bs-toggle': 'tooltip',
                 'data-bs-trigger': 'manual',
                 'data-bs-title': title,
+                'required': required ? 'required' : null,
                 'type': options.type,
-                'required': required,
                 'value': this.value,
                 'class': className
             }, options.attributes);
-
             this.$input = $('<input>', attributes);
 
             this.$element.addClass(options.cellClass)

@@ -221,7 +221,7 @@
                             const $view = $this.getCustomView();
                             const params = $this.getParameters();
                             const selector = '.custom-view-actions:eq(%index%)';
-                            const callback = typeof options.onRenderCustomView === 'function' ? options.onRenderCustomView : false;
+                            const callback = $.isFunction(options.onRenderCustomView) ? options.onRenderCustomView : false;
                             $this.find('tbody tr[data-index] .actions').each(function (index, element) {
                                 // copy actions
                                 const $rowActions = $(element).children();
@@ -354,7 +354,7 @@
                 }
 
                 // query parameters function?
-                if (typeof options.queryParams === 'function') {
+                if ($.isFunction(options.queryParams)) {
                     return $.extend(params, options.queryParams(params));
                 }
                 return params;
@@ -524,8 +524,8 @@
                 const $this = $(this);
                 const options = $this.getOptions();
                 const params = $this.getParameters();
-                const onUpdateHref = typeof options.onUpdateHref === 'function' ? options.onUpdateHref : false;
-                const onRenderAction = typeof options.onRenderAction === 'function' ? options.onRenderAction : false;
+                const onUpdateHref = $.isFunction(options.onUpdateHref) ? options.onUpdateHref : false;
+                const onRenderAction = $.isFunction(options.onRenderAction) ? options.onRenderAction : false;
                 // run over rows
                 $this.find('tbody tr[data-index]').each(function (index) {
                     const $row = $(this);

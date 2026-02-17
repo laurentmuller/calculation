@@ -786,7 +786,7 @@ $(function () {
         // UI
         selector: '.dropdown-item',
         menu: '<ul class="typeahead dropdown-menu" />',
-        item: '<li class="dropdown-item" type="button" />',
+        item: '<li class="dropdown-item" />',
         header: '<li class="h6 dropdown-header text-uppercase pb-1"></li>',
         divider: '<li><hr class="dropdown-divider"></li>',
         highlight: '<span class="text-success">$&</span>',

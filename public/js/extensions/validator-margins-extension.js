@@ -79,20 +79,29 @@ function getMaximumInput(row) {
 }
 
 /**
- * Gets the sorted rows by first the minimum and if equal,
- * then the maximum values.
+ * Gets the rows for the given element
+ * @param {jQuery<HTMLInputElement>} $element the element to get rows from.
+ * @return {jQuery} the rows.
+ */
+function getBodyRows($element) {
+    'use strict';
+    return $element.closest('tbody').children('tr');
+}
+
+/**
+ * Gets the sorted rows by first the minimum and if equal, then by the maximum values.
  *
  * @param {jQuery<HTMLInputElement>} $element the element to get rows from.
  * @return {jQuery} the sorted rows.
  */
 function getSortedMargins($element) {
     'use strict';
-    const $rows = $element.closest('tbody').children('tr');
-    //const $rows = $element.find('tbody > tr');
+    const $rows = getBodyRows($element);
     if ($rows.length < 2) {
         return $rows;
     }
-    return $rows.sort(function (rowA, rowB) {
+
+    return $rows.sortElements(function (rowA, rowB) {
         const result = getMinimumInput(rowA) - getMinimumInput(rowB);
         if (result !== 0) {
             return result;
@@ -109,7 +118,7 @@ function getSortedMargins($element) {
  */
 function isSortedMargins($element) {
     'use strict';
-    const $rows = $element.closest('tbody').children('tr');
+    const $rows = getBodyRows($element);
     if ($rows.length < 2) {
         return true;
     }

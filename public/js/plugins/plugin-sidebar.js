@@ -103,7 +103,7 @@ $(function () {
             if (!this.$showButton) {
                 return;
             }
-            this.$showButton.click(this.showSidebarProxy);
+            this.$showButton.on('click', this.showSidebarProxy);
             if (options.timeout > 0) {
                 this._initButtonTimeout(this.$showButton, options.timeout, this.showSidebarProxy);
             }
@@ -119,7 +119,7 @@ $(function () {
             if (!this.$hideButton) {
                 return;
             }
-            this.$hideButton.click(this.hideSidebarProxy);
+            this.$hideButton.on('click', this.hideSidebarProxy);
             if (options.timeout > 0) {
                 this._initButtonTimeout(this.$hideButton, options.timeout, this.hideSidebarProxy);
             }

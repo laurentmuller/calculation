@@ -85,7 +85,7 @@ $(function () {
          * @private
          */
         _onCopySuccess(e) {
-            if (typeof this.options.copySuccess === 'function') {
+            if ($.isFunction(this.options.copySuccess)) {
                 this.options.copySuccess(e);
             }
             e.clearSelection();

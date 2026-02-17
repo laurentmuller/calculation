@@ -512,14 +512,13 @@
             // get rows
             const that = this;
             const $tbody = $element.closest('tbody');
-            /** @type {jQuery|HTMLElement|*} */
             const $items = $tbody.find('.item');
             if ($items.length < 2) {
                 return that;
             }
 
             // sort
-            $items.sort(function (rowA, rowB) {
+            $items.sortElements(function (rowA, rowB) {
                 const textA = $('td:first', rowA).text();
                 const textB = $('td:first', rowB).text();
                 return that.compareStrings(textA, textB);
@@ -545,12 +544,11 @@
             if ($group.length === 0) {
                 $group = $element.parents('tbody').prev();
             }
-            const $bodies = $group.nextUntil('.group');
+            let $bodies = $group.nextUntil('.group');
             if ($bodies.length < 2) {
                 return that;
             }
-
-            $bodies.sort(function (a, b) {
+            $bodies = $bodies.sortElements(function (a, b) {
                 const textA = $('th:first', a).text();
                 const textB = $('th:first', b).text();
                 return that.compareStrings(textA, textB);
@@ -1099,7 +1097,7 @@
             $this.each(function (i, element) {
                 $(element).fadeOut(400, function () {
                     $(this).remove();
-                    if (i === lastIndex && typeof callback === 'function') {
+                    if (i === lastIndex && $.isFunction(callback)) {
                         callback();
                     }
                 });

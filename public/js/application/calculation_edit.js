@@ -1097,7 +1097,7 @@
             $this.each(function (i, element) {
                 $(element).fadeOut(400, function () {
                     $(this).remove();
-                    if (i === lastIndex && $.isFunction(callback)) {
+                    if (i === lastIndex && typeof callback === 'function') {
                         callback();
                     }
                 });

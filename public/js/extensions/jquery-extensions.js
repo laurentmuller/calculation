@@ -31,18 +31,6 @@
             },
 
             /**
-             * Returns if the given data is a function.
-             *
-             * Note. Must be removed when context menu is updated to jQuery v4.0.
-             *
-             * @param {any} data - The data to evaluate.
-             * @return {boolean} true if a function.
-             */
-            isFunction: function (data) {
-                return typeof data === 'function';
-            },
-
-            /**
              * Parse the given value as float.
              * If the parsed valus is NaN, 0 is returned.
              *
@@ -139,7 +127,7 @@
                 const windowTop = $window.scrollTop();
                 const windowBottom = windowTop + $window.height() - footer;
 
-                return this.each(function () {
+                return $(this).each(function () {
                     const $this = $(this);
                     const top = $this.offset().top;
                     const bottom = top + $this.outerHeight();
@@ -163,7 +151,7 @@
                 if ($this.length) {
                     return $this.addClass(className).stop().delay(1500).queue(function () {
                         $this.removeClass(className).dequeue();
-                        if ($.isFunction(callback)) {
+                        if (typeof callback === 'function') {
                             callback();
                         }
                     });
@@ -298,8 +286,9 @@
              * @return {jQuery} The element for chaining.
              */
             selectFirstOption: function () {
-                const value = $(this).find(':first').val();
-                return $(this).val(value);
+                const $this = $(this);
+                const value = $this.find(':first').val();
+                return $this.val(value);
             },
 
             /**
@@ -330,7 +319,7 @@
              *            attribute (enabled).
              */
             toggleDisabled: function (state) {
-                return this.each(function () {
+                return $(this).each(function () {
                     const $this = $(this);
                     if (state) {
                         $this.addClass('disabled').attr({
@@ -361,45 +350,12 @@
             },
 
             /**
-             * Drop first, last, and all 2 consecutive separators in a drop-down menu.
-             *
-             * @return {jQuery} - the element for chaining.
-             */
-            removeSeparators: function () {
-                const selector = 'li:has(.dropdown-divider),.dropdown-divider';
-                return this.each(function () {
-                    const $this = $(this);
-                    if ($this.is('.dropdown-menu')) {
-                        // remove firsts
-                        while ($this.children().first().is(selector)) {
-                            $this.children().first().remove();
-                        }
-                        // remove lasts
-                        while ($this.children().last().is(selector)) {
-                            $this.children().last().remove();
-                        }
-                        // remove 2 consecutive separators
-                        let previewSeparator = false;
-                        $this.children().each(function (index, element) {
-                            const $item = $(element);
-                            const isSeparator = $item.is(selector);
-                            if (previewSeparator && isSeparator) {
-                                $item.remove();
-                            } else {
-                                previewSeparator = isSeparator;
-                            }
-                        });
-                    }
-                });
-            },
-
-            /**
              * Replace the d-none class by the display none style.
              *
              * @return {jQuery} - the element for chaining.
              */
             replaceDisplayNone: function () {
-                return this.each(function () {
+                return $(this).each(function () {
                     const $this = $(this);
                     if ($this.hasClass('d-none')) {
                         $this.css('display', 'none').removeClass('d-none');
@@ -408,15 +364,15 @@
             },
 
             /**
-             * Sort these array of elements.
+             * Sort this array of elements.
              *
-             * @param {function(HTMLElement, HTMLElement): number} compareFn the function used to compare elements.
+             * @param {function(HTMLElement, HTMLElement): number} comparator the function used to compare elements.
              * @return {jQuery} the sorted elements.
              */
-            sortElements: function (compareFn) {
+            sortElements: function (comparator) {
                 /** @type {array.<HTMLElement>} */
                 const array = $(this).toArray();
-                return $(array.sort(compareFn));
+                return $(array.sort(comparator));
             }
         });
 

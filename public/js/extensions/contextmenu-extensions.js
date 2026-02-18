@@ -186,12 +186,25 @@ const MenuBuilder = class { /* exported MenuBuilder */
  */
 
 /**
- * jQuery's extension for Bootstrap tables context-menu.
+ * jQuery's extension for context-menu.
  */
 (function ($) {
     'use strict';
 
     $.fn.extend({
+
+        /**
+         * Returns if the given data is a function.
+         *
+         * Note. Must be removed when the context-menu plugin is updated to jQuery v4.0.
+         *
+         * @param {any} data - The data to evaluate.
+         * @return {boolean} true if a function.
+         */
+        isFunction: function (data) {
+            return typeof data === 'function';
+        },
+
         /**
          * Returns if this element is selectable.
          *
@@ -200,6 +213,39 @@ const MenuBuilder = class { /* exported MenuBuilder */
         isSelectable: function () {
             const $this = $(this);
             return !($this.hasClass('disabled') || $this.hasClass('d-none'));
+        },
+
+        /**
+         * Drop first, last, and all 2 consecutive separators in a drop-down menu.
+         *
+         * @return {jQuery} - the element for chaining.
+         */
+        removeSeparators: function () {
+            const selector = 'li:has(.dropdown-divider),.dropdown-divider';
+            return this.each(function () {
+                const $this = $(this);
+                if ($this.is('.dropdown-menu')) {
+                    // remove firsts
+                    while ($this.children().first().is(selector)) {
+                        $this.children().first().remove();
+                    }
+                    // remove lasts
+                    while ($this.children().last().is(selector)) {
+                        $this.children().last().remove();
+                    }
+                    // remove 2 consecutive separators
+                    let previewSeparator = false;
+                    $this.children().each(function (index, element) {
+                        const $item = $(element);
+                        const isSeparator = $item.is(selector);
+                        if (previewSeparator && isSeparator) {
+                            $item.remove();
+                        } else {
+                            previewSeparator = isSeparator;
+                        }
+                    });
+                }
+            });
         },
 
         /**

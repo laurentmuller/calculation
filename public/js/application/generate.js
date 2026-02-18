@@ -11,7 +11,7 @@ function createRows(items, mapping, callback) {
     'use strict';
     const $body = $('<tbody/>');
     const entries = Object.entries(mapping);
-    const isCallback = $.isFunction(callback);
+    const isCallback = typeof callback === 'function';
     items.forEach(function (item, index) {
         const $row = $('<tr/>');
         for (const [key, className] of entries) {

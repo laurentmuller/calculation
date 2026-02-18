@@ -183,7 +183,7 @@ function getMarginError($element) {
  *
  * @param {jQuery<HTMLInputElement>} $element the element to update.
  * @param {string} [error] the error message to set or null to remove.
- * @return {boolean} false if error message; true if valid.
+ * @return {boolean} false if the error message; true if valid.
  */
 function setMarginError($element, error) {
     'use strict';

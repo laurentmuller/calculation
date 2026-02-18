@@ -563,7 +563,7 @@
                 autohide: options.autohide
             }).on('hidden.bs.toast', function () {
                 $toast.remove();
-                if ($.isFunction(options.onHide)) {
+                if (typeof options.onHide === 'function') {
                     options.onHide(options);
                 }
             }).toast('show');

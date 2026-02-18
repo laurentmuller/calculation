@@ -20,121 +20,121 @@ $(function () {
     // --------------------------------------
     const CopyClipboard = class {
 
-        // -----------------------------
-        // public functions
-        // -----------------------------
+            // -----------------------------
+            // public functions
+            // -----------------------------
 
-        /**
-         * Constructor
-         *
-         * @param {HTMLElement} element - the element to handle.
-         * @param {Object|string} [options] - the plugin options.
-         */
-        constructor(element, options) {
-            this.$element = $(element);
-            this.options = $.extend(true, CopyClipboard.DEFAULTS, this.$element.data(), options);
-            this._init();
-        }
-
-        /**
-         * Destructor.
-         */
-        destroy() {
-            if (this.clipboard) {
-                this.clipboard.off('success', this.proxySuccess);
-                this.clipboard.off('error', this.proxyError);
-                this.clipboard.destroy();
-                this.clipboard = null;
+            /**
+             * Constructor
+             *
+             * @param {HTMLElement} element - the element to handle.
+             * @param {Object|string} [options] - the plugin options.
+             */
+            constructor(element, options) {
+                this.$element = $(element);
+                this.options = $.extend(true, CopyClipboard.DEFAULTS, this.$element.data(), options);
+                this._init();
             }
-            this.$element.removeData(CopyClipboard.NAME);
-        }
 
-        // -----------------------------
-        // private functions
-        // -----------------------------
-
-        /**
-         * Initialize clipboard.
-         * @private
-         */
-        _init() {
-            if (ClipboardJS && ClipboardJS.isSupported()) {
-                this.proxySuccess = (e) => this._onCopySuccess(e);
-                this.proxyError = (e) => this._onCopyError(e);
-                this.clipboard = new ClipboardJS(this.$element[0], this.options);
-                this.clipboard.on('success', this.proxySuccess);
-                this.clipboard.on('error', this.proxyError);
-            } else {
-                this._removeOnError();
+            /**
+             * Destructor.
+             */
+            destroy() {
+                if (this.clipboard) {
+                    this.clipboard.off('success', this.proxySuccess);
+                    this.clipboard.off('error', this.proxyError);
+                    this.clipboard.destroy();
+                    this.clipboard = null;
+                }
+                this.$element.removeData(CopyClipboard.NAME);
             }
-        }
 
-        /**
-         * Notify a message.
-         * @param {string} type - the message type.
-         * @param {string} message - the message content.
-         * @private
-         */
-        _notify(type, message) {
-            Toaster.notify(type, message, this.options.title);
-        }
+            // -----------------------------
+            // private functions
+            // -----------------------------
 
-        /**
-         * Handle copy success event.
-         * @param {CopyEvent} e
-         * @private
-         */
-        _onCopySuccess(e) {
-            if ($.isFunction(this.options.copySuccess)) {
-                this.options.copySuccess(e);
-            }
-            e.clearSelection();
-            this._hideModal(e);
-            this._notify(Toaster.NotificationTypes.SUCCESS, this.options.success);
-        }
-
-        /**
-         * Handle copy error event.
-         * @param {CopyEvent} e
-         * @private
-         */
-        _onCopyError(e) {
-            if (typeof this.options.copyError === 'function') {
-                this.options.copyError(e);
-            }
-            e.clearSelection();
-            this._hideModal(e);
-            this._removeOnError();
-            this._notify(Toaster.NotificationTypes.WARNING, this.options.error);
-        }
-
-        /**
-         * Destroy this instance and remove the element if applicable.
-         * @private
-         */
-        _removeOnError() {
-            this.destroy();
-            if (this.options.removeOnError) {
-                this.$element.fadeOut().remove();
-            }
-        }
-
-        /**
-         * Hide the parent's modal dialog if applicable.
-         * @param {CopyEvent} e
-         * @private
-         */
-        _hideModal(e) {
-            if (this.options.hideModal) {
-                const $source = $(e.trigger);
-                const $dialog = $source.parents('.modal');
-                if ($dialog.length) {
-                    $source.trigger('blur');
-                    $dialog.modal('hide');
+            /**
+             * Initialize clipboard.
+             * @private
+             */
+            _init() {
+                if (ClipboardJS && ClipboardJS.isSupported()) {
+                    this.proxySuccess = (e) => this._onCopySuccess(e);
+                    this.proxyError = (e) => this._onCopyError(e);
+                    this.clipboard = new ClipboardJS(this.$element[0], this.options);
+                    this.clipboard.on('success', this.proxySuccess);
+                    this.clipboard.on('error', this.proxyError);
+                } else {
+                    this._removeOnError();
                 }
             }
-        }
-    };
+
+            /**
+             * Notify a message.
+             * @param {string} type - the message type.
+             * @param {string} message - the message content.
+             * @private
+             */
+            _notify(type, message) {
+                Toaster.notify(type, message, this.options.title);
+            }
+
+            /**
+             * Handle copy success event.
+             * @param {CopyEvent} e
+             * @private
+             */
+            _onCopySuccess(e) {
+                if (typeof this.options.copySuccess === 'function') {
+                    this.options.copySuccess(e);
+                }
+                e.clearSelection();
+                this._hideModal(e);
+                this._notify(Toaster.NotificationTypes.SUCCESS, this.options.success);
+            }
+
+            /**
+             * Handle copy error event.
+             * @param {CopyEvent} e
+             * @private
+             */
+            _onCopyError(e) {
+                if (typeof this.options.copyError === 'function') {
+                    this.options.copyError(e);
+                }
+                e.clearSelection();
+                this._hideModal(e);
+                this._removeOnError();
+                this._notify(Toaster.NotificationTypes.WARNING, this.options.error);
+            }
+
+            /**
+             * Destroy this instance and remove the element if applicable.
+             * @private
+             */
+            _removeOnError() {
+                this.destroy();
+                if (this.options.removeOnError) {
+                    this.$element.fadeOut().remove();
+                }
+            }
+
+            /**
+             * Hide the parent's modal dialog if applicable.
+             * @param {CopyEvent} e
+             * @private
+             */
+            _hideModal(e) {
+                if (this.options.hideModal) {
+                    const $source = $(e.trigger);
+                    const $dialog = $source.parents('.modal');
+                    if ($dialog.length) {
+                        $source.trigger('blur');
+                        $dialog.modal('hide');
+                    }
+                }
+            }
+        };
 
     // -----------------------------
     // Default options

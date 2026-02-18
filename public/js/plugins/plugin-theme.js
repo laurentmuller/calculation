@@ -141,7 +141,7 @@ $(function () {
 
         /**
          * Gets the dialog
-         * @return {jQuery<HTMLDivElement>|*|null} the dialog, if found; null otherwise.
+         * @return {?jQuery<HTMLDivElement>} the dialog, if found; null otherwise.
          * @private
          */
         _getDialog() {

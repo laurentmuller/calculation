@@ -14,7 +14,7 @@
             return $(this).find('#error-message').text().trim();
         },
 
-        /** @return {string|null} */
+        /** @return {?string} */
         getException: function () {
             const $table = $(this).find('#exception-table');
             if (!$table.length) {

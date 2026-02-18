@@ -1,10 +1,22 @@
-/* eslint no-unused-vars: ["error", { "varsIgnorePattern": "EditDialog" }] */
+
+/**
+ * @typedef {Object} Application
+ * @property {function: string} getItemDialogUrl
+ * @property {function: void} onEditItemDialogSubmit
+ * @property {function: void} onAddItemDialogSubmit
+ * @property {function(jQuery<HTMLElement>)} removeItem
+ * @property {function: string} getTaskDialogUrl
+ * @property {function: void} onEditTaskDialogSubmit
+ * @property {function: void} onAddTaskDialogSubmit
+ */
 
 /**
  * Abstract edit dialog class.
+ *
  * @property {jQuery<HTMLFormElement>} $form
  * @property {jQuery<HTMLDialogElement>} $modal
  * @property {jQuery<HTMLInputElement>} $category
+ * @property {jQuery<HTMLTableRowElement>} $editingRow
  * @property {Application} application
  */
 class EditDialog {
@@ -22,7 +34,7 @@ class EditDialog {
 
     /**
      * Display the dialog to add item.
-     * @param {jQuery} $row - the selected row.
+     * @param {jQuery<HTMLTableRowElement>} $row - the selected row.
      * @return {this} This instance for chaining.
      */
     showAdd($row) {
@@ -45,7 +57,7 @@ class EditDialog {
 
     /**
      * Display the edit dialog.
-     * @param {jQuery} $row - the selected row.
+     * @param {jQuery<HTMLTableRowElement>} $row - the selected row.
      * @return {this} This instance for chaining.
      */
     showEdit($row) {
@@ -107,7 +119,7 @@ class EditDialog {
 
     /**
      * Gets the editing row.
-     * @return {jQuery} the row or null if none.
+     * @return {?jQuery<HTMLTableRowElement>} the row or null if none.
      */
     getEditingRow() {
         return this.$editingRow;
@@ -126,7 +138,7 @@ class EditDialog {
 
     /**
      * Initialize the modal dialog.
-     * @param {jQuery} $modal - the modal dialog.
+     * @param {jQuery<HTMLDialogElement>} $modal - the modal dialog.
      * @return {this} This instance for chaining.
      * @protected
      */
@@ -148,7 +160,7 @@ class EditDialog {
 
     /**
      * Initialize this dialog when adding a new item.
-     * @param {jQuery} $row - the selected row.
+     * @param {jQuery<HTMLTableRowElement>} $row - the selected row.
      * @return {this} This instance for chaining.
      * @protected
      */
@@ -160,7 +172,7 @@ class EditDialog {
 
     /**
      * Initialize this dialog when editing an item.
-     * @param {jQuery} $row - the selected row.
+     * @param {jQuery<HTMLTableRowElement>} $row - the selected row.
      * @return {this} This instance for chaining.
      * @protected
      */
@@ -225,7 +237,7 @@ class EditDialog {
     /**
      * Load the modal dialog.
      * @param {string} callback - the function name to call after the dialog is loaded.
-     * @param {jQuery} $row - the editing row.
+     * @param {jQuery<HTMLTableRowElement>} $row - the editing row.
      * @protected
      */
     _loadDialog(callback, $row) {
@@ -262,7 +274,7 @@ class EditDialog {
 
     /**
      * Initialize the type ahead search units.
-     * @param {jQuery} $input - the input.
+     * @param {jQuery<HTMLInputElement>} $input - the input.
      * @protected
      */
     _initSearchUnits($input) {

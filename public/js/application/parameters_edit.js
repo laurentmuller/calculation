@@ -3,7 +3,7 @@
 /**
  * Gets the active page.
  *
- * @return {jQuery<HTMLElement>|null} the active page or null if none.
+ * @return {?jQuery<HTMLElement>} the active page or null if none.
  */
 function getActivePage() {
     'use strict';
@@ -45,7 +45,7 @@ function setDefaultValues($source) {
         const value = $this.data('default');
         const oldValue = $this.find(':radio:checked').val();
         if (value.toString() !== oldValue.toString()) {
-            /** @type {JQuery|HTMLElement|*} */
+            /** @type {jQuery<HTMLElement>} */
             const $radio = $this.find(`:radio[value="${value}"]`);
             $radio.setChecked(true).trigger('input');
         }

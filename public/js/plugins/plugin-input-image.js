@@ -187,7 +187,7 @@ $(function () {
         /**
          * Find or create (if applicable) the HTML image
          * @param {boolean} createIfMissing true to create the HTML image if not found
-         * @return {jQuery|HTMLImageElement|any|null}
+         * @return {?jQuery<HTMLImageElement>}
          * @private
          */
         _findImage(createIfMissing) {
@@ -222,7 +222,7 @@ $(function () {
         /**
          * Gets the data transfer, if applicable.
          * @param {DragEvent|Event|any} e the event to get data transfer for.
-         * @return {DataTransfer|null} the data transfer or null if not found.
+         * @return {?DataTransfer} the data transfer or null if not found.
          * @private
          */
         _getDataTransfer(e) {

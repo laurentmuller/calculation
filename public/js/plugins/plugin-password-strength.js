@@ -254,8 +254,8 @@ $(function () {
             }
 
             // get the label container
-            /** @type {jQuery<HTMLElement>|any|null} */
-            let $labelContainer = null;
+            /** @type {jQuery<HTMLElement>} */
+            let $labelContainer;
             if ($container.is(options.labelContainer)) {
                 $labelContainer = $container;
             } else {

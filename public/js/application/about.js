@@ -126,7 +126,6 @@
         // .card-body
         $accordion.on('shown.bs.collapse', function (e) {
             const $target = $(e.target);
-            /** @type {JQuery|HTMLElement|*} */
             const $content = $target.find('.collapse-content');
             if ($content.length) {
                 $content.loadContent();

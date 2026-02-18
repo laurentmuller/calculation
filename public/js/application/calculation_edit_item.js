@@ -1,4 +1,4 @@
-/* globals EditDialog */
+/* globals Application, EditDialog */
 
 /**
  * Edit item dialog class.
@@ -29,7 +29,7 @@ class EditItemDialog extends EditDialog {
 
     /**
      * Display the copy dialog.
-     * @param {jQuery} $row - the selected row.
+     * @param {jQuery<HTMLTableRowElement>} $row - the selected row.
      * @return {this} This instance for chaining.
      */
     showCopy($row) {
@@ -54,7 +54,7 @@ class EditItemDialog extends EditDialog {
 
     /**
      * Initialize the dialog when adding a new item.
-     * @param {jQuery} $row - the selected row.
+     * @param {jQuery<HTMLTableRowElement>} $row - the selected row.
      * @return {this} This instance for chaining.
      * @private
      */
@@ -77,7 +77,7 @@ class EditItemDialog extends EditDialog {
 
     /**
      * Initialize the dialog edit.
-     * @param {jQuery} $row - the selected row.
+     * @param {jQuery<HTMLTableRowElement>} $row - the selected row.
      * @return {this} This instance for chaining.
      * @private
      */

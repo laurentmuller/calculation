@@ -24,7 +24,7 @@
  * @property {string} view - the display mode ('table' or 'custom').
  * @property {string} searchText - the search text.
  *
- * @typedef {jQuery|HTMLTableElement|*} jQueryTable - the bootstrap table.
+ * @typedef {jQuery<HTMLTableElement>} jQueryTable - the bootstrap table.
  * @property {Options} getOptions - the table options.
  * @property {boolean} isCustomView - true if custom view is displayed.
  * @property {jQuery<HTMLDivElement>} getCustomView - get the custom view.
@@ -37,7 +37,7 @@
 
     /**
      * The loading message.
-     * @type {string|null}
+     * @type {?string}
      */
     let loadingMessage = null;
 
@@ -491,7 +491,7 @@
 
             /**
              * Gets the bootstrap table container.
-             * @return {jQuery|HTMLDivElement|*}
+             * @return {jQuery<HTMLDivElement>}
              */
             getTableContainer: function () {
                 return $(this).parents('.bootstrap-table');

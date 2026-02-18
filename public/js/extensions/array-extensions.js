@@ -8,7 +8,7 @@ Object.defineProperty(Array.prototype, 'randomElement', {
      * Returns a random element that is different from the given index (if any).
      * @template T
      * @param {number} [lastIndex] the last selected index, if any; null otherwise.
-     * @return {T|null}
+     * @return {?T}
      */
     value: function (lastIndex) {
         'use strict';

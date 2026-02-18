@@ -6,6 +6,7 @@
      * -------------- jQuery Extensions --------------
      */
     $(function () {
+
         /**
          * -------------- Core extensions --------------
          */

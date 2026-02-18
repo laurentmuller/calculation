@@ -1,8 +1,7 @@
 /* globals Toaster */
 
 /**
- * @typedef QueryParams
- * @type {object}
+ * @typedef {Object} QueryParams
  * @property {string} name - the command name.
  * @property {boolean} arguments - the expanded arguments state.
  * @property {boolean} options - the expanded options state.

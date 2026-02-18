@@ -13,7 +13,7 @@
             /**
              * Gets the validator.
              *
-             * @return {jQuery|null}
+             * @return {?jQuery}
              */
             getValidator() {
                 return $(this).data('validator');

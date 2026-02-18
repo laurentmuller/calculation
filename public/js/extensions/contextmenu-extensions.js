@@ -9,6 +9,7 @@ const MenuBuilder = class { /* exported MenuBuilder */
      */
     constructor(options) {
         this.index = 0;
+        /** @type {Object.<string, Object>} */
         this.items = {};
         this.options = $.extend(true, {}, options);
         if (this.options.elements) {
@@ -36,8 +37,7 @@ const MenuBuilder = class { /* exported MenuBuilder */
     }
 
     /**
-     * Adds a separator.
-     * Do nothing if empty or if the last item is already a separator.
+     * Adds a separator. Do nothing if empty or if the last item is already a separator.
      *
      * @return {MenuBuilder} This instance for chaining.
      */
@@ -56,8 +56,7 @@ const MenuBuilder = class { /* exported MenuBuilder */
     }
 
     /**
-     * Adds a title.
-     * Do nothing if the last item is already a title.
+     * Adds a title. Do nothing if the last item is already a title.
      *
      * @param {jQuery} $item - the item's title.
      * @return {MenuBuilder} This instance for chaining.
@@ -88,7 +87,7 @@ const MenuBuilder = class { /* exported MenuBuilder */
     /**
      * Gets items.
      *
-     * @return {Object} The items.
+     * @return {Object.<string, Object>}
      */
     getItems() {
         // remove the first and last separators (if any)
@@ -137,10 +136,7 @@ const MenuBuilder = class { /* exported MenuBuilder */
      */
     getFirstKey() {
         const keys = Object.keys(this.items);
-        if (keys.length) {
-            return keys[0];
-        }
-        return null;
+        return keys.length ? keys[0] : null;
     }
 
     /**
@@ -150,10 +146,7 @@ const MenuBuilder = class { /* exported MenuBuilder */
      */
     getLastKey() {
         const keys = Object.keys(this.items);
-        if (keys.length) {
-            return keys[keys.length - 1];
-        }
-        return null;
+        return keys.length ? keys[keys.length - 1] : null;
     }
 
     /**
@@ -191,8 +184,8 @@ const MenuBuilder = class { /* exported MenuBuilder */
 (function ($) {
     'use strict';
 
-    $.fn.extend({
-
+    // noinspection JSUnusedGlobalSymbols
+    $.extend({
         /**
          * Returns if the given data is a function.
          *
@@ -203,8 +196,10 @@ const MenuBuilder = class { /* exported MenuBuilder */
          */
         isFunction: function (data) {
             return typeof data === 'function';
-        },
+        }
+    });
 
+    $.fn.extend({
         /**
          * Returns if this element is selectable.
          *

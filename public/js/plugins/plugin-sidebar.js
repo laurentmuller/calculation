@@ -137,7 +137,7 @@ $(function () {
 
         /**
          * Initialize the timeout to toggle navigation automatically.
-         * @param {jQuery|HTMLButtonElement|*} $button
+         * @param {jQuery<HTMLButtonElement>} $button
          * @param {number} timeout
          * @param {function} callback
          * @private
@@ -320,7 +320,7 @@ $(function () {
         /**
          * Ensure that the given element has a unique identifier.
          *
-         * @param {jQuery|HTMLElement|*} $element the element to validate or update.
+         * @param {jQuery<HTMLElement>} $element the element to validate or update.
          * @return {string} the unique identifier selector.
          * @private
          */
@@ -367,7 +367,7 @@ $(function () {
 
         /**
          * Gets the horizontal and vertical navigations, if applicable.
-         * @returns {jQuery|HTMLElement|*|null}
+         * @returns {?jQuery<HTMLElement>}
          * @private
          */
         _getNavigations() {
@@ -458,7 +458,7 @@ $(function () {
          * Find an element.
          *
          * @param {string} selector the selector.
-         * @return {jQuery|HTMLElement|*|null}
+         * @return {?jQuery<HTMLElement>}
          * @private
          */
         _ensureInstance(selector) {

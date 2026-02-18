@@ -31,8 +31,8 @@ Object.defineProperty(URLSearchParams.prototype, 'getOrDefault', {
     /**
      * Returns the parameter value or the default value if none.
      * @param {string} name the parameter name.
-     * @param {string|null} [defaultValue] the default value if the parameter is not found.
-     * @returns {string|null} the parameter value, if found; the default value otherwise.
+     * @param {?string} [defaultValue] the default value if the parameter is not found.
+     * @returns {?string} the parameter value, if found; the default value otherwise.
      */
     value: function (name, defaultValue) {
         'use strict';

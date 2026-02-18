@@ -2,6 +2,13 @@
     'use strict';
 
     /**
+     * @typedef {Object} ButtonData
+     * @property {?string} exec
+     * @property {?boolean} state
+     * @property {?boolean} enabled
+     * @property {?string} parameter
+     */
+    /**
      * jQuery Simple-Editor extensions.
      */
     $(function () {
@@ -63,12 +70,15 @@
              */
             initSimpleEditor: function (options) {
                 const queryCommandState = function (command) {
+                    // noinspection JSDeprecatedSymbols
                     return document.queryCommandState(command);
                 };
                 const queryCommandEnabled = function (command) {
+                    // noinspection JSDeprecatedSymbols
                     return document.queryCommandEnabled(command);
                 };
                 const execCommand = function (command, value) {
+                    // noinspection JSDeprecatedSymbols
                     return document.execCommand(command, false, value);
                 };
 
@@ -76,13 +86,13 @@
                 const events = 'click focus keyup mouseup input';
                 return this.each(function () {
                     const $this = $(this);
-                    /** @type {jQuery|HTMLElement|*} */
                     const $editor = $this.parents('div.simple-editor');
                     const $content = $editor.find('div.simple-editor-content');
 
                     // actions
                     $editor.find('.simple-editor-toolbar button').each(function () {
                         const $button = $(this);
+                        /** @type {ButtonData} */
                         const data = $button.data();
                         const exec = data.exec || false;
                         const state = exec && data.state || false;

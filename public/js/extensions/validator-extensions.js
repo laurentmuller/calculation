@@ -22,7 +22,7 @@
             /**
              * Validate elements.
              *
-             * @return {jQuery}
+             * @return {jQuery<HTMLElement>}
              */
             validateElement() {
                 return this.each(function () {
@@ -104,6 +104,9 @@
              */
             findPasswordScore: function () {
                 const $that = $(this);
+                /**
+                 * @type {Object} data
+                 */
                 const data = $that.data('password-strength');
                 if (data && data.verdict && !$.isUndefined(data.verdict.score)) {
                     return data.verdict.score;

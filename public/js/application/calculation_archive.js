@@ -1,5 +1,3 @@
-
-
 /**
  * Ready function
  */
@@ -14,8 +12,9 @@ $(function () {
             }
         },
         messages: {
-            'form[sources][]':  $form.data('error')
-        }
+            'form[sources][]': $form.data('error')
+        },
+        showModification: false
     });
     $('#form_sources .custom-switch').addClass('me-4');
 });

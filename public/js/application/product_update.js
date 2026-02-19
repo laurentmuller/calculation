@@ -180,7 +180,8 @@ $(function () {
             }
             $(form).showSubmit();
             form.submit();
-        }
+        },
+        showModification: false
     });
 
     // handle events

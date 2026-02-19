@@ -112,7 +112,7 @@ class EditTaskDialog extends EditDialog {
     }
 
     /**
-     * Send data to server and update UI.
+     * Send data to the server and update UI.
      *
      * @param {Object} data - the data to send.
      *

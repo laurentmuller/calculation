@@ -265,6 +265,7 @@
             const groups = [];
             $('#data-table-edit thead').each(function () {
                 let total = 0.0;
+                /** @type {jQuery<HTMLElement>} */
                 const $this = $(this);
                 $this.nextUntil('thead').each(function () {
                     $(this).find('tr.item').each(function () {
@@ -533,7 +534,7 @@
         /**
          * Sort categories by code.
          *
-         * @param {jQuery<HTMLElement>} $element - the caller element (button, row or thead) used to
+         * @param {jQuery<HTMLElement>} $element - the caller element (button, row, or thead) used to
          *            find the group and the categories.
          * @return {Application} This instance for chaining.
          */
@@ -595,7 +596,7 @@
         },
 
         /**
-         * Sort groups, categories and items.
+         * Sort groups, categories, and items.
          *
          * @return {Application} This instance for chaining.
          */
@@ -966,6 +967,7 @@
          */
         onDragStop: function (e) {
             const that = this;
+            /** @type {jQuery<HTMLTableRowElement>} */
             const $row = $(e.detail.item);
             const origin = e.detail.origin;
             const destination = e.detail.destination;
@@ -978,10 +980,11 @@
                 // create template and replace content
                 const item = $row.getRowItem();
                 const $newBody = $(destination.container);
+                /** @type {jQuery<HTMLTableRowElement>} */
                 const $newRow = $newBody.appendRowItem(item);
                 $row.replaceWith($newRow);
 
-                // remove old category if empty
+                // remove the old category if empty
                 const $oldBody = $(origin.container);
                 if ($oldBody.children().length === 1) {
                     that.removeCategory($oldBody);
@@ -1007,7 +1010,7 @@
 
 
         /**
-         * Update positions of groups, categories and items.
+         * Update positions of groups, categories, and items.
          *
          * @return {Application} This instance for chaining.
          */

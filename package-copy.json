@@ -46,10 +46,6 @@
             "to": "public/build/jquery/"
         },
         {
-            "from": "node_modules/jquery-migrate/dist/jquery-migrate.js",
-            "to": "public/build/jquery/"
-        },
-        {
             "from": [
                 "node_modules/jquery-contextmenu/dist/jquery.ui.position.js",
                 "node_modules/jquery-contextmenu/dist/jquery.contextMenu.js"

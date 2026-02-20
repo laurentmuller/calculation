@@ -73,7 +73,7 @@
              */
             formatInt: function (value) {
                 if ($.isUndefined($.integerFormatter)) {
-                    $.integerFormatter = new Intl.NumberFormat('de-CH', {maximumFractionDigits: 0});
+                    $.integerFormatter = Intl.NumberFormat('de-CH', {maximumFractionDigits: 0});
                 }
                 return $.integerFormatter.format(value);
             },
@@ -208,7 +208,7 @@
              * Sets or gets the value as integer.
              *
              * @param {number|string} [value] - if present the value to set; otherwise return the value.
-             * @return {jQuery|number} The value if the value parameter is not set.
+             * @return {jQuery<HTMLInputElement>|number} The value if the value parameter is not set.
              */
             intVal: function (value) {
                 // get?
@@ -225,7 +225,7 @@
              * Sets or gets the value as float with 2 fixed decimals.
              *
              * @param {number|string} [value] - if present the value to set; otherwise return the value.
-             * @return {number} The value if the value parameter is not set.
+             * @return {jQuery<HTMLInputElement>|number} The value if the value parameter is not set.
              */
             floatVal: function (value) {
                 // get?

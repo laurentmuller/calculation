@@ -26,12 +26,6 @@
     const diagrams = document.getElementById('diagrams');
 
     /**
-     * The root node of the document.
-     * @type {HTMLElement}
-     */
-    const rootNode = document.documentElement;
-
-    /**
      * The reset button (toolbar).
      * @type {HTMLButtonElement}
      */
@@ -42,6 +36,18 @@
      * @type {HTMLButtonElement}
      */
     const buttonZoom = document.querySelector('.btn-zoom');
+
+    /**
+     * The zoom-in button (toolbar).
+     * @type {HTMLButtonElement}
+     */
+    const buttonZoomIn = document.querySelector('.btn-zoom-in');
+
+    /**
+     * The zoom-out button (toolbar).
+     * @type {HTMLButtonElement}
+     */
+    const buttonZoomOut = document.querySelector('.btn-zoom-out');
 
     /**
      * The reset zoom button (drop-down).
@@ -76,7 +82,7 @@
     /**
      * The number to format zoom.
      */
-    const zoomFormatter = new Intl.NumberFormat('de-DE', {
+    const zoomFormatter = Intl.NumberFormat('de-DE', {
         style: 'percent',
         minimumFractionDigits: 0,
         maximumFractionDigits: 0
@@ -155,16 +161,15 @@
      */
     const getThemeVariables = () => {
         if (!themeVariables) {
-            const element = document.querySelector('.card-header');
-            const style = getComputedStyle(element);
+            const $element = $('.card-header');
+            const borderBottomColor = $element.css('borderBottomColor');
             themeVariables = {
-                primaryTextColor: style.color,
-                primaryColor: style.backgroundColor,
-                primaryBorderColor: style.borderBottomColor,
-                lineColor: style.borderBottomColor
+                primaryColor: $element.css('backgroundColor'),
+                primaryTextColor: $element.css('color'),
+                primaryBorderColor: borderBottomColor,
+                lineColor: borderBottomColor
             };
         }
-
         return themeVariables;
     };
 
@@ -212,11 +217,28 @@
     };
 
     /**
+     * Listener to zoom-in.
+     */
+    const zoomInListener = () => {
+        setZoom(getZoom() + ZOOM_STEP);
+    };
+
+    /**
+     * Listener to zoom-out.
+     */
+    const zoomOutListener = () => {
+        setZoom(getZoom() - ZOOM_STEP);
+    };
+
+
+    /**
      * Listener to zoom change event.
      */
     const zoomChangeListener = function (event) {
         const scale = event.detail.scale;
         updateState(buttonReset, scale === DEFAULT_ZOOM && event.detail.x === 0 && event.detail.y === 0);
+        updateState(buttonZoomIn, scale >= MAX_SCALE);
+        updateState(buttonZoomOut, scale <= MIN_SCALE);
         buttonZoom.textContent = zoomFormatter.format(scale);
         pushState(diagrams.value, true);
     };
@@ -231,13 +253,15 @@
     };
 
     /**
-     * Remove panzoom listeners.
+     * Remove panzoom listener.
      * @param {SVGSVGElement} svgDiagram
      */
     const removePanzoomListeners = function (svgDiagram) {
         svgDiagram.parentElement.removeEventListener('wheel', zoomWheelListener);
         svgDiagram.removeEventListener('panzoomchange', zoomChangeListener);
         buttonReset.removeEventListener('click', resetZoomListener);
+        buttonZoomIn.removeEventListener('click', zoomInListener);
+        buttonZoomOut.removeEventListener('click', zoomOutListener);
     };
 
     /**
@@ -248,6 +272,8 @@
         svgDiagram.parentElement.addEventListener('wheel', zoomWheelListener);
         svgDiagram.addEventListener('panzoomchange', zoomChangeListener);
         buttonReset.addEventListener('click', resetZoomListener);
+        buttonZoomIn.addEventListener('click', zoomInListener);
+        buttonZoomOut.addEventListener('click', zoomOutListener);
     };
 
     /**
@@ -266,7 +292,7 @@
             origin: '0 0',
             startScale: zoom,
             minScale: MIN_SCALE,
-            maxScale: MAX_SCALE
+            maxScale: MAX_SCALE,
         });
         addPanzoomListeners(svgDiagram);
     };
@@ -391,8 +417,9 @@
     initZoomDropDown();
 
     // add a listener when the theme data attribute is changing
+    const documentElement = document.documentElement;
     const observer = new MutationObserver(() => reloadDiagram(true, getZoom()));
-    observer.observe(rootNode, {attributeFilter: [THEME_ATTRIBUTE]});
+    observer.observe(documentElement, {attributeFilter: [THEME_ATTRIBUTE]});
 
     // get zoom
     const zoom = Number.parseFloat(diagram.dataset.zoom || DEFAULT_ZOOM);

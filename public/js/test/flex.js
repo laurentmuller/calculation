@@ -3,7 +3,7 @@
  */
 function getNumberFormat(decimal) {
     'use strict';
-    return new Intl.NumberFormat('de-CH', {
+    return Intl.NumberFormat('de-CH', {
         'minimumFractionDigits': decimal,
         'maximumFractionDigits': decimal
     });

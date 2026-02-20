@@ -50,7 +50,7 @@ function updateUI() {
     updateSortButton();
 
     // update edit message
-    $('#edit-form :input:first').trigger('input');
+    $(':input[type=number]:first').trigger('input');
 }
 
 

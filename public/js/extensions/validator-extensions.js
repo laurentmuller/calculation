@@ -106,6 +106,7 @@
                 const $that = $(this);
                 /**
                  * @type {Object} data
+                 * @property {Object} verdict
                  */
                 const data = $that.data('password-strength');
                 if (data && data.verdict && !$.isUndefined(data.verdict.score)) {
@@ -344,7 +345,8 @@
                     if ($message.length) {
                         $message.replaceDisplayNone();
                         const data = $that.serialize();
-                        $that.find(':input').on('change input', function () {
+                        const selector = ':input:not(:password,button)';
+                        $that.find(selector).on('change input', function () {
                             if ($that.serialize() === data) {
                                 $message.hide(300);
                             } else {
@@ -366,7 +368,6 @@
                 const $that = $(this);
                 const toFind = 'input,select,textarea';
                 const selector = ':visible:enabled:not([readonly]):first';
-                // :hidden:not(.must-validate)
 
                 // find the first invalid field
                 $that.find('.invalid-feedback').each(function () {

@@ -39,9 +39,6 @@ final class DiagramServiceTest extends TestCase
         $actual = $this->service->getDiagram('user');
         self::assertSame('User', $actual['title']);
         self::assertSame('user', $actual['name']);
-        $content = $actual['content'];
-        self::assertStringNotContainsString('---', $content);
-        self::assertStringNotContainsString('title:', $content);
     }
 
     public function testGetDiagramNotFound(): void

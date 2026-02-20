@@ -37,7 +37,7 @@ function updateDate($element, date) {
  */
 function formatValue(value, digits) {
     'use strict';
-    const formatter = new Intl.NumberFormat('de-CH', {
+    const formatter = Intl.NumberFormat('de-CH', {
         'minimumFractionDigits': digits,
         'maximumFractionDigits': digits
     });
@@ -152,6 +152,7 @@ $(function () {
     // validate
     const options = {
         focus: false,
+        showModification: false,
         submitHandler: function () {
             compute();
         }

@@ -1,10 +1,9 @@
 {% extends 'cards/card_base.html.twig' %}
-{% from 'macros/_icons.html.twig' import icon %}
 {% from 'macros/_attributes.html.twig' import attributes %}
 {# macros #}
-{% macro button(class, title, icon, attr = {}) -%}
+{% macro button(class, title, icon = null, text = null, attr = {}) -%}
     <button type="button" class="btn btn-outline-secondary {{ class }}" title="{{ title|trans }}"{{ attributes(attr) }}>
-        {{- icon(icon) -}}
+        {%- if icon %}<i class="fa-solid fa-{{ icon }}"></i>{% endif -%}{%- if text %}{{ text }}{% endif -%}
     </button>
 {%- endmacro button %}
 {# parameters #}
@@ -35,11 +34,18 @@
                         </option>
                     {% endfor %}
                 </select>
-                <button type="button" class="btn btn-zoom btn-outline-secondary dropdown-toggle"
-                        title="{{ 'diagram.zoom'|trans }}" data-bs-toggle="dropdown" data-bs-target="#dropdownZoom"
-                        aria-expanded="false">
-                    {{- 1|percent -}}
-                </button>
+                {{ _self.button(class: 'btn-zoom-in', title: 'diagram.zoom_in', icon: 'magnifying-glass-plus') }}
+                {{ _self.button(class: 'btn-zoom dropdown-toggle', title: 'diagram.zoom', text: '100 %', attr: {
+                    'data-bs-toggle': 'dropdown',
+                    'data-bs-target': '#dropdownZoom',
+                    'aria-expanded': 'false',
+                }) }}
+                {{ _self.button(class: 'btn-zoom-out', title: 'diagram.zoom_out', icon: 'magnifying-glass-minus') }}
+                {{ _self.button(class: 'btn-reset', title: 'diagram.reset', icon: 'arrows-to-dot') }}
+                {{ _self.button(class: 'btn-code', title: 'diagram.content', icon: 'code', attr: {
+                    'data-bs-toggle': 'modal',
+                    'data-bs-target': '#diagram-modal',
+                }) }}
                 <div id="dropdownZoom" class="dropdown-menu dropdown-menu-end px-2 py-3">
                     <div class="d-flex-no-wrap-center">
                         <input id="rangeZoom" type="range" class="form-range range-zoom border rounded-pill px-1 py-2"
@@ -50,11 +56,6 @@
                         </button>
                     </div>
                 </div>
-                {{ _self.button('btn-reset', 'diagram.reset', 'arrows-to-dot') }}
-                {{ _self.button('btn-code', 'diagram.content', 'code', {
-                    'data-bs-toggle': 'modal',
-                    'data-bs-target': '#diagram-modal',
-                }) }}
             </div>
         </div>
     </div>

@@ -105,10 +105,9 @@ class DiagramService implements \Countable
         $files = [];
         $finder = $this->createFinder();
         foreach ($finder as $file) {
-            $content = $file->getContents();
             $name = $file->getBasename(self::FILE_EXTENSION);
+            $content = $file->getContents();
             $title = $this->findTitle($content, $name);
-            $content = $this->removeTitle($content);
             $files[$name] = [
                 'name' => $name,
                 'title' => $title,
@@ -118,15 +117,5 @@ class DiagramService implements \Countable
         \uasort($files, static fn (array $a, array $b): int => $a['title'] <=> $b['title']);
 
         return $files;
-    }
-
-    private function removeTitle(string $content): string
-    {
-        $pos = \strrpos($content, '---');
-        if (false !== $pos) {
-            $content = \substr($content, $pos + 3);
-        }
-
-        return \trim($content);
     }
 }

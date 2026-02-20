@@ -14,7 +14,7 @@ function getActivePage() {
 /**
  * Reset widgets to default values.
  *
- * @param {jQuery} [$source] the active page or null to reset all values.
+ * @param {jQuery<HTMLDivElement>} [$source] the active page or null to reset all values.
  */
 function setDefaultValues($source) {
     'use strict';
@@ -78,7 +78,7 @@ function displayError() {
 /**
  * Display a notification.
  *
- * @param {jQuery} $source - the notification source.
+ * @param {jQuery<HTMLButtonElement>} $source - the notification source.
  */
 function displayNotification($source) {
     'use strict';
@@ -86,7 +86,7 @@ function displayNotification($source) {
     const url = $('#edit-form').data('random');
     $.getJSON(url, function (response) {
         if (response.result && response.content) {
-            const type = $source.data('value');
+            const type = $source.data('used', true).data('value');
             const content = `<p class="m-0 p-0">${response.content}</p>`;
             const title = $('#message_title').isChecked() ? $source.text().trim() : null;
             const options = {
@@ -105,6 +105,23 @@ function displayNotification($source) {
     }).fail(function () {
         displayError();
     });
+}
+
+/**
+ * Display a random notification.
+ *
+ * @param {jQuery<HTMLButtonElement>} $dropdownNotify
+ */
+function randomNotification($dropdownNotify) {
+    'use strict';
+    let $buttons = $dropdownNotify.filter(function () {
+        return !$(this).data('used');
+    });
+    if ($buttons.length === 0) {
+        $buttons = $dropdownNotify.data('used', false);
+    }
+    const index = Math.floor(Math.random() * $buttons.length);
+    $buttons.eq(index).trigger('click');
 }
 
 /**
@@ -211,13 +228,12 @@ $(function () {
     $('.btn-item-all').on('click', function () {
         setDefaultValues();
     });
-    const $notify = $('.dropdown-notify');
-    $notify.on('click', (e) => {
+    const $dropdownNotify = $('.dropdown-notify');
+    $dropdownNotify.data('used', false).on('click', (e) => {
         displayNotification($(e.currentTarget));
     });
     $('.btn-notify').on('click', () => {
-        const index = Math.floor(Math.random() * $notify.length);
-        $notify.eq(index).trigger('click');
+        randomNotification($dropdownNotify);
     });
     $('.card-parameter .collapse').on('shown.bs.collapse', function () {
         const $button = findCollapseButton($(this));

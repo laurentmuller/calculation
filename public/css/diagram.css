@@ -20,30 +20,35 @@ body:not(.sidebar-show) .diagram {
     height: calc(100vh - 180px);
 }
 
-.diagram svg {
-    font-size: var(--bs-body-font-size) !important;
-    font-weight: var(--bs-body-font-weight) !important;
-    font-family: var(--bs-body-font-family) !important;
-    cursor: grab;
-}
-
-.diagram svg .clickable {
-    cursor: initial;
-}
-
-.diagram svg .error-text,
-.diagram svg .error-icon {
-    fill: var(--bs-danger) !important;
-}
-
-.diagram svg .error-text {
-    stroke: var(--bs-danger) !important;
-}
-
 .range-zoom {
     min-width: 14rem;
 }
 
 .btn-zoom {
     min-width: 4.5rem;
+}
+
+.diagram svg {
+    font-size: var(--bs-body-font-size) !important;
+    font-weight: var(--bs-body-font-weight) !important;
+    font-family: var(--bs-body-font-family) !important;
+    cursor: grab;
+
+    .clickable {
+        cursor: pointer !important;
+    }
+
+    .error-icon {
+        fill: var(--bs-danger) !important;
+
+    }
+
+    .error-text {
+        fill: var(--bs-danger) !important;
+        stroke: var(--bs-danger) !important;
+    }
+
+    .classDiagramTitleText {
+        display: none !important;
+    }
 }

@@ -4,7 +4,7 @@
 $(function () {
     'use strict';
     // submit form when units change
-    const $form = $("#edit-form");
+    const $form = $('#edit-form');
     const $unit = $('#form_units');
     const $query = $('#form_query');
     $unit.data('value', $unit.val()).on('input', function () {
@@ -19,5 +19,7 @@ $(function () {
     });
 
     // validation
-    $form.initValidator();
+    $form.initValidator({
+        showModification: false
+    });
 });

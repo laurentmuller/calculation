@@ -72,8 +72,7 @@ function updateUI() {
     });
 
     // update edit message
-    $('#edit-form :input:first').trigger('input');
-    // validateOtherMargins();
+    $('#task_name').trigger('input');
 }
 
 /**

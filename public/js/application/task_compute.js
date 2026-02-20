@@ -3,9 +3,11 @@
 /**
  * @typedef {Object} InputData
  * @property {number} id
- * @property {number} quantity
  * @property {number[]} items
- *
+ * @property {number} quantity
+ */
+
+/**
  * @typedef {Object} ResponseData
  * @property {boolean} result
  * @property {string} message
@@ -29,8 +31,7 @@ function updateValue(id, value) {
  */
 function resetValues() {
     'use strict';
-    const value = $.formatFloat(0);
-    $('#edit-form .form-control-read-only:not(.skip-reset)').text(value);
+    $('#edit-form .form-control-read-only:not(.skip-reset)').text($.formatFloat(0));
 }
 
 /**
@@ -42,12 +43,11 @@ function showError(message) {
     'use strict';
     resetValues();
     const title = $('.card-title').text();
-    message = message || $('#edit-form').data('failed');
-    Toaster.danger(message, title);
+    Toaster.danger(message || $('#edit-form').data('failed'), title);
 }
 
 /**
- * @param {JQuery} $form
+ * @param {jQuery<HTMLFormElement>} $form
  * @param {InputData} data
  * @return {boolean}
  */
@@ -100,7 +100,7 @@ function isValid(data) {
 
 /**
  * Cancel post submit.
- * @param {jQuery} $form
+ * @param {jQuery<HTMLFormElement>} $form
  */
 function cancelSubmit($form) {
     'use strict';

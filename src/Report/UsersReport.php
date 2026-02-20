@@ -53,13 +53,12 @@ class UsersReport extends AbstractArrayReport
         private readonly FontAwesomeService $fontService,
     ) {
         parent::__construct($controller, $entities);
+        $this->setTranslatedTitle('user.list.title');
     }
 
     #[\Override]
     protected function doRender(array $entities): bool
     {
-        $this->setTranslatedTitle('user.list.title');
-
         $this->addPage();
         $this->createStyles();
         $table = $this->createTable();

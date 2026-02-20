@@ -3,6 +3,7 @@
  */
 function getNumberFormat(decimal) {
     'use strict';
+    /* eslint new-cap: ["error", { "newIsCap": false }] */
     return Intl.NumberFormat('de-CH', {
         'minimumFractionDigits': decimal,
         'maximumFractionDigits': decimal

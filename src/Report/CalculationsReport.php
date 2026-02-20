@@ -56,8 +56,8 @@ class CalculationsReport extends AbstractReport
     public function __construct(AbstractController $controller, private readonly iterable $entities)
     {
         parent::__construct(controller: $controller, orientation: PdfOrientation::LANDSCAPE);
-        $this->minMargin = $controller->getMinMargin();
         $this->setTranslatedTitle('calculation.list.title');
+        $this->minMargin = $controller->getMinMargin();
     }
 
     #[\Override]

@@ -42,14 +42,13 @@ class ReportTable extends PdfTable
     }
 
     /**
-     * Creates a new instance from the given report.
+     * Creates a new instance from the given report using all the printable width.
      *
-     * @param AbstractReport $parent    the parent report to print in
-     * @param bool           $fullWidth a value indicating if the table takes all the printable width
+     * @param AbstractReport $parent the parent report to print in
      */
-    public static function fromReport(AbstractReport $parent, bool $fullWidth = true): self
+    public static function fromReport(AbstractReport $parent): self
     {
-        return new self($parent, $fullWidth);
+        return new self($parent);
     }
 
     #[\Override]

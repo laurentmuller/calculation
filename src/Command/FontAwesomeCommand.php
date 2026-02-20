@@ -15,6 +15,7 @@ namespace App\Command;
 
 use App\Service\FontAwesomeImageService;
 use App\Utils\FileUtils;
+use App\Utils\StringUtils;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Attribute\Option;
@@ -35,6 +36,8 @@ class FontAwesomeCommand
 
     private const string DEFAULT_SOURCE = 'vendor/fortawesome/font-awesome/metadata/icons.json';
     private const string DEFAULT_TARGET = 'resources/fontawesome';
+    private const string VIEW_BOX_PATTERN = '/(viewBox="\d+\s+\d+\s+\d+\s+\d+")/i';
+    private const string VIEW_BOX_REPLACE = 'viewBox="0 0 640 640"';
 
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
@@ -85,6 +88,7 @@ class FontAwesomeCommand
                     if ('' === $svg) {
                         continue;
                     }
+                    $svg = $this->replaceViewBox($svg);
                     $svgFileName = $this->getSvgFileName($style, $key);
                     $svgTargetFile = Path::join($tempDir, $svgFileName);
                     if (!FileUtils::dumpFile($svgTargetFile, $svg)) {
@@ -133,6 +137,11 @@ class FontAwesomeCommand
     private function getSvgFileName(string $style, string|int $name): string
     {
         return \sprintf('%s/%s%s', $style, $name, FontAwesomeImageService::SVG_EXTENSION);
+    }
+
+    private function replaceViewBox(string $svg): string
+    {
+        return StringUtils::pregReplace(self::VIEW_BOX_PATTERN, self::VIEW_BOX_REPLACE, $svg);
     }
 
     private function success(SymfonyStyle $io, string $format, string|int ...$parameters): int

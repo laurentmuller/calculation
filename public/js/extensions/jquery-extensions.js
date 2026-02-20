@@ -73,6 +73,7 @@
              */
             formatInt: function (value) {
                 if ($.isUndefined($.integerFormatter)) {
+                    /* eslint new-cap: ["error", { "newIsCap": false }] */
                     $.integerFormatter = Intl.NumberFormat('de-CH', {maximumFractionDigits: 0});
                 }
                 return $.integerFormatter.format(value);

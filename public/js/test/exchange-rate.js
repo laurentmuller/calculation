@@ -37,6 +37,7 @@ function updateDate($element, date) {
  */
 function formatValue(value, digits) {
     'use strict';
+    /* eslint new-cap: ["error", { "newIsCap": false }] */
     const formatter = Intl.NumberFormat('de-CH', {
         'minimumFractionDigits': digits,
         'maximumFractionDigits': digits

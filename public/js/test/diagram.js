@@ -81,6 +81,8 @@
 
     /**
      * The number to format zoom.
+     *
+     * eslint new-cap: ["error", { "newIsCap": false }]
      */
     const zoomFormatter = Intl.NumberFormat('de-DE', {
         style: 'percent',

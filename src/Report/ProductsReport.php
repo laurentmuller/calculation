@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
+use App\Entity\Product;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfStyle;
 use App\Report\Table\ReportGroupTable;
@@ -20,7 +21,7 @@ use App\Report\Table\ReportGroupTable;
 /**
  * Report for the list of products.
  *
- * @extends AbstractArrayReport<\App\Entity\Product>
+ * @extends AbstractArrayReport<Product>
  */
 class ProductsReport extends AbstractArrayReport
 {

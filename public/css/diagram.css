@@ -48,7 +48,8 @@ body:not(.sidebar-show) .diagram {
         stroke: var(--bs-danger) !important;
     }
 
-    .classDiagramTitleText {
+
+    .classDiagramTitleText { /* stylelint-disable selector-class-pattern -- kebab-case */
         display: none !important;
     }
 }

@@ -135,6 +135,19 @@ class MemoryImageReport extends AbstractReport
         $this->resetAlpha();
     }
 
+    private function getFontAwesomeImage(string $icon, ?string $color = null): ?FontAwesomeImage
+    {
+        if (!$this->service instanceof FontAwesomeService) {
+            return null;
+        }
+        $relativePath = $this->service->getPath($icon);
+        if (!\is_string($relativePath)) {
+            return null;
+        }
+
+        return $this->service->getImage($relativePath, $color);
+    }
+
     /**
      * @phpstan-param PsrLevel::* $level
      */
@@ -166,11 +179,7 @@ class MemoryImageReport extends AbstractReport
         $files = [];
         foreach ($channels as $channel) {
             $logChannel = new LogChannel($channel);
-            $icon = $this->service?->getPath($logChannel->getChannelIcon());
-            if (!\is_string($icon)) {
-                continue;
-            }
-            $image = $this->service?->getImage($icon);
+            $image = $this->getFontAwesomeImage($logChannel->getChannelIcon());
             if ($image instanceof FontAwesomeImage) {
                 $files[$channel] = $image;
             }
@@ -189,11 +198,7 @@ class MemoryImageReport extends AbstractReport
         foreach ($levels as $level) {
             $logLevel = new LogLevel($level->toPsrLogLevel());
             $color = HtmlBootstrapColor::parseTextColor($logLevel->getLevelColor())?->asHex('#');
-            $icon = $this->service?->getPath($logLevel->getLevelIcon());
-            if (!\is_string($icon)) {
-                continue;
-            }
-            $image = $this->service?->getImage($icon, $color);
+            $image = $this->getFontAwesomeImage($logLevel->getLevelIcon(), $color);
             if (!$image instanceof FontAwesomeImage) {
                 continue;
             }
@@ -213,16 +218,9 @@ class MemoryImageReport extends AbstractReport
     private function renderDigits(): void
     {
         $this->renderCellTitle('Digits');
-
-        $color = HtmlBootstrapColor::DANGER->value;
-        HtmlBootstrapColor::DANGER->applyTextColor($this);
         foreach (\range(0, 9) as $index) {
-            $source = \sprintf('fa-solid fa-%d', $index);
-            $icon = $this->service?->getPath($source);
-            if (!\is_string($icon)) {
-                continue;
-            }
-            $image = $this->service?->getImage($icon, $color);
+            $icon = \sprintf('fa-solid fa-%d', $index);
+            $image = $this->getFontAwesomeImage($icon);
             if (!$image instanceof FontAwesomeImage) {
                 continue;
             }
@@ -256,7 +254,6 @@ class MemoryImageReport extends AbstractReport
 
         $this->addPage()
             ->resetStyle();
-
         $this->renderDigits();
         $channelFiles = $this->getLogChannelImages();
         if ([] !== $channelFiles) {

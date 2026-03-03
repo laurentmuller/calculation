@@ -18,6 +18,9 @@ namespace App\Constants;
  */
 final class CacheAttributes
 {
+    // cache adapter
+    public const string CACHE_ADAPTER = 'cache.adapter.filesystem';
+
     // cache names
     public const string CACHE_ASSET = 'calculation.asset';
     public const string CACHE_COMMAND = 'calculation.command';

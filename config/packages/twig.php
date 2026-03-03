@@ -58,9 +58,4 @@ return App::config([
             'application_parameters' => '@' . ApplicationParameters::class,
         ],
     ],
-    'when@test' => [
-        'twig' => [
-            'strict_variables' => true,
-        ],
-    ],
 ]);

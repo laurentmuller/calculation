@@ -18,6 +18,7 @@ use App\Utils\StringUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\DatePointType;
 use Symfony\Component\Clock\DatePoint;
+use Symfony\Component\Serializer\Attribute\Ignore;
 use Symfony\Component\Validator\Constraints as Assert;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
 
@@ -29,6 +30,7 @@ trait ResetPasswordRequestTrait
     #[ORM\Column(type: DatePointType::NAME, nullable: true)]
     private ?DatePoint $expiresAt = null;
 
+    #[Ignore]
     #[Assert\Length(max: 100)]
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $hashedToken = null;

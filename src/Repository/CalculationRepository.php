@@ -344,7 +344,7 @@ class CalculationRepository extends AbstractRepository
     }
 
     /**
-     * Gets iterable calculations, as array, for export.
+     * Gets iterable calculations, for export.
      *
      * @param bool $forExcel true for Excel, false for PDF
      *
@@ -416,7 +416,7 @@ class CalculationRepository extends AbstractRepository
      *
      * @param float $minMargin the minimum margin in percent
      *
-     * @return iterable<array> the iterable below calculations, as array
+     * @return iterable<array> the iterable below calculations
      *
      * @phpstan-return iterable<ExportType>
      */

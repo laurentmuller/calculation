@@ -81,14 +81,13 @@ readonly class CacheService
     private function parseContent(string $content): array
     {
         $lines = StringUtils::splitLines(\trim($content), true);
-        $lines = \array_filter(\array_map(\trim(...), $lines));
-        \sort($lines, \SORT_NATURAL);
+        $lines = \array_map(\trim(...), $lines);
+        $lines = \array_filter($lines, static fn (string $line): bool => !StringUtils::startWith($line, '-')
+            && !StringUtils::startWith($line, 'pool name'));
+        \sort($lines);
 
         $results = [];
         foreach ($lines as $line) {
-            if (StringUtils::startWith($line, '-') || StringUtils::startWith($line, 'pool name')) {
-                continue;
-            }
             $values = \explode('.', $line, 2);
             $results[$values[0]][] = $values[1];
         }

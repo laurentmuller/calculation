@@ -30,6 +30,7 @@ use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Serializer\Attribute\Ignore;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Exception\MappingNotFoundException;
 use Vich\UploaderBundle\Mapping\Attribute as Vich;
@@ -75,6 +76,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     #[ORM\Column(type: DatePointType::NAME, nullable: true)]
     private ?DatePoint $lastLogin = null;
 
+    #[Ignore]
     #[Assert\NotBlank]
     #[ORM\Column]
     private ?string $password = null;

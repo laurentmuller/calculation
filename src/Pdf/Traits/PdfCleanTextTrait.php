@@ -40,6 +40,6 @@ trait PdfCleanTextTrait
             return $str;
         }
 
-        return parent::convertEncoding($str, self::ENCODING_TO, self::ENCODING_FROM);
+        return $this->encoder->convertEncoding($str, self::ENCODING_TO, self::ENCODING_FROM);
     }
 }

@@ -154,13 +154,8 @@ final class AbstractControllerTest extends KernelTestCase
             {
                 return true;
             }
-
-            #[\Override]
-            public function getTitle(): string
-            {
-                return 'Fake';
-            }
         };
+        $report->getInfo()->setTitle('Fake');
         $response = $controller->renderPdfDocument($report);
         self::assertTrue($response->isOk());
     }

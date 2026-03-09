@@ -51,7 +51,7 @@ class HelpReport extends AbstractReport
         private readonly ?array $entity = null
     ) {
         parent::__construct($controller);
-        $this->setTitle($this->buildTitle(), true);
+        $this->getInfo()->setTitle($this->buildTitle(), true);
         $this->defaultStyle = PdfStyle::default();
         $this->headerStyle = PdfStyle::getHeaderStyle();
     }

@@ -57,7 +57,7 @@ class MemoryImageReport extends AbstractReport
         private readonly ?FontAwesomeService $service = null,
     ) {
         parent::__construct($controller);
-        $this->setTitle('In memory Images');
+        $this->getInfo()->setTitle('In memory Images');
     }
 
     #[\Override]

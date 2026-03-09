@@ -90,7 +90,7 @@ class TestExportController extends AbstractController
         $report = new PdfLabelDocument($label);
         $report->setLabelBorder(true)
             ->setLabelTextListener($listener)
-            ->setTitle(\sprintf('Etiquette - Avery %s', $label->name));
+            ->getInfo()->setTitle(\sprintf('Etiquette - Avery %s', $label->name));
 
         $sortField = $repository->getSortField(CustomerRepository::NAME_COMPANY_FIELD);
         /** @phpstan-var \App\Entity\Customer[] $customers */
@@ -147,7 +147,7 @@ class TestExportController extends AbstractController
     {
         $content = $this->renderView('test/html_report.html.twig');
         $report = new HtmlReport($this, $content);
-        $report->setTitle($this->trans('test.html'));
+        $report->getInfo()->setTitle($this->trans('test.html'));
 
         return $this->renderPdfDocument($report);
     }

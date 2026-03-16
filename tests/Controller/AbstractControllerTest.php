@@ -155,7 +155,7 @@ final class AbstractControllerTest extends KernelTestCase
                 return true;
             }
         };
-        $report->getInfo()->setTitle('Fake');
+        $report->getProperties()->setTitle('Fake');
         $response = $controller->renderPdfDocument($report);
         self::assertTrue($response->isOk());
     }

@@ -286,8 +286,8 @@ abstract class AbstractController extends BaseController
         if ($doc instanceof AbstractReport && !$doc->render()) {
             throw $this->createTranslatedNotFoundException('errors.render_document');
         }
-        if (!StringUtils::isString($name) && StringUtils::isString($doc->getInfo()->getTitle())) {
-            $name = $doc->getInfo()->getTitle();
+        if (!StringUtils::isString($name) && StringUtils::isString($doc->getProperties()->getTitle())) {
+            $name = $doc->getProperties()->getTitle();
         }
 
         return new PdfResponse($doc, $inline, $name);

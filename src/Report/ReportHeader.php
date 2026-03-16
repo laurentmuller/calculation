@@ -260,7 +260,7 @@ class ReportHeader
         $this->outputCell(
             $cellWidth,
             self::LINE_HEIGHT,
-            $this->parent->getInfo()->getTitle(),
+            $this->parent->getProperties()->getTitle(),
             $border,
             PdfTextAlignment::LEFT,
         );

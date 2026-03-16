@@ -33,7 +33,7 @@ class HtmlColorsReport extends AbstractReport
     #[\Override]
     public function render(): bool
     {
-        $this->getInfo()->setTitle('Colors');
+        $this->properties->setTitle('Colors');
 
         $this->addPage();
         $colors = HtmlColorName::cases();

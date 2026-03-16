@@ -36,7 +36,7 @@ class FontAwesomeReport extends AbstractReport
     public function __construct(AbstractController $controller, private readonly FontAwesomeImageService $service)
     {
         parent::__construct($controller);
-        $this->getInfo()->setTitle('Font Awesome Icons');
+        $this->properties->setTitle('Font Awesome Icons');
     }
 
     #[\Override]

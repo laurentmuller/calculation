@@ -67,10 +67,10 @@ abstract class AbstractReport extends PdfDocument
         $this->footer = ReportFooter::instance($this)
             ->setContent(ApplicationService::APP_FULL_NAME, ApplicationService::OWNER_URL);
 
-        $this->info->setCreator(ApplicationService::APP_FULL_NAME);
+        $this->properties->setCreator(ApplicationService::APP_FULL_NAME);
         $user = $controller->getUserIdentifier();
         if (null !== $user) {
-            $this->info->setAuthor($user);
+            $this->properties->setAuthor($user);
         }
     }
 
@@ -165,7 +165,7 @@ abstract class AbstractReport extends PdfDocument
         array $parameters = [],
         bool $isUTF8 = false
     ): static {
-        $this->info->setTitle($this->trans($id, $parameters), $isUTF8);
+        $this->properties->setTitle($this->trans($id, $parameters), $isUTF8);
 
         return $this;
     }

@@ -11,7 +11,6 @@
 
 declare(strict_types=1);
 
-use Rector\CodeQuality\Rector\Catch_\ThrowWithPreviousExceptionRector;
 use Rector\CodingStyle\Rector\ArrowFunction\StaticArrowFunctionRector;
 use Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector;
 use Rector\CodingStyle\Rector\ClassLike\NewlineBetweenClassLikeStmtsRector;
@@ -61,11 +60,6 @@ $skip = [
     RemoveParentDelegatingConstructorRector::class,
     // allow override attribute for setUp method in tests
     NoSetupWithParentCallOverrideRector::class,
-
-    // must be removed when PR 7912 is released !
-    ThrowWithPreviousExceptionRector::class => [
-        __DIR__ . '/tests/Twig/IntegrationTestCase.php',
-    ],
 ];
 
 $sets = [

@@ -50,25 +50,20 @@ class MessageParameter implements ParameterInterface
     /**
      * Gets these values as attributes.
      *
-     * @return array{
-     *     icon: bool,
-     *     title: bool,
-     *     display-close: bool,
-     *     display-subtitle: bool,
-     *     timeout: int,
-     *     progress: int,
-     *     position: string}
+     * @param string $prefix an optional prefix to prepend to keys
+     *
+     * @return array<string, string|int|bool>
      */
-    public function getAttributes(): array
+    public function getAttributes(string $prefix = ''): array
     {
         return [
-            'icon' => $this->icon,
-            'title' => $this->title,
-            'display-close' => $this->close,
-            'display-subtitle' => $this->subTitle,
-            'timeout' => $this->timeout,
-            'progress' => $this->progress,
-            'position' => $this->position->value,
+            $prefix . 'icon' => $this->icon,
+            $prefix . 'title' => $this->title,
+            $prefix . 'display-close' => $this->close,
+            $prefix . 'display-subtitle' => $this->subTitle,
+            $prefix . 'timeout' => $this->timeout,
+            $prefix . 'progress' => $this->progress,
+            $prefix . 'position' => $this->position->value,
         ];
     }
 

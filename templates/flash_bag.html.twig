@@ -7,9 +7,9 @@
     'data-subtitle': app_full_name,
     'data-close-title': 'common.button_close'|trans} %}
 {% if app.user %}
-    {% set flash_attrs = flash_attrs|merge(user_parameters.message.attributes) %}
+    {% set flash_attrs = flash_attrs|merge(user_parameters.message.attributes('data-')) %}
 {% else %}
-    {% set flash_attrs = flash_attrs|merge(application_parameters.message.attributes) %}
+    {% set flash_attrs = flash_attrs|merge(application_parameters.message.attributes('data-')) %}
 {% endif %}
 {# add all flash messages #}
 <div {{ html_attr(flash_attrs) }}>

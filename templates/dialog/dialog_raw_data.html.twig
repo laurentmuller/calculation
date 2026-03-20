@@ -6,7 +6,7 @@
 <div class="modal modal-raw-data fade" id="{{ dialog_id }}" tabindex="-1" aria-labelledby="modal-data-title" aria-hidden="true">
     <div class="modal-dialog{% if raw_data %} modal-lg{% endif %}">
         <div class="modal-content{% if not raw_data %} border-danger{% endif %}">
-            {{- modal_title(id: 'modal-data-title', title_icon: 'code', title_text: 'dialog_raw_data.title', data_target: dialog_id, header_class: raw_data ? 'text-bg-danger' : null) -}}
+            {{- modal_title(id: 'modal-data-title', title_icon: 'code', title_text: 'dialog_raw_data.title', data_target: dialog_id, header_class: raw_data ? null : 'text-bg-danger') -}}
             <div class="modal-body">
             {%- if raw_data -%}
                 {% if description is defined and description %}

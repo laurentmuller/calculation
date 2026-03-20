@@ -1,6 +1,5 @@
 {# search form #}
 {% from 'macros/_icons.html.twig' import icon %}
-{% from 'macros/_attributes.html.twig' import attributes %}
 {% set search_button_attributes = {
     id: 'search-button-horizontal',
     class: 'nav-link',
@@ -8,13 +7,13 @@
 } %}
 {% set search_div_attributes = {
     id: 'search-div-horizontal',
-    class: 'my-auto mx-lg-2 py-1 py-lg-0 d-none',
+    class: ['my-auto', 'mx-lg-2', 'py-1 py-lg-0', 'd-none'],
     role: 'search',
 } %}
 {% set search_input_attributes = {
     type: 'text',
     id: 'search-input-horizontal',
-    class: 'form-control form-control-sm w-100',
+    class: ['form-control', 'form-control-sm', 'w-100'],
     'aria-label': 'search.title'|trans,
     minlength: 2,
     autocomplete: 'off',
@@ -28,8 +27,10 @@
     'data-bs-title': 'search.minimum'|trans,
 } %}
 <li class="nav-item my-auto">
-    <button{{ attributes(search_button_attributes) }}>{{- icon('search fa-fw') -}}</button>
-    <div{{ attributes(search_div_attributes) }}>
-        <input{{ attributes(search_input_attributes) }}>
+    <button {{ html_attr(search_button_attributes) }}>
+        {{- icon('search fa-fw') -}}
+    </button>
+    <div {{ html_attr(search_div_attributes) }}>
+        <input{{ html_attr(search_input_attributes) }}>
     </div>
 </li>

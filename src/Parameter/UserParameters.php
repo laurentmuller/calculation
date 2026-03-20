@@ -17,7 +17,6 @@ use App\Constants\CacheAttributes;
 use App\Entity\User;
 use App\Entity\UserProperty;
 use App\Model\CustomerInformation;
-use App\Traits\ArrayTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Target;
@@ -30,8 +29,6 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 class UserParameters extends AbstractParameters
 {
-    use ArrayTrait;
-
     public function __construct(
         #[Target(CacheAttributes::CACHE_USER)]
         CacheInterface $cache,
@@ -134,13 +131,8 @@ class UserParameters extends AbstractParameters
     #[\Override]
     protected function loadProperties(): array
     {
-        $user = $this->getUser();
-        $repository = $this->manager->getRepository(UserProperty::class);
-
-        return $this->mapToKeyValue(
-            $repository->findByUser($user),
-            static fn (UserProperty $property): array => [$property->getName() => $property]
-        );
+        return $this->manager->getRepository(UserProperty::class)
+            ->findByUser($this->getUser());
     }
 
     private function getUser(): User

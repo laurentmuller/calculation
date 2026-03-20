@@ -1,5 +1,4 @@
 {% from 'macros/_icons.html.twig' import icon, link %}
-{% from 'macros/_attributes.html.twig' import attributes %}
 {# macros #}
 {% macro cardEntry(entity, count, index_route, add_route, icon) -%}
 {% set entity_text = entity ~ '.list.title' %}
@@ -43,11 +42,11 @@
 {%- set header_attributes = header_attributes|merge({
     href: '#' ~ panel_key,
     title: panel_title|trans,
-    'aria-expanded': panel_show|json_encode}) -%}
+    'aria-expanded': panel_show}) -%}
 {# content #}
 <div class="card card-collapse card-catalog mb-2" data-path="{{ path('homepage_hide_catalog') }}">
     <div class="card-header d-flex-wrap-center">
-        <a{{ attributes(header_attributes) }}>
+        <a {{ html_attr(header_attributes) }}>
             {{- icon('database ms-1', 'index.panel_catalog') -}}
         </a>
         <button type="button" class="btn btn-link hide-panel text-body p-0" title="{{ 'index.panel_catalog_hide'|trans }}">

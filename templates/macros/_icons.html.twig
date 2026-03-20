@@ -19,19 +19,27 @@
 {%- endmacro icon %}
 
 {% macro link(href, text, class, icon = null, title = null, parameters = []) -%}
-{%- set role = (class and 'btn' in class) ? ' role="button"' : '' -%}
-{%- set title = title ? ' title="' ~ title|trans(parameters) ~ '"' : '' -%}
-{%- set class = class ? ' class="' ~ class ~ '"' : '' -%}
-<a href="{{ href }}"{{ class|raw }}{{ role|raw }}{{ title|raw }}>
+{% set attrs = {
+    href: href,
+    role: (class and 'btn' in class) ? 'button' : null,
+    title: title ? title|trans(parameters) : null,
+    class: class}
+%}
+<a {{ html_attr(attrs) }}>
     {{- _self.icon(icon, text, parameters) -}}
 </a>
 {%- endmacro link %}
 
 {% macro linkExternal(href, text, class, icon = null, title = null, parameters = []) -%}
-{%- set role = (class and 'btn' in class) ? ' role="button"' : '' -%}
-{%- set title = title ? ' title="' ~ title|trans(parameters) ~ '"' : '' -%}
-{%- set class = class ? ' class="' ~ class ~ '"' : '' -%}
-<a href="{{ href }}" target="_blank" rel="noopener noreferrer"{{ class|raw }}{{ title|raw }}{{ role|raw }}>
+{% set attrs = {
+    href: href,
+    target: '_blank',
+    rel: ['noopener', 'noreferrer'],
+    role: (class and 'btn' in class) ? 'button' : null,
+    title: title ? title|trans(parameters) : null,
+    class: class}
+%}
+<a {{ html_attr(attrs) }}>
     {{- _self.icon(icon, text, parameters) -}}
 </a>
 {%- endmacro linkExternal %}
@@ -70,17 +78,21 @@
 </li>
 {%- endmacro dropdownItemButton %}
 
-{% macro dropdownSeparator(hidden = false, class = '') -%}
-{%- set class = (class ~ (hidden ? ' d-none' : ''))|trim -%}
-<li{% if class %} class="{{ class }}"{% endif %}>
-    <hr class="dropdown-divider">
-</li>
+{% macro dropdownSeparator(hidden = false, class = null) -%}
+{% set attrs = {class: [class, hidden ? 'd-none' : null]} %}
+<li {{ html_attr(attrs) }}><hr class="dropdown-divider"></li>
 {%- endmacro dropdownSeparator %}
 
 {% macro dropdownEllipsis(id = null) -%}
-<button type="button" class="btn btn-sm btn-outline-secondary border-0 px-1"{% if id %} id="{{ id }}"{% endif %} data-bs-toggle="dropdown" aria-expanded="false" title="{{ 'common.actions'|trans }}">
-    {{- _self.icon('ellipsis-v') -}}
-</button>
+{% set attrs = {
+    type: 'button',
+    id: id,
+    class: ['btn', 'btn-sm', 'btn-outline-secondary', 'border-0', 'px-1'],
+    'data-bs-toggle': 'dropdown',
+    'aria-expanded': false,
+    title: 'common.actions'|trans}
+%}
+<button {{ html_attr(attrs) }}>{{- _self.icon('ellipsis-v') -}}</button>
 {%- endmacro dropdownEllipsis %}
 
 {% macro homepage() -%}
@@ -88,9 +100,13 @@
 {%- endmacro homepage %}
 
 {% macro button_submit(text = 'common.button_ok', class = 'btn-primary', parameters = []) -%}
-{% from 'macros/_attributes.html.twig' import attributes %}
-{%- set parameters = parameters|merge({type: 'submit', role: 'button', class: ('btn btn-form btn-submit ' ~ class)|trim}) -%}
-<button{{ attributes(parameters) }}>{{ text|trans }}</button>
+{% set attrs = {
+    type: 'submit',
+    role: 'button',
+    class: ['btn', 'btn-form', 'btn-submit', class],
+    }|merge(parameters)
+%}
+<button {{ html_attr(attrs) }}>{{ text|trans }}</button>
 {%- endmacro button_submit %}
 
 {% macro button_ok(href = '#', text = 'common.button_ok', class = 'btn btn-ok btn-form btn-primary') -%}
@@ -133,8 +149,8 @@
 {%- endmacro copyright_link %}
 
 {% macro modal_title(id, title_icon, title_text, data_target = false, header_class = null) %}
-    <div class="modal-header{% if header_class %} {{ header_class }}{% endif %}">
-        <h5 class="modal-title"{% if id %} id="{{ id }}{% endif %}">
+    <div {{ html_attr({class: ['modal-header', header_class]}) }}>
+        <h5 {{ html_attr({class: 'modal-title', id: id}) }}>
             {{- _self.icon(title_icon, title_text) -}}
         </h5>
         {{- _self.modal_close_button(for_header: true, data_target: data_target) -}}
@@ -149,12 +165,15 @@
 
 {% macro modal_close_button(for_header = false, label = null, data_target = false) -%}
 {% set label = label|default('common.button_close')|trans %}
+{% set attrs = {
+    type: 'button',
+    'data-bs-dismiss': 'modal',
+    'data-target': data_target ? '#' ~ data_target : null,
+} %}
 {% if for_header %}
-    <button type="button"{% if data_target %} data-bs-target="#{{ data_target }}"{% endif %} data-bs-dismiss="modal" class="btn-close" title="{{ label }}"></button>
+    <button {{ html_attr(attrs|merge({class: 'btn-close', title: label})) }}></button>
 {% else %}
-    <button type="button"{% if data_target %} data-bs-target="#{{ data_target }}"{% endif %} data-bs-dismiss="modal" class="btn btn-form btn-secondary">
-        {{- label -}}
-    </button>
+    <button {{ html_attr(attrs|merge({class: ['btn', 'btn-form', 'btn-secondary']})) }}>{{- label -}}</button>
 {% endif %}
 {%- endmacro modal_close_button %}
 
@@ -180,12 +199,15 @@
 {% endmacro sitemap %}
 
 {% macro button_copy(target, class = 'btn-success', hide_modal = false, disabled = false) %}
-<button type="button" class="btn btn-copy btn-form {{ class }}"{% if disabled %} disabled{% endif %}
-        data-success="{{ 'common.copy_success'|trans }}"
-        data-error="{{ 'common.copy_error'|trans }}"
-        data-title="{{ 'common.copy_title'|trans }}"
-        data-hide-modal="{{ hide_modal|json_encode }}"
-        {% if target %} data-clipboard-target="{{ target }}"{% endif %}>
-    {{- 'common.button_copy'|trans -}}
-</button>
+{% set attrs = {
+    type: 'button',
+    class: ['btn', 'btn-copy', 'btn-form', class],
+    disabled: disabled,
+    'data-title': 'common.copy_title'|trans,
+    'data-success': 'common.copy_success'|trans,
+    'data-error': 'common.copy_error'|trans,
+    'data-hide-modal': hide_modal,
+    'data-clipboard-target': target,
+} %}
+<button {{ html_attr(attrs) }}>{{- 'common.button_copy'|trans -}}</button>
 {% endmacro button_copy %}

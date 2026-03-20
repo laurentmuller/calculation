@@ -56,9 +56,7 @@ abstract class AbstractParameters
     /**
      * Gets all default values.
      *
-     * @return array<string, array<string, mixed>>
-     *
-     * @phpstan-return array<array<string, TValue>>
+     * @return array<array<string, TValue>>
      */
     abstract public function getDefaultValues(): array;
 
@@ -102,7 +100,7 @@ abstract class AbstractParameters
     public function save(): bool
     {
         $saved = false;
-        $properties = $this->loadProperties();
+        $properties = $this->mapProperties();
         $defaultParameters = $this->getDefaultParameters();
         $parameters = \array_filter($this->getParameters());
         foreach ($parameters as $key => $parameter) {
@@ -163,11 +161,9 @@ abstract class AbstractParameters
     }
 
     /**
-     * @phpstan-param TParameter[] $parameters
+     * @param TParameter[] $parameters
      *
-     * @return array<string, array<string, mixed>>
-     *
-     * @phpstan-return array<string, array<string, TValue>>
+     * @return array<string, array<string, TValue>>
      */
     protected function getParametersDefaultValues(array $parameters): array
     {
@@ -188,12 +184,24 @@ abstract class AbstractParameters
     }
 
     /**
-     * @return array<string, TProperty>
+     * @return TProperty[]
      */
     abstract protected function loadProperties(): array;
 
     /**
-     * @phpstan-param TParameter $parameter
+     * @return array<string, TProperty>
+     */
+    protected function mapProperties(): array
+    {
+        return \array_reduce(
+            $this->loadProperties(),
+            static fn (array $carry, AbstractProperty $property): array => $carry + [$property->getName() => $property],
+            []
+        );
+    }
+
+    /**
+     * @param TParameter $parameter
      *
      * @return array<string, MetaData>
      *
@@ -232,7 +240,7 @@ abstract class AbstractParameters
     {
         $parameter = new $class();
         $accessor = $this->getAccessor();
-        $properties = $this->loadProperties();
+        $properties = $this->mapProperties();
         $metaDatas = $this->getMetaDatas($parameter);
 
         foreach ($metaDatas as $name => $metaData) {
@@ -256,7 +264,7 @@ abstract class AbstractParameters
     }
 
     /**
-     * @phpstan-return TValue
+     * @return TValue
      */
     private function getDefaultPropertyValue(
         MetaData $metaData,
@@ -271,7 +279,7 @@ abstract class AbstractParameters
     }
 
     /**
-     * @phpstan-param TParameter $parameter
+     * @param TParameter $parameter
      *
      * @return array<string, MetaData>
      */
@@ -284,7 +292,7 @@ abstract class AbstractParameters
     }
 
     /**
-     * @phpstan-return TValue
+     * @return TValue
      */
     private function getParameterPropertyValue(
         MetaData $metaData,
@@ -295,7 +303,7 @@ abstract class AbstractParameters
     }
 
     /**
-     * @phpstan-param TParameter $parameter
+     * @param TParameter $parameter
      *
      * @return \ReflectionProperty[]
      *
@@ -319,7 +327,7 @@ abstract class AbstractParameters
     }
 
     /**
-     * @phpstan-return TValue
+     * @return TValue
      */
     private function getPropertyValue(MetaData $metaData, AbstractProperty $property): mixed
     {

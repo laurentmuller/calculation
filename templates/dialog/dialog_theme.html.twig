@@ -1,5 +1,4 @@
 {% from 'macros/_icons.html.twig' import button_ok, modal_title, modal_close_button %}
-{% from 'macros/_attributes.html.twig' import attributes as output_attributes %}
 {# output a theme entry #}
 {% macro output_theme(theme, checked) -%}
     {% set id = 'form_theme_' ~ theme.value %}
@@ -10,13 +9,14 @@
         value: theme.value,
         name: 'form_theme',
         class: 'form-check-input',
+        checked: checked,
         'aria-describedby': id_help,
         'data-text': theme|trans,
         'data-success': theme.success|trans,
         'data-class': 'theme-icon ' ~ theme.icon,
     } %}
     <div class="form-check mb-3">
-        <input{{ output_attributes(attributes) }}{% if checked %} checked="checked"{% endif %}>
+        <input {{ html_attr(attributes) }}>
         <label class="form-check-label" for="{{ id }}">
             <span class="d-inline d-lg-none"><i class="{{ theme.icon }}"></i></span>
             <span>{{ theme|trans }}</span>

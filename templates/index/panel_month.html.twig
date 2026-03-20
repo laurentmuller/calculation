@@ -1,6 +1,5 @@
 {# import #}
 {% from 'macros/_icons.html.twig' import icon, link, linkExternal %}
-{% from 'macros/_attributes.html.twig' import attributes %}
 {% from 'index/_macros.html.twig' import margin as macros_margin, empty_content %}
 {# macros #}
 {% macro cardEntry(item, route_name, min_margin) -%}
@@ -32,11 +31,11 @@
 {%- set header_attributes = header_attributes|default({})|merge({
     href: '#' ~ panel_key,
     title: panel_title|trans,
-    'aria-expanded': panel_show|json_encode}) -%}
+    'aria-expanded': panel_show}) -%}
 {# content #}
 <div class="card card-collapse card-month mb-2" data-path="{{ path('homepage_hide_month') }}">
     <div class="card-header d-flex-wrap-center">
-        <a{{ attributes(header_attributes) }}>
+        <a {{ html_attr(header_attributes) }}>
             {{- icon('calendar-alt ms-1 far', 'index.panel_month') -}}
         </a>
         {%- if route_name and is_months -%}

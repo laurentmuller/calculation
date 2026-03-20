@@ -1,7 +1,6 @@
 {# imports #}
 {% from 'macros/_icons.html.twig' import icon %}
 {% from 'calculation/_macro_groups.html.twig' import outputGroupRow %}
-{% from 'macros/_attributes.html.twig' import attributes %}
 {# panel #}
 <div id='items-panel' class="card mb-3">
     <div class="card-header">
@@ -31,7 +30,7 @@
     </div>
     <div class="card-body px-2 pt-2 pb-1">
         <div class="table-responsive">
-            {%- set table_attributes = {id: 'data-table-edit', class: 'table table-edit table-list table-hover'} -%}
+            {%- set table_attributes = {id: 'data-table-edit', class: ['table', 'table-edit', 'table-list', 'table-hover']} -%}
             {%- if editable -%}
                 {%- set table_attributes = table_attributes|merge({
                     'data-group-index': groupIndex,
@@ -40,7 +39,7 @@
                     'data-prototype': outputGroupRow(form.groups.vars.prototype, editable),
                 }) -%}
             {%- endif -%}
-            <table{{ attributes(table_attributes) }}>
+            <table {{ html_attr(table_attributes) }}>
                 {% for group in form.groups %}
                     {{ outputGroupRow(group, editable, loop.first, loop.last) }}
                 {% endfor %}

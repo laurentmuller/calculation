@@ -1,16 +1,21 @@
-{% from 'macros/_attributes.html.twig' import attributes %}
-{# add a single flash message #}
-{% macro addFlashbag(key, message) -%}
-    <p class="flash" data-type="{{ key }}" data-title="{{ ('flash_bag.' ~ key)|trans }}">{{ message }}</p>
-{%- endmacro addFlashbag %}
+{# attributes #}
+{% set flash_attrs = {
+    id: 'flashes',
+    class: 'd-none',
+    'data-dataset': '#flashes',
+    'data-target': '.page-content',
+    'data-subtitle': app_full_name,
+    'data-close-title': 'common.button_close'|trans} %}
+{% if app.user %}
+    {% set flash_attrs = flash_attrs|merge(user_parameters.message.attributes) %}
+{% else %}
+    {% set flash_attrs = flash_attrs|merge(application_parameters.message.attributes) %}
+{% endif %}
 {# add all flash messages #}
-{%- set flash_attributes = user_parameters.message.attributes|merge({
-    dataset: '#flashes',
-    target: '.page-content',
-    subtitle: app_full_name,
-    'close-title': 'common.button_close'|trans}) -%}
-<div id="flashes" class="d-none"{{ attributes(flash_attributes, 'data-') }}>
+<div {{ html_attr(flash_attrs) }}>
     {% for key, messages in app.flashes %}
-        {% for message in messages %}{{- _self.addFlashbag(key, message) -}}{% endfor %}
+        {% for message in messages %}
+            <span class="flash" data-type="{{ key }}" data-title="{{ ('flash_bag.' ~ key)|trans }}">{{ message }}</span>
+        {% endfor %}
     {% endfor %}
 </div>

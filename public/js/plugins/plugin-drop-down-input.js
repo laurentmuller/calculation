@@ -160,7 +160,7 @@ $(function () {
                     $icon = $newIcon;
                 }
                 if (options.resetIcon && $selection.is($items.first()) && $element.data('icon')) {
-                    $icon = $($element.data('icon'));
+                    $icon = $(JSON.parse($element.data('icon')));
                 }
             }
 

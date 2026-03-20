@@ -25,9 +25,7 @@ class Parameter
 {
     /**
      * @param string $name    the property name
-     * @param mixed  $default the default value
-     *
-     * @phpstan-param TValue $default
+     * @param TValue $default the default value
      */
     public function __construct(public string $name, public mixed $default = null)
     {

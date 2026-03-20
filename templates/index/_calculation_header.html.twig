@@ -1,6 +1,5 @@
 {# import #}
 {% from 'macros/_icons.html.twig' import icon, dropdownSeparator, link %}
-{% from 'macros/_attributes.html.twig' import attributes %}
 {# macros #}
 {% macro button_view(icon, view, selection, value) %}
 <li>
@@ -20,9 +19,9 @@
 {%- set header_attributes = header_attributes|merge({
     href: '#' ~ panel_key,
     title: panel_title|trans,
-    'aria-expanded': panel_show|json_encode}) -%}
+    'aria-expanded': panel_show}) -%}
 <div id="card-header-calculation" class="card-header d-flex-wrap-center">
-    <a{{ attributes(header_attributes) }}>
+    <a {{ html_attr(header_attributes) }}>
         {{- icon(ICON_CALCULATION ~ ' ms-1', 'index.panel_table_title') -}}
     </a>
     <div class="btn-group btn-group-sm d-print-none" role="group">

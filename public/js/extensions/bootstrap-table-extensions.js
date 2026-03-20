@@ -561,11 +561,10 @@
             /**
              * Reset the search text.
              *
-             * @param {String} [text] - the optional search text.
              * @return {jQuery} this instance for chaining.
              */
-            resetSearch: function (text) {
-                return $(this).bootstrapTable('resetSearch', text || '');
+            resetSearch: function () {
+                return $(this).bootstrapTable('resetSearch');
             },
 
             /**

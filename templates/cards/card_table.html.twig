@@ -1,27 +1,27 @@
 {% extends 'cards/card_base.html.twig' %}
+{% from 'macros/_data_attributes.html.twig' import html_data_attr %}
 {% from 'macros/_icons.html.twig' import icon, link, linkExternal, dropdownItem, dropdownSeparator, dropdownEllipsis %}
-{% from 'macros/_attributes.html.twig' import attributes as output_attributes %}
 {# output a column #}
 {% macro output_column(column) -%}
-<th{{ output_attributes(column.attributes, 'data-') }}>
+<th {{ html_data_attr(column.attributes) }}>
     {{- column.title ? column.title|trans : '&nbsp;'|raw -}}
 </th>
 {%- endmacro output_column %}
 {# output a drop-down menu #}
 {% macro output_dropdown_menu(id, icon, text, title, value, default) -%}
-{% set icon = icon(icon) %}
-{%- set attributes = {
+{% set html_icon = icon(icon) %}
+{%- set attrs = {
     id: id,
     title: title|trans,
     type: 'button',
-    class: 'btn btn-outline-secondary dropdown-toggle dropdown-input',
-    'aria-expanded': 'false',
+    class: ['btn', 'btn-outline-secondary', 'dropdown-toggle', 'dropdown-input'],
+    'aria-expanded': false,
     'data-bs-toggle': 'dropdown',
+    'data-icon': html_icon,
     'data-value': value,
-    'data-icon': icon,
     'data-default': default} -%}
-<button{{ output_attributes(attributes) }}>
-    <span class="dropdown-icon">{{- icon -}}</span>
+<button {{ html_attr(attrs) }}>
+    <span class="dropdown-icon">{{- html_icon -}}</span>
     <span class="dropdown-label ms-1 d-none d-sm-inline">{{- text -}}</span>
 </button>
 {% endmacro output_dropdown_menu %}
@@ -34,7 +34,7 @@
         'data-value': value,
         class: ('dropdown-item dropdown-' ~ suffix ~ active)|trim}) %}
     <li>
-        <button{{ output_attributes(attributes) }}>
+        <button {{ html_attr(attributes) }}>
             <span class="dropdown-icon">{{- icon(icon) -}}</span>
             <span class="dropdown-label ms-1">{{- text|default(value) -}}</span>
         </button>
@@ -244,7 +244,7 @@
     </div>
 </div>
 {# table #}
-<table id="table-edit"{{ output_attributes(attributes, 'data-') }} class="opacity-0">
+<table id="table-edit" class="opacity-0" {{ html_data_attr(attributes) }}>
     <thead>
         <tr>
         {% for column in columns %}

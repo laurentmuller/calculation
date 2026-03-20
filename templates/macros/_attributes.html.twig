@@ -1,9 +1,0 @@
-{# output attributes #}
-{% macro attributes(attributes, prefix = '') -%}
-    {% for name, value in attributes %}
-        {%- if value === true or value === false -%}
-            {% set value = value|json_encode %}
-        {% endif %}
-        {{- ' %s%s="%s"'|format(prefix, name, value|e)|raw -}}
-    {%- endfor -%}
-{%- endmacro attributes %}

@@ -1,5 +1,4 @@
 {% from 'macros/_icons.html.twig' import icon, link, linkExternal %}
-{% from 'macros/_attributes.html.twig' import attributes %}
 {% from 'index/_macros.html.twig' import margin as macros_margin, empty_content %}
 {# macros #}
 {% macro cardEntry(state, index_route, parameters, min_margin) -%}
@@ -32,11 +31,11 @@
 {%- set header_attributes = header_attributes|merge({
     href: '#' ~ panel_key,
     title: panel_title|trans,
-    'aria-expanded': panel_show|json_encode}) -%}
+    'aria-expanded': panel_show}) -%}
 {# content #}
 <div class="card card-collapse card-state mb-2" data-path="{{ path('homepage_hide_state') }}">
     <div class="card-header d-flex-wrap-center">
-        <a{{ attributes(header_attributes) }}>
+        <a {{ html_attr(header_attributes) }}>
             {{- icon(ICON_CALCULATION_STATE ~ ' ms-1', 'index.panel_state') -}}
         </a>
         {%- if table_path and is_states -%}

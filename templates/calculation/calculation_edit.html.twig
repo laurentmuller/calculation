@@ -5,7 +5,6 @@
     {%- set type = type|default('number') -%}
     <div class="input-group">
         {%- if not disabled -%}
-            {% from 'macros/_attributes.html.twig' import attributes %}
             {%- set label = 'calculation.edit.adjust_label'|trans -%}
             {%- set title = 'calculation.edit.adjust_title'|trans({'%minimum%': minMargin|percent}) -%}
             {%- set class_name = 'btn btn-adjust btn-outline-secondary px-2 d-print-none' ~ (overallBelow ? '' : ' cursor-default') -%}
@@ -13,14 +12,15 @@
                 type: 'button',
                 id: 'btn-adjust',
                 name: 'btn-adjust',
+                disabled: not overallBelow,
                 'aria-label': label,
                 class: class_name,
-                'data-bs-html': 'true',
+                'data-bs-html': true,
                 'data-bs-title': title,
                 'data-bs-toggle': 'tooltip',
                 'data-bs-custom-class': 'tooltip-success',
             } -%}
-            <button{{ attributes(attrs) }}{% if not overallBelow %} disabled{% endif %}>
+            <button {{ html_attr(attrs) }}>
                 <i class="fa-solid fa-wand-magic-sparkles"></i>
             </button>
         {%- endif -%}

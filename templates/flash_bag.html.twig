@@ -1,21 +1,19 @@
 {# attributes #}
 {% set flash_attrs = {
-    id: 'flashes',
-    class: 'd-none',
-    'data-dataset': '#flashes',
-    'data-target': '.page-content',
-    'data-subtitle': app_full_name,
-    'data-close-title': 'common.button_close'|trans} %}
+    dataset: '#flashes',
+    target: '.page-content',
+    subtitle: app_full_name,
+    'close-title': 'common.button_close'|trans} %}
 {% if app.user %}
-    {% set flash_attrs = flash_attrs|merge(user_parameters.message.attributes('data-')) %}
+    {% set flash_attrs = flash_attrs|merge(user_parameters.message.attributes) %}
 {% else %}
-    {% set flash_attrs = flash_attrs|merge(application_parameters.message.attributes('data-')) %}
+    {% set flash_attrs = flash_attrs|merge(application_parameters.message.attributes) %}
 {% endif %}
 {# add all flash messages #}
-<div {{ html_attr(flash_attrs) }}>
+<div id="flashes" class="d-none" {{ html_data_attr(flash_attrs) }}>
     {% for key, messages in app.flashes %}
         {% for message in messages %}
-            <span class="flash" data-type="{{ key }}" data-title="{{ ('flash_bag.' ~ key)|trans }}">{{ message }}</span>
+            <div class="flash" data-type="{{ key }}" data-title="{{ ('flash_bag.' ~ key)|trans }}">{{ message }}</div>
         {% endfor %}
     {% endfor %}
 </div>

@@ -876,3 +876,16 @@ body.status-bar .grecaptcha-badge {
 .navbar-cookie-banner {
     z-index: 1031;
 }
+
+/* submit alert */
+form:has(.alert-submit) {
+    position: relative;
+}
+
+.alert-submit {
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    position: absolute;
+    z-index: 1000;
+}

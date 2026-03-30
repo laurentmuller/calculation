@@ -1627,11 +1627,7 @@
 
         // main form validation
         const $form = $('#edit-form');
-        $form.initValidator({
-            spinner: {
-                parent: $('#main-content')
-            }
-        });
+        $form.initValidator();
 
         // initialize the type ahead
         $('#calculation_customer').initTypeahead({

@@ -1,9 +1,0 @@
-{# output attributes with data prefix #}
-{% macro html_data_attr(attributes, prefix = 'data-') -%}
-    {% for name, value in attributes %}
-        {%- if value === true or value === false -%}
-            {%- set value = value|json_encode -%}
-        {%- endif -%}
-        {{- ' %s%s="%s"'|format(prefix, name, value|e)|raw -}}
-    {%- endfor -%}
-{%- endmacro html_data_attr %}

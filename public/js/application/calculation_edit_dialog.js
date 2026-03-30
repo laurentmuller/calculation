@@ -1,4 +1,3 @@
-
 /**
  * @typedef {Object} Application
  * @property {function: string} getItemDialogUrl
@@ -220,7 +219,10 @@ class EditDialog {
      * @protected
      */
     _onDialogHide() {
-        $('tr.table-primary').removeClass('table-primary');
+        if (this.$editingRow) {
+            this.$editingRow.removeClass('table-primary');
+        }
+        // $('tr.table-primary').removeClass('table-primary');
         return this;
     }
 

@@ -13,10 +13,14 @@
             /**
              * Gets the validator.
              *
-             * @return {?jQuery}
+             * @return {jQuery|null} the validator, if any; null otherwise.
              */
             getValidator() {
-                return $(this).data('validator');
+                let $this = $(this);
+                if (!$this.is('form')) {
+                    $this = $this.parents('form');
+                }
+                return $this.data('validator');
             },
 
             /**
@@ -26,13 +30,10 @@
              */
             validateElement() {
                 return this.each(function () {
-                    const $that = $(this);
-                    const $form = $that.parents('form');
-                    if ($form.length) {
-                        const validator = $form.getValidator();
-                        if (validator) {
-                            validator.element($that);
-                        }
+                    const $this = $(this);
+                    const validator = $this.getValidator();
+                    if (validator) {
+                        validator.element($this);
                     }
                 });
             },
@@ -159,7 +160,6 @@
              * @param {boolean} [options.colorPicker]
              * @param {boolean} [options.simpleEditor]
              * @param {function} [options.submitHandler]
-             * @param {Object} [options.spinner]
              * @param {Object} [options.rules]
              * @param {function} [options.highlight]
              * @param {function} [options.unhighlight]
@@ -322,7 +322,7 @@
 
                 if (!options.submitHandler) {
                     defaults.submitHandler = function (form) {
-                        $(form).showSubmit(options.spinner || {});
+                        $(form).showSubmit();
                         form.submit();
                     };
                 }
@@ -438,62 +438,39 @@
             },
 
             /**
-             * Display an information alert while the form is submitted.
+             * Display waiting information while submitting the form.
              *
-             * @param {Object} [options] - the alert options.
              * @return {jQuery} this form for chaining.
              */
-            showSubmit: function (options) {
+            showSubmit: function () {
                 const $this = $(this);
-                const settings = $.extend(true, {
-                    parent: $this,
-                    text: $this.data('save') || $this.find('.card-title').text() || 'Sauvegarde des données',
-                    alertClass: 'alert bg-body-secondary border border-secondary-subtle text-center position-absolute start-50 translate-middle z-3',
-                    iconClass: 'fa-solid fa-spinner fa-spin me-2',
-                    css: {
-                        width: '90%',
-                        zIndex: 2
-                    },
-                    maxWidth: 600,
-                    hide: 1500,
-                    show: 150
-                }, options);
+                const settings = {
+                    text: $this.data('save') || $this.find('.card-title').text(),
+                    alertClass: 'alert alert-submit border border-secondary-subtle bg-body-secondary',
+                    css: {},
+                };
 
                 // check width
-                const parent = settings.parent;
-                let width = settings.css.width;
-                const parentWidth = parent.width();
+                const width = Math.floor($this.width() * 0.9);
                 const windowWidth = Math.floor($(window).width() * 0.9);
-                if (width.endsWith('%')) {
-                    width = $.parseInt(width);
-                    width = Math.floor(parentWidth * width / 100.0);
-                } else if (width.endsWith('px')) {
-                    width = $.parseInt(width, 10);
-                }
-                settings.css.width = Math.min(width, windowWidth, settings.maxWidth) + 'px';
+                settings.css.width = Math.min(width, windowWidth, 600) + 'px';
 
                 // check height
-                if (window.innerHeight < parent.height()) {
+                if (window.innerHeight < $this.height()) {
                     settings.css.top = '25%';
                 } else {
                     settings.alertClass += ' top-50';
                 }
 
-                // build alert
+                // build and show alert
                 const $alert = $('<div />', {
-                    class: settings.alertClass,
-                    text: settings.text,
-                    css: settings.css,
-                    role: 'alert',
+                    class: settings.alertClass, text: settings.text, css: settings.css, role: 'alert',
                 });
-                if (settings.iconClass) {
-                    const $icon = $('<i />', {
-                        class: settings.iconClass
-                    });
-                    $alert.prepend($icon);
-                }
-                parent.addClass('position-relative');
-                $alert.appendTo($(parent)).show(settings.show);
+                const $icon = $('<i />', {
+                    class: 'fa-solid fa-spinner fa-spin me-2'
+                });
+                $alert.prepend($icon);
+                $alert.appendTo($this).show();
                 window.onpagehide = () => $alert.remove();
                 return $this;
             }

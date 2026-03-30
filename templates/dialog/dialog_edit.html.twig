@@ -18,15 +18,19 @@
        <div class="modal-content">
             <form {{ html_attr(form_attr) }}>
                 <div class="modal-header">
-                    <h5 class="modal-title" id="{{ dialog_id }}">{{ icon(dialog_icon ~ ' me-1') }}<span class="dialog-title">{{ edit_title }}</span></h5>
+                    <h5 class="modal-title" id="{{ dialog_id }}">
+                        {{- icon(dialog_icon ~ ' me-1') }}<span class="dialog-title">{{ edit_title }}</span>
+                    </h5>
                     {{- modal_close_button(for_header: true, data_target: dialog_id) }}
                 </div>
                 <div class="modal-body">
                     {% block modal_body %}{% endblock modal_body %}
                 </div>
                 <div class="modal-footer justify-content-start align-items-start">
-                    <input type="submit" role="button" id="dialog_submit_button" class="btn btn-form btn-primary" value="{{ 'common.button_ok'|trans }}">
-                    <input type="button" role="button" id="dialog_cancel_button" class="btn btn-form btn-secondary" value="{{ 'common.button_cancel'|trans }}" data-bs-dismiss="modal">
+                    <button type="submit" id="dialog_submit_button" class="btn btn-form btn-primary">
+                        {{- 'common.button_ok'|trans -}}
+                    </button>
+                    {{- modal_close_button(for_header: false, data_target: dialog_id) }}
                     {%- block modal_buttons -%}{%- endblock modal_buttons -%}
                     <small class="flex-grow-1 text-sm-end">{{ 'common.required'|trans|raw }}</small>
                 </div>

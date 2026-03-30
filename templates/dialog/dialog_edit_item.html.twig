@@ -49,5 +49,7 @@
 {% endblock modal_body %}
 {# buttons #}
 {% block modal_buttons %}
-<input type="button" role="button" id="item_delete_button" class="btn btn-form btn-outline-danger" value="{{ 'common.button_delete'|trans }}">
+    <button type="button" id="item_delete_button" class="btn btn-form btn-outline-danger">
+        {{- 'common.button_delete'|trans -}}
+    </button>
 {% endblock modal_buttons %}

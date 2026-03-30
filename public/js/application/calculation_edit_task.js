@@ -54,8 +54,8 @@ class EditTaskDialog extends EditDialog {
         that.$unit = $('#task_unit');
         that.$quantity = $('#task_quantity').inputNumberFormat();
         that.$category = $('#task_category');
-        that.$submit = $('#task_submit_button');
         that.$itemsEmpty = $('.task-items-empty');
+        that.$submit = $('#dialog_submit_button');
 
         // handle type ahead search
         that._initSearchUnits(that.$unit);
@@ -77,11 +77,12 @@ class EditTaskDialog extends EditDialog {
         const options = {
             showModification: false,
             submitHandler: function () {
-                if (that.$editingRow) {
-                    that.application.onEditTaskDialogSubmit();
-                } else {
-                    that.application.onAddTaskDialogSubmit();
-                }
+                that.application.onAddTaskDialogSubmit();
+                // if (that.$editingRow) {
+                //     that.application.onEditTaskDialogSubmit();
+                // } else {
+                //     that.application.onAddTaskDialogSubmit();
+                // }
             },
             rules: {
                 'task[quantity]': {

@@ -25,7 +25,7 @@ use Twig\Error\RuntimeError;
 use Twig\Extension\CoreExtension;
 
 /**
- * Twig extension to format dates, numbers or boolean values.
+ * Twig extension to format dates, numbers, or boolean values.
  */
 final class FormatExtension implements DateFormatInterface
 {

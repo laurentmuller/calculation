@@ -371,7 +371,7 @@ class HelpService
         }
         \uasort(
             $entities,
-            static fn (array $a, array $b): int => \strnatcmp($a['name'] ?? '', $b['name'] ?? '')
+            static fn (array $a, array $b): int => \strnatcmp($a['name'], $b['name'])
         );
     }
 }

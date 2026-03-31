@@ -463,7 +463,7 @@
          * @returns {jQuery<HTMLElement>} the table head.
          */
         findOrCreateGroup: function (group) {
-            const $group = $('#data-table-edit .group:has(input[name$="[group]"][value="' + group.id + '"])');
+            const $group = $(`#data-table-edit .group:has(input[name$="[group]"][value="${group.id}"])`);
             if ($group.length > 0) {
                 return $group;
             }
@@ -478,7 +478,7 @@
          * @returns {jQuery<HTMLElement>} the table body.
          */
         findOrCreateCategory: function ($group, category) {
-            const $body = $('#data-table-edit tbody:has(input[name$="[category]"][value="' + category.id + '"])');
+            const $body = $(`#data-table-edit tbody:has(input[name$="[category]"][value="${category.id}"])`);
             if ($body.length > 0) {
                 return $body;
             }
@@ -631,25 +631,28 @@
                 }
             });
 
-            // create a group and update
-            const $parent = $('#data-table-edit');
-            const prototype = $parent.getPrototype(/__groupIndex__/g, 'groupIndex');
-            const $group = $(prototype);
-            $group.find('tr:first th:first').text(group.code);
-            $group.findNamedInput('group').val(group.id);
-            $group.findNamedInput('code').val(group.code);
-
-            // insert or append
-            if ($nextGroup) {
-                $group.insertBefore($nextGroup);
-            } else {
-                $group.appendTo($parent);
+            try {
+                // create a group
+                const $parent = $('#data-table-edit');
+                const prototype = $parent.getPrototype(/__groupIndex__/g, 'groupIndex');
+                const $group = $(JSON.parse(prototype));
+                // update
+                $group.find('tr:first th:first').text(group.code);
+                $group.findNamedInput('group').val(group.id);
+                $group.findNamedInput('code').val(group.code);
+                // insert or append
+                if ($nextGroup) {
+                    $group.insertBefore($nextGroup);
+                } else {
+                    $group.appendTo($parent);
+                }
+                // reset the drag and drop handler.
+                this.initDragDrop(true);
+                return $group;
+            } catch (e) {
+                window.console.error(e);
+                return null;
             }
-
-            // reset the drag and drop handler.
-            this.initDragDrop(true);
-
-            return $group;
         },
 
         /**
@@ -672,29 +675,31 @@
                 }
             });
 
-            // create a category and update
-            const prototype = $group.getPrototype(/__categoryIndex__/g, 'categoryIndex');
-            const $category = $(prototype);
-            $category.find('tr:first th:first').text(category.code);
-            $category.findNamedInput('category').val(category.id);
-            $category.findNamedInput('code').val(category.code);
-
-            // insert or append
-            if ($nextCategory) {
-                $category.insertBefore($nextCategory);
-            } else {
-                const $last = $group.nextUntil('.group').last();
-                if ($last.length) {
-                    $last.after($category);
+            try {
+                // create a category and update
+                const prototype = $group.getPrototype(/__categoryIndex__/g, 'categoryIndex');
+                const $category = $(JSON.parse(prototype));
+                $category.find('tr:first th:first').text(category.code);
+                $category.findNamedInput('category').val(category.id);
+                $category.findNamedInput('code').val(category.code);
+                // insert or append
+                if ($nextCategory) {
+                    $category.insertBefore($nextCategory);
                 } else {
-                    $group.after($category);
+                    const $last = $group.nextUntil('.group').last();
+                    if ($last.length) {
+                        $last.after($category);
+                    } else {
+                        $group.after($category);
+                    }
                 }
+                // reset the drag and drop handler.
+                this.initDragDrop(true);
+                return $category;
+            } catch (e) {
+                window.console.error(e);
+                return null;
             }
-
-            // reset the drag and drop handler.
-            this.initDragDrop(true);
-
-            return $category;
         },
 
         /**
@@ -834,9 +839,16 @@
             const category = dialog.getCategory();
             const item = dialog.getItem();
 
-            // get or create the group and the category
+            // get or create the group
             const $group = this.findOrCreateGroup(group);
+            if (!$group) {
+                return this;
+            }
+            // get or create the category
             const $category = this.findOrCreateCategory($group, category);
+            if (!$category) {
+                return this;
+            }
 
             // append
             const $row = $category.appendRowItem(item);
@@ -920,9 +932,6 @@
          */
         onAddTaskDialogSubmit: function () {
             // hide dialog
-            /**
-             * @type {EditTaskDialog}
-             */
             const dialog = this.getTaskDialog().hide();
 
             // get dialog values
@@ -930,27 +939,24 @@
             const category = dialog.getCategory();
             const items = dialog.getItems();
 
-            // get or create the group and the category
+            // get or create the group
             const $group = this.findOrCreateGroup(group);
+            if (!$group) {
+                return this;
+            }
+            // get or create the category
             const $category = this.findOrCreateCategory($group, category);
-
+            if (!$category) {
+                return this;
+            }
             // append items and select
             items.forEach(function (item) {
                 const $row = $category.appendRowItem(item);
                 $row.scrollInViewport().timeoutToggle('table-success');
             });
-
             this.$editingRow = null;
             return this.updateAll();
-        },
 
-        /**
-         * Handle the task dialog form submit event when editing a task.
-         *
-         * @return {Application} This instance for chaining.
-         */
-        onEditTaskDialogSubmit: function () {
-            this.getTaskDialog().hide();
         },
 
         /**
@@ -1152,14 +1158,21 @@
          * @returns {jQuery<HTMLTableRowElement>} the created row.
          */
         appendRowItem: function (item) {
-            // tbody
-            const $parent = $(this);
-
-            // get the prototype
-            const prototype = $parent.getPrototype(/__itemIndex__/g, 'itemIndex');
-
-            // append and update
-            return $(prototype).appendTo($parent).updateRowItem(item);
+            try {
+                // tbody
+                const $parent = $(this);
+                // get the prototype
+                const prototype = $parent.getPrototype(/__itemIndex__/g, 'itemIndex');
+                // create row
+                const $row = $(JSON.parse(prototype));
+                // append and update
+                $row.appendTo($parent);
+                $row.updateRowItem(item);
+                return $row;
+            } catch (e) {
+                window.console.error(e);
+                return null;
+            }
         },
 
         /**

@@ -101,7 +101,7 @@ class SchemaReport extends AbstractReport
 
     private function findLink(?string $name): ?int
     {
-        return $this->tableLinks[$name] ?? null;
+        return null === $name ? null : $this->tableLinks[$name] ?? null;
     }
 
     /**

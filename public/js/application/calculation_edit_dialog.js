@@ -5,7 +5,6 @@
  * @property {function: void} onAddItemDialogSubmit
  * @property {function(jQuery<HTMLElement>)} removeItem
  * @property {function: string} getTaskDialogUrl
- * @property {function: void} onEditTaskDialogSubmit
  * @property {function: void} onAddTaskDialogSubmit
  */
 

@@ -16,6 +16,7 @@ parameters:
     reportStaticMethodSignatures: true
     reportUnmatchedIgnoredErrors: true
     checkDynamicProperties: true
+    reportNonIntStringArrayKey: true
 
     doctrine:
     	allowNullablePropertyForRequiredField: true

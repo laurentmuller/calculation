@@ -73,7 +73,7 @@ class PlainType extends AbstractType implements DateFormatInterface
     }
 
     /**
-     * @phpstan-param OptionsType $options
+     * @param OptionsType $options
      */
     #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
@@ -195,7 +195,7 @@ class PlainType extends AbstractType implements DateFormatInterface
     }
 
     /**
-     * @phpstan-param OptionsType $options
+     * @param OptionsType $options
      */
     private function formatArray(array $value, array $options): string
     {
@@ -210,19 +210,20 @@ class PlainType extends AbstractType implements DateFormatInterface
     }
 
     /**
-     * @phpstan-param OptionsType $options
+     * @param OptionsType $options
      */
     private function formatDate(DatePoint|int|null $value, array $options): string
     {
-        $dateType = self::DATE_FORMATS[$options['date_format']] ?? null;
-        $timeType = self::DATE_FORMATS[$options['time_format']] ?? null;
-        $pattern = $options['date_pattern'];
-
-        return (string) FormatUtils::formatDateTime($value, $dateType, $timeType, $pattern);
+        return (string) FormatUtils::formatDateTime(
+            $value,
+            $this->getDateTimeType($options, 'date_format'),
+            $this->getDateTimeType($options, 'time_format'),
+            $options['date_pattern']
+        );
     }
 
     /**
-     * @phpstan-param OptionsType $options
+     * @param OptionsType $options
      */
     private function formatEmpty(mixed $value, array $options): string
     {
@@ -234,7 +235,7 @@ class PlainType extends AbstractType implements DateFormatInterface
     }
 
     /**
-     * @phpstan-param OptionsType $options
+     * @param OptionsType $options
      */
     private function formatNumber(float|int|string $value, array $options): string
     {
@@ -248,7 +249,7 @@ class PlainType extends AbstractType implements DateFormatInterface
     }
 
     /**
-     * @phpstan-param OptionsType $options
+     * @param OptionsType $options
      */
     private function formatPercent(float|int|string $value, array $options): string
     {
@@ -279,6 +280,17 @@ class PlainType extends AbstractType implements DateFormatInterface
             \is_scalar($value) || $value instanceof \Stringable => (string) $value,
             default => throw new TransformationFailedException(\sprintf('Unable to map instance of "%s" to string.', StringUtils::getDebugType($value)))
         };
+    }
+
+    /**
+     * @param OptionsType                 $options
+     * @param 'date_format'|'time_format' $key
+     *
+     * @return value-of<self::DATE_FORMATS>|null
+     */
+    private function getDateTimeType(array $options, string $key): ?int
+    {
+        return \is_string($options[$key]) ? self::DATE_FORMATS[$options[$key]] : null;
     }
 
     private function trans(string $id): string

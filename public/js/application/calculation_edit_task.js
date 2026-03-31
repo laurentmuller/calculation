@@ -78,11 +78,6 @@ class EditTaskDialog extends EditDialog {
             showModification: false,
             submitHandler: function () {
                 that.application.onAddTaskDialogSubmit();
-                // if (that.$editingRow) {
-                //     that.application.onEditTaskDialogSubmit();
-                // } else {
-                //     that.application.onAddTaskDialogSubmit();
-                // }
             },
             rules: {
                 'task[quantity]': {

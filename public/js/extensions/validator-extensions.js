@@ -1,4 +1,19 @@
 /**
+ * @typedef {Object} ValidatorOptions
+ * @property {boolean} [recaptcha]
+ * @property {boolean} [fileInput]
+ * @property {boolean} [imageInput]
+ * @property {boolean} [colorPicker]
+ * @property {boolean} [simpleEditor]
+ * @property {function} [submitHandler]
+ * @property {function} [highlight]
+ * @property {function} [unhighlight]
+ * @property {function} [invalidHandler]
+ * @property {function} [errorPlacement]
+ * @property {Object} [rules]
+ */
+
+/**
  * jQuery Validation Plugin extensions.
  */
 (function ($) {
@@ -153,17 +168,8 @@
             /**
              * Initialize default validator options.
              *
-             * @param {Object} [options] - the options
-             * @param {boolean} [options.recaptcha]
-             * @param {boolean} [options.fileInput]
-             * @param {boolean} [options.imageInput]
-             * @param {boolean} [options.colorPicker]
-             * @param {boolean} [options.simpleEditor]
-             * @param {function} [options.submitHandler]
-             * @param {Object} [options.rules]
-             * @param {function} [options.highlight]
-             * @param {function} [options.unhighlight]
-             * @param {function} [options.invalidHandler]
+             * @param {ValidatorOptions} [options] - the options
+             *
              * @returns {Object} the validator.
              */
             initValidator: function (options) {
@@ -272,6 +278,7 @@
                 };
 
                 // default options
+                /** @type {ValidatorOptions} */
                 let defaults = {
                     focus: true,
                     focusInvalid: true,

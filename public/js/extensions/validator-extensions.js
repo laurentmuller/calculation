@@ -285,7 +285,7 @@
                     showModification: true,
                     errorElement: 'small',
                     errorClass: 'is-invalid',
-                    ignore: ':hidden:not(".must-validate"), .skip-validation',
+                    ignore: ':hidden:not(.must-validate), .skip-validation',
 
                     errorPlacement: function (error, element) {
                         const $parent = $(element).closest('.form-group, .mb-3');

@@ -36,10 +36,9 @@
                     'data-group-index': groupIndex,
                     'data-category-index': categoryIndex,
                     'data-item-index': itemIndex,
-                    'data-prototype': outputGroupRow(form.groups.vars.prototype, editable),
                 }) -%}
             {%- endif -%}
-            <table {{ html_attr(table_attributes) }}>
+            <table {{ html_attr(table_attributes) }}{% if editable %} data-prototype="{{ outputGroupRow(form.groups.vars.prototype, editable)|e('html_attr') }}"{% endif %}>
                 {% for group in form.groups %}
                     {{ outputGroupRow(group, editable, loop.first, loop.last) }}
                 {% endfor %}

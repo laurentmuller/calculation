@@ -631,28 +631,23 @@
                 }
             });
 
-            try {
-                // create a group
-                const $parent = $('#data-table-edit');
-                const prototype = $parent.getPrototype(/__groupIndex__/g, 'groupIndex');
-                const $group = $(JSON.parse(prototype));
-                // update
-                $group.find('tr:first th:first').text(group.code);
-                $group.findNamedInput('group').val(group.id);
-                $group.findNamedInput('code').val(group.code);
-                // insert or append
-                if ($nextGroup) {
-                    $group.insertBefore($nextGroup);
-                } else {
-                    $group.appendTo($parent);
-                }
-                // reset the drag and drop handler.
-                this.initDragDrop(true);
-                return $group;
-            } catch (e) {
-                window.console.error(e);
-                return null;
+            // create a group
+            const $parent = $('#data-table-edit');
+            const prototype = $parent.getPrototype(/__groupIndex__/g, 'groupIndex');
+            const $group = $(prototype);
+            // update
+            $group.find('tr:first th:first').text(group.code);
+            $group.findNamedInput('group').val(group.id);
+            $group.findNamedInput('code').val(group.code);
+            // insert or append
+            if ($nextGroup) {
+                $group.insertBefore($nextGroup);
+            } else {
+                $group.appendTo($parent);
             }
+            // reset the drag and drop handler.
+            this.initDragDrop(true);
+            return $group;
         },
 
         /**
@@ -675,31 +670,26 @@
                 }
             });
 
-            try {
-                // create a category and update
-                const prototype = $group.getPrototype(/__categoryIndex__/g, 'categoryIndex');
-                const $category = $(JSON.parse(prototype));
-                $category.find('tr:first th:first').text(category.code);
-                $category.findNamedInput('category').val(category.id);
-                $category.findNamedInput('code').val(category.code);
-                // insert or append
-                if ($nextCategory) {
-                    $category.insertBefore($nextCategory);
+            // create a category and update
+            const prototype = $group.getPrototype(/__categoryIndex__/g, 'categoryIndex');
+            const $category = $(prototype);
+            $category.find('tr:first th:first').text(category.code);
+            $category.findNamedInput('category').val(category.id);
+            $category.findNamedInput('code').val(category.code);
+            // insert or append
+            if ($nextCategory) {
+                $category.insertBefore($nextCategory);
+            } else {
+                const $last = $group.nextUntil('.group').last();
+                if ($last.length) {
+                    $last.after($category);
                 } else {
-                    const $last = $group.nextUntil('.group').last();
-                    if ($last.length) {
-                        $last.after($category);
-                    } else {
-                        $group.after($category);
-                    }
+                    $group.after($category);
                 }
-                // reset the drag and drop handler.
-                this.initDragDrop(true);
-                return $category;
-            } catch (e) {
-                window.console.error(e);
-                return null;
             }
+            // reset the drag and drop handler.
+            this.initDragDrop(true);
+            return $category;
         },
 
         /**
@@ -841,14 +831,9 @@
 
             // get or create the group
             const $group = this.findOrCreateGroup(group);
-            if (!$group) {
-                return this;
-            }
+
             // get or create the category
             const $category = this.findOrCreateCategory($group, category);
-            if (!$category) {
-                return this;
-            }
 
             // append
             const $row = $category.appendRowItem(item);
@@ -941,14 +926,10 @@
 
             // get or create the group
             const $group = this.findOrCreateGroup(group);
-            if (!$group) {
-                return this;
-            }
+
             // get or create the category
             const $category = this.findOrCreateCategory($group, category);
-            if (!$category) {
-                return this;
-            }
+
             // append items and select
             items.forEach(function (item) {
                 const $row = $category.appendRowItem(item);
@@ -956,7 +937,6 @@
             });
             this.$editingRow = null;
             return this.updateAll();
-
         },
 
         /**
@@ -1164,7 +1144,7 @@
                 // get the prototype
                 const prototype = $parent.getPrototype(/__itemIndex__/g, 'itemIndex');
                 // create row
-                const $row = $(JSON.parse(prototype));
+                const $row = $(prototype);
                 // append and update
                 $row.appendTo($parent);
                 $row.updateRowItem(item);

@@ -11,9 +11,8 @@
 
 declare(strict_types=1);
 
-namespace Twig;
+namespace App\Tests\Twig;
 
-use App\Tests\Twig\RuntimeTestCase;
 use App\Twig\HtmlDataExtension;
 
 /**

@@ -107,6 +107,8 @@ abstract class AbstractProperty extends AbstractEntity
     }
 
     /**
+     * Gets this property value as an IntBackedEnum.
+     *
      * @template T of \BackedEnum
      *
      * @param class-string<T> $type
@@ -127,6 +129,8 @@ abstract class AbstractProperty extends AbstractEntity
     }
 
     /**
+     * Gets this property value as a StringBackedEnum.
+     *
      * @template T of \BackedEnum
      *
      * @param class-string<T> $type

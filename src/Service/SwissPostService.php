@@ -17,7 +17,7 @@ use App\Database\SwissDatabase;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
- * Service to search zip codes, cities and streets from Switzerland.
+ * Service to search zip codes, cities, and streets from Switzerland.
  *
  * @phpstan-import-type SearchStreetType from SwissDatabase
  * @phpstan-import-type SearchZipCityType from SwissDatabase
@@ -44,7 +44,7 @@ readonly class SwissPostService
     }
 
     /**
-     * Finds values by searching in streets, zip codes and cities.
+     * Finds values by searching in streets, zip codes, and cities.
      *
      * @param string $value the value to search for
      * @param int    $limit the maximum number of rows to return

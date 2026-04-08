@@ -82,7 +82,7 @@ class SwissDatabase extends AbstractDatabase
             city.zip,
             city.name as city,
             state.name as state,
-            FORMAT('%s, %s %s', street.name, city.zip, city.name) as display
+            printf('%s, %s %s', street.name, city.zip, city.name) as display
         FROM street
         INNER JOIN city on street.city_id = city.id
         INNER JOIN state on city.state_id = state.id
@@ -106,7 +106,7 @@ class SwissDatabase extends AbstractDatabase
             city.zip,
             city.name as city,
             state.name as state,
-            FORMAT('%s, %s %s', street.name, city.zip, city.name) as display
+            printf('%s, %s %s', street.name, city.zip, city.name) as display
         FROM street
         INNER JOIN city on street.city_id = city.id
         INNER JOIN state on city.state_id = state.id
@@ -129,7 +129,7 @@ class SwissDatabase extends AbstractDatabase
             city.zip,
             city.name as city,
             state.name as state,
-            FORMAT('%s, %s', city.name, city.zip) as display
+            printf('%s, %s', city.name, city.zip) as display
         FROM city
         INNER JOIN state on city.state_id = state.id
         WHERE city.name LIKE :value
@@ -146,7 +146,7 @@ class SwissDatabase extends AbstractDatabase
             city.zip,
             city.name as city,
             state.name as state,
-            FORMAT('%s, %s %s', street.name, city.zip, city.name) as display
+            printf('%s, %s %s', street.name, city.zip, city.name) as display
         FROM street
         INNER JOIN city on street.city_id = city.id
         INNER JOIN state on city.state_id = state.id
@@ -164,7 +164,7 @@ class SwissDatabase extends AbstractDatabase
             city.zip,
             city.name as city,
             state.name as state,
-            FORMAT('%s %s', city.zip, city.name) as display
+            printf('%s %s', city.zip, city.name) as display
         FROM city
         INNER JOIN state on city.state_id = state.id
         WHERE city.zip LIKE :value

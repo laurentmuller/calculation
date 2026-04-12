@@ -68,8 +68,10 @@ $rules = [
     'phpdoc_line_span' => [
         'case' => 'single',
         'const' => 'single',
-        'property' => 'single',
+        'function' => 'single',
         'other' => 'single',
+        'property' => 'single',
+        'trait_import' => 'single',
     ],
 ];
 

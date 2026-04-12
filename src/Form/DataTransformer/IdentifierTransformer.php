@@ -27,9 +27,7 @@ use Symfony\Component\Form\DataTransformerInterface;
  */
 readonly class IdentifierTransformer implements DataTransformerInterface
 {
-    /**
-     * @use EntityTransformerTrait<TEntity>
-     */
+    /** @use EntityTransformerTrait<TEntity> */
     use EntityTransformerTrait;
 
     /**

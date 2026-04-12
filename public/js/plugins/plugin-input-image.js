@@ -168,7 +168,7 @@ $(function () {
                     $image.remove();
                 }
             }
-            this.$parent.removeClass('image-input-exists').addClass('image-input-new');
+            this.$parent.removeClass('image-input-exist').addClass('image-input-new');
             this.$element.val('').trigger('input');
             this.$browse.trigger('focus');
         }
@@ -262,7 +262,7 @@ $(function () {
             for (const file of files) {
                 if (file && this._accept(file)) {
                     this._findImage(true).attr('src', URL.createObjectURL(file));
-                    this.$parent.removeClass('image-input-new').addClass('image-input-exists');
+                    this.$parent.removeClass('image-input-new').addClass('image-input-exist');
                     this.$edit.trigger('focus');
                     return true;
                 }

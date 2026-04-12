@@ -24,9 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class GlobalMargins implements \Countable
 {
-    /**
-     * @use ValidateMarginsTrait<int, GlobalMargin>
-     */
+    /** @use ValidateMarginsTrait<int, GlobalMargin> */
     use ValidateMarginsTrait;
 
     /**

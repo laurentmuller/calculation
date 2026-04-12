@@ -86,7 +86,7 @@ class ProductUpdateService implements ServiceSubscriberInterface
     }
 
     /**
-     *  Save the update query to the session.
+     * Save the update query to the session.
      */
     public function saveQuery(ProductUpdateQuery $query): void
     {

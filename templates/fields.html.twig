@@ -116,7 +116,7 @@
         {%- set thumbnail_src = thumbnail_src|default(false) -%}
         {%- set thumbnail_alt = (thumbnail_alt|default('filetype.image'))|trans -%}
         {%- if thumbnail_src -%}{%- set attr = attr|default({})|merge({'data-src': thumbnail_src}) -%}{%- endif -%}
-        <div class="image-input {{ thumbnail_src ? 'image-input-exists' : 'image-input-new' }}">
+        <div class="image-input {{ thumbnail_src ? 'image-input-exist' : 'image-input-new' }}">
             <div class="image-input-preview img-thumbnail" data-default="{{ empty_image }}" title="{{ thumbnail_alt }}">
                 {% if thumbnail_src or empty_image -%}
                     <img src="{{ thumbnail_src|default(empty_image) }}" alt="{{ thumbnail_alt }}">

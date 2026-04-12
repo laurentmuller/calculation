@@ -25,7 +25,7 @@ use Twig\Environment;
 use Twig\Error\Error;
 
 /**
- * Twig extension to output calculation state borders CSS.
+ * Twig extension to output calculation state colors as CSS classes.
  */
 #[AsEntityListener(event: Events::postPersist, method: 'deleteCache', lazy: true, entity: CalculationState::class)]
 #[AsEntityListener(event: Events::postUpdate, method: 'deleteCache', lazy: true, entity: CalculationState::class)]

@@ -40,9 +40,7 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
 {
     use PositionTrait;
 
-    /**
-     * @use ValidateMarginsTrait<int, TaskItemMargin>
-     */
+    /** @use ValidateMarginsTrait<int, TaskItemMargin> */
     use ValidateMarginsTrait;
 
     /**

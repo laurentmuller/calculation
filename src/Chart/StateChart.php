@@ -50,8 +50,7 @@ class StateChart extends AbstractHighchart
     {
         $data = $this->repository->getCalculations();
 
-        $this->setType(self::TYPE_PIE)
-            ->hideTitle()
+        $this->setType(ChartType::TYPE_PIE)
             ->setPlotOptions()
             ->setTooltipOptions()
             ->setColors($data->items)

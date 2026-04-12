@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Chart;
 
-use App\Chart\AbstractHighchart;
+use App\Chart\ChartType;
 use App\Parameter\ApplicationParameters;
 use App\Tests\Fixture\FixtureChart;
 use HighchartsBundle\Highcharts\ChartExpression;
@@ -136,9 +136,9 @@ final class AbstractChartTest extends TestCase
     {
         $chart = $this->createChart();
         self::assertNull(@$chart->chart['type']);
-        $expected = AbstractHighchart::TYPE_COLUMN;
+        $expected = ChartType::TYPE_COLUMN;
         $chart->setType($expected);
-        self::assertSame($expected, $chart->chart['type']);
+        self::assertSame($expected->value, $chart->chart['type']);
     }
 
     private function createChart(?ApplicationParameters $parameters = null, ?Environment $twig = null): FixtureChart

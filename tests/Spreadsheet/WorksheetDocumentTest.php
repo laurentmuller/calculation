@@ -358,7 +358,7 @@ final class WorksheetDocumentTest extends TestCase
         $sheet->setCellContent(3, 1, new DatePoint());
         $sheet->setCellContent(4, 1, 'Fake');
 
-        $sheet->getColumnStyleFromIndex(0);
+        $sheet->getColumnStyleFromIndex(1);
         self::assertInstanceOf(SpreadsheetDocument::class, $sheet->getParent());
         $actual = $sheet->getPercentFormat();
         self::assertSame(NumberFormat::FORMAT_PERCENTAGE, $actual);

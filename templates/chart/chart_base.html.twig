@@ -2,44 +2,54 @@
 {% from 'macros/_icons.html.twig' import homepage, sitemap, button_pdf, link %}
 {# macros #}
 {% macro margin_below_class(margin, min_margin) -%}
-{% if margin < min_margin %} text-danger has-tooltip{% endif %}
+    {% if margin < min_margin %} text-danger has-tooltip{% endif %}
 {%- endmacro margin_below_class %}
 {% macro margin_below_tooltip(margin, min_margin) -%}
-{% if margin < min_margin %} title="{{ 'calculation.list.margin_below'|trans({'%margin%': margin|percent, '%minimum%': min_margin|percent}) }}"{% endif %}
+    {% if margin < min_margin %} title="{{ 'calculation.list.margin_below'|trans({'%margin%': margin|percent, '%minimum%': min_margin|percent}) }}"{% endif %}
 {%- endmacro margin_below_tooltip %}
 {# parameters #}
 {%- set title_icon = title_icon|default('area-chart') -%}
 {%- set list_path = 'calculation_index' -%}
 {# body #}
 {% block card_body %}
-<div id="{{ constant('App\\Chart\\AbstractHighchart::CONTAINER') }}" class="chart{% block chart_class %}{% endblock chart_class %}"></div>
-<div id="data" class="table-responsive my-2">
-    <table class="table table-bordered table-hover table-list table-sm">
-        {% block data %}{% endblock data %}
-    </table>
-</div>
+    <div id="{{ constant('App\\Chart\\AbstractHighchart::CONTAINER') }}" class="chart{% block chart_class %}{% endblock chart_class %}"></div>
+    <div id="data" class="table-responsive my-2">
+        <table class="table table-bordered table-hover table-list table-sm">
+            <thead>
+            <tr>
+                {% block header_row %}{% endblock header_row %}
+            </tr>
+            </thead>
+            <tbody data-link="row" class="rowlink">
+            {% block data_rows %}{% endblock data_rows %}
+            <tr class="fw-bold" title="{{ 'chart.row_all'|trans }}">
+                {% block total_row %}{% endblock total_row %}
+            </tr>
+            </tbody>
+        </table>
+    </div>
 {% endblock card_body %}
 {# footer #}
 {% block card_footer -%}
-<div class="d-flex-wrap">
-    {{ homepage() }}
-    {% if pdf_route is defined and is_granted(PERMISSION_EXPORT, ENTITY_CALCULATION) %}
-        {{ button_pdf(pdf_route, pdf_params|default({})) }}
-    {% endif %}
-    {{ sitemap() }}
-</div>
+    <div class="d-flex-wrap">
+        {{ homepage() }}
+        {% if pdf_route is defined and is_granted(PERMISSION_EXPORT, ENTITY_CALCULATION) %}
+            {{ button_pdf(pdf_route, pdf_params|default({})) }}
+        {% endif %}
+        {{ sitemap() }}
+    </div>
 {%- endblock card_footer %}
 {# javascripts #}
 {% block javascripts %}
-{% if is_js_debug %}
-    {{ parent() }}
-    {{ asset_js('build/highcharts/highcharts.js') }}
-    {{ asset_js('js/plugins/plugin-rowlink.js') }}
-    {{ asset_js('js/application/chart.js') }}
-{% else %}
-    {{ asset_js('js/compiled/chart.js') }}
-{% endif %}
-<script nonce="{{ csp_nonce() }}">
-    {{- chart(chart) -}}
-</script>
+    {% if is_js_debug %}
+        {{ parent() }}
+        {{ asset_js('build/highcharts/highcharts.js') }}
+        {{ asset_js('js/plugins/plugin-rowlink.js') }}
+        {{ asset_js('js/application/chart.js') }}
+    {% else %}
+        {{ asset_js('js/compiled/chart.js') }}
+    {% endif %}
+    <script nonce="{{ csp_nonce() }}">
+        {{- chart(chart) -}}
+    </script>
 {% endblock javascripts %}

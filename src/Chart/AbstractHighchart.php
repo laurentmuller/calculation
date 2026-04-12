@@ -39,18 +39,6 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     /** The default identifier of the div where to render the chart. */
     public const string CONTAINER = 'chartContainer';
 
-    /** The column chart type. */
-    public const string TYPE_COLUMN = 'column';
-
-    /** The line chart type. */
-    public const string TYPE_LINE = 'line';
-
-    /** The pie chart type. */
-    public const string TYPE_PIE = 'pie';
-
-    /** The spline chart type. */
-    public const string TYPE_SP_LINE = 'spline';
-
     private const string COMMENT_REGEX = '/\/\*(.|[\r\n])*?\*\//m';
 
     public function __construct(
@@ -74,11 +62,12 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
 
     /**
      * Sets the chart type.
-     *
-     * @phpstan-param self::TYPE_* $type
      */
-    public function setType(string $type): static
+    public function setType(ChartType|string $type): static
     {
+        if ($type instanceof ChartType) {
+            $type = $type->value;
+        }
         $this->chart['type'] = $type;
 
         return $this;
@@ -198,6 +187,9 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
             'backgroundColor' => 'var(--bs-body-bg)',
             'style' => $this->getFontStyle(),
             'renderTo' => self::CONTAINER,
+            'events' => [
+                'load' => new ChartExpression('function(e) {chartLoaded(e);}'),
+            ],
         ]);
 
         $this->legend->merge([
@@ -220,6 +212,7 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
             'shortMonths' => \array_values(DateUtils::getShortMonths()),
             'shortWeekdays' => \array_values(DateUtils::getShortWeekdays()),
         ]);
+        $this->hideTitle();
     }
 
     /**

@@ -5,56 +5,54 @@
 {%- set pdf_route = 'chart_state_pdf' -%}
 {# class #}
 {% block chart_class ' state' -%}
+{# header #}
+{% block header_row %}
+    <th class="text-nowrap">{{ 'calculation.fields.state'|trans }}</th>
+    <th class="text-center" colspan="2">{{ 'calculation.list.title'|trans }}</th>
+    <th class="text-currency">{{ 'calculationgroup.fields.amount'|trans }}</th>
+    <th class="text-center" colspan="2">{{ 'calculation.fields.margin'|trans }}</th>
+    <th class="text-center" colspan="2">{{ 'calculation.fields.total'|trans }}</th>
+{% endblock header_row %}
 {# data #}
-{% block data %}
-<thead>
-    <tr>
-        <th class="text-nowrap">{{ 'calculation.fields.state'|trans }}</th>
-        <th class="text-center" colspan="2">{{ 'calculation.list.title'|trans }}</th>
-        <th class="text-currency">{{ 'calculationgroup.fields.amount'|trans }}</th>
-        <th class="text-center" colspan="2">{{ 'calculation.fields.margin'|trans }}</th>
-        <th class="text-center" colspan="2">{{ 'calculation.fields.total'|trans }}</th>
-    </tr>
-</thead>
-<tbody data-link="row" class="rowlink">
+{% block data_rows %}
     {% for item in data.items -%}
-    <tr title="{{ 'chart.state.row'|trans({'%name%': item.code}) }}">
-        <td class="text-nowrap">
-            <a class="d-flex align-items-center" href="{{ path(list_path, {stateId: item.id}) }}">
-                <span class="border state-color state-background-{{ item.id }} me-1"></span>
-                <span>{{ item.code }}</span>
-            </a>
-        </td>
-        <td class="text-currency">{{ item.count|integer }}</td>
-        <td class="text-percent">{{ item.calculationsPercent|percent(true, 2, 5) }}</td>
-        <td class="text-currency">{{ item.items|amount }}</td>
-        <td class="text-currency">{{ item.marginAmount|amount }}</td>
-        <td class="text-percent{{ _self.margin_below_class(item.marginPercent, minMargin) }}"
-                {{ _self.margin_below_tooltip(item.marginPercent, minMargin) }}>
-            {{- item.marginPercent|percent -}}
-        </td>
-        <td class="text-currency">{{ item.total|amount }}</td>
-        <td class="text-percent">{{ item.totalPercent|percent(true, 2, 5) }}</td>
-    </tr>
+        <tr class="row-data" title="{{ 'chart.state.row'|trans({'%name%': item.code}) }}">
+            <td class="text-nowrap">
+                <a class="d-flex align-items-center" href="{{ path(list_path, {stateId: item.id}) }}">
+                    <span class="border state-color state-background-{{ item.id }} me-1"></span>
+                    <span>{{ item.code }}</span>
+                </a>
+            </td>
+            <td class="text-currency">{{ item.count|integer }}</td>
+            <td class="text-percent">{{ item.calculationsPercent|percent(true, 2, 5) }}</td>
+            <td class="text-currency">{{ item.items|amount }}</td>
+            <td class="text-currency">{{ item.marginAmount|amount }}</td>
+            <td class="text-percent{{ _self.margin_below_class(item.marginPercent, minMargin) }}"
+                    {{ _self.margin_below_tooltip(item.marginPercent, minMargin) }}>
+                {{- item.marginPercent|percent -}}
+            </td>
+            <td class="text-currency">{{ item.total|amount }}</td>
+            <td class="text-percent">{{ item.totalPercent|percent(true, 2, 5) }}</td>
+        </tr>
     {% endfor -%}
+{% endblock data_rows %}
+{# total #}
+{% block total_row %}
     {% set total = data.total %}
-    <tr title="{{ 'chart.row_all'|trans }}" class="fw-bold">
-        <td class="text-nowrap">
-            <a href="{{ path(list_path) }}">{{ 'calculation.fields.total'|trans }}</a>
-        </td>
-        <td class="text-currency">{{ total.count|integer }}</td>
-        <td class="text-percent">{{ 1.0|percent(true, 2, 5) }}</td>
-        <td class="text-currency">{{ total.items|amount }}</td>
-        <td class="text-currency">{{ total.marginAmount|amount }}</td>
-        <td class="text-percent{{ _self.margin_below_class(total.marginPercent, minMargin) }}"
-                {{ _self.margin_below_tooltip(total.marginPercent, minMargin) }}>
-            {{- total.marginPercent|percent -}}
-        </td>
-        <td class="text-currency">{{ total.total|amount }}</td>
-        <td class="text-percent">{{ 1.0|percent(true, 2, 5) }}</td>
-    </tr>
-</tbody>
-{% endblock data %}
+    <td class="text-nowrap">
+        <a href="{{ path(list_path) }}">{{ 'calculation.fields.total'|trans }}</a>
+    </td>
+    <td class="text-currency">{{ total.count|integer }}</td>
+    <td class="text-percent">{{ 1.0|percent(true, 2, 5) }}</td>
+    <td class="text-currency">{{ total.items|amount }}</td>
+    <td class="text-currency">{{ total.marginAmount|amount }}</td>
+    <td class="text-percent{{ _self.margin_below_class(total.marginPercent, minMargin) }}"
+            {{ _self.margin_below_tooltip(total.marginPercent, minMargin) }}>
+        {{- total.marginPercent|percent -}}
+    </td>
+    <td class="text-currency">{{ total.total|amount }}</td>
+    <td class="text-percent">{{ 1.0|percent(true, 2, 5) }}</td>
+{% endblock total_row %}
 {# body #}
 {% block card_body %}
     {{ parent() }}

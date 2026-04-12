@@ -63,8 +63,7 @@ class MonthChart extends AbstractHighchart
         $calculationMonths = $this->repository->getByMonth($months);
         $items = $calculationMonths->items;
 
-        $this->setType(self::TYPE_COLUMN)
-            ->hideTitle()
+        $this->setType(ChartType::TYPE_COLUMN)
             ->setPlotOptions()
             ->setLegendOptions()
             ->setTooltipOptions()

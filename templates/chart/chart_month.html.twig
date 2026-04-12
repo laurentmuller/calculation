@@ -1,30 +1,31 @@
 {% extends 'chart/chart_base.html.twig' %}
 {# add a month option #}
 {% macro month(value, selected) -%}
-<li>
-    <a href="{{ path('chart_month_index', {count: value}) }}" class="dropdown-item{% if selected %} active{% endif %}">
-        {{- 'counters.months'|trans({count: value}) -}}
-    </a>
-</li>
+    <li>
+        <a href="{{ path('chart_month_index', {count: value}) }}"
+           class="dropdown-item{% if selected %} active{% endif %}">
+            {{- 'counters.months'|trans({count: value}) -}}
+        </a>
+    </li>
 {%- endmacro month %}
 {# format the value with arrow #}
 {% macro cell_value(value, previous, user_percent = false) -%}
-{% if not previous %}
-    {% set icon = false %}
-{% elseif previous == value %}
-    {% set icon = 'right' %}
-    {% set color = 'text-secondary' %}
-{% elseif previous < value %}
-    {% set icon = 'up' %}
-    {% set color = 'text-success' %}
-{% elseif previous > value %}
-    {% set icon = 'down' %}
-    {% set color = 'text-danger' %}
-{% endif %}
-{% if icon %}
-    <i class="fa-fw fa-solid fa-caret-{{ icon }} position-absolute top-50 start-0 translate-middle-y {{ color }}"></i>
-{% endif %}
-{{- user_percent ? value|percent : value|integer -}}
+    {% if not previous %}
+        {% set icon = false %}
+    {% elseif previous == value %}
+        {% set icon = 'right' %}
+        {% set color = 'text-secondary' %}
+    {% elseif previous < value %}
+        {% set icon = 'up' %}
+        {% set color = 'text-success' %}
+    {% elseif previous > value %}
+        {% set icon = 'down' %}
+        {% set color = 'text-danger' %}
+    {% endif %}
+    {% if icon %}
+        <i class="fa-fw fa-solid fa-caret-{{ icon }} position-absolute top-50 start-0 translate-middle-y {{ color }}"></i>
+    {% endif %}
+    {{- user_percent ? value|percent : value|integer -}}
 {%- endmacro cell_value %}
 {# parameters #}
 {%- set title = 'chart.month.title' -%}
@@ -36,48 +37,47 @@
 {% block chart_class ' month' -%}
 {# header #}
 {% block card_header %}
-<div class="d-flex-wrap-center">
-    {{ parent() }}
-    {% if allowedMonths|length > 1 %}
-        <div class="dropdown ms-sm-auto">
-            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                {{- 'chart.month.fields.period'|trans -}}
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-sm">
-                {% for current in allowedMonths %}
-                    {{ _self.month(current, current == months) }}
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
-</div>
+    <div class="d-flex-wrap-center">
+        {{ parent() }}
+        {% if allowedMonths|length > 1 %}
+            <div class="dropdown ms-sm-auto">
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                    {{- 'chart.month.fields.period'|trans -}}
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-sm">
+                    {% for current in allowedMonths %}
+                        {{ _self.month(current, current == months) }}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
 {%- endblock card_header %}
-{# data #}
-{% block data %}
-<thead>
-    <tr>
-        <th class="text-nowrap">{{ 'chart.month.fields.month'|trans }}</th>
-        <th class="text-currency">{{ 'calculation.list.title'|trans }}</th>
-        <th class="text-center">
-            <div class="d-flex align-items-center justify-content-center">
-                <span class="border chart-item month-amount me-1"></span>
-                <span class="ms-auto">{{ 'calculationgroup.fields.amount'|trans }}</span>
-            </div>
-        </th>
-        <th class="text-center" colspan="2">
-            <div class="d-flex align-items-center justify-content-center">
-                <span class="border chart-item month-margin me-1"></span>
-                <span>{{ 'calculation.fields.margin'|trans }}</span>
-            </div>
-        </th>
-        <th class="text-currency">{{ 'calculation.fields.total'|trans }}</th>
-    </tr>
-</thead>
-<tbody data-link="row" class="rowlink">
+{# header #}
+{% block header_row %}
+    <th class="text-nowrap">{{ 'chart.month.fields.month'|trans }}</th>
+    <th class="text-currency">{{ 'calculation.list.title'|trans }}</th>
+    <th class="text-center">
+        <div class="d-flex align-items-center justify-content-center">
+            <span class="border chart-item month-amount me-1"></span>
+            <span class="ms-auto">{{ 'calculationgroup.fields.amount'|trans }}</span>
+        </div>
+    </th>
+    <th class="text-center" colspan="2">
+        <div class="d-flex align-items-center justify-content-center">
+            <span class="border chart-item month-margin me-1"></span>
+            <span>{{ 'calculation.fields.margin'|trans }}</span>
+        </div>
+    </th>
+    <th class="text-currency">{{ 'calculation.fields.total'|trans }}</th>
+{% endblock header_row %}
+{# rows #}
+{% block data_rows %}
     {% for item in data -%}
         {%- set month = item.date|locale_date('none', 'MMMM Y') -%}
         {%- set parameters = {search: item.date|locale_date('none', 'MM.Y')} -%}
-        <tr title="{{ 'chart.month.row'|trans({'%name%': month}) }}">
+        <tr class="row-data" title="{{ 'chart.month.row'|trans({'%name%': month}) }}">
             <td class="text-nowrap">
                 <a class="d-flex" href="{{ path(list_path, parameters) }}">{{ month }}</a>
             </td>
@@ -104,20 +104,21 @@
         {%- set last_percent = item.marginPercent|round(2, 'floor') -%}
         {%- set last_total = item.total|round -%}
     {% endfor -%}
-    <tr title="{{ 'chart.row_all'|trans }}" class="fw-bold">
-        <td class="text-nowrap">
-            <a href="{{ path(list_path) }}">{{ 'calculation.fields.total'|trans }}</a>
-        </td>
-        <td class="text-currency">{{ totals.count|integer }}</td>
-        <td class="text-currency">{{ totals.items|integer }}</td>
-        <td class="text-currency">{{ totals.marginAmount|integer }}</td>
-        <td class="text-percent{{ _self.margin_below_class(totals.marginPercent, minMargin) }}"
-                {{- _self.margin_below_tooltip(totals.marginPercent, minMargin) }}>{{ totals.marginPercent|percent -}}
-        </td>
-        <td class="text-currency">{{ totals.total|integer }}</td>
-    </tr>
-</tbody>
-{% endblock data %}
+{% endblock data_rows %}
+{# total #}
+{% block total_row %}
+    <td class="text-nowrap">
+        <a href="{{ path(list_path) }}">{{ 'calculation.fields.total'|trans }}</a>
+    </td>
+    <td class="text-currency">{{ totals.count|integer }}</td>
+    <td class="text-currency">{{ totals.items|integer }}</td>
+    <td class="text-currency">{{ totals.marginAmount|integer }}</td>
+    <td class="text-percent{{ _self.margin_below_class(totals.marginPercent, minMargin) }}"
+            {{- _self.margin_below_tooltip(totals.marginPercent, minMargin) }}>
+        {{ totals.marginPercent|percent -}}
+    </td>
+    <td class="text-currency">{{ totals.total|integer }}</td>
+{% endblock total_row %}
 {# body #}
 {% block card_body %}
     {{ parent() }}

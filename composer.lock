@@ -1424,16 +1424,16 @@
         },
         {
             "name": "elao/enum",
-            "version": "v2.5.3",
+            "version": "v2.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Elao/PhpEnums.git",
-                "reference": "a1e09f8c781e383071f5257661be9af485c665a4"
+                "reference": "4c9e50830bdbc03449f3eb70a938e6ef45380ca7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Elao/PhpEnums/zipball/a1e09f8c781e383071f5257661be9af485c665a4",
-                "reference": "a1e09f8c781e383071f5257661be9af485c665a4",
+                "url": "https://api.github.com/repos/Elao/PhpEnums/zipball/4c9e50830bdbc03449f3eb70a938e6ef45380ca7",
+                "reference": "4c9e50830bdbc03449f3eb70a938e6ef45380ca7",
                 "shasum": ""
             },
             "require": {
@@ -1501,7 +1501,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Elao/PhpEnums/issues",
-                "source": "https://github.com/Elao/PhpEnums/tree/v2.5.3"
+                "source": "https://github.com/Elao/PhpEnums/tree/v2.6.0"
             },
             "funding": [
                 {
@@ -1509,7 +1509,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-06-06T06:50:35+00:00"
+            "time": "2026-04-13T11:38:21+00:00"
         },
         {
             "name": "endroid/qr-code",
@@ -6222,7 +6222,7 @@
         },
         {
             "name": "symfony/polyfill-php84",
-            "version": "v1.34.0",
+            "version": "v1.35.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php84.git",
@@ -6278,7 +6278,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-php84/tree/v1.34.0"
+                "source": "https://github.com/symfony/polyfill-php84/tree/v1.35.0"
             },
             "funding": [
                 {
@@ -6302,7 +6302,7 @@
         },
         {
             "name": "symfony/polyfill-php85",
-            "version": "v1.34.0",
+            "version": "v1.35.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php85.git",
@@ -6358,7 +6358,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-php85/tree/v1.34.0"
+                "source": "https://github.com/symfony/polyfill-php85/tree/v1.35.0"
             },
             "funding": [
                 {
@@ -9580,16 +9580,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "12.5.4",
+            "version": "12.5.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "e70f9f8870918ec31991d69133385964834f9c5a"
+                "reference": "a25bde1f8f83849f441ef5713c6466e470872a71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/e70f9f8870918ec31991d69133385964834f9c5a",
-                "reference": "e70f9f8870918ec31991d69133385964834f9c5a",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/a25bde1f8f83849f441ef5713c6466e470872a71",
+                "reference": "a25bde1f8f83849f441ef5713c6466e470872a71",
                 "shasum": ""
             },
             "require": {
@@ -9644,7 +9644,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
                 "security": "https://github.com/sebastianbergmann/php-code-coverage/security/policy",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/12.5.4"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/12.5.5"
             },
             "funding": [
                 {
@@ -9664,7 +9664,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-04-12T05:05:15+00:00"
+            "time": "2026-04-13T04:53:32+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -9925,16 +9925,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "12.5.17",
+            "version": "12.5.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "85b62adab1a340982df64e66daa4a4435eb5723b"
+                "reference": "c2364520611caa03567a8a020f2d59f3f90b115a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/85b62adab1a340982df64e66daa4a4435eb5723b",
-                "reference": "85b62adab1a340982df64e66daa4a4435eb5723b",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/c2364520611caa03567a8a020f2d59f3f90b115a",
+                "reference": "c2364520611caa03567a8a020f2d59f3f90b115a",
                 "shasum": ""
             },
             "require": {
@@ -9948,13 +9948,13 @@
                 "phar-io/manifest": "^2.0.4",
                 "phar-io/version": "^3.2.1",
                 "php": ">=8.3",
-                "phpunit/php-code-coverage": "^12.5.3",
+                "phpunit/php-code-coverage": "^12.5.5",
                 "phpunit/php-file-iterator": "^6.0.1",
                 "phpunit/php-invoker": "^6.0.0",
                 "phpunit/php-text-template": "^5.0.0",
                 "phpunit/php-timer": "^8.0.0",
                 "sebastian/cli-parser": "^4.2.0",
-                "sebastian/comparator": "^7.1.4",
+                "sebastian/comparator": "^7.1.6",
                 "sebastian/diff": "^7.0.0",
                 "sebastian/environment": "^8.0.4",
                 "sebastian/exporter": "^7.0.2",
@@ -10003,7 +10003,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.5.17"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.5.20"
             },
             "funding": [
                 {
@@ -10011,7 +10011,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2026-04-08T03:04:19+00:00"
+            "time": "2026-04-15T05:05:59+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -10084,16 +10084,16 @@
         },
         {
             "name": "sebastian/comparator",
-            "version": "7.1.5",
+            "version": "7.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/comparator.git",
-                "reference": "c284f55811f43d555e51e8e5c166ac40d3e33c63"
+                "reference": "c769009dee98f494e0edc3fd4f4087501688f11e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/c284f55811f43d555e51e8e5c166ac40d3e33c63",
-                "reference": "c284f55811f43d555e51e8e5c166ac40d3e33c63",
+                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/c769009dee98f494e0edc3fd4f4087501688f11e",
+                "reference": "c769009dee98f494e0edc3fd4f4087501688f11e",
                 "shasum": ""
             },
             "require": {
@@ -10152,7 +10152,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/comparator/issues",
                 "security": "https://github.com/sebastianbergmann/comparator/security/policy",
-                "source": "https://github.com/sebastianbergmann/comparator/tree/7.1.5"
+                "source": "https://github.com/sebastianbergmann/comparator/tree/7.1.6"
             },
             "funding": [
                 {
@@ -10172,7 +10172,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-04-08T04:43:00+00:00"
+            "time": "2026-04-14T08:23:15+00:00"
         },
         {
             "name": "sebastian/complexity",

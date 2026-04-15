@@ -126,7 +126,6 @@ abstract class AbstractController extends BaseController
     public function getRequestStack(): RequestStack
     {
         try {
-            /** @phpstan-var RequestStack */
             return $this->requestStack ??= $this->container->get('request_stack');
         } catch (ContainerExceptionInterface $e) {
             throw new \LogicException(\sprintf('Unable to get the "%s" service,', RequestStack::class), $e->getCode(), $e);
@@ -139,8 +138,8 @@ abstract class AbstractController extends BaseController
         return [
             ...parent::getSubscribedServices(),
             TranslatorInterface::class,
-            UserParameters::class,
             UrlGeneratorService::class,
+            UserParameters::class,
         ];
     }
 

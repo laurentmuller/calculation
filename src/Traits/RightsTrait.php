@@ -118,7 +118,7 @@ trait RightsTrait
      */
     public function setRights(?array $rights): static
     {
-        $this->rights = 0 === \array_sum($rights ?? []) ? null : $rights;
+        $this->rights = null === $rights || 0 === \array_sum($rights) ? null : $rights;
 
         return $this;
     }
@@ -128,8 +128,6 @@ trait RightsTrait
      */
     private function getEmptyRights(): array
     {
-        $len = \count(EntityName::cases());
-
-        return \array_fill(0, $len, 0);
+        return \array_fill(0, \count(EntityName::cases()), 0);
     }
 }

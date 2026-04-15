@@ -34,6 +34,7 @@ use App\Table\LogTable;
 use App\Traits\TableTrait;
 use App\Utils\FileUtils;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -50,35 +51,36 @@ class LogController extends AbstractController
 {
     use TableTrait;
 
+    /** The key to save the display context state. */
+    public const string LOG_SHOW_KEY = 'log.context.expended';
+
+    public function __construct(private readonly LogService $service)
+    {
+    }
+
     /**
      * Delete the content of the log file (if any).
      */
     #[GetPostRoute(path: '/delete', name: 'delete')]
-    public function delete(Request $request, LogService $service, LoggerInterface $logger): Response
+    public function delete(Request $request, Filesystem $fs, LoggerInterface $logger): Response
     {
-        $file = $this->getLogFile($service)?->getFile();
-        if (null === $file || FileUtils::empty($file)) {
+        $logFile = $this->getLogFile();
+        if (!$logFile instanceof LogFile) {
             return $this->getEmptyResponse();
         }
 
+        $file = $logFile->getFile();
         $form = $this->createForm(FormType::class)
             ->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                if ($this->setEmptyFile($file)) {
-                    return $this->redirectToHomePage(message: 'log.delete.success');
-                }
+                $fs->remove($file);
 
-                return $this->redirectToHomePage(
-                    message: TranslatableFlashMessage::instance(
-                        message: 'log.delete.error',
-                        type: FlashType::DANGER,
-                    )
-                );
+                return $this->redirectToHomePage(message: 'log.delete.success');
             } catch (\Exception $e) {
                 return $this->renderFormException('log.delete.error', $e, $logger);
             } finally {
-                $service->clearCache();
+                $this->service->clearCache();
             }
         }
 
@@ -87,7 +89,6 @@ class LogController extends AbstractController
             'file' => $this->getRelativePath($file),
             'size' => FileUtils::formatSize($file),
             'entries' => FileUtils::getLinesCount($file),
-            'route' => $this->getDefaultRoute($request),
         ];
 
         return $this->render('log/log_delete.html.twig', $parameters);
@@ -97,27 +98,23 @@ class LogController extends AbstractController
      * Download the file.
      */
     #[GetRoute(path: '/download', name: 'download')]
-    public function download(LogService $service): Response
+    public function download(): Response
     {
-        if (!$service->isFileValid()) {
-            return $this->redirectToHomePage(
-                message: TranslatableFlashMessage::instance(
-                    message: 'log.download.error',
-                    type: FlashType::WARNING,
-                )
-            );
+        $logFile = $this->getLogFile();
+        if (!$logFile instanceof LogFile) {
+            return $this->getEmptyResponse();
         }
 
-        return $this->file($service->getFileName());
+        return $this->file($logFile->getFile());
     }
 
     /**
      * Export the logs to a Spreadsheet document.
      */
     #[ExcelRoute]
-    public function excel(LogService $service): Response
+    public function excel(): Response
     {
-        $logFile = $this->getLogFile($service);
+        $logFile = $this->getLogFile();
         if (!$logFile instanceof LogFile) {
             return $this->getEmptyResponse();
         }
@@ -142,11 +139,9 @@ class LogController extends AbstractController
      * Export to PDF the content of the log file.
      */
     #[PdfRoute]
-    public function pdf(
-        LogService $logService,
-        FontAwesomeService $service
-    ): Response {
-        $logFile = $this->getLogFile($logService);
+    public function pdf(FontAwesomeService $service): Response
+    {
+        $logFile = $this->getLogFile();
         if (!$logFile instanceof LogFile) {
             return $this->getEmptyResponse();
         }
@@ -158,9 +153,9 @@ class LogController extends AbstractController
      * Clear the log file cache.
      */
     #[GetRoute(path: '/refresh', name: 'refresh')]
-    public function refresh(Request $request, LogService $service): Response
+    public function refresh(Request $request): Response
     {
-        $service->clearCache();
+        $this->service->clearCache();
 
         return $this->redirectToDefaultRoute($request);
     }
@@ -169,24 +164,18 @@ class LogController extends AbstractController
      * Show properties of a log entry.
      */
     #[ShowEntityRoute]
-    public function show(Request $request, int $id, LogService $service): Response
+    public function show(Request $request, int $id): Response
     {
-        $item = $service->getLog($id);
+        $item = $this->service->getLog($id);
         if (!$item instanceof Log) {
-            $this->warningTrans('log.show.not_found');
-
-            return $this->redirectToDefaultRoute($request);
+            return $this->redirectToDefaultRoute($request, 'log.show.not_found');
         }
+        $expanded = $request->getSession()->get(self::LOG_SHOW_KEY, false);
 
-        return $this->render('log/log_show.html.twig', ['item' => $item]);
-    }
-
-    /**
-     * Gets the default route name used to display the logs.
-     */
-    private function getDefaultRoute(Request $request): string
-    {
-        return $this->getRequestString($request, 'route', 'log_index');
+        return $this->render('log/log_show.html.twig', [
+            'item' => $item,
+            'expanded' => $expanded,
+        ]);
     }
 
     private function getEmptyResponse(): RedirectResponse
@@ -199,9 +188,9 @@ class LogController extends AbstractController
         );
     }
 
-    private function getLogFile(LogService $service): ?LogFile
+    private function getLogFile(): ?LogFile
     {
-        $logFile = $service->getLogFile();
+        $logFile = $this->service->getLogFile();
         if (!$logFile instanceof LogFile || $logFile->isEmpty()) {
             return null;
         }
@@ -209,17 +198,13 @@ class LogController extends AbstractController
         return $logFile;
     }
 
-    private function redirectToDefaultRoute(Request $request): RedirectResponse
+    private function redirectToDefaultRoute(Request $request, ?string $warning = null): RedirectResponse
     {
-        $route = $this->getDefaultRoute($request);
+        if (null !== $warning) {
+            $this->warningTrans($warning);
+        }
 
-        return $this->redirectToRoute($route);
-    }
-
-    private function setEmptyFile(string $file): bool
-    {
-        $stream = \fopen($file, 'w');
-
-        return \is_resource($stream) && \fclose($stream);
+        return $this->getUrlGenerator()
+            ->redirect(request: $request, routeName: 'log_index');
     }
 }

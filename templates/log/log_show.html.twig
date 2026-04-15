@@ -24,13 +24,26 @@
     {% if item.context %}
         <tr>
             <td colspan="2">
-                <a class="drop-down-icon-right text-body d-flex" href="#context" data-bs-toggle="collapse"
-                   data-bs-target="#context" aria-controls="context" aria-expanded="false">
+                {%- set attrs = {
+                    href: '#context',
+                    class: ['drop-down-icon-right', 'text-body', 'd-flex'],
+                    'aria-controls': 'context',
+                    'aria-expanded': expanded,
+                    'data-bs-toggle': 'collapse',
+                    'data-bs-target': '#context',
+                } -%}
+                <a {{ html_attr(attrs) }}>
                     <span class="w-100">{{- 'log.fields.context'|trans -}}</span>
                 </a>
             </td>
         </tr>
-        <tr id="context" class="collapse">
+        {%- set attrs = {
+            id: 'context',
+            class: ['collapse', expanded ? 'show' : null],
+            'data-url': path('ajax_session_set'),
+            'data-name': constant('App\\Controller\\LogController::LOG_SHOW_KEY'),
+        } -%}
+        <tr {{ html_attr(attrs) }}>
             <td colspan="2">{{ item.context|var_export_php }}</td>
         </tr>
     {% endif %}
@@ -39,3 +52,8 @@
 {% block stylesheets %}
     {{ asset_css('css/table_log.css') }}
 {% endblock stylesheets %}
+{# javascripts #}
+{% block javascripts -%}
+    {{ parent() }}
+    {{ asset_js('js/application/log_show.js') }}
+{% endblock javascripts %}

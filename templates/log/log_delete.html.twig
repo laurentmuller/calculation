@@ -2,7 +2,7 @@
 {# parameters #}
 {%- set title = 'log.delete.title' -%}
 {%- set message = 'log.delete.message' %}
-{%- set cancel_path = path(route|default('homepage')) -%}
+{%- set cancel_path = path('log_index') -%}
 {# message #}
 {% block message %}
 {{ parent() }}

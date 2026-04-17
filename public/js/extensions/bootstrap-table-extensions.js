@@ -36,26 +36,17 @@
     'use strict';
 
     /**
-     * The loading message.
-     * @type {?string}
-     */
-    let loadingMessage = null;
-
-    /**
      * Gets the loading template.
      *
-     * @param {string} message - the loading message.
+     * @param {string} message the loading message.
      * @returns {string} the loading template.
      */
-    window.loadingTemplate = function (message) {
-        if (loadingMessage === null) {
-            loadingMessage = $('#loading-template').html();
-        }
-        return loadingMessage.replace('%message%', message);
+    window.loadingTemplate = (message) => {
+        return $('#loading-template').html().replace('%message%', message);
     };
 
     /**
-     * JQuery extension for Bootstrap tables rows and cells.
+     * Jquery extension for Bootstrap tables rows and cells.
      */
     $(function () {
         $.fn.extend({

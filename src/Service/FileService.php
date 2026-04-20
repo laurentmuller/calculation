@@ -335,7 +335,7 @@ readonly class FileService
     {
         $dir ??= \sys_get_temp_dir();
         for ($i = 0; $i < 10; ++$i) {
-            $path = \sprintf('%s/%s_%d', $dir, $prefix, \mt_rand());
+            $path = \sprintf('%s/%s_%d', $dir, $prefix, \random_int(100_000, 999_999));
             if (\file_exists($path) || !\mkdir(directory: $path, recursive: true)) {
                 continue;
             }

@@ -329,7 +329,7 @@ abstract class AbstractParameters
     /**
      * Gets the property type.
      *
-     * @throws \LogicException if the type is not supported
+     * @throws \LogicException if the property type is not supported
      */
     private function getPropertyType(\ReflectionProperty $property): PropertyType
     {
@@ -337,13 +337,7 @@ abstract class AbstractParameters
         $type = $property->getType();
         $name = $type->getName();
         if (\enum_exists($name) && \is_a($name, \BackedEnum::class, true)) {
-            $backingType = (string) (new \ReflectionEnum($name))->getBackingType();
-
-            return match ($backingType) {
-                'int' => PropertyType::ENUM_INT,
-                'string' => PropertyType::ENUM_STRING,
-                default => throw new \LogicException(\sprintf('Unsupported backing type "%s" for property "%s".', $backingType, $property->getName())),
-            };
+            $name = 'enum_' . (new \ReflectionEnum($name))->getBackingType();
         }
 
         return match ($name) {
@@ -352,6 +346,8 @@ abstract class AbstractParameters
             'float' => PropertyType::FLOAT,
             'int' => PropertyType::INTEGER,
             'string' => PropertyType::STRING,
+            'enum_int' => PropertyType::ENUM_INT,
+            'enum_string' => PropertyType::ENUM_STRING,
             DatePoint::class => PropertyType::DATE,
             default => throw new \LogicException(\sprintf('Unsupported type "%s" for property "%s".', $name, $property->getName())),
         };

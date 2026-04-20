@@ -32,7 +32,7 @@ class LogParserService
     /** The service formatter name. */
     public const string FORMATTER_NAME = 'monolog.application.formatter';
 
-    // the values separator.
+    // the separator
     private const string SEPARATOR = '|';
 
     /**

@@ -23,41 +23,16 @@ use App\Attribute\Parameter;
 readonly class MetaData
 {
     /**
-     * @param string $name     the parameter name
-     * @param string $property the property name
-     * @param string $type     the property type
-     * @param TValue $default  the default value
+     * @param string       $name     the parameter name
+     * @param string       $property the property name
+     * @param PropertyType $type     the property type
+     * @param TValue       $default  the default value
      */
     public function __construct(
         public string $name,
         public string $property,
-        public string $type,
+        public PropertyType $type,
         public mixed $default
     ) {
-    }
-
-    /**
-     * @phpstan-assert-if-true class-string<\BackedEnum> $this->type
-     */
-    public function isIntEnum(): bool
-    {
-        return 'int' === $this->getBackingType();
-    }
-
-    /**
-     * @phpstan-assert-if-true class-string<\BackedEnum> $this->type
-     */
-    public function isStringEnum(): bool
-    {
-        return 'string' === $this->getBackingType();
-    }
-
-    private function getBackingType(): ?string
-    {
-        if (!\enum_exists($this->type) || !\is_a($this->type, \BackedEnum::class, true)) {
-            return null;
-        }
-
-        return (string) (new \ReflectionEnum($this->type))->getBackingType();
     }
 }

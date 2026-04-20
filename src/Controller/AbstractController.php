@@ -128,7 +128,7 @@ abstract class AbstractController extends BaseController
         try {
             return $this->requestStack ??= $this->container->get('request_stack');
         } catch (ContainerExceptionInterface $e) {
-            throw new \LogicException(\sprintf('Unable to get the "%s" service,', RequestStack::class), $e->getCode(), $e);
+            throw new \LogicException(\sprintf('Unable to get the service "%s".', RequestStack::class), $e->getCode(), $e);
         }
     }
 
@@ -152,10 +152,12 @@ abstract class AbstractController extends BaseController
      */
     public function getTranslator(): TranslatorInterface
     {
+        $id = TranslatorInterface::class;
+
         try {
-            return $this->translator ??= $this->container->get(TranslatorInterface::class);
+            return $this->translator ??= $this->container->get($id);
         } catch (ContainerExceptionInterface $e) {
-            throw new \LogicException(\sprintf('Unable to get the "%s" service,', TranslatorInterface::class), $e->getCode(), $e);
+            throw new \LogicException(\sprintf('Unable to get the service "%s".', $id), $e->getCode(), $e);
         }
     }
 
@@ -166,10 +168,12 @@ abstract class AbstractController extends BaseController
      */
     public function getUrlGenerator(): UrlGeneratorService
     {
+        $id = UrlGeneratorService::class;
+
         try {
-            return $this->generatorService ??= $this->container->get(UrlGeneratorService::class);
+            return $this->generatorService ??= $this->container->get($id);
         } catch (ContainerExceptionInterface $e) {
-            throw new \LogicException(\sprintf('Unable to get the "%s" service,', UrlGeneratorService::class), $e->getCode(), $e);
+            throw new \LogicException(\sprintf('Unable to get the service "%s".', $id), $e->getCode(), $e);
         }
     }
 
@@ -190,10 +194,12 @@ abstract class AbstractController extends BaseController
      */
     public function getUserParameters(): UserParameters
     {
+        $id = UserParameters::class;
+
         try {
-            return $this->userParameters ??= $this->container->get(UserParameters::class);
+            return $this->userParameters ??= $this->container->get($id);
         } catch (ContainerExceptionInterface $e) {
-            throw new \LogicException(\sprintf('Unable to get the "%s" service,', UserParameters::class), $e->getCode(), $e);
+            throw new \LogicException(\sprintf('Unable to get the service "%s".', $id), $e->getCode(), $e);
         }
     }
 

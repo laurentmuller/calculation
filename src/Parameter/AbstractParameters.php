@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
- * Abstract parameters container.
+ * Abstract container for parameters.
  *
  * @template TProperty of AbstractProperty
  *
@@ -206,6 +206,7 @@ abstract class AbstractParameters
      * @return array<string, MetaData>
      *
      * @throws \ReflectionException
+     * @throws \LogicException
      */
     private function createMetaDatas(ParameterInterface|string $parameter): array
     {
@@ -278,6 +279,15 @@ abstract class AbstractParameters
         return $metaData->default;
     }
 
+    private function getIntEnum(MetaData $metaData, AbstractProperty $property): ?\BackedEnum
+    {
+        if ($metaData->default instanceof \BackedEnum) {
+            return $property->getIntEnum($metaData->default::class);
+        }
+
+        return null;
+    }
+
     /**
      * @param TParameter $parameter
      *
@@ -316,14 +326,35 @@ abstract class AbstractParameters
         );
     }
 
-    private function getPropertyType(\ReflectionProperty $property): string
+    /**
+     * Gets the property type.
+     *
+     * @throws \LogicException if the type is not supported
+     */
+    private function getPropertyType(\ReflectionProperty $property): PropertyType
     {
-        $type = \ltrim((string) $property->getType(), '?');
-        if (DatePoint::class === $type) {
-            return 'date_point';
+        /** @var \ReflectionNamedType $type */
+        $type = $property->getType();
+        $name = $type->getName();
+        if (\enum_exists($name) && \is_a($name, \BackedEnum::class, true)) {
+            $backingType = (string) (new \ReflectionEnum($name))->getBackingType();
+
+            return match ($backingType) {
+                'int' => PropertyType::ENUM_INT,
+                'string' => PropertyType::ENUM_STRING,
+                default => throw new \LogicException(\sprintf('Unsupported backing type "%s" for property "%s".', $backingType, $property->getName())),
+            };
         }
 
-        return $type;
+        return match ($name) {
+            'array' => PropertyType::ARRAY,
+            'bool' => PropertyType::BOOL,
+            'float' => PropertyType::FLOAT,
+            'int' => PropertyType::INTEGER,
+            'string' => PropertyType::STRING,
+            DatePoint::class => PropertyType::DATE,
+            default => throw new \LogicException(\sprintf('Unsupported type "%s" for property "%s".', $name, $property->getName())),
+        };
     }
 
     /**
@@ -331,17 +362,25 @@ abstract class AbstractParameters
      */
     private function getPropertyValue(MetaData $metaData, AbstractProperty $property): mixed
     {
-        return match (true) {
-            'array' === $metaData->type => $property->getArray(),
-            'bool' === $metaData->type => $property->getBoolean(),
-            'date_point' === $metaData->type => $property->getDate(),
-            'float' === $metaData->type => $property->getFloat(),
-            'int' === $metaData->type => $property->getInteger(),
-            'string' === $metaData->type => $property->getValue(),
-            $metaData->isIntEnum() => $property->getIntEnum($metaData->type),
-            $metaData->isStringEnum() => $property->getStringEnum($metaData->type),
-            default => throw new \LogicException(\sprintf('Unsupported type "%s" for property "%s".', $metaData->type, $metaData->property))
+        return match ($metaData->type) {
+            PropertyType::ARRAY => $property->getArray(),
+            PropertyType::BOOL => $property->getBoolean(),
+            PropertyType::FLOAT => $property->getFloat(),
+            PropertyType::INTEGER => $property->getInteger(),
+            PropertyType::STRING => $property->getValue(),
+            PropertyType::DATE => $property->getDate(),
+            PropertyType::ENUM_INT => $this->getIntEnum($metaData, $property),
+            PropertyType::ENUM_STRING => $this->getStringEnum($metaData, $property),
         };
+    }
+
+    private function getStringEnum(MetaData $metaData, AbstractProperty $property): ?\BackedEnum
+    {
+        if ($metaData->default instanceof \BackedEnum) {
+            return $property->getStringEnum($metaData->default::class);
+        }
+
+        return null;
     }
 
     private function removeProperty(?AbstractProperty $property): bool

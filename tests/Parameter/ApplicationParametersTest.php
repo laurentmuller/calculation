@@ -31,6 +31,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 use Symfony\Component\Clock\DatePoint;
 
 final class ApplicationParametersTest extends TestCase
@@ -258,10 +259,14 @@ final class ApplicationParametersTest extends TestCase
         ?CalculationState $state = null,
         ?Product $product = null,
     ): ApplicationParameters {
-        $cache = new ArrayAdapter();
+        $cache = new TagAwareAdapter(new ArrayAdapter());
         $manager = $this->createMockManager($properties, $category, $state, $product);
 
-        return new ApplicationParameters($cache, $manager, false);
+        return new ApplicationParameters(
+            cache: $cache,
+            manager: $manager,
+            debug: false
+        );
     }
 
     private function createMockManager(

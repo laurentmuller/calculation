@@ -20,7 +20,7 @@ use App\Model\CustomerInformation;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Target;
-use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
 /**
  * Contains user parameters (preferences).
@@ -30,8 +30,8 @@ use Symfony\Contracts\Cache\CacheInterface;
 class UserParameters extends AbstractParameters
 {
     public function __construct(
-        #[Target(CacheAttributes::CACHE_USER)]
-        CacheInterface $cache,
+        #[Target(CacheAttributes::CACHE_PARAMETERS)]
+        TagAwareCacheInterface $cache,
         EntityManagerInterface $manager,
         private readonly Security $security,
         private readonly ApplicationParameters $application,
@@ -115,6 +115,12 @@ class UserParameters extends AbstractParameters
     protected function createProperty(string $name): UserProperty
     {
         return UserProperty::instance($name, $this->getUser());
+    }
+
+    #[\Override]
+    protected function getCacheKey(): string
+    {
+        return 'user';
     }
 
     #[\Override]

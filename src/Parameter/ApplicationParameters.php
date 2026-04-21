@@ -25,7 +25,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
 /**
  * Contains application parameters.
@@ -54,7 +54,7 @@ class ApplicationParameters extends AbstractParameters
 
     public function __construct(
         #[Target(CacheAttributes::CACHE_PARAMETERS)]
-        CacheInterface $cache,
+        TagAwareCacheInterface $cache,
         EntityManagerInterface $manager,
         #[Autowire('%kernel.debug%')]
         private readonly bool $debug,
@@ -196,6 +196,12 @@ class ApplicationParameters extends AbstractParameters
     protected function createProperty(string $name): ApplicationProperty
     {
         return ApplicationProperty::instance($name);
+    }
+
+    #[\Override]
+    protected function getCacheKey(): string
+    {
+        return 'application';
     }
 
     #[\Override]

@@ -19,13 +19,8 @@ return App::config([
     'framework' => [
         'cache' => [
             'pools' => [
-                // ApplicationParameters
+                // Application and User Parameters
                 CacheAttributes::CACHE_PARAMETERS => [
-                    'adapter' => CacheAttributes::CACHE_ADAPTER,
-                    'default_lifetime' => CacheAttributes::LIFE_TIME_ONE_HOUR,
-                ],
-                // UserParameters
-                CacheAttributes::CACHE_USER => [
                     'adapter' => CacheAttributes::CACHE_ADAPTER,
                     'default_lifetime' => CacheAttributes::LIFE_TIME_ONE_HOUR,
                 ],

@@ -23,16 +23,20 @@ use App\Attribute\Parameter;
 readonly class MetaData
 {
     /**
-     * @param string       $name     the parameter name
-     * @param string       $property the property name
-     * @param PropertyType $type     the property type
-     * @param TValue       $default  the default value
+     * template T of \BackedEnum.
+     *
+     * @param string                         $name     the parameter name
+     * @param string                         $property the property name
+     * @param PropertyType                   $type     the property type
+     * @param TValue                         $default  the default value
+     * @param class-string<\BackedEnum>|null $enum     the optional backed enum class
      */
     public function __construct(
         public string $name,
         public string $property,
         public PropertyType $type,
-        public mixed $default
+        public mixed $default,
+        public ?string $enum = null,
     ) {
     }
 }

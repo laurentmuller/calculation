@@ -134,19 +134,20 @@ trait MathTrait
     /**
      * Ensure that the given value is within the given inclusive range.
      *
-     * @param int|float $value the value to be tested
-     * @param int|float $min   the minimum value allowed (inclusive)
-     * @param int|float $max   the maximum value allowed (inclusive)
+     * @template Value of int|float
      *
-     * @return int|float checked value
+     * @param Value $value the value to be tested
+     * @param Value $min   the minimum value allowed (inclusive)
+     * @param Value $max   the maximum value allowed (inclusive)
      *
-     * @phpstan-return ($value is float ? float : int)
+     * @return Value the checked value
      */
     protected function validateRange(int|float $value, int|float $min, int|float $max): int|float
     {
         if ($value < $min) {
             return $min;
-        } elseif ($value > $max) {
+        }
+        if ($value > $max) {
             return $max;
         }
 

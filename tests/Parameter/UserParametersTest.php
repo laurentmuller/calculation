@@ -25,6 +25,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 
 final class UserParametersTest extends TestCase
 {
@@ -93,7 +94,7 @@ final class UserParametersTest extends TestCase
 
     private function createApplication(): ApplicationParameters
     {
-        $cache = new ArrayAdapter();
+        $cache = new TagAwareAdapter(new ArrayAdapter());
         $repository = self::createStub(ApplicationPropertyRepository::class);
         $manager = $this->createMock(EntityManagerInterface::class);
         $manager->method('getRepository')
@@ -134,7 +135,7 @@ final class UserParametersTest extends TestCase
     private function createUserParameters(array $properties = [], ?User $user = null): UserParameters
     {
         return new UserParameters(
-            cache: new ArrayAdapter(),
+            cache: new TagAwareAdapter(new ArrayAdapter()),
             manager: $this->createMockManager($properties),
             security: $this->createMockSecurity($user),
             application: $this->createApplication()

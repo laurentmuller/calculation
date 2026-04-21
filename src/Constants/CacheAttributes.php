@@ -34,7 +34,6 @@ final class CacheAttributes
     public const string CACHE_SEARCH = 'calculation.search';
     public const string CACHE_SERVICE = 'calculation.service';
     public const string CACHE_SYMFONY = 'calculation.symfony';
-    public const string CACHE_USER = 'calculation.user';
 
     // cache lifetime in seconds
     public const int LIFE_TIME_FIFTEEN_MINUTES = 900;

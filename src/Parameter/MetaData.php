@@ -29,14 +29,23 @@ readonly class MetaData
      * @param string                         $property the property name
      * @param PropertyType                   $type     the property type
      * @param TValue                         $default  the default value
-     * @param class-string<\BackedEnum>|null $enum     the optional backed enum class
+     * @param class-string<\BackedEnum>|null $enum     the backed enum class
      */
     public function __construct(
         public string $name,
         public string $property,
         public PropertyType $type,
         public mixed $default,
-        public ?string $enum = null,
+        private ?string $enum = null,
     ) {
+    }
+
+    /**
+     * @return class-string<\BackedEnum>
+     */
+    public function getEnum(): string
+    {
+        /** @phpstan-var class-string<\BackedEnum> */
+        return (string) $this->enum;
     }
 }

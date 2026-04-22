@@ -29,9 +29,8 @@ trait CacheKeyTrait
             return $key;
         }
 
-        /** @phpstan-var string[] $reservedCharacters */
-        static $reservedCharacters = [];
-        if ([] === $reservedCharacters) {
+        static $reservedCharacters = null;
+        if (null === $reservedCharacters) {
             $reservedCharacters = \str_split(ItemInterface::RESERVED_CHARACTERS);
         }
 

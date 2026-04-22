@@ -131,9 +131,15 @@ abstract class AbstractParameters
         string $class,
         ?ParameterInterface $defaultParameter = null
     ): ParameterInterface {
+        $tags = $this->getTags($class);
+
         return $this->cache->get(
-            $this->getCacheKey() . '_' . $class::getCacheKey(),
-            fn (ItemInterface $item): ParameterInterface => $this->createParameter($item, $class, $defaultParameter)
+            \implode('_', $tags),
+            function (ItemInterface $item) use ($tags, $class, $defaultParameter): ParameterInterface {
+                $item->tag($tags);
+
+                return $this->createParameter($class, $defaultParameter);
+            }
         );
     }
 
@@ -248,13 +254,9 @@ abstract class AbstractParameters
      * @throws CacheException
      */
     private function createParameter(
-        ItemInterface $item,
         string $class,
         ?ParameterInterface $defaultParameter = null
     ): ParameterInterface {
-        // set tags to clear values when a property change
-        $item->tag([$this->getCacheKey(), $class::getCacheKey()]);
-
         $parameter = new $class();
         $accessor = $this->getAccessor();
         $properties = $this->mapProperties();
@@ -380,9 +382,6 @@ abstract class AbstractParameters
      */
     private function getPropertyValue(MetaData $metaData, AbstractProperty $property): mixed
     {
-        /** @phpstan-var class-string<\BackedEnum> $enum */
-        $enum = $metaData->enum;
-
         return match ($metaData->type) {
             PropertyType::ARRAY => $property->getArray(),
             PropertyType::BOOL => $property->getBoolean(),
@@ -390,9 +389,19 @@ abstract class AbstractParameters
             PropertyType::INTEGER => $property->getInteger(),
             PropertyType::STRING => $property->getValue(),
             PropertyType::DATE => $property->getDate(),
-            PropertyType::ENUM_INT => $property->getIntEnum($enum),
-            PropertyType::ENUM_STRING => $property->getStringEnum($enum),
+            PropertyType::ENUM_INT => $property->getIntEnum($metaData->getEnum()),
+            PropertyType::ENUM_STRING => $property->getStringEnum($metaData->getEnum()),
         };
+    }
+
+    /**
+     * @param TParameter $parameter
+     *
+     * @return string[]
+     */
+    private function getTags(ParameterInterface|string $parameter): array
+    {
+        return [$this->getCacheKey(), $parameter::getCacheKey()];
     }
 
     private function removeProperty(?AbstractProperty $property): bool
@@ -434,7 +443,7 @@ abstract class AbstractParameters
 
         if ($changed) {
             $this->manager->flush();
-            $this->cache->invalidateTags([$this->getCacheKey(), $parameter::getCacheKey()]);
+            $this->cache->invalidateTags($this->getTags($parameter));
         }
 
         return $changed;

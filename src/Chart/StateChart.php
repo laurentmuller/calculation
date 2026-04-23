@@ -19,6 +19,7 @@ use App\Parameter\ApplicationParameters;
 use App\Repository\CalculationStateRepository;
 use App\Table\CalculationTable;
 use App\Utils\FormatUtils;
+use HighchartsBundle\Highcharts\ChartExpression;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
@@ -51,16 +52,27 @@ class StateChart extends AbstractHighchart
         $data = $this->repository->getCalculations();
 
         $this->setType(ChartType::TYPE_PIE)
-            ->setPlotOptions()
-            ->setTooltipOptions()
             ->setColors($data->items)
-            ->setSeries($data->items);
+            ->setSeries($data->items)
+            ->setPlotOptions();
 
         return [
             'chart' => $this,
             'data' => $data,
             'minMargin' => $this->getMinMargin(),
         ];
+    }
+
+    #[\Override]
+    protected function setLegendOptions(): static
+    {
+        $this->legend->merge([
+            'events' => [
+                'itemClick' => ChartExpression::instance('function(e) {itemClicked(e);}'),
+            ],
+        ]);
+
+        return parent::setLegendOptions();
     }
 
     #[\Override]
@@ -149,20 +161,18 @@ class StateChart extends AbstractHighchart
         return $this;
     }
 
-    private function setPlotOptions(): self
+    private function setPlotOptions(): void
     {
         $this->plotOptions->merge([
             'pie' => $this->getPieOptions(),
             'series' => $this->getSeriesOptions(),
         ]);
-
-        return $this;
     }
 
     /**
      * @phpstan-param CalculationsStateItem[] $items
      */
-    private function setSeries(array $items): void
+    private function setSeries(array $items): self
     {
         $this->series->merge([
             [
@@ -170,5 +180,7 @@ class StateChart extends AbstractHighchart
                 'data' => $this->mapItems($items),
             ],
         ]);
+
+        return $this;
     }
 }

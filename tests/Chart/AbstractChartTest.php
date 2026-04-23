@@ -24,6 +24,32 @@ use Twig\Error\Error;
 
 final class AbstractChartTest extends TestCase
 {
+    public function testAccessibilityOptions(): void
+    {
+        $chart = $this->createChart();
+        self::assertFalse($chart->accessibility['enabled']);
+    }
+
+    public function testAxisOptions(): void
+    {
+        $chart = $this->createChart();
+        self::assertSame('var(--bs-border-color)', $chart->xAxis['gridLineColor']);
+        self::assertSame('var(--bs-border-color)', $chart->yAxis['gridLineColor']);
+        self::assertSameStyle($chart->xAxis['labels']['style'], '0.875rem', 'var(--bs-body-color)');
+        self::assertSameStyle($chart->yAxis['labels']['style'], '0.875rem', 'var(--bs-body-color)');
+    }
+
+    public function testChartOptions(): void
+    {
+        $chart = $this->createChart();
+        self::assertNull($chart->title['text']);
+        self::assertSame('chartContainer', $chart->chart['renderTo']);
+        self::assertSameStyle($chart->chart['style']);
+        self::assertSame('var(--bs-body-bg)', $chart->chart['backgroundColor']);
+        self::assertIsArray($chart->chart['events']);
+        self::assertCount(1, $chart->chart['events']);
+    }
+
     public function testCreateInvalidTemplateExpression(): void
     {
         $twig = $this->createMock(Environment::class);
@@ -46,6 +72,12 @@ final class AbstractChartTest extends TestCase
         $actual = $chart->createTemplateExpression('fake');
         self::assertInstanceOf(ChartExpression::class, $actual);
         self::assertSame((string) $expected, (string) $actual);
+    }
+
+    public function testCreditsOptions(): void
+    {
+        $chart = $this->createChart();
+        self::assertFalse($chart->credits['enabled']);
     }
 
     public function testGetClickExpression(): void
@@ -84,52 +116,30 @@ final class AbstractChartTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    public function testHideTitle(): void
+    public function testLangOptions(): void
     {
         $chart = $this->createChart();
-
-        $chart->hideTitle();
-        self::assertNull($chart->title['text']);
-    }
-
-    public function testInitializeOptions(): void
-    {
-        $chart = $this->createChart();
-        self::assertSame('var(--bs-body-bg)', $chart->chart['backgroundColor']);
-        self::assertSame([
-            'fontFamily' => 'var(--bs-body-font-family)',
-            'fontWeight' => 'var(--bs-body-font-weight)',
-            'fontSize' => 'var(--bs-body-font-size)',
-        ], $chart->chart['style']);
-        self::assertSame('chartContainer', $chart->chart['renderTo']);
-
-        self::assertSame(['color' => 'var(--bs-link-hover-color)'], $chart->legend['itemHoverStyle']);
-        self::assertSame([
-            'fontFamily' => 'var(--bs-body-font-family)',
-            'fontWeight' => 'var(--bs-body-font-weight)',
-            'fontSize' => 'var(--bs-body-font-size)',
-            'color' => 'var(--bs-body-color)',
-        ], $chart->legend['itemStyle']);
-
-        self::assertFalse($chart->accessibility['enabled']);
-        self::assertFalse($chart->credits['enabled']);
-
         self::assertSame('.', $chart->lang['decimalPoint']);
         self::assertSame("'", $chart->lang['thousandsSep']);
+    }
+
+    public function testLegendOptions(): void
+    {
+        $chart = $this->createChart();
+        self::assertSameStyle($chart->legend['itemStyle'], color: 'var(--bs-body-color)');
+        self::assertSame(['color' => 'var(--bs-link-hover-color)'], $chart->legend['itemHoverStyle']);
+        self::assertSame(['color' => 'var(--bs-secondary)'], $chart->legend['itemHiddenStyle']);
     }
 
     public function testTooltipOptions(): void
     {
         $chart = $this->createChart();
-        $chart->setTooltipOptions();
-
         self::assertSame('var(--bs-light)', $chart->tooltip['backgroundColor']);
         self::assertSame('var(--bs-border-color)', $chart->tooltip['borderColor']);
-        self::assertSame([
-            'fontFamily' => 'var(--bs-body-font-family)',
-            'fontWeight' => 'var(--bs-body-font-weight)',
-            'fontSize' => '0.75rem',
-        ], $chart->tooltip['style']);
+        self::assertSame(0, $chart->tooltip['borderRadius']);
+        self::assertTrue($chart->tooltip['useHTML']);
+        self::assertTrue($chart->tooltip['shared']);
+        self::assertSameStyle($chart->tooltip['style'], '0.75rem');
     }
 
     public function testType(): void
@@ -141,12 +151,23 @@ final class AbstractChartTest extends TestCase
         self::assertSame($expected->value, $chart->chart['type']);
     }
 
+    protected static function assertSameStyle(
+        array $option,
+        string $fontSize = 'var(--bs-body-font-size)',
+        ?string $color = null
+    ): void {
+        self::assertSame('var(--bs-body-font-family)', $option['fontFamily']);
+        self::assertSame('var(--bs-body-font-weight)', $option['fontWeight']);
+        self::assertSame($fontSize, $option['fontSize']);
+        self::assertSame($color, $option['color']);
+    }
+
     private function createChart(?ApplicationParameters $parameters = null, ?Environment $twig = null): FixtureChart
     {
         return new FixtureChart(
-            $parameters ?? self::createStub(ApplicationParameters::class),
-            self::createStub(UrlGeneratorInterface::class),
-            $twig ?? self::createStub(Environment::class)
+            parameters: $parameters ?? self::createStub(ApplicationParameters::class),
+            generator: self::createStub(UrlGeneratorInterface::class),
+            twig: $twig ?? self::createStub(Environment::class)
         );
     }
 }

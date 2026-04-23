@@ -44,10 +44,4 @@ class FixtureChart extends AbstractHighchart
     {
         return parent::getMinMargin();
     }
-
-    #[\Override]
-    public function setTooltipOptions(): static
-    {
-        return parent::setTooltipOptions();
-    }
 }

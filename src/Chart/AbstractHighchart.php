@@ -51,6 +51,26 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     }
 
     /**
+     * Disable the accessibility.
+     */
+    public function disableAccessibility(): static
+    {
+        $this->accessibility['enabled'] = false;
+
+        return $this;
+    }
+
+    /**
+     * Disable the credit.
+     */
+    public function disableCredit(): static
+    {
+        $this->credits['enabled'] = false;
+
+        return $this;
+    }
+
+    /**
      * Hides the chart title.
      */
     public function hideTitle(): static
@@ -88,16 +108,6 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
         } catch (Error) {
             return null;
         }
-    }
-
-    protected function getAxisOptions(): array
-    {
-        return [
-            'labels' => [
-                'style' => $this->getColorFontStyle('0.875rem'),
-            ],
-            'gridLineColor' => $this->getBorderColor(),
-        ];
     }
 
     /**
@@ -179,31 +189,59 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     }
 
     /**
-     * Initialize the chart options.
+     * Initialize options.
      */
     protected function initializeOptions(): void
     {
+        $this->setChartOptions()
+            ->setTooltipOptions()
+            ->setLegendOptions()
+            ->setLangOptions()
+            ->setAxisOptions()
+            ->disableAccessibility()
+            ->disableCredit()
+            ->hideTitle();
+    }
+
+    /**
+     * Sets the x and y axes options.
+     */
+    protected function setAxisOptions(): static
+    {
+        $options = [
+            'labels' => [
+                'style' => $this->getColorFontStyle('0.875rem'),
+            ],
+            'gridLineColor' => $this->getBorderColor(),
+        ];
+        $this->xAxis->merge($options);
+        $this->yAxis->merge($options);
+
+        return $this;
+    }
+
+    /**
+     * Sets the chart options.
+     */
+    protected function setChartOptions(): static
+    {
         $this->chart->merge([
-            'backgroundColor' => 'var(--bs-body-bg)',
-            'style' => $this->getFontStyle(),
             'renderTo' => self::CONTAINER,
+            'style' => $this->getFontStyle(),
+            'backgroundColor' => 'var(--bs-body-bg)',
             'events' => [
                 'load' => new ChartExpression('function(e) {chartLoaded(e);}'),
             ],
         ]);
 
-        $this->legend->merge([
-            'itemHoverStyle' => $this->getLinkStyle(),
-            'itemStyle' => $this->getColorFontStyle(),
-        ]);
+        return $this;
+    }
 
-        $options = $this->getAxisOptions();
-        $this->xAxis->merge($options);
-        $this->yAxis->merge($options);
-
-        $this->accessibility['enabled'] = false;
-        $this->credits['enabled'] = false;
-
+    /**
+     * Sets the lang options.
+     */
+    protected function setLangOptions(): static
+    {
         $this->lang->merge([
             'decimalPoint' => FormatUtils::DECIMAL_SEP,
             'thousandsSep' => FormatUtils::THOUSANDS_SEP,
@@ -212,7 +250,24 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
             'shortMonths' => \array_values(DateUtils::getShortMonths()),
             'shortWeekdays' => \array_values(DateUtils::getShortWeekdays()),
         ]);
-        $this->hideTitle();
+
+        return $this;
+    }
+
+    /**
+     * Sets the legend options.
+     */
+    protected function setLegendOptions(): static
+    {
+        $this->legend->merge([
+            'itemStyle' => $this->getColorFontStyle(),
+            'itemHoverStyle' => $this->getLinkStyle(),
+            'itemHiddenStyle' => [
+                'color' => 'var(--bs-secondary)',
+            ],
+        ]);
+
+        return $this;
     }
 
     /**

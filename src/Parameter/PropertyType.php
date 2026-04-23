@@ -20,7 +20,7 @@ enum PropertyType
 {
     case ARRAY;
     case BOOL;
-    case DATE;
+    case DATE_POINT;
     case ENUM_INT;
     case ENUM_STRING;
     case FLOAT;

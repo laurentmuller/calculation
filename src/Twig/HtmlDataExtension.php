@@ -15,6 +15,7 @@ namespace App\Twig;
 
 use Twig\Attribute\AsTwigFunction;
 use Twig\Environment;
+use Twig\Error\RuntimeError;
 use Twig\Extra\Html\HtmlExtension;
 
 /**
@@ -22,6 +23,9 @@ use Twig\Extra\Html\HtmlExtension;
  */
 class HtmlDataExtension
 {
+    /**
+     * @throws RuntimeError
+     */
     #[AsTwigFunction(name: 'html_data_attr', needsEnvironment: true, isSafe: ['html'])]
     public static function htmlDataAttributes(Environment $env, iterable|string|false|null ...$args): string
     {

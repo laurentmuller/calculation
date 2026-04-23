@@ -218,8 +218,7 @@ abstract class AbstractParameters
      *
      * @return array<string, MetaData>
      *
-     * @throws \ReflectionException
-     * @throws \LogicException
+     * @throws \ReflectionException|\LogicException
      */
     private function createMetaDatas(ParameterInterface|string $parameter): array
     {
@@ -231,12 +230,21 @@ abstract class AbstractParameters
                 continue;
             }
 
+            $name = $this->getTypeName($property);
+            $type = $this->getPropertyType($name);
+            /** @phpstan-var class-string<\BackedEnum>|null $enum */
+            $enum = match ($type) {
+                PropertyType::ENUM_INT,
+                PropertyType::ENUM_STRING => $name,
+                default => null,
+            };
+
             $metaDatas[$attribute->name] = new MetaData(
                 $attribute->name,
                 $property->name,
-                $this->getPropertyType($property),
+                $type,
                 $attribute->default,
-                $this->getBackedEnumClass($property),
+                $enum,
             );
         }
 
@@ -280,21 +288,6 @@ abstract class AbstractParameters
     private function getAccessor(): PropertyAccessor
     {
         return $this->accessor ??= PropertyAccess::createPropertyAccessor();
-    }
-
-    /**
-     * @return class-string<\BackedEnum>|null
-     */
-    private function getBackedEnumClass(\ReflectionProperty $property): ?string
-    {
-        /** @var \ReflectionNamedType $type */
-        $type = $property->getType();
-        $name = $type->getName();
-        if (\enum_exists($name) && \is_a($name, \BackedEnum::class, true)) {
-            return $name;
-        }
-
-        return null;
     }
 
     /**
@@ -353,13 +346,10 @@ abstract class AbstractParameters
     /**
      * Gets the property type.
      *
-     * @throws \LogicException if the property type is not supported
+     * @throws \LogicException
      */
-    private function getPropertyType(\ReflectionProperty $property): PropertyType
+    private function getPropertyType(string $name): PropertyType
     {
-        /** @var \ReflectionNamedType $type */
-        $type = $property->getType();
-        $name = $type->getName();
         if (\enum_exists($name) && \is_a($name, \BackedEnum::class, true)) {
             $name = 'enum_' . (new \ReflectionEnum($name))->getBackingType();
         }
@@ -372,8 +362,8 @@ abstract class AbstractParameters
             'string' => PropertyType::STRING,
             'enum_int' => PropertyType::ENUM_INT,
             'enum_string' => PropertyType::ENUM_STRING,
-            DatePoint::class => PropertyType::DATE,
-            default => throw new \LogicException(\sprintf('Unsupported type "%s" for property "%s".', $name, $property->getName())),
+            DatePoint::class => PropertyType::DATE_POINT,
+            default => throw new \LogicException(\sprintf('Unsupported type "%s".', $name)),
         };
     }
 
@@ -388,7 +378,7 @@ abstract class AbstractParameters
             PropertyType::FLOAT => $property->getFloat(),
             PropertyType::INTEGER => $property->getInteger(),
             PropertyType::STRING => $property->getValue(),
-            PropertyType::DATE => $property->getDate(),
+            PropertyType::DATE_POINT => $property->getDatePoint(),
             PropertyType::ENUM_INT => $property->getIntEnum($metaData->getEnum()),
             PropertyType::ENUM_STRING => $property->getStringEnum($metaData->getEnum()),
         };
@@ -402,6 +392,14 @@ abstract class AbstractParameters
     private function getTags(ParameterInterface|string $parameter): array
     {
         return [$this->getCacheKey(), $parameter::getCacheKey()];
+    }
+
+    private function getTypeName(\ReflectionProperty $property): string
+    {
+        /** @var \ReflectionNamedType $type */
+        $type = $property->getType();
+
+        return $type->getName();
     }
 
     private function removeProperty(?AbstractProperty $property): bool

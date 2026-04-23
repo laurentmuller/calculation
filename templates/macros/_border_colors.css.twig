@@ -1,4 +1,4 @@
 {% for state in states -%}
 .state-border-{{ state.id }} { border-left-color: {{ state.color|raw }} !important; }
-.state-background-{{ state.id }} { background-color: {{ state.color|raw }} !important; }
+.state-background-{{ state.id }} { background-color: {{ state.color|raw }}; }
 {% endfor -%}

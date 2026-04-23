@@ -56,7 +56,7 @@ final class AbstractPropertyTest extends TestCase
         self::assertSame('', $entity->getName());
         self::assertNull($entity->getArray());
         self::assertFalse($entity->getBoolean());
-        self::assertNull($entity->getDate());
+        self::assertNull($entity->getDatePoint());
         self::assertSame(0, $entity->getInteger());
         self::assertNull($entity->getValue());
 
@@ -64,13 +64,13 @@ final class AbstractPropertyTest extends TestCase
         self::assertSame('name', $entity->getName());
     }
 
-    public function testDate(): void
+    public function testDatePoint(): void
     {
         $date = new DatePoint();
         $entity = $this->getEntity();
-        self::assertNull($entity->getDate());
+        self::assertNull($entity->getDatePoint());
         $entity->setDate($date);
-        $actual = $entity->getDate();
+        $actual = $entity->getDatePoint();
         self::assertNotNull($actual);
         self::assertTimestampEquals($date, $actual);
     }
@@ -140,7 +140,7 @@ final class AbstractPropertyTest extends TestCase
 
         $date = new DatePoint();
         $entity->setValue($date);
-        $actual = $entity->getDate();
+        $actual = $entity->getDatePoint();
         self::assertNotNull($actual);
         self::assertTimestampEquals($date, $actual);
 

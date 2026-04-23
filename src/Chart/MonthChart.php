@@ -64,11 +64,9 @@ class MonthChart extends AbstractHighchart
         $items = $calculationMonths->items;
 
         $this->setType(ChartType::TYPE_COLUMN)
-            ->setPlotOptions()
-            ->setLegendOptions()
-            ->setTooltipOptions()
             ->setSeries($items)
             ->setXAxis($items)
+            ->setPlotOptions()
             ->setYAxis();
 
         return [
@@ -79,6 +77,14 @@ class MonthChart extends AbstractHighchart
             'allowedMonths' => $allowedMonths,
             'minMargin' => $this->getMinMargin(),
         ];
+    }
+
+    #[\Override]
+    protected function setLegendOptions(): static
+    {
+        $this->legend->merge(['enabled' => false]);
+
+        return parent::setLegendOptions();
     }
 
     #[\Override]
@@ -200,13 +206,6 @@ class MonthChart extends AbstractHighchart
         return $this->generator->generate('calculation_index', [
             'search' => $item->getSearchDate(),
         ]);
-    }
-
-    private function setLegendOptions(): self
-    {
-        $this->legend->merge(['enabled' => false]);
-
-        return $this;
     }
 
     private function setPlotOptions(): self

@@ -72,9 +72,9 @@ abstract class AbstractProperty extends AbstractEntity
     }
 
     /**
-     * Gets this property value as a date.
+     * Gets this property value as a date point.
      */
-    public function getDate(): ?DatePoint
+    public function getDatePoint(): ?DatePoint
     {
         $timestamp = $this->getInteger();
         if (self::FALSE_VALUE !== $timestamp) {

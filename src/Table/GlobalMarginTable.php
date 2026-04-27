@@ -57,8 +57,10 @@ class GlobalMarginTable extends AbstractEntityTable
         parent::updateResults($query, $results);
         if (!$query->callback) {
             $results->pageList = [];
-            $results->addAttribute('search', false);
-            $results->addAttribute('pagination', false);
+            $results->addAttributes([
+                'search' => false,
+                'pagination' => false,
+            ]);
         }
     }
 }

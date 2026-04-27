@@ -90,10 +90,10 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
                 'icon' => $this->getIcon($key),
             ];
         }
-        $results->customData = [
+        $results->addCustomDatas([
             'entity' => $entity,
             'entities' => $entities,
-        ];
+        ]);
         $results->addParameter(self::PARAM_ENTITY, $entity);
 
         return $results;

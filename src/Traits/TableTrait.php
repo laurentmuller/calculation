@@ -65,11 +65,10 @@ trait TableTrait
             $prefix = $query->prefix;
             $results = $table->processDataQuery($query);
             $response = $query->callback ? $this->json($results) : $this->render($template, (array) $results);
-            $this->saveTableCookie($response, $results, TableInterface::PARAM_VIEW, TableView::TABLE);
-            $this->saveTableCookie($response, $results, TableInterface::PARAM_LIMIT, TableView::TABLE->getPageSize(), $prefix);
-            $this->saveTableCookie($response, $results, TableInterface::PARAM_SORT, $query->sort, $prefix);
-            $this->saveTableCookie($response, $results, TableInterface::PARAM_ORDER, $query->order, $prefix);
-            $this->saveTableView($query->view);
+            $this->saveTableCookie($response, $results, TableInterface::PARAM_LIMIT, TableView::TABLE->getPageSize(), $prefix)
+                ->saveTableCookie($response, $results, TableInterface::PARAM_ORDER, $query->order, $prefix)
+                ->saveTableCookie($response, $results, TableInterface::PARAM_SORT, $query->sort, $prefix)
+                ->saveTableCookie($response, $results, TableInterface::PARAM_VIEW, TableView::getDefault());
 
             return $response;
         } catch (\Throwable $e) {
@@ -105,21 +104,31 @@ trait TableTrait
         string $key,
         string|bool|int|\BackedEnum|null $default = null,
         string $prefix = ''
-    ): void {
+    ): static {
         $value = $results->getParameter($key, $default);
         $this->updateCookie($response, $key, $value, $prefix);
+        if (TableInterface::PARAM_VIEW === $key) {
+            /** @phpstan-var TableView|string $value */
+            $this->saveTableView($value);
+        }
+
+        return $this;
     }
 
     /**
-     * Save the display mode.
+     * Save the display mode to the user parameters.
      */
-    private function saveTableView(TableView $view): void
+    private function saveTableView(TableView|string $view): void
     {
+        if (\is_string($view)) {
+            $view = TableView::tryFrom($view) ?? TableView::getDefault();
+        }
         $userParameters = $this->getUserParameters();
         $display = $userParameters->getDisplay();
-        if ($display->getDisplayMode() !== $view) {
-            $display->setDisplayMode($view);
-            $userParameters->save();
+        if ($display->getDisplayMode() === $view) {
+            return;
         }
+        $display->setDisplayMode($view);
+        $userParameters->save();
     }
 }

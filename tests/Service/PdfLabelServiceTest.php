@@ -68,8 +68,8 @@ final class PdfLabelServiceTest extends TestCase
     public function testGetValid(): void
     {
         $service = $this->createLabelService();
-        $service->get('3422');
-        self::expectNotToPerformAssertions();
+        $actual = $service->get('3422');
+        self::assertNotEmpty($actual);
     }
 
     public function testHas(): void

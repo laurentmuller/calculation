@@ -126,11 +126,15 @@ class CalculationTable extends AbstractEntityTable
         $stateId = $this->getQueryStateId($query);
         $editable = $this->getQueryEditable($query);
         $results->addAttribute('row-style', 'styleTextMuted');
-        $results->addParameter(self::PARAM_STATE, $stateId);
-        $results->addParameter(self::PARAM_EDITABLE, $editable);
-        $results->addCustomData('dropdown', $this->getDropDownValues());
-        $results->addCustomData('state', $this->getCalculationState($stateId));
-        $results->addCustomData('editable', $editable);
+        $results->addParameters([
+            self::PARAM_STATE => $stateId,
+            self::PARAM_EDITABLE => $editable,
+        ]);
+        $results->addCustomDatas([
+            'dropdown' => $this->getDropDownValues(),
+            'state' => $this->getCalculationState($stateId),
+            'editable' => $editable,
+        ]);
     }
 
     /**

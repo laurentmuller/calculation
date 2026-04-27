@@ -41,7 +41,7 @@ final class AbstractEntityTableTest extends TestCase
             ->willReturn($builder);
 
         $table = new FixtureEntityTable($repository);
-        $table->handleQuery(new DataQuery());
-        self::expectNotToPerformAssertions();
+        $actual = $table->handleQuery(new DataQuery());
+        self::assertSame(0, $actual->filtered);
     }
 }

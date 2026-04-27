@@ -91,11 +91,15 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
         }
         $groupId = $this->getQueryGroupId($query);
         $categoryId = $this->getQueryCategoryId($query);
-        $results->addParameter(CategoryTable::PARAM_GROUP, $groupId);
-        $results->addParameter(self::PARAM_CATEGORY, $categoryId);
-        $results->addCustomData('dropdown', $this->getDropDownValues());
-        $results->addCustomData('category', $this->getCategory($categoryId));
-        $results->addCustomData('group', $this->getGroup($groupId));
+        $results->addParameters([
+            CategoryTable::PARAM_GROUP => $groupId,
+            self::PARAM_CATEGORY => $categoryId,
+        ]);
+        $results->addCustomDatas([
+            'dropdown' => $this->getDropDownValues(),
+            'category' => $this->getCategory($categoryId),
+            'group' => $this->getGroup($groupId),
+        ]);
     }
 
     private function getCategory(int $categoryId): ?array

@@ -90,10 +90,10 @@ trait RequestTrait
 
     private function getRequestBag(Request $request, string $key): ParameterBag
     {
-        if ($request->query->has($key)) {
+        if (Request::METHOD_GET === $request->getMethod() && $request->query->has($key)) {
             return $request->query;
         }
-        if ($request->request->has($key)) {
+        if (Request::METHOD_POST === $request->getMethod() && $request->request->has($key)) {
             return $request->request;
         }
 

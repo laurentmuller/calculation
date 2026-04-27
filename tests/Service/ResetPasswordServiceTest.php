@@ -18,9 +18,9 @@ use App\Repository\UserRepository;
 use App\Service\ResetPasswordService;
 use App\Service\UserExceptionService;
 use App\Tests\Entity\IdTrait;
+use App\Tests\Fixture\FixtureCountableLogger;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\UnexpectedResponseException;
@@ -61,7 +61,6 @@ final class ResetPasswordServiceTest extends TestCase
     {
         $helper = $this->createResetPasswordHelper();
         $service = $this->createService($helper);
-
         $token = $this->createResetPasswordToken();
         $actual = $service->getExpiresLifeTime($token);
         self::assertSame('%count% minute|%count% minutes', $actual);
@@ -72,7 +71,7 @@ final class ResetPasswordServiceTest extends TestCase
         $helper = $this->createResetPasswordHelper();
         $service = $this->createService($helper);
         $actual = $service->getLogger();
-        self::assertInstanceOf(LoggerInterface::class, $actual);
+        self::assertInstanceOf(FixtureCountableLogger::class, $actual);
     }
 
     public function testGetThrottleLifeTime(): void
@@ -176,7 +175,7 @@ final class ResetPasswordServiceTest extends TestCase
             $translator,
             self::createStub(UrlGeneratorInterface::class),
             $mailer,
-            self::createStub(LoggerInterface::class),
+            new FixtureCountableLogger(),
         );
     }
 

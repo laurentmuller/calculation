@@ -65,8 +65,8 @@ final class SwissPostUpdaterTest extends TestCase
 
     public function testCreateForm(): void
     {
-        $this->service->createForm();
-        self::expectNotToPerformAssertions();
+        $actual = $this->service->createForm();
+        self::assertCount(0, $actual);
     }
 
     public function testImport2FilesInZip(): void

@@ -64,6 +64,6 @@ final class AbstractTableTest extends TestCase
         $table = new FixtureTable();
         $query = new DataQuery();
         $table->updateDataQuery($query);
-        self::expectNotToPerformAssertions();
+        self::assertSame('', $query->sort);
     }
 }

@@ -136,8 +136,10 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
         }
         $groupId = $this->getQueryGroupId($query);
         $results->addParameter(self::PARAM_GROUP, $groupId);
-        $results->addCustomData('group', $this->getGroup($groupId));
-        $results->addCustomData('dropdown', $this->getDropDownValues());
+        $results->addCustomDatas([
+            'group' => $this->getGroup($groupId),
+            'dropdown' => $this->getDropDownValues(),
+        ]);
     }
 
     /**

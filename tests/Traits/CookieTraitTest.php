@@ -110,8 +110,11 @@ final class CookieTraitTest extends TestCase
             'null' => null,
         ];
         $response = $this->createResponse();
+        $cookies = $response->headers->getCookies();
+        self::assertCount(0, $cookies);
         $this->updateCookies($response, $values);
-        self::expectNotToPerformAssertions();
+        $cookies = $response->headers->getCookies();
+        self::assertCount(6, $cookies);
     }
 
     #[\Override]

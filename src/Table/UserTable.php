@@ -109,8 +109,10 @@ class UserTable extends AbstractEntityTable
     {
         parent::updateResults($query, $results);
         if (!$query->callback) {
-            $results->addAttribute('row-style', 'styleTextMuted');
-            $results->addAttribute('original-user-id', $this->getOriginalUserId());
+            $results->addAttributes([
+                'row-style' => 'styleTextMuted',
+                'original-user-id' => $this->getOriginalUserId(),
+            ]);
             $results->addCustomData('resetPasswords', $this->isResettableUsers());
         }
     }

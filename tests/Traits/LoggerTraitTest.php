@@ -13,25 +13,25 @@ declare(strict_types=1);
 
 namespace App\Tests\Traits;
 
+use App\Tests\Fixture\FixtureCountableLogger;
 use App\Traits\LoggerTrait;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
 final class LoggerTraitTest extends TestCase
 {
     use LoggerTrait;
 
-    private LoggerInterface $logger;
+    private FixtureCountableLogger $logger;
 
     #[\Override]
     protected function setUp(): void
     {
-        $this->logger = self::createStub(LoggerInterface::class);
+        $this->logger = new FixtureCountableLogger();
     }
 
     #[\Override]
-    public function getLogger(): LoggerInterface
+    public function getLogger(): FixtureCountableLogger
     {
         return $this->logger;
     }
@@ -48,6 +48,6 @@ final class LoggerTraitTest extends TestCase
         $this->logInfo('info');
         $this->logNotice('notice');
         $this->logWarning('warning');
-        self::expectNotToPerformAssertions();
+        self::assertCount(10, $this->logger);
     }
 }

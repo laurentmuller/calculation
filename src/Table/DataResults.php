@@ -84,11 +84,39 @@ class DataResults implements \JsonSerializable
     }
 
     /**
-     * Adds custom data to this list of custom datas.
+     * Adds an array of attributes to this list of attributes.
+     *
+     * @param array<string, string|bool|int> $attributes
+     */
+    public function addAttributes(array $attributes): self
+    {
+        foreach ($attributes as $name => $value) {
+            $this->addAttribute($name, $value);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Adds custom datas to this list of custom datas.
      */
     public function addCustomData(string $name, mixed $value): self
     {
         $this->customData[$name] = $value;
+
+        return $this;
+    }
+
+    /**
+     * Adds an array of custom data to this list of custom datas.
+     *
+     * @param array<string, mixed> $customDatas
+     */
+    public function addCustomDatas(array $customDatas): self
+    {
+        foreach ($customDatas as $name => $value) {
+            $this->addCustomData($name, $value);
+        }
 
         return $this;
     }
@@ -104,6 +132,20 @@ class DataResults implements \JsonSerializable
     }
 
     /**
+     * Adds an array of parameters to this list of parameters.
+     *
+     * @param array<string, string|bool|int|\BackedEnum> $parameters
+     */
+    public function addParameters(array $parameters): self
+    {
+        foreach ($parameters as $name => $value) {
+            $this->addParameter($name, $value);
+        }
+
+        return $this;
+    }
+
+    /**
      * Gets a custom data value for the given name.
      */
     public function getCustomData(string $name, mixed $default = null): mixed
@@ -113,12 +155,6 @@ class DataResults implements \JsonSerializable
 
     /**
      * Gets a parameter value for the given name.
-     *
-     * @phpstan-return ($default is null ? (bool|string|int|\BackedEnum|null)
-     * : ($default is bool ? bool
-     * : ($default is string ? string
-     * : ($default is int ? int
-     * : \BackedEnum))))
      */
     public function getParameter(string $name, bool|string|int|\BackedEnum|null $default = null): bool|string|int|\BackedEnum|null
     {

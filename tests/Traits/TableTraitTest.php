@@ -172,13 +172,13 @@ final class TableTraitTest extends TestCase
         $logger = self::createStub(LoggerInterface::class);
         $query = new DataQuery();
         $template = '';
-        $this->handleTableRequest(
+        $actual = $this->handleTableRequest(
             $table,
             $logger,
             $query,
             $template
         );
-        self::expectNotToPerformAssertions();
+        self::assertSame(Response::HTTP_OK, $actual->getStatusCode());
     }
 
     public function testThrowExceptionJson(): void
@@ -221,12 +221,12 @@ final class TableTraitTest extends TestCase
         $logger = self::createStub(LoggerInterface::class);
         $query = new DataQuery();
         $template = '';
-        $this->handleTableRequest(
+        $actual = $this->handleTableRequest(
             $table,
             $logger,
             $query,
             $template
         );
-        self::expectNotToPerformAssertions();
+        self::assertSame(Response::HTTP_OK, $actual->getStatusCode());
     }
 }

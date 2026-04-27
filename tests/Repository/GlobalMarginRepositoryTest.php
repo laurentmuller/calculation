@@ -100,8 +100,11 @@ final class GlobalMarginRepositoryTest extends AbstractRepositoryTestCase
             'minimum > 0',
             Criteria::create(true),
         ];
-        $this->repository->getSearchQuery($sortedFields, $criteria);
-        self::expectNotToPerformAssertions();
+        $query = $this->repository->getSearchQuery($sortedFields, $criteria);
+        $actual = $query->getDQL();
+        self::assertIsString($actual);
+        self::assertStringContainsString('minimum ASC', $actual);
+        self::assertStringContainsString('minimum > 0', $actual);
     }
 
     public function testGetSingleIdentifierFieldName(): void

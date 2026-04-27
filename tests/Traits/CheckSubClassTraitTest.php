@@ -48,6 +48,9 @@ final class CheckSubClassTraitTest extends TestCase
             $this->expectException(\InvalidArgumentException::class);
         }
         $this->checkSubClass($source, $target);
-        self::expectNotToPerformAssertions();
+        if (!$exception) {
+            $actual = \is_a($source, $target, true);
+            self::assertTrue($actual);
+        }
     }
 }

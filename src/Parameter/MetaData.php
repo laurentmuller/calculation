@@ -23,8 +23,6 @@ use App\Attribute\Parameter;
 readonly class MetaData
 {
     /**
-     * template T of \BackedEnum.
-     *
      * @param string                         $name     the parameter name
      * @param string                         $property the property name
      * @param PropertyType                   $type     the property type

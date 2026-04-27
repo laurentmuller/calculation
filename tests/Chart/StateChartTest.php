@@ -50,8 +50,8 @@ final class StateChartTest extends TestCase
         $this->repository->method('getCalculations')
             ->willReturn(new CalculationsState([]));
         $chart = $this->createChart();
-        $chart->generate();
-        self::expectNotToPerformAssertions();
+        $actual = $chart->generate();
+        self::assertCount(0, $actual['data']);
     }
 
     public function testWithSeries(): void
@@ -60,8 +60,8 @@ final class StateChartTest extends TestCase
             ->willReturn($this->createCalculationsState());
 
         $chart = $this->createChart();
-        $chart->generate();
-        self::expectNotToPerformAssertions();
+        $actual = $chart->generate();
+        self::assertCount(2, $actual['data']);
     }
 
     private function createCalculationsState(): CalculationsState

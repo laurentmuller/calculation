@@ -159,7 +159,7 @@ final class AbstractChartTest extends TestCase
         self::assertSame('var(--bs-body-font-family)', $option['fontFamily']);
         self::assertSame('var(--bs-body-font-weight)', $option['fontWeight']);
         self::assertSame($fontSize, $option['fontSize']);
-        self::assertSame($color, $option['color']);
+        @self::assertSame($color, $option['color']);
     }
 
     private function createChart(?ApplicationParameters $parameters = null, ?Environment $twig = null): FixtureChart

@@ -53,8 +53,8 @@ final class MonthChartTest extends TestCase
             ->willReturn($this->createEmptyCalculationsMonth());
 
         $chart = $this->createChart();
-        $chart->generate(1);
-        self::expectNotToPerformAssertions();
+        $actual = $chart->generate(1);
+        self::assertCount(0, $actual['data']);
     }
 
     public function testWithOneMonth(): void
@@ -65,8 +65,8 @@ final class MonthChartTest extends TestCase
             ->willReturn($this->createEmptyCalculationsMonth());
 
         $chart = $this->createChart();
-        $chart->generate(1);
-        self::expectNotToPerformAssertions();
+        $actual = $chart->generate(1);
+        self::assertCount(0, $actual['data']);
     }
 
     public function testWithSeries(): void
@@ -77,8 +77,8 @@ final class MonthChartTest extends TestCase
             ->willReturn($this->createCalculationsMonth());
 
         $chart = $this->createChart();
-        $chart->generate(6);
-        self::expectNotToPerformAssertions();
+        $actual = $chart->generate(6);
+        self::assertCount(2, $actual['data']);
     }
 
     private function createCalculationsMonth(): CalculationsMonth

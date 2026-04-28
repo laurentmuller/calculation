@@ -43,7 +43,6 @@ final class MailerServiceTest extends TestCase
 
         $service = $this->createService();
         $service->sendComment($comment);
-        self::expectNotToPerformAssertions();
     }
 
     /**
@@ -62,7 +61,6 @@ final class MailerServiceTest extends TestCase
             Importance::LOW,
             [$this->createAttachement()]
         );
-        self::expectNotToPerformAssertions();
     }
 
     private function createAttachement(): UploadedFile
@@ -70,12 +68,21 @@ final class MailerServiceTest extends TestCase
         return new UploadedFile(__FILE__, \basename(__FILE__), test: true);
     }
 
+    private function createMailer(): MailerInterface
+    {
+        $mailer = $this->createMock(MailerInterface::class);
+        $mailer->expects(self::once())
+            ->method('send');
+
+        return $mailer;
+    }
+
     private function createService(): MailerService
     {
         return new MailerService(
             self::createStub(UrlGeneratorInterface::class),
             self::createStub(MarkdownInterface::class),
-            self::createStub(MailerInterface::class),
+            $this->createMailer(),
             $this->createMockTranslator()
         );
     }

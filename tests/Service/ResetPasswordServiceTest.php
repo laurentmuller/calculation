@@ -18,9 +18,11 @@ use App\Repository\UserRepository;
 use App\Service\ResetPasswordService;
 use App\Service\UserExceptionService;
 use App\Tests\Entity\IdTrait;
-use App\Tests\Fixture\FixtureCountableLogger;
 use App\Tests\TranslatorMockTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\UnexpectedResponseException;
@@ -43,9 +45,14 @@ final class ResetPasswordServiceTest extends TestCase
     public function testFlush(): void
     {
         $helper = $this->createResetPasswordHelper();
-        $service = $this->createService($helper);
+        $repository = $this->createRepository();
+        $repository->expects(self::once())
+            ->method('flush');
+        $service = $this->createService(
+            helper: $helper,
+            repository: $repository,
+        );
         $service->flush();
-        self::expectNotToPerformAssertions();
     }
 
     public function testGenerateFakeResetToken(): void
@@ -69,9 +76,12 @@ final class ResetPasswordServiceTest extends TestCase
     public function testGetLogger(): void
     {
         $helper = $this->createResetPasswordHelper();
-        $service = $this->createService($helper);
+        $service = $this->createService(
+            helper: $helper,
+            logger: new NullLogger(),
+        );
         $actual = $service->getLogger();
-        self::assertInstanceOf(FixtureCountableLogger::class, $actual);
+        self::assertInstanceOf(NullLogger::class, $actual);
     }
 
     public function testGetThrottleLifeTime(): void
@@ -85,9 +95,14 @@ final class ResetPasswordServiceTest extends TestCase
     public function testHandleException(): void
     {
         $helper = $this->createResetPasswordHelper();
-        $service = $this->createService($helper);
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger->expects(self::once())
+            ->method('error');
+        $service = $this->createService(
+            helper: $helper,
+            logger: $logger,
+        );
         $service->handleException(new Request(), new ExpiredSignatureException());
-        self::expectNotToPerformAssertions();
     }
 
     public function testSendEmailWithMailerException(): void
@@ -97,7 +112,11 @@ final class ResetPasswordServiceTest extends TestCase
             ->willThrowException(new UnexpectedResponseException());
         $helper = $this->createResetPasswordHelper();
         $user = $this->createUser();
-        $service = $this->createService($helper, $user, $mailer);
+        $service = $this->createService(
+            helper: $helper,
+            user: $user,
+            mailer: $mailer
+        );
         $request = new Request();
         $actual = $service->sendEmail($request, $user);
         self::assertNull($actual);
@@ -109,7 +128,10 @@ final class ResetPasswordServiceTest extends TestCase
         $helper->method('generateResetToken')
             ->willThrowException(new InvalidResetPasswordTokenException());
         $user = $this->createUser();
-        $service = $this->createService($helper, $user);
+        $service = $this->createService(
+            helper: $helper,
+            user: $user
+        );
         $request = new Request();
         $actual = $service->sendEmail($request, $user);
         self::assertNull($actual);
@@ -119,7 +141,10 @@ final class ResetPasswordServiceTest extends TestCase
     {
         $helper = $this->createResetPasswordHelper();
         $user = $this->createUser();
-        $service = $this->createService($helper, $user);
+        $service = $this->createService(
+            helper: $helper,
+            user: $user
+        );
         $request = new Request();
         $actual = $service->sendEmail($request, $user->getUsername());
         self::assertInstanceOf(ResetPasswordToken::class, $actual);
@@ -133,21 +158,27 @@ final class ResetPasswordServiceTest extends TestCase
         self::assertFalse($actual);
     }
 
+    private function createRepository(?User $user = null): MockObject&UserRepository
+    {
+        $repository = $this->createMock(UserRepository::class);
+        $repository->method('findByUsernameOrEmail')
+            ->willReturn($user);
+
+        return $repository;
+    }
+
     private function createResetPasswordHelper(): ResetPasswordHelper
     {
-        $resetRequestLifetime = 3600;
-        $requestThrottleTime = 3600;
-
         return new ResetPasswordHelper(
-            self::createStub(ResetPasswordTokenGenerator::class),
-            self::createStub(ResetPasswordCleaner::class),
-            self::createStub(ResetPasswordRequestRepositoryInterface::class),
-            $resetRequestLifetime,
-            $requestThrottleTime
+            generator: self::createStub(ResetPasswordTokenGenerator::class),
+            cleaner: self::createStub(ResetPasswordCleaner::class),
+            repository: self::createStub(ResetPasswordRequestRepositoryInterface::class),
+            resetRequestLifetime: 3600,
+            requestThrottleTime: 3600
         );
     }
 
-    private function createResetPasswordToken(?\DateTime $date = null): ResetPasswordToken
+    private function createResetPasswordToken(?\DateTimeInterface $date = null): ResetPasswordToken
     {
         $date ??= new DatePoint();
 
@@ -156,17 +187,16 @@ final class ResetPasswordServiceTest extends TestCase
 
     private function createService(
         ResetPasswordHelperInterface $helper,
+        ?UserRepository $repository = null,
         ?User $user = null,
-        ?MailerInterface $mailer = null
+        ?MailerInterface $mailer = null,
+        ?LoggerInterface $logger = null,
     ): ResetPasswordService {
-        $repository = $this->createMock(UserRepository::class);
-        if ($user instanceof User) {
-            $repository->method('findByUsernameOrEmail')
-                ->willReturn($user);
-        }
+        $repository ??= $this->createRepository($user);
         $translator = $this->createMockTranslator();
         $service = new UserExceptionService($translator);
         $mailer ??= self::createStub(MailerInterface::class);
+        $logger ??= self::createStub(LoggerInterface::class);
 
         return new ResetPasswordService(
             $helper,
@@ -175,7 +205,7 @@ final class ResetPasswordServiceTest extends TestCase
             $translator,
             self::createStub(UrlGeneratorInterface::class),
             $mailer,
-            new FixtureCountableLogger(),
+            $logger,
         );
     }
 

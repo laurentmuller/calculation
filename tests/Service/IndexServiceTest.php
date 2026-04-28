@@ -30,8 +30,15 @@ final class IndexServiceTest extends TestCase
 {
     public function testClear(): void
     {
-        $this->createService()->clear();
-        self::expectNotToPerformAssertions();
+        $cache = $this->createMock(ArrayAdapter::class);
+        $cache->method('withSubNamespace')
+            ->willReturn($cache);
+        $cache->expects(self::once())
+            ->method('withSubNamespace');
+        $cache->expects(self::once())
+            ->method('clear');
+        $service = $this->createService(cache: $cache);
+        $service->clear();
     }
 
     public function testGetCalculationByMonths(): void
@@ -138,10 +145,13 @@ final class IndexServiceTest extends TestCase
         $service->onFlush($args);
     }
 
-    private function createService(?EntityManagerInterface $manager = null): IndexService
-    {
+    private function createService(
+        ?EntityManagerInterface $manager = null,
+        ?ArrayAdapter $cache = null
+    ): IndexService {
         $manager ??= $this->createMock(EntityManagerInterface::class);
+        $cache ??= new ArrayAdapter();
 
-        return new IndexService($manager, new ArrayAdapter());
+        return new IndexService($manager, $cache);
     }
 }

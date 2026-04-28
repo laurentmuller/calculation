@@ -79,9 +79,9 @@ final class VichListenerTest extends TestCase
     private function createPropertyMapping(?UserNamer $namer = null): PropertyMapping
     {
         $mapping = new PropertyMapping(
-            'imageFile',
-            'imageName',
-            [
+            filePropertyPath: 'imageFile',
+            fileNamePropertyPath: 'imageName',
+            propertyPaths: [
                 'propertyName' => 'imageFile',
                 'fileNameProperty' => 'imageName',
             ]

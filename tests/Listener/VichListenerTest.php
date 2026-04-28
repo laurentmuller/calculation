@@ -30,18 +30,22 @@ final class VichListenerTest extends TestCase
     public function testPreUploadInvalidFile(): void
     {
         $event = $this->createEvent();
-        $listener = $this->createListener();
+        $resizer = self::createMock(ImageResizer::class);
+        $resizer->expects(self::never())
+            ->method('resize');
+        $listener = $this->createListener($resizer);
         $listener->onPreUpload($event);
-        self::expectNotToPerformAssertions();
     }
 
     public function testPreUploadValidFile(): void
     {
         $file = $this->createUploadedFile();
         $event = $this->createEvent($file);
-        $listener = $this->createListener();
+        $resizer = self::createMock(ImageResizer::class);
+        $resizer->expects(self::once())
+            ->method('resize');
+        $listener = $this->createListener($resizer);
         $listener->onPreUpload($event);
-        self::expectNotToPerformAssertions();
     }
 
     public function testPreUploadWithEmptyNamer(): void
@@ -56,24 +60,26 @@ final class VichListenerTest extends TestCase
 
         $file = $this->createUploadedFile();
         $event = $this->createEvent($file, $namer);
-        $listener = $this->createListener();
+        $resizer = self::createMock(ImageResizer::class);
+        $resizer->expects(self::never())
+            ->method('resize');
+        $listener = $this->createListener($resizer);
         $listener->onPreUpload($event);
-        self::expectNotToPerformAssertions();
     }
 
-    private function createEvent(
-        ?UploadedFile $file = null,
-        ?UserNamer $namer = null
-    ): Event {
+    private function createEvent(?UploadedFile $file = null, ?UserNamer $namer = null): Event
+    {
         $user = $this->createUser($file);
         $mapping = $this->createPropertyMapping($namer);
 
         return new Event($user, $mapping);
     }
 
-    private function createListener(): VichListener
+    private function createListener(?ImageResizer $resizer = null): VichListener
     {
-        return new VichListener(self::createStub(ImageResizer::class));
+        $resizer ??= self::createStub(ImageResizer::class);
+
+        return new VichListener($resizer);
     }
 
     private function createPropertyMapping(?UserNamer $namer = null): PropertyMapping
@@ -86,7 +92,7 @@ final class VichListenerTest extends TestCase
                 'fileNameProperty' => 'imageName',
             ]
         );
-        $mapping->setNamer($this->getNamer($namer));
+        $mapping->setNamer($namer ?? new UserNamer());
         $mapping->setMapping([
             'uri_prefix' => '/images/users',
             'upload_destination' => __DIR__,
@@ -95,8 +101,9 @@ final class VichListenerTest extends TestCase
         return $mapping;
     }
 
-    private function createUploadedFile(string $name = 'user_example.jpg'): UploadedFile
+    private function createUploadedFile(): UploadedFile
     {
+        $name = 'user_example.jpg';
         $path = $this->getImagesPath() . $name;
 
         return new UploadedFile($path, $name);
@@ -104,8 +111,7 @@ final class VichListenerTest extends TestCase
 
     private function createUser(?UploadedFile $file = null): User
     {
-        $file ??= new UploadedFile('fake', 'fake', error: -1);
-
+        $file ??= new UploadedFile(path: 'fake', originalName: 'fake', error: -1);
         $user = new User();
         $user->setUsername('user_name')
             ->setImageName($file->getBasename())
@@ -117,10 +123,5 @@ final class VichListenerTest extends TestCase
     private function getImagesPath(): string
     {
         return __DIR__ . '/../files/images/';
-    }
-
-    private function getNamer(?UserNamer $namer = null): UserNamer
-    {
-        return $namer ?? new UserNamer();
     }
 }

@@ -21,6 +21,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
+use Twig\Attribute\AsTwigFunction;
 
 /**
  * Contains user parameters (preferences).
@@ -109,6 +110,12 @@ class UserParameters extends AbstractParameters
             OptionsParameter::class,
             $this->application->getOptions()
         );
+    }
+
+    #[AsTwigFunction(name: 'is_dark_navigation')]
+    public function isDarkNavigation(): bool
+    {
+        return $this->getHomePage()->isDarkNavigation();
     }
 
     #[\Override]

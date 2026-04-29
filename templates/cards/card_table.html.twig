@@ -111,11 +111,11 @@
 {%- endmacro button_view %}
 {# granted actions #}
 {%- set object_type = object_type|default('none') -%}
-{%- set allow_show = allow_show is defined ? allow_show : is_granted(PERMISSION_SHOW, object_type) -%}
-{%- set allow_add = allow_add is defined ? allow_add : is_granted(PERMISSION_ADD, object_type) -%}
-{%- set allow_edit = allow_edit is defined ? allow_edit : is_granted(PERMISSION_EDIT, object_type) -%}
-{%- set allow_delete = allow_delete is defined ? allow_delete : is_granted(PERMISSION_DELETE, object_type) -%}
-{%- set allow_export = allow_export is defined ? allow_export : is_granted(PERMISSION_EXPORT, object_type) -%}
+{%- set allow_show = allow_show ?? is_granted(PERMISSION_SHOW, object_type) -%}
+{%- set allow_add = allow_add ?? is_granted(PERMISSION_ADD, object_type) -%}
+{%- set allow_edit = allow_edit ?? is_granted(PERMISSION_EDIT, object_type) -%}
+{%- set allow_delete = allow_delete ?? is_granted(PERMISSION_DELETE, object_type) -%}
+{%- set allow_export = allow_export ?? is_granted(PERMISSION_EXPORT, object_type) -%}
 {# default action #}
 {%- set row_none = user_parameters.display.actionNone -%}
 {%- set row_show = allow_show and user_parameters.display.actionShow -%}
@@ -132,14 +132,14 @@
 {# parameters #}
 {%- set sortable_columns = columns|filter(c => c.sortable and c.visible) -%}
 {%- set sortable = sortable_columns|length -%}
-{%- set allow_search = attributes.search is defined ? attributes.search : true -%}
-{%- set allow_global = allow_global is defined ? allow_global : is_granted(PERMISSION_EXPORT, object_type) -%}
+{%- set allow_search = attributes.search ?? true -%}
+{%- set allow_global = allow_global ?? is_granted(PERMISSION_EXPORT, object_type) -%}
 {%- set row_selector = 'table-primary' -%}
 {%- set caller = path(app.current_route) -%}
 {%- set params = params|default({})|merge({caller: caller}) -%}
 {%- set id = params.id|default(0) -%}
 {%- set limit = params.limit|default(20) -%}
-{%- set is_page_list = pageList is defined and pageList|length > 1 -%}
+{%- set is_page_list = (pageList ?? {})|length > 1 -%}
 {%- set attributes = attributes|default({})|merge({
     classes: 'table table-hover table-sm',
     'row-class': row_selector,

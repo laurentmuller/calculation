@@ -149,7 +149,7 @@
     {%- set src = asset_exists(image_uri) ? asset(image_uri|trim('/', 'left')) : false -%}
     {{- form_widget(form.file, {thumbnail: true, thumbnail_src: src, thumbnail_alt: alt}) -}}
     {# delete #}
-    {% if form.delete is defined -%}
+    {% if form.delete ?? false -%}
         <div class="d-none">{{- form_widget(form.delete) -}}</div>
     {%- endif %}
 {%- endblock vich_image_widget %}

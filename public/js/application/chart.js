@@ -23,21 +23,24 @@ window.chartLoaded = function (e) {
             $this.showTooltip(chart);
         }
     }).on('mouseleave', function () {
-        $(this).hideTooltip(chart);
+        const $this = $(this);
+        if (!$this.hasClass('row-data-hidden')) {
+            $(this).hideTooltip(chart);
+        }
     });
 };
 
 /**
  * Render the HTML tooltip.
- * @param {Object} source
+ * @param {Object.<string, string>} options
  */
-window.renderTooltip = function (source) {
+window.renderTooltip = function (options) {
     'use strict';
-    const point = source.point || source.points[0].point;
+    /** @type {string} */
     let html = $('#tooltip').html();
-    for (const [key, value] of Object.entries(point)) {
+    Object.entries(options).forEach(([key, value]) => {
         html = html.replace(`{${key}}`, value);
-    }
+    });
     return html;
 };
 
@@ -74,13 +77,15 @@ window.itemClicked = function (e) {
          * @param {Chart} chart
          */
         hideTooltip: function (chart) {
-            chart.tooltip.hide(0);
+            chart.tooltip.hide();
         }
     });
 
     $(function () {
         $('#data').tooltip({
-            customClass: 'tooltip-danger', selector: '.has-tooltip', html: true
+            customClass: 'tooltip-danger',
+            selector: '.has-tooltip',
+            html: true
         });
     });
 }(jQuery));

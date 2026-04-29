@@ -13,7 +13,7 @@
 {%- endblock header_actions %}
 {# toolbar actions #}
 {% block toolbar_actions -%}
-{% if customData.dropdown is defined and customData.dropdown|length %}
+{% if (customData.dropdown ?? {})|length %}
     {%- set group_id = customData.group.id|default(0) -%}
     {%- set group_param = constant('App\\Table\\CategoryTable::PARAM_GROUP') -%}
     {%- set data_default = 'category.fields.group'|trans -%}

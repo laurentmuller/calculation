@@ -15,9 +15,12 @@ namespace App\Tests\Model;
 
 use App\Entity\Log;
 use App\Model\LogFile;
+use App\Model\LogFileEntry;
 use App\Tests\Entity\IdTrait;
+use App\Utils\DateUtils;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
+use Symfony\Component\Filesystem\Path;
 
 final class LogFileTest extends TestCase
 {
@@ -75,6 +78,15 @@ final class LogFileTest extends TestCase
         self::assertTrue($this->file->isEmpty());
         $this->file->addLog($this->createLog());
         self::assertFalse($this->file->isEmpty());
+    }
+
+    public function testLogFileEntryToString(): void
+    {
+        $name = 'file.log';
+        $path = Path::join(__DIR__, $name);
+        $entry = new LogFileEntry($name, $path, DateUtils::createDatePoint());
+        $actual = (string) $entry;
+        self::assertSame($name, $actual);
     }
 
     public function testSort(): void

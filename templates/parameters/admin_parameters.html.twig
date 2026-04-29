@@ -13,7 +13,7 @@
         {{ include('parameters/_parameters_message.html.twig', {form: form.message}) }}
         {{ include('parameters/_parameters_home_page.html.twig', {form: form.homePage}) }}
         {{ include('parameters/_parameters_options.html.twig', {form: form.options}) }}
-        {% if form.security is defined %}
+        {% if form.security ?? false %}
             {{ include('parameters/_parameters_security.html.twig', {form: form.security}) }}
         {% endif %}
     </div>

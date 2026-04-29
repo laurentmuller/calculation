@@ -9,8 +9,8 @@
             {{- modal_title(id: 'modal-data-title', title_icon: 'code', title_text: 'dialog_raw_data.title', data_target: dialog_id, header_class: raw_data ? null : 'text-bg-danger') -}}
             <div class="modal-body">
             {%- if raw_data -%}
-                {% if description is defined and description %}
-                <span class="form-label">{{ description }}</span>
+                {% if description ?? false %}
+                    <span class="form-label">{{ description }}</span>
                 {% endif %}
                 <div class="border pre-scrollable pre-scrollable-highlight-php scrollbar-thin font-monospace">
                     {{- raw_data|var_export_php(raw_data_id) -}}
@@ -22,7 +22,7 @@
             {%- endif -%}
             </div>
             <div class="modal-footer justify-content-start">
-                {% if raw_data and allow_copy is defined and allow_copy %}
+                {% if raw_data and (allow_copy ?? false) %}
                     {{ button_copy(target: '#' ~ raw_data_id, class: 'btn-primary', hide_modal: true) }}
                 {% endif %}
                 {{- modal_close_button(data_target: dialog_id) }}

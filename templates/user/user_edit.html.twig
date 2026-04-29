@@ -23,7 +23,7 @@
             <div class="col-md-6">{{ form_row(form.plainPassword.first) }}</div>
             <div class="col-md-6">{{ form_row(form.plainPassword.second) }}</div>
         </div>
-        {% if tooltips is defined and tooltips|length %}
+        {% if (tooltips ?? {})|length %}
             {% from 'macros/_password_constraints.html.twig' import password_constraints %}
             <div class="mb-3">{{ password_constraints(tooltips) }}</div>
         {% endif %}

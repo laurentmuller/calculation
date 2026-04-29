@@ -172,7 +172,7 @@ class AbstractHighchart extends Highchart
 
     protected function getTooltipExpression(): ChartExpression
     {
-        return ChartExpression::instance('function(){return renderTooltip(this);}');
+        return ChartExpression::instance('function(){return renderTooltip(this.options);}');
     }
 
     /**
@@ -249,6 +249,7 @@ class AbstractHighchart extends Highchart
             'borderColor' => $this->getBorderColor(),
             'backgroundColor' => 'var(--bs-light)',
             'borderRadius' => 0,
+            'hideDelay' => 100,
             'useHTML' => true,
             'shared' => true,
         ]);

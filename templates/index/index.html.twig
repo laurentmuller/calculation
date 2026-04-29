@@ -14,21 +14,19 @@
 {% block navigation_horizontal -%}
     {%- if enabled -%}{{ parent() }}{%- endif -%}
 {%- endblock navigation_horizontal %}
-{# footer #}
-{% block footer -%}
-    {%- if enabled -%}{{- parent() -}}{%- endif -%}
-{%- endblock footer %}
+{# container_class #}
+{% block container_class 'container mb-5' %}
 {# body #}
 {% block body -%}
     {% if enabled %}
         {{ include('index/panel_calculation.html.twig') }}
-        {% if months is defined %}
+        {% if months ?? false %}
             {{ include('index/panel_month.html.twig') }}
         {% endif %}
-        {% if states is defined %}
+        {% if states ?? false %}
             {{ include('index/panel_state.html.twig') }}
         {% endif %}
-        {% if catalog is defined %}
+        {% if catalog ?? false %}
             {{ include('index/panel_catalog.html.twig') }}
         {% endif %}
         {{ include('user/user_switch.html.twig') }}
@@ -41,6 +39,10 @@
         </div>
     {% endif %}
 {%- endblock body %}
+{# footer #}
+{% block footer -%}
+    {%- if enabled -%}{{- parent() -}}{%- endif -%}
+{%- endblock footer %}
 {# stylesheets #}
 {% block stylesheets -%}
     {{ preload_css(enabled ? 'css/calculation.css' : 'css/center.css') }}

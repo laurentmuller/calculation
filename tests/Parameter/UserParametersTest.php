@@ -29,6 +29,14 @@ use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 
 final class UserParametersTest extends TestCase
 {
+    public function testDarkNavigation(): void
+    {
+        $user = $this->createUser();
+        $parameters = $this->createUserParameters(user: $user);
+        $actual = $parameters->isDarkNavigation();
+        self::assertTrue($actual);
+    }
+
     public function testGetApplication(): void
     {
         $user = $this->createUser();

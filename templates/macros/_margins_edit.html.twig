@@ -16,7 +16,7 @@
     </td>
     <td class="w-30">
         <div class="form-group">
-        {% if margin.margin is defined %}
+        {% if margin.margin ?? false %}
             {{ form_widget(margin.margin, {attr: {'aria-label': 'globalmargin.fields.margin_percent'|trans}}) }}
             <em>{{ form_errors(margin.margin) }}</em>
         {% else %}

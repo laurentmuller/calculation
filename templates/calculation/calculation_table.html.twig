@@ -10,7 +10,7 @@
 {%- endblock header_actions %}
 {# toolbar actions #}
 {% block toolbar_actions -%}
-{% if customData.dropdown is defined and customData.dropdown|length %}
+{% if (customData.dropdown ?? {})|length %}
     {%- set state_id = customData.state.id|default(0) -%}
     {%- set state_editable = customData.editable|default(0) -%}
     {%- set input_value = state_id != 0 ? state_id : state_editable -%}

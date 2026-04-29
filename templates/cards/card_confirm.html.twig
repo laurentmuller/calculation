@@ -4,7 +4,7 @@
 {%- set title = title|default('flash_bag.success') -%}
 {%- set border = border|default('warning') -%}
 {%- set submit_class = submit_class|default('btn-' ~ border) -%}
-{%- set show_required = show_required is defined ? show_required : false -%}
+{%- set show_required = show_required ?? false -%}
 {# class #}
 {% block card_class ' border-' ~ border %}
 {% block card_header_class ' text-bg-' ~ border %}
@@ -12,7 +12,7 @@
 {# body #}
 {% block card_body -%}
     {% block message %}
-        {% if message is defined %}
+        {% if message ?? false %}
             <p class="my-2">{{ message|trans(message_parameters|default({}))|raw|nl2br }}</p>
         {% endif %}
     {% endblock message %}

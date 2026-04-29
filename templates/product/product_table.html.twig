@@ -12,7 +12,7 @@
 {%- endblock header_actions %}
 {# toolbar actions #}
 {% block toolbar_actions -%}
-{% if customData.dropdown is defined and customData.dropdown|length %}
+{% if (customData.dropdown ?? {})|length %}
     {%- set group_id = customData.group.id|default(0) -%}
     {%- set category_id = customData.category.id|default(0) -%}
     {%- set data_default = 'product.fields.category'|trans -%}

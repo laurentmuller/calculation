@@ -6,8 +6,7 @@
 {%- endmacro output_type %}
 
 {% macro output_required(field) -%}
-    {%- set required = field.required is defined ? field.required : true -%}
-    {% if required %}
+    {% if field.required ?? true %}
         <i class="text-success fa-solid fa-check"></i>
     {% endif %}
 {%- endmacro output_required %}
@@ -105,7 +104,7 @@
                             <a href="{{ href }}">{{- _self.output_icon('database', entity.name) -}}</a>
                         </li>
                     {% endif %}
-                {% elseif link.href is defined and link.text is defined %}
+                {% elseif (link.href ?? false) and (link.text ?? false) %}
                     <li>
                         <a href="{{ link.href }}">{{- _self.output_icon('link', link.text) -}}</a>
                     </li>

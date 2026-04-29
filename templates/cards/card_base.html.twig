@@ -14,7 +14,7 @@
                 <h1 class="card-title py-1">
                     {{- icon(title_icon, title, title_parameters|default({})) -}}
                 </h1>
-                {% if title_description is defined and title_description %}
+                {% if title_description ?? false %}
                     <small>{{ title_description|trans }}</small>
                 {% endif %}
                 {%- endblock card_header %}

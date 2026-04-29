@@ -94,7 +94,7 @@ final class AbstractChartTest extends TestCase
     public function testGetTooltipExpression(): void
     {
         $chart = $this->createChart();
-        $expected = 'function(){return renderTooltip(this);}';
+        $expected = 'function(){return renderTooltip(this.options);}';
         $actual = $chart->getTooltipExpression()->getExpression();
         self::assertSame($expected, $actual);
     }
@@ -110,12 +110,13 @@ final class AbstractChartTest extends TestCase
     public function testTooltipOptions(): void
     {
         $chart = $this->createChart();
-        self::assertSame('var(--bs-light)', $chart->tooltip['backgroundColor']);
+        self::assertSameStyle($chart->tooltip['style'], '0.75rem');
         self::assertSame('var(--bs-border-color)', $chart->tooltip['borderColor']);
+        self::assertSame('var(--bs-light)', $chart->tooltip['backgroundColor']);
         self::assertSame(0, $chart->tooltip['borderRadius']);
+        self::assertSame(100, $chart->tooltip['hideDelay']);
         self::assertTrue($chart->tooltip['useHTML']);
         self::assertTrue($chart->tooltip['shared']);
-        self::assertSameStyle($chart->tooltip['style'], '0.75rem');
     }
 
     public function testType(): void
@@ -135,7 +136,11 @@ final class AbstractChartTest extends TestCase
         self::assertSame('var(--bs-body-font-family)', $option['fontFamily']);
         self::assertSame('var(--bs-body-font-weight)', $option['fontWeight']);
         self::assertSame($fontSize, $option['fontSize']);
-        @self::assertSame($color, $option['color']);
+        if (null === $color) {
+            self::assertArrayNotHasKey('color', $option);
+        } else {
+            self::assertSame($color, $option['color']);
+        }
     }
 
     private function createChart(?ApplicationParameters $parameters = null): FixtureChart

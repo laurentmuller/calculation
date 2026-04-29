@@ -9,6 +9,10 @@
 }
 
 /* page-content */
+body:has(footer) .page-content {
+    margin-bottom: 1.5rem !important;
+}
+
 .page-content {
     transition: margin-left var(--sidebar-delay) ease-in-out;
     margin-top: 1rem;

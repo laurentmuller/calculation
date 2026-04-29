@@ -1,4 +1,4 @@
-{# horizontal toolbar #}
+{# imports #}
 {% from 'macros/_icons.html.twig' import icon, link, navItem %}
 {# parameters #}
 {%- set is_admin = is_granted(ROLE_ADMIN) -%}
@@ -9,11 +9,9 @@
     or is_granted(PERMISSION_LIST, ENTITY_CATEGORY)
     or is_granted(PERMISSION_LIST, ENTITY_GROUP)
     or is_granted(PERMISSION_LIST, ENTITY_CALCULATION_STATE)
-    or is_granted(PERMISSION_LIST, ENTITY_GLOBAL_MARGIN)
--%}
-{%- set is_dark_navigation = app.user and user_parameters.homePage.darkNavigation -%}
-{# horizontal navigation #}
-<nav class="navbar navbar-horizontal navbar-expand-lg bg-body-tertiary d-print-none border-bottom ps-2 z-3"{% if is_dark_navigation %} data-bs-theme="dark"{% endif %}>
+    or is_granted(PERMISSION_LIST, ENTITY_GLOBAL_MARGIN) -%}
+{# navigation #}
+<nav class="navbar navbar-horizontal navbar-expand-lg bg-body-tertiary d-print-none border-bottom ps-2 z-3"{% if is_dark_navigation() %} data-bs-theme="dark"{% endif %}>
     <div class="container-fluid ps-0">
         {# toggle navigation #}
         <button class="btn btn-outline-secondary show-sidebar me-2" title="{{ 'index.sidebar_show'|trans }}">
@@ -24,7 +22,9 @@
             <i class="fa-solid fa-home" style=""></i>
         </a>
         {# navigation toggler #}
-        <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-horizontal-menu" aria-controls="navbarContent" aria-expanded="false" aria-label="{{ 'index.toggle_navigation'|trans }}">
+        <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-horizontal-menu"
+                aria-controls="navbarContent" aria-expanded="false"
+                aria-label="{{ 'index.toggle_navigation'|trans }}">
             <span class="navbar-toggler-icon"></span>
         </button>
         {# menus #}
@@ -36,7 +36,7 @@
                     </li>
                 {% endif %}
                 {% if is_granted_data -%}
-                   {{ include('navigation/horizontal/navigation_data.html.twig') }}
+                    {{ include('navigation/horizontal/navigation_data.html.twig') }}
                 {% endif %}
                 {% if is_granted_calculation %}
                     {{ include('navigation/horizontal/navigation_chart.html.twig') }}

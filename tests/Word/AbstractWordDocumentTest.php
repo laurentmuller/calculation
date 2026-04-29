@@ -21,6 +21,7 @@ use App\Parameter\UserParameters;
 use App\Tests\TranslatorMockTrait;
 use App\Word\AbstractWordDocument;
 use App\Word\HtmlDocument;
+use App\Word\WordFooter;
 use PHPUnit\Framework\TestCase;
 
 final class AbstractWordDocumentTest extends TestCase
@@ -42,10 +43,28 @@ final class AbstractWordDocumentTest extends TestCase
         self::assertTrue($actual);
     }
 
+    public function testFooterWithoutUrl(): void
+    {
+        $controller = $this->createMockController();
+        $doc = new class($controller) extends AbstractWordDocument {
+            #[\Override]
+            public function render(): bool
+            {
+                $section = $this->addSection();
+                $footer = new WordFooter($this);
+                $footer->setName('name')
+                    ->output($section);
+
+                return true;
+            }
+        };
+        $actual = $doc->render();
+        self::assertTrue($actual);
+    }
+
     public function testWithCustomer(): void
     {
-        $customerInformation = $this->createCustomerInformation();
-        $controller = $this->createMockController($customerInformation);
+        $controller = $this->createMockController();
         $doc = new class($controller) extends AbstractWordDocument {
             #[\Override]
             public function render(): bool
@@ -59,8 +78,7 @@ final class AbstractWordDocumentTest extends TestCase
 
     public function testWithEmptyValues(): void
     {
-        $customerInformation = new CustomerInformation();
-        $controller = $this->createMockController($customerInformation);
+        $controller = $this->createMockController();
         $this->render($controller);
     }
 
@@ -90,8 +108,7 @@ final class AbstractWordDocumentTest extends TestCase
 
     public function testWithPrintAddress(): void
     {
-        $customerInformation = $this->createCustomerInformation();
-        $controller = $this->createMockController($customerInformation);
+        $controller = $this->createMockController();
         $this->render($controller);
     }
 
@@ -109,8 +126,10 @@ final class AbstractWordDocumentTest extends TestCase
         return $customerInformation;
     }
 
-    private function createMockController(CustomerInformation $customerInformation): AbstractController
+    private function createMockController(?CustomerInformation $customerInformation = null): AbstractController
     {
+        $customerInformation ??= $this->createCustomerInformation();
+
         $applicationParameters = $this->createMock(ApplicationParameters::class);
         $applicationParameters->method('getCustomerInformation')
             ->willReturn($customerInformation);

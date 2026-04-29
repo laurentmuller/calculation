@@ -3,8 +3,9 @@
 {% from 'macros/_icons.html.twig' import link, homepage, button_copy %}
 {# parameters #}
 {%- set title_icon = 'exclamation-circle' -%}
+{% set status_code = status_code|default(0) %}
 {% if not title is defined %}
-    {% if status_code is defined and status_code != 0 %}
+    {% if status_code != 0 %}
         {%- set title = 'error_page.title' -%}
         {%- set title_parameters = {'%status_code%': status_code} -%}
     {% else %}
@@ -12,101 +13,104 @@
     {% endif %}
 {% endif %}
 {%- set title_description = 'error_page.description' -%}
-{%- set is_exception = exception is defined and exception -%}
+{%- set is_exception = exception ?? false -%}
 {# class #}
 {% block card_class ' border-danger' %}
 {% block card_header_class ' text-bg-danger' %}
 {% block card_container_class is_exception ? '' : ' col-xl-8 offset-xl-2' %}
 {# body #}
 {% block card_body %}
-<p id="error-message">
-{% block error_message -%}
-    {{- description|default('')|raw }} {{ suggestion|default('')|raw -}}
-{%- endblock error_message %}
-</p>
-<div class="d-flex-wrap-center d-print-none">
-    <p class="mb-0 me-auto">{{ 'error_page.link'|trans({'%mailto%': app_owner_email, '%subject%': app_full_name|url_encode})|raw }}</p>
+    <p id="error-message">
+        {% block error_message -%}
+            {{- description|default('')|raw }} {{ suggestion|default('')|raw -}}
+        {%- endblock error_message %}
+    </p>
+    <div class="d-flex-wrap-center d-print-none">
+        <p class="mb-0 me-auto">{{ 'error_page.link'|trans({'%mailto%': app_owner_email, '%subject%': app_full_name|url_encode})|raw }}</p>
+        {% if is_exception %}
+            <a data-bs-toggle="collapse" href="#exception-detail" class="drop-down-icon-right text-end"
+               aria-expanded="false" aria-controls="exception-detail">
+                {{- 'error_page.details'|trans -}}
+            </a>
+        {% endif %}
+    </div>
     {% if is_exception %}
-        <a data-bs-toggle="collapse" href="#exception-detail" class="drop-down-icon-right text-end" aria-expanded="false" aria-controls="exception-detail">
-            {{- 'error_page.details'|trans -}}
-        </a>
+        <div id="exception-detail" class="collapse border-top mt-3">
+            <table id="exception-table" class="table table-exception table-no-end-line table-sm mb-0">
+                <thead>
+                <tr>
+                    <th>{{ 'error_page.fields.property'|trans }}</th>
+                    <th>{{ 'error_page.fields.value'|trans }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{{ 'error_page.fields.message'|trans }}</td>
+                    <td>{{ exception.message }}</td>
+                </tr>
+                {% if exception.code|default %}
+                    <tr>
+                        <td>{{ 'error_page.fields.code'|trans }}</td>
+                        <td>{{ exception.code }}</td>
+                    </tr>
+                {% endif %}
+                {% if exception.file|default %}
+                    <tr>
+                        <td>{{ 'error_page.fields.file'|trans }}</td>
+                        <td>{{ exception.file|relative_path }}</td>
+                    </tr>
+                {% endif %}
+                {% if exception.line|default %}
+                    <tr>
+                        <td>{{ 'error_page.fields.line'|trans }}</td>
+                        <td>{{ exception.line }}</td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <th>{{ 'error_page.fields.trace'|trans }}</th>
+                    <th>{{ 'error_page.fields.call'|trans }}</th>
+                </tr>
+                {% set line = 'error_page.fields.line'|trans|lower %}
+                {% set traces = traces|default(exception.trace|default({})) %}
+                {% for trace in traces %}
+                    <tr>
+                        <td>{{ loop.index0 }}</td>
+                        <td>
+                            {%- if trace.file -%}
+                                <span class="me-1">{{ trace.file|relative_path }}</span>
+                            {%- endif -%}
+                            {%- if trace.short_class|default -%}
+                                <span class="text-warning">{{ trace.short_class }}</span>
+                            {%- endif -%}
+                            {%- if trace.type|default -%}
+                                <span class="text-body-secondary">{{ trace.type }}</span>
+                            {%- endif -%}
+                            {%- if trace.function|default -%}
+                                <span class="text-danger">{{ trace.function }}</span>
+                            {%- endif -%}
+                            {%- if trace.line|default -%}
+                                <span class="text-body-secondary{% if trace.function|default %} ms-1{% endif %}">{{ 'error_page.fields.line_number'|trans({'%line%': trace.line}) }}</span>
+                            {%- endif -%}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="2">{{ 'error_page.no_trace'|trans }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% endif %}
-</div>
-{% if is_exception %}
-<div id="exception-detail" class="collapse border-top mt-3">
-    <table id="exception-table" class="table table-exception table-no-end-line table-sm mb-0">
-        <thead>
-            <tr>
-                <th>{{ 'error_page.fields.property'|trans }}</th>
-                <th>{{ 'error_page.fields.value'|trans }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{ 'error_page.fields.message'|trans }}</td>
-                <td>{{ exception.message }}</td>
-            </tr>
-            {% if exception.code|default %}
-                <tr>
-                    <td>{{ 'error_page.fields.code'|trans }}</td>
-                    <td>{{ exception.code }}</td>
-                </tr>
-            {% endif %}
-            {% if exception.file|default %}
-                <tr>
-                    <td>{{ 'error_page.fields.file'|trans }}</td>
-                    <td>{{ exception.file|relative_path }}</td>
-                </tr>
-            {% endif %}
-            {% if exception.line|default %}
-                <tr>
-                    <td>{{ 'error_page.fields.line'|trans }}</td>
-                    <td>{{ exception.line }}</td>
-                </tr>
-            {% endif %}
-            <tr>
-                <th>{{ 'error_page.fields.trace'|trans }}</th>
-                <th>{{ 'error_page.fields.call'|trans }}</th>
-            </tr>
-            {% set line = 'error_page.fields.line'|trans|lower %}
-            {% set traces = traces|default(exception.trace|default({})) %}
-            {% for trace in traces %}
-                <tr>
-                    <td>{{ loop.index0 }}</td>
-                    <td>
-                        {%- if trace.file -%}
-                            <span class="me-1">{{ trace.file|relative_path }}</span>
-                        {%- endif -%}
-                        {%- if trace.short_class|default -%}
-                            <span class="text-warning">{{ trace.short_class }}</span>
-                        {%- endif -%}
-                        {%- if trace.type|default -%}
-                            <span class="text-body-secondary">{{ trace.type }}</span>
-                        {%- endif -%}
-                        {%- if trace.function|default -%}
-                            <span class="text-danger">{{ trace.function }}</span>
-                        {%- endif -%}
-                        {%- if trace.line|default -%}
-                            <span class="text-body-secondary{% if trace.function|default %} ms-1{% endif %}">{{ 'error_page.fields.line_number'|trans({'%line%': trace.line}) }}</span>
-                        {%- endif -%}
-                    </td>
-                </tr>
-            {% else %}
-                <tr><td colspan="2">{{ 'error_page.no_trace'|trans }}</td></tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-{% endif %}
 {% endblock card_body %}
 {# footer #}
 {% block card_footer %}
-{% if page_list is defined and page_list %}
-    {%- set href = cancel_url(app.request, id|default(null), page_list) -%}
-    {{ link(href, 'common.button_back_list', 'btn btn-form btn-primary', 'chevron-left') }}
-{% else %}
-    {{ homepage() }}
-{% endif %}
+    {% if page_list ?? false %}
+        {%- set href = cancel_url(app.request, id|default(null), page_list) -%}
+        {{ link(href, 'common.button_back_list', 'btn btn-form btn-primary', 'chevron-left') }}
+    {% else %}
+        {{ homepage() }}
+    {% endif %}
     {{ button_copy(target: false) }}
 {% endblock card_footer %}
 {# javascripts #}

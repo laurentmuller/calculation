@@ -3,12 +3,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="application-name" content="{{ app_name }}">
 <meta name="description" content="{{ app_description }}">
-<meta name="theme-color" content="#212529">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#212529" media="(prefers-color-scheme: dark)">
 <meta name="msapplication-TileColor" content="#212529">
-<meta name="msapplication-TileImage" content="{{ asset_icon(144) }}">
+<meta name="msapplication-TileImage" content="{{ asset_icon(96) }}">
 <meta name="msapplication-config" content="{{ asset('browserconfig.xml') }}"/>
 <meta property="og:title" content="{{ page_title }}"/>
-<meta property="og:image" content="{{ asset_icon(144) }}"/>
+<meta property="og:image" content="{{ asset_icon(96) }}"/>
 <meta property="og:url" content="{{ app.request.uri }}"/>
 <meta property="og:description" content="{{ app_description }}">
 <meta property="og:type" content="website"/>

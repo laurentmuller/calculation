@@ -38,7 +38,7 @@
 </table>
 {%- else -%}
 <p class="mb-0">
-    {{- 'openweather.result.failure'|trans }}{% if message is defined %} {{ message }}{% endif -%}
+    {{- 'openweather.result.failure'|trans }}{% if message ?? false %} {{ message }}{% endif -%}
 </p>
 {%- endif %}
 {% endblock card_body %}

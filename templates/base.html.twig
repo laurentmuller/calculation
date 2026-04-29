@@ -2,8 +2,7 @@
 {%- set title_parameters = title_parameters|default({}) -%}
 {%- set page_title = app_name ~ (title is defined ? ' - ' ~ title|trans(title_parameters) : '') -%}
 {%- set sidebar_show = app.user and app.user.enabled and app.request.cookies.boolean('MENU_SIDEBAR_SHOW') -%}
-{%- set statusbar_show = statusbar_show is defined ? statusbar_show : app.user and app.user.enabled and user_parameters.homePage.statusBar -%}
-{%- set body_class = [sidebar_show ? 'sidebar-show' : '', statusbar_show ? 'status-bar' : '']|join(' ')|trim -%}
+{%- set statusbar_show = statusbar_show ?? app.user and app.user.enabled and user_parameters.homePage.statusBar -%}
 {%- set is_js_debug = app.debug -%}
 <!DOCTYPE html>
 <html lang="{{ app.request.locale|replace({_: '-'}) }}" data-bs-theme="{{ theme_value(app.request) }}">
@@ -13,7 +12,6 @@
     {{ include('meta_links.html.twig') }}
     {{ include('icon_links.html.twig') }}
     <title>{{ page_title }}</title>
-    <link rel="manifest" type="application/manifest+json" href="{{ asset('site.webmanifest') }}">
     {# stylesheets #}
     {{ preload_css('build/bootstrap/bootstrap.css') }}
     {{ preload_css('build/font-awesome/css/all.css') }}
@@ -23,12 +21,19 @@
         {{ asset_css('css/style.css') }}
     {% endblock stylesheets %}
 </head>
-<body class="{{ body_class }}"
-      data-cookie-path="{{ cookie_path }}"
-      data-vertical-url="{{ path('navigation_vertical') }}"
-      data-horizontal-url="{{ path('navigation_horizontal') }}"
-      data-show-menu="{{ 'index.menu_show'|trans }}"
-      data-hide-menu="{{ 'index.menu_hide'|trans }}">
+{# body #}
+{%- set body_class = {
+    'sidebar-show': sidebar_show,
+    'statusbar-show': statusbar_show,
+} -%}
+{%- set body_attr = {
+    'cookie-path': cookie_path,
+    'vertical-url': path('navigation_vertical'),
+    'horizontal-url': path('navigation_horizontal'),
+    'show-menu': 'index.menu_show'|trans,
+    'hide-menu': 'index.menu_hide'|trans,
+} -%}
+<body class="{{ html_classes(body_class) }}" {{ html_data_attr(body_attr) }}>
 {# vertical navigation #}
 {% block navigation_vertical %}
     {% if sidebar_show %}

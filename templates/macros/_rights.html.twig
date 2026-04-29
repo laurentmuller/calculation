@@ -47,13 +47,13 @@
             {{ _self.row(rights.Group, permissions.Group, overwrite) }}
             {{ _self.row(rights.CalculationState, permissions.CalculationState, overwrite) }}
             {{ _self.row(rights.GlobalMargin, permissions.GlobalMargin, overwrite) }}
-            {%- if rights.Customer is defined -%}
+            {%- if rights.Customer ?? false -%}
                 {{ _self.row(rights.Customer, permissions.Customer, overwrite) }}
             {%- endif -%}
-            {%- if rights.User is defined -%}
+            {%- if rights.User ?? false -%}
                 {{ _self.row(rights.User, permissions.User, overwrite) }}
             {%- endif -%}
-            {%- if rights.Log is defined -%}
+            {%- if rights.Log ?? false -%}
                 {{ _self.row(rights.Log, permissions.Log, overwrite) }}
             {%- endif -%}
         </tbody>

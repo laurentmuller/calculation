@@ -19,11 +19,11 @@ use App\Model\CalculationsMonthItem;
 use App\Parameter\ApplicationParameters;
 use App\Repository\CalculationRepository;
 use App\Tests\TranslatorMockTrait;
+use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Twig\Environment;
 
 final class MonthChartTest extends TestCase
 {
@@ -33,7 +33,6 @@ final class MonthChartTest extends TestCase
     private ApplicationParameters $parameters;
     private MockObject&CalculationRepository $repository;
     private TranslatorInterface $translator;
-    private Environment $twig;
 
     #[\Override]
     protected function setUp(): void
@@ -41,7 +40,6 @@ final class MonthChartTest extends TestCase
         $this->parameters = self::createStub(ApplicationParameters::class);
         $this->repository = $this->createMock(CalculationRepository::class);
         $this->generator = self::createStub(UrlGeneratorInterface::class);
-        $this->twig = self::createStub(Environment::class);
         $this->translator = $this->createMockTranslator();
     }
 
@@ -104,10 +102,16 @@ final class MonthChartTest extends TestCase
 
     private function createChart(): MonthChart
     {
-        $chart = new MonthChart($this->parameters, $this->generator, $this->twig, $this->repository);
-        $chart->setTranslator($this->translator);
+        $entityManager = self::createStub(EntityManagerInterface::class);
+        $entityManager->method('getRepository')
+            ->willReturn($this->repository);
 
-        return $chart;
+        return new MonthChart(
+            parameters: $this->parameters,
+            generator: $this->generator,
+            manager: $entityManager,
+            translator: $this->translator
+        );
     }
 
     private function createEmptyCalculationsMonth(): CalculationsMonth

@@ -78,8 +78,6 @@ final class DateUtils
      *
      * @param ?int $year   the year to complet or <code>null</code> to use the current year
      * @param int  $change the year change limit
-     *
-     * @return int the full year
      */
     public static function completYear(?int $year = null, int $change = 1930): int
     {
@@ -140,7 +138,7 @@ final class DateUtils
     /**
      * Gets the numeric representation of a day of the month for the given date point.
      *
-     * @return int value 1 through 31
+     * @return int<1, 31>
      */
     public static function getDay(DatePoint $date = new DatePoint()): int
     {
@@ -150,7 +148,7 @@ final class DateUtils
     /**
      * Gets the numeric representation of a month for the given date point.
      *
-     * @return int value 1 through 12
+     * @return int<1, 12>
      */
     public static function getMonth(DatePoint $date = new DatePoint()): int
     {
@@ -206,8 +204,6 @@ final class DateUtils
      *
      * The weeks are starting on Monday.
      *
-     * @param DatePoint $date the date to get week for
-     *
      * @return int value 1 through 53
      */
     public static function getWeek(DatePoint $date = new DatePoint()): int
@@ -233,8 +229,6 @@ final class DateUtils
 
     /**
      * Gets the full numeric representation of a year with 4 digits for the given date point.
-     *
-     * @param DatePoint $date the date to get year for or <code>null</code> to use the current date
      */
     public static function getYear(DatePoint $date = new DatePoint()): int
     {
@@ -294,7 +288,7 @@ final class DateUtils
     {
         $result = [];
         $formatter = self::getFormatter($pattern);
-        for ($i = 0; $i <= 6; ++$i) {
+        foreach (\range(0, 6) as $i) {
             $time = (int) \strtotime(\sprintf('last %s + %d day', $firstDay, $i));
             $result[$i + 1] = \ucfirst((string) $formatter->format($time));
         }
@@ -320,7 +314,7 @@ final class DateUtils
         $date = self::createDate('2000-01-01');
         $interval = self::createDateInterval('P1M');
         $formatter = self::getFormatter($pattern);
-        for ($i = 1; $i <= 12; ++$i) {
+        foreach (\range(1, 12) as $i) {
             $result[$i] = \ucfirst((string) $formatter->format($date));
             $date = $date->add($interval);
         }

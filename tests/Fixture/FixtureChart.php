@@ -22,12 +22,6 @@ use HighchartsBundle\Highcharts\ChartExpression;
 class FixtureChart extends AbstractHighchart
 {
     #[\Override]
-    public function createTemplateExpression(string $template, array $context = []): ?ChartExpression
-    {
-        return parent::createTemplateExpression($template, $context);
-    }
-
-    #[\Override]
     public function getClickExpression(): ChartExpression
     {
         return parent::getClickExpression();
@@ -43,5 +37,11 @@ class FixtureChart extends AbstractHighchart
     public function getMinMargin(): float
     {
         return parent::getMinMargin();
+    }
+
+    #[\Override]
+    public function getTooltipExpression(): ChartExpression
+    {
+        return parent::getTooltipExpression();
     }
 }

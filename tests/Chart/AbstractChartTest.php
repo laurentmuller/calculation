@@ -16,11 +16,10 @@ namespace App\Tests\Chart;
 use App\Chart\ChartType;
 use App\Parameter\ApplicationParameters;
 use App\Tests\Fixture\FixtureChart;
-use HighchartsBundle\Highcharts\ChartExpression;
+use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Twig\Environment;
-use Twig\Error\Error;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class AbstractChartTest extends TestCase
 {
@@ -50,30 +49,6 @@ final class AbstractChartTest extends TestCase
         self::assertCount(1, $chart->chart['events']);
     }
 
-    public function testCreateInvalidTemplateExpression(): void
-    {
-        $twig = $this->createMock(Environment::class);
-        $twig->method('render')
-            ->willThrowException(new Error('Test Message'));
-        $chart = $this->createChart(twig: $twig);
-
-        $actual = $chart->createTemplateExpression('fake');
-        self::assertNull($actual);
-    }
-
-    public function testCreateTemplateExpression(): void
-    {
-        $twig = $this->createMock(Environment::class);
-        $twig->expects(self::once())->method('render')
-            ->willReturn('fake');
-        $chart = $this->createChart(twig: $twig);
-
-        $expected = new ChartExpression('fake');
-        $actual = $chart->createTemplateExpression('fake');
-        self::assertInstanceOf(ChartExpression::class, $actual);
-        self::assertSame((string) $expected, (string) $actual);
-    }
-
     public function testCreditsOptions(): void
     {
         $chart = $this->createChart();
@@ -82,7 +57,7 @@ final class AbstractChartTest extends TestCase
 
     public function testGetClickExpression(): void
     {
-        $chart = $this->createChart(twig: self::createStub(Environment::class));
+        $chart = $this->createChart();
         $expected = 'function() {location.href = this.url;}';
         $actual = $chart->getClickExpression()->getExpression();
         self::assertSame($expected, $actual);
@@ -116,11 +91,12 @@ final class AbstractChartTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    public function testLangOptions(): void
+    public function testGetTooltipExpression(): void
     {
         $chart = $this->createChart();
-        self::assertSame('.', $chart->lang['decimalPoint']);
-        self::assertSame("'", $chart->lang['thousandsSep']);
+        $expected = 'function(){return renderTooltip(this);}';
+        $actual = $chart->getTooltipExpression()->getExpression();
+        self::assertSame($expected, $actual);
     }
 
     public function testLegendOptions(): void
@@ -162,12 +138,13 @@ final class AbstractChartTest extends TestCase
         @self::assertSame($color, $option['color']);
     }
 
-    private function createChart(?ApplicationParameters $parameters = null, ?Environment $twig = null): FixtureChart
+    private function createChart(?ApplicationParameters $parameters = null): FixtureChart
     {
         return new FixtureChart(
             parameters: $parameters ?? self::createStub(ApplicationParameters::class),
             generator: self::createStub(UrlGeneratorInterface::class),
-            twig: $twig ?? self::createStub(Environment::class)
+            manager: self::createStub(EntityManagerInterface::class),
+            translator: self::createStub(TranslatorInterface::class)
         );
     }
 }

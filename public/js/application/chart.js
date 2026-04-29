@@ -15,12 +15,30 @@
  */
 window.chartLoaded = function (e) {
     'use strict';
+    /** @type {EventTarget&Chart} */
     const chart = e.target;
     $('#data tbody tr.row-data').on('mouseenter', function () {
-        $(this).showTooltip(chart);
+        const $this = $(this);
+        if (!$this.hasClass('row-data-hidden')) {
+            $this.showTooltip(chart);
+        }
     }).on('mouseleave', function () {
         $(this).hideTooltip(chart);
     });
+};
+
+/**
+ * Render the HTML tooltip.
+ * @param {Object} source
+ */
+window.renderTooltip = function (source) {
+    'use strict';
+    const point = source.point || source.points[0].point;
+    let html = $('#tooltip').html();
+    for (const [key, value] of Object.entries(point)) {
+        html = html.replace(`{${key}}`, value);
+    }
+    return html;
 };
 
 /**
@@ -29,11 +47,12 @@ window.chartLoaded = function (e) {
  */
 window.itemClicked = function (e) {
     'use strict';
+    /** @type {Chart} */
+    const chart = e.target.chart;
     const index = e.legendItem.index + 1;
-    $(`#data tbody tr:nth-child(${index}) td`)
-        .toggleClass('text-decoration-line-through text-secondary');
-    $(`#data tbody tr:nth-child(${index}) .state-color`)
-        .toggleClass('bg-secondary');
+    const selector = `#data tbody tr:nth-child(${index})`;
+    $(selector).toggleClass('row-data-hidden')
+        .hideTooltip(chart);
 };
 
 (function ($) {
@@ -42,7 +61,7 @@ window.itemClicked = function (e) {
     $.fn.extend({
         /**
          * Show the chart tooltip.
-         * @param {Object} chart
+         * @param {Chart} chart
          */
         showTooltip: function (chart) {
             const index = $(this).index();
@@ -52,18 +71,16 @@ window.itemClicked = function (e) {
 
         /**
          * Hide the chart tooltip.
-         * @param {Object} chart
+         * @param {Chart} chart
          */
         hideTooltip: function (chart) {
-            chart.tooltip.hide();
+            chart.tooltip.hide(0);
         }
     });
 
     $(function () {
         $('#data').tooltip({
-            customClass: 'tooltip-danger',
-            selector: '.has-tooltip',
-            html: true
+            customClass: 'tooltip-danger', selector: '.has-tooltip', html: true
         });
     });
 }(jQuery));

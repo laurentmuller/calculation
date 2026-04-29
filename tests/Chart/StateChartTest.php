@@ -19,11 +19,11 @@ use App\Model\CalculationsStateItem;
 use App\Parameter\ApplicationParameters;
 use App\Repository\CalculationStateRepository;
 use App\Tests\TranslatorMockTrait;
+use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Twig\Environment;
 
 final class StateChartTest extends TestCase
 {
@@ -33,7 +33,6 @@ final class StateChartTest extends TestCase
     private ApplicationParameters $parameters;
     private MockObject&CalculationStateRepository $repository;
     private MockObject&TranslatorInterface $translator;
-    private Environment $twig;
 
     #[\Override]
     protected function setUp(): void
@@ -41,7 +40,6 @@ final class StateChartTest extends TestCase
         $this->parameters = self::createStub(ApplicationParameters::class);
         $this->repository = $this->createMock(CalculationStateRepository::class);
         $this->generator = self::createStub(UrlGeneratorInterface::class);
-        $this->twig = self::createStub(Environment::class);
         $this->translator = $this->createMockTranslator();
     }
 
@@ -92,9 +90,15 @@ final class StateChartTest extends TestCase
 
     private function createChart(): StateChart
     {
-        $chart = new StateChart($this->parameters, $this->generator, $this->twig, $this->repository);
-        $chart->setTranslator($this->translator);
+        $entityManager = self::createStub(EntityManagerInterface::class);
+        $entityManager->method('getRepository')
+            ->willReturn($this->repository);
 
-        return $chart;
+        return new StateChart(
+            parameters: $this->parameters,
+            generator: $this->generator,
+            manager: $entityManager,
+            translator: $this->translator
+        );
     }
 }

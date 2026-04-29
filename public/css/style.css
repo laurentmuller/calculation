@@ -867,6 +867,15 @@ body.status-bar .grecaptcha-badge {
     background-color: indianred;
 }
 
+tr.row-data.row-data-hidden td {
+    text-decoration: line-through;
+    color: var(--bs-secondary) !important;
+}
+
+tr.row-data.row-data-hidden td .state-color {
+    background-color: var(--bs-secondary) !important;
+}
+
 /* item hover */
 .item-hover:not(.table-primary):hover {
     background-color: var(--bs-secondary-bg);

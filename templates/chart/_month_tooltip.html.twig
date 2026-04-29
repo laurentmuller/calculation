@@ -1,0 +1,48 @@
+<template id="tooltip">
+    <table class="m-1">
+        <tr>
+            <th>{{ 'chart.month.fields.month'|trans }}</th>
+            <th class="px-1">:</th>
+            <th class="text-calculation">{date}</th>
+            <th class="text-calculation">&nbsp;</th>
+        </tr>
+        <tr><td colspan="4"><hr class="my-1"></td>
+        </tr>
+        <tr>
+            <td class="text-category">{{ 'calculation.list.title'|trans }}</td>
+            <td class="px-1">:</td>
+            <td class="text-calculation">{count}</td>
+            <td class="text-calculation">&nbsp;</td>
+        </tr>
+        <tr><td colspan="4"><hr class="my-1"></td></tr>
+        <tr>
+            <td class="text-category">
+                <div class="d-flex align-items-center">
+                    <span class="border chart-item month-amount me-1"></span>
+                    <span>{{ 'calculationgroup.fields.amount'|trans }}</span>
+                </div>
+            </td>
+            <td class="px-1">:</td>
+            <td class="text-calculation">{items}</td>
+            <td class="text-calculation">&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="text-category">
+                <div class="d-flex align-items-center">
+                    <span class="border chart-item month-margin me-1"></span>
+                    <span>{{ 'calculation.fields.margin'|trans }}</span>
+                </div>
+            </td>
+            <td class="px-1">:</td>
+            <td class="text-calculation">{marginAmount}</td>
+            <td class="text-calculation {marginClass} ps-3">{marginPercent}</td>
+        </tr>
+        <tr><td colspan="4"><hr class="my-1"></td></tr>
+        <tr>
+            <th>{{ 'calculation.fields.total'|trans }}</th>
+            <th class="px-1">:</th>
+            <th class="text-calculation">{totalAmount}</th>
+            <th class="text-calculation">&nbsp;</th>
+        </tr>
+    </table>
+</template>

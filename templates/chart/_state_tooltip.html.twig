@@ -1,0 +1,41 @@
+<template id="tooltip">
+    <table class="m-1">
+        <tr>
+            <th>{{ 'calculation.fields.state'|trans }}</th>
+            <th class="px-1">:</th>
+            <th class="text-calculation">
+                <div class="d-flex align-items-center">
+                    <span class="border chart-item state-background-{id} me-1"></span><span>{name}</span>
+                </div>
+            </th>
+            <th class="text-calculation">&nbsp;</th>
+        </tr>
+        <tr><td colspan="4"><hr class="my-1"></td></tr>
+        <tr>
+            <td>{{ 'calculation.list.title'|trans }}</td>
+            <td class="px-1">:</td>
+            <td class="text-calculation">{count}</td>
+            <td class="text-calculation ps-3">{calculationsPercent}</td>
+        </tr>
+        <tr><td colspan="4"><hr class="my-1"></td></tr>
+        <tr>
+            <td>{{ 'calculationgroup.fields.amount'|trans }}</td>
+            <td class="px-1">:</td>
+            <td class="text-calculation">{items}</td>
+            <td class="text-calculation">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>{{ 'calculation.fields.margin'|trans }}</td>
+            <td class="px-1">:</td>
+            <td class="text-calculation">{marginAmount}</td>
+            <td class="text-calculation {marginClass}">{marginPercent}</td>
+        </tr>
+        <tr><td colspan="4"><hr class="my-1"></td></tr>
+        <tr>
+            <th>{{ 'calculation.fields.total'|trans }}</th>
+            <th class="px-1">:</th>
+            <th class="text-calculation">{totalAmount}</th>
+            <th class="text-calculation ps-3">{totalPercent}</th>
+        </tr>
+    </table>
+</template>

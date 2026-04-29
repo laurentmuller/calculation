@@ -5,7 +5,7 @@
 {%- set pdf_route = 'chart_state_pdf' -%}
 {# class #}
 {% block chart_class ' state' -%}
-{# header #}
+{# header_row #}
 {% block header_row %}
     <th class="text-nowrap">{{ 'calculation.fields.state'|trans }}</th>
     <th class="text-center" colspan="2">{{ 'calculation.list.title'|trans }}</th>
@@ -13,7 +13,7 @@
     <th class="text-center" colspan="2">{{ 'calculation.fields.margin'|trans }}</th>
     <th class="text-center" colspan="2">{{ 'calculation.fields.total'|trans }}</th>
 {% endblock header_row %}
-{# data #}
+{# data_rows #}
 {% block data_rows %}
     {% for item in data.items -%}
         <tr class="row-data" title="{{ 'chart.state.row'|trans({'%name%': item.code}) }}">
@@ -36,7 +36,7 @@
         </tr>
     {% endfor -%}
 {% endblock data_rows %}
-{# total #}
+{# total_row #}
 {% block total_row %}
     {% set total = data.total %}
     <td class="text-nowrap">
@@ -53,11 +53,16 @@
     <td class="text-currency">{{ total.total|amount }}</td>
     <td class="text-percent">{{ 1.0|percent(true, 2, 5) }}</td>
 {% endblock total_row %}
-{# body #}
+{# card_body #}
 {% block card_body %}
     {{ parent() }}
     <p class="small mb-0">{{ 'chart.state.tooltip'|trans|raw }}</p>
 {%- endblock card_body %}
+{# body #}
+{% block body -%}
+    {{ parent() }}
+    {{ include('chart/_state_tooltip.html.twig') }}
+{%- endblock body %}
 {# stylesheets #}
 {% block stylesheets -%}
     {{ parent() }}

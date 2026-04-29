@@ -15,36 +15,29 @@ namespace App\Chart;
 
 use App\Parameter\ApplicationParameters;
 use App\Traits\MathTrait;
-use App\Traits\TranslatorAwareTrait;
-use App\Utils\DateUtils;
-use App\Utils\FormatUtils;
-use App\Utils\StringUtils;
+use App\Traits\TranslatorTrait;
+use Doctrine\ORM\EntityManagerInterface;
 use HighchartsBundle\Highcharts\ChartExpression;
 use HighchartsBundle\Highcharts\Highchart;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Twig\Environment;
-use Twig\Error\Error;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Extends the Highchart with method shortcuts.
  */
-class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
+class AbstractHighchart extends Highchart
 {
     use MathTrait;
-    use ServiceMethodsSubscriberTrait;
-    use TranslatorAwareTrait;
+    use TranslatorTrait;
 
     /** The default identifier of the div where to render the chart. */
     public const string CONTAINER = 'chartContainer';
 
-    private const string COMMENT_REGEX = '/\/\*(.|[\r\n])*?\*\//m';
-
     public function __construct(
         protected readonly ApplicationParameters $parameters,
         protected readonly UrlGeneratorInterface $generator,
-        protected readonly Environment $twig
+        protected readonly EntityManagerInterface $manager,
+        protected readonly TranslatorInterface $translator,
     ) {
         parent::__construct();
         $this->initializeOptions();
@@ -70,6 +63,12 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
         return $this;
     }
 
+    #[\Override]
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
+    }
+
     /**
      * Hides the chart title.
      */
@@ -91,23 +90,6 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
         $this->chart['type'] = $type;
 
         return $this;
-    }
-
-    /**
-     * Render the given template and create an expression from the content.
-     *
-     * @return ?ChartExpression the expression if the template is rendered; null on error
-     */
-    protected function createTemplateExpression(string $template, array $context = []): ?ChartExpression
-    {
-        try {
-            $content = $this->twig->render($template, $context);
-            $content = StringUtils::pregReplace(self::COMMENT_REGEX, '', $content);
-
-            return ChartExpression::instance($content);
-        } catch (Error) {
-            return null;
-        }
     }
 
     /**
@@ -188,6 +170,11 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
         return $this->parameters->getMinMargin();
     }
 
+    protected function getTooltipExpression(): ChartExpression
+    {
+        return ChartExpression::instance('function(){return renderTooltip(this);}');
+    }
+
     /**
      * Initialize options.
      */
@@ -196,7 +183,6 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
         $this->setChartOptions()
             ->setTooltipOptions()
             ->setLegendOptions()
-            ->setLangOptions()
             ->setAxisOptions()
             ->disableAccessibility()
             ->disableCredit()
@@ -238,23 +224,6 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     }
 
     /**
-     * Sets the lang options.
-     */
-    protected function setLangOptions(): static
-    {
-        $this->lang->merge([
-            'decimalPoint' => FormatUtils::DECIMAL_SEP,
-            'thousandsSep' => FormatUtils::THOUSANDS_SEP,
-            'months' => \array_values(DateUtils::getMonths()),
-            'weekdays' => \array_values(DateUtils::getWeekdays()),
-            'shortMonths' => \array_values(DateUtils::getShortMonths()),
-            'shortWeekdays' => \array_values(DateUtils::getShortWeekdays()),
-        ]);
-
-        return $this;
-    }
-
-    /**
      * Sets the legend options.
      */
     protected function setLegendOptions(): static
@@ -276,9 +245,9 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     protected function setTooltipOptions(): static
     {
         $this->tooltip->merge([
-            'backgroundColor' => 'var(--bs-light)',
             'style' => $this->getFontStyle('0.75rem'),
             'borderColor' => $this->getBorderColor(),
+            'backgroundColor' => 'var(--bs-light)',
             'borderRadius' => 0,
             'useHTML' => true,
             'shared' => true,

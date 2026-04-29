@@ -35,7 +35,7 @@
 {# class #}
 {% block card_container_class '' -%}
 {% block chart_class ' month' -%}
-{# header #}
+{# card_header #}
 {% block card_header %}
     <div class="d-flex-wrap-center">
         {{ parent() }}
@@ -54,7 +54,7 @@
         {% endif %}
     </div>
 {%- endblock card_header %}
-{# header #}
+{# header_row #}
 {% block header_row %}
     <th class="text-nowrap">{{ 'chart.month.fields.month'|trans }}</th>
     <th class="text-currency">{{ 'calculation.list.title'|trans }}</th>
@@ -72,7 +72,7 @@
     </th>
     <th class="text-currency">{{ 'calculation.fields.total'|trans }}</th>
 {% endblock header_row %}
-{# rows #}
+{# data_rows #}
 {% block data_rows %}
     {% for item in data -%}
         {%- set month = item.date|locale_date('none', 'MMMM Y') -%}
@@ -105,7 +105,7 @@
         {%- set last_total = item.total|round -%}
     {% endfor -%}
 {% endblock data_rows %}
-{# total #}
+{# total_row #}
 {% block total_row %}
     <td class="text-nowrap">
         <a href="{{ path(list_path) }}">{{ 'calculation.fields.total'|trans }}</a>
@@ -119,8 +119,13 @@
     </td>
     <td class="text-currency">{{ totals.total|integer }}</td>
 {% endblock total_row %}
-{# body #}
+{# card_body #}
 {% block card_body %}
     {{ parent() }}
     <p class="small mb-0">{{ 'chart.month.tooltip'|trans|raw }}</p>
 {%- endblock card_body %}
+{# body #}
+{% block body -%}
+    {{ parent() }}
+    {{ include('chart/_month_tooltip.html.twig') }}
+{%- endblock body %}

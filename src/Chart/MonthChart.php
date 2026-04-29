@@ -13,15 +13,13 @@ declare(strict_types=1);
 
 namespace App\Chart;
 
+use App\Entity\Calculation;
 use App\Model\CalculationsMonthItem;
 use App\Model\CalculationsTotal;
-use App\Parameter\ApplicationParameters;
 use App\Pdf\Html\HtmlColorName;
 use App\Repository\CalculationRepository;
 use App\Utils\FormatUtils;
 use HighchartsBundle\Highcharts\ChartExpression;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Twig\Environment;
 
 /**
  * Chart to display calculations by months.
@@ -33,17 +31,6 @@ class MonthChart extends AbstractHighchart
 
     /** The HTML color name for margins. */
     public const HtmlColorName COLOR_MARGIN = HtmlColorName::INDIAN_RED;
-
-    private const string TEMPLATE_NAME = 'chart/_month_tooltip.js.twig';
-
-    public function __construct(
-        ApplicationParameters $parameters,
-        UrlGeneratorInterface $generator,
-        Environment $twig,
-        private readonly CalculationRepository $repository
-    ) {
-        parent::__construct($parameters, $generator, $twig);
-    }
 
     /**
      * Generate the chart data.
@@ -60,7 +47,7 @@ class MonthChart extends AbstractHighchart
     {
         $allowedMonths = $this->getAllowedMonths();
         $months = $this->checkMonth($months, $allowedMonths);
-        $calculationMonths = $this->repository->getByMonth($months);
+        $calculationMonths = $this->getRepository()->getByMonth($months);
         $items = $calculationMonths->items;
 
         $this->setType(ChartType::TYPE_COLUMN)
@@ -90,7 +77,7 @@ class MonthChart extends AbstractHighchart
     #[\Override]
     protected function setTooltipOptions(): static
     {
-        $this->tooltip->merge(['formatter' => $this->createTemplateExpression(self::TEMPLATE_NAME)]);
+        $this->tooltip->merge(['formatter' => $this->getTooltipExpression()]);
 
         return parent::setTooltipOptions();
     }
@@ -113,7 +100,7 @@ class MonthChart extends AbstractHighchart
     private function getAllowedMonths(): array
     {
         $step = 6;
-        $maxMonths = $this->repository->countDistinctMonths();
+        $maxMonths = $this->getRepository()->countDistinctMonths();
         if ($maxMonths <= $step) {
             return [$maxMonths];
         }
@@ -155,7 +142,7 @@ class MonthChart extends AbstractHighchart
     }
 
     /**
-     * The y value, the url and all data needed by the custom tooltip are returned.
+     * The y value, the url, and all data needed by the custom tooltip are returned.
      *
      * @param CalculationsMonthItem[] $items
      */
@@ -172,6 +159,11 @@ class MonthChart extends AbstractHighchart
             'totalAmount' => FormatUtils::formatInt($item->total),
             'url' => $this->getURL($item),
         ], $items);
+    }
+
+    private function getRepository(): CalculationRepository
+    {
+        return $this->manager->getRepository(Calculation::class);
     }
 
     private function getSeriesOptions(): array

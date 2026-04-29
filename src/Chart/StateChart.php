@@ -13,32 +13,19 @@ declare(strict_types=1);
 
 namespace App\Chart;
 
+use App\Entity\CalculationState;
 use App\Model\CalculationsState;
 use App\Model\CalculationsStateItem;
-use App\Parameter\ApplicationParameters;
 use App\Repository\CalculationStateRepository;
 use App\Table\CalculationTable;
 use App\Utils\FormatUtils;
 use HighchartsBundle\Highcharts\ChartExpression;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Twig\Environment;
 
 /**
  * Chart to display calculations by state.
  */
 class StateChart extends AbstractHighchart
 {
-    private const string TEMPLATE_NAME = 'chart/_state_tooltip.js.twig';
-
-    public function __construct(
-        ApplicationParameters $parameters,
-        UrlGeneratorInterface $generator,
-        Environment $twig,
-        private readonly CalculationStateRepository $repository,
-    ) {
-        parent::__construct($parameters, $generator, $twig);
-    }
-
     /**
      * Generate the chart data.
      *
@@ -49,7 +36,7 @@ class StateChart extends AbstractHighchart
      */
     public function generate(): array
     {
-        $data = $this->repository->getCalculations();
+        $data = $this->getRepository()->getCalculations();
 
         $this->setType(ChartType::TYPE_PIE)
             ->setColors($data->items)
@@ -78,7 +65,7 @@ class StateChart extends AbstractHighchart
     #[\Override]
     protected function setTooltipOptions(): static
     {
-        $this->tooltip->merge(['formatter' => $this->createTemplateExpression(self::TEMPLATE_NAME)]);
+        $this->tooltip->merge(['formatter' => $this->getTooltipExpression()]);
 
         return parent::setTooltipOptions();
     }
@@ -101,6 +88,11 @@ class StateChart extends AbstractHighchart
                 'events' => ['click' => $this->getClickExpression()],
             ],
         ];
+    }
+
+    private function getRepository(): CalculationStateRepository
+    {
+        return $this->manager->getRepository(CalculationState::class);
     }
 
     private function getSeriesOptions(): array

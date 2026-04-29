@@ -3,7 +3,7 @@ SET STA__TIME=%TIME: =0%
 ECHO ----- START BATCH %STA__TIME% ----------------------------------------------------- && ^
 ECHO ----- SYMFONY --------------------------------------------------------------------- && ^
 php bin/console lint:yaml translations config                                            && ^
-php bin/console lint:twig templates                                                      && ^
+php bin/console lint:twig templates --show-deprecations                                  && ^
 php bin/console lint:xliff translations                                                  && ^
 php bin/console lint:container                                                           && ^
 php bin/console doctrine:schema:validate --skip-sync --no-interaction                    && ^

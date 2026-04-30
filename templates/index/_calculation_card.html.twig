@@ -35,6 +35,7 @@
                     </div>
                 {% endif %}
             </div>
+            <hr class="my-1">
             <div class="text-truncate">
                 <span title="{{ 'calculation.fields.date'|trans }}">{{- calculation.date|locale_date }}</span>
                 <span>&nbsp;/&nbsp;</span>
@@ -46,7 +47,6 @@
             <div class="text-truncate" title="{{ 'calculation.fields.description'|trans }}">
                 {{- calculation.description -}}
             </div>
-            <hr class="my-1">
             <div class="d-flex-wrap-center">
                 {%- if calculation.overallTotal and calculation.overallMargin < min_margin -%}
                     {%- set overall_title = 'calculation.list.margin_below'|trans({'%margin%': calculation.overallMargin|percent, '%minimum%': min_margin|percent}) -%}

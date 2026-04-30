@@ -97,10 +97,6 @@
     <div class="{{ right_class }}">{{ right_value|raw }}</div>
 </div>
 {%- endmacro property_both %}
-{# output a property line #}
-{% macro property_line() -%}
-<hr class="my-1">
-{%- endmacro property_line %}
 {# output a drop-down view item #}
 {% macro button_view(icon, view, selection) %}
 <li>
@@ -292,9 +288,11 @@
             <div class="d-flex-no-wrap-center">
                 <div class="custom-view-header d-flex-no-wrap-center">
                     {% block custom_view_header -%}{%- endblock custom_view_header %}
+
                 </div>
                 <div class="d-print-none custom-view-actions"></div>
             </div>
+            <hr class="my-1">
             {% block custom_view_body -%}{%- endblock custom_view_body %}
         </div>
     </div>

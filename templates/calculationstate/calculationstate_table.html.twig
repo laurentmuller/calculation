@@ -57,7 +57,6 @@
 {# custom view body #}
 {% block custom_view_body -%}
 {{ _self.property_value('%description%') }}
-{{ _self.property_line() }}
 {{ _self.property_row('calculationstate.fields.editable', '%editable%') }}
 {{ _self.property_row('calculationstate.fields.calculations', '%calculations%') }}
 {%- endblock custom_view_body %}

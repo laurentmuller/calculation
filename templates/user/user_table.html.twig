@@ -5,13 +5,13 @@
 {%- set title_icon = ICON_USER -%}
 {%- set object_type = ENTITY_USER -%}
 {%- set attributes = attributes|default({})|merge({'user-id': app.user.id}) -%}
-
+{# header actions #}
 {% block header_actions -%}
 {% if allow_add %}
     {{ link(path('user_add', params), 'user.add.title', 'add-link p-0') }}
 {% endif %}
 {%- endblock header_actions %}
-
+{# global actions #}
 {% block global_actions -%}
 {% if customData.resetPasswords %}
     {{- _self.item_path(path('user_reset_all', params), 'user.reset_all.title', 'eraser') }}
@@ -23,25 +23,25 @@
 {{- _self.item_external(path('user_rights_pdf'), 'user.list.rights_export', ICON_PDF) }}
 {{- _self.item_external(path('user_rights_excel'), 'user.list.rights_excel', ICON_EXCEL) }}
 {%- endblock global_actions %}
-
+{# show actions #}
 {% block show_actions -%}
 {{- _self.item_path(path('user_show', params), 'user.show.title', ICON_SHOW, show_class) }}
 {%- endblock show_actions %}
-
+{# edit actions #}
 {% block edit_actions -%}
 {{- _self.item_path(path('user_edit', params), 'user.edit.title', ICON_EDIT, edit_class) }}
 {{- _self.item_path(path('user_rights', params), 'user.rights.action', 'unlock', 'btn-rights') }}
 {{- _self.item_path(path('user_password', params), 'user.change_password.title', 'unlock-alt', 'btn-password') }}
 {%- endblock edit_actions %}
-
+{# delete actions #}
 {% block delete_actions -%}
 {{- _self.item_path(path('user_delete', params), 'user.delete.title', ICON_DELETE, 'btn-delete btn-user-delete') }}
 {%- endblock delete_actions %}
-
+{# add actions #}
 {% block add_actions -%}
 {{- _self.item_path(path('user_add', params), 'user.add.title', ICON_ADD, 'btn-add') }}
 {%- endblock add_actions %}
-
+{# other actions #}
 {% block other_actions -%}
 {% if allow_edit %}
     {% if allow_edit or allow_delete or allow_add or allow_show %}
@@ -61,7 +61,7 @@
     {{- _self.item_path(path('homepage', {_switch_user: 'username'}), 'user.switch.take.title', 'user-plus', 'btn-user-switch') }}
 {%- endif -%}
 {%- endblock other_actions %}
-
+{# custom view header #}
 {% block custom_view_header -%}
 {%- if row_edit -%}
     <a href="{{ path('user_edit', params) }}" class="item-link text-body d-flex" title="{{ 'user.edit.title'|trans }}">
@@ -75,15 +75,14 @@
     %imageName%<span class="align-top">%username%</span>
 {%- endif -%}
 {%- endblock custom_view_header %}
-
+{# custom view body #}
 {% block custom_view_body -%}
-{{ _self.property_value('%email%') }}
-{{ _self.property_line() }}
+{{ _self.property_row('user.fields.email', '%email%') }}
 {{ _self.property_row('user.fields.role', '%role%') }}
 {{ _self.property_row('user.fields.enabled', '%enabled%') }}
 {{ _self.property_row('user.fields.lastLogin', '%lastLogin%') }}
 {%- endblock custom_view_body %}
-
+{# body #}
 {% block body %}
 {{ parent() }}
 {{ include('user/user_switch.html.twig') }}

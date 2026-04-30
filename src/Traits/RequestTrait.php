@@ -44,9 +44,9 @@ trait RequestTrait
      *
      * @template EnumType of \BackedEnum
      *
-     * @phpstan-param EnumType $default
+     * @param EnumType $default
      *
-     * @phpstan-return EnumType
+     * @return EnumType
      */
     protected function getRequestEnum(Request $request, string $key, \BackedEnum $default): \BackedEnum
     {
@@ -58,7 +58,7 @@ trait RequestTrait
      */
     protected function getRequestFloat(Request $request, string $key, float $default = 0): float
     {
-        return (float) $this->getRequestBag($request, $key)->get($key, $default);
+        return (float) $this->getRequestValue($request, $key, $default);
     }
 
     /**
@@ -90,13 +90,16 @@ trait RequestTrait
 
     private function getRequestBag(Request $request, string $key): ParameterBag
     {
-        if (Request::METHOD_GET === $request->getMethod() && $request->query->has($key)) {
+        if ($request->query->has($key)) {
             return $request->query;
         }
-        if (Request::METHOD_POST === $request->getMethod() && $request->request->has($key)) {
+        if ($request->request->has($key)) {
             return $request->request;
         }
+        if ($request->attributes->has($key)) {
+            return $request->attributes;
+        }
 
-        return $request->attributes->has($key) ? $request->attributes : new ParameterBag();
+        return new ParameterBag();
     }
 }

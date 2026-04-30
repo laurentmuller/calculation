@@ -1,12 +1,12 @@
 {% extends 'cards/card_base.html.twig' %}
 {# macros #}
-{% macro button(class, title, icon = null, text = null, attr = {}) -%}
-    {% set attr = attr|merge({
+{% macro button(class, title, icon = null, text = null, attrs = {}) -%}
+    {% set attrs = attrs|merge({
         type: 'button',
         title: title|trans,
         class: ['btn', 'btn-outline-secondary', class],
     }) %}
-    <button {{ html_attr(attr) }}>
+    <button {{ html_attr(attrs) }}>
         {%- if icon %}<i class="fa-solid fa-{{ icon }}"></i>{% endif -%}{%- if text %}{{ text }}{% endif -%}
     </button>
 {%- endmacro button %}
@@ -38,14 +38,14 @@
                     {% endfor %}
                 </select>
                 {{ _self.button(class: 'btn-zoom-in', title: 'diagram.zoom_in', icon: 'magnifying-glass-plus') }}
-                {{ _self.button(class: 'btn-zoom dropdown-toggle', title: 'diagram.zoom', text: '100 %', attr: {
+                {{ _self.button(class: 'btn-zoom dropdown-toggle', title: 'diagram.zoom', text: '100 %', attrs: {
                     'data-bs-toggle': 'dropdown',
                     'data-bs-target': '#dropdownZoom',
                     'aria-expanded': 'false',
                 }) }}
                 {{ _self.button(class: 'btn-zoom-out', title: 'diagram.zoom_out', icon: 'magnifying-glass-minus') }}
                 {{ _self.button(class: 'btn-reset', title: 'diagram.reset', icon: 'arrows-to-dot') }}
-                {{ _self.button(class: 'btn-code', title: 'diagram.content', icon: 'code', attr: {
+                {{ _self.button(class: 'btn-code', title: 'diagram.content', icon: 'code', attrs: {
                     'data-bs-toggle': 'modal',
                     'data-bs-target': '#diagram-modal',
                 }) }}
@@ -65,13 +65,13 @@
 {% endblock card_header %}
 {# body #}
 {% block card_body -%}
-    {%- set data_attributes = {
+    {%- set data_attrs = {
         id: 'diagram',
         class: 'diagram',
         'data-url': path('diagram_load'),
         'data-error': 'diagram.error_not_found'|trans, zoom: zoom}
     -%}
-    <div {{ html_attr(data_attributes) }}>
+    <div {{ html_attr(data_attrs) }}>
         {{- diagram.content -}}
     </div>
 {% endblock card_body %}

@@ -15,7 +15,7 @@
 {% endblock header_actions %}
 {# toolbar actions #}
 {% block toolbar_actions -%}
-{% if customData.levels|length > 1 %}
+{% if customData.levels|length %}
     {% set data_default = 'log.fields.level'|trans %}
     {% set text = level|length ? level|capitalize : data_default %}
     {{ _self.output_dropdown_menu('level', 'layer-group', text, 'log.list.level_help', level, data_default) }}
@@ -28,7 +28,7 @@
     </ul>
 {% endif %}
 {# chanels #}
-{% if customData.channels|length > 1 %}
+{% if customData.channels|length %}
     {% set data_default = 'log.fields.channel'|trans %}
     {% set text = channel|length ? channel|capitalize : data_default %}
     {{ _self.output_dropdown_menu('channel', 'tools', text, 'log.list.channel_help', channel, data_default) }}

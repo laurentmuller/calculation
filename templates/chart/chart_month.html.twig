@@ -39,7 +39,7 @@
 {% block card_header %}
     <div class="d-flex-wrap-center">
         {{ parent() }}
-        {% if allowedMonths|length > 1 %}
+        {% if allowedMonths|length %}
             <div class="dropdown ms-sm-auto">
                 <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                         aria-expanded="false">

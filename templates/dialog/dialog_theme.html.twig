@@ -3,7 +3,7 @@
 {% macro output_theme(theme, checked) -%}
     {% set id = 'form_theme_' ~ theme.value %}
     {% set id_help = id ~ '_help' %}
-    {% set attributes = {
+    {% set attrs = {
         id: id,
         type: 'radio',
         value: theme.value,
@@ -16,7 +16,7 @@
         'data-class': 'theme-icon ' ~ theme.icon,
     } %}
     <div class="form-check mb-3">
-        <input {{ html_attr(attributes) }}>
+        <input {{ html_attr(attrs) }}>
         <label class="form-check-label" for="{{ id }}">
             <span class="d-inline d-lg-none"><i class="{{ theme.icon }}"></i></span>
             <span>{{ theme|trans }}</span>

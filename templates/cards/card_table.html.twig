@@ -139,7 +139,7 @@
 {%- set params = params|default({})|merge({caller: caller}) -%}
 {%- set id = params.id|default(0) -%}
 {%- set limit = params.limit|default(20) -%}
-{%- set is_page_list = (pageList ?? {})|length > 1 -%}
+{%- set is_page_list = (pageList ?? {})|length -%}
 {%- set attributes = attributes|default({})|merge({
     classes: 'table table-hover table-sm',
     'row-class': row_selector,

@@ -5,17 +5,16 @@
 {%- set title_icon = 'search' -%}
 {%- set path = path('homepage') -%}
 {%- set allow_global = false -%}
-{%- set entity = customData.entity|default('') -%}
-{%- set is_search = params is defined and params.search|default('')|length > 1 -%}
+{%- set entity = customData.entity -%}
+{%- set is_search = params.search|length -%}
 {# header #}
 {% block header_actions %}
-<small id="search_minimum" class="text-danger d-print-none{% if is_search %} d-none{% endif %}">
-    {{- 'search.minimum'|trans -}}
-</small>
+    <small id="search_minimum" class="text-danger d-print-none{% if is_search %} d-none{% endif %}">
+        {{- 'search.minimum'|trans -}}
+    </small>
 {% endblock header_actions %}
 {# actions #}
 {% block toolbar_actions -%}
-{% if customData.entities and customData.entities|length > 1 %}
     {% set data_default = 'search.entity'|trans %}
     {% set input_text = entity ? customData.entities[entity].name|trans : data_default %}
     {{ _self.output_dropdown_menu('entity', 'database', input_text, 'search.entity_help', entity, data_default) }}
@@ -26,7 +25,6 @@
             {{ _self.output_dropdown_item('entity', key, entity, entry.name|trans, entry.icon) }}
         {% endfor %}
     </ul>
-{% endif %}
 {%- endblock toolbar_actions %}
 {# other actions #}
 {% block other_actions -%}
@@ -40,10 +38,10 @@
 {%- endblock other_actions %}
 {# custom view #}
 {% block custom_view_header -%}
-<a href="#" class="item-link text-body">%entityName%</a>
+    <a href="#" class="item-link text-body">%entityName%</a>
 {%- endblock custom_view_header %}
 {# custom body #}
 {% block custom_view_body -%}
-{{ _self.property_row('search.fields.field', '%fieldName%') }}
-{{ _self.property_row('search.fields.content', '%content%', 'text-truncate') }}
+    {{ _self.property_row('search.fields.field', '%fieldName%') }}
+    {{ _self.property_row('search.fields.content', '%content%', 'text-truncate') }}
 {%- endblock custom_view_body %}

@@ -37,7 +37,7 @@ final class ConstantExtension extends AbstractExtension implements ConstantsInte
     }
 
     /**
-     * This implementation return icons constants.
+     * This implementation returns icon constants.
      *
      * @return array<string, string>
      */

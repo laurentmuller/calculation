@@ -129,10 +129,10 @@ class IndexController extends AbstractController
             ->getHomePage();
         $parameters = $this->getParameters($indexService, $request, $query);
         if ($homePage->isPanelMonth()) {
-            $parameters['months'] = $indexService->getCalculationByMonths();
+            $parameters['months'] = $indexService->getMonthChartData();
         }
         if ($homePage->isPanelState()) {
-            $parameters['states'] = $indexService->getCalculationByStates();
+            $parameters['states'] = $indexService->getStateChartData();
         }
         if ($homePage->isPanelCatalog()) {
             $parameters['catalog'] = $indexService->getCatalog();

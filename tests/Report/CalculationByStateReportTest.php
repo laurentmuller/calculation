@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace App\Tests\Report;
 
 use App\Controller\AbstractController;
-use App\Model\CalculationsState;
-use App\Model\CalculationsStateItem;
+use App\Model\StateChartData;
+use App\Model\StateChartDataItem;
 use App\Report\CalculationByStateReport;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -29,7 +29,7 @@ final class CalculationByStateReportTest extends TestCase
             ->willReturn(1.1);
         $generator = self::createStub(UrlGeneratorInterface::class);
         $items = [
-            new CalculationsStateItem(
+            new StateChartDataItem(
                 id: 1,
                 code: 'Code1',
                 editable: true,
@@ -38,7 +38,7 @@ final class CalculationByStateReportTest extends TestCase
                 items: 1.0,
                 total: 2.0
             ),
-            new CalculationsStateItem(
+            new StateChartDataItem(
                 id: 2,
                 code: 'Code2',
                 editable: false,
@@ -48,8 +48,8 @@ final class CalculationByStateReportTest extends TestCase
                 total: 1050.0
             ),
         ];
-        $state = new CalculationsState($items);
-        $report = new CalculationByStateReport($controller, $state, $generator);
+        $stateChartData = new StateChartData($items);
+        $report = new CalculationByStateReport($controller, $stateChartData, $generator);
         $actual = $report->render();
         self::assertTrue($actual);
     }

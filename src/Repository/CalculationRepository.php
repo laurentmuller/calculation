@@ -15,8 +15,8 @@ namespace App\Repository;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
-use App\Model\CalculationsMonth;
-use App\Model\CalculationsMonthItem;
+use App\Model\MonthChartData;
+use App\Model\MonthChartDataItem;
 use App\Utils\DateUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\AbstractQuery;
@@ -242,37 +242,6 @@ class CalculationRepository extends AbstractRepository
             ->addOrderBy('c.id', self::SORT_DESC)
             ->getQuery()
             ->getResult();
-    }
-
-    /**
-     * Gets the calculations grouped by years and months sorted by date in descending order.
-     *
-     * @param int $maxResults the maximum number of results to retrieve (the "limit")
-     */
-    public function getByMonth(int $maxResults = 6): CalculationsMonth
-    {
-        $query = $this->createQueryBuilder('c')
-            ->select('COUNT(c.id) as count')
-            ->addSelect('ROUND(SUM(c.itemsTotal), 2) as items')
-            ->addSelect('ROUND(SUM(c.overallTotal), 2) as total')
-            ->addSelect('YEAR(c.date) as year')
-            ->addSelect('MONTH(c.date) as month')
-            ->groupBy('year', 'month')
-            ->orderBy('year', self::SORT_DESC)
-            ->addOrderBy('month', self::SORT_DESC)
-            ->setMaxResults($maxResults)
-            ->getQuery();
-
-        $result = \array_reverse($query->getArrayResult());
-        $items = \array_map(static fn (array $row): CalculationsMonthItem => new CalculationsMonthItem(
-            $row['count'],
-            $row['items'],
-            $row['total'],
-            $row['year'],
-            $row['month']
-        ), $result);
-
-        return new CalculationsMonth($items);
     }
 
     /**
@@ -609,6 +578,37 @@ class CalculationRepository extends AbstractRepository
             DateUtils::createDatePoint($values['MIN_DATE']),
             DateUtils::createDatePoint($values['MAX_DATE']),
         ];
+    }
+
+    /**
+     * Gets the calculations grouped by years and months sorted by date in descending order.
+     *
+     * @param int $maxResults the maximum number of results to retrieve (the "limit")
+     */
+    public function getMonthChartData(int $maxResults = 6): MonthChartData
+    {
+        $query = $this->createQueryBuilder('c')
+            ->select('COUNT(c.id) as count')
+            ->addSelect('ROUND(SUM(c.itemsTotal), 2) as items')
+            ->addSelect('ROUND(SUM(c.overallTotal), 2) as total')
+            ->addSelect('YEAR(c.date) as year')
+            ->addSelect('MONTH(c.date) as month')
+            ->groupBy('year', 'month')
+            ->orderBy('year', self::SORT_DESC)
+            ->addOrderBy('month', self::SORT_DESC)
+            ->setMaxResults($maxResults)
+            ->getQuery();
+
+        $result = \array_reverse($query->getArrayResult());
+        $items = \array_map(static fn (array $row): MonthChartDataItem => new MonthChartDataItem(
+            count: $row['count'],
+            items: $row['items'],
+            total: $row['total'],
+            year: $row['year'],
+            month: $row['month']
+        ), $result);
+
+        return new MonthChartData($items);
     }
 
     /**

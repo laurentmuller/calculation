@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Entity\Group;
-use App\Model\CalculationsMonth;
-use App\Model\CalculationsState;
+use App\Model\MonthChartData;
+use App\Model\StateChartData;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
 use App\Service\IndexService;
@@ -39,42 +39,6 @@ final class IndexServiceTest extends TestCase
             ->method('clear');
         $service = $this->createService(cache: $cache);
         $service->clear();
-    }
-
-    public function testGetCalculationByMonths(): void
-    {
-        $result = new CalculationsMonth([]);
-        $repository = $this->createMock(CalculationRepository::class);
-        $repository->expects(self::once())
-            ->method('getByMonth')
-            ->willReturn($result);
-
-        $manager = $this->createMock(EntityManagerInterface::class);
-        $manager->expects(self::once())
-            ->method('getRepository')
-            ->willReturn($repository);
-
-        $service = $this->createService($manager);
-        $actual = $service->getCalculationByMonths();
-        self::assertCount(0, $actual);
-    }
-
-    public function testGetCalculationByStates(): void
-    {
-        $result = new CalculationsState([]);
-        $repository = $this->createMock(CalculationStateRepository::class);
-        $repository->expects(self::once())
-            ->method('getCalculations')
-            ->willReturn($result);
-
-        $manager = $this->createMock(EntityManagerInterface::class);
-        $manager->expects(self::once())
-            ->method('getRepository')
-            ->willReturn($repository);
-
-        $service = $this->createService($manager);
-        $actual = $service->getCalculationByStates();
-        self::assertCount(0, $actual);
     }
 
     public function testGetCatalog(): void
@@ -121,6 +85,42 @@ final class IndexServiceTest extends TestCase
 
         $service = $this->createService($manager);
         $actual = $service->getLastCalculations(6);
+        self::assertCount(0, $actual);
+    }
+
+    public function testGetMonthChartData(): void
+    {
+        $monthChartData = new MonthChartData([]);
+        $repository = $this->createMock(CalculationRepository::class);
+        $repository->expects(self::once())
+            ->method('getMonthChartData')
+            ->willReturn($monthChartData);
+
+        $manager = $this->createMock(EntityManagerInterface::class);
+        $manager->expects(self::once())
+            ->method('getRepository')
+            ->willReturn($repository);
+
+        $service = $this->createService($manager);
+        $actual = $service->getMonthChartData();
+        self::assertCount(0, $actual);
+    }
+
+    public function testGetStateChartData(): void
+    {
+        $stateChartData = new StateChartData([]);
+        $repository = $this->createMock(CalculationStateRepository::class);
+        $repository->expects(self::once())
+            ->method('getStateChartData')
+            ->willReturn($stateChartData);
+
+        $manager = $this->createMock(EntityManagerInterface::class);
+        $manager->expects(self::once())
+            ->method('getRepository')
+            ->willReturn($repository);
+
+        $service = $this->createService($manager);
+        $actual = $service->getStateChartData();
         self::assertCount(0, $actual);
     }
 

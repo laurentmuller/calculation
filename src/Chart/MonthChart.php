@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace App\Chart;
 
 use App\Entity\Calculation;
-use App\Model\CalculationsMonthItem;
-use App\Model\CalculationsTotal;
+use App\Model\MonthChartData;
+use App\Model\MonthChartDataItem;
 use App\Pdf\Html\HtmlColorName;
 use App\Repository\CalculationRepository;
 use App\Utils\FormatUtils;
@@ -37,9 +37,8 @@ class MonthChart extends AbstractHighchart
      *
      * @return array{
      *     chart: MonthChart,
-     *     data: CalculationsMonthItem[],
+     *     data: MonthChartData,
      *     months: int,
-     *     totals: CalculationsTotal,
      *     allowedMonths: int[],
      *     minMargin: float}
      */
@@ -47,20 +46,17 @@ class MonthChart extends AbstractHighchart
     {
         $allowedMonths = $this->getAllowedMonths();
         $months = $this->checkMonth($months, $allowedMonths);
-        $calculationMonths = $this->getRepository()->getByMonth($months);
-        $items = $calculationMonths->items;
-
+        $data = $this->getMonthChartData($months);
         $this->setType(ChartType::TYPE_COLUMN)
-            ->setSeries($items)
-            ->setXAxis($items)
+            ->setSeries($data->items)
+            ->setXAxis($data->items)
             ->setPlotOptions()
             ->setYAxis();
 
         return [
             'chart' => $this,
-            'data' => $items,
+            'data' => $data,
             'months' => $months,
-            'totals' => $calculationMonths->total,
             'allowedMonths' => $allowedMonths,
             'minMargin' => $this->getMinMargin(),
         ];
@@ -114,13 +110,13 @@ class MonthChart extends AbstractHighchart
     }
 
     /**
-     * @param CalculationsMonthItem[] $items
+     * @param MonthChartDataItem[] $items
      *
-     * @return int[]
+     * @return string[]
      */
     private function getCategories(array $items): array
     {
-        return \array_map(static fn (CalculationsMonthItem $item): int => $item->getMilliseconds(), $items);
+        return \array_map(static fn (MonthChartDataItem $item): string => $item->getShortDate(), $items);
     }
 
     private function getFormatterExpression(): ChartExpression
@@ -131,11 +127,11 @@ class MonthChart extends AbstractHighchart
     /**
      * Only y and url values are returned.
      *
-     * @param CalculationsMonthItem[] $items
+     * @param MonthChartDataItem[] $items
      */
     private function getItemsSeries(array $items): array
     {
-        return \array_map(fn (CalculationsMonthItem $item): array => [
+        return \array_map(fn (MonthChartDataItem $item): array => [
             'y' => $item->items,
             'url' => $this->getURL($item),
         ], $items);
@@ -144,13 +140,13 @@ class MonthChart extends AbstractHighchart
     /**
      * The y value, the url, and all data needed by the custom tooltip are returned.
      *
-     * @param CalculationsMonthItem[] $items
+     * @param MonthChartDataItem[] $items
      */
     private function getMarginsSeries(array $items): array
     {
-        return \array_map(fn (CalculationsMonthItem $item): array => [
+        return \array_map(fn (MonthChartDataItem $item): array => [
             'y' => $item->marginAmount,
-            'date' => $item->formatDate(),
+            'date' => $item->getLongDate(),
             'count' => FormatUtils::formatInt($item->count),
             'items' => FormatUtils::formatInt($item->items),
             'marginAmount' => FormatUtils::formatInt($item->marginAmount),
@@ -159,6 +155,11 @@ class MonthChart extends AbstractHighchart
             'totalAmount' => FormatUtils::formatInt($item->total),
             'url' => $this->getURL($item),
         ], $items);
+    }
+
+    private function getMonthChartData(int $months): MonthChartData
+    {
+        return $this->getRepository()->getMonthChartData($months);
     }
 
     private function getRepository(): CalculationRepository
@@ -193,7 +194,7 @@ class MonthChart extends AbstractHighchart
         ];
     }
 
-    private function getURL(CalculationsMonthItem $item): string
+    private function getURL(MonthChartDataItem $item): string
     {
         return $this->generator->generate('calculation_index', [
             'search' => $item->getSearchDate(),
@@ -208,7 +209,7 @@ class MonthChart extends AbstractHighchart
     }
 
     /**
-     * @phpstan-param CalculationsMonthItem[] $items
+     * @phpstan-param MonthChartDataItem[] $items
      */
     private function setSeries(array $items): self
     {
@@ -229,15 +230,12 @@ class MonthChart extends AbstractHighchart
     }
 
     /**
-     * @param CalculationsMonthItem[] $items
+     * @param MonthChartDataItem[] $items
      */
     private function setXAxis(array $items): self
     {
-        $categories = $this->getCategories($items);
         $this->xAxis->merge([
-            'type' => 'datetime',
-            'categories' => $categories,
-            'labels' => ['format' => '{value:%b %Y}'],
+            'categories' => $this->getCategories($items),
         ]);
 
         return $this;

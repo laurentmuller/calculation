@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace App\Tests\Chart;
 
 use App\Chart\MonthChart;
-use App\Model\CalculationsMonth;
-use App\Model\CalculationsMonthItem;
+use App\Model\MonthChartData;
+use App\Model\MonthChartDataItem;
 use App\Parameter\ApplicationParameters;
 use App\Repository\CalculationRepository;
 use App\Tests\TranslatorMockTrait;
@@ -47,7 +47,7 @@ final class MonthChartTest extends TestCase
     {
         $this->repository->method('countDistinctMonths')
             ->willReturn(11);
-        $this->repository->method('getByMonth')
+        $this->repository->method('getMonthChartData')
             ->willReturn($this->createEmptyCalculationsMonth());
 
         $chart = $this->createChart();
@@ -59,7 +59,7 @@ final class MonthChartTest extends TestCase
     {
         $this->repository->method('countDistinctMonths')
             ->willReturn(1);
-        $this->repository->method('getByMonth')
+        $this->repository->method('getMonthChartData')
             ->willReturn($this->createEmptyCalculationsMonth());
 
         $chart = $this->createChart();
@@ -71,7 +71,7 @@ final class MonthChartTest extends TestCase
     {
         $this->repository->method('countDistinctMonths')
             ->willReturn(6);
-        $this->repository->method('getByMonth')
+        $this->repository->method('getMonthChartData')
             ->willReturn($this->createCalculationsMonth());
 
         $chart = $this->createChart();
@@ -79,17 +79,17 @@ final class MonthChartTest extends TestCase
         self::assertCount(2, $actual['data']);
     }
 
-    private function createCalculationsMonth(): CalculationsMonth
+    private function createCalculationsMonth(): MonthChartData
     {
         $items = [
-            new CalculationsMonthItem(
+            new MonthChartDataItem(
                 count: 1,
                 items: 100.0,
                 total: 200,
                 year: 2024,
                 month: 6
             ),
-            new CalculationsMonthItem(
+            new MonthChartDataItem(
                 count: 1,
                 items: 100.0,
                 total: 200,
@@ -97,7 +97,7 @@ final class MonthChartTest extends TestCase
                 month: 6
             )];
 
-        return new CalculationsMonth($items);
+        return new MonthChartData($items);
     }
 
     private function createChart(): MonthChart
@@ -114,8 +114,8 @@ final class MonthChartTest extends TestCase
         );
     }
 
-    private function createEmptyCalculationsMonth(): CalculationsMonth
+    private function createEmptyCalculationsMonth(): MonthChartData
     {
-        return new CalculationsMonth([]);
+        return new MonthChartData([]);
     }
 }

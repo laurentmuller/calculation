@@ -99,6 +99,13 @@ final class AbstractChartTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    public function testLangOptions(): void
+    {
+        $chart = $this->createChart();
+        self::assertSame("'", $chart->lang['thousandsSep']);
+        self::assertSame('.', $chart->lang['decimalPoint']);
+    }
+
     public function testLegendOptions(): void
     {
         $chart = $this->createChart();

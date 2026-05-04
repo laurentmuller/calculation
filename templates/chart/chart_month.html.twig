@@ -74,7 +74,7 @@
 {% endblock header_row %}
 {# data_rows #}
 {% block data_rows %}
-    {% for item in data -%}
+    {% for item in data.items -%}
         {%- set month = item.date|locale_date('none', 'MMMM Y') -%}
         {%- set parameters = {search: item.date|locale_date('none', 'MM.Y')} -%}
         <tr class="row-data" title="{{ 'chart.month.row'|trans({'%name%': month}) }}">
@@ -107,17 +107,18 @@
 {% endblock data_rows %}
 {# total_row #}
 {% block total_row %}
+    {% set total = data.total %}
     <td class="text-nowrap">
         <a href="{{ path(list_path) }}">{{ 'calculation.fields.total'|trans }}</a>
     </td>
-    <td class="text-currency">{{ totals.count|integer }}</td>
-    <td class="text-currency">{{ totals.items|integer }}</td>
-    <td class="text-currency">{{ totals.marginAmount|integer }}</td>
-    <td class="text-percent{{ _self.margin_below_class(totals.marginPercent, minMargin) }}"
-            {{- _self.margin_below_tooltip(totals.marginPercent, minMargin) }}>
-        {{ totals.marginPercent|percent -}}
+    <td class="text-currency">{{ total.count|integer }}</td>
+    <td class="text-currency">{{ total.items|integer }}</td>
+    <td class="text-currency">{{ total.marginAmount|integer }}</td>
+    <td class="text-percent{{ _self.margin_below_class(total.marginPercent, minMargin) }}"
+            {{- _self.margin_below_tooltip(total.marginPercent, minMargin) }}>
+        {{ total.marginPercent|percent -}}
     </td>
-    <td class="text-currency">{{ totals.total|integer }}</td>
+    <td class="text-currency">{{ total.total|integer }}</td>
 {% endblock total_row %}
 {# card_body #}
 {% block card_body %}

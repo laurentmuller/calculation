@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace App\Tests\Chart;
 
 use App\Chart\StateChart;
-use App\Model\CalculationsState;
-use App\Model\CalculationsStateItem;
+use App\Model\StateChartData;
+use App\Model\StateChartDataItem;
 use App\Parameter\ApplicationParameters;
 use App\Repository\CalculationStateRepository;
 use App\Tests\TranslatorMockTrait;
@@ -45,8 +45,8 @@ final class StateChartTest extends TestCase
 
     public function testWithoutData(): void
     {
-        $this->repository->method('getCalculations')
-            ->willReturn(new CalculationsState([]));
+        $this->repository->method('getStateChartData')
+            ->willReturn(new StateChartData([]));
         $chart = $this->createChart();
         $actual = $chart->generate();
         self::assertCount(0, $actual['data']);
@@ -54,7 +54,7 @@ final class StateChartTest extends TestCase
 
     public function testWithSeries(): void
     {
-        $this->repository->method('getCalculations')
+        $this->repository->method('getStateChartData')
             ->willReturn($this->createCalculationsState());
 
         $chart = $this->createChart();
@@ -62,10 +62,10 @@ final class StateChartTest extends TestCase
         self::assertCount(2, $actual['data']);
     }
 
-    private function createCalculationsState(): CalculationsState
+    private function createCalculationsState(): StateChartData
     {
         $items = [
-            new CalculationsStateItem(
+            new StateChartDataItem(
                 id: 1,
                 code: 'code1',
                 editable: true,
@@ -74,7 +74,7 @@ final class StateChartTest extends TestCase
                 items: 100.0,
                 total: 200,
             ),
-            new CalculationsStateItem(
+            new StateChartDataItem(
                 id: 2,
                 code: 'code2',
                 editable: false,
@@ -85,7 +85,7 @@ final class StateChartTest extends TestCase
             ),
         ];
 
-        return new CalculationsState($items);
+        return new StateChartData($items);
     }
 
     private function createChart(): StateChart

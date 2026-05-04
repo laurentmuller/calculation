@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-class CalculationsStateItem extends CalculationsTotal
+class StateChartDataItem extends ChartDataItem
 {
     public float $calculationsPercent = 0.0;
     public float $totalPercent = 0.0;

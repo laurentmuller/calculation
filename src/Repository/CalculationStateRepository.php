@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\CalculationState;
-use App\Model\CalculationsState;
-use App\Model\CalculationsStateItem;
+use App\Model\StateChartData;
+use App\Model\StateChartDataItem;
 use App\Traits\ArrayTrait;
 use App\Traits\GroupByTrait;
 use App\Traits\MathTrait;
@@ -43,38 +43,6 @@ class CalculationStateRepository extends AbstractRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CalculationState::class);
-    }
-
-    /**
-     * Gets states with the calculation statistics.
-     *
-     * <b>Note:</b> Only states with at least one calculation are returned.
-     */
-    public function getCalculations(): CalculationsState
-    {
-        $builder = $this->createQueryBuilder('s')
-            ->select(\sprintf(
-                'NEW %s(
-                    s.id,
-                    s.code,
-                    s.editable,
-                    s.color,
-                    COUNT(c.id),
-                    ROUND(SUM(c.itemsTotal), 2),
-                    ROUND(SUM(c.overallTotal), 2)
-                )',
-                CalculationsStateItem::class
-            ))
-            ->innerJoin('s.calculations', 'c')
-            ->groupBy('s.id')
-            ->orderBy('s.editable', self::SORT_DESC)
-            ->addOrderBy('s.code', self::SORT_ASC);
-
-        /** @var CalculationsStateItem[] $items */
-        $items = $builder->getQuery()
-            ->getResult();
-
-        return new CalculationsState($items);
     }
 
     /**
@@ -186,6 +154,38 @@ class CalculationStateRepository extends AbstractRepository
             'editable' => \sprintf('IFELSE(%s.%s = 1, 0, 1)', $alias, $field), // reverse
             default => parent::getSortField($field, $alias),
         };
+    }
+
+    /**
+     * Gets states with the calculation statistics.
+     *
+     * <b>Note:</b> Only states with at least one calculation are returned.
+     */
+    public function getStateChartData(): StateChartData
+    {
+        $builder = $this->createQueryBuilder('s')
+            ->select(\sprintf(
+                'NEW %s(
+                    s.id,
+                    s.code,
+                    s.editable,
+                    s.color,
+                    COUNT(c.id),
+                    ROUND(SUM(c.itemsTotal), 2),
+                    ROUND(SUM(c.overallTotal), 2)
+                )',
+                StateChartDataItem::class
+            ))
+            ->innerJoin('s.calculations', 'c')
+            ->groupBy('s.id')
+            ->orderBy('s.editable', self::SORT_DESC)
+            ->addOrderBy('s.code', self::SORT_ASC);
+
+        /** @var StateChartDataItem[] $items */
+        $items = $builder->getQuery()
+            ->getResult();
+
+        return new StateChartData($items);
     }
 
     /**

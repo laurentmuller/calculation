@@ -114,14 +114,14 @@ final class CalculationRepositoryTest extends AbstractRepositoryTestCase
 
     public function testGetByMonth(): void
     {
-        $actual = $this->repository->getByMonth();
+        $actual = $this->repository->getMonthChartData();
         self::assertEmpty($actual);
 
-        $actual = $this->repository->getByMonth(12);
+        $actual = $this->repository->getMonthChartData(12);
         self::assertEmpty($actual);
 
         $this->getCalculation();
-        $actual = $this->repository->getByMonth(12);
+        $actual = $this->repository->getMonthChartData(12);
         self::assertCount(1, $actual);
     }
 

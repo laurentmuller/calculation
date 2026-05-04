@@ -16,6 +16,7 @@ namespace App\Chart;
 use App\Parameter\ApplicationParameters;
 use App\Traits\MathTrait;
 use App\Traits\TranslatorTrait;
+use App\Utils\FormatUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use HighchartsBundle\Highcharts\ChartExpression;
 use HighchartsBundle\Highcharts\Highchart;
@@ -183,6 +184,7 @@ class AbstractHighchart extends Highchart
         $this->setChartOptions()
             ->setTooltipOptions()
             ->setLegendOptions()
+            ->setLangOptions()
             ->setAxisOptions()
             ->disableAccessibility()
             ->disableCredit()
@@ -218,6 +220,19 @@ class AbstractHighchart extends Highchart
             'events' => [
                 'load' => new ChartExpression('function(e) {chartLoaded(e);}'),
             ],
+        ]);
+
+        return $this;
+    }
+
+    /**
+     * Sets the lang options.
+     */
+    protected function setLangOptions(): static
+    {
+        $this->lang->merge([
+            'thousandsSep' => FormatUtils::THOUSANDS_SEP,
+            'decimalPoint' => FormatUtils::DECIMAL_SEP,
         ]);
 
         return $this;

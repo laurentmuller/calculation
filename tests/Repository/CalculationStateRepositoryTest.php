@@ -37,11 +37,11 @@ final class CalculationStateRepositoryTest extends AbstractRepositoryTestCase
 
     public function testGetCalculations(): void
     {
-        $actual = $this->repository->getCalculations();
+        $actual = $this->repository->getStateChartData();
         self::assertCount(0, $actual);
 
         $this->getCalculation();
-        $actual = $this->repository->getCalculations();
+        $actual = $this->repository->getStateChartData();
         self::assertCount(1, $actual);
     }
 

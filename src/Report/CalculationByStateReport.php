@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
-use App\Model\CalculationsState;
-use App\Model\CalculationsStateItem;
-use App\Model\CalculationsTotal;
+use App\Model\ChartDataItem;
+use App\Model\StateChartData;
+use App\Model\StateChartDataItem;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Events\PdfCellTextEvent;
@@ -39,7 +39,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * Report for calculations by states.
  *
- * @extends AbstractArrayReport<CalculationsStateItem>
+ * @extends AbstractArrayReport<StateChartDataItem>
  */
 class CalculationByStateReport extends AbstractArrayReport implements PdfChartInterface, PdfDrawCellTextInterface, PdfDrawHeadersInterface
 {
@@ -47,25 +47,25 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
     use PdfChartLegendTrait;
     use PdfPieChartTrait;
 
-    private ?CalculationsStateItem $currentEntity = null;
+    private ?StateChartDataItem $currentEntity = null;
     private float $minMargin;
-    private CalculationsTotal $total;
+    private ChartDataItem $total;
 
     public function __construct(
         AbstractController $controller,
-        CalculationsState $state,
+        StateChartData $stateChartData,
         private readonly UrlGeneratorInterface $generator
     ) {
-        parent::__construct($controller, $state->items);
+        parent::__construct($controller, $stateChartData->items);
         $this->setTranslatedTitle('chart.state.title');
         $this->minMargin = $controller->getMinMargin();
-        $this->total = $state->total;
+        $this->total = $stateChartData->total;
     }
 
     #[\Override]
     public function drawCellText(PdfCellTextEvent $event): bool
     {
-        if (0 !== $event->index || !$this->currentEntity instanceof CalculationsStateItem) {
+        if (0 !== $event->index || !$this->currentEntity instanceof StateChartDataItem) {
             return false;
         }
         if (!$this->applyFillColor($this->currentEntity)) {
@@ -123,7 +123,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
         return true;
     }
 
-    private function applyFillColor(CalculationsStateItem $entity): bool
+    private function applyFillColor(StateChartDataItem $entity): bool
     {
         $color = PdfFillColor::create($entity->color);
         if (!$color instanceof PdfFillColor) {
@@ -199,7 +199,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
     }
 
     /**
-     * @phpstan-param CalculationsStateItem[] $entities
+     * @phpstan-param StateChartDataItem[] $entities
      */
     private function renderChart(array $entities): void
     {
@@ -209,7 +209,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
         $radius = $printableWidth / 4.0;
         $centerX = $margin + $printableWidth / 2.0;
         $centerY = $top + $radius;
-        $rows = \array_map(static fn (CalculationsStateItem $entity): array => [
+        $rows = \array_map(static fn (StateChartDataItem $entity): array => [
             'label' => $entity->code,
             'color' => $entity->color,
             'value' => $entity->total,
@@ -222,7 +222,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
     }
 
     /**
-     * @phpstan-param CalculationsStateItem[] $entities
+     * @phpstan-param StateChartDataItem[] $entities
      */
     private function renderTable(array $entities): void
     {

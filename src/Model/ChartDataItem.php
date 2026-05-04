@@ -15,7 +15,7 @@ namespace App\Model;
 
 use App\Traits\MathTrait;
 
-class CalculationsTotal
+class ChartDataItem
 {
     use MathTrait;
 

@@ -17,7 +17,7 @@ use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
 use Symfony\Component\Clock\DatePoint;
 
-class CalculationsMonthItem extends CalculationsTotal
+class MonthChartDataItem extends ChartDataItem
 {
     public readonly DatePoint $date;
 
@@ -32,18 +32,23 @@ class CalculationsMonthItem extends CalculationsTotal
         $this->date = DateUtils::createDatePoint(\sprintf('%d-%d-10', $this->year, $this->month));
     }
 
-    public function formatDate(): string
+    public function getLongDate(): string
     {
-        return FormatUtils::formatDate($this->date, \IntlDateFormatter::NONE, 'MMMM Y');
-    }
-
-    public function getMilliseconds(): int
-    {
-        return $this->date->getTimestamp() * 1000;
+        return $this->formatDate('MMMM Y');
     }
 
     public function getSearchDate(): string
     {
-        return $this->date->format('m.Y');
+        return $this->formatDate('M.Y');
+    }
+
+    public function getShortDate(): string
+    {
+        return $this->formatDate('MMM Y');
+    }
+
+    private function formatDate(string $pattern): string
+    {
+        return FormatUtils::formatDate($this->date, \IntlDateFormatter::NONE, $pattern);
     }
 }

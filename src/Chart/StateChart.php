@@ -14,9 +14,8 @@ declare(strict_types=1);
 namespace App\Chart;
 
 use App\Entity\CalculationState;
-use App\Model\CalculationsState;
-use App\Model\CalculationsStateItem;
-use App\Repository\CalculationStateRepository;
+use App\Model\StateChartData;
+use App\Model\StateChartDataItem;
 use App\Table\CalculationTable;
 use App\Utils\FormatUtils;
 use HighchartsBundle\Highcharts\ChartExpression;
@@ -31,13 +30,12 @@ class StateChart extends AbstractHighchart
      *
      * @return array{
      *     chart: StateChart,
-     *     data: CalculationsState,
+     *     data: StateChartData,
      *     minMargin: float}
      */
     public function generate(): array
     {
-        $data = $this->getRepository()->getCalculations();
-
+        $data = $this->getStateChartData();
         $this->setType(ChartType::TYPE_PIE)
             ->setColors($data->items)
             ->setSeries($data->items)
@@ -90,11 +88,6 @@ class StateChart extends AbstractHighchart
         ];
     }
 
-    private function getRepository(): CalculationStateRepository
-    {
-        return $this->manager->getRepository(CalculationState::class);
-    }
-
     private function getSeriesOptions(): array
     {
         return [
@@ -115,6 +108,12 @@ class StateChart extends AbstractHighchart
         ];
     }
 
+    private function getStateChartData(): StateChartData
+    {
+        return $this->manager->getRepository(CalculationState::class)
+            ->getStateChartData();
+    }
+
     private function getURL(int $id): string
     {
         return $this->generator->generate('calculation_index', [
@@ -123,11 +122,11 @@ class StateChart extends AbstractHighchart
     }
 
     /**
-     * @param CalculationsStateItem[] $items
+     * @param StateChartDataItem[] $items
      */
     private function mapItems(array $items): array
     {
-        return \array_map(fn (CalculationsStateItem $entry): array => [
+        return \array_map(fn (StateChartDataItem $entry): array => [
             'y' => $entry->total,
             'id' => $entry->id,
             'name' => $entry->code,
@@ -144,11 +143,11 @@ class StateChart extends AbstractHighchart
     }
 
     /**
-     * @param CalculationsStateItem[] $items
+     * @param StateChartDataItem[] $items
      */
     private function setColors(array $items): self
     {
-        $this->colors = \array_map(static fn (CalculationsStateItem $state): string => $state->color, $items);
+        $this->colors = \array_map(static fn (StateChartDataItem $state): string => $state->color, $items);
 
         return $this;
     }
@@ -162,7 +161,7 @@ class StateChart extends AbstractHighchart
     }
 
     /**
-     * @phpstan-param CalculationsStateItem[] $items
+     * @phpstan-param StateChartDataItem[] $items
      */
     private function setSeries(array $items): self
     {

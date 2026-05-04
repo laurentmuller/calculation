@@ -22,8 +22,8 @@ use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\Task;
 use App\Entity\User;
-use App\Model\CalculationsMonth;
-use App\Model\CalculationsState;
+use App\Model\MonthChartData;
+use App\Model\StateChartData;
 use App\Traits\CacheKeyTrait;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\EntityManagerInterface;
@@ -76,27 +76,6 @@ class IndexService
     }
 
     /**
-     * Gets the calculations grouped by years and months sorted by date in descending order.
-     *
-     * @param int $maxResults the maximum number of results to retrieve (the "limit")
-     */
-    public function getCalculationByMonths(int $maxResults = 6): CalculationsMonth
-    {
-        return $this->cache->get(
-            \sprintf('index.calculations.months.%d', $maxResults),
-            fn (): CalculationsMonth => $this->loadCalculationsByMonths($maxResults)
-        );
-    }
-
-    /**
-     * Gets calculations grouped by state.
-     */
-    public function getCalculationByStates(): CalculationsState
-    {
-        return $this->cache->get('index.calculations.states', $this->loadCalculationsByStates(...));
-    }
-
-    /**
      * Gets the number of entities.
      *
      * @return array<string, int>
@@ -118,6 +97,27 @@ class IndexService
         $key = \sprintf('index.calculations.last.%d.%s', $maxResults, $id);
 
         return $this->cache->get($key, fn (): array => $this->loadLastCalculations($maxResults, $user));
+    }
+
+    /**
+     * Gets the calculations grouped by years and months sorted by date in descending order.
+     *
+     * @param int $maxResults the maximum number of results to retrieve (the "limit")
+     */
+    public function getMonthChartData(int $maxResults = 6): MonthChartData
+    {
+        return $this->cache->get(
+            \sprintf('index.calculations.months.%d', $maxResults),
+            fn (): MonthChartData => $this->loadMonthChartData($maxResults)
+        );
+    }
+
+    /**
+     * Gets calculations grouped by state.
+     */
+    public function getStateChartData(): StateChartData
+    {
+        return $this->cache->get('index.calculations.states', $this->loadStateChartData(...));
     }
 
     public function onFlush(OnFlushEventArgs $args): void
@@ -144,18 +144,6 @@ class IndexService
             || [] !== $unitOfWork->getScheduledEntityUpdates();
     }
 
-    private function loadCalculationsByMonths(int $maxResults): CalculationsMonth
-    {
-        return $this->manager->getRepository(Calculation::class)
-            ->getByMonth($maxResults);
-    }
-
-    private function loadCalculationsByStates(): CalculationsState
-    {
-        return $this->manager->getRepository(CalculationState::class)
-            ->getCalculations();
-    }
-
     /**
      * @return array<string, int>
      */
@@ -168,5 +156,17 @@ class IndexService
     {
         return $this->manager->getRepository(Calculation::class)
             ->getLastCalculations($maxResults, $user);
+    }
+
+    private function loadMonthChartData(int $maxResults): MonthChartData
+    {
+        return $this->manager->getRepository(Calculation::class)
+            ->getMonthChartData($maxResults);
+    }
+
+    private function loadStateChartData(): StateChartData
+    {
+        return $this->manager->getRepository(CalculationState::class)
+            ->getStateChartData();
     }
 }

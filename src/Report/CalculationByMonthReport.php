@@ -15,8 +15,8 @@ namespace App\Report;
 
 use App\Chart\MonthChart;
 use App\Controller\AbstractController;
-use App\Model\CalculationsMonth;
-use App\Model\CalculationsMonthItem;
+use App\Model\MonthChartData;
+use App\Model\MonthChartDataItem;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Events\PdfCellBackgroundEvent;
@@ -47,7 +47,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * Report for calculations by months.
  *
- * @extends AbstractArrayReport<CalculationsMonthItem>
+ * @extends AbstractArrayReport<MonthChartDataItem>
  */
 class CalculationByMonthReport extends AbstractArrayReport implements PdfChartInterface, PdfDrawCellBackgroundInterface, PdfDrawCellTextInterface, PdfDrawHeadersInterface
 {
@@ -65,18 +65,18 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
 
     /** @phpstan-var \WeakMap<PdfColorInterface, PdfTextColor> */
     private \WeakMap $colors;
-    private ?CalculationsMonthItem $currentItem = null;
+    private ?MonthChartDataItem $currentItem = null;
     private bool $drawHeaders = false;
-    private ?CalculationsMonthItem $lastItem = null;
+    private ?MonthChartDataItem $lastItem = null;
     private float $minMargin;
 
     public function __construct(
         AbstractController $controller,
-        private readonly CalculationsMonth $month,
+        private readonly MonthChartData $monthChartData,
         private readonly UrlGeneratorInterface $generator
     ) {
-        $orientation = $month->count() > 12 ? PdfOrientation::LANDSCAPE : PdfOrientation::PORTRAIT;
-        parent::__construct($controller, $month->items, $orientation);
+        $orientation = $monthChartData->count() > 12 ? PdfOrientation::LANDSCAPE : PdfOrientation::PORTRAIT;
+        parent::__construct($controller, $monthChartData->items, $orientation);
         $this->setTranslatedTitle('chart.month.title');
         $this->minMargin = $controller->getMinMargin();
         $this->colors = new \WeakMap();
@@ -85,7 +85,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
     #[\Override]
     public function drawCellBackground(PdfCellBackgroundEvent $event): bool
     {
-        if (!$this->lastItem instanceof CalculationsMonthItem || !$this->currentItem instanceof CalculationsMonthItem) {
+        if (!$this->lastItem instanceof MonthChartDataItem || !$this->currentItem instanceof MonthChartDataItem) {
             return false;
         }
 
@@ -239,7 +239,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         return $style;
     }
 
-    private function getURL(CalculationsMonthItem $item): string
+    private function getURL(MonthChartDataItem $item): string
     {
         $parameters = ['search' => $item->getSearchDate()];
 
@@ -284,7 +284,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
     }
 
     /**
-     * @param CalculationsMonthItem[] $entities
+     * @param MonthChartDataItem[] $entities
      */
     private function renderChart(array $entities): void
     {
@@ -294,7 +294,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         if ($newPage) {
             $h = $this->pageBreakTrigger - $top - 2.0 * self::LINE_HEIGHT;
         }
-        $rows = \array_map(fn (CalculationsMonthItem $entity): array => [
+        $rows = \array_map(fn (MonthChartDataItem $entity): array => [
             'link' => $this->getURL($entity),
             'label' => $this->cleanText($this->getDateCell($entity->date, false)),
             'values' => [
@@ -315,7 +315,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
     }
 
     /**
-     * @param CalculationsMonthItem[] $entities
+     * @param MonthChartDataItem[] $entities
      */
     private function renderTable(array $entities): void
     {
@@ -348,7 +348,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
             ->setTextListener(null);
 
         // total
-        $total = $this->month->total;
+        $total = $this->monthChartData->total;
         $margin = $total->marginPercent;
         $table->startHeaderRow()
             ->addCellTrans('calculation.fields.total')

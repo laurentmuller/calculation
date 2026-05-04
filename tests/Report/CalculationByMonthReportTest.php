@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace App\Tests\Report;
 
 use App\Controller\AbstractController;
-use App\Model\CalculationsMonth;
-use App\Model\CalculationsMonthItem;
+use App\Model\MonthChartData;
+use App\Model\MonthChartDataItem;
 use App\Report\CalculationByMonthReport;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -26,7 +26,7 @@ final class CalculationByMonthReportTest extends TestCase
     {
         $items = [];
         for ($i = 0; $i <= 15; ++$i) {
-            $items[] = new CalculationsMonthItem(
+            $items[] = new MonthChartDataItem(
                 count: 5,
                 items: 15.0,
                 total: 35.0,
@@ -42,14 +42,14 @@ final class CalculationByMonthReportTest extends TestCase
     public function testRender(): void
     {
         $items = [
-            new CalculationsMonthItem(
+            new MonthChartDataItem(
                 count: 1,
                 items: 10.0,
                 total: 20.0,
                 year: 2024,
                 month: 1
             ),
-            new CalculationsMonthItem(
+            new MonthChartDataItem(
                 count: 5,
                 items: 3000.0,
                 total: 3050.0,
@@ -63,7 +63,7 @@ final class CalculationByMonthReportTest extends TestCase
     }
 
     /**
-     * @param CalculationsMonthItem[] $items
+     * @param MonthChartDataItem[] $items
      */
     private function createReport(array $items): CalculationByMonthReport
     {
@@ -73,7 +73,7 @@ final class CalculationByMonthReportTest extends TestCase
 
         return new CalculationByMonthReport(
             $controller,
-            new CalculationsMonth($items),
+            new MonthChartData($items),
             self::createStub(UrlGeneratorInterface::class),
         );
     }

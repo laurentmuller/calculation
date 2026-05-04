@@ -190,8 +190,8 @@ final class FileUtilsTest extends TestCase
 
     public function testNormalize(): void
     {
-        $expected = 'C:/Temp/';
-        $actual = FileUtils::normalize('C:\\Temp\\');
+        $expected = \str_replace('\\', '/', __DIR__);
+        $actual = FileUtils::normalize(__DIR__);
         self::assertSame($expected, $actual);
     }
 

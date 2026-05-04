@@ -16,10 +16,10 @@ namespace App\Service;
 use App\Traits\LoggerTrait;
 use App\Utils\StringUtils;
 use Psr\Log\LoggerInterface;
+use Random\RandomException;
 use Symfony\Component\Console\Helper\Helper;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -33,22 +33,6 @@ readonly class FileService
         private Filesystem $fs,
         private LoggerInterface $logger,
     ) {
-    }
-
-    /**
-     * Normalizes the given path.
-     *
-     * During normalization, all slashes are replaced by forward slashes ("/").
-     * This method does not remove invalid or dot path segments. Consequently, it is much more efficient and should
-     * be used whenever the given path is known to be a valid, absolute system
-     * path.
-     * This method is able to deal with both UNIX and Windows paths.
-     */
-    public function canonicalize(string $path): string
-    {
-        $realPath = \realpath($path);
-
-        return Path::normalize(\is_string($realPath) ? $realPath : $path);
     }
 
     /**
@@ -67,7 +51,7 @@ readonly class FileService
 
             return true;
         } catch (IOException $e) {
-            $this->logException($e);
+            $this->logException($e, \sprintf('Unable to copy "%s" to "%s".', $originFile, $targetFile));
 
             return false;
         }
@@ -88,7 +72,7 @@ readonly class FileService
     public function decodeJson(string $file, bool $assoc = true): array|\stdClass
     {
         // file or url?
-        if (!\is_file($file) && !$this->validateURL($file)) {
+        if (!$this->isValideFile($file)) {
             throw new \InvalidArgumentException(\sprintf("The file '%s' cannot be found.", $file));
         }
         $content = $this->readFile($file);
@@ -114,7 +98,7 @@ readonly class FileService
 
             return true;
         } catch (IOException $e) {
-            $this->logException($e);
+            $this->logException($e, \sprintf('Unable to write file "%s".', $file));
 
             return false;
         }
@@ -205,10 +189,20 @@ readonly class FileService
 
             return true;
         } catch (IOException $e) {
-            $this->logException($e);
+            $this->logException($e, \sprintf('Unable to mirror "%s" to "%s".', $origin, $target));
 
             return false;
         }
+    }
+
+    /**
+     * Normalizes the given path. The backward slashes are replaced by forward slashes ("/").
+     */
+    public function normalize(string $path): string
+    {
+        $realPath = \realpath($path);
+
+        return \str_replace('\\', '/', \is_string($realPath) ? $realPath : $path);
     }
 
     /**
@@ -218,7 +212,7 @@ readonly class FileService
      */
     public function readFile(string $file): ?string
     {
-        if (!\is_file($file) && !$this->validateURL($file)) {
+        if (!$this->isValideFile($file)) {
             return null;
         }
 
@@ -227,7 +221,7 @@ readonly class FileService
 
             return '' === $content ? null : $content;
         } catch (IOException $e) {
-            $this->logException($e);
+            $this->logException($e, \sprintf('Unable to read file "%s".', $file));
 
             return null;
         }
@@ -245,7 +239,7 @@ readonly class FileService
                 return true;
             }
         } catch (IOException $e) {
-            $this->logException($e);
+            $this->logException($e, \sprintf('Unable to remove file "%s".', $file));
         }
 
         return false;
@@ -267,7 +261,7 @@ readonly class FileService
 
             return true;
         } catch (IOException $e) {
-            $this->logException($e);
+            $this->logException($e, \sprintf('Unable to rename "%s" to "%s".', $origin, $target));
 
             return false;
         }
@@ -330,12 +324,14 @@ readonly class FileService
      * @param bool    $deleteOnExit if true, the directory is deleted at the end of the script
      *
      * @return ?string the new temporary directory; null on failure
+     *
+     * @throws \LogicException if unable to generate a random number
      */
     public function tempDir(?string $dir = null, string $prefix = 'tmp', bool $deleteOnExit = true): ?string
     {
         $dir ??= \sys_get_temp_dir();
         for ($i = 0; $i < 10; ++$i) {
-            $path = \sprintf('%s/%s_%d', $dir, $prefix, \random_int(100_000, 999_999));
+            $path = \sprintf('%s/%s_%d', $dir, $prefix, $this->randomInt());
             if (\file_exists($path) || !\mkdir(directory: $path, recursive: true)) {
                 continue;
             }
@@ -376,14 +372,23 @@ readonly class FileService
 
             return $file;
         } catch (IOException $e) {
-            $this->logException($e);
+            $this->logException($e, 'Unable to create temporary file.');
 
             return null;
         }
     }
 
-    private function validateURL(string $file): bool
+    private function isValideFile(string $file): bool
     {
-        return false !== \filter_var($file, \FILTER_VALIDATE_URL);
+        return \is_file($file) || false !== \filter_var($file, \FILTER_VALIDATE_URL);
+    }
+
+    private function randomInt(): int
+    {
+        try {
+            return \random_int(100_000, 999_999);
+        } catch (RandomException $e) {
+            throw new \LogicException('Unable to generate a random number.', $e->getCode(), $e);
+        }
     }
 }

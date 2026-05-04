@@ -67,14 +67,6 @@ final class FileServiceTest extends TestCase
         yield [__FILE__, $thisText];
     }
 
-    public function testCanonicalize(): void
-    {
-        $service = $this->createFileService();
-        $expected = \str_replace('\\', '/', __DIR__);
-        $actual = $service->canonicalize(__DIR__);
-        self::assertSame($expected, $actual);
-    }
-
     public function testDecodeJsonEmptyFile(): void
     {
         self::expectException(\InvalidArgumentException::class);
@@ -205,6 +197,14 @@ final class FileServiceTest extends TestCase
         $target = __DIR__ . '/target';
         $actual = $service->mirror($source, $target);
         self::assertFalse($actual);
+    }
+
+    public function testNormalize(): void
+    {
+        $service = $this->createFileService();
+        $expected = \str_replace('\\', '/', __DIR__);
+        $actual = $service->normalize(__DIR__);
+        self::assertSame($expected, $actual);
     }
 
     public function testReadFileInvalidDirectory(): void

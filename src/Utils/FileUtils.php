@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace App\Utils;
 
+use Random\RandomException;
 use Symfony\Component\Console\Helper\Helper;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -67,7 +67,7 @@ final class FileUtils
     public static function decodeJson(string $file, bool $assoc = true): array|\stdClass
     {
         // file or url?
-        if (!\is_file($file) && !self::validateURL($file)) {
+        if (!self::isValideFile($file)) {
             throw new \InvalidArgumentException(\sprintf("The file '%s' cannot be found.", $file));
         }
         $content = self::readFile($file);
@@ -189,19 +189,13 @@ final class FileUtils
     }
 
     /**
-     * Normalizes the given path.
-     *
-     * During normalization, all slashes are replaced by forward slashes ("/").
-     * This method does not remove invalid or dot path segments. Consequently, it is much more efficient and should
-     * be used whenever the given path is known to be a valid, absolute system
-     * path.
-     * This method is able to deal with both UNIX and Windows paths.
+     * Normalizes the given path. The backward slashes are replaced by forward slashes ("/").
      */
     public static function normalize(string $path): string
     {
         $realPath = \realpath($path);
 
-        return Path::normalize(\is_string($realPath) ? $realPath : $path);
+        return \str_replace('\\', '/', \is_string($realPath) ? $realPath : $path);
     }
 
     /**
@@ -211,7 +205,7 @@ final class FileUtils
      */
     public static function readFile(string $file): ?string
     {
-        if (!\is_file($file) && !self::validateURL($file)) {
+        if (!self::isValideFile($file)) {
             return null;
         }
 
@@ -323,7 +317,7 @@ final class FileUtils
     {
         $dir ??= \sys_get_temp_dir();
         for ($i = 0; $i < 10; ++$i) {
-            $path = \sprintf('%s/%s_%d', $dir, $prefix, \random_int(100_000, 999_999));
+            $path = \sprintf('%s/%s_%d', $dir, $prefix, self::randomInt());
             if (\file_exists($path) || !\mkdir(directory: $path, recursive: true)) {
                 continue;
             }
@@ -368,8 +362,17 @@ final class FileUtils
         }
     }
 
-    private static function validateURL(string $file): bool
+    private static function isValideFile(string $file): bool
     {
-        return false !== \filter_var($file, \FILTER_VALIDATE_URL);
+        return \is_file($file) || false !== \filter_var($file, \FILTER_VALIDATE_URL);
+    }
+
+    private static function randomInt(): int
+    {
+        try {
+            return \random_int(100_000, 999_999);
+        } catch (RandomException $e) {
+            throw new \LogicException('Unable to generate a random number.', $e->getCode(), $e);
+        }
     }
 }

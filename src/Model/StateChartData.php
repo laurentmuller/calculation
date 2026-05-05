@@ -13,22 +13,17 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-use App\Traits\MathTrait;
-
 /**
  * @extends ChartData<StateChartDataItem>
  */
 readonly class StateChartData extends ChartData
 {
-    use MathTrait;
-
     #[\Override]
     protected function generateTotalItem(): ChartDataItem
     {
         $total = parent::generateTotalItem();
         foreach ($this->items as $item) {
-            $item->calculationsPercent = $this->round($this->safeDivide($item->count, $total->count), 4);
-            $item->totalPercent = $this->round($this->safeDivide($item->total, $total->total), 4);
+            $item->updatePercents($total);
         }
 
         return $total;

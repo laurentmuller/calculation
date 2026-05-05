@@ -38,26 +38,18 @@ abstract readonly class ChartData implements \Countable
      */
     protected function generateTotalItem(): ChartDataItem
     {
-        $values = \array_reduce(
-            $this->items,
-            static function (array $carry, ChartDataItem $item): array {
-                $carry['count'] += $item->count;
-                $carry['items'] += $item->items;
-                $carry['total'] += $item->total;
-
-                return $carry;
-            },
-            [
-                'count' => 0,
-                'items' => 0.0,
-                'total' => 0.0,
-            ]
-        );
-
         return new ChartDataItem(
-            count: $values['count'],
-            items: $values['items'],
-            total: $values['total']
+            count: $this->getItemsSum('count'),
+            items: $this->getItemsSum('items'),
+            total: $this->getItemsSum('total')
         );
+    }
+
+    /**
+     * @phpstan-return ($key is 'count' ? int : float)
+     */
+    private function getItemsSum(string $key): int|float
+    {
+        return \array_sum(\array_column($this->items, $key));
     }
 }

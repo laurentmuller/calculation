@@ -209,7 +209,7 @@ class MonthChart extends AbstractHighchart
     }
 
     /**
-     * @phpstan-param MonthChartDataItem[] $items
+     * @param MonthChartDataItem[] $items
      */
     private function setSeries(array $items): self
     {

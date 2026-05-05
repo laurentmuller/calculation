@@ -26,12 +26,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Extends the Highchart with method shortcuts.
  */
-class AbstractHighchart extends Highchart
+abstract class AbstractHighchart extends Highchart
 {
     use MathTrait;
     use TranslatorTrait;
 
-    /** The default identifier of the div where to render the chart. */
+    /** The chart container identifier where to render the chart. */
     public const string CONTAINER = 'chartContainer';
 
     public function __construct(

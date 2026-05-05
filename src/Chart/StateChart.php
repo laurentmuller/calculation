@@ -161,7 +161,7 @@ class StateChart extends AbstractHighchart
     }
 
     /**
-     * @phpstan-param StateChartDataItem[] $items
+     * @param StateChartDataItem[] $items
      */
     private function setSeries(array $items): self
     {

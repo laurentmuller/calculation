@@ -2,7 +2,7 @@
  * -------------- String Extensions --------------
  */
 
-/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
+/* eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
 Object.defineProperty(String.prototype, 'clean', {
     /**
      * Clean this string.
@@ -14,7 +14,7 @@ Object.defineProperty(String.prototype, 'clean', {
     }
 });
 
-/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
+/* eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
 Object.defineProperty(String.prototype, 'indexOfIgnoreCase', {
     /**
      * Returns the index of the first occurrence in this string, ignoring case considerations of the specified value.
@@ -30,7 +30,7 @@ Object.defineProperty(String.prototype, 'indexOfIgnoreCase', {
     }
 });
 
-/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
+/* eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
 Object.defineProperty(String.prototype, 'equalsIgnoreCase', {
     /**
      * Check if the given value is equal to this string, ignoring case considerations.
@@ -45,7 +45,7 @@ Object.defineProperty(String.prototype, 'equalsIgnoreCase', {
     }
 });
 
-/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
+/* eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
 Object.defineProperty(String.prototype, 'format', {
     /**
      * Format a string.
@@ -66,7 +66,7 @@ Object.defineProperty(String.prototype, 'format', {
     }
 });
 
-/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
+/* eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
 Object.defineProperty(String.prototype, 'startsWithIgnoreCase', {
     /**
      * Returns if this string starts with the given value, ignoring case
@@ -79,5 +79,19 @@ Object.defineProperty(String.prototype, 'startsWithIgnoreCase', {
         const string1 = this.normalize('NFD').toLowerCase();
         const string2 = s.normalize('NFD').toLowerCase();
         return string1.startsWith(string2);
+    }
+});
+
+/* eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
+Object.defineProperty(String.prototype, 'snakeCase', {
+    /**
+     * Returns this string as a snake-cased string.
+     */
+    value: function () {
+        'use strict';
+        return this.replace(/\W+/g, ' ')
+            .split(/ |\B(?=[A-Z])/)
+            .map(word => word.toLowerCase())
+            .join('_');
     }
 });

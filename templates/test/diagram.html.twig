@@ -65,13 +65,15 @@
 {% endblock card_header %}
 {# body #}
 {% block card_body -%}
-    {%- set data_attrs = {
+    {%- set diagram_attrs = {
         id: 'diagram',
         class: 'diagram',
+        'data-zoom': zoom,
         'data-url': path('diagram_load'),
-        'data-error': 'diagram.error_not_found'|trans, zoom: zoom}
+        'data-error': 'diagram.error_not_found'|trans,
+        }
     -%}
-    <div {{ html_attr(data_attrs) }}>
+    <div {{ html_attr(diagram_attrs) }}>
         {{- diagram.content -}}
     </div>
 {% endblock card_body %}

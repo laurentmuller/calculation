@@ -5,13 +5,10 @@
 
     const THEME_ATTRIBUTE = 'data-bs-theme';
     const DATA_PROCESSED = 'data-processed';
-    const CLASS_REGEX = /classId-(.*)-\d+/;
-    const REPLACE_REGEX = /([a-z])([A-Z])/g;
-    const REPLACE_TARGET = '$1_$2';
-    const DEFAULT_ZOOM = 1;
+    const DEFAULT_ZOOM = 1.0;
     const ZOOM_STEP = 0.05;
-    const MIN_SCALE = 0.5;
-    const MAX_SCALE = 2.0;
+    const MIN_ZOOM = 0.5;
+    const MAX_ZOOM = 2.0;
 
     /**
      * The diagram renderer.
@@ -20,7 +17,7 @@
     const diagram = document.getElementById('diagram');
 
     /**
-     * The diagrams list (toolbar).
+     * The diagram list (toolbar).
      * @type {HTMLSelectElement}
      */
     const diagrams = document.getElementById('diagrams');
@@ -74,7 +71,7 @@
     let themeVariables = null;
 
     /**
-     * Gets SVG element.
+     * Gets the SVG element.
      * @return {SVGSVGElement}
      */
     const getSvgDiagram = () => document.querySelector('#diagram svg');
@@ -96,7 +93,7 @@
      * @return {number}
      */
     const roundZoom = (zoom) => {
-        return Math.ceil(zoom * 20) / 20;
+        return Math.round(zoom / ZOOM_STEP) * ZOOM_STEP;
     };
 
     /**
@@ -121,7 +118,7 @@
      * @param {number} zoom
      */
     const setZoom = (zoom) => {
-        zoom = Math.max(MIN_SCALE, Math.min(MAX_SCALE, roundZoom(zoom)));
+        zoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, roundZoom(zoom)));
         if (panzoom && getZoom() !== zoom) {
             panzoom.zoom(zoom);
         }
@@ -135,21 +132,29 @@
     };
 
     /**
+     * Hide the diagram tooltip (if any).
+     */
+    const hideTooltip = () => {
+        const tooltip = document.querySelector('.mermaidTooltip');
+        if (tooltip) {
+            tooltip.style.opacity = 0;
+        }
+    };
+
+    /**
      * Handle the diagram node click.
-     * @param {string} nodeId - the node identifier like: "classId-Category-0".
+     * @param {string} nodeId - the node identifier like: "AbstractCodeEntity".
      */
     window.nodeCallback = (nodeId) => {
+        hideTooltip();
         let found = false;
-        const result = CLASS_REGEX.exec(nodeId);
-        if (result && result.length >= 2) {
-            const className = result[1].replace(REPLACE_REGEX, REPLACE_TARGET);
-            for (const option of diagrams.options) {
-                if (className.equalsIgnoreCase(option.value)) {
-                    diagrams.value = option.value;
-                    diagrams.dispatchEvent(new Event('change'));
-                    found = true;
-                    break;
-                }
+        const name = nodeId.snakeCase();
+        for (const option of diagrams.options) {
+            if (name.equalsIgnoreCase(option.value)) {
+                diagrams.value = option.value;
+                diagrams.dispatchEvent(new Event('change'));
+                found = true;
+                break;
             }
         }
         if (!found) {
@@ -205,7 +210,7 @@
     };
 
     /**
-     * Listener to zoom wheel panzoom.
+     * Listener to the zoom wheel panzoom.
      * @param {WheelEvent} e the wheel event.
      */
     const zoomWheelListener = (e) => {
@@ -239,8 +244,8 @@
     const zoomChangeListener = function (event) {
         const scale = event.detail.scale;
         updateState(buttonReset, scale === DEFAULT_ZOOM && event.detail.x === 0 && event.detail.y === 0);
-        updateState(buttonZoomIn, scale >= MAX_SCALE);
-        updateState(buttonZoomOut, scale <= MIN_SCALE);
+        updateState(buttonZoomIn, scale >= MAX_ZOOM);
+        updateState(buttonZoomOut, scale <= MIN_ZOOM);
         buttonZoom.textContent = zoomFormatter.format(scale);
         pushState(diagrams.value, true);
     };
@@ -255,7 +260,7 @@
     };
 
     /**
-     * Remove panzoom listener.
+     * Remove the panzoom listener.
      * @param {SVGSVGElement} svgDiagram
      */
     const removePanzoomListeners = function (svgDiagram) {
@@ -293,8 +298,8 @@
         panzoom = Panzoom(svgDiagram, {
             origin: '0 0',
             startScale: zoom,
-            minScale: MIN_SCALE,
-            maxScale: MAX_SCALE,
+            minScale: MIN_ZOOM,
+            maxScale: MAX_ZOOM,
         });
         addPanzoomListeners(svgDiagram);
     };
@@ -348,13 +353,14 @@
         if (resetTheme) {
             themeVariables = null;
         }
+        hideTooltip();
         resetDiagram();
         loadDiagram(zoom);
     };
 
     const initZoomDropDown = () => {
-        rangeZoom.min = String(MIN_SCALE);
-        rangeZoom.max = String(MAX_SCALE);
+        rangeZoom.min = String(MIN_ZOOM);
+        rangeZoom.max = String(MAX_ZOOM);
         rangeZoom.step = String(ZOOM_STEP);
         rangeZoom.addEventListener('input', () => {
             const scale = Number.parseFloat(rangeZoom.value);

@@ -14,11 +14,14 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\DiagramService;
+use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 final class DiagramServiceTest extends TestCase
 {
+    use TranslatorMockTrait;
+
     private DiagramService $service;
 
     #[\Override]
@@ -26,7 +29,8 @@ final class DiagramServiceTest extends TestCase
     {
         $path = __DIR__ . '/../files/diagrams';
         $cache = new ArrayAdapter();
-        $this->service = new DiagramService($path, $cache);
+        $translator = $this->createMockTranslator();
+        $this->service = new DiagramService($path, $cache, $translator);
     }
 
     public function testCount(): void

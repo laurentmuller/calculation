@@ -16,7 +16,9 @@ namespace App\Service;
 use App\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Service to get Mermaid diagrams.
@@ -33,11 +35,15 @@ class DiagramService implements \Countable
     private const string FILE_EXTENSION = '.mmd';
     private const string TITLE_PATTERN = '/title\s?:\s?(.*)/m';
 
+    private readonly string $tooltip;
+
     public function __construct(
         #[Autowire('%kernel.project_dir%/resources/diagrams/')]
         private readonly string $path,
-        private readonly CacheInterface $cache
+        private readonly CacheInterface $cache,
+        public readonly TranslatorInterface $translator
     ) {
+        $this->tooltip = $translator->trans('diagram.tooltip');
     }
 
     #[\Override]
@@ -97,6 +103,19 @@ class DiagramService implements \Countable
             ->toString();
     }
 
+    private function getFileContent(SplFileInfo $file): string
+    {
+        $search = 'nodeCallback()';
+        $replace = \sprintf('%s "%s"', $search, $this->tooltip);
+
+        return \str_replace($search, $replace, $file->getContents());
+    }
+
+    private function getFileName(SplFileInfo $file): string
+    {
+        return $file->getBasename(self::FILE_EXTENSION);
+    }
+
     /**
      * @phpstan-return array<string, DiagramType>
      */
@@ -105,8 +124,8 @@ class DiagramService implements \Countable
         $files = [];
         $finder = $this->createFinder();
         foreach ($finder as $file) {
-            $name = $file->getBasename(self::FILE_EXTENSION);
-            $content = $file->getContents();
+            $name = $this->getFileName($file);
+            $content = $this->getFileContent($file);
             $title = $this->findTitle($content, $name);
             $files[$name] = [
                 'name' => $name,

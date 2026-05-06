@@ -8,11 +8,11 @@
     display: block;
 }
 
-body.status-bar .diagram {
+body.statusbar-show .diagram {
     height: calc(100vh - 120px);
 }
 
-body:not(.status-bar) .diagram {
+body:not(.statusbar-show) .diagram {
     height: calc(100vh - 90px);
 }
 

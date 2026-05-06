@@ -69,12 +69,12 @@ body:not(.sidebar-show) .page-content {
     border-right: var(--bs-border-width) solid var(--bs-border-color);
 }
 
-body.status-bar .navbar-vertical::after {
+body.statusbar-show .navbar-vertical::after {
     height: calc(100% - var(--statusbar-height));
 }
 
-/* bottom margin when the status-bar is visible */
-body.status-bar {
+/* bottom margin when the statusbar is visible */
+body.statusbar-show {
     margin-bottom: var(--statusbar-height);
 }
 
@@ -215,7 +215,7 @@ span.state-color {
     opacity: 1;
 }
 
-body.status-bar .btn-back-to-top {
+body.statusbar-show .btn-back-to-top {
     bottom: calc(15px + var(--statusbar-height));
 }
 
@@ -819,9 +819,10 @@ span.bottom-border-gradient {
  */
 .grecaptcha-badge {
     bottom: 5px !important;
+    right: 5px !important;
 }
 
-body.status-bar .grecaptcha-badge {
+body.statusbar-show .grecaptcha-badge {
     bottom: calc(5px + var(--statusbar-height)) !important;
 }
 

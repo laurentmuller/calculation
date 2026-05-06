@@ -91,7 +91,7 @@ Object.defineProperty(String.prototype, 'snakeCase', {
         'use strict';
         return this.replace(/\W+/g, ' ')
             .split(/ |\B(?=[A-Z])/)
-            .map(word => word.toLowerCase())
+            .map((word) => word.toLowerCase())
             .join('_');
     }
 });

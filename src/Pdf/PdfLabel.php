@@ -58,43 +58,6 @@ readonly class PdfLabel implements \Stringable
     }
 
     /**
-     * Creates a copy of this instance with the desired new values.
-     *
-     * @param positive-int|null $cols     the number of horizontal labels (columns)
-     * @param positive-int|null $rows     the number of vertical labels (rows)
-     * @param int<6, 15>|null   $fontSize the font size in points
-     */
-    public function copy(
-        ?string $name = null,
-        ?int $cols = null,
-        ?int $rows = null,
-        ?float $width = null,
-        ?float $height = null,
-        ?float $marginLeft = null,
-        ?float $marginTop = null,
-        ?float $spaceX = null,
-        ?float $spaceY = null,
-        ?int $fontSize = null,
-        ?PdfUnit $unit = null,
-        ?PdfPageSize $pageSize = null
-    ): self {
-        return new self(
-            name: $name ?? $this->name,
-            cols: $cols ?? $this->cols,
-            rows: $rows ?? $this->rows,
-            width: $width ?? $this->width,
-            height: $height ?? $this->height,
-            marginLeft: $marginLeft ?? $this->marginLeft,
-            marginTop: $marginTop ?? $this->marginTop,
-            spaceX: $spaceX ?? $this->spaceX,
-            spaceY: $spaceY ?? $this->spaceY,
-            fontSize: $fontSize ?? $this->fontSize,
-            unit: $unit ?? $this->unit,
-            pageSize: $pageSize ?? $this->pageSize
-        );
-    }
-
-    /**
      * Gets the horizontal offset for the given column.
      */
     public function offsetX(int $column): float

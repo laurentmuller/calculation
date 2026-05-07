@@ -41,8 +41,8 @@ class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterfac
 
     private const string SESSION_KEY = 'alpha_captcha_answer';
 
-    private readonly AlphaCaptchaInterface $captcha;
-    private readonly string $dataError;
+    private ?AlphaCaptchaInterface $captcha = null;
+    private ?string $dataError = null;
     private ?string $previousAnswer = null;
     private ?string $question = null;
 
@@ -51,17 +51,15 @@ class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterfac
      */
     public function __construct(
         #[AutowireIterator(AlphaCaptchaInterface::class)]
-        iterable $captchas,
-        TranslatorInterface $translator
+        private readonly iterable $captchas,
+        private readonly TranslatorInterface $translator
     ) {
-        $this->captcha = $this->getRandomCaptcha($captchas);
-        $this->dataError = $translator->trans('required', [], 'captcha');
     }
 
     #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $challenge = $this->captcha->getChallenge();
+        $challenge = $this->getCaptcha()->getChallenge();
         $this->question = $challenge->question;
         $this->previousAnswer = $this->getSessionString(self::SESSION_KEY);
         $this->setSessionValue(self::SESSION_KEY, $challenge->answer);
@@ -79,7 +77,7 @@ class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterfac
         $resolver->setDefaults([
             'attr' => [
                 'class' => 'text-uppercase text-center',
-                'data-error' => $this->dataError,
+                'data-error' => $this->getDataError(),
                 'autocapitalize' => 'none',
                 'autocomplete' => 'off',
                 'spellcheck' => 'false',
@@ -101,22 +99,28 @@ class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterfac
         return TextType::class;
     }
 
-    /**
-     * @param iterable<AlphaCaptchaInterface> $captchas
-     */
-    private function getRandomCaptcha(iterable $captchas): AlphaCaptchaInterface
+    private function getCaptcha(): AlphaCaptchaInterface
     {
+        if ($this->captcha instanceof AlphaCaptchaInterface) {
+            return $this->captcha;
+        }
+        $captchas = $this->captchas;
         if ($captchas instanceof \Traversable) {
             $captchas = \iterator_to_array($captchas);
         }
 
-        return $captchas[\array_rand($captchas)];
+        return $this->captcha = $captchas[\array_rand($captchas)];
+    }
+
+    private function getDataError(): string
+    {
+        return $this->dataError ??= $this->translator->trans('required', [], 'captcha');
     }
 
     private function validate(?string $givenAnswer, ExecutionContextInterface $context): void
     {
         if (StringUtils::isString($givenAnswer) && StringUtils::isString($this->previousAnswer)
-            && $this->captcha->checkAnswer($givenAnswer, $this->previousAnswer)) {
+            && $this->getCaptcha()->checkAnswer($givenAnswer, $this->previousAnswer)) {
             return;
         }
         $context->buildViolation('error')

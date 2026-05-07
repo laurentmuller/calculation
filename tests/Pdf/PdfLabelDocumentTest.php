@@ -19,7 +19,6 @@ use App\Pdf\PdfLabel;
 use App\Pdf\PdfLabelDocument;
 use App\Service\PdfLabelService;
 use fpdf\Enums\PdfScaling;
-use fpdf\PdfException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
@@ -54,15 +53,6 @@ final class PdfLabelDocumentTest extends TestCase
         self::assertEqualsWithDelta($expected, $doc->getPageHeight(), 0.01);
         $expected = $label->fontSize;
         self::assertEqualsWithDelta($expected, $doc->getFontSizeInPoint(), 0.01);
-    }
-
-    public function testInvalidFontSize(): void
-    {
-        self::expectException(PdfException::class);
-        self::expectExceptionMessageMatches('/Invalid font size: 1.*/');
-        $label = $this->getLabel('3422')
-            ->copy(fontSize: 1); // @phpstan-ignore argument.type
-        new PdfLabelDocument($label);
     }
 
     public function testListener(): void

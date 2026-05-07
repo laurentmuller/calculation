@@ -34,16 +34,16 @@ class DiagramService implements \Countable
 {
     private const string FILE_EXTENSION = '.mmd';
     private const string TITLE_PATTERN = '/title\s?:\s?(.*)/m';
+    private const string TOOLTIP_SEARCH = 'nodeCallback()';
 
-    private readonly string $tooltip;
+    private ?string $tooltipReplace = null;
 
     public function __construct(
         #[Autowire('%kernel.project_dir%/resources/diagrams/')]
         private readonly string $path,
         private readonly CacheInterface $cache,
-        public readonly TranslatorInterface $translator
+        private readonly TranslatorInterface $translator
     ) {
-        $this->tooltip = $translator->trans('diagram.tooltip');
     }
 
     #[\Override]
@@ -105,15 +105,21 @@ class DiagramService implements \Countable
 
     private function getFileContent(SplFileInfo $file): string
     {
-        $search = 'nodeCallback()';
-        $replace = \sprintf('%s "%s"', $search, $this->tooltip);
-
-        return \str_replace($search, $replace, $file->getContents());
+        return \str_replace(self::TOOLTIP_SEARCH, $this->getTooltipReplace(), $file->getContents());
     }
 
     private function getFileName(SplFileInfo $file): string
     {
         return $file->getBasename(self::FILE_EXTENSION);
+    }
+
+    private function getTooltipReplace(): string
+    {
+        return $this->tooltipReplace ??= \sprintf(
+            '%s "%s"',
+            self::TOOLTIP_SEARCH,
+            $this->translator->trans('diagram.tooltip')
+        );
     }
 
     /**

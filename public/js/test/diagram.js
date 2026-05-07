@@ -168,13 +168,13 @@
      */
     const getThemeVariables = () => {
         if (!themeVariables) {
-            const $element = $('.card-header');
-            const borderBottomColor = $element.css('borderBottomColor');
+            const header = document.querySelector('.card-header');
+            const computedStyle = window.getComputedStyle(header);
             themeVariables = {
-                primaryColor: $element.css('backgroundColor'),
-                primaryTextColor: $element.css('color'),
-                primaryBorderColor: borderBottomColor,
-                lineColor: borderBottomColor
+                primaryColor: computedStyle.backgroundColor,
+                primaryTextColor: computedStyle.color,
+                primaryBorderColor: computedStyle.borderBottomColor,
+                lineColor: computedStyle.borderBottomColor
             };
         }
         return themeVariables;
@@ -349,7 +349,7 @@
      * @param {boolean} resetTheme true to reset the themed colors.
      * @param {number} zoom the zoom factor
      */
-    const reloadDiagram = (resetTheme, zoom) => {
+    const reloadDiagram = (resetTheme, zoom = DEFAULT_ZOOM) => {
         if (resetTheme) {
             themeVariables = null;
         }

@@ -17,6 +17,7 @@ use App\Attribute\ForSuperAdmin;
 use App\Attribute\GetRoute;
 use App\Attribute\PdfRoute;
 use App\Attribute\WordRoute;
+use App\Entity\Customer;
 use App\Interfaces\SortModeInterface;
 use App\Pdf\Events\PdfLabelTextEvent;
 use App\Pdf\Interfaces\PdfLabelTextListenerInterface;
@@ -70,17 +71,23 @@ class TestExportController extends AbstractController
             #[\Override]
             public function drawLabelText(PdfLabelTextEvent $event): bool
             {
-                if (0 !== $event->index && $event->lines - 1 !== $event->index) {
+                if (!StringUtils::isString($event->text)) {
                     return false;
                 }
 
-                if (StringUtils::isString($event->text)) {
-                    $parent = $event->parent;
-                    $font = $parent->getCurrentFont();
-                    $parent->setFont(style: PdfFontStyle::BOLD);
-                    $parent->cell($event->width, $event->height, $event->text);
-                    $font->apply($parent);
-                }
+                return match ($event->index) {
+                    0, 2, $event->lines - 1 => $this->outputText($event),
+                    default => false,
+                };
+            }
+
+            private function outputText(PdfLabelTextEvent $event): true
+            {
+                $parent = $event->parent;
+                $font = $parent->getCurrentFont();
+                $parent->setFont(style: PdfFontStyle::BOLD);
+                $parent->cell($event->width, $event->height, $event->text);
+                $font->apply($parent);
 
                 return true;
             }
@@ -93,7 +100,7 @@ class TestExportController extends AbstractController
             ->getProperties()->setTitle(\sprintf('Etiquette - Avery %s', $label->name));
 
         $sortField = $repository->getSortField(CustomerRepository::NAME_COMPANY_FIELD);
-        /** @phpstan-var \App\Entity\Customer[] $customers */
+        /** @var Customer[] $customers */
         $customers = $repository->createDefaultQueryBuilder()
             ->orderBy($sortField, SortModeInterface::SORT_ASC)
             ->setMaxResults(40)
@@ -101,13 +108,14 @@ class TestExportController extends AbstractController
             ->getResult();
 
         foreach ($customers as $customer) {
-            $values = \array_filter([
-                $customer->getCompany(),
+            $values = [
+                $customer->getCompany() ?? '',
+                $customer->getTitle() ?? '',
                 $customer->getFullName(),
                 StringUtils::NEW_LINE,
-                $customer->getAddress(),
+                $customer->getAddress() ?? '',
                 $customer->getZipCity(),
-            ]);
+            ];
             $report->outputLabel($values);
         }
 

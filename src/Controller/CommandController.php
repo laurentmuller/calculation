@@ -18,7 +18,6 @@ use App\Attribute\GetPostRoute;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
-use App\Enums\FlashType;
 use App\Model\CommandQuery;
 use App\Model\TranslatableFlashMessage;
 use App\Report\CommandsReport;
@@ -155,10 +154,7 @@ class CommandController extends AbstractController
         $count = $service->count();
         if (0 === $count) {
             return $this->redirectToHomePage(
-                message: TranslatableFlashMessage::instance(
-                    message: 'command.list.empty',
-                    type: FlashType::WARNING,
-                )
+                message: TranslatableFlashMessage::warning('command.list.empty')
             );
         }
 

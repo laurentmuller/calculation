@@ -21,7 +21,6 @@ use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
 use App\Attribute\ShowEntityRoute;
 use App\Entity\Log;
-use App\Enums\FlashType;
 use App\Model\LogFile;
 use App\Model\TranslatableFlashMessage;
 use App\Report\LogsReport;
@@ -181,10 +180,7 @@ class LogController extends AbstractController
     private function getEmptyResponse(): RedirectResponse
     {
         return $this->redirectToHomePage(
-            message: TranslatableFlashMessage::instance(
-                message: 'log.list.empty',
-                type: FlashType::INFO,
-            )
+            message: TranslatableFlashMessage::info('log.list.empty')
         );
     }
 

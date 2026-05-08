@@ -1,67 +1,19 @@
 {% extends 'cards/card_delete.html.twig' %}
-{% from 'macros/_icons.html.twig' import modal_title, modal_close_button %}
 {# parameters #}
 {%- set title = 'clear_cache.title' -%}
 {%- set submit_text = 'clear_cache.submit' -%}
 {%- set message = 'clear_cache.message' %}
 {%- set message_parameters = {'%size%': size} -%}
-{%- set pools_length = 0 -%}
 {% block card_container_class ' col-md-8 offset-md-2 col-xl-6 offset-xl-3' %}
 {# body #}
 {% block body -%}
     {{ parent() }}
-    {% if pools|length %}
-        <div class="modal fade" id="modal-cache-list" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    {{ modal_title(title_text: 'clear_cache.list') }}
-                    <div class="modal-body p-2">
-                        <div id="accordion-cache" class="accordion accordion-flush accordion-no-background p-2">
-                            {% for key, pool in pools %}
-                                {%- set pools_length = pools_length + pool|length -%}
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header">
-                                        <button class="accordion-button p-2"
-                                                type="button"
-                                                data-bs-toggle="collapse"
-                                                data-bs-target="#{{ key }}"
-                                                aria-expanded="{{ loop.first|json_encode }}"
-                                                aria-controls="{{ key }}">
-                                            <span class="flex-fill">{{- key|title -}}</span><small class="pe-2">{{ pool|integer }}</small>
-                                        </button>
-                                    </h2>
-                                    <div id="{{ key }}"
-                                         class="accordion-collapse collapse{% if loop.first %} show{% endif %}"
-                                         data-bs-parent="#accordion-cache">
-                                        <div class="accordion-body p-2">
-                                            <ul>
-                                                {% for line in pool %}
-                                                    <li class="text-break">{{ line }}</li>
-                                                {% endfor %}
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        {{- modal_close_button() -}}
-                        {% if pools_length %}
-                            <span class="ms-auto">{{ 'clear_cache.count'|trans({'%count%': pools_length|integer}) }}</span>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endif %}
+    {{ include('admin/_cache_dialog.html.twig') }}
 {% endblock body %}
 {# actions #}
 {% block actions_form -%}
     {{ parent() }}
-    {% if pools|length %}
-        <button type="button" class="btn btn-form btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal-cache-list">
-            {{- 'clear_cache.list'|trans -}}
-        </button>
-    {% endif %}
+    <button type="button" class="btn btn-form btn-outline-info" data-bs-toggle="modal" data-bs-target="#modal-cache-list">
+        {{- 'clear_cache.list'|trans -}}
+    </button>
 {% endblock actions_form %}

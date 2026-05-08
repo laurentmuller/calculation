@@ -285,6 +285,7 @@ clear_cache:
     submit: Vider
     list: Liste des caches
     count: 'Nombre de caches : %count%'
+    empty: Le cache de l'application est vide.
     success: Le cache de l'application a été vidé avec succès.
     failure: Impossible de vider le cache de l'application.
 common:

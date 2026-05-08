@@ -105,7 +105,7 @@ class RegistrationController extends AbstractController
         }
 
         return $this->redirectToHomePage(
-            message: TranslatableFlashMessage::instance(
+            message: TranslatableFlashMessage::success(
                 message: 'registration.confirmed',
                 parameters: ['%username%' => $user],
             )

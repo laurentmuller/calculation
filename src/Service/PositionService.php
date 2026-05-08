@@ -17,7 +17,7 @@ use App\Traits\TranslatorTrait;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Service to format direction, latitude and longitude values.
+ * Service to format direction, latitude, and longitude values.
  */
 class PositionService
 {

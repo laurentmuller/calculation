@@ -17,7 +17,6 @@ use App\Attribute\ExcelRoute;
 use App\Attribute\ForAdmin;
 use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
-use App\Enums\FlashType;
 use App\Model\TranslatableFlashMessage;
 use App\Report\CalculationsBelowReport;
 use App\Repository\CalculationRepository;
@@ -99,10 +98,7 @@ class CalculationBelowController extends AbstractController
     {
         if (0 === $repository->countItemsBelow($minMargin)) {
             return $this->redirectToHomePage(
-                message: TranslatableFlashMessage::instance(
-                    message: 'below.empty',
-                    type: FlashType::WARNING
-                )
+                message: TranslatableFlashMessage::warning('below.empty')
             );
         }
 

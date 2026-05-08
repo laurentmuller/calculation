@@ -1,0 +1,49 @@
+{% from 'macros/_icons.html.twig' import modal_title, modal_close_button %}
+{%- set count = 0 -%}
+<div class="modal fade" id="modal-cache-list" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            {{ modal_title(title_text: 'clear_cache.list') }}
+            <div class="modal-body p-2">
+                <div id="accordion-cache" class="accordion accordion-flush accordion-no-background p-2">
+                    {% for key, pool in pools %}
+                        {%- set count = count + pool|length -%}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                {%- set button_attrs = {
+                                    type: 'button',
+                                    class: ['accordion-button', 'p-2'],
+                                    'data-bs-toggle': 'collapse',
+                                    'data-bs-target': '#' ~ key,
+                                    'aria-expanded': loop.first,
+                                    'aria-controls': key,
+                                } -%}
+                                <button {{ html_attr(button_attrs) }}>
+                                    <span class="flex-fill">{{- key|title -}}</span><small class="pe-2">{{ pool|integer }}</small>
+                                </button>
+                            </h2>
+                            {%- set div_attrs = {
+                                id: key,
+                                class: ['accordion-collapse', 'collapse', loop.first ? 'show'],
+                                'data-bs-parent': '#accordion-cache'
+                            } -%}
+                            <div {{ html_attr(div_attrs) }}>
+                                <div class="accordion-body p-2">
+                                    <ul class="ps-4">
+                                        {% for line in pool %}
+                                            <li class="text-break">{{ line }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="modal-footer">
+                {{- modal_close_button() -}}
+                <span class="ms-auto">{{ 'clear_cache.count'|trans({'%count%': count|integer}) }}</span>
+            </div>
+        </div>
+    </div>
+</div>

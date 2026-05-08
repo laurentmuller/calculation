@@ -25,7 +25,6 @@ use App\Attribute\PdfRoute;
 use App\Attribute\ShowEntityRoute;
 use App\Entity\User;
 use App\Enums\EntityPermission;
-use App\Enums\FlashType;
 use App\Form\User\ResetAllPasswordType;
 use App\Form\User\UserChangePasswordType;
 use App\Form\User\UserCommentType;
@@ -85,7 +84,7 @@ class UserController extends AbstractEntityController
     }
 
     /**
-     * Delete an user.
+     * Delete a user.
      */
     #[DeleteEntityRoute]
     public function delete(Request $request, User $item, Security $security, LoggerInterface $logger): Response
@@ -94,10 +93,9 @@ class UserController extends AbstractEntityController
             return $this->redirectToDefaultRoute(
                 request: $request,
                 item: $item,
-                message: TranslatableFlashMessage::instance(
+                message: TranslatableFlashMessage::warning(
                     message: 'user.delete.connected',
-                    parameters: ['%name%' => $item],
-                    type: FlashType::WARNING,
+                    parameters: ['%name%' => $item]
                 )
             );
         }
@@ -155,10 +153,7 @@ class UserController extends AbstractEntityController
             return $this->redirectToDefaultRoute(
                 request: $request,
                 item: $user,
-                message: TranslatableFlashMessage::instance(
-                    message: 'user.message.connected',
-                    type: FlashType::WARNING,
-                )
+                message: TranslatableFlashMessage::warning('user.message.connected')
             );
         }
         $comment = UserComment::instance(ApplicationService::APP_FULL_NAME, $from, $user);
@@ -171,7 +166,7 @@ class UserController extends AbstractEntityController
                 return $this->redirectToDefaultRoute(
                     request: $request,
                     item: $user,
-                    message: TranslatableFlashMessage::instance(
+                    message: TranslatableFlashMessage::success(
                         message: 'user.message.success',
                         parameters: ['%name%' => $user]
                     )
@@ -234,10 +229,7 @@ class UserController extends AbstractEntityController
         if (0 === $count) {
             return $this->redirectToDefaultRoute(
                 request: $request,
-                message: TranslatableFlashMessage::instance(
-                    message: 'user.reset_all.empty',
-                    type: FlashType::WARNING,
-                )
+                message: TranslatableFlashMessage::warning('user.reset_all.empty')
             );
         }
 
@@ -260,7 +252,7 @@ class UserController extends AbstractEntityController
 
             return $this->redirectToDefaultRoute(
                 request: $request,
-                message: TranslatableFlashMessage::instance(
+                message: TranslatableFlashMessage::success(
                     message: 'user.reset_all.success',
                     parameters: ['%count%' => \count($users)],
                 )
@@ -281,20 +273,22 @@ class UserController extends AbstractEntityController
             ->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             if ($this->removeResetPasswordRequest($item)) {
-                $id = 'user.reset.success';
-                $type = FlashType::SUCCESS;
-            } else {
-                $id = 'user.reset.error';
-                $type = FlashType::WARNING;
+                return $this->redirectToDefaultRoute(
+                    request: $request,
+                    item: $item,
+                    message: TranslatableFlashMessage::success(
+                        message: 'user.reset.success',
+                        parameters: $parameters,
+                    )
+                );
             }
 
             return $this->redirectToDefaultRoute(
                 request: $request,
                 item: $item,
-                message: TranslatableFlashMessage::instance(
-                    message: $id,
-                    parameters: ['%name%' => $item],
-                    type: $type,
+                message: TranslatableFlashMessage::warning(
+                    message: 'user.reset.error',
+                    parameters: $parameters,
                 )
             );
         }
@@ -322,10 +316,7 @@ class UserController extends AbstractEntityController
             return $this->redirectToDefaultRoute(
                 request: $request,
                 item: $item,
-                message: TranslatableFlashMessage::instance(
-                    message: 'user.rights.connected',
-                    type: FlashType::WARNING,
-                )
+                message: TranslatableFlashMessage::warning('user.rights.connected')
             );
         }
 
@@ -394,24 +385,35 @@ class UserController extends AbstractEntityController
             $this->removeResetPasswordRequest($item);
             $result = $service->sendEmail($request, $item);
             if (false === $result) {
-                $id = 'reset.user_not_found';
-                $type = FlashType::WARNING;
-            } elseif (!$result instanceof ResetPasswordToken) {
-                $id = 'reset.token_not_found';
-                $type = FlashType::WARNING;
-            } else {
-                $id = 'reset.token_send';
-                $type = FlashType::SUCCESS;
+                return $this->redirectToDefaultRoute(
+                    request: $request,
+                    item: $item,
+                    message: TranslatableFlashMessage::warning(
+                        message: 'reset.user_not_found',
+                        parameters: $parameters,
+                        domain: 'security',
+                    )
+                );
+            }
+            if (!$result instanceof ResetPasswordToken) {
+                return $this->redirectToDefaultRoute(
+                    request: $request,
+                    item: $item,
+                    message: TranslatableFlashMessage::warning(
+                        message: 'reset.token_not_found',
+                        parameters: $parameters,
+                        domain: 'security',
+                    )
+                );
             }
 
             return $this->redirectToDefaultRoute(
                 request: $request,
                 item: $item,
-                message: TranslatableFlashMessage::instance(
-                    message: $id,
+                message: TranslatableFlashMessage::success(
+                    message: 'reset.token_send',
                     parameters: $parameters,
                     domain: 'security',
-                    type: $type
                 )
             );
         }

@@ -15,7 +15,6 @@ namespace App\Traits;
 
 use App\Controller\AbstractController;
 use App\Enums\EntityPermission;
-use App\Enums\FlashType;
 use App\Enums\TableView;
 use App\Interfaces\TableInterface;
 use App\Model\TranslatableFlashMessage;
@@ -54,10 +53,7 @@ trait TableTrait
         $message = $table->getEmptyMessage();
         if (null !== $message) {
             return $this->redirectToHomePage(
-                message: TranslatableFlashMessage::instance(
-                    message: $message,
-                    type: FlashType::INFO,
-                )
+                message: TranslatableFlashMessage::info($message)
             );
         }
 

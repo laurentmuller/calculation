@@ -17,7 +17,6 @@ use App\Attribute\ExcelRoute;
 use App\Attribute\ForAdmin;
 use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
-use App\Enums\FlashType;
 use App\Model\TranslatableFlashMessage;
 use App\Report\CalculationsDuplicateReport;
 use App\Repository\CalculationRepository;
@@ -93,10 +92,7 @@ class CalculationDuplicateController extends AbstractController
     {
         if (0 === $repository->countItemsDuplicate()) {
             return $this->redirectToHomePage(
-                message: TranslatableFlashMessage::instance(
-                    message: 'duplicate.empty',
-                    type: FlashType::WARNING
-                )
+                message: TranslatableFlashMessage::warning('duplicate.empty')
             );
         }
 

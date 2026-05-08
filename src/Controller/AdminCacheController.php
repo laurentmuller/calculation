@@ -15,7 +15,6 @@ namespace App\Controller;
 
 use App\Attribute\ForAdmin;
 use App\Attribute\GetPostRoute;
-use App\Enums\FlashType;
 use App\Model\TranslatableFlashMessage;
 use App\Service\CacheService;
 use App\Traits\FormExceptionTrait;
@@ -56,10 +55,7 @@ class AdminCacheController extends AbstractController
 
                 return $this->redirectToHomePage(
                     request: $request,
-                    message: TranslatableFlashMessage::instance(
-                        message: 'clear_cache.failure',
-                        type: FlashType::DANGER
-                    )
+                    message: TranslatableFlashMessage::danger('clear_cache.failure')
                 );
             } catch (\Exception $e) {
                 return $this->renderFormException('clear_cache.failure', $e, $logger);
@@ -70,6 +66,13 @@ class AdminCacheController extends AbstractController
             $pools = $service->list();
         } catch (\Exception) {
             $pools = [];
+        }
+
+        if ([] === $pools) {
+            return $this->redirectToHomePage(
+                request: $request,
+                message: TranslatableFlashMessage::info('clear_cache.empty')
+            );
         }
 
         return $this->render('admin/clear_cache.html.twig', [

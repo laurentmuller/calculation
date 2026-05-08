@@ -25,9 +25,17 @@ class TranslatableFlashMessage extends TranslatableMessage
         string $message,
         array $parameters = [],
         ?string $domain = null,
-        private readonly FlashType $type = FlashType::SUCCESS
+        private readonly FlashType $type = FlashType::SUCCESS,
     ) {
         parent::__construct($message, $parameters, $domain);
+    }
+
+    public static function danger(
+        string $message,
+        array $parameters = [],
+        ?string $domain = null,
+    ): self {
+        return new self($message, $parameters, $domain, FlashType::DANGER);
     }
 
     public function getType(): FlashType
@@ -35,12 +43,27 @@ class TranslatableFlashMessage extends TranslatableMessage
         return $this->type;
     }
 
-    public static function instance(
+    public static function info(
         string $message,
         array $parameters = [],
         ?string $domain = null,
-        FlashType $type = FlashType::SUCCESS
     ): self {
-        return new self($message, $parameters, $domain, $type);
+        return new self($message, $parameters, $domain, FlashType::INFO);
+    }
+
+    public static function success(
+        string $message,
+        array $parameters = [],
+        ?string $domain = null,
+    ): self {
+        return new self($message, $parameters, $domain, FlashType::SUCCESS);
+    }
+
+    public static function warning(
+        string $message,
+        array $parameters = [],
+        ?string $domain = null,
+    ): self {
+        return new self($message, $parameters, $domain, FlashType::WARNING);
     }
 }

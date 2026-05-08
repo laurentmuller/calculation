@@ -16,7 +16,6 @@ namespace App\Controller;
 use App\Attribute\ForAdmin;
 use App\Attribute\ForSuperAdmin;
 use App\Attribute\GetRoute;
-use App\Enums\FlashType;
 use App\Model\TranslatableFlashMessage;
 use App\Service\CommandService;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,19 +38,13 @@ class AdminDumSqlController extends AbstractController
         $result = $service->execute('doctrine:schema:update', ['--dump-sql' => true]);
         if (!$result->isSuccess()) {
             return $this->redirectToHomePage(
-                message: TranslatableFlashMessage::instance(
-                    message: 'admin.dump_sql.error',
-                    type: FlashType::WARNING
-                )
+                message: TranslatableFlashMessage::warning('admin.dump_sql.error')
             );
         }
 
         if (\str_contains($result->content, '[OK]')) {
             return $this->redirectToHomePage(
-                message: TranslatableFlashMessage::instance(
-                    message: 'admin.dump_sql.no_change',
-                    type: FlashType::INFO
-                )
+                message: TranslatableFlashMessage::info('admin.dump_sql.no_change')
             );
         }
 

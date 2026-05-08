@@ -15,7 +15,6 @@ namespace App\Controller;
 
 use App\Attribute\ForAdmin;
 use App\Attribute\GetPostRoute;
-use App\Enums\FlashType;
 use App\Form\CalculationState\CalculationStateListType;
 use App\Model\CalculationArchiveQuery;
 use App\Model\TranslatableFlashMessage;
@@ -40,19 +39,13 @@ class CalculationArchiveController extends AbstractController
         if (!$service->isEditableStates()) {
             return $this->redirectToHomePage(
                 request: $request,
-                message: TranslatableFlashMessage::instance(
-                    message: 'archive.editable_empty',
-                    type: FlashType::WARNING
-                )
+                message: TranslatableFlashMessage::warning('archive.editable_empty')
             );
         }
         if (!$service->isNotEditableStates()) {
             return $this->redirectToHomePage(
                 request: $request,
-                message: TranslatableFlashMessage::instance(
-                    message: 'archive.not_editable_empty',
-                    type: FlashType::WARNING
-                )
+                message: TranslatableFlashMessage::warning('archive.not_editable_empty')
             );
         }
 

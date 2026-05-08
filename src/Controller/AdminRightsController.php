@@ -87,7 +87,7 @@ class AdminRightsController extends AbstractController
             if ($parameters->save()) {
                 return $this->redirectToHomePage(
                     request: $request,
-                    message: TranslatableFlashMessage::instance(
+                    message: TranslatableFlashMessage::success(
                         message: 'admin.rights.success',
                         parameters: ['%name%' => $roleService->translateRole($role)],
                     )

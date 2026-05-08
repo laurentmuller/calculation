@@ -25,7 +25,7 @@
                             {%- set div_attrs = {
                                 id: key,
                                 class: ['accordion-collapse', 'collapse', loop.first ? 'show'],
-                                'data-bs-parent': '#accordion-cache'
+                                'data-bs-parent': '#accordion-cache',
                             } -%}
                             <div {{ html_attr(div_attrs) }}>
                                 <div class="accordion-body p-2">

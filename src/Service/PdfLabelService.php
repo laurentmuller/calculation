@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Pdf\PdfLabel;
-use App\Traits\CacheKeyTrait;
 use App\Utils\FileUtils;
 use fpdf\Enums\PdfPageSize;
 use fpdf\Enums\PdfUnit;
 use fpdf\PdfException;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
@@ -26,26 +26,23 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 readonly class PdfLabelService
 {
-    use CacheKeyTrait;
-
-    public function __construct(private CacheInterface $cache)
-    {
+    public function __construct(
+        #[Autowire('%kernel.project_dir%/resources/data/labels.json')]
+        private string $file,
+        private CacheInterface $cache
+    ) {
     }
 
     /**
      * Gets all labels.
      *
-     * @param ?string $file the file to decode or null to use default
-     *
      * @return array<string, PdfLabel> an array where the key is the label's name and the value is the label itself
      *
      * @throws PdfException if the file cannot be decoded
      */
-    public function all(?string $file = null): array
+    public function all(): array
     {
-        $key = $this->cleanKey(\sprintf('service.labels.%s', \basename($file ?? 'default')));
-
-        return $this->cache->get($key, fn (): array => $this->loadLabels($file));
+        return $this->cache->get('service.labels.all', fn (): array => $this->loadLabels());
     }
 
     /**
@@ -73,17 +70,16 @@ readonly class PdfLabelService
      *
      * @throws PdfException
      */
-    private function loadLabels(?string $file = null): array
+    private function loadLabels(): array
     {
-        $file ??= __DIR__ . '/../../resources/data/labels.json';
-
         try {
-            $content = FileUtils::decodeJson($file);
+            $content = FileUtils::decodeJson($this->file);
             $labels = \array_map($this->mapSource(...), $content);
+            $keys = \array_column($labels, 'name');
 
-            return \array_combine(\array_column($labels, 'name'), $labels);
+            return \array_combine($keys, $labels);
         } catch (\Exception $e) {
-            throw PdfException::instance(\sprintf('Unable to deserialize the content of the file "%s".', $file), $e);
+            throw PdfException::instance(\sprintf('Unable to deserialize the content of the file "%s".', $this->file), $e);
         }
     }
 
@@ -97,11 +93,11 @@ readonly class PdfLabelService
             height: $source['height'],
             marginLeft: $source['marginLeft'],
             marginTop: $source['marginTop'],
-            spaceX: $source['spaceX'],
-            spaceY: $source['spaceY'],
+            spaceWidth: $source['spaceWidth'],
+            spaceHeight: $source['spaceHeight'],
             fontSize: $source['fontSize'],
             unit: PdfUnit::from($source['unit']),
-            pageSize: PdfPageSize::from($source['pageSize'])
+            pageSize: PdfPageSize::from($source['pageSize']),
         );
     }
 }

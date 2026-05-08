@@ -31,15 +31,14 @@ final class PdfLabelServiceTest extends TestCase
     {
         $file = __DIR__ . '/../files/txt/empty.txt';
         self::expectException(PdfException::class);
-        $service = $this->createLabelService();
-        $service->all($file);
+        $service = $this->createLabelService($file);
+        $service->all();
     }
 
     public function testAllWithGivenFile(): void
     {
-        $file = __DIR__ . '/../../resources/data/labels.json';
         $service = $this->createLabelService();
-        $actual = $service->all($file);
+        $actual = $service->all();
         self::assertNotEmpty($actual);
     }
 
@@ -47,15 +46,16 @@ final class PdfLabelServiceTest extends TestCase
     {
         $file = __FILE__;
         self::expectException(PdfException::class);
-        $service = $this->createLabelService();
-        $service->all($file);
+        $service = $this->createLabelService($file);
+        $service->all();
     }
 
     public function testAllWithNotExistFile(): void
     {
+        $file = __DIR__ . '/fake.txt';
         self::expectException(PdfException::class);
-        $service = $this->createLabelService();
-        $service->all('fake');
+        $service = $this->createLabelService($file);
+        $service->all();
     }
 
     public function testGetInvalid(): void
@@ -79,8 +79,11 @@ final class PdfLabelServiceTest extends TestCase
         self::assertFalse($service->has('fake'));
     }
 
-    private function createLabelService(): PdfLabelService
+    private function createLabelService(?string $file = null): PdfLabelService
     {
-        return new PdfLabelService(new ArrayAdapter());
+        return new PdfLabelService(
+            file: $file ?? __DIR__ . '/../../resources/data/labels.json',
+            cache: new ArrayAdapter()
+        );
     }
 }

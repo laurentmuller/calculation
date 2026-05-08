@@ -14,14 +14,10 @@ declare(strict_types=1);
 namespace App\Pdf;
 
 use App\Pdf\Colors\PdfDrawColor;
-use App\Pdf\Events\PdfLabelTextEvent;
-use App\Pdf\Interfaces\PdfLabelTextListenerInterface;
 use App\Pdf\Traits\PdfCleanTextTrait;
 use App\Pdf\Traits\PdfStyleTrait;
-use App\Utils\StringUtils;
 use fpdf\Enums\PdfFontName;
 use fpdf\Enums\PdfScaling;
-use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfDocument;
 use fpdf\PdfException;
 use fpdf\Traits\PdfDashTrait;
@@ -51,7 +47,6 @@ class PdfLabelDocument extends PdfDocument
 
     // the padding inside labels
     private const float PADDING = 3.0;
-
     // the current column (0-based index)
     private int $currentCol;
     // the current row (0-based index)
@@ -60,8 +55,6 @@ class PdfLabelDocument extends PdfDocument
     private PdfLabel $label;
     // the draw border around labels
     private bool $labelBorder = false;
-    // the label listener
-    private ?PdfLabelTextListenerInterface $labelTextListener = null;
     // the line height
     private float $lineHeight;
 
@@ -98,19 +91,6 @@ class PdfLabelDocument extends PdfDocument
     }
 
     /**
-     * Gets the current position as a zero-based column and row.
-     *
-     * @return array{column: int, row: int}
-     */
-    public function getCurrentPosition(): array
-    {
-        return [
-            'column' => $this->currentCol,
-            'row' => $this->currentRow,
-        ];
-    }
-
-    /**
      * This implementation skips the output header.
      */
     #[\Override]
@@ -121,22 +101,30 @@ class PdfLabelDocument extends PdfDocument
     /**
      * Output a label.
      *
-     * @param string[]|string $text the text or an array of lines
+     * Do nothing if the label is null or empty.
+     *
+     * @param PdfLabelItem|string|array<PdfLabelItem|string|null> $label the text, the label or an array of lines to output
      */
-    public function outputLabel(array|string $text): static
+    public function outputLabel(string|PdfLabelItem|array $label): static
     {
+        $items = $this->convertLabel($label);
+        if ([] === $items) {
+            return $this;
+        }
+
         if (0 === $this->page) {
             $this->addPage();
         } elseif ($this->currentRow === $this->label->rows) {
             $this->currentRow = 0;
             $this->addPage();
         }
-        if (\is_array($text)) {
-            $text = \implode(StringUtils::NEW_LINE, $text);
+
+        $x = $this->getLabelX();
+        $y = $this->getLabelY(\count($items));
+        foreach ($items as $item) {
+            $y = $this->outputLabelItem($x, $y, $item);
         }
-        if (StringUtils::isString($text)) {
-            $this->outputLabelText($text);
-        }
+
         if ($this->labelBorder) {
             $this->outputLabelBorder();
         }
@@ -159,13 +147,24 @@ class PdfLabelDocument extends PdfDocument
     }
 
     /**
-     * Sets the output label listener.
+     * @param PdfLabelItem|string|array<PdfLabelItem|string|null> $label
+     *
+     * @return PdfLabelItem[]
      */
-    public function setLabelTextListener(?PdfLabelTextListenerInterface $labelTextListener): static
+    private function convertLabel(string|PdfLabelItem|array $label): array
     {
-        $this->labelTextListener = $labelTextListener;
+        $items = [];
+        foreach ((array) $label as $item) {
+            if (null === $item) {
+                continue;
+            }
+            $item = \is_string($item) ? new PdfLabelItem($item) : $item;
+            if ($item->isText()) {
+                $items[] = $item;
+            }
+        }
 
-        return $this;
+        return $items;
     }
 
     /**
@@ -179,13 +178,11 @@ class PdfLabelDocument extends PdfDocument
     /**
      * Gets the vertical label offset.
      */
-    private function getLabelY(string $text): float
+    private function getLabelY(int $rows): float
     {
-        $y = $this->label->offsetY($this->currentRow);
-        $lines = \count(StringUtils::splitLines($text));
-        $height = (float) $lines * $this->lineHeight;
+        $height = (float) $rows * $this->lineHeight;
 
-        return $y + ($this->label->height - $height) / 2.0;
+        return $this->label->offsetY($this->currentRow) + ($this->label->height - $height) / 2.0;
     }
 
     /**
@@ -200,31 +197,18 @@ class PdfLabelDocument extends PdfDocument
     }
 
     /**
-     * Output the label's text if applicable.
+     * Output the label item.
      */
-    private function outputLabelText(string $text): void
+    private function outputLabelItem(float $x, float $y, PdfLabelItem $item): float
     {
-        $x = $this->getLabelX();
-        $y = $this->getLabelY($text);
+        $this->setXY($x, $y);
+        $item->style?->apply($this);
         $height = $this->lineHeight;
         $width = $this->label->width - self::PADDING;
-        if (!$this->labelTextListener instanceof PdfLabelTextListenerInterface) {
-            $this->setXY($x, $y);
-            $this->multiCell(width: $width, height: $height, text: $text, align: PdfTextAlignment::LEFT);
+        $this->cell($width, $height, $item->text ?? '');
+        $this->resetStyle();
 
-            return;
-        }
-
-        $texts = StringUtils::splitLines($text);
-        $lines = \count($texts);
-        foreach ($texts as $index => $value) {
-            $this->setXY($x, $y);
-            $event = new PdfLabelTextEvent($this, $value, $index, $lines, $width, $height);
-            if (!$this->labelTextListener->drawLabelText($event)) {
-                $this->cell($width, $height, $value);
-            }
-            $y += $this->lastHeight;
-        }
+        return $y + $this->lastHeight;
     }
 
     /**
@@ -233,7 +217,7 @@ class PdfLabelDocument extends PdfDocument
     private function updateFont(int $pt): static
     {
         $this->lineHeight = self::FONT_CONVERSION[$pt]
-            ?? throw PdfException::format('Invalid font size: %d. Allowed sizes: [%s]', $pt, \implode(', ', \array_keys(self::FONT_CONVERSION)));
+            ?? throw PdfException::format('Invalid font size: %d. Allowed sizes: [%s].', $pt, \implode(', ', \array_keys(self::FONT_CONVERSION)));
 
         return $this->setFontSizeInPoint($pt)
             ->setFont(PdfFontName::ARIAL);

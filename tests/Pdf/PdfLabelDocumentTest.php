@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Pdf;
 
-use App\Pdf\Events\PdfLabelTextEvent;
-use App\Pdf\Interfaces\PdfLabelTextListenerInterface;
 use App\Pdf\PdfLabel;
 use App\Pdf\PdfLabelDocument;
+use App\Pdf\PdfLabelItem;
 use App\Service\PdfLabelService;
 use fpdf\Enums\PdfScaling;
+use fpdf\PdfException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
@@ -29,7 +29,10 @@ final class PdfLabelDocumentTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->service = new PdfLabelService(new ArrayAdapter());
+        $this->service = new PdfLabelService(
+            file: __DIR__ . '/../../resources/data/labels.json',
+            cache: new ArrayAdapter()
+        );
     }
 
     public function testConstructor(): void
@@ -55,38 +58,41 @@ final class PdfLabelDocumentTest extends TestCase
         self::assertEqualsWithDelta($expected, $doc->getFontSizeInPoint(), 0.01);
     }
 
-    public function testListener(): void
+    public function testInvalidFontSize(): void
     {
-        $listener = new class implements PdfLabelTextListenerInterface {
-            #[\Override]
-            public function drawLabelText(PdfLabelTextEvent $event): bool
-            {
-                return 1 === $event->index % 2;
-            }
-        };
-
-        $label = $this->getLabel('3422');
-        $doc = new PdfLabelDocument($label);
-        $doc->setLabelTextListener($listener);
-        for ($i = 0; $i < 3; ++$i) {
-            $doc->outputLabel(\sprintf('text %d', $i));
-        }
-        self::assertSame(1, $doc->getPage());
+        $label = new PdfLabel(
+            name: 'Fake',
+            cols: 1,
+            rows: 1,
+            width: 100,
+            height: 100,
+            fontSize: 0, // @phpstan-ignore argument.type
+        );
+        $this->expectException(PdfException::class);
+        $this->expectExceptionMessageMatches('/Invalid font size: 0\. Allowed sizes: \[.*\]\./');
+        new PdfLabelDocument($label);
     }
 
-    public function testOutputLabel(): void
+    public function testOutputEmptyLabel(): void
+    {
+        $label = $this->getLabel('5160');
+        $doc = new PdfLabelDocument($label);
+        $doc->outputLabel('');
+        self::assertSame(0, $doc->getPage());
+    }
+
+    public function testOutputLabelWithBorder(): void
     {
         $label = $this->getLabel('5160');
         $doc = new PdfLabelDocument($label);
         $doc->setLabelBorder(true);
-        self::assertSame(['column' => 0, 'row' => 0], $doc->getCurrentPosition());
-        $doc->outputLabel('');
-        self::assertSame(1, $doc->getPage());
-        self::assertSame(['column' => 1, 'row' => 0], $doc->getCurrentPosition());
-
-        $doc->setLabelBorder(false);
-        for ($i = 0, $size = $label->size(); $i < $size; ++$i) {
-            $doc->outputLabel(['Text1', 'Text1']);
+        $values = [
+            'Text1',
+            PdfLabelItem::instance('Text2'),
+            null,
+        ];
+        for ($i = 0, $size = $label->size() + 1; $i < $size; ++$i) {
+            $doc->outputLabel($values);
         }
         self::assertSame(2, $doc->getPage());
     }

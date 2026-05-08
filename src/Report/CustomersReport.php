@@ -62,9 +62,9 @@ class CustomersReport extends AbstractArrayReport
         return $this->renderCount($table, $entities, 'counters.customers');
     }
 
-    private function firstChar(string $text): string
+    private function getFirstChar(?string $text): string
     {
-        if ('' === $text) {
+        if (null === $text || '' === $text) {
             return $this->other;
         }
 
@@ -80,7 +80,7 @@ class CustomersReport extends AbstractArrayReport
     {
         $result = [];
         foreach ($entities as $c) {
-            $key = $this->firstChar($c->getNameAndCompany());
+            $key = $this->getFirstChar($c->getNameAndCompany());
             $result[$key][] = $c;
         }
         \uksort($result, function (string $str1, string $str2): int {

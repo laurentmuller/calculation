@@ -146,11 +146,7 @@ class Customer extends AbstractEntity
     #[\Override]
     public function getDisplay(): string
     {
-        if (StringUtils::isString($this->firstName) || StringUtils::isString($this->lastName) || StringUtils::isString($this->company)) {
-            return $this->getNameAndCompany();
-        }
-
-        return parent::getDisplay();
+        return $this->getNameAndCompany() ?? parent::getDisplay();
     }
 
     /**
@@ -172,7 +168,7 @@ class Customer extends AbstractEntity
     /**
      * Gets the last name and the first name separate by a space character.
      */
-    public function getFullName(): string
+    public function getFullName(): ?string
     {
         return $this->concat($this->lastName, $this->firstName);
     }
@@ -190,7 +186,7 @@ class Customer extends AbstractEntity
      *
      * @see Customer::getFullName()
      */
-    public function getNameAndCompany(): string
+    public function getNameAndCompany(): ?string
     {
         return $this->concat($this->getFullName(), $this->company, ', ');
     }
@@ -214,15 +210,15 @@ class Customer extends AbstractEntity
     }
 
     /**
-     * Gets the title, the last name and the first name separate by a space character.
+     * Gets the title, the last name, and the first name separate by a space character.
      */
-    public function getTitleAndFullName(): string
+    public function getTitleAndFullName(): ?string
     {
         return $this->concat($this->title, $this->getFullName());
     }
 
     /**
-     * Get web site.
+     * Get the website.
      */
     public function getWebSite(): ?string
     {
@@ -232,7 +228,7 @@ class Customer extends AbstractEntity
     /**
      * Gets the zip code and the city separate by a space character.
      */
-    public function getZipCity(): string
+    public function getZipCity(): ?string
     {
         return $this->concat($this->zipCode, $this->city);
     }
@@ -339,7 +335,7 @@ class Customer extends AbstractEntity
     }
 
     /**
-     * Set web site.
+     * Set the website.
      */
     public function setWebSite(?string $webSite): self
     {
@@ -376,18 +372,21 @@ class Customer extends AbstractEntity
 
     /**
      * Join 2 elements with a string.
-     * If both elements are empty, an empty string is returned;
-     * if one of the elements is empty, the other element is returned;
-     * else both elements are returned with the separator.
+     *
+     * If both elements are null or empty, null is returned
      *
      * @param ?string $str1 the first element
      * @param ?string $str2 the second element
      * @param string  $sep  the separator
      *
-     * @return string the joined elements
+     * @return ?string the joined elements if both are null or empty
      */
-    private function concat(?string $str1, ?string $str2, string $sep = ' '): string
+    private function concat(?string $str1, ?string $str2, string $sep = ' '): ?string
     {
-        return \implode($sep, \array_filter([$str1, $str2]));
+        if (StringUtils::isString($str1) || StringUtils::isString($str2)) {
+            return \implode($sep, \array_filter([$str1, $str2]));
+        }
+
+        return null;
     }
 }

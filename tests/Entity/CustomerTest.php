@@ -86,7 +86,7 @@ final class CustomerTest extends ConstraintValidatorTestCase
     public function testFullName(): void
     {
         $customer = new Customer();
-        self::assertSame('', $customer->getFullName());
+        self::assertNull($customer->getFullName());
 
         $customer = new Customer();
         $customer->setFirstName('John');
@@ -138,7 +138,7 @@ final class CustomerTest extends ConstraintValidatorTestCase
     public function testTitleAndFullName(): void
     {
         $customer = new Customer();
-        self::assertSame('', $customer->getTitleAndFullName());
+        self::assertNull($customer->getTitleAndFullName());
     }
 
     public function testValidateNoViolation(): void
@@ -160,7 +160,7 @@ final class CustomerTest extends ConstraintValidatorTestCase
     public function testZipCity(): void
     {
         $customer = new Customer();
-        self::assertSame('', $customer->getZipCity());
+        self::assertNull($customer->getZipCity());
         $customer->setZipCode('zipCode');
         self::assertSame('zipCode', $customer->getZipCity());
         $customer->setCity('city');

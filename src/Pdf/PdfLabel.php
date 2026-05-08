@@ -22,18 +22,18 @@ use fpdf\Enums\PdfUnit;
 readonly class PdfLabel implements \Stringable
 {
     /**
-     * @param string       $name       the label's name
-     * @param PdfUnit      $unit       the layout unit
-     * @param positive-int $cols       the number of horizontal labels (columns)
-     * @param positive-int $rows       the number of vertical labels (rows)
-     * @param float        $width      the width of a label
-     * @param float        $height     the height of a label
-     * @param float        $marginLeft the left margin
-     * @param float        $marginTop  the top margin
-     * @param float        $spaceX     the horizontal space between labels
-     * @param float        $spaceY     the vertical space between labels
-     * @param int<6, 15>   $fontSize   the font size in points
-     * @param PdfPageSize  $pageSize   the page size
+     * @param string       $name        the label's name
+     * @param positive-int $cols        the number of horizontal labels (columns)
+     * @param positive-int $rows        the number of vertical labels (rows)
+     * @param float        $width       the width of a label
+     * @param float        $height      the height of a label
+     * @param float        $marginLeft  the left margin
+     * @param float        $marginTop   the top margin
+     * @param float        $spaceWidth  the horizontal space between labels
+     * @param float        $spaceHeight the vertical space between labels
+     * @param int<6, 15>   $fontSize    the font size in points
+     * @param PdfUnit      $unit        the layout unit
+     * @param PdfPageSize  $pageSize    the page size
      */
     public function __construct(
         public string $name,
@@ -43,11 +43,11 @@ readonly class PdfLabel implements \Stringable
         public float $height,
         public float $marginLeft = 0.0,
         public float $marginTop = 0.0,
-        public float $spaceX = 0.0,
-        public float $spaceY = 0.0,
+        public float $spaceWidth = 0.0,
+        public float $spaceHeight = 0.0,
         public int $fontSize = 9,
         public PdfUnit $unit = PdfUnit::MILLIMETER,
-        public PdfPageSize $pageSize = PdfPageSize::A4
+        public PdfPageSize $pageSize = PdfPageSize::A4,
     ) {
     }
 
@@ -62,7 +62,7 @@ readonly class PdfLabel implements \Stringable
      */
     public function offsetX(int $column): float
     {
-        return $this->marginLeft + (float) $column * ($this->width + $this->spaceX);
+        return $this->marginLeft + (float) $column * ($this->width + $this->spaceWidth);
     }
 
     /**
@@ -70,7 +70,7 @@ readonly class PdfLabel implements \Stringable
      */
     public function offsetY(int $row): float
     {
-        return $this->marginTop + (float) $row * ($this->height + $this->spaceY);
+        return $this->marginTop + (float) $row * ($this->height + $this->spaceHeight);
     }
 
     /**
@@ -106,8 +106,8 @@ readonly class PdfLabel implements \Stringable
             height: $this->height * $factor,
             marginLeft: $this->marginLeft * $factor,
             marginTop: $this->marginTop * $factor,
-            spaceX: $this->spaceX * $factor,
-            spaceY: $this->spaceY * $factor,
+            spaceWidth: $this->spaceWidth * $factor,
+            spaceHeight: $this->spaceHeight * $factor,
             fontSize: $this->fontSize,
             unit: $targetUnit,
             pageSize: $this->pageSize

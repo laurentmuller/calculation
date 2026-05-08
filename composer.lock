@@ -1121,16 +1121,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "3.6.3",
+            "version": "3.6.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/orm.git",
-                "reference": "e88cd591f0786089dee22b972c28aa2076df51c0"
+                "reference": "156f3b5a984e7eaa72d440bb6de1d3b6f8d2d6fd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/orm/zipball/e88cd591f0786089dee22b972c28aa2076df51c0",
-                "reference": "e88cd591f0786089dee22b972c28aa2076df51c0",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/156f3b5a984e7eaa72d440bb6de1d3b6f8d2d6fd",
+                "reference": "156f3b5a984e7eaa72d440bb6de1d3b6f8d2d6fd",
                 "shasum": ""
             },
             "require": {
@@ -1203,9 +1203,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/orm/issues",
-                "source": "https://github.com/doctrine/orm/tree/3.6.3"
+                "source": "https://github.com/doctrine/orm/tree/3.6.4"
             },
-            "time": "2026-04-02T06:53:27+00:00"
+            "time": "2026-05-07T07:04:34+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -1827,16 +1827,16 @@
         },
         {
             "name": "laurentmuller/fpdf2",
-            "version": "4.3.3",
+            "version": "4.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/fpdf2.git",
-                "reference": "aafbff1cbebafd95d87ff24b4ca70067cfc682dd"
+                "reference": "fb3d98bf6105370e36e9b12980c51f8ef1949e71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/aafbff1cbebafd95d87ff24b4ca70067cfc682dd",
-                "reference": "aafbff1cbebafd95d87ff24b4ca70067cfc682dd",
+                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/fb3d98bf6105370e36e9b12980c51f8ef1949e71",
+                "reference": "fb3d98bf6105370e36e9b12980c51f8ef1949e71",
                 "shasum": ""
             },
             "require": {
@@ -1888,7 +1888,7 @@
                 "issues": "https://github.com/laurentmuller/fpdf2/issues",
                 "source": "https://github.com/laurentmuller/fpdf2"
             },
-            "time": "2026-03-28T16:35:57+00:00"
+            "time": "2026-05-07T09:49:58+00:00"
         },
         {
             "name": "laurentmuller/highcharts-bundle",

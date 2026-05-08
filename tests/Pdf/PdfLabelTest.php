@@ -26,7 +26,10 @@ final class PdfLabelTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->service = new PdfLabelService(new ArrayAdapter());
+        $this->service = new PdfLabelService(
+            file: __DIR__ . '/../../resources/data/labels.json',
+            cache: new ArrayAdapter()
+        );
     }
 
     public function testOffsetX(): void

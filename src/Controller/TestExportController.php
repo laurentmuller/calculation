@@ -19,9 +19,9 @@ use App\Attribute\PdfRoute;
 use App\Attribute\WordRoute;
 use App\Entity\Customer;
 use App\Interfaces\SortModeInterface;
-use App\Pdf\Events\PdfLabelTextEvent;
-use App\Pdf\Interfaces\PdfLabelTextListenerInterface;
 use App\Pdf\PdfLabelDocument;
+use App\Pdf\PdfLabelItem;
+use App\Pdf\PdfStyle;
 use App\Report\FontAwesomeReport;
 use App\Report\HtmlColorsReport;
 use App\Report\HtmlReport;
@@ -34,7 +34,6 @@ use App\Service\FontAwesomeService;
 use App\Service\PdfLabelService;
 use App\Utils\StringUtils;
 use App\Word\HtmlDocument;
-use fpdf\Enums\PdfFontStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -67,37 +66,11 @@ class TestExportController extends AbstractController
     #[GetRoute(path: '/label', name: 'label')]
     public function exportLabel(CustomerRepository $repository, PdfLabelService $service): PdfResponse
     {
-        $listener = new class implements PdfLabelTextListenerInterface {
-            #[\Override]
-            public function drawLabelText(PdfLabelTextEvent $event): bool
-            {
-                if (!StringUtils::isString($event->text)) {
-                    return false;
-                }
-
-                return match ($event->index) {
-                    0, 2, $event->lines - 1 => $this->outputText($event),
-                    default => false,
-                };
-            }
-
-            private function outputText(PdfLabelTextEvent $event): true
-            {
-                $parent = $event->parent;
-                $font = $parent->getCurrentFont();
-                $parent->setFont(style: PdfFontStyle::BOLD);
-                $parent->cell($event->width, $event->height, $event->text);
-                $font->apply($parent);
-
-                return true;
-            }
-        };
-
         $label = $service->get('5161');
         $report = new PdfLabelDocument($label);
         $report->setLabelBorder(true)
-            ->setLabelTextListener($listener)
-            ->getProperties()->setTitle(\sprintf('Etiquette - Avery %s', $label->name));
+            ->getProperties()
+            ->setTitle(\sprintf('Etiquette - Avery %s', $label->name));
 
         $sortField = $repository->getSortField(CustomerRepository::NAME_COMPANY_FIELD);
         /** @var Customer[] $customers */
@@ -107,14 +80,19 @@ class TestExportController extends AbstractController
             ->getQuery()
             ->getResult();
 
+        $boldStyle = PdfStyle::getNoBorderStyle()
+            ->setFontBold();
         foreach ($customers as $customer) {
+            $isSeparator = StringUtils::isString($customer->getCompany())
+                && StringUtils::isString($customer->getFullName());
             $values = [
-                $customer->getCompany() ?? '',
-                $customer->getTitle() ?? '',
-                $customer->getFullName(),
+                PdfLabelItem::instance($customer->getCompany(), $boldStyle),
+                $isSeparator ? StringUtils::NEW_LINE : null,
+                $customer->getTitle(),
+                PdfLabelItem::instance($customer->getFullName(), $boldStyle),
                 StringUtils::NEW_LINE,
-                $customer->getAddress() ?? '',
-                $customer->getZipCity(),
+                $customer->getAddress(),
+                PdfLabelItem::instance($customer->getZipCity(), $boldStyle),
             ];
             $report->outputLabel($values);
         }

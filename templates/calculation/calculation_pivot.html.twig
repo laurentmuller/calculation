@@ -149,16 +149,24 @@
         <input type="checkbox" class="form-check-input" id="highlight" name="highlight"{% if highlight %} checked{% endif %}>
         <label class="form-check-label" for="highlight">{{ 'pivot.highlight'|trans }}</label>
     </div>
-    {{ dropdownEllipsis() }}
-    <div class="dropdown-menu dropdown-menu-end">
-        <li><h6 class="dropdown-header">{{ icon('calendar', 'timeline.interval') }}</h6></li>
-        {% for i in [1, 2, 3, 6, 12] %}
-            {{ _self.output_month(i, months) }}
-        {%- endfor -%}
-        <li><hr class="dropdown-divider"></li>
-        <li><h6 class="dropdown-header">{{ icon('calculator', 'pivot.operation.title') }}</h6></li>
-        {{ _self.output_operation(false, count, 'pivot.operation.sum') }}
-        {{ _self.output_operation(true, count, 'pivot.operation.count') }}
+    <div class="btn-toolbar" role="toolbar">
+        <div class="btn-group btn-group-sm" role="group">
+            <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" data-bs-target="#month" aria-expanded="false">
+                {{ 'timeline.interval'|trans }}
+            </button>
+            <ul id="month" class="dropdown-menu">
+                {% for i in [1, 2, 3, 6, 12] %}
+                    {{ _self.output_month(i, months) }}
+                {%- endfor -%}
+            </ul>
+            <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" data-bs-target="operation" aria-expanded="false">
+                {{ 'pivot.operation.title'|trans }}
+            </button>
+            <ul id="operation" class="dropdown-menu">
+                {{ _self.output_operation(false, count, 'pivot.operation.sum') }}
+                {{ _self.output_operation(true, count, 'pivot.operation.count') }}
+            </ul>
+        </div>
     </div>
 </div>
 <div class="table-responsive">

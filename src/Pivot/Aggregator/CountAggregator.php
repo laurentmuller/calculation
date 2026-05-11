@@ -21,7 +21,7 @@ class CountAggregator extends AbstractAggregator
     private int $result = 0;
 
     #[\Override]
-    public function add(mixed $value): static
+    public function add(AbstractAggregator|int|float|null $value): static
     {
         if ($value instanceof self) {
             $this->result += $value->result;

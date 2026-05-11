@@ -29,8 +29,8 @@
 {%- endmacro dataRow %}
 
 {% macro dayCell(month, day, small) %}
-{%- set text = day.number -%}
 {%- set title = '' -%}
+{%- set text = day.number -%}
 {%- set class = 'text-center align-middle' ~ (small ? ' border' : '') -%}
 {%- set link = false -%}
 {% if day.inMonth(month) -%}

@@ -230,7 +230,7 @@ final class FormatUtils
         ?string $pattern = null,
         \DateTimeZone|string|null $timezone = null
     ): \IntlDateFormatter {
-        $hash = self::hashCode($dateType, $timeType, $timezone, $pattern);
+        $hash = self::hashCode($dateType, $timeType, $pattern, $timezone);
 
         return self::$dateFormatters[$hash] ??= self::createDateFormatter(
             dateType: $dateType,

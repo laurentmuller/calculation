@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Pivot;
 
-use App\Entity\Calculation;
 use App\Pivot\Aggregator\SumAggregator;
 use App\Pivot\Field\PivotField;
 use App\Pivot\Field\PivotFieldFactory;
@@ -24,13 +23,6 @@ use Symfony\Component\Clock\DatePoint;
 
 final class PivotTableFactoryTest extends TestCase
 {
-    public function testCheckFieldsInvalid(): void
-    {
-        self::expectException(\InvalidArgumentException::class);
-        $factory = PivotTableFactory::instance([]);
-        $factory->setColumnFields([new Calculation()]); // @phpstan-ignore argument.type
-    }
-
     public function testConstructor(): void
     {
         $factory = PivotTableFactory::instance([]);
@@ -151,8 +143,8 @@ final class PivotTableFactoryTest extends TestCase
         $dataset = $this->createDataset();
 
         return PivotTableFactory::instance($dataset, SumAggregator::class, 'Title')
-            ->setColumnFields($columns)
-            ->setRowFields($rows)
+            ->setColumnFields(...$columns)
+            ->setRowFields(...$rows)
             ->setKeyField($keyField)
             ->setDataField($data);
     }

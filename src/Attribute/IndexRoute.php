@@ -22,8 +22,8 @@ class IndexRoute extends GetRoute
     /** This route path. */
     public const string PATH = '';
 
-    public function __construct()
+    public function __construct(array $requirements = [])
     {
-        parent::__construct(self::PATH, 'index');
+        parent::__construct(self::PATH, 'index', $requirements);
     }
 }

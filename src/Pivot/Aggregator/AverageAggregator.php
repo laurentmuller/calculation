@@ -22,19 +22,25 @@ class AverageAggregator extends AbstractAggregator
 {
     use MathTrait;
 
-    private int $count = 0;
+    private CountAggregator $countAggregator;
+    private SumAggregator $sumAggregator;
 
-    private float $sum = 0.0;
+    public function __construct(AbstractAggregator|int|float|null $value = null)
+    {
+        $this->countAggregator = new CountAggregator();
+        $this->sumAggregator = new SumAggregator();
+        parent::__construct($value);
+    }
 
     #[\Override]
-    public function add(mixed $value): static
+    public function add(AbstractAggregator|int|float|null $value): static
     {
         if ($value instanceof self) {
-            $this->sum += $value->sum;
-            $this->count += $value->count;
+            $this->countAggregator->add($value->countAggregator);
+            $this->sumAggregator->add($value->sumAggregator);
         } elseif (null !== $value) {
-            ++$this->count;
-            $this->sum += (float) $value;
+            $this->countAggregator->add($value);
+            $this->sumAggregator->add($value);
         }
 
         return $this;
@@ -49,14 +55,17 @@ class AverageAggregator extends AbstractAggregator
     #[\Override]
     public function getResult(): float
     {
-        return $this->safeDivide($this->sum, $this->count);
+        return $this->safeDivide(
+            $this->sumAggregator->getResult(),
+            $this->countAggregator->getResult()
+        );
     }
 
     #[\Override]
     public function init(): static
     {
-        $this->sum = 0;
-        $this->count = 0;
+        $this->countAggregator->init();
+        $this->sumAggregator->init();
 
         return $this;
     }

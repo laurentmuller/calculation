@@ -68,18 +68,15 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     #[\Override]
     public function __toString(): string
     {
-        $year = (int) $this->year;
         $name = parent::getShortName();
-        $firstDate = DateUtils::createDate(\sprintf('%d-01-01', $year));
-        $lastDate = DateUtils::createDate(\sprintf('%d-12-31', $year));
-        $first = FormatUtils::formatDate($firstDate);
-        $last = FormatUtils::formatDate($lastDate);
+        $first = FormatUtils::formatDate($this->getStartYear());
+        $last = FormatUtils::formatDate($this->getEndYear());
 
-        return \sprintf('%s(%d, %s - %s)', $name, $this->getNumber(), $first, $last);
+        return \sprintf('%s(%d, %s - %s)', $name, $this->year, $first, $last);
     }
 
     /**
-     * Generates months, weeks and days for the given year.
+     * Generates months, weeks, and days for the given year.
      *
      * @param int $year the year to generate
      */
@@ -88,26 +85,18 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
         $this->year = DateUtils::completYear($year);
         $this->key = (string) $this->year;
         $this->reset();
-        $firstYearDate = DateUtils::createDate(\sprintf('1 January %d', $this->year));
-        $lastYearDate = DateUtils::createDate(\sprintf('31 December %d', $this->year));
-        $firstDate = DateUtils::createDate(\sprintf('first monday of January %s', $this->year));
-        if ($firstDate > $firstYearDate) {
-            $firstDate = DateUtils::sub($firstDate, 'P1W');
-        }
-        $lastDate = DateUtils::createDate(\sprintf('last sunday of December %d', $this->year));
-        if ($lastDate < $lastYearDate) {
-            $lastDate = DateUtils::add($lastDate, 'P1W');
-        }
-        /** @var ?Week $currentWeek */
+        $startDate = $this->getStartDate();
+        $endDate = $this->getEndDate();
+
         $currentWeek = null;
-        /** @var ?Month $currentMonth */
         $currentMonth = null;
         $interval = DateUtils::createDateInterval('P1D');
-        while ($firstDate <= $lastDate) {
-            $day = $this->createDay($firstDate);
-            $monthYear = DateUtils::getYear($firstDate);
-            $monthNumber = DateUtils::getMonth($firstDate);
-            $weekNumber = DateUtils::getWeek($firstDate);
+
+        while ($startDate <= $endDate) {
+            $day = $this->createDay($startDate);
+            $monthYear = DateUtils::getYear($startDate);
+            $monthNumber = DateUtils::getMonth($startDate);
+            $weekNumber = DateUtils::getWeek($startDate);
             if ($monthYear === $this->year) {
                 if (!$currentMonth instanceof Month || $currentMonth->getNumber() !== $monthNumber) {
                     $currentMonth = $this->createMonth($monthNumber);
@@ -118,7 +107,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
                 $currentWeek = $this->createWeek($weekNumber);
             }
             $currentWeek->addDay($day);
-            $firstDate = $firstDate->add($interval);
+            $startDate = $startDate->add($interval);
         }
 
         return $this;
@@ -325,5 +314,37 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
         $this->weeks[] = $week;
 
         return $week;
+    }
+
+    private function getEndDate(): DatePoint
+    {
+        $endYear = $this->getEndYear();
+        $endDate = DateUtils::createDate(\sprintf('Last Sunday of December %d', $this->year));
+        if ($endDate < $endYear) {
+            return DateUtils::add($endDate, 'P1W');
+        }
+
+        return $endDate;
+    }
+
+    private function getEndYear(): DatePoint
+    {
+        return DateUtils::createDate(\sprintf('%d-12-31', $this->year));
+    }
+
+    private function getStartDate(): DatePoint
+    {
+        $startYear = $this->getStartYear();
+        $startDate = DateUtils::createDate(\sprintf('First Monday of January %s', $this->year));
+        if ($startDate > $startYear) {
+            return DateUtils::sub($startDate, 'P1W');
+        }
+
+        return $startDate;
+    }
+
+    private function getStartYear(): DatePoint
+    {
+        return DateUtils::createDate(\sprintf('%d-01-01', $this->year));
     }
 }

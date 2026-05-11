@@ -23,7 +23,7 @@ class PivotFieldFactory
      *
      * @param string      $name   the field name
      * @param ?string     $title  the field title
-     * @param PivotMethod $method the field method (one of the <code></code>PivotField::METHOD_XX</code>)
+     * @param PivotMethod $method the field method (one of the <code>PivotField::METHOD_XX</code>)
      */
     public static function default(string $name, ?string $title = null, PivotMethod $method = PivotMethod::STRING): PivotField
     {

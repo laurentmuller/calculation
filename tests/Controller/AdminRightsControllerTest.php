@@ -11,15 +11,16 @@
 
 declare(strict_types=1);
 
+namespace App\Tests\Controller;
+
 use App\Enums\EntityPermission;
 use App\Parameter\ApplicationParameters;
-use App\Tests\Controller\ControllerTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 final class AdminRightsControllerTest extends ControllerTestCase
 {
-    #[Override]
-    public static function getRoutes(): Generator
+    #[\Override]
+    public static function getRoutes(): \Generator
     {
         yield ['/admin/rights/admin', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/admin/rights/admin', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];

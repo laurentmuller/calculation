@@ -17,7 +17,6 @@ use App\Pivot\Aggregator\AbstractAggregator;
 use App\Pivot\Aggregator\SumAggregator;
 use App\Pivot\Field\PivotField;
 use App\Traits\CheckSubClassTrait;
-use App\Utils\StringUtils;
 
 /**
  * Factory to create a pivot table.
@@ -64,8 +63,11 @@ class PivotTableFactory
      *
      * @throws \InvalidArgumentException if the given aggregator class name is not a subclass of the AbstractAggregator class
      */
-    public function __construct(private readonly array $dataset, string $aggregatorClass = SumAggregator::class, private ?string $title = null)
-    {
+    public function __construct(
+        private readonly array $dataset,
+        string $aggregatorClass = SumAggregator::class,
+        private ?string $title = null
+    ) {
         $this->checkSubClass($aggregatorClass, AbstractAggregator::class);
         $this->aggregatorClass = $aggregatorClass;
     }
@@ -192,8 +194,11 @@ class PivotTableFactory
      *
      * @phpstan-return PivotTableFactory<E>
      */
-    public static function instance(array $dataset, string $aggregatorClass = SumAggregator::class, ?string $title = null): self
-    {
+    public static function instance(
+        array $dataset,
+        string $aggregatorClass = SumAggregator::class,
+        ?string $title = null
+    ): self {
         return new self($dataset, $aggregatorClass, $title);
     }
 
@@ -209,13 +214,11 @@ class PivotTableFactory
     /**
      * Sets the column fields.
      *
-     * @param PivotField|PivotField[] $fields the fields to set
-     *
-     * @throws \InvalidArgumentException if one of the given fields is not an instanceof of the PivotField class
+     * @param PivotField ...$fields the fields to set
      */
-    public function setColumnFields(array|PivotField $fields): static
+    public function setColumnFields(PivotField ...$fields): static
     {
-        $this->columnFields = $this->checkFields($fields);
+        $this->columnFields = $fields;
 
         return $this;
     }
@@ -245,13 +248,11 @@ class PivotTableFactory
     /**
      * Sets the row fields.
      *
-     * @param PivotField|PivotField[] $fields the fields to set
-     *
-     * @throws \InvalidArgumentException if one of the given fields is not an instanceof of the PivotField class
+     * @param PivotField ...$fields the fields to set
      */
-    public function setRowFields(array|PivotField $fields): static
+    public function setRowFields(PivotField ...$fields): static
     {
-        $this->rowFields = $this->checkFields($fields);
+        $this->rowFields = $fields;
 
         return $this;
     }
@@ -279,33 +280,6 @@ class PivotTableFactory
             self::SEPARATOR,
             \array_map(static fn (PivotField $field): string => (string) $field->getTitle(), $fields)
         );
-    }
-
-    /**
-     * Checks if all elements of the given array are instance of PivotField class.
-     *
-     * @param mixed $fields the single value or an array to validate
-     *
-     * @return PivotField[] the pivot fields
-     *
-     * @throws \InvalidArgumentException if one of the given fields is not an instanceof of the PivotField class
-     */
-    private function checkFields(mixed $fields): array
-    {
-        if (!\is_array($fields)) {
-            $fields = [$fields];
-        }
-
-        /** @var PivotField[] $result */
-        $result = [];
-        foreach ($fields as $field) {
-            if (!$field instanceof PivotField) {
-                throw new \InvalidArgumentException(\sprintf('Expected argument of type "%s", "%s" given', PivotField::class, StringUtils::getDebugType($field)));
-            }
-            $result[] = $field;
-        }
-
-        return $result;
     }
 
     /**

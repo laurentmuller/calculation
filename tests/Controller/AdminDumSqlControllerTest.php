@@ -11,16 +11,17 @@
 
 declare(strict_types=1);
 
+namespace App\Tests\Controller;
+
 use App\Model\CommandResult;
 use App\Service\CommandService;
-use App\Tests\Controller\ControllerTestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\HttpFoundation\Response;
 
 final class AdminDumSqlControllerTest extends ControllerTestCase
 {
-    #[Override]
-    public static function getRoutes(): Generator
+    #[\Override]
+    public static function getRoutes(): \Generator
     {
         yield ['/admin/dump-sql', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/admin/dump-sql', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];

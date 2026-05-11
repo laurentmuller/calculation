@@ -926,15 +926,23 @@ password:
     compromisedPassword: Le mot de passe ne doit pas être compromis
     strengthLevel: Force du mot de passe
 pivot:
+    title: Tableau croisé dynamique
+    line: Ligne
     column: Colonne
+    value: Valeur
+    popover: Info-bulle
+    highlight: Sélection en surbrillance
+    invalid_months: Le nombre de mois doit être compris entre 1 et 12.
+    empty: Aucune calculation ne correspond aux critères.
+    operation:
+        title: Opération
+        sum: Somme
+        count: Nombre
     fields:
         month: Mois
         quarter: Trimestre
         semester: Semestre
         year: Année
-    highlight: Sélection en surbrillance
-    line: Ligne
-    popover: Info-bulle
     quarter:
         1: 1<sup>er</sup> trimestre
         2: 2<sup>ème</sup> trimestre
@@ -943,8 +951,6 @@ pivot:
     semester:
         1: 1<sup>er</sup> semestre
         2: 2<sup>ème</sup> semestre
-    title: Tableau croisé dynamique
-    value: Valeur
 product:
     add:
         title: Nouvel article

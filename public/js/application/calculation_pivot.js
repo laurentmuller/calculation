@@ -24,6 +24,25 @@
     });
 
     /**
+     * Save the session value.
+     * @param {string} name
+     * @param {boolean} value
+     */
+    function saveSession(name, value) {
+        const url = $('#pivot').data('session');
+        const data = {
+            name: name,
+            value: value
+        };
+        $.ajaxSetup({
+            global: false
+        });
+        $.post(url, data).always(() => $.ajaxSetup({
+            global: true
+        }));
+    }
+
+    /**
      * Toggle the cell highlight enablement.
      *
      * @param {jQuery} $source - The highlight checkbox.
@@ -61,12 +80,7 @@
 
         // save to session
         if (save) {
-            const url = $('#pivot').data('session');
-            const data = {
-                name: 'highlight',
-                value: checked
-            };
-            $.post(url, data);
+            saveSession('pivot.highlight', checked);
         }
         return $source;
     }
@@ -107,12 +121,7 @@
 
         // save to session
         if (save) {
-            const url = $('#pivot').data('session');
-            const data = {
-                name: 'popover',
-                value: checked
-            };
-            $.post(url, data);
+            saveSession('pivot.popover', checked);
         }
         return $source;
     }

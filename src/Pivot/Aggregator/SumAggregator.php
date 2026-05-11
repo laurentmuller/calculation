@@ -21,11 +21,11 @@ class SumAggregator extends AbstractAggregator
     private float $result = 0.0;
 
     #[\Override]
-    public function add(mixed $value): static
+    public function add(AbstractAggregator|int|float|null $value): static
     {
         if ($value instanceof self) {
             $this->result += $value->result;
-        } elseif (null !== $value) {
+        } elseif (\is_numeric($value)) {
             $this->result += (float) $value;
         }
 

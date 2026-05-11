@@ -11,15 +11,16 @@
 
 declare(strict_types=1);
 
+namespace App\Tests\Controller;
+
 use App\Service\CacheService;
-use App\Tests\Controller\ControllerTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class AdminCacheControllerTest extends ControllerTestCase
 {
-    #[Override]
-    public static function getRoutes(): Generator
+    #[\Override]
+    public static function getRoutes(): \Generator
     {
         yield ['/admin/clear', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/admin/clear', self::ROLE_ADMIN];
@@ -58,7 +59,7 @@ final class AdminCacheControllerTest extends ControllerTestCase
         $service->method('list')
             ->willReturn(['cache' => ['app']]);
         $service->method('clear')
-            ->willThrowException(new Exception('Fake Message'));
+            ->willThrowException(new \Exception('Fake Message'));
         $this->setService(CacheService::class, $service);
 
         $this->checkForm(
@@ -74,7 +75,7 @@ final class AdminCacheControllerTest extends ControllerTestCase
     {
         $service = $this->createMock(CacheService::class);
         $service->method('list')
-            ->willThrowException(new Exception('Fake Message'));
+            ->willThrowException(new \Exception('Fake Message'));
         $this->setService(CacheService::class, $service);
 
         $this->checkRoute(

@@ -614,9 +614,12 @@ class CalculationRepository extends AbstractRepository
     /**
      * Gets data for the pivot table.
      *
+     * @param DatePoint $startDate the start date (inclusive)
+     * @param DatePoint $endDate   the end date (exclusive)
+     *
      * @phpstan-return PivotType[]
      */
-    public function getPivot(): array
+    public function getPivot(DatePoint $startDate, DatePoint $endDate): array
     {
         $builder = $this->createQueryBuilder('e')
             // calculation
@@ -636,18 +639,22 @@ class CalculationRepository extends AbstractRepository
             ->addSelect('i.quantity                          AS item_quantity')
             ->addSelect('i.price * i.quantity                AS item_total')
             ->addSelect('i.price * i.quantity * g.margin     AS item_overall')
-
             // tables
             ->innerJoin('e.state', 's')
             ->innerJoin('e.groups', 'g')
             ->innerJoin('g.categories', 'c')
             ->innerJoin('c.items', 'i')
-
             // not empty
             ->where('i.quantity != 0')
-            ->andWhere('i.price != 0');
+            ->andWhere('i.price != 0')
+            // dates
+            ->andWhere('e.date >= :startDate')
+            ->andWhere('e.date < :endDate')
+            ->setParameter('startDate', $startDate, Types::DATE_IMMUTABLE)
+            ->setParameter('endDate', $endDate, Types::DATE_IMMUTABLE);
 
-        return $builder->getQuery()->getArrayResult();
+        return $builder->getQuery()
+            ->getArrayResult();
     }
 
     #[\Override]

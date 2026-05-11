@@ -22,6 +22,7 @@ use App\Tests\DateAssertTrait;
 use App\Tests\Entity\IdTrait;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
+use App\Utils\DateUtils;
 use Doctrine\ORM\Query\Expr\Andx;
 use Symfony\Component\Clock\DatePoint;
 
@@ -235,7 +236,8 @@ final class CalculationRepositoryTest extends AbstractRepositoryTestCase
 
     public function testGetPivot(): void
     {
-        $actual = $this->repository->getPivot();
+        $date = DateUtils::createDate();
+        $actual = $this->repository->getPivot($date, $date);
         self::assertEmpty($actual);
     }
 

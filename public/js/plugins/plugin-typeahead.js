@@ -819,7 +819,7 @@ $(function () {
     // Typeahead plugin definition
     // -----------------------------
     const oldTypeahead = $.fn.typeahead;
-    $.fn.typeahead = function (options) { // jslint ignore:line
+    $.fn.typeahead = function (options) { // jshint ignore:line
         return this.each(function () {
             const $this = $(this);
             let data = $this.data(Typeahead.NAME);

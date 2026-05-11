@@ -628,7 +628,7 @@ $(function () {
     // BoostrapTreeView plugin definition
     // -----------------------------------
     const oldBoostrapTreeView = $.fn.boostrapTreeView;
-    $.fn.boostrapTreeView = function (options) { // jslint ignore:line
+    $.fn.boostrapTreeView = function (options) { // jshint ignore:line
         return this.each(function () {
             const $this = $(this);
             if (!$this.data($.BoostrapTreeView.NAME)) {

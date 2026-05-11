@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
-{% from 'macros/_icons.html.twig' import icon, dropdownEllipsis %}
+{% from 'macros/_icons.html.twig' import icon, dropdownSeparator, dropdownItemExternal %}
 {# macros #}
-{% macro format(value) -%}
-{{ value matches '/^-?\\d+$/' ? value|integer : value|amount }}
+{% macro format(value, is_int) -%}
+    {{- is_int ? value|integer : value|amount -}}
 {%- endmacro format %}
 
 {% macro colspan(value) -%}
@@ -13,18 +13,18 @@
 {% if value > 1 %} rowspan="{{ value }}"{% endif %}
 {%- endmacro rowspan %}
 
-{% macro outputPopover(cell, value, separator) -%}
+{% macro outputPopover(cell, value, separator, is_int) -%}
 <table class="table table-borderless table-sm mb-0">
     <tbody>
         <tr>
             <td class="fw-bold">{{ 'pivot.line'|trans }}</td>
             <td>{{ cell.rowTitle(separator)|raw }}</td>
-            <td class="text-currency">{{ _self.format(cell.row.value) }}</td>
+            <td class="text-currency">{{ _self.format(cell.row.value, is_int) }}</td>
         </tr>
         <tr>
             <td class="fw-bold">{{ 'pivot.column'|trans }}</td>
             <td>{{ cell.columnTitle(separator)|raw }}</td>
-            <td class="text-currency">{{ _self.format(cell.column.value) }}</td>
+            <td class="text-currency">{{ _self.format(cell.column.value, is_int) }}</td>
         </tr>
         <tr>
             <td class="border-top fw-bold">{{ 'pivot.value'|trans }}</td>
@@ -34,61 +34,61 @@
 </table>
 {%- endmacro outputPopover %}
 
-{% macro outputPopoverTitle(cell, separator) -%}
+{% macro outputPopoverTitle(cell, separator, is_int) -%}
 {%- set titles = cell.titles|default(cell.title)|default('') -%}
-<p class="mb-0">{{ titles|join(separator)|raw }}{{ separator|raw }}<span class="fw-bold">{{ _self.format(cell.value) }}</span></p>
+<p class="mb-0">{{ titles|join(separator)|raw }}{{ separator|raw }}<span class="fw-bold">{{ _self.format(cell.value, is_int) }}</span></p>
 {%- endmacro outputPopoverTitle %}
 
-{% macro outputHeaders(nodes, separator) -%}
+{% macro outputHeaders(nodes, separator, is_int) -%}
 {%- for node in nodes %}
     {%- if node.leaf -%}
-        <td class="text-currency not-hover" data-bs-toggle="popover" data-bs-html="{{ _self.outputPopoverTitle(node, separator)|e }}">{{ node.title|raw }}</td>
+        <td class="text-currency not-hover" data-bs-toggle="popover" data-bs-html="{{ _self.outputPopoverTitle(node, separator, is_int)|e }}">{{ node.title|raw }}</td>
     {%- else -%}
-        <td class="text-nowrap not-hover" data-bs-toggle="popover" data-bs-html="{{ _self.outputPopoverTitle(node, separator)|e }}"{{ _self.colspan(node.lastChildren|length) }}>{{ node.title|raw }}</td>
+        <td class="text-nowrap not-hover" data-bs-toggle="popover" data-bs-html="{{ _self.outputPopoverTitle(node, separator, is_int)|e }}"{{ _self.colspan(node.lastChildren|length) }}>{{ node.title|raw }}</td>
     {%- endif -%}
 {%- endfor -%}
 {%- endmacro outputHeaders %}
 
-{% macro outputPopoverTotal(cell, separator) -%}
-<td class="text-bg-success text-currency" data-bs-toggle="popover" data-bs-html="{{ _self.outputPopoverTitle(cell, separator)|e }}">
-    {{- _self.format(cell.value) -}}
+{% macro outputPopoverTotal(cell, separator, is_int) -%}
+<td class="text-bg-success text-currency" data-bs-toggle="popover" data-bs-html="{{ _self.outputPopoverTitle(cell, separator, is_int)|e }}">
+    {{- _self.format(cell.value, is_int) -}}
 </td>
 {%- endmacro outputPopoverTotal %}
 
-{% macro outputValue(cell, class, separator) -%}
+{% macro outputValue(cell, class, separator, is_int) -%}
 {%- set class = ('text-currency ' ~ class|default(''))|trim -%}
 {% if cell %}
     {%- set popover = 'not-hover' not in class -%}
-    {%- set value = _self.format(cell.value) -%}
-    <td class="{{ class }}"{% if popover %} data-bs-toggle="popover" data-bs-html="{{ _self.outputPopover(cell, value, separator)|e }}"{% endif %}>{{ value }}</td>
+    {%- set value = _self.format(cell.value, is_int) -%}
+    <td class="{{ class }}"{% if popover %} data-bs-toggle="popover" data-bs-html="{{ _self.outputPopover(cell, value, separator, is_int)|e }}"{% endif %}>{{ value }}</td>
 {% else %}
     <td class="{{ class }} not-hover">&nbsp;</td>
 {% endif %}
 {%- endmacro outputValue %}
 
-{% macro outputCell(table, column, row, class, separator) -%}
+{% macro outputCell(table, column, row, class, separator, is_int) -%}
 {%- set cell = table.findCellByNode(column, row) -%}
-{{ _self.outputValue(cell, class, separator) }}
+{{ _self.outputValue(cell, class, separator, is_int) }}
 {%- endmacro outputCell %}
 
-{% macro outputCells(table, columns, row, separator) -%}
+{% macro outputCells(table, columns, row, separator, is_int) -%}
 {%- for column in columns %}
-    {{ _self.outputCell(table, column, row, 'hover', separator) }}
+    {{ _self.outputCell(table, column, row, 'hover', separator, is_int) }}
 {%- endfor -%}
-{{ _self.outputPopoverTotal(row, separator) }}
+{{ _self.outputPopoverTotal(row, separator, is_int) }}
 {%- endmacro outputCells %}
 
-{% macro outputRow(table, columns, row, separator) %}
+{% macro outputRow(table, columns, row, separator, is_int) %}
 {% if row.index >= row.level - 1 -%}
 <tr>
 {% endif -%}
-    <td class="text-nowrap not-hover" data-bs-toggle="popover" data-bs-html="{{ _self.outputPopoverTitle(row, separator)|e }}"{{ _self.rowspan(row.lastChildren|length) }}>{{ row.title }}</td>
+    <td class="text-nowrap not-hover" data-bs-toggle="popover" data-bs-html="{{ _self.outputPopoverTitle(row, separator, is_int)|e }}"{{ _self.rowspan(row.lastChildren|length) }}>{{ row.title }}</td>
 {%- if row.leaf -%}
-    {{ _self.outputCells(table, columns, row, separator) -}}
+    {{ _self.outputCells(table, columns, row, separator, is_int) -}}
 </tr>
 {% else -%}
     {%- for child in row.children %}
-        {{- _self.outputRow(table, columns, child, separator) -}}
+        {{- _self.outputRow(table, columns, child, separator, is_int) -}}
     {%- endfor -%}
 {%- endif -%}
 {% endmacro outputRow %}
@@ -114,7 +114,7 @@
 
 {%- macro output_month(month, selection) %}
     {% set attrs = {
-        class: ['dropdown-item', month === selection ? 'active'],
+        class: ['dropdown-item', month === selection ? 'dropdown-item-checked-right'],
         href: path('calculation_pivot_index', {months: month}),
     } %}
     <li><a {{ html_attr(attrs) }}>{{ 'counters.months'|trans({count: month}) }}</a></li>
@@ -122,7 +122,7 @@
 
 {%- macro output_operation(count, selection, title) %}
     {% set attrs = {
-        class: ['dropdown-item', count === selection ? 'active'],
+        class: ['dropdown-item', count === selection ? 'dropdown-item-checked-right'],
         href: path('calculation_pivot_index', {count: count}),
     } %}
     <li><a {{ html_attr(attrs) }}>{{ title|trans }}</a></li>
@@ -141,30 +141,44 @@
 {% block body %}
 <div class="d-flex-wrap-center mb-2">
     <h4 class="flex-grow-1">{{ icon(title_icon, title) }}</h4>
-    <div class="form-check form-switch d-print-none">
-        <input type="checkbox" class="form-check-input" id="popover" name="popover"{% if popover %} checked{% endif %}>
-        <label class="form-check-label" for="popover">{{ 'pivot.popover'|trans }}</label>
-    </div>
-    <div class="form-check form-switch d-print-none">
-        <input type="checkbox" class="form-check-input" id="highlight" name="highlight"{% if highlight %} checked{% endif %}>
-        <label class="form-check-label" for="highlight">{{ 'pivot.highlight'|trans }}</label>
-    </div>
-    <div class="btn-toolbar" role="toolbar">
+    <div class="btn-toolbar d-print-none" role="toolbar">
         <div class="btn-group btn-group-sm" role="group">
             <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" data-bs-target="#month" aria-expanded="false">
-                {{ 'timeline.interval'|trans }}
+                {{- 'timeline.interval'|trans -}}
             </button>
-            <ul id="month" class="dropdown-menu">
+            <ul id="month" class="dropdown-menu dropdown-menu-checked-sm">
                 {% for i in [1, 2, 3, 6, 12] %}
                     {{ _self.output_month(i, months) }}
                 {%- endfor -%}
             </ul>
-            <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" data-bs-target="operation" aria-expanded="false">
-                {{ 'pivot.operation.title'|trans }}
+            <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" data-bs-target="#operation" aria-expanded="false">
+                {{- 'pivot.operation.title'|trans -}}
             </button>
-            <ul id="operation" class="dropdown-menu">
+            <ul id="operation" class="dropdown-menu dropdown-menu-checked-sm">
                 {{ _self.output_operation(false, count, 'pivot.operation.sum') }}
                 {{ _self.output_operation(true, count, 'pivot.operation.count') }}
+            </ul>
+            <button type="button" class="btn btn-outline-secondary px-1" title="{{ 'common.actions'|trans }}" data-bs-toggle="dropdown" data-bs-target="#actions" aria-expanded="false">
+                {{- icon('ellipsis-v') -}}
+            </button>
+            <ul id="actions" class="dropdown-menu">
+                <li>
+                    <button id="popover" type="button" class="dropdown-item{% if popover %} dropdown-item-checked-right{% endif %}">
+                        {{- icon('message', 'pivot.popover') -}}
+                    </button>
+                </li>
+                <li>
+                    <button id="highlight" type="button" class="dropdown-item{% if highlight %} dropdown-item-checked-right{% endif %}">
+                        {{- icon('highlighter', 'pivot.highlight') -}}
+                    </button>
+                </li>
+                {{ dropdownSeparator() }}
+                <li>
+                    {{- dropdownItemExternal(
+                        href: path('calculation_pivot_csv', {months: months}),
+                        text: 'common.button_export_csv',
+                        icon: 'file-csv') -}}
+                </li>
             </ul>
         </div>
     </div>
@@ -175,7 +189,7 @@
             {%- for i in 1..col_level -%}
             <tr>
                 {%- if i == 1 -%}<td class="text-nowrap not-hover p-0"{{ _self.rowspan(col_level) }}{{ _self.colspan(row_level) }}>{{ _self.outputTitle(table, col_level) }}</td>{%- endif -%}
-                {{ _self.outputHeaders(table.rootColumn.childrenAtLevel(i), separator) }}
+                {{ _self.outputHeaders(table.rootColumn.childrenAtLevel(i), separator, count) }}
                 {%- if i == 1 -%}<td{{ _self.rowspan(col_level) }} class="text-currency text-bg-success not-hover align-bottom">{{ total_title }}</td>{%- endif -%}
             </tr>
             {%- endfor -%}
@@ -183,16 +197,16 @@
         <tbody>
             {%- set columns = table.rootColumn.lastChildren -%}
             {%- for row in table.rootRow.children %}
-                {{ _self.outputRow(table, columns, row, separator) }}
+                {{ _self.outputRow(table, columns, row, separator, count) }}
             {%- endfor -%}
         </tbody>
         <tfoot>
             <tr>
                 <td class="text-nowrap not-hover text-bg-success"{{ _self.colspan(row_level) }}>{{ total_title }}</td>
                 {%- for cell in table.rootColumn.childrenAtLevel(col_level) -%}
-                    {{ _self.outputPopoverTotal(cell, separator) }}
+                    {{ _self.outputPopoverTotal(cell, separator, count) }}
                 {%- endfor -%}
-                {{ _self.outputPopoverTotal(table, separator) }}
+                {{ _self.outputPopoverTotal(table, separator, count) }}
             </tr>
         </tfoot>
     </table>

@@ -348,7 +348,7 @@ $(function () {
     // PasswordStrength plugin definition
     // -----------------------------------
     const oldPasswordStrength = $.fn.passwordStrength;
-    $.fn.passwordStrength = function (options) { // jslint ignore:line
+    $.fn.passwordStrength = function (options) { // jshint ignore:line
         return this.each(function () {
             const $this = $(this);
             if (!$this.data(PasswordStrength.NAME)) {

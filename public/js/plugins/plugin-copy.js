@@ -165,7 +165,7 @@ $(function () {
     // CopyClipboard plugin definition
     // -------------------------------
     const oldCopyClipboard = $.fn.copyClipboard;
-    $.fn.copyClipboard = function (options) { // jslint ignore:line
+    $.fn.copyClipboard = function (options) { // jshint ignore:line
         const settings = typeof options === 'object' && options;
         return this.each(function () {
             const $this = $(this);

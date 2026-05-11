@@ -106,7 +106,6 @@
                 // trigger events
                 that.horizontal.trigger('cellHighlight.mouseenter-horizontal');
                 that.vertical.trigger('cellHighlight.mouseenter-vertical');
-
                 that.$element.trigger('cellHighlight.mouseenter', {
                     horizontal: that.horizontal,
                     vertical: that.vertical
@@ -131,7 +130,6 @@
                 // trigger events
                 that.horizontal.trigger('cellHighlight.mouseleave-horizontal');
                 that.vertical.trigger('cellHighlight.mouseleave-vertical');
-
                 that.$element.trigger('cellHighlight.mouseleave', {
                     horizontal: that.horizontal,
                     vertical: that.vertical
@@ -190,7 +188,7 @@
 
                 // Iterate through each hypothetical table row.
                 $.each(tableIndex, function (y) {
-                    // Note that columns length is smaller than or equal to the table width
+                    // Note that column lengths are smaller than or equal to the table width
                     const row = rows.eq(y);
                     const columns = row.children();
                     let cellIndex = 0;
@@ -249,7 +247,7 @@
         // CellHighlight plugin definition
         // -------------------------------
         const oldCellHighlight = $.fn.cellhighlight;
-        $.fn.cellhighlight = function (options) { // jslint ignore:line
+        $.fn.cellhighlight = function (options) { // jshint ignore:line
             return this.each(function () {
                 const $this = $(this);
                 if (!$this.data(CellHighlight.NAME)) {

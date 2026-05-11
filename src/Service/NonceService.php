@@ -32,7 +32,7 @@ class NonceService
     }
 
     /**
-     * Generates a random nonce.
+     * Gets the random nonce.
      */
     #[AsTwigFunction(name: 'csp_nonce')]
     public function getNonce(): string

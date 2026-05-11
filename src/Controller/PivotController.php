@@ -98,7 +98,7 @@ class PivotController extends AbstractController
             \fclose($handle);
         };
 
-        return new CsvResponse($callback);
+        return new CsvResponse(callback: $callback, name: \sprintf('pivot_%d', $months));
     }
 
     /**

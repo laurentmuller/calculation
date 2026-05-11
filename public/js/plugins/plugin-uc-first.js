@@ -80,7 +80,7 @@ $(function () {
     // UCFirst plugin definition
     // -------------------------------
     const oldUcFirst = $.fn.ucFirst;
-    $.fn.ucFirst = function (options) { // jslint ignore:line
+    $.fn.ucFirst = function (options) { // jshint ignore:line
         return this.each(function () {
             const $this = $(this);
             if (!$this.data(UCFirst.NAME)) {

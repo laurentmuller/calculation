@@ -2,31 +2,14 @@
     'use strict';
 
     /**
-     * -------------- jQuery extensions --------------
+     * The checked menu class.
      */
-    $.fn.extend({
-        /**
-         * Toggle total cells class.
-         *
-         * @param {string} oldClass the old class.
-         * @param {string} newClass the new class.
-         * @return {jQuery} The jQuery element for chaining.
-         */
-        toggleCell(oldClass, newClass) {
-            return $(this).each(function () {
-                const $that = $(this);
-                const firstClass = oldClass.split(' ')[0];
-                if ($that.hasClass(firstClass)) {
-                    $that.toggleClass(oldClass + ' ' + newClass);
-                }
-            });
-        }
-    });
+    const CHECKED_CLASS = 'dropdown-item-checked-right';
 
     /**
-     * Save the session value.
-     * @param {string} name
-     * @param {boolean} value
+     * Save a value to the user's session.
+     * @param {string} name the key name.
+     * @param {boolean} value the value to save.
      */
     function saveSession(name, value) {
         const url = $('#pivot').data('session');
@@ -45,13 +28,12 @@
     /**
      * Toggle the cell highlight enablement.
      *
-     * @param {jQuery} $source - The highlight checkbox.
-     * @param {jQuery} $table - The table to update.
+     * @param {jQuery<HTMLLinkElement>} $source - The highlight link.
+     * @param {jQuery<HTMLTableElement>} $table - The table to update.
      * @param {boolean} save - true to save value to the session.
-     * @return {jQuery} The jQuery source element for chaining.
      */
     function toggleHighlight($source, $table, save) {
-        const checked = $source.isChecked();
+        const checked = $source.hasClass(CHECKED_CLASS);
         const highlight = $table.data('cell-highlight');
         if (checked) {
             if (!highlight) {
@@ -60,14 +42,6 @@
                     cellSelector: 'td:not(.not-hover), th:not(.not-hover)',
                     highlightHorizontal: 'table-primary',
                     highlightVertical: 'table-primary'
-                }).on('cellhighlight.mouseenter', function (_e, {horizontal, vertical}) {
-                    $.each($.merge(horizontal, vertical), function () {
-                        $(this).toggleCell('bg-success text-white', 'table-cell');
-                    });
-                }).on('cellhighlight.mouseleave', function (_e, {horizontal, vertical}) {
-                    $.each($.merge(horizontal, vertical), function () {
-                        $(this).toggleCell('table-cell', 'bg-success text-white');
-                    });
                 });
             } else {
                 highlight.enable();
@@ -82,19 +56,17 @@
         if (save) {
             saveSession('pivot.highlight', checked);
         }
-        return $source;
     }
 
     /**
      * Toggle the popover enablement.
      *
-     * @param {jQuery} $source - The popover checkbox.
-     * @param {jQuery} $selector - The popover elements.
+     * @param {jQuery<HTMLLinkElement>} $source - The popover link.
+     * @param {jQuery<HTMLTableCellElement>} $selector - The popover elements.
      * @param {boolean} save - true to save value to the session.
-     * @return {jQuery} The jQuery source element for chaining.
      */
     function togglePopover($source, $selector, save) {
-        const checked = $source.isChecked();
+        const checked = $source.hasClass(CHECKED_CLASS);
         const enabled = $source.data('enabled');
         if (checked) {
             if (enabled) {
@@ -123,7 +95,6 @@
         if (save) {
             saveSession('pivot.popover', checked);
         }
-        return $source;
     }
 
     /**
@@ -134,22 +105,24 @@
         const $table = $('#pivot');
         const $popover = $('#popover');
         const $highlight = $('#highlight');
-        const $selector = $('[data-bs-toggle="popover"]');
+        const $selector = $('#pivot [data-bs-toggle="popover"]');
 
         // popover
-        if ($popover.isChecked()) {
+        if ($popover.hasClass(CHECKED_CLASS)) {
             togglePopover($popover, $selector, false);
         }
-        $popover.on('input', function () {
-            togglePopover($(this), $selector, true);
+        $popover.on('click', function () {
+            $popover.toggleClass(CHECKED_CLASS);
+            togglePopover($popover, $selector, true);
         });
 
         // highlight
-        if ($highlight.isChecked()) {
+        if ($highlight.hasClass(CHECKED_CLASS)) {
             toggleHighlight($highlight, $table, false);
         }
-        $highlight.on('input', function () {
-            toggleHighlight($(this), $table, true);
+        $highlight.on('click', function () {
+            $highlight.toggleClass(CHECKED_CLASS);
+            toggleHighlight($highlight, $table, true);
         });
 
         // hover

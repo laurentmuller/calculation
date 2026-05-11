@@ -304,7 +304,7 @@ common:
     button_export_pdf: Exporter vers le format de document portable (PDF)
     button_export_excel: Exporter vers le format Microsoft® Excel®
     button_export_word: Exporter vers le format Microsoft® Word®
-    button_excel_list: Exporter la liste
+    button_export_csv: Exporter vers le format CSV
     button_card: Mode mosaïque
     button_import: Importer
     button_ok: OK

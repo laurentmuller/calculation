@@ -656,13 +656,21 @@ a.disabled {
     min-width: 15rem;
 }
 
+.dropdown-menu.dropdown-menu-checked-sm:has(.badge, .dropdown-item-checked-right) {
+    min-width: 8rem;
+}
+
+.dropdown-item-checked-right {
+    display: inline-flex;
+    align-items: center;
+}
+
 .dropdown-item-checked-right::after {
     font-family: 'Font Awesome 7 Free', sans-serif;
     font-weight: 900;
     content: '\f00c';
-    margin-left: 0.5rem;
+    margin-left: auto;
     float: right;
-    top: 0;
 }
 
 /* read-only control label */

@@ -362,7 +362,7 @@ $(function () {
     // CellEdit plugin definition
     // -------------------------------
     const oldCellEdit = $.fn.cellEdit;
-    $.fn.cellEdit = function (options) { // jslint ignore:line
+    $.fn.cellEdit = function (options) { // jshint ignore:line
         return this.each(function () {
             const $this = $(this);
             if (!$this.data(CellEdit.NAME)) {

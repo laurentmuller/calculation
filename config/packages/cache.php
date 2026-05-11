@@ -23,6 +23,7 @@ return App::config([
                 CacheAttributes::CACHE_PARAMETERS => [
                     'adapter' => CacheAttributes::CACHE_ADAPTER,
                     'default_lifetime' => CacheAttributes::LIFE_TIME_ONE_HOUR,
+                    'tags' => true,
                 ],
                 // SymfonyInfoService
                 CacheAttributes::CACHE_SYMFONY => [

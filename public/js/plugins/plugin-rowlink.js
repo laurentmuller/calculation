@@ -91,7 +91,7 @@ $(function () {
     // Rowlink plugin definition
     // ------------------------------------
     const oldRowlink = $.fn.rowlink;
-    $.fn.rowlink = function (options) { // jslint ignore:line
+    $.fn.rowlink = function (options) { // jshint ignore:line
         return this.each(function () {
             const $this = $(this);
             if (!$this.data(Rowlink.NAME)) {

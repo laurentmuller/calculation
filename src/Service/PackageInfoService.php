@@ -29,9 +29,10 @@ use Symfony\Contracts\Cache\CacheInterface;
  * @phpstan-type PackageType = array{
  *       name: string,
  *       version: string,
- *       description: string,
+ *       description: string|null,
  *       homepage: string|null,
  *       license: string|null,
+ *       source: string|null,
  *       time: string,
  *       debug: bool,
  *       production: array<string, string>,
@@ -41,6 +42,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  *      version: string,
  *      description?: string,
  *      homepage?: string,
+ *      source?: array{url: string|null},
  *      time: string,
  *      support?: array{source?: string},
  *      require?: array<string, string>,
@@ -157,11 +159,16 @@ readonly class PackageInfoService implements \Countable
     /**
      * @phpstan-param PackageSourceType $package
      */
-    private function parseDescription(array $package): string
+    private function parseDescription(array $package): ?string
     {
-        $description = $package['description'] ?? '';
+        $description = StringUtils::trim($package['description'] ?? null);
+        if (null === $description) {
+            return null;
+        }
 
-        return StringUtils::isString($description) ? \rtrim($description, '.') . '.' : '';
+        return StringUtils::unicode($description)
+            ->ensureEnd('.')
+            ->toString();
     }
 
     /**
@@ -187,10 +194,9 @@ readonly class PackageInfoService implements \Countable
      */
     private function parseLicense(array $package): ?string
     {
-        /** @var list<string> $files */
         $files = \glob($this->getLicensePattern($package), \GLOB_BRACE | \GLOB_NOSORT);
 
-        return \array_first($files);
+        return \is_array($files) ? \array_first($files) : null;
     }
 
     /**
@@ -204,6 +210,7 @@ readonly class PackageInfoService implements \Countable
             'name' => $name,
             'debug' => $debug,
             'time' => $this->parseTime($package),
+            'source' => $this->parseSource($package),
             'version' => $this->parseVersion($package),
             'license' => $this->parseLicense($package),
             'homepage' => $this->parseHomepage($package),
@@ -240,6 +247,14 @@ readonly class PackageInfoService implements \Countable
     private function parseProduction(array $package): array
     {
         return $package['require'] ?? [];
+    }
+
+    /**
+     * @phpstan-param PackageSourceType $package
+     */
+    private function parseSource(array $package): ?string
+    {
+        return $package['source']['url'] ?? null;
     }
 
     /**

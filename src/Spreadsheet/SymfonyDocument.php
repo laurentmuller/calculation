@@ -184,7 +184,7 @@ class SymfonyDocument extends AbstractDocument
                 $package['homepage'] ?? '',
                 $package['name'],
                 $package['version'],
-                $package['description']
+                $package['description'] ?? ''
             );
         }
         $sheet->getStyle('A:C')

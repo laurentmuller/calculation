@@ -23,6 +23,7 @@ use App\Service\KernelInfoService;
 use App\Service\PackageInfoService;
 use App\Service\RouteInfoService;
 use App\Service\SymfonyInfoService;
+use App\Utils\StringUtils;
 
 /**
  * Report containing Symfony configuration.
@@ -181,7 +182,7 @@ class SymfonyReport extends AbstractReport
             $table->startRow()
                 ->add($package['name'], link: $package['homepage'])
                 ->add($package['version'])
-                ->add($package['description'])
+                ->add($this->trimDescription($package['description']))
                 ->endRow();
         }
     }
@@ -232,5 +233,18 @@ class SymfonyReport extends AbstractReport
             ->endRow();
 
         return $this;
+    }
+
+    private function trimDescription(?string $description): ?string
+    {
+        if (null === $description || '' === $description) {
+            return $description;
+        }
+
+        return StringUtils::unicode($description)
+            ->ascii()
+            ->replace('?', '')
+            ->trim()
+            ->toString();
     }
 }

@@ -27,6 +27,7 @@ use App\Repository\CalculationRepository;
 use App\Response\CsvResponse;
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
@@ -110,12 +111,14 @@ class PivotController extends AbstractController
         ?int $months = null,
         #[MapQueryParameter]
         ?bool $count = null
-    ): Response {
+    ): JsonResponse {
         $months = $this->validateMonths($months);
         $count = $this->validateCount($count);
         $table = $this->createTable($months, $count);
         if (!$table instanceof PivotTable) {
-            return $this->getEmptyResponse();
+            return $this->jsonFalse([
+                'message' => $this->trans('pivot.empty'),
+            ]);
         }
 
         return $this->json($table);

@@ -65,13 +65,13 @@
 
         /**
          * Display the modal dialog with the given content.
-         * @param {JQuery|any} $dialog the modal dialog.
+         * @param {jQuery<HTMLDivElement>} $dialog the modal dialog.
          * @param {string} content the HTML content to display
          */
         displayDialogContent: function ($dialog, content) {
             const $this = $(this);
             const $row = $this.parents('tr');
-            const $button = $this.parents('.dropdown').find('button[data-bs-toggle="dropdown"]');
+            const $button = $row.find('button[data-bs-toggle="dropdown"]');
             // content
             $dialog.find('.modal-data').html(content);
             // clipboard

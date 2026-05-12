@@ -52,7 +52,7 @@
             {{ tools.rowInfo('application.mode'|trans, enum('App\\Enums\\Environment').from(app_mode)|trans) }}
             {{ tools.rowInfo('application.deploy'|trans, deploy|locale_date('long')) }}
             {{ tools.rowInfoLink('application.customer'|trans, customer.name, customer.url) }}
-            {{ tools.rowInfoLink('application.owner'|trans, app_owner_name, app_owner_url) }}
+            {{ tools.rowInfoLink('application.owner'|trans, app_owner_name|title, app_owner_url) }}
             {{ tools.rowInfoLink('application.github'|trans, 'application.github_url'|trans, 'https://github.com/laurentmuller/calculation') }}
         </tbody>
     </table>

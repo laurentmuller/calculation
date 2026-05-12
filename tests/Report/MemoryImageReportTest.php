@@ -153,7 +153,7 @@ final class MemoryImageReportTest extends TestCase
 
     public function testWithAllImages(): void
     {
-        $logoFile = $this->getImageFile('logo/logo-customer-148x148.png');
+        $logoFile = $this->getImageFile('logo/customer_148_148.png');
         $iconFile = $this->getImageFile('icons/favicon-144x144.png');
         $screenshotFile = $this->getImageFile('screenshots/home_light.png');
         $controller = self::createStub(AbstractController::class);
@@ -187,15 +187,15 @@ final class MemoryImageReportTest extends TestCase
 
     private function getImageFile(string $name): string
     {
-        $file = __DIR__ . '/../../public/images/' . $name;
-        self::assertFileExists($file);
+        $path = Path::join(__DIR__, '/../../public/images', $name);
+        self::assertFileExists($path);
 
-        return $file;
+        return $path;
     }
 
     private function getTestFile(): string
     {
-        $file = __DIR__ . '/../files/images/example.png';
+        $file = Path::join(__DIR__, '/../files/images/example.png');
         self::assertFileExists($file);
 
         return $file;

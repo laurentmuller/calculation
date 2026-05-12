@@ -99,7 +99,8 @@ final class KernelInfoServiceTest extends TestCase
             ->willReturn($mode);
         $kernel->method('getCharset')
             ->willReturn(self::CHARSET);
-
+        $kernel->method('getProjectDir')
+            ->willReturn($dir);
         $kernel->method('getBuildDir')
             ->willReturn($dir);
         $kernel->method('getCacheDir')
@@ -107,6 +108,6 @@ final class KernelInfoServiceTest extends TestCase
         $kernel->method('getLogDir')
             ->willReturn($dir);
 
-        return new KernelInfoService($kernel, __DIR__, $mode);
+        return new KernelInfoService($kernel, $mode);
     }
 }

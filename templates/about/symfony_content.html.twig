@@ -33,32 +33,43 @@
     <tr>
         <td class="e">{{ package.name }}</td>
         <td class="text-id">{{ package.version }}</td>
-        <td class="text">{{ package.description }}</td>
+        <td class="text">{{ package.description|default('&nbsp;') }}</td>
         <td>
-            {%- set is_info = package.homepage or package.license -%}
+            {%- set is_license = package.license -%}
+            {%- set is_links = package.homepage or package.source -%}
             {%- set is_dependance = package.production|length or package.development|length -%}
-            {%- if is_info or is_dependance -%}
+            {%- if is_license or is_links or is_dependance -%}
                 <div class="dropdown">
                     {{ dropdownEllipsis() }}
                     <ul class="dropdown-menu dropdown-menu-end">
-                        {%- if package.homepage -%}
-                            {{- dropdownItemExternal(
-                                href: package.homepage,
-                                text: 'about.extern_link',
-                                icon: 'arrow-up-right-from-square fa-fw') -}}
-
-                        {% endif %}
-                        {%- if package.license -%}
+                        {%- if is_license -%}
                             {{- dropdownItemWithClass(
                                 href: path('about_symfony_license', {name: package.name}),
                                 text: 'about.licence.title',
                                 icon: 'book-open-reader fa-fw',
                                 class: 'link-license') -}}
                         {% endif %}
-                        {%- if is_info and is_dependance -%}
-                            {{ dropdownSeparator() }}
-                        {% endif %}
+                        {%- if is_links -%}
+                            {%- if is_license -%}
+                                {{ dropdownSeparator() }}
+                            {%- endif -%}
+                            {%- if package.homepage -%}
+                                {{- dropdownItemExternal(
+                                    href: package.homepage,
+                                    text: 'about.extern_link',
+                                    icon: 'arrow-up-right-from-square fa-fw') -}}
+                            {%- endif -%}
+                            {%- if package.source -%}
+                                {{- dropdownItemExternal(
+                                    href: package.source,
+                                    text: 'about.code_link',
+                                    icon: 'github fab fa-fw') -}}
+                            {%- endif -%}
+                        {%- endif -%}
                         {%- if is_dependance -%}
+                            {%- if is_license or is_links -%}
+                                {{ dropdownSeparator() }}
+                            {%- endif -%}
                             {{- dropdownItemWithClass(
                                 href: path('about_symfony_dependency', {name: package.name}),
                                 text: 'about.package.title',
@@ -69,7 +80,7 @@
                 </div>
             {%- else -%}
                 &nbsp;
-            {% endif %}
+            {%- endif %}
         </td>
     </tr>
 {%- endmacro rowPackage %}

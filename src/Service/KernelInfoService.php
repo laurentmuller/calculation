@@ -35,12 +35,10 @@ readonly class KernelInfoService
 
     public function __construct(
         private KernelInterface $kernel,
-        #[Autowire('%kernel.project_dir%')]
-        string $projectDir,
         #[Autowire('%app_mode%')]
         string $app_mode
     ) {
-        $this->projectDir = FileUtils::normalize($projectDir);
+        $this->projectDir = FileUtils::normalize($this->kernel->getProjectDir());
         $this->environment = Environment::fromKernel($this->kernel);
         $this->mode = Environment::from($app_mode);
     }

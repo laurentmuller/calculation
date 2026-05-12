@@ -105,7 +105,7 @@ class TestExportController extends AbstractController
      */
     #[GetRoute(path: '/memory', name: 'memory')]
     public function exportMemoryImage(
-        #[Autowire('%kernel.project_dir%/public/images/logo/logo-customer-148x148.png')]
+        #[Autowire('%kernel.project_dir%/public/images/logo/customer_148_148.png')]
         string $logoFile,
         #[Autowire('%kernel.project_dir%/public/images/icons/favicon-144x144.png')]
         string $iconFile,

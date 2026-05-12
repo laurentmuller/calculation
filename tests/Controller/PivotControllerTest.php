@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use App\Entity\Calculation;
 use App\Entity\GroupMargin;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
+use Symfony\Component\HttpFoundation\Response;
 
 final class PivotControllerTest extends ControllerTestCase
 {
@@ -36,6 +38,38 @@ final class PivotControllerTest extends ControllerTestCase
         yield ['/pivot/json', self::ROLE_USER];
         yield ['/pivot/json', self::ROLE_ADMIN];
         yield ['/pivot/json', self::ROLE_SUPER_ADMIN];
+    }
+
+    public function testInvalidMonths(): void
+    {
+        $this->checkRoute(
+            url: '/pivot?months=0',
+            username: self::ROLE_USER,
+            expected: Response::HTTP_BAD_REQUEST,
+        );
+    }
+
+    public function testPivotEmpty(): void
+    {
+        $this->deleteEntitiesByClass(Calculation::class);
+
+        $this->checkRoute(
+            url: '/pivot',
+            username: self::ROLE_USER,
+            expected: Response::HTTP_FOUND,
+        );
+
+        $this->checkRoute(
+            url: '/pivot/csv',
+            username: self::ROLE_USER,
+            expected: Response::HTTP_FOUND,
+        );
+
+        $this->checkRoute(
+            url: '/pivot/json',
+            username: self::ROLE_USER,
+            xmlHttpRequest: true
+        );
     }
 
     #[\Override]

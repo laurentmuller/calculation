@@ -56,13 +56,13 @@
                             {%- if package.homepage -%}
                                 {{- dropdownItemExternal(
                                     href: package.homepage,
-                                    text: 'about.extern_link',
+                                    text: 'about.link_homepage',
                                     icon: 'arrow-up-right-from-square fa-fw') -}}
                             {%- endif -%}
                             {%- if package.source -%}
                                 {{- dropdownItemExternal(
                                     href: package.source,
-                                    text: 'about.code_link',
+                                    text: 'about.link_source',
                                     icon: 'github fab fa-fw') -}}
                             {%- endif -%}
                         {%- endif -%}

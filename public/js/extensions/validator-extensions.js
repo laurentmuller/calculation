@@ -341,8 +341,8 @@
                 const $that = $(this);
                 const validator = $that.validate(settings);
 
-                // focus
-                if (settings.focus) {
+                // focus only for medium screen
+                if (settings.focus && window.innerWidth > 768) {
                     $that.initFocus();
                 }
 

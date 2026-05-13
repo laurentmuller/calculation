@@ -13,8 +13,8 @@ application:
 about:
     title: A propos de
     version: Version %version%
-    extern_link: Accéder au site
-    code_link: Accéder au code source
+    link_homepage: Accéder au site
+    link_source: Accéder au code source
     load:
         message: Recherche des informations...
         error: Erreur lors du chargement des informations.

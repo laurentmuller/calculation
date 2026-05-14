@@ -26,17 +26,9 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
 {
     use EmptyItemsTrait;
 
-    /** The price label. */
-    private readonly string $priceLabel;
-
-    /** The quantity label. */
-    private readonly string $quantityLabel;
-
-    public function __construct(CalculationRepository $repository, TranslatorInterface $translator)
+    public function __construct(CalculationRepository $repository, private readonly TranslatorInterface $translator)
     {
         parent::__construct($repository);
-        $this->priceLabel = $translator->trans('calculationitem.fields.price');
-        $this->quantityLabel = $translator->trans('calculationitem.fields.quantity');
     }
 
     /**
@@ -86,12 +78,12 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
     #[\Override]
     protected function getPriceLabel(): string
     {
-        return $this->priceLabel;
+        return $this->translator->trans('calculationitem.fields.price');
     }
 
     #[\Override]
     protected function getQuantityLabel(): string
     {
-        return $this->quantityLabel;
+        return $this->translator->trans('calculationitem.fields.quantity');
     }
 }

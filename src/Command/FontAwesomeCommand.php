@@ -80,18 +80,18 @@ class FontAwesomeCommand
         try {
             $files = 0;
             $this->start();
-            $io->title(\sprintf('Generate files from "%s"', $source));
+            $io->title(\sprintf('Generate SVG files from "%s"', $source));
             foreach ($io->progressIterate($content, $count) as $key => $item) {
                 $styles = $item['styles'];
                 foreach ($styles as $style) {
-                    $svg = $item['svg'][$style]['raw'] ?? '';
-                    if ('' === $svg) {
+                    $svgContent = $item['svg'][$style]['raw'] ?? '';
+                    if ('' === $svgContent) {
                         continue;
                     }
-                    $svg = $this->replaceViewBox($svg);
+                    $svgContent = $this->replaceViewBox($svgContent);
                     $svgFileName = $this->getSvgFileName($style, $key);
                     $svgTargetFile = Path::join($tempDir, $svgFileName);
-                    if (!FileUtils::dumpFile($svgTargetFile, $svg)) {
+                    if (!FileUtils::dumpFile($svgTargetFile, $svgContent)) {
                         return $this->error($io, 'Unable to copy file: "%s".', $svgFileName);
                     }
                     ++$files;

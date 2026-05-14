@@ -36,11 +36,8 @@ class TimestampableListener implements DisableListenerInterface
     use ArrayTrait;
     use DisableListenerTrait;
 
-    private readonly string $emptyUser;
-
-    public function __construct(private readonly Security $security, TranslatorInterface $translator)
+    public function __construct(private readonly Security $security, private readonly TranslatorInterface $translator)
     {
-        $this->emptyUser = $translator->trans('common.entity_empty_user');
     }
 
     public function onFlush(OnFlushEventArgs $args): void
@@ -74,6 +71,11 @@ class TimestampableListener implements DisableListenerInterface
             fn (object $entity): ?TimestampableInterface => $this->getTimestampable($entity, $includeChildren),
             $entities
         ));
+    }
+
+    private function getEmptyUser(): string
+    {
+        return $this->translator->trans('common.entity_empty_user');
     }
 
     /**
@@ -113,7 +115,7 @@ class TimestampableListener implements DisableListenerInterface
 
     private function getUser(): string
     {
-        return $this->security->getUser()?->getUserIdentifier() ?? $this->emptyUser;
+        return $this->security->getUser()?->getUserIdentifier() ?? $this->getEmptyUser();
     }
 
     private function persist(EntityManagerInterface $em, UnitOfWork $unitOfWork, TimestampableInterface $entity): void

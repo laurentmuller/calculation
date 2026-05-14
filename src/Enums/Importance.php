@@ -64,8 +64,8 @@ enum Importance: string implements EnumSortableInterface, PdfEnumDefaultInterfac
     /**
      * Gets the translated title.
      */
-    public function transTitle(TranslatorInterface $translator, ?string $locale = null): string
+    public function transTitle(TranslatorInterface $translator): string
     {
-        return $translator->trans(id: \sprintf('%s_title', $this->getReadable()), locale: $locale);
+        return $translator->trans(id: \sprintf('%s_title', $this->getReadable()));
     }
 }

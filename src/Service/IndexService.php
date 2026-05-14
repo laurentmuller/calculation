@@ -24,7 +24,6 @@ use App\Entity\Task;
 use App\Entity\User;
 use App\Model\MonthChartData;
 use App\Model\StateChartData;
-use App\Traits\CacheKeyTrait;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\OnFlushEventArgs;
@@ -41,8 +40,6 @@ use Symfony\Contracts\Cache\NamespacedPoolInterface;
 #[AsDoctrineListener(Events::onFlush)]
 class IndexService
 {
-    use CacheKeyTrait;
-
     private const array CATALOG = [
         'user' => User::class,
         'task' => Task::class,
@@ -64,7 +61,7 @@ class IndexService
         #[Target(CacheAttributes::CACHE_PARAMETERS)]
         CacheItemPoolInterface&CacheInterface&NamespacedPoolInterface $cache
     ) {
-        $this->cache = $cache->withSubNamespace('counters');
+        $this->cache = $cache->withSubNamespace('index.service');
     }
 
     /**
@@ -88,13 +85,12 @@ class IndexService
     /**
      * Gets the last created or modified calculations.
      *
-     * @param int            $maxResults the maximum number of calculations to retrieve (the "limit")
-     * @param ?UserInterface $user       if not null, returns the user's calculations
+     * @param int   $maxResults the maximum number of calculations to retrieve (the "limit")
+     * @param ?User $user       if not null, returns the user's calculations
      */
-    public function getLastCalculations(int $maxResults, ?UserInterface $user = null): array
+    public function getLastCalculations(int $maxResults, ?User $user = null): array
     {
-        $id = $this->cleanKey($user?->getUserIdentifier() ?? '--all--');
-        $key = \sprintf('index.calculations.last.%d.%s', $maxResults, $id);
+        $key = \sprintf('index.calculations.last.%d.%d', $maxResults, $user?->getId() ?? 0);
 
         return $this->cache->get($key, fn (): array => $this->loadLastCalculations($maxResults, $user));
     }

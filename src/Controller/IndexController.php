@@ -17,6 +17,7 @@ use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
 use App\Attribute\PostRoute;
+use App\Entity\User;
 use App\Enums\TableView;
 use App\Interfaces\TableInterface;
 use App\Model\IndexQuery;
@@ -178,6 +179,7 @@ class IndexController extends AbstractController
 
     private function getLastCalculations(IndexService $indexService, int $maxResults, bool $restrict): array
     {
+        /** @var ?User $user */
         $user = $restrict ? $this->getUser() : null;
 
         return $indexService->getLastCalculations($maxResults, $user);

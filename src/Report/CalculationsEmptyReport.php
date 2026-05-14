@@ -25,20 +25,12 @@ class CalculationsEmptyReport extends AbstractCalculationItemsReport
 {
     use EmptyItemsTrait;
 
-    /** The price label. */
-    private readonly string $priceLabel;
-
-    /** The quantity label. */
-    private readonly string $quantityLabel;
-
     /**
      * @phpstan-param CalculationItemType[] $entities
      */
     public function __construct(AbstractController $controller, array $entities)
     {
         parent::__construct($controller, $entities, 'empty.title', 'empty.description');
-        $this->priceLabel = $this->trans('calculationitem.fields.price');
-        $this->quantityLabel = $this->trans('calculationitem.fields.quantity');
     }
 
     /**
@@ -57,13 +49,13 @@ class CalculationsEmptyReport extends AbstractCalculationItemsReport
     #[\Override]
     protected function getPriceLabel(): string
     {
-        return $this->priceLabel;
+        return $this->trans('calculationitem.fields.price');
     }
 
     #[\Override]
     protected function getQuantityLabel(): string
     {
-        return $this->quantityLabel;
+        return $this->trans('calculationitem.fields.quantity');
     }
 
     #[\Override]

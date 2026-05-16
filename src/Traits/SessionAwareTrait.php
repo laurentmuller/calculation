@@ -36,6 +36,20 @@ trait SessionAwareTrait
         return $this->requestStack ??= $this->getContainerService(__FUNCTION__, RequestStack::class);
     }
 
+    /**
+     * Gets a session attribute, as enumeration.
+     *
+     * @template T of \UnitEnum|\BackedEnum
+     *
+     * @param T $default
+     *
+     * @return T
+     */
+    public function getSessionEnum(string $key, \UnitEnum|\BackedEnum $default): \UnitEnum|\BackedEnum
+    {
+        return $this->getSessionValue($key, $default);
+    }
+
     public function setRequestStack(RequestStack $requestStack): static
     {
         $this->requestStack = $requestStack;

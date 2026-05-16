@@ -20,16 +20,16 @@ use Symfony\Component\Clock\DatePoint;
  */
 class PivotSemesterField extends PivotDateField
 {
-    /** @var callable(int): string|null */
-    private $formatter;
+    /** @var (\Closure(int): string)|null */
+    private ?\Closure $formatter = null;
 
-    public function __construct(protected string $name, protected ?string $title = null)
+    public function __construct(string $name, ?string $title = null)
     {
         parent::__construct($name, self::PART_MONTH, $title);
     }
 
     #[\Override]
-    public function getDisplayValue($value): string
+    public function getDisplayValue(mixed $value): string
     {
         return $this->formatSemester((int) $value);
     }
@@ -37,9 +37,9 @@ class PivotSemesterField extends PivotDateField
     /**
      * Gets the callback used to format a semestre.
      *
-     * @phpstan-return callable(int): string|null
+     * @return ?\Closure(int): string
      */
-    public function getFormatter(): ?callable
+    public function getFormatter(): ?\Closure
     {
         return $this->formatter;
     }
@@ -49,11 +49,9 @@ class PivotSemesterField extends PivotDateField
      *
      * The function receives the semestre (1 or 2) as a parameter and must return a string.
      *
-     * @param ?callable $formatter the optional callback
-     *
-     * @phpstan-param callable(int): string|null $formatter
+     * @param ?\Closure(int): string $formatter the optional callback
      */
-    public function setFormatter(?callable $formatter): self
+    public function setFormatter(?\Closure $formatter): self
     {
         $this->formatter = $formatter;
 
@@ -61,9 +59,9 @@ class PivotSemesterField extends PivotDateField
     }
 
     #[\Override]
-    protected function doGetValue(DatePoint $date): int
+    protected function getDateValue(DatePoint $date): int
     {
-        $value = parent::doGetValue($date);
+        $value = parent::getDateValue($date);
 
         return (int) \ceil($value / 6);
     }

@@ -14,19 +14,25 @@ declare(strict_types=1);
 namespace App\Pivot\Aggregator;
 
 /**
- * Aggregator to sum values.
+ * Aggregator to get the minimum value.
  */
-class SumAggregator extends AbstractFloatAggregator
+class MinAggregator extends AbstractFloatAggregator
 {
     #[\Override]
-    public function add(AbstractAggregator|int|float|null $value): static
+    public function add(float|AbstractAggregator|int|null $value): static
     {
         if ($value instanceof self) {
-            $this->result += $value->result;
+            $this->result = \min($this->result, $value->result);
         } elseif (\is_numeric($value)) {
-            $this->result += (float) $value;
+            $this->result = \min($this->result, (float) $value);
         }
 
         return $this;
+    }
+
+    #[\Override]
+    protected function getInitialValue(): float
+    {
+        return (float) \PHP_INT_MAX;
     }
 }

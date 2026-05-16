@@ -51,12 +51,12 @@ final class AverageAggregatorTest extends TestCase
         self::assertSame(10.0, $aggregator->getFormattedResult());
     }
 
-    public function testInit(): void
+    public function testInitialize(): void
     {
         $aggregator = new AverageAggregator(10.0);
         self::assertSame(10.0, $aggregator->getResult());
 
-        $aggregator->init();
+        $aggregator->initialize();
         self::assertSame(0.0, $aggregator->getResult());
     }
 

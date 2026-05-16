@@ -94,18 +94,23 @@ readonly class RouteInfoService
         return $result;
     }
 
+    private function parseMethod(Route $route): array
+    {
+        $methods = $route->getMethods();
+
+        return [] === $methods ? ['ANY'] : $methods;
+    }
+
     /**
      * @phpstan-return RouteType
      */
     private function parseRoute(string $name, Route $route): array
     {
-        $methods = $route->getMethods();
-
         return [
             'name' => $name,
             'path' => $route->getPath(),
             'debug' => $this->isDebugRoute($name),
-            'methods' => [] === $methods ? ['ANY'] : $methods,
+            'methods' => $this->parseMethod($route),
         ];
     }
 }

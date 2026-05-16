@@ -61,6 +61,8 @@ final class DateUtils
      *
      * @param DatePoint            $date     the date point
      * @param \DateInterval|string $interval the date interval to add
+     *
+     * @throws \InvalidArgumentException if the given duration is a string and cannot be parsed as an interval
      */
     public static function add(DatePoint $date, \DateInterval|string $interval): DatePoint
     {
@@ -111,7 +113,7 @@ final class DateUtils
     {
         try {
             return new \DateInterval($duration);
-        } catch (\Exception $e) {
+        } catch (\DateMalformedIntervalStringException  $e) {
             throw new \InvalidArgumentException(\sprintf('Invalid duration: "%s".', $duration), $e->getCode(), $e);
         }
     }
@@ -204,10 +206,11 @@ final class DateUtils
      *
      * The weeks are starting on Monday.
      *
-     * @return int value 1 through 53
+     * @return int<1, 53>
      */
     public static function getWeek(DatePoint $date = new DatePoint()): int
     {
+        /** @phpstan-var int<1, 53> */
         return (int) $date->format('W');
     }
 
@@ -242,10 +245,16 @@ final class DateUtils
      * @param string    $modifier a date/time string
      *
      * @return DatePoint the modified date
+     *
+     * @throws \InvalidArgumentException if the given modifier is invalid
      */
     public static function modify(DatePoint $date, string $modifier): DatePoint
     {
-        return $date->modify($modifier);
+        try {
+            return $date->modify($modifier);
+        } catch (\DateMalformedStringException $e) {
+            throw new \InvalidArgumentException(\sprintf('Invalid modifier: "%s".', $modifier), $e->getCode(), $e);
+        }
     }
 
     /**
@@ -261,6 +270,8 @@ final class DateUtils
      *
      * @param DatePoint            $date     the date point
      * @param \DateInterval|string $interval the date interval to subtract
+     *
+     * @throws \InvalidArgumentException if the given duration is a string and cannot be parsed as an interval
      */
     public static function sub(DatePoint $date, \DateInterval|string $interval): DatePoint
     {
@@ -273,6 +284,8 @@ final class DateUtils
 
     /**
      * Convert the given date interface to a date point.
+     *
+     * Returns the parameter instance if it is already a date point.
      */
     public static function toDatePoint(\DateTimeInterface $date): DatePoint
     {

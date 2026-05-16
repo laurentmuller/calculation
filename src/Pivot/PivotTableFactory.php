@@ -14,28 +14,22 @@ declare(strict_types=1);
 namespace App\Pivot;
 
 use App\Pivot\Aggregator\AbstractAggregator;
-use App\Pivot\Aggregator\SumAggregator;
 use App\Pivot\Field\PivotField;
-use App\Traits\CheckSubClassTrait;
 
 /**
  * Factory to create a pivot table.
- *
- * @template T of AbstractAggregator
  */
 class PivotTableFactory
 {
-    use CheckSubClassTrait;
-
     /** The title separator. */
     private const string SEPARATOR = '\\';
 
     /**
      * The aggregator class name.
      *
-     * @var class-string<T>
+     * @var class-string<AbstractAggregator>
      */
-    private string $aggregatorClass;
+    private readonly string $aggregator;
 
     /**
      * The column fields.
@@ -58,18 +52,14 @@ class PivotTableFactory
     private array $rowFields = [];
 
     /**
-     * @phpstan-param array<array<array-key, mixed>> $dataset
-     * @phpstan-param class-string<T> $aggregatorClass
-     *
-     * @throws \InvalidArgumentException if the given aggregator class name is not a subclass of the AbstractAggregator class
+     * @param array<array<array-key, mixed>> $dataset
      */
     public function __construct(
         private readonly array $dataset,
-        string $aggregatorClass = SumAggregator::class,
+        PivotOperation $operation = PivotOperation::SUM,
         private ?string $title = null
     ) {
-        $this->checkSubClass($aggregatorClass, AbstractAggregator::class);
-        $this->aggregatorClass = $aggregatorClass;
+        $this->aggregator = $operation->getAggregator();
     }
 
     /**
@@ -106,8 +96,7 @@ class PivotTableFactory
             if ($cell instanceof PivotCell) {
                 $cell->addValue($value);
             } else {
-                $aggregator = $this->createAggregator();
-                $table->addCellValue($aggregator, $currentCol, $currentRow, $value);
+                $table->addCellValue($this->createAggregator(), $currentCol, $currentRow, $value);
             }
             $table->addValue($value);
         }
@@ -125,11 +114,11 @@ class PivotTableFactory
     /**
      * Gets the aggregator class name.
      *
-     * @phpstan-return class-string<T>
+     * @return class-string<AbstractAggregator>
      */
-    public function getAggregatorClass(): string
+    public function getAggregator(): string
     {
-        return $this->aggregatorClass;
+        return $this->aggregator;
     }
 
     /**
@@ -187,19 +176,14 @@ class PivotTableFactory
     /**
      * Creates a new instance.
      *
-     * @phpstan-template E of AbstractAggregator
-     *
-     * @phpstan-param array<array<array-key, mixed>> $dataset
-     * @phpstan-param class-string<E> $aggregatorClass
-     *
-     * @phpstan-return PivotTableFactory<E>
+     * @param array<array<array-key, mixed>> $dataset
      */
     public static function instance(
         array $dataset,
-        string $aggregatorClass = SumAggregator::class,
+        PivotOperation $operation = PivotOperation::SUM,
         ?string $title = null
     ): self {
-        return new self($dataset, $aggregatorClass, $title);
+        return new self($dataset, $operation, $title);
     }
 
     /**
@@ -284,12 +268,10 @@ class PivotTableFactory
 
     /**
      * Creates an aggregator.
-     *
-     * @return T
      */
     private function createAggregator(): AbstractAggregator
     {
-        return new $this->aggregatorClass();
+        return new $this->aggregator();
     }
 
     /**

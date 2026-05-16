@@ -16,7 +16,7 @@ namespace App\Tests\Pivot;
 use App\Pivot\Aggregator\SumAggregator;
 use App\Pivot\Field\PivotField;
 use App\Pivot\Field\PivotFieldFactory;
-use App\Pivot\PivotTable;
+use App\Pivot\PivotOperation;
 use App\Pivot\PivotTableFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
@@ -27,7 +27,7 @@ final class PivotTableFactoryTest extends TestCase
     {
         $factory = PivotTableFactory::instance([]);
         self::assertNull($factory->getTitle());
-        self::assertSame(SumAggregator::class, $factory->getAggregatorClass());
+        self::assertSame(SumAggregator::class, $factory->getAggregator());
         self::assertNull($factory->getDataField());
         self::assertNull($factory->getKeyField());
         self::assertSame([], $factory->getDataset());
@@ -35,13 +35,6 @@ final class PivotTableFactoryTest extends TestCase
         self::assertSame([], $factory->getRowFields());
         self::assertFalse($factory->isValid());
         self::assertNull($factory->create());
-    }
-
-    public function testConstructorInvalidAggregator(): void
-    {
-        self::expectException(\InvalidArgumentException::class);
-        /* @phpstan-ignore argument.type */
-        new PivotTableFactory([], PivotTable::class);
     }
 
     public function testCreate(): void
@@ -122,9 +115,6 @@ final class PivotTableFactoryTest extends TestCase
         return [$row1, $row2];
     }
 
-    /**
-     * @phpstan-ignore missingType.generics
-     */
     private function createFactory(): PivotTableFactory
     {
         $columns = [
@@ -142,7 +132,7 @@ final class PivotTableFactoryTest extends TestCase
         $data = PivotFieldFactory::float('amount', 'Amount');
         $dataset = $this->createDataset();
 
-        return PivotTableFactory::instance($dataset, SumAggregator::class, 'Title')
+        return PivotTableFactory::instance($dataset, PivotOperation::SUM, 'Title')
             ->setColumnFields(...$columns)
             ->setRowFields(...$rows)
             ->setKeyField($keyField)

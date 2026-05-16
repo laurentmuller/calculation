@@ -17,10 +17,9 @@ use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
 use App\Model\TranslatableFlashMessage;
-use App\Pivot\Aggregator\CountAggregator;
-use App\Pivot\Aggregator\SumAggregator;
 use App\Pivot\Field\PivotField;
 use App\Pivot\Field\PivotFieldFactory;
+use App\Pivot\PivotOperation;
 use App\Pivot\PivotTable;
 use App\Pivot\PivotTableFactory;
 use App\Repository\CalculationRepository;
@@ -55,11 +54,11 @@ class PivotController extends AbstractController
         #[MapQueryParameter]
         ?int $months = null,
         #[MapQueryParameter]
-        ?bool $count = null
+        ?PivotOperation $operation = null
     ): Response {
         $months = $this->validateMonths($months);
-        $count = $this->validateCount($count);
-        $table = $this->createTable($months, $count);
+        $operation = $this->validateOperation($operation);
+        $table = $this->createTable($months, $operation);
         if (!$table instanceof PivotTable) {
             return $this->getEmptyResponse();
         }
@@ -69,7 +68,7 @@ class PivotController extends AbstractController
             'popover' => $this->isSessionBool('pivot.popover', true),
             'table' => $table,
             'months' => $months,
-            'count' => $count,
+            'operation' => $operation,
         ]);
     }
 
@@ -110,11 +109,11 @@ class PivotController extends AbstractController
         #[MapQueryParameter]
         ?int $months = null,
         #[MapQueryParameter]
-        ?bool $count = null
+        ?PivotOperation $operation = null
     ): JsonResponse {
         $months = $this->validateMonths($months);
-        $count = $this->validateCount($count);
-        $table = $this->createTable($months, $count);
+        $operation = $this->validateOperation($operation);
+        $table = $this->createTable($months, $operation);
         if (!$table instanceof PivotTable) {
             return $this->jsonFalse([
                 'message' => $this->trans('pivot.empty'),
@@ -149,7 +148,7 @@ class PivotController extends AbstractController
     /**
      * Gets the pivot table.
      */
-    private function createTable(int $months, bool $count): ?PivotTable
+    private function createTable(int $months, PivotOperation $operation): ?PivotTable
     {
         $dataset = $this->createDataset($months);
         if ([] === $dataset) {
@@ -158,9 +157,8 @@ class PivotController extends AbstractController
 
         $title = $this->trans('calculation.list.title');
         $data = PivotFieldFactory::float('item_overall', $this->trans('calculation.fields.overallTotal'));
-        $aggregatorClass = $count ? CountAggregator::class : SumAggregator::class;
 
-        return PivotTableFactory::instance($dataset, $aggregatorClass, $title)
+        return PivotTableFactory::instance($dataset, $operation, $title)
             ->setColumnFields(...$this->getColumnFields())
             ->setRowFields(...$this->getRowFields())
             ->setDataField($data)
@@ -172,8 +170,8 @@ class PivotController extends AbstractController
      */
     private function getColumnFields(): array
     {
-        $semesterFormatter = fn (int $semestre): string => $this->trans('pivot.semester.' . $semestre);
-        $quarterFormatter = fn (int $quarter): string => $this->trans('pivot.quarter.' . $quarter);
+        $semesterFormatter = fn (int $semestre): string => $this->trans('counters.semester', ['count' => $semestre]);
+        $quarterFormatter = fn (int $quarter): string => $this->trans('counters.quarter', ['count' => $quarter]);
 
         return [
             PivotFieldFactory::year('calculation_date', $this->trans('pivot.fields.year')),
@@ -197,26 +195,25 @@ class PivotController extends AbstractController
         ];
     }
 
-    private function validateCount(?bool $count): bool
-    {
-        $count ??= 0 !== $this->getSessionInt('pivot.count');
-        $this->setSessionValue('pivot.count', $count ? 1 : 0);
-
-        return $count;
-    }
-
     /**
      * @throws BadRequestHttpException
      */
     private function validateMonths(?int $months): int
     {
-        $months ??= $this->getSessionInt('pivot.months', 1);
+        $months ??= $this->getSessionInt('pivot.months', 3);
         if ($months < 1 || $months > 12) {
             throw new BadRequestHttpException($this->trans('pivot.invalid_months'));
         }
-
         $this->setSessionValue('pivot.months', $months);
 
         return $months;
+    }
+
+    private function validateOperation(?PivotOperation $operation): PivotOperation
+    {
+        $operation ??= $this->getSessionEnum('pivot.operation', PivotOperation::getDefault());
+        $this->setSessionValue('pivot.operation', $operation);
+
+        return $operation;
     }
 }

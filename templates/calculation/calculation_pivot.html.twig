@@ -120,17 +120,18 @@
     <li><a {{ html_attr(attrs) }}>{{ 'counters.months'|trans({count: month}) }}</a></li>
 {% endmacro output_month -%}
 
-{%- macro output_operation(count, selection, title) %}
+{%- macro output_operation(operation, selection) %}
     {% set attrs = {
-        class: ['dropdown-item', count === selection ? 'dropdown-item-checked-right'],
-        href: path('calculation_pivot_index', {count: count}),
+        class: ['dropdown-item', operation === selection ? 'dropdown-item-checked-right'],
+        href: path('calculation_pivot_index', {operation: operation.value}),
     } %}
-    <li><a {{ html_attr(attrs) }}>{{ title|trans }}</a></li>
+    <li><a {{ html_attr(attrs) }}>{{ operation|trans }}</a></li>
 {% endmacro output_operation -%}
 
 {# parameters #}
 {%- set title = 'pivot.title' -%}
 {%- set title_icon = 'table' -%}
+{%- set is_int = operation.isInt -%}
 {%- set row_level = table.rootRow.maxLevel -%}
 {%- set col_level = table.rootColumn.maxLevel -%}
 {%- set total_title = table.totalTitle|default('calculation.fields.total'|trans) -%}
@@ -155,8 +156,9 @@
                 {{- 'pivot.operation.title'|trans -}}
             </button>
             <ul id="operation" class="dropdown-menu dropdown-menu-checked-sm">
-                {{ _self.output_operation(false, count, 'pivot.operation.sum') }}
-                {{ _self.output_operation(true, count, 'pivot.operation.count') }}
+                {% for current in enum('App\\Pivot\\PivotOperation').sorted() %}
+                    {{ _self.output_operation(current, operation) }}
+                {% endfor %}
             </ul>
             <button type="button" class="btn btn-outline-secondary px-1" title="{{ 'common.actions'|trans }}" data-bs-toggle="dropdown" data-bs-target="#actions" aria-expanded="false">
                 {{- icon('ellipsis-v') -}}
@@ -179,6 +181,12 @@
                         text: 'common.button_export_csv',
                         icon: 'file-csv') -}}
                 </li>
+                <li>
+                    {{- dropdownItemExternal(
+                        href: path('calculation_pivot_json', {months: months, operation: operation.value}),
+                        text: 'common.button_export_json',
+                        icon: 'folder-tree') -}}
+                </li>
             </ul>
         </div>
     </div>
@@ -189,7 +197,7 @@
             {%- for i in 1..col_level -%}
             <tr>
                 {%- if i == 1 -%}<td class="text-nowrap not-hover p-0"{{ _self.rowspan(col_level) }}{{ _self.colspan(row_level) }}>{{ _self.outputTitle(table, col_level) }}</td>{%- endif -%}
-                {{ _self.outputHeaders(table.rootColumn.childrenAtLevel(i), separator, count) }}
+                {{ _self.outputHeaders(table.rootColumn.childrenAtLevel(i), separator, is_int) }}
                 {%- if i == 1 -%}<td{{ _self.rowspan(col_level) }} class="text-currency text-bg-success not-hover align-bottom">{{ total_title }}</td>{%- endif -%}
             </tr>
             {%- endfor -%}
@@ -197,16 +205,16 @@
         <tbody>
             {%- set columns = table.rootColumn.lastChildren -%}
             {%- for row in table.rootRow.children %}
-                {{ _self.outputRow(table, columns, row, separator, count) }}
+                {{ _self.outputRow(table, columns, row, separator, is_int) }}
             {%- endfor -%}
         </tbody>
         <tfoot>
             <tr>
                 <td class="text-nowrap not-hover text-bg-success"{{ _self.colspan(row_level) }}>{{ total_title }}</td>
                 {%- for cell in table.rootColumn.childrenAtLevel(col_level) -%}
-                    {{ _self.outputPopoverTotal(cell, separator, count) }}
+                    {{ _self.outputPopoverTotal(cell, separator, is_int) }}
                 {%- endfor -%}
-                {{ _self.outputPopoverTotal(table, separator, count) }}
+                {{ _self.outputPopoverTotal(table, separator, is_int) }}
             </tr>
         </tfoot>
     </table>

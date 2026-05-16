@@ -343,8 +343,15 @@ final class DateUtilsTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    public function testModifyInvalid(): void
+    {
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage('Invalid modifier: "fake".');
+        DateUtils::modify(DateUtils::createDate(), 'fake');
+    }
+
     #[DataProvider('getModifies')]
-    public function testModify(DatePoint $date, string $modifier, string $expected): void
+    public function testModifyValid(DatePoint $date, string $modifier, string $expected): void
     {
         $date = DateUtils::modify($date, $modifier);
         $actual = $date->format('Y-m-d');

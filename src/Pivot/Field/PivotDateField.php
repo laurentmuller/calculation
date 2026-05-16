@@ -37,7 +37,7 @@ class PivotDateField extends PivotField
      * @param string  $format the format used to extract the date part
      * @param ?string $title  the field title
      */
-    public function __construct(protected string $name, protected string $format, protected ?string $title = null)
+    public function __construct(string $name, protected string $format, ?string $title = null)
     {
         parent::__construct($name, $title);
     }
@@ -47,7 +47,7 @@ class PivotDateField extends PivotField
     {
         $value = $this->getRowValue($row);
         if ($value instanceof DatePoint) {
-            return $this->doGetValue($value);
+            return $this->getDateValue($value);
         }
 
         return parent::getValue($row);
@@ -56,7 +56,7 @@ class PivotDateField extends PivotField
     /**
      * Gets the value for the given date.
      */
-    protected function doGetValue(DatePoint $date): int
+    protected function getDateValue(DatePoint $date): int
     {
         return (int) $date->format($this->format);
     }

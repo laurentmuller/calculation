@@ -16,7 +16,7 @@ namespace App\Pivot\Field;
 use App\Utils\DateUtils;
 
 /**
- * The pivot field that map the week day values (1...7) to the wek day names (monday, tuesday, etc...).
+ * The pivot field that maps the week day values (1...7) to the wek day names (Monday, Tuesday, etc...).
  */
 class PivotWeekdayField extends PivotDateField
 {
@@ -32,7 +32,7 @@ class PivotWeekdayField extends PivotDateField
      * @param ?string $title the field title
      * @param bool    $short true to display the short day name, false to display the day name
      */
-    public function __construct(protected string $name, protected ?string $title = null, bool $short = false)
+    public function __construct(string $name, ?string $title = null, bool $short = false)
     {
         parent::__construct($name, self::PART_WEEK_DAY, $title);
 
@@ -45,10 +45,6 @@ class PivotWeekdayField extends PivotDateField
     #[\Override]
     public function getDisplayValue(mixed $value): mixed
     {
-        if (\is_int($value) && \array_key_exists($value, $this->names)) {
-            return $this->names[$value];
-        }
-
-        return parent::getDisplayValue($value);
+        return $this->names[(int) $value] ?? parent::getDisplayValue($value);
     }
 }

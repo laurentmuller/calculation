@@ -13,80 +13,90 @@ declare(strict_types=1);
 
 namespace App\Tests\Pivot\Aggregator;
 
-use App\Pivot\Aggregator\SumAggregator;
+use App\Pivot\Aggregator\MinAggregator;
 use PHPUnit\Framework\TestCase;
 
-final class SumAggregatorTest extends TestCase
+final class MinAggregatorTest extends TestCase
 {
+    private float $initialValue;
+
+    #[\Override]
+    protected function setUp(): void
+    {
+        $this->initialValue = (float) \PHP_INT_MAX;
+        parent::setUp();
+    }
+
     public function testAdd(): void
     {
-        $aggregator = new SumAggregator();
-        self::assertSame(0.0, $aggregator->getResult());
+        $aggregator = new MinAggregator();
+        self::assertSame($this->initialValue, $aggregator->getResult());
 
         $aggregator->add(10.0);
         self::assertSame(10.0, $aggregator->getResult());
 
-        $aggregator->add(new SumAggregator(10.0));
-        self::assertSame(20.0, $aggregator->getResult());
+        $aggregator->add(new MinAggregator(0.0));
+        self::assertSame(0.0, $aggregator->getResult());
     }
 
     public function testConstructor(): void
     {
-        $aggregator = new SumAggregator();
-        self::assertSame(0.0, $aggregator->getResult());
+        $aggregator = new MinAggregator();
+        self::assertSame($this->initialValue, $aggregator->getResult());
 
-        $aggregator = new SumAggregator(10.0);
+        $aggregator = new MinAggregator(10.0);
         self::assertSame(10.0, $aggregator->getResult());
 
-        $aggregator = new SumAggregator($aggregator);
+        $aggregator = new MinAggregator($aggregator);
         self::assertSame(10.0, $aggregator->getResult());
     }
 
     public function testGetFormattedResult(): void
     {
-        $aggregator = new SumAggregator(10.0);
+        $aggregator = new MinAggregator(10.0);
         self::assertSame(10.0, $aggregator->getFormattedResult());
 
         $aggregator->add(10.00255);
-        self::assertSame(20.0, $aggregator->getFormattedResult());
+        self::assertSame(10.0, $aggregator->getFormattedResult());
     }
 
     public function testInitialize(): void
     {
-        $aggregator = new SumAggregator(10.0);
+        $aggregator = new MinAggregator(10.0);
         self::assertSame(10.0, $aggregator->getResult());
 
         $aggregator->initialize();
-        self::assertSame(0.0, $aggregator->getResult());
+        self::assertSame($this->initialValue, $aggregator->getResult());
     }
 
     public function testJsonSerialize(): void
     {
         $expected = [
-            'name' => 'SumAggregator',
-            'value' => 0.0,
+            'name' => 'MinAggregator',
+            'value' => $this->initialValue,
         ];
-        $aggregator = new SumAggregator();
+        $aggregator = new MinAggregator();
         $actual = $aggregator->jsonSerialize();
         self::assertSame($expected, $actual);
 
         $expected = [
-            'name' => 'SumAggregator',
+            'name' => 'MinAggregator',
             'value' => 10.0,
         ];
-        $aggregator = new SumAggregator(10);
+        $aggregator = new MinAggregator(10);
         $actual = $aggregator->jsonSerialize();
         self::assertSame($expected, $actual);
     }
 
     public function testToString(): void
     {
-        $aggregator = new SumAggregator();
+        $aggregator = new MinAggregator();
         $actual = (string) $aggregator;
-        self::assertSame('SumAggregator(0)', $actual);
+        $expected = \sprintf('MinAggregator(%s)', $this->initialValue);
+        self::assertSame($expected, $actual);
 
-        $aggregator = new SumAggregator(10.0);
+        $aggregator = new MinAggregator(10.0);
         $actual = (string) $aggregator;
-        self::assertSame('SumAggregator(10)', $actual);
+        self::assertSame('MinAggregator(10)', $actual);
     }
 }

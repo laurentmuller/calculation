@@ -43,7 +43,7 @@ class PivotCell extends AbstractPivotAggregator
     }
 
     /**
-     * Returns if this column and row nodes are equal to the given nodes.
+     * Returns if this column and row these nodes are equal to the given nodes.
      *
      * @param PivotNode $column the node column to compare to
      * @param PivotNode $row    the node row to compare to
@@ -99,21 +99,21 @@ class PivotCell extends AbstractPivotAggregator
     /**
      * Gets the formatted result.
      *
-     * @return mixed the formatted result
+     * @return int|float the formatted result
      */
-    public function getFormattedResult(): mixed
+    public function getFormattedResult(): int|float
     {
-        return $this->getAggregator()->getFormattedResult();
+        return $this->aggregator->getFormattedResult();
     }
 
     /**
      * Gets the result.
      *
-     * @return mixed the result
+     * @return int|float the result
      */
-    public function getResult(): mixed
+    public function getResult(): int|float
     {
-        return $this->getAggregator()->getResult();
+        return $this->aggregator->getResult();
     }
 
     /**
@@ -152,7 +152,7 @@ class PivotCell extends AbstractPivotAggregator
         return [
             'row' => $this->getRowPath(),
             'col' => $this->getColumnPath(),
-            'value' => $this->getAggregator()->getFormattedResult(),
+            'value' => $this->aggregator->getFormattedResult(),
         ];
     }
 }

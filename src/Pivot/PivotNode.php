@@ -58,9 +58,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     #[\Override]
     public function __toString(): string
     {
-        $className = StringUtils::getShortName($this);
-
-        return \sprintf('%s(%s)', $className, 0);
+        return \sprintf('%s(%s)', StringUtils::getShortName($this), 0);
     }
 
     /**
@@ -554,7 +552,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     private function update(): static
     {
         if (!$this->isEmpty()) {
-            $this->aggregator->init();
+            $this->aggregator->initialize();
             foreach ($this->children as $child) {
                 $this->aggregator->add($child->getAggregator());
             }

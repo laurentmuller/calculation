@@ -18,33 +18,9 @@ use App\Traits\MathTrait;
 /**
  * Aggregator to get average of values.
  */
-class AverageAggregator extends AbstractAggregator
+class AverageAggregator extends AbstractCompositeAggregator
 {
     use MathTrait;
-
-    private CountAggregator $countAggregator;
-    private SumAggregator $sumAggregator;
-
-    public function __construct(AbstractAggregator|int|float|null $value = null)
-    {
-        $this->countAggregator = new CountAggregator();
-        $this->sumAggregator = new SumAggregator();
-        parent::__construct($value);
-    }
-
-    #[\Override]
-    public function add(AbstractAggregator|int|float|null $value): static
-    {
-        if ($value instanceof self) {
-            $this->countAggregator->add($value->countAggregator);
-            $this->sumAggregator->add($value->sumAggregator);
-        } elseif (null !== $value) {
-            $this->countAggregator->add($value);
-            $this->sumAggregator->add($value);
-        }
-
-        return $this;
-    }
 
     #[\Override]
     public function getFormattedResult(): float
@@ -56,17 +32,17 @@ class AverageAggregator extends AbstractAggregator
     public function getResult(): float
     {
         return $this->safeDivide(
-            $this->sumAggregator->getResult(),
-            $this->countAggregator->getResult()
+            $this->aggregators['sum']->getResult(),
+            $this->aggregators['count']->getResult()
         );
     }
 
     #[\Override]
-    public function init(): static
+    protected function createAggregators(): array
     {
-        $this->countAggregator->init();
-        $this->sumAggregator->init();
-
-        return $this;
+        return [
+            'sum' => new SumAggregator(),
+            'count' => new CountAggregator(),
+        ];
     }
 }

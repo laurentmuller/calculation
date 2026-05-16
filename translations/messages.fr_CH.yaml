@@ -306,6 +306,7 @@ common:
     button_export_excel: Exporter vers le format Microsoft® Excel®
     button_export_word: Exporter vers le format Microsoft® Word®
     button_export_csv: Exporter vers le format CSV
+    button_export_json: Exporter vers le format JSON
     button_card: Mode mosaïque
     button_import: Importer
     button_ok: OK
@@ -937,21 +938,16 @@ pivot:
     empty: Aucune calculation ne correspond aux critères.
     operation:
         title: Opération
-        sum: Somme
+        average: Moyenne
         count: Nombre
+        max: Maximum
+        min: Minimum
+        sum: Somme
     fields:
         month: Mois
         quarter: Trimestre
         semester: Semestre
         year: Année
-    quarter:
-        1: 1<sup>er</sup> trimestre
-        2: 2<sup>ème</sup> trimestre
-        3: 3<sup>ème</sup> trimestre
-        4: 4<sup>ème</sup> trimestre
-    semester:
-        1: 1<sup>er</sup> semestre
-        2: 2<sup>ème</sup> semestre
 product:
     add:
         title: Nouvel article

@@ -25,7 +25,7 @@ abstract class AbstractAggregator implements \JsonSerializable, \Stringable
      */
     public function __construct(self|int|float|null $value = null)
     {
-        $this->init();
+        $this->initialize();
         if (null !== $value) {
             $this->add($value);
         }
@@ -59,9 +59,9 @@ abstract class AbstractAggregator implements \JsonSerializable, \Stringable
     abstract public function getResult(): int|float;
 
     /**
-     * Initialize.
+     * Initialize the result.
      */
-    abstract public function init(): static;
+    abstract public function initialize(): static;
 
     #[\Override]
     public function jsonSerialize(): array

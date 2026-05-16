@@ -27,8 +27,12 @@ final class PivotQuarterFieldTest extends TestCase
 
     public function testFormatter(): void
     {
-        $formatter = static fn (int $quarter): string => (string) $quarter;
         $field = new PivotQuarterField('name');
+        self::assertNull($field->getFormatter());
+        $actual = $field->getDisplayValue(1);
+        self::assertSame('1st quarter', $actual);
+
+        $formatter = static fn (int $quarter): string => (string) $quarter;
         $field->setFormatter($formatter);
         self::assertSame($formatter, $field->getFormatter());
 

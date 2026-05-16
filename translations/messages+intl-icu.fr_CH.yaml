@@ -233,3 +233,15 @@ counters:
             one   {1 pixel} 
             other {# pixels}
         }
+    semester: >-
+        {count, plural,  
+            =0    {Aucun semestre} 
+            one   {1er semestre} 
+            other {#ème semestre}
+        }
+    quarter: >-
+        {count, plural,  
+            =0    {Aucun trimestre} 
+            one   {1er trimestre} 
+            other {#ème trimestre}
+        }

@@ -16,10 +16,8 @@ namespace App\Pivot\Aggregator;
 /**
  * Aggregator to count values.
  */
-class CountAggregator extends AbstractAggregator
+class CountAggregator extends AbstractIntAggregator
 {
-    private int $result = 0;
-
     #[\Override]
     public function add(AbstractAggregator|int|float|null $value): static
     {
@@ -28,20 +26,6 @@ class CountAggregator extends AbstractAggregator
         } elseif (null !== $value) {
             ++$this->result;
         }
-
-        return $this;
-    }
-
-    #[\Override]
-    public function getResult(): int
-    {
-        return $this->result;
-    }
-
-    #[\Override]
-    public function init(): static
-    {
-        $this->result = 0;
 
         return $this;
     }

@@ -27,10 +27,14 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Event\SwitchUserEvent;
+use Symfony\Component\Security\Http\Firewall\SwitchUserListener as SecuritySwitchUserListener;
 
 final class SwitchUserListenerTest extends TestCase
 {
     use TranslatorMockTrait;
+
+    private const string EXIT_VALUE = SecuritySwitchUserListener::EXIT_VALUE;
+    private const string SWITCH_USER_PARAMETER = SwitchUserListener::SWITCH_USER_PARAMETER;
 
     public function testSwitchUserDefault(): void
     {
@@ -41,21 +45,21 @@ final class SwitchUserListenerTest extends TestCase
 
         $listener = $this->createListener();
         $listener->onSwitchUser($event);
-        self::assertTrue($request->query->has('_switch_user'));
-        self::assertSame('', $request->query->get('_switch_user'));
+        self::assertTrue($request->query->has(self::SWITCH_USER_PARAMETER));
+        self::assertSame('', $request->query->get(self::SWITCH_USER_PARAMETER));
     }
 
     public function testSwitchUserExit(): void
     {
-        $request = $this->createRequest('_exit');
+        $request = $this->createRequest(self::EXIT_VALUE);
         $token = $this->createSwitchUserToken();
         $user = $this->getUserToken($token);
         $event = new SwitchUserEvent($request, $user, $token);
 
         $listener = $this->createListener();
         $listener->onSwitchUser($event);
-        self::assertTrue($request->query->has('_switch_user'));
-        self::assertSame('_exit', $request->query->get('_switch_user'));
+        self::assertTrue($request->query->has(self::SWITCH_USER_PARAMETER));
+        self::assertSame(self::EXIT_VALUE, $request->query->get(self::SWITCH_USER_PARAMETER));
     }
 
     public function testSwitchUserOriginal(): void
@@ -67,8 +71,8 @@ final class SwitchUserListenerTest extends TestCase
 
         $listener = $this->createListener();
         $listener->onSwitchUser($event);
-        self::assertTrue($request->query->has('_switch_user'));
-        self::assertSame('fake', $request->query->get('_switch_user'));
+        self::assertTrue($request->query->has(self::SWITCH_USER_PARAMETER));
+        self::assertSame('fake', $request->query->get(self::SWITCH_USER_PARAMETER));
     }
 
     private function createListener(): SwitchUserListener
@@ -83,7 +87,7 @@ final class SwitchUserListenerTest extends TestCase
     private function createRequest(string $action = ''): Request
     {
         /** @var InputBag<string> $query */
-        $query = new InputBag(['_switch_user' => $action]);
+        $query = new InputBag([self::SWITCH_USER_PARAMETER => $action]);
         $request = $this->createMock(Request::class);
         $request->query = $query;
 
@@ -92,10 +96,11 @@ final class SwitchUserListenerTest extends TestCase
 
     private function createRequestStack(): RequestStack
     {
+        $session = self::createStub(SessionInterface::class);
         $requestStack = $this->createMock(RequestStack::class);
         $requestStack->expects(self::once())
             ->method('getSession')
-            ->willReturn(self::createStub(SessionInterface::class));
+            ->willReturn($session);
 
         return $requestStack;
     }

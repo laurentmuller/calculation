@@ -35,7 +35,7 @@ class LoginListener implements ServiceSubscriberInterface
     ) {
     }
 
-    #[AsEventListener(event: LoginSuccessEvent::class)]
+    #[AsEventListener]
     public function onLoginSuccess(LoginSuccessEvent $event): void
     {
         /** @var User $user */

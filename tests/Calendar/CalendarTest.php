@@ -37,7 +37,7 @@ final class CalendarTest extends CalendarTestCase
 
         $start = new DatePoint('2024-01-01');
         $end = new DatePoint('2025-01-05');
-        $interval = (int) $start->diff($end)->days + 1;
+        $interval = $start->diff($end)->days + 1;
 
         self::assertCount($interval, $calendar->getDays());
         self::assertCount(53, $calendar->getWeeks());

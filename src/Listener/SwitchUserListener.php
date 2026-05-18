@@ -16,7 +16,6 @@ namespace App\Listener;
 use App\Traits\TranslatorFlashMessageAwareTrait;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Event\SwitchUserEvent;
 use Symfony\Component\Security\Http\Firewall\SwitchUserListener as SecuritySwitchUserListener;
 use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
@@ -31,21 +30,15 @@ class SwitchUserListener implements ServiceSubscriberInterface
     use TranslatorFlashMessageAwareTrait;
 
     /** The switch user parameter name. */
-    public const string SWITCH_USER_PARAMETER = '_switch_user';
+    public const string SWITCH_USER_PARAMETER = 'switch_user';
 
-    private const string ROLE_PREVIOUS_ADMIN = 'ROLE_PREVIOUS_ADMIN';
-
-    #[AsEventListener(event: SwitchUserEvent::class, priority: 100)]
+    #[AsEventListener]
     public function onSwitchUser(SwitchUserEvent $event): void
     {
-        // update the token
-        $this->updateToken($event);
-
         // get values
-        $request = $event->getRequest();
+        $action = $this->getAction($event);
         $name = $this->getTargetUsername($event);
         $original = $this->getOriginalUsername($event);
-        $action = $request->query->getString(self::SWITCH_USER_PARAMETER);
 
         // get the message
         if (SecuritySwitchUserListener::EXIT_VALUE === $action) {
@@ -58,6 +51,11 @@ class SwitchUserListener implements ServiceSubscriberInterface
 
         // display message
         $this->successTrans($id, ['%name%' => $name, '%orignal%' => $original]);
+    }
+
+    private function getAction(SwitchUserEvent $event): string
+    {
+        return $event->getRequest()->query->getString(self::SWITCH_USER_PARAMETER);
     }
 
     private function getOriginalUsername(SwitchUserEvent $event): ?string
@@ -73,25 +71,5 @@ class SwitchUserListener implements ServiceSubscriberInterface
     private function getTargetUsername(SwitchUserEvent $event): string
     {
         return $event->getTargetUser()->getUserIdentifier();
-    }
-
-    /**
-     * This is a workaround for https://github.com/symfony/symfony/issues/64224.
-     */
-    private function updateToken(SwitchUserEvent $event): void
-    {
-        $token = $event->getToken();
-        if (!$token instanceof SwitchUserToken || !$token->getUser() instanceof UserInterface
-            || \in_array(self::ROLE_PREVIOUS_ADMIN, $token->getRoleNames(), true)) {
-            return;
-        }
-
-        $event->setToken(new SwitchUserToken(
-            $token->getUser(),
-            $token->getFirewallName(),
-            \array_unique([...$token->getRoleNames(), self::ROLE_PREVIOUS_ADMIN]),
-            $token->getOriginalToken(),
-            $token->getOriginatedFromUri(),
-        ));
     }
 }

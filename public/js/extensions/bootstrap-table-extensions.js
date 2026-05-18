@@ -63,6 +63,9 @@
              */
             updateLink: function (row, params) {
                 const $link = $(this);
+                if ($link.hasClass('btn-skip-href')) {
+                    return;
+                }
                 const regex = /\bid=\d+/i;
                 const values = $link.attr('href').split('?');
                 values[0] = values[0].replace(/\/\d+/, '/' + row.action);

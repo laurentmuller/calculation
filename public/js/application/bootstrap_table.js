@@ -245,11 +245,7 @@ function updateUserSwitchAction($table, row, _$element, $action) {
     if (isConnectedUser($table, row)) {
         removeAction($action, '.user-switch-divider');
     } else {
-        const source = $action.attr('href').split('?')[0];
-        const params = {
-            _switch_user: row.username
-        };
-        const href = source + '?' + $.param(params);
+        const href = $action.attr('href').replace('_username_', row.username);
         $action.attr('href', href);
     }
 }
@@ -644,7 +640,8 @@ function showSortDialog($table, $button) {
                 const $button = $item.find('a.btn-default');
                 if ($link.length && $button.length) {
                     $link.attr({
-                        'href': $button.attr('href'), 'title': $button.text()
+                        'href': $button.attr('href'),
+                        'title': $button.text()
                     });
                 }
             },

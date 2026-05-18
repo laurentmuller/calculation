@@ -54,11 +54,10 @@
     {% endif %}
     {{- _self.item_path(path('user_reset', params), 'user.reset.title', 'eraser', 'btn-user-reset') }}
 {% endif %}
-{%- if not is_granted(IS_IMPERSONATOR) and is_granted(ROLE_ADMIN) -%}
-    {% if allow_edit or allow_delete or allow_add or allow_show %}
-        {{- _self.item_separator('user-switch-divider') }}
-    {% endif %}
-    {{- _self.item_path(path('homepage', {_switch_user: 'username'}), 'user.switch.take.title', 'user-plus', 'btn-user-switch') }}
+{%- if not is_granted(IS_IMPERSONATOR) and is_granted(ROLE_SUPER_ADMIN) -%}
+    {%- set param_name = constant('App\\Listener\\SwitchUserListener::SWITCH_USER_PARAMETER') -%}
+    {{- _self.item_separator('user-switch-divider') }}
+    {{- _self.item_path(path('homepage', {(param_name): 'username'}), 'user.switch.take.title', 'user-plus', 'btn-user-switch') }}
 {%- endif -%}
 {%- endblock other_actions %}
 {# custom view header #}

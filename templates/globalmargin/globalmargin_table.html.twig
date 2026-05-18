@@ -8,7 +8,7 @@
 {# display mode #}
 {% block display_mode %}
 {% if allow_edit -%}
-    {{- _self.item_path(path('globalmargin_edit', params), 'globalmargin.edit.title', ICON_EDIT) }}
+    {{- _self.item_path(path('globalmargin_edit', params), 'globalmargin.edit.title', ICON_EDIT, 'btn-default') }}
     {{- _self.item_separator() }}
 {% endif %}
 {{ parent() }}
@@ -20,11 +20,11 @@
 {%- endblock global_actions %}
 {# edit actions #}
 {% block edit_actions -%}
-{{- _self.item_path(path('globalmargin_edit', params), 'globalmargin.edit.title', ICON_EDIT) }}
+{{- _self.item_path(path('globalmargin_edit', params), 'globalmargin.edit.title', ICON_EDIT, 'btn-default') }}
 {%- endblock edit_actions %}
 {# show actions #}
 {% block show_actions -%}
-{{- _self.item_path(path('globalmargin_show', params), 'globalmargin.show.title', ICON_SHOW, show_class ~ ' btn-default') }}
+{{- _self.item_path(path('globalmargin_show', params), 'globalmargin.show.title', ICON_SHOW, show_class) }}
 {%- endblock show_actions %}
 {# page list #}
 {% block page_list %}

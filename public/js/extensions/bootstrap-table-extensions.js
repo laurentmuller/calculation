@@ -94,7 +94,7 @@
              * Update the selected row.
              *
              * @param {jQueryTable} $table - the bootstrap table.
-             * @return {boolean} this function returns always true.
+             * @return {boolean} this function always returns true.
              */
             updateRow: function ($table) {
                 const $row = $(this);
@@ -251,7 +251,7 @@
                 $this.bootstrapTable(settings);
                 $this.enableKeys().highlight();
 
-                // select row on right click
+                // select row on the right click
                 $this.find('tbody').on('mousedown', 'tr[data-index]', function (e) {
                     if (e.button === 2) {
                         $(this).updateRow($this);
@@ -939,7 +939,7 @@
             },
 
             /**
-             * Format the pages range.
+             * Format the range of pages.
              *
              * @param {Options} [options] the options to get pages from.
              * @param {number} [pageNumber] the optional current page.
@@ -955,7 +955,7 @@
             },
 
             /**
-             * Format the records range.
+             * Format the range of records.
              *
              * @param {Options} [options] the options to get pages from.
              * @param {number} [pageNumber] the optional current page.

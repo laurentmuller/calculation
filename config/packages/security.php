@@ -16,6 +16,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 use App\Constants\CacheAttributes;
 use App\Constants\SecurityAttributes;
 use App\Interfaces\RoleInterface;
+use App\Listener\SwitchUserListener;
 use App\Repository\UserRepository;
 use App\Security\LoginFormAuthenticator;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -77,6 +78,7 @@ return App::config([
                 'login_throttling' => [], // allows 5 login attempts per minute
                 'switch_user' => [
                     'role' => RoleInterface::ROLE_SUPER_ADMIN,
+                    'parameter' => SwitchUserListener::SWITCH_USER_PARAMETER,
                 ],
                 'logout' => [
                     'path' => SecurityAttributes::LOGOUT_ROUTE,

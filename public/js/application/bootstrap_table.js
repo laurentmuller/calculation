@@ -247,7 +247,7 @@ function updateUserSwitchAction($table, row, _$element, $action) {
     } else {
         const source = $action.attr('href').split('?')[0];
         const params = {
-            '_switch_user': row.username
+            _switch_user: row.username
         };
         const href = source + '?' + $.param(params);
         $action.attr('href', href);
@@ -728,7 +728,6 @@ function showSortDialog($table, $button) {
                     $table.refresh();
                 }
                 $table.find('tr.table-primary').trigger('focus');
-                //$('input.form-control-search').trigger('focus');
             });
         }
 

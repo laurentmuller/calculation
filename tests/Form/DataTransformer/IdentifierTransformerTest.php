@@ -103,7 +103,7 @@ final class IdentifierTransformerTest extends EntityTransformerTestCase
     }
 
     /**
-     * @phpstan-param int|string|null $value
+     * @param int|string|null $value
      */
     #[DataProvider('getTransformValid')]
     public function testTransformValid(mixed $value, mixed $expected): void
@@ -115,7 +115,7 @@ final class IdentifierTransformerTest extends EntityTransformerTestCase
     }
 
     /**
-     * @phpstan-return IdentifierTransformer<Group>
+     * @return IdentifierTransformer<Group>
      */
     #[\Override]
     protected function createTransformer(?Group $group = null): IdentifierTransformer

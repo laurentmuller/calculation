@@ -308,7 +308,7 @@ final class ArrayTraitTest extends TestCase
     }
 
     /**
-     * @phpstan-return array<int, string>
+     * @return array<int, string>
      */
     private function createArray(): array
     {

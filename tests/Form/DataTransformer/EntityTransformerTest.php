@@ -117,7 +117,7 @@ final class EntityTransformerTest extends EntityTransformerTestCase
     }
 
     /**
-     * @phpstan-return EntityTransformer<Group>
+     * @return EntityTransformer<Group>
      */
     #[\Override]
     protected function createTransformer(?Group $group = null): EntityTransformer

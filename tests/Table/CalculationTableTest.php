@@ -112,7 +112,7 @@ final class CalculationTableTest extends EntityTableTestCase
     }
 
     /**
-     * @phpstan-return array[]
+     * @return array[]
      */
     #[\Override]
     protected function createEntities(): array

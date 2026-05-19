@@ -70,7 +70,7 @@ final class ComparableTraitTest extends TestCase
     }
 
     /**
-     * @phpstan-return array<array-key, Product>
+     * @return array<array-key, Product>
      */
     private function createArray(Product ...$products): array
     {

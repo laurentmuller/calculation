@@ -193,7 +193,7 @@ final class FileTypeExtensionTest extends TypeTestCase
     }
 
     /**
-     * @phpstan-return FormInterface<mixed>
+     * @return FormInterface<mixed>
      */
     private function createForm(array $options = []): FormInterface
     {

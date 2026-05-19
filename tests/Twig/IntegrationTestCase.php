@@ -276,7 +276,7 @@ abstract class IntegrationTestCase extends TestCase
     }
 
     /**
-     * @phpstan-return \Iterator<string>
+     * @return \Iterator<string>
      */
     private function getIterator(string $fixturesDir): \Iterator
     {

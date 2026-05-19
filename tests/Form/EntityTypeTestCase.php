@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Form;
 
+use App\Form\AbstractEntityType;
 use App\Form\Extension\FileTypeExtension;
 use App\Form\Extension\InputGroupTypeExtension;
 use App\Form\Extension\UrlTypeExtension;
@@ -27,7 +28,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
  * Test for entity type class.
  *
  * @template TEntity of EntityInterface
- * @template TForm of \App\Form\AbstractEntityType<TEntity>
+ * @template TForm of AbstractEntityType<TEntity>
  */
 #[AllowMockObjectsWithoutExpectations]
 abstract class EntityTypeTestCase extends TypeTestCase
@@ -92,10 +93,10 @@ abstract class EntityTypeTestCase extends TypeTestCase
     /**
      * Update the given entity with the given data.
      *
-     * @phpstan-param class-string<TEntity> $entityClass
-     * @phpstan-param array<string, mixed>  $data
+     * @param class-string<TEntity> $entityClass
+     * @param array<string, mixed>  $data
      *
-     * @phpstan-return TEntity
+     * @return TEntity
      */
     protected function populate(string $entityClass, array $data): EntityInterface
     {

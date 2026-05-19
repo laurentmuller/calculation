@@ -321,11 +321,11 @@ final class CalculationServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @phpstan-template TEntity of EntityInterface
+     * @template TEntity of EntityInterface
      *
-     * @phpstan-param class-string<TEntity> $entityName
+     * @param class-string<TEntity> $entityName
      *
-     * @phpstan-return EntityRepository<TEntity> $repository
+     * @return EntityRepository<TEntity> $repository
      */
     private function initRepository(ObjectManager $manager, string $entityName): EntityRepository
     {

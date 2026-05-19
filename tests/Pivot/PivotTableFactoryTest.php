@@ -90,7 +90,7 @@ final class PivotTableFactoryTest extends TestCase
     }
 
     /**
-     * @phpstan-return array<array<array-key, mixed>>
+     * @return array<array<array-key, mixed>>
      */
     private function createDataset(): array
     {

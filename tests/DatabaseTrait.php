@@ -44,9 +44,9 @@ trait DatabaseTrait
      *
      * @template T of EntityInterface
      *
-     * @phpstan-param T $entity
+     * @param T $entity
      *
-     * @phpstan-return T
+     * @return T
      */
     protected function addEntity(EntityInterface $entity): EntityInterface
     {
@@ -60,7 +60,7 @@ trait DatabaseTrait
     /**
      * Delete all entities for the given class.
      *
-     * @phpstan-param class-string $className
+     * @param class-string $className
      */
     protected function deleteEntitiesByClass(string $className): void
     {

@@ -49,7 +49,7 @@ abstract class EntityTableTestCase extends TestCase
     }
 
     /**
-     * @phpstan-return TEntity[]|array[]
+     * @return TEntity[]|array[]
      */
     abstract protected function createEntities(): array;
 
@@ -70,7 +70,7 @@ abstract class EntityTableTestCase extends TestCase
     }
 
     /**
-     * @phpstan-return MockObject&Query<array-key, mixed>
+     * @return MockObject&Query<array-key, mixed>
      */
     protected function createMockQuery(array $entities): MockObject&Query
     {
@@ -82,7 +82,7 @@ abstract class EntityTableTestCase extends TestCase
     }
 
     /**
-     * @phpstan-param MockObject&Query<array-key, mixed> $query
+     * @param MockObject&Query<array-key, mixed> $query
      */
     protected function createMockQueryBuilder(MockObject&Query $query): MockObject&QueryBuilder
     {
@@ -98,14 +98,14 @@ abstract class EntityTableTestCase extends TestCase
     }
 
     /**
-     * @phpstan-return MockObject&TRepository
+     * @return MockObject&TRepository
      */
     abstract protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&AbstractRepository;
 
     /**
-     * @phpstan-param MockObject&TRepository $repository
+     * @param MockObject&TRepository $repository
      *
-     * @phpstan-return TEntityTable
+     * @return TEntityTable
      */
     abstract protected function createTable(MockObject&AbstractRepository $repository): AbstractEntityTable;
 
@@ -123,9 +123,9 @@ abstract class EntityTableTestCase extends TestCase
     }
 
     /**
-     * @phpstan-param TEntity[]|array[] $entities
+     * @param TEntity[]|array[] $entities
      *
-     * @phpstan-return TEntity[]|array[]
+     * @return TEntity[]|array[]
      */
     protected function updateIds(array $entities): array
     {

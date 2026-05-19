@@ -89,9 +89,9 @@ final class CommandFormServiceTest extends FormIntegrationTestCase
     }
 
     /**
-     * @phpstan-param array<string, array|scalar|null> $data
+     * @param array<string, array|scalar|null> $data
      *
-     * @phpstan-return FormInterface<mixed>
+     * @return FormInterface<mixed>
      */
     private function createForm(string $name = 'completion', array $data = []): FormInterface
     {

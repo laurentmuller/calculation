@@ -23,9 +23,9 @@ trait IdTrait
     /**
      * @template T of EntityInterface
      *
-     * @phpstan-param T $entity
+     * @param T $entity
      *
-     * @phpstan-return  T
+     * @return T
      */
     protected static function setId(EntityInterface $entity, int $id = 1): EntityInterface
     {

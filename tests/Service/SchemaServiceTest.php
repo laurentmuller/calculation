@@ -186,9 +186,9 @@ final class SchemaServiceTest extends TestCase
     /**
      * @template T of object
      *
-     * @phpstan-param class-string<T> $class
+     * @param class-string<T> $class
      *
-     * @phpstan-return ClassMetadata<T>
+     * @return ClassMetadata<T>
      */
     private function createMetadata(
         string $class,

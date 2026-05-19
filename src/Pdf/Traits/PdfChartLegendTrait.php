@@ -211,7 +211,7 @@ trait PdfChartLegendTrait
     /**
      * @phpstan-param non-empty-array<ColorStringType> $legends
      *
-     * @phpstan-return non-empty-array<float>
+     * @return non-empty-array<float>
      */
     private function getLegendWidths(array $legends, PdfPointStyle $style): array
     {

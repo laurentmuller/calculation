@@ -118,9 +118,9 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
     }
 
     /**
-     * @phpstan-param Collection<array-key, object>[] $collections
+     * @param Collection<array-key, object>[] $collections
      *
-     * @phpstan-return EntityInterface[]
+     * @return EntityInterface[]
      */
     private function filterCollections(array $collections): array
     {
@@ -137,9 +137,9 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
     }
 
     /**
-     * @phpstan-param array|Collection<array-key, object> $entities
+     * @param array|Collection<array-key, object> $entities
      *
-     * @phpstan-return EntityInterface[]
+     * @return EntityInterface[]
      */
     private function filterEntities(array|Collection $entities, bool $includeChildren = false): array
     {

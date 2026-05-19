@@ -65,7 +65,7 @@ class AnonymousCommand
     }
 
     /**
-     * @phpstan-return Query<Calculation>
+     * @return Query<Calculation>
      */
     private function createQuery(): Query
     {

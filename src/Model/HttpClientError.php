@@ -53,7 +53,7 @@ class HttpClientError implements \JsonSerializable, \Stringable
     }
 
     /**
-     * @phpstan-return array{
+     * @return array{
      *      result: false,
      *      code: int,
      *      message: string,

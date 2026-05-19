@@ -107,7 +107,7 @@ class ProductUpdateQuery extends AbstractSimulateQuery
     /**
      * Gets the update type (percent or fixed amount).
      *
-     * @phpstan-return ProductUpdateQuery::UPDATE_*
+     * @return ProductUpdateQuery::UPDATE_*
      */
     public function getType(): string
     {

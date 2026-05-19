@@ -25,7 +25,7 @@ interface ParentTimestampableInterface extends ParentEntityInterface
     /**
      * Gets the parent's entity or null if none.
      *
-     * @phpstan-return TEntity|null
+     * @return TEntity|null
      */
     #[\Override]
     public function getParentEntity(): ?TimestampableInterface;

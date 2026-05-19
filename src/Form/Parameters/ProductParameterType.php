@@ -57,7 +57,7 @@ class ProductParameterType extends AbstractParameterType
     }
 
     /**
-     * @phpstan-return IdentifierTransformer<Product>
+     * @return IdentifierTransformer<Product>
      */
     private function getProductTransformer(): IdentifierTransformer
     {

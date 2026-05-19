@@ -23,13 +23,13 @@ trait GroupByTrait
      *
      * Any additional keys will be used for grouping the next set of subarrays.
      *
-     * @phpstan-template T of array|object
+     * @template T of array|object
      *
-     * @phpstan-param T[]                              $array
-     * @phpstan-param string|int|callable(T):array-key $key
-     * @phpstan-param string|int|callable(T):array-key ...$others
+     * @param T[]                              $array
+     * @param string|int|callable(T):array-key $key
+     * @param string|int|callable(T):array-key ...$others
      *
-     * @phpstan-return array<array-key, T|mixed>
+     * @return array<array-key, T|mixed>
      */
     public function groupBy(array $array, string|int|callable $key, string|int|callable ...$others): array
     {

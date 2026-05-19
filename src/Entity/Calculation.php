@@ -752,7 +752,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Set global margin.
+     * Set the global margin.
      */
     public function setGlobalMargin(float $globalMargin): self
     {
@@ -873,10 +873,10 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * @template TValue
      *
-     * @phpstan-param \Closure(TValue, CalculationGroup): TValue $func
-     * @phpstan-param TValue $initial
+     * @param \Closure(TValue, CalculationGroup): TValue $func
+     * @param TValue                                     $initial
      *
-     * @phpstan-return TValue
+     * @return TValue
      */
     private function reduceGroups(\Closure $func, mixed $initial): mixed
     {

@@ -360,7 +360,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     /**
      * Gets the sort mode.
      *
-     * @phpstan-return self::SORT_*
+     * @return self::SORT_*
      */
     public function getSortMode(): string
     {

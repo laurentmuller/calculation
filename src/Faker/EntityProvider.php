@@ -83,7 +83,7 @@ class EntityProvider extends Base implements \Countable
     /**
      * Gets a random entity.
      *
-     * @phpstan-return TEntity|null
+     * @return TEntity|null
      */
     protected function entity(): ?EntityInterface
     {

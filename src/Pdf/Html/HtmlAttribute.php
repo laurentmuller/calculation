@@ -32,9 +32,9 @@ enum HtmlAttribute: string
     /**
      * @template T of \BackedEnum
      *
-     * @phpstan-param T $default
+     * @param T $default
      *
-     * @phpstan-return T
+     * @return T
      */
     public function getEnumValue(\DOMNode $node, \BackedEnum $default): \BackedEnum
     {

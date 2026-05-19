@@ -42,7 +42,7 @@ trait RoleTrait
      *
      * @see RoleInterface
      *
-     * @phpstan-return RoleInterface::ROLE_*
+     * @return RoleInterface::ROLE_*
      */
     public function getRole(): string
     {
@@ -50,11 +50,9 @@ trait RoleTrait
     }
 
     /**
-     * @return string[]
-     *
      * @see UserInterface
      *
-     * @phpstan-return RoleInterface::ROLE_*[]
+     * @return RoleInterface::ROLE_*[]
      */
     public function getRoles(): array
     {

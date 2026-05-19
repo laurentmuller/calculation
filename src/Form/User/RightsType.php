@@ -56,11 +56,11 @@ class RightsType extends AbstractType
             EntityPermissionType::class,
             [
                 'label' => $entity,
-                /** @phpstan-param int[] $object */
+                /* @param int[] $object */
                 'getter' => fn (array $object): FlagBag => $this->getOffsetValue($offset, $object),
-                /**
-                 * @phpstan-param int[]                     $object
-                 * @phpstan-param FlagBag<EntityPermission> $value
+                /*
+                 * @param int[]                     $object
+                 * @param FlagBag<EntityPermission> $value
                  */
                 'setter' => fn (array &$object, FlagBag $value) => $this->setOffsetValue($offset, $object, $value),
             ]
@@ -68,7 +68,7 @@ class RightsType extends AbstractType
     }
 
     /**
-     * @phpstan-return EntityName[]
+     * @return EntityName[]
      */
     private function getEntityNames(): array
     {
@@ -76,9 +76,9 @@ class RightsType extends AbstractType
     }
 
     /**
-     * @phpstan-param int[] $object
+     * @param int[] $object
      *
-     * @phpstan-return FlagBag<EntityPermission>
+     * @return FlagBag<EntityPermission>
      */
     private function getOffsetValue(int $offset, array $object): FlagBag
     {
@@ -102,8 +102,8 @@ class RightsType extends AbstractType
     }
 
     /**
-     * @phpstan-param int[]                     $object
-     * @phpstan-param FlagBag<EntityPermission> $value
+     * @param int[]                     $object
+     * @param FlagBag<EntityPermission> $value
      */
     private function setOffsetValue(int $offset, array &$object, FlagBag $value): void
     {

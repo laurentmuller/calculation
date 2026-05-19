@@ -384,7 +384,7 @@ class SchemaService
     }
 
     /**
-     * @phpstan-return AbstractSchemaManager<\Doctrine\DBAL\Platforms\AbstractPlatform>
+     * @return AbstractSchemaManager<\Doctrine\DBAL\Platforms\AbstractPlatform>
      *
      * @throws Exception
      */
@@ -407,7 +407,7 @@ class SchemaService
     }
 
     /**
-     * @phpstan-return ClassMetadata<object>|null
+     * @return ClassMetadata<object>|null
      */
     private function getTargetMetaData(string $name): ?ClassMetadata
     {

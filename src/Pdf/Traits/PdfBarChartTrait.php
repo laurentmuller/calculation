@@ -297,7 +297,7 @@ trait PdfBarChartTrait
     /**
      * @phpstan-param non-empty-array<BarChartRowType> $rows
      *
-     * @phpstan-return non-empty-array<float>
+     * @return non-empty-array<float>
      */
     private function getRowsValues(array $rows): array
     {

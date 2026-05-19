@@ -264,8 +264,7 @@ class CalculationRepository extends AbstractRepository
      * Gets the distinct years and months of calculations.
      *
      * @return array<int[]> the distinct years and months
-     *
-     * @phpstan-return array<array{
+     * @return array<array{
      *      year: int,
      *      month: int,
      *      year_month: int}>
@@ -290,8 +289,7 @@ class CalculationRepository extends AbstractRepository
      * Gets the distinct years and week of calculations.
      *
      * @return int[] the distinct years and weeks
-     *
-     * @phpstan-return array<array{
+     * @return array<array{
      *      year: int,
      *      month: int,
      *      year_week: int}>
@@ -351,9 +349,7 @@ class CalculationRepository extends AbstractRepository
      * @param int $year the year
      * @param int $week the week number (1 to 53)
      *
-     * @return Calculation[] the matching calculations
-     *
-     * @phpstan-return list<Calculation>
+     * @return list<Calculation> the matching calculations
      */
     public function getForWeek(int $year, int $week): array
     {
@@ -369,9 +365,7 @@ class CalculationRepository extends AbstractRepository
      *
      * @param int $year the year
      *
-     * @return Calculation[] the matching calculations
-     *
-     * @phpstan-return list<Calculation>
+     * @return list<Calculation> the matching calculations
      */
     public function getForYear(int $year): array
     {

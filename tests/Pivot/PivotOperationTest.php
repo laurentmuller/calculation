@@ -19,17 +19,42 @@ use App\Pivot\Aggregator\MaxAggregator;
 use App\Pivot\Aggregator\MinAggregator;
 use App\Pivot\Aggregator\SumAggregator;
 use App\Pivot\PivotOperation;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class PivotOperationTest extends TestCase
 {
-    public function testGetAggregator(): void
+    public static function getAggregators(): \Generator
     {
-        self::assertSame(AverageAggregator::class, PivotOperation::AVERAGE->getAggregator());
-        self::assertSame(CountAggregator::class, PivotOperation::COUNT->getAggregator());
-        self::assertSame(MaxAggregator::class, PivotOperation::MAX->getAggregator());
-        self::assertSame(MinAggregator::class, PivotOperation::MIN->getAggregator());
-        self::assertSame(SumAggregator::class, PivotOperation::SUM->getAggregator());
+        yield [PivotOperation::AVERAGE, AverageAggregator::class];
+        yield [PivotOperation::COUNT, CountAggregator::class];
+        yield [PivotOperation::MAX, MaxAggregator::class];
+        yield [PivotOperation::MIN, MinAggregator::class];
+        yield [PivotOperation::SUM, SumAggregator::class];
+    }
+
+    public static function getIsInts(): \Generator
+    {
+        yield [PivotOperation::AVERAGE, false];
+        yield [PivotOperation::COUNT, true];
+        yield [PivotOperation::MAX, false];
+        yield [PivotOperation::MIN, false];
+        yield [PivotOperation::SUM, false];
+    }
+
+    /**
+     * @param class-string $expected
+     */
+    #[DataProvider('getAggregators')]
+    public function testCreateAggregator(PivotOperation $operation, string $expected): void
+    {
+        self::assertInstanceOf($expected, $operation->createAggregator());
+    }
+
+    #[DataProvider('getAggregators')]
+    public function testGetAggregator(PivotOperation $operation, string $expected): void
+    {
+        self::assertSame($expected, $operation->getAggregator());
     }
 
     public function testGetDefault(): void
@@ -37,13 +62,10 @@ final class PivotOperationTest extends TestCase
         self::assertSame(PivotOperation::SUM, PivotOperation::getDefault());
     }
 
-    public function testIsInt(): void
+    #[DataProvider('getIsInts')]
+    public function testIsInt(PivotOperation $operation, bool $expected): void
     {
-        self::assertFalse(PivotOperation::AVERAGE->isInt());
-        self::assertTrue(PivotOperation::COUNT->isInt());
-        self::assertFalse(PivotOperation::MAX->isInt());
-        self::assertFalse(PivotOperation::MIN->isInt());
-        self::assertFalse(PivotOperation::SUM->isInt());
+        self::assertSame($expected, $operation->isInt());
     }
 
     public function testSorted(): void

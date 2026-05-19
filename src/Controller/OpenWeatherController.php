@@ -322,7 +322,7 @@ class OpenWeatherController extends AbstractController
     }
 
     /**
-     * @phpstan-return FormInterface<mixed>
+     * @return FormInterface<mixed>
      */
     private function createSearchForm(array $data): FormInterface
     {

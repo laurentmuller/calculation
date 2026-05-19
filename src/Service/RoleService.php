@@ -32,9 +32,7 @@ readonly class RoleService
      *
      * @param ?RoleInterface $role the data to get reachable role names
      *
-     * @return string[] an array, maybe empty, of reachable role names
-     *
-     * @phpstan-return RoleInterface::ROLE_*[]
+     * @return RoleInterface::ROLE_*[] an array, maybe empty, of reachable role names
      */
     public function getReachableRoleNames(?RoleInterface $role): array
     {
@@ -76,9 +74,7 @@ readonly class RoleService
     /**
      * Gets the role names for the given data.
      *
-     * @return string[] an array, maybe empty, of role names
-     *
-     * @phpstan-return RoleInterface::ROLE_*[]
+     * @return RoleInterface::ROLE_*[] an array, maybe empty, of role names
      */
     public function getRoleNames(?RoleInterface $role): array
     {

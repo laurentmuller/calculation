@@ -181,7 +181,7 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Gets the form type class name used to edit an entity.
      *
-     * @phpstan-return class-string<FormTypeInterface<TEntity>>
+     * @return class-string<FormTypeInterface<TEntity>>
      */
     protected function getEditFormType(): string
     {
@@ -222,7 +222,7 @@ abstract class AbstractEntityController extends AbstractController
     }
 
     /**
-     * @phpstan-return TRepository
+     * @return TRepository
      */
     protected function getRepository(): AbstractRepository
     {

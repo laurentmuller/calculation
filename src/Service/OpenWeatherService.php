@@ -124,7 +124,7 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param int              $count the number of results to return or -1 for all
      * @param OpenWeatherUnits $units the unit to use
      *
-     * @phpstan-return array{current: array|false, forecast: array|false, daily: array|false}
+     * @return array{current: array|false, forecast: array|false, daily: array|false}
      */
     public function all(
         int $id,
@@ -273,7 +273,7 @@ class OpenWeatherService extends AbstractHttpClientService
     /**
      * Returns the current, the hourly and daily forecasts conditions data for a specific location.
      *
-     * @phpstan-return array{current: array|false, forecast: array|false, daily: array|false}
+     * @return array{current: array|false, forecast: array|false, daily: array|false}
      */
     private function doGetAll(
         int $id,

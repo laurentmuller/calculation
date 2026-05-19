@@ -38,7 +38,7 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
     public const string PARAM_CATEGORY = 'categoryId';
 
     /**
-     * @phpstan-param TRepository $repository
+     * @param TRepository $repository
      */
     public function __construct(
         AbstractCategoryItemRepository $repository,

@@ -23,7 +23,7 @@ interface ParentEntityInterface
     /**
      * Gets the parent's entity or null if none.
      *
-     * @phpstan-return TEntity|null
+     * @return TEntity|null
      */
     public function getParentEntity(): ?EntityInterface;
 }

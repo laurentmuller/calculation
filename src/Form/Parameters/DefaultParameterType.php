@@ -57,7 +57,7 @@ class DefaultParameterType extends AbstractParameterType
     }
 
     /**
-     * @phpstan-return IdentifierTransformer<CalculationState>
+     * @return IdentifierTransformer<CalculationState>
      */
     private function getCalculationStateTransformer(): IdentifierTransformer
     {
@@ -65,7 +65,7 @@ class DefaultParameterType extends AbstractParameterType
     }
 
     /**
-     * @phpstan-return IdentifierTransformer<Category>
+     * @return IdentifierTransformer<Category>
      */
     private function getCategoryTransformer(): IdentifierTransformer
     {

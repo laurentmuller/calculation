@@ -75,7 +75,7 @@ class LogParserService
     }
 
     /**
-     * @phpstan-return array<string, string>|null
+     * @return array<string, string>|null
      */
     private function parseContext(string $value): ?array
     {

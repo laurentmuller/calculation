@@ -47,7 +47,7 @@ class Generator extends \Faker\Generator
      *
      * @param class-string<TProvider> $class the provider class name to find
      *
-     * @phpstan-return TProvider|null the provider, if found; null otherwise
+     * @return TProvider|null the provider, if found; null otherwise
      */
     public function getProvider(string $class): ?Base
     {

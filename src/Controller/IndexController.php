@@ -186,7 +186,7 @@ class IndexController extends AbstractController
     }
 
     /**
-     * @phpstan-return array{restrict: bool, view: TableView,  ...}
+     * @return array{restrict: bool, view: TableView,  ...}
      */
     private function getParameters(IndexService $indexService, Request $request, IndexQuery $query): array
     {

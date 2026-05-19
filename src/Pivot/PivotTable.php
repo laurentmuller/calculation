@@ -64,10 +64,6 @@ class PivotTable extends AbstractPivotAggregator
     /** The total title. */
     private ?string $totalTitle = null;
 
-    /**
-     * @param AbstractAggregator $aggregator the aggregator function
-     * @param ?string            $title      the table title
-     */
     public function __construct(AbstractAggregator $aggregator, private ?string $title = null)
     {
         parent::__construct($aggregator);

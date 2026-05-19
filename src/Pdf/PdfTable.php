@@ -639,7 +639,7 @@ class PdfTable
      * @param PdfCell[]   $cells
      * @param PdfColumn[] $columns
      *
-     * @phpstan-return array{
+     * @return array{
      *     0: string[],
      *     1: PdfStyle[],
      *     2: PdfTextAlignment[],

@@ -83,7 +83,7 @@ final readonly class DataQueryValueResolver extends AbstractValueResolver implem
     }
 
     /**
-     * @phpstan-return self::SORT_*
+     * @return self::SORT_*
      */
     private function getOrder(Request $request, string $prefix): string
     {
@@ -156,7 +156,7 @@ final readonly class DataQueryValueResolver extends AbstractValueResolver implem
     }
 
     /**
-     * @phpstan-return self::SORT_*
+     * @return self::SORT_*
      */
     private function validateOrder(string $order): string
     {

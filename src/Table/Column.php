@@ -188,7 +188,7 @@ class Column implements \Stringable, SortModeInterface
     /**
      * Gets the default sorting order.
      *
-     * @phpstan-return self::SORT_*
+     * @return self::SORT_*
      */
     public function getOrder(): string
     {

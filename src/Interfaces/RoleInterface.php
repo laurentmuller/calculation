@@ -41,25 +41,21 @@ interface RoleInterface
     /**
      * Gets the role.
      *
-     * @phpstan-return self::ROLE_*
+     * @return self::ROLE_*
      */
     public function getRole(): string;
 
     /**
      * Gets roles.
      *
-     * @return string[]
-     *
-     * @phpstan-return self::ROLE_*[]
+     * @return self::ROLE_*[]
      */
     public function getRoles(): array;
 
     /**
      * Checks if this has a given role.
      *
-     * @param string $role the role name to be tested
-     *
-     * @phpstan-param self::ROLE_* $role
+     * @param self::ROLE_* $role
      *
      * @return bool true if this has a given role
      */

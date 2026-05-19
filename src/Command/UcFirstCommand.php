@@ -97,7 +97,7 @@ class UcFirstCommand
     }
 
     /**
-     * @phpstan-param class-string $class
+     * @param class-string $class
      */
     private function askFieldName(SymfonyStyle $io, string $class): ?string
     {
@@ -144,9 +144,9 @@ class UcFirstCommand
     }
 
     /**
-     * @phpstan-param class-string $class
+     * @param class-string $class
      *
-     * @phpstan-return Query<EntityInterface>
+     * @return Query<EntityInterface>
      */
     private function createQuery(string $class): Query
     {
@@ -240,9 +240,7 @@ class UcFirstCommand
     }
 
     /**
-     * @phpstan-param string|null $class
-     *
-     * @phpstan-return class-string|null
+     * @return class-string|null
      */
     private function validateClass(SymfonyStyle $io, ?string $class): ?string
     {

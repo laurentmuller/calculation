@@ -31,7 +31,7 @@ trait LogLevelTrait
     /**
      * Get the level.
      *
-     * @phpstan-return PsrLevel::*
+     * @return PsrLevel::*
      */
     public function getLevel(): string
     {

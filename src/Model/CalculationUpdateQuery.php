@@ -114,9 +114,9 @@ class CalculationUpdateQuery extends AbstractSimulateQuery
     /**
      * @template TResult
      *
-     * @phpstan-param callable(CalculationState): TResult $callback
+     * @param callable(CalculationState): TResult $callback
      *
-     * @phpstan-return TResult[]
+     * @return TResult[]
      */
     private function mapStates(callable $callback): array
     {

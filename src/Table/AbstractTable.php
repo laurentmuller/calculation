@@ -64,9 +64,7 @@ abstract class AbstractTable implements SortModeInterface
     /**
      * Gets the column definitions.
      *
-     * @return Column[]
-     *
-     * @phpstan-return array<int, Column>
+     * @return array<int, Column>
      */
     public function getColumns(): array
     {
@@ -211,9 +209,7 @@ abstract class AbstractTable implements SortModeInterface
     /**
      * Create the columns.
      *
-     * @return Column[] the columns
-     *
-     * @phpstan-return non-empty-array<int, Column>
+     * @return non-empty-array<int, Column>
      */
     private function createColumns(): array
     {

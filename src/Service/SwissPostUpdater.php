@@ -75,7 +75,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     /**
      * Creates a form to select the file to upload.
      *
-     * @phpstan-return FormInterface<mixed>
+     * @return FormInterface<mixed>
      */
     public function createForm(array $data = []): FormInterface
     {

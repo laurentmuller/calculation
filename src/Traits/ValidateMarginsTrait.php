@@ -29,7 +29,7 @@ trait ValidateMarginsTrait
     /**
      * Get margins.
      *
-     * @phpstan-return Collection<TMarginKey, TMarginValue>
+     * @return Collection<TMarginKey, TMarginValue>
      */
     abstract public function getMargins(): Collection;
 

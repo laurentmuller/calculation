@@ -193,7 +193,7 @@ class ExchangeRateService extends AbstractHttpClientService
     }
 
     /**
-     * @phpstan-return array<string, float>
+     * @return array<string, float>
      *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */

@@ -32,14 +32,14 @@ use Doctrine\ORM\Tools\Pagination\CountWalker;
  */
 abstract class AbstractEntityTable extends AbstractTable
 {
-    /** The group by part name of the query. */
+    /** The group by part's name of the query. */
     private const string GROUP_BY_PART = 'groupBy';
 
-    /** The join part name of the query. */
+    /** The join part's name of the query. */
     private const string JOIN_PART = 'join';
 
     /**
-     * @phpstan-param TRepository $repository
+     * @param TRepository $repository
      */
     public function __construct(private readonly AbstractRepository $repository)
     {
@@ -106,10 +106,7 @@ abstract class AbstractEntityTable extends AbstractTable
     /**
      * Gets the default sort order.
      *
-     * @return array<string, string> an array where each key is the field name, and the value is the order
-     *                               direction ('asc' or 'desc')
-     *
-     * @phpstan-return array<string, self::SORT_*>
+     * @return array<string, self::SORT_*> an array where each key is the field name, and the value is the order direction ('asc' or 'desc')
      */
     protected function getDefaultOrder(): array
     {
@@ -117,7 +114,7 @@ abstract class AbstractEntityTable extends AbstractTable
     }
 
     /**
-     * @phpstan-return TRepository
+     * @return TRepository
      */
     protected function getRepository(): AbstractRepository
     {
@@ -270,8 +267,8 @@ abstract class AbstractEntityTable extends AbstractTable
     /**
      * Update the clause order by.
      *
-     * @phpstan-param array<string, string> $orderBy
-     * @phpstan-param DataQuery|Column|array<string, string> $value
+     * @param array<string, string>                  $orderBy
+     * @param DataQuery|Column|array<string, string> $value
      */
     private function updateOrderBy(array &$orderBy, DataQuery|Column|array $value, string $alias): void
     {

@@ -46,7 +46,7 @@ readonly class CommandFormService
      *
      * @phpstan-param CommandType $command
      *
-     * @phpstan-return FormInterface<mixed>
+     * @return FormInterface<mixed>
      */
     public function createForm(array $command, array $data, array $options = []): FormInterface
     {
@@ -191,7 +191,7 @@ readonly class CommandFormService
     }
 
     /**
-     * @phpstan-return array<string, mixed>
+     * @return array<string, mixed>
      */
     private function getTooltipAttributes(string $title, string $content): array
     {

@@ -26,8 +26,12 @@ class PivotCell extends AbstractPivotAggregator
      * @param PivotNode          $row        the parent row
      * @param mixed              $value      the initial value
      */
-    public function __construct(AbstractAggregator $aggregator, private readonly PivotNode $column, private readonly PivotNode $row, mixed $value = null)
-    {
+    public function __construct(
+        AbstractAggregator $aggregator,
+        private readonly PivotNode $column,
+        private readonly PivotNode $row,
+        mixed $value = null
+    ) {
         parent::__construct($aggregator, $value);
     }
 

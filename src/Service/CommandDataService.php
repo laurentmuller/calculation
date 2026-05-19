@@ -34,7 +34,7 @@ class CommandDataService
      *
      * @phpstan-param CommandType $command
      *
-     * @phpstan-return array<string, array|scalar|null>
+     * @return array<string, array|scalar|null>
      */
     public function createData(array $command): array
     {
@@ -59,7 +59,7 @@ class CommandDataService
      * @phpstan-param CommandType $command
      * @phpstan-param array<string, array|scalar|null> $data
      *
-     * @phpstan-return array<string, array|scalar|null>
+     * @return array<string, array|scalar|null>
      *
      * @throws \LogicException if a parameter name is not found
      */
@@ -136,7 +136,7 @@ class CommandDataService
     /**
      * @phpstan-param CommandType $command
      *
-     * @phpstan-return array|scalar|null
+     * @return array|scalar|null
      */
     private function getDefaultValue(array $command, string $key): mixed
     {

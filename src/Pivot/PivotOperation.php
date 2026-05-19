@@ -50,6 +50,14 @@ enum PivotOperation: string implements EnumSortableInterface, PdfEnumDefaultInte
     case SUM = 'sum';
 
     /**
+     * Creates a new aggregator instance.
+     */
+    public function createAggregator(): AbstractAggregator
+    {
+        return new ($this->getAggregator())();
+    }
+
+    /**
      * Gets the aggregator class name.
      *
      * @return class-string<AbstractAggregator>

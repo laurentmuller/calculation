@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Pivot;
 
-use App\Pivot\Aggregator\AbstractAggregator;
 use App\Pivot\Field\PivotField;
 
 /**
@@ -21,16 +20,6 @@ use App\Pivot\Field\PivotField;
  */
 class PivotTableFactory
 {
-    /** The title separator. */
-    private const string SEPARATOR = '\\';
-
-    /**
-     * The aggregator class name.
-     *
-     * @var class-string<AbstractAggregator>
-     */
-    private readonly string $aggregator;
-
     /**
      * The column fields.
      *
@@ -56,10 +45,9 @@ class PivotTableFactory
      */
     public function __construct(
         private readonly array $dataset,
-        PivotOperation $operation = PivotOperation::SUM,
+        private readonly PivotOperation $operation,
         private ?string $title = null
     ) {
-        $this->aggregator = $operation->getAggregator();
     }
 
     /**
@@ -78,7 +66,8 @@ class PivotTableFactory
         $dataField = $this->dataField;
         $rowFields = $this->rowFields;
         $columnFields = $this->columnFields;
-        $table = new PivotTable($this->createAggregator(), $this->title);
+        $aggregator = $this->operation->createAggregator();
+        $table = new PivotTable($aggregator, $this->title);
 
         foreach ($this->dataset as $row) {
             // key
@@ -96,7 +85,8 @@ class PivotTableFactory
             if ($cell instanceof PivotCell) {
                 $cell->addValue($value);
             } else {
-                $table->addCellValue($this->createAggregator(), $currentCol, $currentRow, $value);
+                $aggregator = $this->operation->createAggregator();
+                $table->addCellValue($aggregator, $currentCol, $currentRow, $value);
             }
             $table->addValue($value);
         }
@@ -109,16 +99,6 @@ class PivotTableFactory
         $table->getRootRow()->setTitle($this->buildFieldsTitle($rowFields));
 
         return $table;
-    }
-
-    /**
-     * Gets the aggregator class name.
-     *
-     * @return class-string<AbstractAggregator>
-     */
-    public function getAggregator(): string
-    {
-        return $this->aggregator;
     }
 
     /**
@@ -156,6 +136,14 @@ class PivotTableFactory
     }
 
     /**
+     * Gets the operation.
+     */
+    public function getOperation(): PivotOperation
+    {
+        return $this->operation;
+    }
+
+    /**
      * Gets the row fields.
      *
      * @return PivotField[]
@@ -180,10 +168,10 @@ class PivotTableFactory
      */
     public static function instance(
         array $dataset,
-        PivotOperation $operation = PivotOperation::SUM,
+        ?PivotOperation $operation = null,
         ?string $title = null
     ): self {
-        return new self($dataset, $operation, $title);
+        return new self($dataset, $operation ?? PivotOperation::getDefault(), $title);
     }
 
     /**
@@ -261,17 +249,9 @@ class PivotTableFactory
     private function buildFieldsTitle(array $fields): string
     {
         return \implode(
-            self::SEPARATOR,
+            PivotTable::PATH_SEPARATOR,
             \array_map(static fn (PivotField $field): string => (string) $field->getTitle(), $fields)
         );
-    }
-
-    /**
-     * Creates an aggregator.
-     */
-    private function createAggregator(): AbstractAggregator
-    {
-        return new $this->aggregator();
     }
 
     /**
@@ -285,7 +265,7 @@ class PivotTableFactory
             $key = $field->getValue($row);
             $child = $node->find($key);
             if (!$child instanceof PivotNode) {
-                $aggregator = $this->createAggregator();
+                $aggregator = $this->operation->createAggregator();
                 $title = (string) $field->getDisplayValue($key);
                 $node = $node
                     ->add($aggregator, $key)

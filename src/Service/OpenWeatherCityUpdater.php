@@ -75,7 +75,7 @@ readonly class OpenWeatherCityUpdater
     /**
      * Import data from the given file.
      *
-     * @phpstan-return array{result: bool, message: string, valid: int, error: int}
+     * @return array{result: bool, message: string, valid: int, error: int}
      */
     public function import(UploadedFile $file): array
     {
@@ -116,7 +116,7 @@ readonly class OpenWeatherCityUpdater
     }
 
     /**
-     * @phpstan-return array{result: bool, message: string, valid: int, error: int}
+     * @return array{result: bool, message: string, valid: int, error: int}
      */
     private function falseResult(string $message, array $parameters = []): array
     {
@@ -157,7 +157,7 @@ readonly class OpenWeatherCityUpdater
     /**
      * @phpstan-param OpenWeatherCityType[] $cities
      *
-     * @phpstan-return array{0: int, 1: int}
+     * @return array{0: int, 1: int}
      */
     private function insertCities(OpenWeatherDatabase $db, array $cities): array
     {

@@ -87,7 +87,7 @@ class CustomerGenerator extends AbstractEntityGenerator
     }
 
     /**
-     * @phpstan-return Person::GENDER_*
+     * @return Person::GENDER_*
      */
     private function randomGender(Generator $generator): string
     {
@@ -95,7 +95,7 @@ class CustomerGenerator extends AbstractEntityGenerator
     }
 
     /**
-     * @phpstan-return self::STYLE_*
+     * @return self::STYLE_*
      */
     private function randomStyle(Generator $generator): int
     {

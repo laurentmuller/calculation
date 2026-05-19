@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Pivot;
 
-use App\Pivot\Aggregator\SumAggregator;
 use App\Pivot\Field\PivotField;
 use App\Pivot\Field\PivotFieldFactory;
 use App\Pivot\PivotOperation;
@@ -27,7 +26,7 @@ final class PivotTableFactoryTest extends TestCase
     {
         $factory = PivotTableFactory::instance([]);
         self::assertNull($factory->getTitle());
-        self::assertSame(SumAggregator::class, $factory->getAggregator());
+        self::assertSame(PivotOperation::SUM, $factory->getOperation());
         self::assertNull($factory->getDataField());
         self::assertNull($factory->getKeyField());
         self::assertSame([], $factory->getDataset());

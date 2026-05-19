@@ -581,7 +581,7 @@ class FormHelper
     /**
      * Gets the underlying form builder.
      *
-     * @phpstan-return FormBuilderInterface<mixed>
+     * @return FormBuilderInterface<mixed>
      */
     public function getBuilder(): FormBuilderInterface
     {

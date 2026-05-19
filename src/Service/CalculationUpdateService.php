@@ -146,7 +146,7 @@ class CalculationUpdateService implements ServiceSubscriberInterface
     }
 
     /**
-     * @phpstan-return Calculation[]
+     * @return Calculation[]
      */
     private function getCalculations(CalculationUpdateQuery $query): array
     {

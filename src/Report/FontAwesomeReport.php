@@ -53,7 +53,7 @@ class FontAwesomeReport extends AbstractReport
     }
 
     /**
-     * @phpstan-return \Iterator<string, SplFileInfo>
+     * @return \Iterator<string, SplFileInfo>
      */
     private function createIterator(string $path): \Iterator
     {
@@ -78,7 +78,7 @@ class FontAwesomeReport extends AbstractReport
     }
 
     /**
-     * @phpstan-return list<string>
+     * @return list<string>
      */
     private function getDirectories(): array
     {

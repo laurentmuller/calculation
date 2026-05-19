@@ -120,8 +120,7 @@ class TimestampableListener implements DisableListenerInterface
 
     private function persist(EntityManagerInterface $em, UnitOfWork $unitOfWork, TimestampableInterface $entity): void
     {
-        $em->persist($entity);
-        $metadata = $em->getClassMetadata($entity::class);
-        $unitOfWork->recomputeSingleEntityChangeSet($metadata, $entity);
+        $class = $em->getClassMetadata($entity::class);
+        $unitOfWork->recomputeSingleEntityChangeSet($class, $entity);
     }
 }

@@ -96,7 +96,7 @@ class CalculationEditStateType extends AbstractEntityType
 
     private function onPreSetData(PreSetDataEvent $event): void
     {
-        /** @phpstan-var Calculation $data */
+        /** @var Calculation $data */
         $data = $event->getData();
         $options = [
             'expanded' => true,

@@ -139,7 +139,7 @@ class ProductController extends AbstractEntityController
     }
 
     /**
-     * @phpstan-param Product $item
+     * @param Product $item
      */
     #[\Override]
     protected function deleteFromDatabase(EntityInterface $item): void

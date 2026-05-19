@@ -36,14 +36,14 @@ final class CustomerTest extends ConstraintValidatorTestCase
         $currentDate = DateUtils::createDate();
         $birthday = DateUtils::sub($currentDate, 'P1Y');
         $customer->setBirthday(clone $birthday);
-        /** @phpstan-var int|null $actual */
+        /** @var int|null $actual */
         $actual = $customer->getAge();
         self::assertIsInt($actual);
         self::assertSame(1, $actual);
 
         $birthday = DateUtils::add($birthday, 'P1D');
         $customer->setBirthday(clone $birthday);
-        /** @phpstan-var int|null $actual */
+        /** @var int|null $actual */
         $actual = $customer->getAge();
         self::assertIsInt($actual);
         self::assertSame(0, $actual);

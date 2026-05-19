@@ -205,7 +205,7 @@ final class HtmlBootstrapColorTest extends TestCase
     }
 
     /**
-     * @phpstan-param callable(HtmlBootstrapColor): ?object $fn
+     * @param callable(HtmlBootstrapColor): ?object $fn
      */
     private function handleColors(callable $fn): void
     {

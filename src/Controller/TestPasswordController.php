@@ -57,7 +57,7 @@ class TestPasswordController extends AbstractController
         $strengthLevel = StrengthLevel::MEDIUM;
         $strength = new Strength($strengthLevel);
         $listener = static function (PreSubmitEvent $event) use ($options, $password, $strength): void {
-            /** @phpstan-var array $data */
+            /** @var array $data */
             $data = $event->getData();
             foreach ($options as $option) {
                 $password->setOption($option, (bool) ($data[$option] ?? false));
@@ -127,7 +127,7 @@ class TestPasswordController extends AbstractController
                     $message .= '<li>' . $this->trans('password.' . $option) . '</li>';
                 }
             }
-            /** @phpstan-var StrengthLevel $level */
+            /** @var StrengthLevel $level */
             $level = $data['level'];
             if (StrengthLevel::NONE !== $level) {
                 $message .= '<li>';

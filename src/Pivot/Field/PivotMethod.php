@@ -30,7 +30,7 @@ enum PivotMethod
     /**
      * Convert the given value.
      *
-     * @phpstan-param scalar|null $value
+     * @param scalar|null $value
      */
     public function convert(mixed $value): float|int|string
     {

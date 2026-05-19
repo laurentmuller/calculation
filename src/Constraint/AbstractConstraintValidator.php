@@ -58,7 +58,7 @@ abstract class AbstractConstraintValidator extends ConstraintValidator
     /**
      * Performs validation.
      *
-     * @phpstan-param T $constraint
+     * @param T $constraint
      */
     abstract protected function doValidate(string $value, Constraint $constraint): void;
 }

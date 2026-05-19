@@ -126,7 +126,7 @@ final readonly class DataQueryValueResolver extends AbstractValueResolver implem
     }
 
     /**
-     * @phpstan-param InputBag<string> $inputBag
+     * @param InputBag<string> $inputBag
      *
      * @throws UnprocessableEntityHttpException if a parameter in the input bag is unknown
      */

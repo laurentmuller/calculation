@@ -29,7 +29,7 @@ use fpdf\Enums\PdfFontName;
 use fpdf\Enums\PdfMove;
 
 /**
- * Report to display database schema.
+ * Report displaying database schema.
  *
  * @phpstan-import-type SchemaColumnType from SchemaService
  * @phpstan-import-type SchemaIndexType from SchemaService
@@ -44,7 +44,7 @@ class SchemaReport extends AbstractReport
     private ?PdfCell $manyToOneCell = null;
     private ?PdfCell $oneToManyCell = null;
 
-    /** @phpstan-var array<string, int> */
+    /** @var array<string, int> */
     private array $tableLinks = [];
 
     public function __construct(

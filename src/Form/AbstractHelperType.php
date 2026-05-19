@@ -40,7 +40,7 @@ abstract class AbstractHelperType extends AbstractType
     /**
      * Creates the form helper.
      *
-     * @phpstan-param FormBuilderInterface<TData|null> $builder
+     * @param FormBuilderInterface<TData|null> $builder
      */
     protected function createFormHelper(FormBuilderInterface $builder): FormHelper
     {

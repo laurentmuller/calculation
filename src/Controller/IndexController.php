@@ -232,7 +232,7 @@ class IndexController extends AbstractController
     }
 
     /**
-     * @phpstan-param array{restrict: bool, view: TableView,  ...} $parameters
+     * @param array{restrict: bool, view: TableView,  ...} $parameters
      */
     private function saveParameters(Response $response, array $parameters): void
     {

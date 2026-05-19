@@ -15,6 +15,7 @@ namespace App\Pdf\Traits;
 
 use App\Pdf\PdfCell;
 use App\Pdf\PdfStyle;
+use App\Pdf\PdfTable;
 use App\Traits\TranslatorTrait;
 use fpdf\Enums\PdfTextAlignment;
 use Symfony\Contracts\Translation\TranslatableInterface;
@@ -22,7 +23,7 @@ use Symfony\Contracts\Translation\TranslatableInterface;
 /**
  * Trait to allow adding translatable cells.
  *
- * @phpstan-require-extends \App\Pdf\PdfTable
+ * @phpstan-require-extends PdfTable
  */
 trait PdfCellTranslatorTrait
 {

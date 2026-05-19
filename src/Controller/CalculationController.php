@@ -224,7 +224,7 @@ class CalculationController extends AbstractEntityController
     }
 
     /**
-     * @phpstan-param Calculation $item
+     * @param Calculation $item
      */
     #[\Override]
     protected function saveToDatabase(EntityInterface $item): void

@@ -158,7 +158,7 @@ final class StringUtilsTest extends TestCase
     public function testDecodeJsonArray(): void
     {
         $expected = ['key' => 'value'];
-        /** @phpstan-var non-empty-string $encoded */
+        /** @var non-empty-string $encoded */
         $encoded = \json_encode($expected);
         $actual = StringUtils::decodeJson($encoded);
         self::assertSame($expected, $actual);
@@ -169,7 +169,7 @@ final class StringUtilsTest extends TestCase
         $expected = new \stdClass();
         $expected->key = 'value';
         $expected->date = 'date';
-        /** @phpstan-var non-empty-string $encoded */
+        /** @var non-empty-string $encoded */
         $encoded = \json_encode($expected);
         $actual = StringUtils::decodeJson($encoded, false);
         self::assertObjectHasProperty('key', $actual);
@@ -230,7 +230,7 @@ final class StringUtilsTest extends TestCase
     }
 
     /**
-     * @phpstan-param object|class-string $objectOrClass
+     * @param object|class-string $objectOrClass
      */
     #[DataProvider('getShortNameValid')]
     public function testGetShortNameValid(object|string $objectOrClass, string $expected): void

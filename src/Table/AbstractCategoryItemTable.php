@@ -55,7 +55,7 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
         $result = parent::addSearch($query, $builder, $alias);
         $categoryId = $this->getQueryCategoryId($query);
         if (0 !== $categoryId) {
-            /** @phpstan-var string $field */
+            /** @var string $field */
             $field = $repository->getSearchFields('category.id', $alias);
             $builder->andWhere($field . '=:' . self::PARAM_CATEGORY)
                 ->setParameter(self::PARAM_CATEGORY, $categoryId, Types::INTEGER);
@@ -64,7 +64,7 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
         }
         $groupId = $this->getQueryGroupId($query);
         if (0 !== $groupId) {
-            /** @phpstan-var string $field */
+            /** @var string $field */
             $field = $repository->getSearchFields('group.id', $alias);
             $builder->andWhere($field . '=:' . CategoryTable::PARAM_GROUP)
                 ->setParameter(CategoryTable::PARAM_GROUP, $groupId, Types::INTEGER);

@@ -72,7 +72,6 @@ abstract class AbstractTable implements SortModeInterface
             $this->columns = $this->createColumns();
         }
 
-        /** @phpstan-var array<int, Column> */
         return $this->columns;
     }
 
@@ -217,7 +216,6 @@ abstract class AbstractTable implements SortModeInterface
         $columns = Column::fromJson($this, $path);
         $columns[] = Column::createColumnAction();
 
-        /** @phpstan-var non-empty-array<int, Column> */
         return $columns;
     }
 

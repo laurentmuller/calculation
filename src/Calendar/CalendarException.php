@@ -19,7 +19,7 @@ namespace App\Calendar;
 class CalendarException extends \RuntimeException
 {
     /**
-     * @phpstan-param string|int ...$values
+     * @param string|int ...$values
      */
     public static function format(string $format, mixed ...$values): self
     {

@@ -320,7 +320,7 @@ final class StringUtils
      */
     public static function slug(string $string): string
     {
-        /** @phpstan-var AsciiSlugger|null $slugger */
+        /** @var AsciiSlugger|null $slugger */
         static $slugger = null;
         if (!$slugger instanceof AsciiSlugger) {
             $slugger = new AsciiSlugger();

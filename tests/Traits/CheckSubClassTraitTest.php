@@ -39,7 +39,7 @@ final class CheckSubClassTraitTest extends TestCase
     }
 
     /**
-     * @phpstan-param class-string $target
+     * @param class-string $target
      */
     #[DataProvider('getSubClass')]
     public function testSubClass(string|object $source, string $target, bool $exception = false): void

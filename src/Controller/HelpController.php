@@ -216,9 +216,9 @@ class HelpController extends AbstractController
         if (\is_numeric(\end($parts))) {
             \array_pop($parts);
         }
-        /** @phpstan-var string $first */
+        /** @var string $first */
         $first = \reset($parts);
-        /** @phpstan-var string $last */
+        /** @var string $last */
         $last = \end($parts);
         if ($first === $last) {
             $last = 'list';

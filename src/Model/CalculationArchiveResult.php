@@ -23,7 +23,7 @@ use App\Entity\CalculationState;
  */
 class CalculationArchiveResult implements \Countable
 {
-    /** @phpstan-var int<0, max> */
+    /** @var int<0, max> */
     private int $count = 0;
     /** @phpstan-var ResultsType */
     private array $results = [];

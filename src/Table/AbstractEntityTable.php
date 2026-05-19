@@ -295,7 +295,7 @@ abstract class AbstractEntityTable extends AbstractTable
     {
         $builder->resetDQLPart(self::GROUP_BY_PART);
 
-        /** @phpstan-var array<string, ?Join[]> $part */
+        /** @var array<string, ?Join[]> $part */
         $part = $builder->getDQLPart(self::JOIN_PART);
         if (!isset($part[$alias])) {
             return $builder;

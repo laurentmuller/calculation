@@ -102,7 +102,7 @@ final class TaskTableTest extends EntityTableTestCase
     }
 
     /**
-     * @phpstan-param TaskRepository $repository
+     * @param TaskRepository $repository
      */
     #[\Override]
     protected function createTable(AbstractRepository $repository): TaskTable

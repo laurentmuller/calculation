@@ -52,7 +52,7 @@ class TaskListType extends AbstractListEntityType
     }
 
     /**
-     * @phpstan-param Options<array> $options
+     * @param Options<array> $options
      */
     private function getSortedBuilder(Options $options): QueryBuilder
     {

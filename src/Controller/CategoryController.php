@@ -154,7 +154,7 @@ class CategoryController extends AbstractEntityController
     }
 
     /**
-     * @phpstan-param Category $item
+     * @param Category $item
      */
     #[\Override]
     protected function deleteFromDatabase(EntityInterface $item): void

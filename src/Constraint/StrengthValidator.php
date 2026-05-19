@@ -92,7 +92,7 @@ class StrengthValidator extends AbstractConstraintValidator
             return null;
         }
 
-        /** @phpstan-var object $object */
+        /** @var object $object */
         $object = $this->context->getObject();
 
         try {

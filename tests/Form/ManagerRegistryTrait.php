@@ -61,7 +61,7 @@ trait ManagerRegistryTrait
     }
 
     /**
-     * @phpstan-param MockObject&Query<array-key, mixed> $query
+     * @param MockObject&Query<array-key, mixed> $query
      */
     private function createQueryBuilder(MockObject&Query $query): MockObject&QueryBuilder
     {
@@ -76,7 +76,7 @@ trait ManagerRegistryTrait
     }
 
     /**
-     * @phpstan-param class-string $repositoryClass
+     * @param class-string $repositoryClass
      */
     private function createRepository(
         string $repositoryClass,

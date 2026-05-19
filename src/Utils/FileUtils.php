@@ -112,7 +112,7 @@ final class FileUtils
     /**
      * Formats the size of the given path.
      *
-     * @phpstan-param string|int $path
+     * @param string|int $path the file path or the file size
      */
     public static function formatSize(string|int $path): string
     {

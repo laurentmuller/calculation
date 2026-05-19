@@ -16,9 +16,6 @@ namespace App\Tests\Traits;
 use App\Traits\GroupByTrait;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @phpstan-type UtilsType = array{id: int, value: string}
- */
 final class GroupByTraitTest extends TestCase
 {
     use GroupByTrait;
@@ -130,7 +127,7 @@ final class GroupByTraitTest extends TestCase
     }
 
     /**
-     * @phpstan-return UtilsType
+     * @return array{id: int, value: string}
      */
     private function createObject(int $id, string $value): array
     {

@@ -232,7 +232,7 @@ abstract class AbstractParameters
 
             $name = $this->getTypeName($property);
             $type = $this->getPropertyType($name);
-            /** @phpstan-var class-string<\BackedEnum>|null $enum */
+            /** @var class-string<\BackedEnum>|null $enum */
             $enum = match ($type) {
                 PropertyType::ENUM_INT,
                 PropertyType::ENUM_STRING => $name,

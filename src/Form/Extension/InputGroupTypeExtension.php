@@ -39,7 +39,7 @@ class InputGroupTypeExtension extends AbstractTypeExtension
     ];
 
     /**
-     * @phpstan-param array<array-key, mixed> $options
+     * @param array<array-key, mixed> $options
      */
     #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void

@@ -40,7 +40,7 @@ class CommandsReport extends AbstractArrayReport
         $this->setCellMargin(0.0);
         $this->setTranslatedTitle('command.list.title');
 
-        /** @phpstan-var string $group */
+        /** @var string $group */
         foreach ($entities as $group => $commands) {
             $first = true;
             foreach ($commands as $command) {
@@ -111,7 +111,7 @@ class CommandsReport extends AbstractArrayReport
         }
 
         $offset = 0;
-        /** @phpstan-var array<int, array{0: string, 1: int}> $match */
+        /** @var array<int, array{0: string, 1: int}> $match */
         foreach ($matches as $match) {
             // previous chunk
             $index = $match[0][1];
@@ -250,7 +250,7 @@ class CommandsReport extends AbstractArrayReport
         }
 
         $offset = 0;
-        /** @phpstan-var array<int, array{0: string, 1: int}> $match */
+        /** @var array<int, array{0: string, 1: int}> $match */
         foreach ($matches as $match) {
             // previous chunk
             $index = $match[0][1];

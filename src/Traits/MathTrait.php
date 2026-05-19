@@ -101,11 +101,9 @@ trait MathTrait
     /**
      * Returns the rounded value to the specified precision.
      *
-     * @param ?float $val       the value to round
-     * @param int    $precision the number of decimal digits to round to
-     * @param int    $mode      the rounding mode
-     *
-     * @phpstan-param int<1,4> $mode
+     * @param ?float   $val       the value to round
+     * @param int      $precision the number of decimal digits to round to
+     * @param int<1,4> $mode      the rounding mode
      *
      * @return float the rounded value or 0.0 if the value is null
      */

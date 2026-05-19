@@ -293,7 +293,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, Comparab
             return false;
         }
 
-        /** @phpstan-var CalculationItem[] $items */
+        /** @var CalculationItem[] $items */
         $items = $this->getSortedCollection($this->items);
 
         $position = 0;

@@ -51,7 +51,7 @@ class ItemsTable extends ReportGroupTable implements PdfGroupListenerInterface
     #[\Override]
     public function drawGroup(PdfGroupEvent $event): true
     {
-        /** @phpstan-var CalculationGroup|CalculationCategory $key */
+        /** @var CalculationGroup|CalculationCategory $key */
         $key = $event->getGroupKey();
         if ($key instanceof CalculationGroup) {
             return $this->renderGroup($key);

@@ -558,7 +558,7 @@ class CalculationRepository extends AbstractRepository
      */
     public function getMinMaxDates(): array
     {
-        /** @phpstan-var array{MIN_DATE: ?string, MAX_DATE: ?string} $values */
+        /** @var array{MIN_DATE: ?string, MAX_DATE: ?string} $values */
         $values = $this->createQueryBuilder('c')
             ->select('MIN(c.date) as MIN_DATE')
             ->addSelect('MAX(c.date) as MAX_DATE')

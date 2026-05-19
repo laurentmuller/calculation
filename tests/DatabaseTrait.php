@@ -98,7 +98,7 @@ trait DatabaseTrait
      */
     protected function getManager(): ObjectManager
     {
-        /** @phpstan-var ManagerRegistry $registry */
+        /** @var ManagerRegistry $registry */
         $registry = static::getContainer()->get('doctrine');
 
         return $registry->getManager();

@@ -63,7 +63,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
     private const float RECT_MARGIN = 1.25;
     private const float RECT_WIDTH = 4.5;
 
-    /** @phpstan-var \WeakMap<PdfColorInterface, PdfTextColor> */
+    /** @var \WeakMap<PdfColorInterface, PdfTextColor> */
     private \WeakMap $colors;
     private ?MonthChartDataItem $currentItem = null;
     private bool $drawHeaders = false;
@@ -195,7 +195,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         $textWidth = $parent->getStringWidth($text) + $parent->getCellMargin();
         $offset = ($bounds->width - $textWidth - self::RECT_WIDTH) / 2.0;
 
-        /** @phpstan-var PdfFillColor $color */
+        /** @var PdfFillColor $color */
         $color = PdfFillColor::create($colorName->value);
         $color->apply($parent);
 

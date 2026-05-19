@@ -140,7 +140,7 @@ abstract class EntityTableTestCase extends TestCase
     }
 
     /**
-     * @phpstan-param array<string, string|int> $parameters
+     * @param array<string, string|int> $parameters
      */
     protected function updateQueryParameters(DataQuery $dataQuery, array $parameters): void
     {

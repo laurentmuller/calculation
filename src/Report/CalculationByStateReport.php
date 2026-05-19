@@ -199,7 +199,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
     }
 
     /**
-     * @phpstan-param StateChartDataItem[] $entities
+     * @param StateChartDataItem[] $entities
      */
     private function renderChart(array $entities): void
     {
@@ -222,7 +222,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
     }
 
     /**
-     * @phpstan-param StateChartDataItem[] $entities
+     * @param StateChartDataItem[] $entities
      */
     private function renderTable(array $entities): void
     {

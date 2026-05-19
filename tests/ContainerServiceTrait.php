@@ -33,7 +33,7 @@ trait ContainerServiceTrait
      */
     protected function getService(string $class): object
     {
-        /** @phpstan-var TService */
+        /** @var TService */
         return static::getContainer()->get($class);
     }
 

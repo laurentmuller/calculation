@@ -329,7 +329,7 @@ final class CalculationServiceTest extends KernelServiceTestCase
      */
     private function initRepository(ObjectManager $manager, string $entityName): EntityRepository
     {
-        /** @phpstan-var AbstractRepository<TEntity> $repository */
+        /** @var AbstractRepository<TEntity> $repository */
         $repository = $manager->getRepository($entityName);
 
         $items = $repository->findAll();

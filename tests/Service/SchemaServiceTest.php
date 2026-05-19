@@ -155,7 +155,7 @@ final class SchemaServiceTest extends TestCase
     /**
      * @template T of AbstractPlatform
      *
-     * @phpstan-param AbstractSchemaManager<T>|null $schemaManager
+     * @param AbstractSchemaManager<T>|null $schemaManager
      */
     private function createConnection(
         ?AbstractSchemaManager $schemaManager = null,
@@ -227,7 +227,7 @@ final class SchemaServiceTest extends TestCase
     }
 
     /**
-     * @phpstan-param ClassMetadata<object>[]|ClassMetadata<object> $metaDatas
+     * @param ClassMetadata<object>[]|ClassMetadata<object> $metaDatas
      */
     private function createMetaDatFactory(array|ClassMetadata $metaDatas): MockObject&ClassMetadataFactory
     {
@@ -264,7 +264,7 @@ final class SchemaServiceTest extends TestCase
     }
 
     /**
-     * @phpstan-param Table[]|Table $tables
+     * @param Table[]|Table $tables
      */
     private function createSchemaManager(array|Table $tables): MockObject&MySQLSchemaManager
     {

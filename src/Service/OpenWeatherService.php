@@ -491,7 +491,7 @@ class OpenWeatherService extends AbstractHttpClientService
     }
 
     /**
-     * @phpstan-param array<array-key, mixed> $results
+     * @param array<array-key, mixed> $results
      */
     private function sortResults(array &$results): void
     {

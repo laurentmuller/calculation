@@ -305,7 +305,7 @@ final class AbstractControllerTest extends KernelTestCase
     }
 
     /**
-     * @phpstan-param class-string $expected
+     * @param class-string $expected
      */
     protected static function assertSameClass(string $expected, object $actual): void
     {
@@ -357,7 +357,7 @@ final class AbstractControllerTest extends KernelTestCase
     {
         $user = (new User())->setUsername('test');
         $token = new TestBrowserToken($user->getRoles(), $user);
-        /** @phpstan-var TokenStorageInterface $storage */
+        /** @var TokenStorageInterface $storage */
         $storage = self::getContainer()->get(TokenStorageInterface::class);
         $storage->setToken($token);
     }

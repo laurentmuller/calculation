@@ -53,7 +53,7 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @phpstan-param array{required: bool, ...} $options
+     * @param array{required: bool, ...} $options
      */
     #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
@@ -105,7 +105,7 @@ class SimpleEditorType extends AbstractType
     /**
      * Filters, updates, and groups actions.
      *
-     * @phpstan-param array{actions?: array, ...} $options
+     * @param array{actions?: array, ...} $options
      */
     private function getGroupedActions(array $options): array
     {
@@ -126,7 +126,7 @@ class SimpleEditorType extends AbstractType
      */
     private function getWidgetClass(FormView $view): string
     {
-        /** @phpstan-var string $class */
+        /** @var string $class */
         $class = $view->vars['attr']['class'] ?? '';
         $values = \array_filter(\explode(' ', $class));
         $values[] = 'must-validate';
@@ -135,7 +135,7 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @phpstan-param array{actions?: array, ...} $action
+     * @param array{actions?: array, ...} $action
      *
      * @phpstan-assert-if-true ActionType[] $action['actions']
      */

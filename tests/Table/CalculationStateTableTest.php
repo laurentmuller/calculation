@@ -104,7 +104,7 @@ final class CalculationStateTableTest extends EntityTableTestCase
     }
 
     /**
-     * @phpstan-param CalculationStateRepository $repository
+     * @param CalculationStateRepository $repository
      */
     #[\Override]
     protected function createTable(AbstractRepository $repository): CalculationStateTable

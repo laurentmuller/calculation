@@ -26,13 +26,10 @@ class AvatarService
     /**
      * Gets the avatar URL image for the given name.
      *
-     * @param string $name       the non-empty name to use
-     * @param int    $size       the image size (only used if the value is greater than 0)
-     * @param int    $set        the image set (only used if the value is between 1 and 5 inclusive)
-     * @param int    $background the background set (only used if the value is between 1 and 2 inclusive)
-     *
-     * @phpstan-param int<0,5> $set
-     * @phpstan-param int<0,2> $background
+     * @param string   $name       the non-empty name to use
+     * @param int      $size       the image size (only used if the value is greater than 0)
+     * @param int<0,5> $set        the image set (only used if the value is between 1 and 5 inclusive)
+     * @param int<0,2> $background the background set (only used if the value is between 1 and 2 inclusive)
      */
     #[AsTwigFunction(name: 'avatar', isSafe: ['html'])]
     public function getURL(string $name, int $size = 32, int $set = 0, int $background = 0): string

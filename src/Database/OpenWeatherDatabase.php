@@ -114,7 +114,7 @@ class OpenWeatherDatabase extends AbstractDatabase implements \Countable
      */
     public function findById(int $id): array|false
     {
-        /** @phpstan-var \SQLite3Stmt $stmt */
+        /** @var \SQLite3Stmt $stmt */
         $stmt = $this->getStatement(self::SEARCH_BY_ID);
         $stmt->bindValue(':id', $id);
         /** @phpstan-var OpenWeatherCityType[] $result */
@@ -153,7 +153,7 @@ class OpenWeatherDatabase extends AbstractDatabase implements \Countable
      */
     public function findCityCountry(string $city, string $country, int $limit = 25): array
     {
-        /** @phpstan-var \SQLite3Stmt $stmt */
+        /** @var \SQLite3Stmt $stmt */
         $stmt = $this->getStatement(self::SEARCH_CITY_COUNTRY);
         $stmt->bindValue(':name', $this->likeValue($city));
         $stmt->bindValue(':country', $this->likeValue($country));
@@ -176,7 +176,7 @@ class OpenWeatherDatabase extends AbstractDatabase implements \Countable
      */
     public function insertCity(int $id, string $name, string $country, float $latitude, float $longitude): bool
     {
-        /** @phpstan-var \SQLite3Stmt $stmt */
+        /** @var \SQLite3Stmt $stmt */
         $stmt = $this->getStatement(self::INSERT_CITY);
 
         $stmt->bindValue(':id', $id, \SQLITE3_INTEGER);

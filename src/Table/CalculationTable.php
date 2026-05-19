@@ -50,7 +50,7 @@ class CalculationTable extends AbstractEntityTable
     /**
      * Render the overall margin column.
      *
-     * @phpstan-param array{overallTotal: float} $entity
+     * @param array{overallTotal: float} $entity
      *
      * @throws \Twig\Error\Error
      */
@@ -69,7 +69,7 @@ class CalculationTable extends AbstractEntityTable
         $result = parent::addSearch($query, $builder, $alias);
         $stateId = $this->getQueryStateId($query);
         if (0 !== $stateId) {
-            /** @phpstan-var string $field */
+            /** @var string $field */
             $field = $repository->getSearchFields('state.id', $alias);
             $builder->andWhere($field . '=:' . self::PARAM_STATE)
                 ->setParameter(self::PARAM_STATE, $stateId, Types::INTEGER);
@@ -79,7 +79,7 @@ class CalculationTable extends AbstractEntityTable
 
         $stateEditable = $this->getQueryEditable($query);
         if (0 !== $stateEditable) {
-            /** @phpstan-var string $field */
+            /** @var string $field */
             $field = $repository->getSearchFields('state.editable', $alias);
             $builder->andWhere($field . '=:' . self::PARAM_EDITABLE)
                 ->setParameter(self::PARAM_EDITABLE, $this->isEditable($stateEditable), Types::BOOLEAN);

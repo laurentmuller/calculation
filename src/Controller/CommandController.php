@@ -109,7 +109,7 @@ class CommandController extends AbstractController
             ->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                /** @phpstan-var array<string, array|scalar|null> $data */
+                /** @var array<string, array|scalar|null> $data */
                 $data = $form->getData();
                 $session->set($key, $data);
                 $parameters = $dataService->createParameters($command, $data);
@@ -213,7 +213,7 @@ class CommandController extends AbstractController
         array $command
     ): array {
         $data = $dataService->createData($command);
-        /** @phpstan-var array<string, array|scalar|null> $existing */
+        /** @var array<string, array|scalar|null> $existing */
         $existing = (array) $session->get($key, []);
         if ([] === $existing) {
             return $data;

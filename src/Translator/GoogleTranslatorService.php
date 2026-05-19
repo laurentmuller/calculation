@@ -102,7 +102,7 @@ class GoogleTranslatorService extends AbstractTranslatorService
             return false;
         }
 
-        /** @phpstan-var string|null $target */
+        /** @var string|null $target */
         $target = $this->getValue($response, '[data][translations][0][translatedText]');
         if (!\is_string($target)) {
             return false;
@@ -138,7 +138,7 @@ class GoogleTranslatorService extends AbstractTranslatorService
         if (false === $response) {
             return false;
         }
-        /** @phpstan-var array<array{name: string, language: string}>|false  $languages */
+        /** @var array<array{name: string, language: string}>|false  $languages */
         $languages = $this->getValue($response, '[data][languages]');
         if (!\is_array($languages)) {
             return false;

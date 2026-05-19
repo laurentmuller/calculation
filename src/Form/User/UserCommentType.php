@@ -29,7 +29,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 class UserCommentType extends AbstractType
 {
     /**
-     * @phpstan-param FormBuilderInterface<UserComment|null> $builder
+     * @param FormBuilderInterface<UserComment|null> $builder
      */
     #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void

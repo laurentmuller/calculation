@@ -183,7 +183,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function findOrCreateCategory(Category $category): CalculationCategory
     {
-        /** @phpstan-var Group $categoryGroup */
+        /** @var Group $categoryGroup */
         $categoryGroup = $category->getGroup();
         $calculationGroup = $this->findOrCreateGroup($categoryGroup);
 
@@ -196,7 +196,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     public function findOrCreateGroup(Group $group): CalculationGroup
     {
         $code = $group->getCode();
-        /** @phpstan-var CalculationGroup|null $calculationGroup */
+        /** @var CalculationGroup|null $calculationGroup */
         $calculationGroup = $this->groups->findFirst(
             static fn (int $key, CalculationGroup $group): bool => $code === $group->getCode()
         );

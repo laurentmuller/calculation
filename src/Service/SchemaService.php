@@ -301,7 +301,7 @@ class SchemaService
 
     private function getDefaultValue(Column $column): string
     {
-        /** @phpstan-var string|null $default */
+        /** @var string|null $default */
         $default = $column->getDefault();
         if (!\is_string($default)) {
             return '';
@@ -348,7 +348,7 @@ class SchemaService
     }
 
     /**
-     * @phpstan-return ClassMetadata<object>|null
+     * @return ClassMetadata<object>|null
      */
     private function getMetaData(Table|string $name): ?ClassMetadata
     {

@@ -50,7 +50,7 @@ final class CustomerTableTest extends EntityTableTestCase
     }
 
     /**
-     * @phpstan-param CustomerRepository $repository
+     * @param CustomerRepository $repository
      */
     #[\Override]
     protected function createTable(AbstractRepository $repository): CustomerTable

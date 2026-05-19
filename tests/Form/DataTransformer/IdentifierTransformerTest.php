@@ -53,7 +53,7 @@ final class IdentifierTransformerTest extends EntityTransformerTestCase
     }
 
     /**
-     * @phpstan-param EntityInterface|null $value
+     * @param EntityInterface|null $value
      */
     #[DataProvider('getReverseInvalid')]
     public function testReverseInvalid(mixed $value): void
@@ -72,7 +72,7 @@ final class IdentifierTransformerTest extends EntityTransformerTestCase
     }
 
     /**
-     * @phpstan-param EntityInterface|null $value
+     * @param EntityInterface|null $value
      */
     #[DataProvider('getReverseValid')]
     public function testReverseValid(mixed $value, mixed $expected): void
@@ -92,7 +92,7 @@ final class IdentifierTransformerTest extends EntityTransformerTestCase
     }
 
     /**
-     * @phpstan-param int|string|null $value
+     * @param int|string|null $value
      */
     #[DataProvider('getTransformInvalid')]
     public function testTransformInvalid(mixed $value): void

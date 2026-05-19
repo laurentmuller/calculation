@@ -152,7 +152,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
     public function findOrCreateCategory(Category $category): CalculationCategory
     {
         $code = $category->getCode();
-        /** @phpstan-var CalculationCategory|null $calculationCategory */
+        /** @var CalculationCategory|null $calculationCategory */
         $calculationCategory = $this->categories->findFirst(
             static fn (int $key, CalculationCategory $category): bool => $code === $category->getCode()
         );
@@ -351,7 +351,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
             return false;
         }
 
-        /** @phpstan-var CalculationCategory[] $categories */
+        /** @var CalculationCategory[] $categories */
         $categories = $this->getSortedCollection($this->categories);
 
         $position = 0;

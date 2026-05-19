@@ -93,7 +93,7 @@ class FormHelper
     /**
      * The data transformer.
      *
-     * @phpstan-var ?DataTransformerInterface<mixed, mixed> $modelTransformer
+     * @var ?DataTransformerInterface<mixed, mixed>
      */
     private ?DataTransformerInterface $modelTransformer = null;
 
@@ -112,12 +112,11 @@ class FormHelper
     private array $rowAttributes = self::DEFAULT_ROW_ATTRIBUTES;
 
     /**
-     * @param FormBuilderInterface $builder     the parent builder
-     * @param ?string              $labelPrefix the label prefix.
-     *                                          If the prefix is not null, the label is added automatically
-     *                                          when the field property is set.
-     *
-     * @phpstan-param FormBuilderInterface<mixed> $builder
+     * @param FormBuilderInterface        $builder     the parent builder
+     * @param ?string                     $labelPrefix the label prefix.
+     *                                                 If the prefix is not null, the label is added automatically
+     *                                                 when the field property is set.
+     * @param FormBuilderInterface<mixed> $builder
      */
     public function __construct(private readonly FormBuilderInterface $builder, ?string $labelPrefix = null)
     {
@@ -249,7 +248,7 @@ class FormHelper
      *
      * @template T of \UnitEnum
      *
-     * @phpstan-param class-string<T> $class
+     * @param class-string<T> $class
      */
     public function addEnumType(string $class): self
     {
@@ -690,7 +689,7 @@ class FormHelper
      * @template TValue
      * @template TTransformedValue
      *
-     * @phpstan-param DataTransformerInterface<TValue, TTransformedValue>|null $modelTransformer
+     * @param DataTransformerInterface<TValue, TTransformedValue>|null $modelTransformer
      */
     public function modelTransformer(?DataTransformerInterface $modelTransformer): static
     {

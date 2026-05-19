@@ -66,7 +66,7 @@ final class GlobalMarginTableTest extends EntityTableTestCase
     }
 
     /**
-     * @phpstan-param GlobalMarginRepository $repository
+     * @param GlobalMarginRepository $repository
      */
     #[\Override]
     protected function createTable(AbstractRepository $repository): GlobalMarginTable

@@ -88,7 +88,7 @@ class CspReportController extends AbstractController
      */
     private function getContext(string $content): array
     {
-        /** @phpstan-var array{csp-report?: string[]} $data */
+        /** @var array{csp-report?: string[]} $data */
         $data = StringUtils::decodeJson($content);
         if (!isset($data['csp-report'])) {
             throw new \InvalidArgumentException('Content without "csp-report".');

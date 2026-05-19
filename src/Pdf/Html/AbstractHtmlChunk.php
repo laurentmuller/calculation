@@ -250,15 +250,13 @@ abstract class AbstractHtmlChunk
     }
 
     /**
-     * Apply the given margins (if different from 0), call the callback and restore the previous margins.
+     * Apply the given margins (if different from 0), call the callback, and restore the previous margins.
      *
-     * @param HtmlReport $report      the report to set and restore margins
-     * @param float      $leftMargin  the left margin to add
-     * @param float      $rightMargin the right margin to add
-     * @param callable   $callback    the callback to call after the margins have been set. The report is passed
-     *                                as an argument.
-     *
-     * @phpstan-param callable(HtmlReport):void $callback
+     * @param HtmlReport                $report      the report to set and restore margins
+     * @param float                     $leftMargin  the left margin to add
+     * @param float                     $rightMargin the right margin to add
+     * @param callable(HtmlReport):void $callback    the callback to call after the margins have been set.
+     *                                               The report is passed as an argument.
      */
     protected function applyMargins(HtmlReport $report, float $leftMargin, float $rightMargin, callable $callback): void
     {

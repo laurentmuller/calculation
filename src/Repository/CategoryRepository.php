@@ -190,7 +190,7 @@ class CategoryRepository extends AbstractRepository
      */
     private function mergeDropDown(QueryBuilder $builder): array
     {
-        /** @phpstan-var array<array{
+        /** @var array<array{
          *     group: string,
          *     groupId: int,
          *     code: string,

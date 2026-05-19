@@ -173,7 +173,7 @@ enum ImageExtension: string implements PdfEnumDefaultInterface
             throw new \InvalidArgumentException(\sprintf('Invalid options: %s, allowed options: %s.', \implode(', ', $diff), \implode(', ', $keys)));
         }
 
-        /** @phpstan-var array{compressed: bool, quality: int, filters: int, foreground_color: int|null} $options */
+        /** @var array{compressed: bool, quality: int, filters: int, foreground_color: int|null} $options */
         $options = \array_merge($allowed, $options);
 
         return match ($this) {

@@ -242,7 +242,7 @@ class CalculationStateRepository extends AbstractRepository
     private function mergeDropDown(QueryBuilder $builder): array
     {
         /**
-         * @phpstan-var array<array{
+         * @var array<array{
          *     id: int,
          *     code: string,
          *     editable: bool}> $values

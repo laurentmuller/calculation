@@ -50,7 +50,7 @@ class CalculationStateTable extends AbstractEntityTable implements ServiceSubscr
     /**
      * Formatter for the calculation column.
      *
-     * @phpstan-param array{id: int} $entity
+     * @param array{id: int} $entity
      *
      * @throws \Twig\Error\Error
      */

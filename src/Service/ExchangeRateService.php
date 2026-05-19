@@ -203,7 +203,7 @@ class ExchangeRateService extends AbstractHttpClientService
         if (!\is_array($response)) {
             return [];
         }
-        /** @phpstan-var array<string, float>|null $rates */
+        /** @var array<string, float>|null $rates */
         $rates = $response['conversion_rates'] ?? null;
         if (!\is_array($rates)) {
             return [];
@@ -243,7 +243,7 @@ class ExchangeRateService extends AbstractHttpClientService
         if (!\is_array($response)) {
             return 0.0;
         }
-        /** @phpstan-var float|null $rate */
+        /** @var float|null $rate */
         $rate = $response['conversion_rate'] ?? null;
         if (!\is_float($rate)) {
             return 0.0;
@@ -264,7 +264,7 @@ class ExchangeRateService extends AbstractHttpClientService
         if (!\is_array($response)) {
             return null;
         }
-        /** @phpstan-var float|null $rate */
+        /** @var float|null $rate */
         $rate = $response['conversion_rate'] ?? null;
         if (!\is_float($rate)) {
             return null;
@@ -289,7 +289,7 @@ class ExchangeRateService extends AbstractHttpClientService
         if (!\is_array($response)) {
             return [];
         }
-        /** @phpstan-var string[]|null $codes */
+        /** @var string[]|null $codes */
         $codes = $response['supported_codes'] ?? null;
         if (!\is_array($codes)) {
             return [];
@@ -307,7 +307,7 @@ class ExchangeRateService extends AbstractHttpClientService
     private function get(string $url): ?array
     {
         try {
-            /** @phpstan-var array<string, string> $result */
+            /** @var array<string, string> $result */
             $result = $this->requestGet($url)->toArray();
             if ($this->isValidResult($result)) {
                 return $result;

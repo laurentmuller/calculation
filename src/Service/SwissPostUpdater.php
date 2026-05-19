@@ -305,7 +305,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     }
 
     /**
-     * @phpstan-param string[] $data
+     * @param string[] $data
      */
     private function processStreet(SwissDatabase $database, array $data): bool
     {

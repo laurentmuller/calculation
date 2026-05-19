@@ -164,7 +164,7 @@ final class LogTableTest extends TestCase
     }
 
     /**
-     * @phpstan-param array<string, int|string> $parameters
+     * @param array<string, int|string> $parameters
      */
     private function createDataQuery(array $parameters = [], int $limit = 15): DataQuery
     {

@@ -78,7 +78,7 @@ final class FixedFloatTypeTest extends TestCase
      */
     public function testName(): void
     {
-        /** @phpstan-var FixedFloatType $type */
+        /** @var FixedFloatType $type */
         $type = $this->getFixedFloatType();
         self::assertSame('fixed_float', $type->getName());
     }

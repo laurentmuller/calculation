@@ -60,7 +60,7 @@ abstract class AbstractEntityController extends AbstractController
     private readonly string $shortName;
 
     /**
-     * @phpstan-param TRepository $repository
+     * @param TRepository $repository
      */
     public function __construct(private readonly AbstractRepository $repository)
     {
@@ -89,8 +89,8 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Delete an entity.
      *
-     * @phpstan-param TEntity $item
-     * @phpstan-param array{route?: string, ...} $parameters
+     * @param TEntity                    $item
+     * @param array{route?: string, ...} $parameters
      */
     protected function deleteEntity(
         Request $request,
@@ -133,7 +133,7 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * This function deletes the given entity from the database.
      *
-     * @phpstan-param TEntity $item
+     * @param TEntity $item
      */
     protected function deleteFromDatabase(EntityInterface $item): void
     {
@@ -143,8 +143,8 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Edit an entity.
      *
-     * @phpstan-param TEntity $item
-     * @phpstan-param array{route?: string, ...} $parameters
+     * @param TEntity                    $item
+     * @param array{route?: string, ...} $parameters
      */
     protected function editEntity(Request $request, EntityInterface $item, array $parameters = []): Response
     {
@@ -286,7 +286,7 @@ abstract class AbstractEntityController extends AbstractController
      *
      * Derived class can update the entity before it is saved to the database.
      *
-     * @phpstan-param TEntity $item
+     * @param TEntity $item
      */
     protected function saveToDatabase(EntityInterface $item): void
     {
@@ -300,7 +300,7 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Show properties of an entity.
      *
-     * @phpstan-param TEntity $item
+     * @param TEntity $item
      *
      * @throws AccessDeniedException
      */
@@ -315,7 +315,7 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Update the parameters by adding the request query values.
      *
-     * @phpstan-param array{params?: array, ...} $parameters
+     * @param array{params?: array, ...} $parameters
      */
     protected function updateQueryParameters(
         Request $request,

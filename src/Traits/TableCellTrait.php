@@ -25,7 +25,7 @@ trait TableCellTrait
     /**
      * Render the link cell template.
      *
-     * @phpstan-param array{id: int} $entity
+     * @param array{id: int} $entity
      *
      * @throws \Twig\Error\Error
      */

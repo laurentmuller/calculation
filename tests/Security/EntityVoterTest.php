@@ -199,7 +199,7 @@ final class EntityVoterTest extends TestCase
     }
 
     /**
-     * @phpstan-param VoterInterface::ACCESS_* $expected
+     * @param VoterInterface::ACCESS_* $expected
      */
     private function assertVote(
         User $user,

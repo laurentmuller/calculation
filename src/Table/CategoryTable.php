@@ -56,7 +56,7 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
     /**
      * Formatter for the product column.
      *
-     * @phpstan-param array{id: int} $entity
+     * @param array{id: int} $entity
      *
      * @throws \Twig\Error\Error
      */
@@ -76,7 +76,7 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
     /**
      * Formatter for the task column.
      *
-     * @phpstan-param array{id: int} $entity
+     * @param array{id: int} $entity
      *
      * @throws \Twig\Error\Error
      */
@@ -101,7 +101,7 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
         if (0 === $groupId) {
             return $result;
         }
-        /** @phpstan-var string $field */
+        /** @var string $field */
         $field = $this->getRepository()->getSearchFields('group.id', $alias);
         $builder->andWhere($field . '=:' . self::PARAM_GROUP)
             ->setParameter(self::PARAM_GROUP, $groupId, Types::INTEGER);

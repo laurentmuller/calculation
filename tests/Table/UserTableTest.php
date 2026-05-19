@@ -152,7 +152,7 @@ final class UserTableTest extends EntityTableTestCase
     }
 
     /**
-     * @phpstan-param UserRepository $repository
+     * @param UserRepository $repository
      */
     #[\Override]
     protected function createTable(AbstractRepository $repository): UserTable

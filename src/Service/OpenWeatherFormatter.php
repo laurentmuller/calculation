@@ -72,7 +72,7 @@ class OpenWeatherFormatter
     }
 
     /**
-     * @phpstan-param array<int<-1,3>> $types
+     * @param array<int<-1,3>> $types
      */
     private function formatDate(int $date, array $types, ?\DateTimeZone $timezone = null): string
     {

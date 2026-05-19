@@ -35,8 +35,8 @@ trait EditParametersTrait
      * @template TParameters of AbstractParameters<TProperty>
      * @template TFormType of AbstractParametersType
      *
-     * @phpstan-param TParameters             $parameters
-     * @phpstan-param class-string<TFormType> $type
+     * @param TParameters             $parameters
+     * @param class-string<TFormType> $type
      */
     protected function renderParameters(
         Request $request,

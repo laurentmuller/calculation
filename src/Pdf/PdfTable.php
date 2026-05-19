@@ -760,7 +760,7 @@ class PdfTable
         }
 
         if ($cell->hasLink()) {
-            /** @phpstan-var string|int $link */
+            /** @var string|int $link */
             $link = $cell->getLink();
             $linkBounds = (clone $textBounds)->inflate(-$margin);
             $linesCount = \max(1, $parent->getLinesCount($text, $linkBounds->width));

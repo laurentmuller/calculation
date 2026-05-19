@@ -122,7 +122,7 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     protected function handleError(array $response): bool
     {
         if (isset($response['error'])) {
-            /** @phpstan-var array{code: int, message: string} $error */
+            /** @var array{code: int, message: string} $error */
             $error = $response['error'];
 
             return $this->setLastError($error['code'], $error['message']);

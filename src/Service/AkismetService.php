@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\User;
 use App\Utils\DateUtils;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -259,7 +260,7 @@ class AkismetService extends AbstractHttpClientService
 
     private function getVerifyParameters(Request $request, string $content, array $options): array
     {
-        /** @phpstan-var \App\Entity\User|null $user */
+        /** @var User|null $user */
         $user = $this->security->getUser();
         $headers = $request->headers;
 

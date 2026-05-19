@@ -220,7 +220,7 @@ readonly class SymfonyInfoService
         try {
             $url = \sprintf(self::RELEASE_URL, Kernel::MAJOR_VERSION, Kernel::MINOR_VERSION);
 
-            /** @phpstan-var array{release_date: string} $content */
+            /** @var array{release_date: string} $content */
             $content = FileUtils::decodeJson($url);
 
             return $this->formatMonthYear($content['release_date']);

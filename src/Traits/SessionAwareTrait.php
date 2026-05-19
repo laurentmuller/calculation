@@ -144,7 +144,7 @@ trait SessionAwareTrait
      */
     protected function getSessionString(string $key, ?string $default = null): ?string
     {
-        /** @phpstan-var string|null $value */
+        /** @var string|null $value */
         $value = $this->getSessionValue($key, $default);
 
         return \is_string($value) ? $value : $default;

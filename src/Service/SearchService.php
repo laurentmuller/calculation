@@ -371,9 +371,7 @@ class SearchService implements ServiceSubscriberInterface
     /**
      * Gets the entity name for the given class.
      *
-     * @param string $class the entity class
-     *
-     * @phpstan-param class-string $class
+     * @param class-string $class the entity class
      *
      * @return string the entity name
      */
@@ -385,10 +383,8 @@ class SearchService implements ServiceSubscriberInterface
     /**
      * Gets the query key for the given class name and field.
      *
-     * @param string $class the class name
-     * @param string $field the field
-     *
-     * @phpstan-param class-string $class
+     * @param class-string $class the class name
+     * @param string       $field the field
      *
      * @return string the key
      */

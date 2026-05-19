@@ -110,7 +110,7 @@ final class ProductTableTest extends EntityTableTestCase
     }
 
     /**
-     * @phpstan-param ProductRepository $repository
+     * @param ProductRepository $repository
      */
     #[\Override]
     protected function createTable(AbstractRepository $repository): ProductTable

@@ -181,7 +181,7 @@ final class ArrayTraitTest extends TestCase
     }
 
     /**
-     * @phpstan-param int<0,2> $mode
+     * @param int<0,2> $mode
      */
     #[DataProvider('getColumnFilterValues')]
     public function testColumnFilter(array $values, array $expected, ?callable $callback = null, int $mode = 0): void
@@ -287,7 +287,7 @@ final class ArrayTraitTest extends TestCase
     }
 
     /**
-     * @phpstan-param 0|1|2 $mode
+     * @param int<0,2> $mode
      */
     #[DataProvider('getUniqueFilteredValues')]
     public function testUniqueFiltered(array $values, array $expected, ?callable $callback = null, int $mode = 0): void

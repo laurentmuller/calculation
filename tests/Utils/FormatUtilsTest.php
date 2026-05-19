@@ -252,8 +252,8 @@ final class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @phpstan-param int<-1,3>|null $dateType
-     * @phpstan-param int<-1,3>|null $timeType
+     * @param int<-1,3>|null $dateType
+     * @param int<-1,3>|null $timeType
      */
     #[DataProvider('getDateFormatterPatterns')]
     public function testDateFormatterPattern(
@@ -296,7 +296,7 @@ final class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @phpstan-param int<-1,3>|null $dateType
+     * @param int<-1,3>|null $dateType
      */
     #[DataProvider('getDates')]
     public function testFormatDate(
@@ -311,8 +311,8 @@ final class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @phpstan-param int<-1,3>|null $dateType
-     * @phpstan-param int<-1,3>|null $timeType
+     * @param int<-1,3>|null $dateType
+     * @param int<-1,3>|null $timeType
      */
     #[DataProvider('getDateTimes')]
     public function testFormatDateTime(
@@ -343,7 +343,7 @@ final class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @phpstan-param \NumberFormatter::ROUND_* $roundingMode
+     * @param \NumberFormatter::ROUND_* $roundingMode
      */
     #[DataProvider('getPercents')]
     public function testFormatPercent(
@@ -372,7 +372,7 @@ final class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @phpstan-param int<-1,3>|null $timeType
+     * @param int<-1,3>|null $timeType
      */
     #[DataProvider('getTimes')]
     public function testFormatTime(

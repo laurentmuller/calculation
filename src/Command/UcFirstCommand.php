@@ -108,7 +108,7 @@ class UcFirstCommand
         $question->setMaxAttempts(1)
             ->setErrorMessage(\sprintf("No field selected for the '%s' entity.", $name));
 
-        /** @phpstan-var ?string $field */
+        /** @var ?string $field */
         $field = $io->askQuestion($question);
         if (!StringUtils::isString($field)) {
             return null;
@@ -131,7 +131,7 @@ class UcFirstCommand
     }
 
     /**
-     * @phpstan-param class-string $class
+     * @param class-string $class
      */
     private function count(SymfonyStyle $io, string $class): int
     {
@@ -166,7 +166,7 @@ class UcFirstCommand
 
         $allMetadata = $this->manager->getMetadataFactory()->getAllMetadata();
         foreach ($allMetadata as $metadata) {
-            /** @phpstan-var \ReflectionClass<\Stringable> $class */
+            /** @var \ReflectionClass<\Stringable> $class */
             $class = $metadata->getReflectionClass();
             if ($class->isAbstract() || !$class->implementsInterface(EntityInterface::class)) {
                 continue;
@@ -192,7 +192,7 @@ class UcFirstCommand
     }
 
     /**
-     * @phpstan-param class-string $class
+     * @param class-string $class
      */
     private function update(SymfonyStyle $io, string $class, string $field, int $total, bool $point, bool $dryRun): int
     {
@@ -266,7 +266,7 @@ class UcFirstCommand
     }
 
     /**
-     * @phpstan-param class-string $class
+     * @param class-string $class
      */
     private function validateField(SymfonyStyle $io, string $class, ?string $field): ?string
     {

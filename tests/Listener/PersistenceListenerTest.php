@@ -222,9 +222,9 @@ final class PersistenceListenerTest extends TestCase
     }
 
     /**
-     * @phpstan-param array<string, EntityInterface> $events
-     * @phpstan-param array<string, EntityInterface> $collections
-     * @phpstan-param array<string, string>  $changeSets
+     * @param array<string, EntityInterface> $events
+     * @param array<string, EntityInterface> $collections
+     * @param array<string, string>          $changeSets
      */
     private function createEvent(
         array $events = [],
@@ -247,9 +247,9 @@ final class PersistenceListenerTest extends TestCase
     }
 
     /**
-     * @phpstan-param array<string, EntityInterface> $events
-     * @phpstan-param array<string, EntityInterface> $collections
-     * @phpstan-param array<string, string>  $changeSets
+     * @param array<string, EntityInterface> $events
+     * @param array<string, EntityInterface> $collections
+     * @param array<string, string>          $changeSets
      */
     private function createMockObjectManager(
         array $events = [],

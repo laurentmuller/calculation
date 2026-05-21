@@ -77,12 +77,11 @@ class PivotField implements \JsonSerializable
     public function getValue(array $row): float|int|string|DatePoint|null
     {
         $value = $this->getRowValue($row);
-
         if (\is_scalar($value)) {
             return $this->method->convert($value);
         }
 
-        return null;
+        return $value;
     }
 
     #[\Override]

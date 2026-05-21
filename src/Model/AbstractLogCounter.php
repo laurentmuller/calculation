@@ -22,7 +22,7 @@ use App\Interfaces\ComparableInterface;
  */
 abstract class AbstractLogCounter implements \Countable, \Stringable, ComparableInterface
 {
-    /** @var non-negative-int */
+    /** @var int<0, max> */
     private int $count = 0;
 
     #[\Override]

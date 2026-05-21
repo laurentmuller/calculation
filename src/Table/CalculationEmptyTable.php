@@ -31,9 +31,6 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
         parent::__construct($repository);
     }
 
-    /**
-     * @return int<0, max>
-     */
     #[\Override]
     public function count(): int
     {

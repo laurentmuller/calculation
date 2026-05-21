@@ -46,8 +46,6 @@ class CalculationArchiveResult implements \Countable
 
     /**
      * Gets the number of calculations.
-     *
-     * @return int<0, max>
      */
     #[\Override]
     public function count(): int

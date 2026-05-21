@@ -111,6 +111,7 @@ readonly class RoleService
      *
      * @phpstan-param RoleInterface|RoleInterface::ROLE_* $role
      */
+    #[AsTwigFilter('role_name')]
     public function translateRole(RoleInterface|string $role): string
     {
         if ($role instanceof RoleInterface) {

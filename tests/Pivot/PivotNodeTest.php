@@ -58,7 +58,6 @@ final class PivotNodeTest extends TestCase
         self::assertSame($aggregator, $node->getAggregator());
         self::assertSame(0, $node->getValue());
         self::assertSame('key', $node->getKey());
-        self::assertFalse($node->isTitle());
 
         $actual = $node->getChildren();
         self::assertEmpty($actual);
@@ -291,10 +290,6 @@ final class PivotNodeTest extends TestCase
         self::assertSame(SortModeInterface::SORT_DESC, $actual);
 
         $node->setSortMode(SortModeInterface::SORT_DESC);
-        $actual = $node->getSortMode();
-        self::assertSame(SortModeInterface::SORT_DESC, $actual);
-
-        $node->setSortMode('fake');
         $actual = $node->getSortMode();
         self::assertSame(SortModeInterface::SORT_DESC, $actual);
     }

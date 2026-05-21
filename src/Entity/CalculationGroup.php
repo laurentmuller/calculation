@@ -125,8 +125,6 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
 
     /**
      * Gets the number of categories.
-     *
-     * @return int<0, max>
      */
     #[\Override]
     public function count(): int

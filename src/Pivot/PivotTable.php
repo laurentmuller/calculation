@@ -87,7 +87,7 @@ class PivotTable extends AbstractPivotAggregator
      * @param AbstractAggregator $aggregator the aggregator
      * @param PivotNode          $column     the parent column
      * @param PivotNode          $row        the parent row
-     * @param mixed|null         $value      the initial value
+     * @param mixed              $value      the initial value
      *
      * @return PivotCell the newly created cell
      */

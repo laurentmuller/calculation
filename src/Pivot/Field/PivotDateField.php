@@ -36,8 +36,10 @@ class PivotDateField extends PivotField
      * @param string  $name   the field name
      * @param string  $format the format used to extract the date part
      * @param ?string $title  the field title
+     *
+     * @phpstan-param self::PART_* $format
      */
-    public function __construct(string $name, protected string $format, ?string $title = null)
+    public function __construct(string $name, private readonly string $format, ?string $title = null)
     {
         parent::__construct($name, $title);
     }

@@ -267,8 +267,7 @@ class PivotTableFactory
             if (!$child instanceof PivotNode) {
                 $aggregator = $this->operation->createAggregator();
                 $title = (string) $field->getDisplayValue($key);
-                $node = $node
-                    ->add($aggregator, $key)
+                $node = $node->add($aggregator, $key)
                     ->setTitle($title);
             } else {
                 $node = $child;

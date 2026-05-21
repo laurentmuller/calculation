@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Twig;
 
+use App\Utils\StringUtils;
 use Twig\Attribute\AsTwigFunction;
 use Twig\Environment;
 use Twig\Error\RuntimeError;
@@ -36,9 +37,9 @@ class HtmlDataExtension
             if (\is_bool($value)) {
                 $value = \json_encode($value);
             }
-            if (!\str_starts_with($name, 'data-')) {
-                $name = 'data-' . $name;
-            }
+            $name = StringUtils::unicode($name)
+                ->ensureStart('data-')
+                ->toString();
             $attr[$name] = $value;
         }
 

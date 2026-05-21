@@ -90,7 +90,6 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
         $this->children[] = $child;
         $child->setParent($this);
 
-        // sort
         return $this->sort();
     }
 
@@ -104,8 +103,6 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
 
     /**
      * Gets the number of children.
-     *
-     * @return int<0, max>
      */
     #[\Override]
     public function count(): int
@@ -263,19 +260,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      */
     public function getKeys(): array
     {
-        if ($this->isRoot()) {
-            return [];
-        }
-
-        $result = [$this->key];
-        $parent = $this->parent;
-        while ($parent instanceof self && !$parent->isRoot()) {
-            // put first
-            \array_unshift($result, $parent->key);
-            $parent = $parent->parent;
-        }
-
-        return $result;
+        return $this->upToRoot(static fn (PivotNode $node): mixed => $node->key);
     }
 
     /**
@@ -285,13 +270,13 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      */
     public function getLastChildren(): array
     {
-        if ($this->isEmpty()) {
+        if ($this->isLeaf()) {
             return [$this];
         }
 
         $result = [];
         foreach ($this->children as $child) {
-            if ($child->isEmpty()) {
+            if ($child->isLeaf()) {
                 $result[] = $child;
             } else {
                 $result = \array_merge($result, $child->getLastChildren());
@@ -308,7 +293,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      */
     public function getLevel(): int
     {
-        if ($this->isRoot() || !$this->parent instanceof self) {
+        if ($this->isRoot()) {
             return 0;
         }
 
@@ -324,7 +309,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     {
         $level = 0;
         $node = $this;
-        while (!$node->isEmpty()) {
+        while (!$node->isLeaf()) {
             ++$level;
             $node = $node->children[0];
         }
@@ -382,49 +367,28 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      */
     public function getTitles(): array
     {
-        if ($this->isRoot()) {
-            return [];
-        }
-
-        $result = [(string) $this->getTitle()];
-        $parent = $this->parent;
-        while ($parent instanceof self && !$parent->isRoot()) {
-            // put first
-            \array_unshift($result, (string) $parent->getTitle());
-            $parent = $parent->parent;
-        }
-
-        return $result;
+        return $this->upToRoot(static fn (PivotNode $node): string => (string) $node->getTitle());
     }
 
     /**
-     * Gets the index (position) in the parent's children.
+     * Gets the zero-based index (position) in the parent's children.
      *
      * @return int the index, if parent is set; -1 otherwise
      */
     public function index(): int
     {
-        if ($this->parent instanceof self) {
-            $index = 0;
-            foreach ($this->parent->getChildren() as $child) {
-                if ($child === $this) {
-                    return $index;
-                }
-                ++$index;
+        if ($this->isRoot()) {
+            return -1;
+        }
+        $index = 0;
+        foreach ($this->parent->getChildren() as $child) {
+            if ($child === $this) {
+                return $index;
             }
+            ++$index;
         }
 
         return -1;
-    }
-
-    /**
-     * Returns if this node is empty.
-     *
-     * @return bool true if this node does not contain children
-     */
-    public function isEmpty(): bool
-    {
-        return 0 === $this->count();
     }
 
     /**
@@ -436,7 +400,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      */
     public function isLeaf(): bool
     {
-        return $this->isEmpty();
+        return [] === $this->children;
     }
 
     /**
@@ -445,20 +409,12 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      * A root node is a node without a parent.
      *
      * @return bool true if root
+     *
+     * @phpstan-assert-if-true null $this->parent
      */
     public function isRoot(): bool
     {
         return !$this->parent instanceof self;
-    }
-
-    /**
-     * Returns if this title is defined.
-     *
-     * @return bool true if defined
-     */
-    public function isTitle(): bool
-    {
-        return null !== $this->title;
     }
 
     #[\Override]
@@ -487,13 +443,14 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
 
     /**
      * Sets the sort mode and sort values if different from the current sort mode.
+     *
+     * @param self::SORT_* $sortMode the sort mode to set
      */
     public function setSortMode(string $sortMode): self
     {
-        if ($this->sortMode === $sortMode || (self::SORT_ASC !== $sortMode && self::SORT_DESC !== $sortMode)) {
+        if ($this->sortMode === $sortMode) {
             return $this;
         }
-
         $this->sortMode = $sortMode;
 
         return $this->sort();
@@ -510,48 +467,13 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     }
 
     /**
-     * Sort children.
-     */
-    private function sort(): self
-    {
-        return match ($this->sortMode) {
-            self::SORT_ASC => $this->sortAscending(),
-            self::SORT_DESC => $this->sortDescending(),
-        };
-    }
-
-    /**
-     * Sort children ascending.
-     */
-    private function sortAscending(): self
-    {
-        if ($this->count() > 1) {
-            \usort($this->children, static fn (self $left, self $right): int => $left->getKey() <=> $right->getKey());
-        }
-
-        return $this;
-    }
-
-    /**
-     * Sort children descending.
-     */
-    private function sortDescending(): self
-    {
-        if ($this->count() > 1) {
-            \usort($this->children, static fn (self $left, self $right): int => $right->getKey() <=> $left->getKey());
-        }
-
-        return $this;
-    }
-
-    /**
-     * Update this value with the sum of all children (if any).
+     * Update this value with of all these children (if any).
      *
      * <b>NB:</b> This method is called recursively for the parents (if any).
      */
-    private function update(): static
+    protected function update(): static
     {
-        if (!$this->isEmpty()) {
+        if (!$this->isLeaf()) {
             $this->aggregator->initialize();
             foreach ($this->children as $child) {
                 $this->aggregator->add($child->getAggregator());
@@ -561,5 +483,42 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
         $this->parent?->update();
 
         return $this;
+    }
+
+    /**
+     * Sort children.
+     */
+    private function sort(): self
+    {
+        if ($this->count() <= 1) {
+            return $this;
+        }
+
+        if (self::SORT_ASC === $this->sortMode) {
+            \uasort($this->children, static fn (self $left, self $right): int => $left->getKey() <=> $right->getKey());
+        } else {
+            \uasort($this->children, static fn (self $left, self $right): int => $right->getKey() <=> $left->getKey());
+        }
+
+        return $this;
+    }
+
+    /**
+     * @template T
+     *
+     * @param callable(PivotNode): T $callable
+     *
+     * @return T[]
+     */
+    private function upToRoot(callable $callable): array
+    {
+        $result = [];
+        $current = $this;
+        while (!$current->isRoot()) {
+            \array_unshift($result, $callable($current));
+            $current = $current->parent;
+        }
+
+        return $result;
     }
 }

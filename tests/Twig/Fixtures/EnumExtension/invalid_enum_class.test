@@ -1,0 +1,6 @@
+--TEST--
+"enum_sorted" not enum exist exception
+--TEMPLATE--
+{{ enum_sorted('fake_enum') }}
+--EXCEPTION--
+Twig\Error\RuntimeError: "fake_enum" is not an enum in "index.twig" at line 2.

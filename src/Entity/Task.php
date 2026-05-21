@@ -110,8 +110,6 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
 
     /**
      * Gets the number of items.
-     *
-     * @return int<0, max>
      */
     #[\Override]
     public function count(): int

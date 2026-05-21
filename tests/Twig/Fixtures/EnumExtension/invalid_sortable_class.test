@@ -1,0 +1,6 @@
+--TEST--
+"enum_sorted" not enum sortable exception
+--TEMPLATE--
+{{ enum_sorted('App\\Enums\\Environment') }}
+--EXCEPTION--
+Twig\Error\RuntimeError: "App\Enums\Environment" is not a sortable enum in "index.twig" at line 2.

@@ -1,0 +1,16 @@
+{% set button_attrs = {
+    class: ['dropdown-toggle', 'nav-link']|merge(button_class|default([])),
+    title: app.user.userIdentifier ~ ' - ' ~ app.user.role|role_name,
+    'data-bs-toggle': 'dropdown',
+    'aria-expanded': false,
+} %}
+<button {{ html_attr(button_attrs) }}>
+    {%- set image = asset_image_user(app.user, 32, {alt: 'user.image.title'|trans, class: 'avatar rounded-circle'}) -%}
+    {%- if image -%}
+        {{- image|raw -}}
+    {%- else -%}
+        <span class="badge rounded-circle text-bg-secondary user-image-empty">{{ app.user.initials }}</span>
+    {%- endif -%}
+    <span class="d-lg-none ms-2">{{ app.user.userIdentifier }}</span>
+</button>
+{{ include('navigation/menu/_menu_user.html.twig', {dropdown_class: dropdown_class}) }}

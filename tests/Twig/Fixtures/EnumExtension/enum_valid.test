@@ -1,0 +1,8 @@
+--TEST--
+"enum_sorted" valid enum
+--TEMPLATE--
+{{ enum_sorted('App\\Enums\\TableView')|length }}
+--DATA--
+return []
+--EXPECT--
+2

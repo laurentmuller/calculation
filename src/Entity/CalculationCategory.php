@@ -121,8 +121,6 @@ class CalculationCategory extends AbstractEntity implements \Countable, Comparab
 
     /**
      * Gets the number of items.
-     *
-     * @return int<0, max>
      */
     #[\Override]
     public function count(): int

@@ -163,7 +163,7 @@
                     </button>
                     <table class="dropdown-menu w-auto table table-borderless mb-0 px-2">
                         <tr>
-                            {% for position in enum('App\\Enums\\MessagePosition').sorted() %}
+                            {% for position in enum_sorted('App\\Enums\\MessagePosition') %}
                             <td>
                                 {% set id = 'btn-check-dropdown-' ~ position.value %}
                                 <div class="form-check ps-0 mb-0">

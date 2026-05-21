@@ -24,9 +24,6 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
 {
     use DuplicateItemsTrait;
 
-    /**
-     * @return int<0, max>
-     */
     #[\Override]
     public function count(): int
     {

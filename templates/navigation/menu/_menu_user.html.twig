@@ -36,6 +36,6 @@
     {% endif %}
     {% if is_granted(IS_IMPERSONATOR) -%}
         {{ dropdownSeparator() }}
-        {{ dropdownItem(impersonation_exit_path(path('user_index', {id: app.user.id|default(0)})), 'user.switch.exit.title', 'user-slash') }}
+        {{ dropdownItem(impersonation_exit_path(path('user_index', {id: app.user.id})), 'user.switch.exit.title', 'user-slash') }}
     {% endif %}
 </ul>

@@ -45,10 +45,10 @@ final class AverageAggregatorTest extends TestCase
     public function testGetFormattedResult(): void
     {
         $aggregator = new AverageAggregator(10.0);
-        self::assertSame(10.0, $aggregator->getFormattedResult());
+        self::assertSame(10.0, $aggregator->getRoundResult());
 
         $aggregator->add(10.00255);
-        self::assertSame(10.0, $aggregator->getFormattedResult());
+        self::assertSame(10.0, $aggregator->getRoundResult());
     }
 
     public function testInitialize(): void
@@ -83,10 +83,10 @@ final class AverageAggregatorTest extends TestCase
     {
         $aggregator = new AverageAggregator();
         $actual = (string) $aggregator;
-        self::assertSame('AverageAggregator(0)', $actual);
+        self::assertSame('AverageAggregator(0.00)', $actual);
 
         $aggregator = new AverageAggregator(10.0);
         $actual = (string) $aggregator;
-        self::assertSame('AverageAggregator(10)', $actual);
+        self::assertSame('AverageAggregator(10.00)', $actual);
     }
 }

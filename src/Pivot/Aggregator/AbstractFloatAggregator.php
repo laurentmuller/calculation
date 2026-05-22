@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Pivot\Aggregator;
 
+use App\Utils\FormatUtils;
+
 /**
  * Abstract aggregator for float values.
  */
@@ -27,15 +29,21 @@ abstract class AbstractFloatAggregator extends AbstractAggregator
     }
 
     #[\Override]
-    public function getFormattedResult(): float
+    public function getFormattedResult(): string
     {
-        return \round($this->getResult(), 2);
+        return FormatUtils::formatAmount($this->result);
     }
 
     #[\Override]
     public function getResult(): float
     {
         return $this->result;
+    }
+
+    #[\Override]
+    public function getRoundResult(): float
+    {
+        return \round($this->getResult(), 2);
     }
 
     #[\Override]

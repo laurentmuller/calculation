@@ -222,7 +222,7 @@ class PivotTable extends AbstractPivotAggregator
         return \array_filter([
             'title' => $this->title,
             'aggregator' => StringUtils::getShortName($this->aggregator),
-            'value' => $this->aggregator->getFormattedResult(),
+            'value' => $this->aggregator->getRoundResult(),
             'keyField' => $this->keyField,
             'dataField' => $this->dataField,
             'columnFields' => $this->columnFields,

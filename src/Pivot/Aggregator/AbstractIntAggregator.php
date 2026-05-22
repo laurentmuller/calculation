@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Pivot\Aggregator;
 
+use App\Utils\FormatUtils;
+
 /**
  * Abstract aggregator for int values.
  */
@@ -24,6 +26,12 @@ abstract class AbstractIntAggregator extends AbstractAggregator
     {
         $this->result = $this->getInitialValue();
         parent::__construct($value);
+    }
+
+    #[\Override]
+    public function getFormattedResult(): string
+    {
+        return FormatUtils::formatInt($this->result);
     }
 
     #[\Override]

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Pivot\Aggregator;
 
 use App\Traits\MathTrait;
+use App\Utils\FormatUtils;
 
 /**
  * Aggregator to get average of values.
@@ -23,9 +24,9 @@ class AverageAggregator extends AbstractCompositeAggregator
     use MathTrait;
 
     #[\Override]
-    public function getFormattedResult(): float
+    public function getFormattedResult(): string
     {
-        return \round($this->getResult(), 2);
+        return FormatUtils::formatAmount($this->getResult());
     }
 
     #[\Override]
@@ -35,6 +36,12 @@ class AverageAggregator extends AbstractCompositeAggregator
             $this->aggregators['sum']->getResult(),
             $this->aggregators['count']->getResult()
         );
+    }
+
+    #[\Override]
+    public function getRoundResult(): float
+    {
+        return \round($this->getResult(), 2);
     }
 
     #[\Override]

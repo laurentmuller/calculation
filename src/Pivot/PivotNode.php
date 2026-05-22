@@ -423,7 +423,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
         return \array_filter([
             'key' => $this->key,
             'title' => $this->title,
-            'value' => $this->aggregator->getFormattedResult(),
+            'value' => $this->aggregator->getRoundResult(),
             'children' => [] === $this->children ? null : $this->children,
         ]);
     }

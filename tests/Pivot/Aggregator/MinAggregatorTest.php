@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Pivot\Aggregator;
 
 use App\Pivot\Aggregator\MinAggregator;
+use App\Utils\FormatUtils;
 use PHPUnit\Framework\TestCase;
 
 final class MinAggregatorTest extends TestCase
@@ -54,10 +55,10 @@ final class MinAggregatorTest extends TestCase
     public function testGetFormattedResult(): void
     {
         $aggregator = new MinAggregator(10.0);
-        self::assertSame(10.0, $aggregator->getFormattedResult());
+        self::assertSame(10.0, $aggregator->getRoundResult());
 
         $aggregator->add(10.00255);
-        self::assertSame(10.0, $aggregator->getFormattedResult());
+        self::assertSame(10.0, $aggregator->getRoundResult());
     }
 
     public function testInitialize(): void
@@ -92,11 +93,12 @@ final class MinAggregatorTest extends TestCase
     {
         $aggregator = new MinAggregator();
         $actual = (string) $aggregator;
-        $expected = \sprintf('MinAggregator(%s)', $this->initialValue);
+        $formatted = FormatUtils::formatAmount($this->initialValue);
+        $expected = \sprintf('MinAggregator(%s)', $formatted);
         self::assertSame($expected, $actual);
 
         $aggregator = new MinAggregator(10.0);
         $actual = (string) $aggregator;
-        self::assertSame('MinAggregator(10)', $actual);
+        self::assertSame('MinAggregator(10.00)', $actual);
     }
 }

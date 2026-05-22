@@ -13,7 +13,7 @@ Ce programme est distribué avec une [licence propriétaire](LICENSE.md) et une
 
 [![Application](https://img.shields.io/badge/Application-3.0.0-blue)](https://github.com/laurentmuller/calculation)
 [![Symfony](https://img.shields.io/badge/Symfony-7.4.12-informational?logo=symfony)](https://symfony.com)
-[![PHP](https://img.shields.io/badge/PHP-8.3.29-informational?logo=php)](https://www.php.net)
+[![PHP](https://img.shields.io/badge/PHP-8.3.31-informational?logo=php)](https://www.php.net)
 [![MariaDB](https://img.shields.io/badge/mariadb-10.11.15-informational?logo=mariadb)](https://mariadb.org/)
 [![Apache](https://img.shields.io/badge/Apache-2.4.51-informational?logo=apache)](https://httpd.apache.org)
 [![PhpStorm](https://img.shields.io/badge/PhpStorm-2026.1-informational?logo=phpstorm)](https://www.jetbrains.com/phpstorm)

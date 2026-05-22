@@ -45,10 +45,10 @@ final class CountAggregatorTest extends TestCase
     public function testGetFormattedResult(): void
     {
         $aggregator = new CountAggregator(10);
-        self::assertSame(1, $aggregator->getFormattedResult());
+        self::assertSame(1, $aggregator->getRoundResult());
 
         $aggregator->add(10);
-        self::assertSame(2, $aggregator->getFormattedResult());
+        self::assertSame(2, $aggregator->getRoundResult());
     }
 
     public function testInitialize(): void

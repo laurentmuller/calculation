@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Pivot\Aggregator;
 
 use App\Pivot\Aggregator\MaxAggregator;
+use App\Utils\FormatUtils;
 use PHPUnit\Framework\TestCase;
 
 final class MaxAggregatorTest extends TestCase
@@ -54,10 +55,10 @@ final class MaxAggregatorTest extends TestCase
     public function testGetFormattedResult(): void
     {
         $aggregator = new MaxAggregator(10.0);
-        self::assertSame(10.0, $aggregator->getFormattedResult());
+        self::assertSame(10.0, $aggregator->getRoundResult());
 
         $aggregator->add(10.00255);
-        self::assertSame(10.0, $aggregator->getFormattedResult());
+        self::assertSame(10.0, $aggregator->getRoundResult());
     }
 
     public function testInitialize(): void
@@ -92,10 +93,12 @@ final class MaxAggregatorTest extends TestCase
     {
         $aggregator = new MaxAggregator();
         $actual = (string) $aggregator;
-        self::assertSame('MaxAggregator(' . $this->initialValue . ')', $actual);
+        $formatted = FormatUtils::formatAmount($this->initialValue);
+        $expected = \sprintf('MaxAggregator(%s)', $formatted);
+        self::assertSame($expected, $actual);
 
         $aggregator = new MaxAggregator(10.0);
         $actual = (string) $aggregator;
-        self::assertSame('MaxAggregator(10)', $actual);
+        self::assertSame('MaxAggregator(10.00)', $actual);
     }
 }

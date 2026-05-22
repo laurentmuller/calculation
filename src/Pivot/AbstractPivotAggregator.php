@@ -55,7 +55,23 @@ abstract class AbstractPivotAggregator implements \JsonSerializable, \Stringable
     }
 
     /**
-     * Gets the value.
+     * Gets the aggregator formatted value.
+     */
+    public function getFormattedValue(): string
+    {
+        return $this->aggregator->getFormattedResult();
+    }
+
+    /**
+     * Gets the aggregator rounded value.
+     */
+    public function getRoundResult(): int|float
+    {
+        return $this->aggregator->getRoundResult();
+    }
+
+    /**
+     * Gets the aggregator value.
      */
     public function getValue(): int|float
     {

@@ -16,6 +16,7 @@ namespace App\Tests\Pivot;
 use App\Interfaces\SortModeInterface;
 use App\Pivot\Aggregator\AbstractAggregator;
 use App\Pivot\Aggregator\CountAggregator;
+use App\Pivot\Aggregator\SumAggregator;
 use App\Pivot\PivotNode;
 use PHPUnit\Framework\TestCase;
 
@@ -57,6 +58,8 @@ final class PivotNodeTest extends TestCase
         $node = $this->createNode($aggregator);
         self::assertSame($aggregator, $node->getAggregator());
         self::assertSame(0, $node->getValue());
+        self::assertSame(0, $node->getRoundResult());
+        self::assertSame('0', $node->getFormattedValue());
         self::assertSame('key', $node->getKey());
 
         $actual = $node->getChildren();
@@ -121,6 +124,19 @@ final class PivotNodeTest extends TestCase
         $this->createChildNode($child, 'sub-child');
         $actual = $parent->findRecursive('sub-child');
         self::assertNotNull($actual);
+    }
+
+    public function testFloatAggregator(): void
+    {
+        $aggregator = new SumAggregator();
+        $node = $this->createNode($aggregator);
+        self::assertSame(0.0, $node->getValue());
+        self::assertSame(0.00, $node->getRoundResult());
+        self::assertSame('0.00', $node->getFormattedValue());
+        $node->addValue(10.00);
+        self::assertSame(10.00, $node->getValue());
+        self::assertSame(10.00, $node->getRoundResult());
+        self::assertSame('10.00', $node->getFormattedValue());
     }
 
     public function testGetChildrenAtLevel(): void
@@ -241,6 +257,19 @@ final class PivotNodeTest extends TestCase
         self::assertSame(0, $actual);
         $actual = $subChild2->index();
         self::assertSame(1, $actual);
+    }
+
+    public function testIntAggregator(): void
+    {
+        $aggregator = new CountAggregator();
+        $node = $this->createNode($aggregator);
+        self::assertSame(0, $node->getValue());
+        self::assertSame(0, $node->getRoundResult());
+        self::assertSame('0', $node->getFormattedValue());
+        $node->addValue(10.00);
+        self::assertSame(1, $node->getValue());
+        self::assertSame(1, $node->getRoundResult());
+        self::assertSame('1', $node->getFormattedValue());
     }
 
     public function testIsLeaf(): void

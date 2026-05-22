@@ -107,7 +107,7 @@ class PivotCell extends AbstractPivotAggregator
      */
     public function getFormattedResult(): int|float
     {
-        return $this->aggregator->getFormattedResult();
+        return $this->aggregator->getRoundResult();
     }
 
     /**
@@ -156,7 +156,7 @@ class PivotCell extends AbstractPivotAggregator
         return [
             'row' => $this->getRowPath(),
             'col' => $this->getColumnPath(),
-            'value' => $this->aggregator->getFormattedResult(),
+            'value' => $this->aggregator->getRoundResult(),
         ];
     }
 }

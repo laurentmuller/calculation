@@ -19,21 +19,14 @@ use Symfony\Component\Clock\DatePoint;
 
 final class PivotSemesterFieldTest extends TestCase
 {
-    public function testConstructor(): void
-    {
-        $field = new PivotSemesterField('name');
-        self::assertSame('name', $field->getName());
-    }
-
     public function testFormatter(): void
     {
         $field = new PivotSemesterField('name');
-        self::assertNull($field->getFormatter());
         $actual = $field->getDisplayValue(1);
         self::assertSame('1st semester', $actual);
 
         $formatter = static fn (int $semester): string => (string) $semester;
-        $field->setFormatter($formatter);
+        $field = new PivotSemesterField('name', formatter: $formatter);
         self::assertSame($formatter, $field->getFormatter());
 
         $actual = $field->getDisplayValue(1);
@@ -49,9 +42,6 @@ final class PivotSemesterFieldTest extends TestCase
 
         $actual = $field->getDisplayValue(2);
         self::assertSame('2nd semester', $actual);
-
-        $actual = $field->getDisplayValue(3);
-        self::assertSame('3', $actual);
     }
 
     public function testGetValue(): void
@@ -64,5 +54,13 @@ final class PivotSemesterFieldTest extends TestCase
         $row = ['name' => $date];
         $actual = $field->getValue($row);
         self::assertSame(1, $actual);
+    }
+
+    public function testInvalidValue(): void
+    {
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage('Invalid semester value: 5, allowed values [1,2].');
+        $field = new PivotSemesterField('name');
+        $field->getDisplayValue(5);
     }
 }

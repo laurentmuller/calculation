@@ -33,11 +33,9 @@ class PivotDateField extends PivotField
     public const string PART_YEAR = 'Y';
 
     /**
-     * @param string  $name   the field name
-     * @param string  $format the format used to extract the date part
-     * @param ?string $title  the field title
-     *
-     * @phpstan-param self::PART_* $format
+     * @param string       $name   the field name
+     * @param self::PART_* $format the format used to extract the date part
+     * @param ?string      $title  the field title
      */
     public function __construct(string $name, private readonly string $format, ?string $title = null)
     {
@@ -45,14 +43,14 @@ class PivotDateField extends PivotField
     }
 
     #[\Override]
-    public function getValue(array $row): float|int|string|DatePoint|null
+    public function getValue(array $row): int|float|string|null
     {
-        $value = $this->getRowValue($row);
+        $value = parent::getValue($row);
         if ($value instanceof DatePoint) {
             return $this->getDateValue($value);
         }
 
-        return parent::getValue($row);
+        return $value;
     }
 
     /**

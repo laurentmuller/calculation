@@ -19,21 +19,14 @@ use Symfony\Component\Clock\DatePoint;
 
 final class PivotQuarterFieldTest extends TestCase
 {
-    public function testConstructor(): void
-    {
-        $field = new PivotQuarterField('name');
-        self::assertSame('name', $field->getName());
-    }
-
     public function testFormatter(): void
     {
         $field = new PivotQuarterField('name');
-        self::assertNull($field->getFormatter());
         $actual = $field->getDisplayValue(1);
         self::assertSame('1st quarter', $actual);
 
         $formatter = static fn (int $quarter): string => (string) $quarter;
-        $field->setFormatter($formatter);
+        $field = new PivotQuarterField('name', formatter: $formatter);
         self::assertSame($formatter, $field->getFormatter());
 
         $actual = $field->getDisplayValue(1);
@@ -55,9 +48,6 @@ final class PivotQuarterFieldTest extends TestCase
 
         $actual = $field->getDisplayValue(4);
         self::assertSame('4th quarter', $actual);
-
-        $actual = $field->getDisplayValue(5);
-        self::assertSame('5', $actual);
     }
 
     public function testGetValue(): void
@@ -70,5 +60,13 @@ final class PivotQuarterFieldTest extends TestCase
         $row = ['name' => $date];
         $actual = $field->getValue($row);
         self::assertSame(2, $actual);
+    }
+
+    public function testInvalidValue(): void
+    {
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage('Invalid quarter value: 5, allowed values [1..4].');
+        $field = new PivotQuarterField('name');
+        $field->getDisplayValue(5);
     }
 }

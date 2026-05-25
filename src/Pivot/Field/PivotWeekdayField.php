@@ -30,21 +30,19 @@ class PivotWeekdayField extends PivotDateField
     /**
      * @param string  $name  the field name
      * @param ?string $title the field title
-     * @param bool    $short true to display the short day name, false to display the day name
      */
-    public function __construct(string $name, ?string $title = null, bool $short = false)
+    public function __construct(string $name, ?string $title = null)
     {
         parent::__construct($name, self::PART_WEEK_DAY, $title);
-
-        /** @var int<1, max> $time */
-        $time = \strtotime('this week');
-        $firstDay = \strtolower(\date('l', $time));
-        $this->names = $short ? DateUtils::getShortWeekdays($firstDay) : DateUtils::getWeekdays($firstDay);
+        $this->names = DateUtils::getWeekdays();
     }
 
+    /**
+     * @throws \InvalidArgumentException if the value is not between 1 and 7 inclusive
+     */
     #[\Override]
     public function getDisplayValue(mixed $value): mixed
     {
-        return $this->names[(int) $value] ?? parent::getDisplayValue($value);
+        return $this->names[(int) $value] ?? throw new \InvalidArgumentException(\sprintf('Invalid weekday value: %d, allowed value [1..7].', $value));
     }
 }

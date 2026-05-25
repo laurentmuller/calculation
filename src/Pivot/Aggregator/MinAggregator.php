@@ -19,7 +19,7 @@ namespace App\Pivot\Aggregator;
 class MinAggregator extends AbstractFloatAggregator
 {
     #[\Override]
-    public function add(float|AbstractAggregator|int|null $value): static
+    public function add(AbstractAggregator|int|float|null $value): static
     {
         if ($value instanceof self) {
             $this->result = \min($this->result, $value->result);

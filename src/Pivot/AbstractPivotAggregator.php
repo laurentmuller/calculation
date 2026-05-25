@@ -33,7 +33,7 @@ abstract class AbstractPivotAggregator implements \JsonSerializable, \Stringable
     #[\Override]
     public function __toString(): string
     {
-        return \sprintf('%s(%s)', StringUtils::getShortName($this), $this->getValue());
+        return \sprintf('%s(%s)', StringUtils::getShortName($this), $this->getResult());
     }
 
     /**
@@ -63,18 +63,18 @@ abstract class AbstractPivotAggregator implements \JsonSerializable, \Stringable
     }
 
     /**
+     * Gets the aggregator result.
+     */
+    public function getResult(): int|float
+    {
+        return $this->aggregator->getResult();
+    }
+
+    /**
      * Gets the aggregator rounded value.
      */
     public function getRoundResult(): int|float
     {
         return $this->aggregator->getRoundResult();
-    }
-
-    /**
-     * Gets the aggregator value.
-     */
-    public function getValue(): int|float
-    {
-        return $this->aggregator->getResult();
     }
 }

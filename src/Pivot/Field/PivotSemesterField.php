@@ -20,42 +20,49 @@ use Symfony\Component\Clock\DatePoint;
  */
 class PivotSemesterField extends PivotDateField
 {
-    /** @var (\Closure(int): string)|null */
-    private ?\Closure $formatter = null;
+    /** @var \Closure(int): string */
+    private readonly \Closure $formatter;
 
-    public function __construct(string $name, ?string $title = null)
+    /**
+     * @param ?\Closure(int): string $formatter the optional callback formatter
+     */
+    public function __construct(string $name, ?string $title = null, ?\Closure $formatter = null)
     {
         parent::__construct($name, self::PART_MONTH, $title);
+        $this->formatter = $formatter ?? self::getDefaultFormatter();
     }
 
+    /**
+     * Gets the default formatter.
+     *
+     * @return \Closure(int): string
+     */
+    public static function getDefaultFormatter(): \Closure
+    {
+        return static fn (int $semester): string => match ($semester) {
+            1 => '1st semester',
+            2 => '2nd semester',
+            default => throw new \InvalidArgumentException(\sprintf('Invalid semester value: %d, allowed values [1,2].', $semester))
+        };
+    }
+
+    /**
+     * @throws \InvalidArgumentException if the value is not between 1 and 2 inclusive
+     */
     #[\Override]
     public function getDisplayValue(mixed $value): string
     {
-        return $this->formatSemester((int) $value);
+        return \call_user_func($this->formatter, (int) $value);
     }
 
     /**
      * Gets the callback used to format a semestre.
      *
-     * @return ?\Closure(int): string
+     * @return \Closure(int): string
      */
-    public function getFormatter(): ?\Closure
+    public function getFormatter(): \Closure
     {
         return $this->formatter;
-    }
-
-    /**
-     * Sets callback used to format a semestre.
-     *
-     * The function receives the semestre (1 or 2) as a parameter and must return a string.
-     *
-     * @param ?\Closure(int): string $formatter the optional callback
-     */
-    public function setFormatter(?\Closure $formatter): self
-    {
-        $this->formatter = $formatter;
-
-        return $this;
     }
 
     #[\Override]
@@ -64,23 +71,5 @@ class PivotSemesterField extends PivotDateField
         $value = parent::getDateValue($date);
 
         return (int) \ceil($value / 6);
-    }
-
-    /**
-     * Formats the semester.
-     *
-     * @param int $semester the semester (1 or 2) to format
-     */
-    private function formatSemester(int $semester): string
-    {
-        if (\is_callable($this->formatter)) {
-            return \call_user_func($this->formatter, $semester);
-        }
-
-        return match ($semester) {
-            1 => '1st semester',
-            2 => '2nd semester',
-            default => (string) $semester,
-        };
     }
 }

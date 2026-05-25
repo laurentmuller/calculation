@@ -19,37 +19,14 @@ namespace App\Pivot\Field;
 class PivotFieldFactory
 {
     /**
-     * Creates a new instance.
-     *
-     * @param string      $name   the field name
-     * @param ?string     $title  the field title
-     * @param PivotMethod $method the field method (one of the <code>PivotField::METHOD_XX</code>)
-     */
-    public static function default(string $name, ?string $title = null, PivotMethod $method = PivotMethod::STRING): PivotField
-    {
-        return (new PivotField($name, $title))->setMethod($method);
-    }
-
-    /**
-     * Creates a new instance with the <code>PivotMethod::FLOAT</code>.
+     * Creates a new default instance.
      *
      * @param string  $name  the field name
      * @param ?string $title the field title
      */
-    public static function float(string $name, ?string $title = null): PivotField
+    public static function default(string $name, ?string $title = null): PivotField
     {
-        return self::default($name, $title, PivotMethod::FLOAT);
-    }
-
-    /**
-     * Creates a new instance with the <code>PivotMethod::INTEGER</code>.
-     *
-     * @param string  $name  the field name
-     * @param ?string $title the field title
-     */
-    public static function integer(string $name, ?string $title = null): PivotField
-    {
-        return self::default($name, $title, PivotMethod::INTEGER);
+        return new PivotField($name, $title);
     }
 
     /**
@@ -57,37 +34,44 @@ class PivotFieldFactory
      *
      * @param string  $name  the field name
      * @param ?string $title the field title
-     * @param bool    $short true to display the short month name, false to display the full month name
      */
-    public static function month(string $name, ?string $title = null, bool $short = false): PivotMonthField
+    public static function month(string $name, ?string $title = null): PivotMonthField
     {
-        return new PivotMonthField($name, $title, $short);
+        return new PivotMonthField($name, $title);
     }
 
     /**
-     * Creates a new date instance for quarter.
+     * Creates a new quarter field instance.
      *
-     * @param string  $name  the field name
-     * @param ?string $title the field title
+     * @param string                 $name      the field name
+     * @param ?string                $title     the field title
+     * @param ?\Closure(int): string $formatter the optional callback formatter
      */
-    public static function quarter(string $name, ?string $title = null): PivotQuarterField
-    {
-        return new PivotQuarterField($name, $title);
+    public static function quarter(
+        string $name,
+        ?string $title = null,
+        ?\Closure $formatter = null
+    ): PivotQuarterField {
+        return new PivotQuarterField($name, $title, $formatter);
     }
 
     /**
-     * Creates a new date instance for the semester.
+     * Creates a semester field instance.
      *
-     * @param string  $name  the field name
-     * @param ?string $title the field title
+     * @param string                 $name      the field name
+     * @param ?string                $title     the field title
+     * @param ?\Closure(int): string $formatter the optional callback formatter
      */
-    public static function semester(string $name, ?string $title = null): PivotSemesterField
-    {
-        return new PivotSemesterField($name, $title);
+    public static function semester(
+        string $name,
+        ?string $title = null,
+        ?\Closure $formatter = null
+    ): PivotSemesterField {
+        return new PivotSemesterField($name, $title, $formatter);
     }
 
     /**
-     * Creates a new date instance for week number.
+     * Creates a week number field instance.
      *
      * @param string  $name  the field name
      * @param ?string $title the field title
@@ -98,19 +82,18 @@ class PivotFieldFactory
     }
 
     /**
-     * Creates a new week day instance.
+     * Creates a new week day field instance.
      *
      * @param string  $name  the field name
      * @param ?string $title the field title
-     * @param bool    $short true to display the short day name, false to display the full-day name
      */
-    public static function weekday(string $name, ?string $title = null, bool $short = false): PivotWeekdayField
+    public static function weekday(string $name, ?string $title = null): PivotWeekdayField
     {
-        return new PivotWeekdayField($name, $title, $short);
+        return new PivotWeekdayField($name, $title);
     }
 
     /**
-     * Creates a new date instance for the year.
+     * Creates a year field instance.
      *
      * @param string  $name  the field name
      * @param ?string $title the field title

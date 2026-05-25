@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Pivot\Field;
 
 use App\Pivot\Field\PivotFieldFactory;
-use App\Pivot\Field\PivotMethod;
 use PHPUnit\Framework\TestCase;
 
 final class PivotFieldFactoryTest extends TestCase
@@ -23,24 +22,7 @@ final class PivotFieldFactoryTest extends TestCase
     {
         $field = PivotFieldFactory::default('name');
         self::assertSame('name', $field->getName());
-        self::assertNull($field->getTitle());
-        self::assertSame(PivotMethod::STRING, $field->getMethod());
-    }
-
-    public function testFloat(): void
-    {
-        $field = PivotFieldFactory::float('name');
-        self::assertSame('name', $field->getName());
-        self::assertNull($field->getTitle());
-        self::assertSame(PivotMethod::FLOAT, $field->getMethod());
-    }
-
-    public function testInteger(): void
-    {
-        $field = PivotFieldFactory::integer('name');
-        self::assertSame('name', $field->getName());
-        self::assertNull($field->getTitle());
-        self::assertSame(PivotMethod::INTEGER, $field->getMethod());
+        self::assertSame('name', $field->getTitle());
     }
 
     public function testMonth(): void

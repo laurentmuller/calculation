@@ -38,10 +38,10 @@ class PivotCell extends AbstractPivotAggregator
     /**
      * Returns if this column and row keys are equal to the given keys.
      *
-     * @param mixed $columnKey the column key to compare to
-     * @param mixed $rowKey    the row key to compare to
+     * @param string|int $columnKey the column key to compare to
+     * @param string|int $rowKey    the row key to compare to
      */
-    public function equalsKey(mixed $columnKey, mixed $rowKey): bool
+    public function equalsKey(string|int $columnKey, string|int $rowKey): bool
     {
         return $this->column->equalsKey($columnKey) && $this->row->equalsKey($rowKey);
     }
@@ -95,29 +95,7 @@ class PivotCell extends AbstractPivotAggregator
      */
     public function getColumnTitle(string $separator = PivotTable::PATH_SEPARATOR): string
     {
-        $titles = $this->column->getTitles();
-
-        return \implode($separator, $titles);
-    }
-
-    /**
-     * Gets the formatted result.
-     *
-     * @return int|float the formatted result
-     */
-    public function getFormattedResult(): int|float
-    {
-        return $this->aggregator->getRoundResult();
-    }
-
-    /**
-     * Gets the result.
-     *
-     * @return int|float the result
-     */
-    public function getResult(): int|float
-    {
-        return $this->aggregator->getResult();
+        return \implode($separator, $this->column->getTitles());
     }
 
     /**
@@ -145,9 +123,7 @@ class PivotCell extends AbstractPivotAggregator
      */
     public function getRowTitle(string $separator = PivotTable::PATH_SEPARATOR): string
     {
-        $titles = $this->row->getTitles();
-
-        return \implode($separator, $titles);
+        return \implode($separator, $this->row->getTitles());
     }
 
     #[\Override]

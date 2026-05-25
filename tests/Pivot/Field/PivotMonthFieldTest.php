@@ -13,35 +13,26 @@ declare(strict_types=1);
 
 namespace App\Tests\Pivot\Field;
 
-use App\Pivot\Field\PivotDateField;
 use App\Pivot\Field\PivotMonthField;
 use App\Utils\FormatUtils;
 use PHPUnit\Framework\TestCase;
 
 final class PivotMonthFieldTest extends TestCase
 {
-    public function testConstructor(): void
-    {
-        $field = new PivotMonthField('name', PivotDateField::PART_MONTH);
-        self::assertSame('name', $field->getName());
-    }
-
     public function testGetDisplayValue(): void
     {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
 
         $field = new PivotMonthField('name');
-        $actual = $field->getDisplayValue(null);
-        self::assertNull($actual);
-
         $actual = $field->getDisplayValue(7);
         self::assertSame('Juillet', $actual);
+    }
 
-        $field = new PivotMonthField('name', short: true);
-        $actual = $field->getDisplayValue(7);
-        self::assertSame('Juil.', $actual);
-
-        $actual = $field->getDisplayValue(-1);
-        self::assertSame(-1, $actual);
+    public function testInvalidValue(): void
+    {
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage('Invalid month value: 0, allowed values [1..12].');
+        $field = new PivotMonthField('name');
+        $field->getDisplayValue(0);
     }
 }

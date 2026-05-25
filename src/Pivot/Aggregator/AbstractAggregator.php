@@ -26,19 +26,13 @@ abstract class AbstractAggregator implements \JsonSerializable, \Stringable
     public function __construct(self|int|float|null $value = null)
     {
         $this->initialize();
-        if (null !== $value) {
-            $this->add($value);
-        }
+        $this->add($value);
     }
 
     #[\Override]
     public function __toString(): string
     {
-        return \sprintf(
-            '%s(%s)',
-            StringUtils::getShortName($this),
-            $this->getFormattedResult()
-        );
+        return \sprintf('%s(%s)', StringUtils::getShortName($this), $this->getFormattedResult());
     }
 
     /**
@@ -46,10 +40,10 @@ abstract class AbstractAggregator implements \JsonSerializable, \Stringable
      */
     abstract public function add(self|int|float|null $value): static;
 
-    public function getFormattedResult(): string
-    {
-        return (string) $this->getResult();
-    }
+    /*
+     * Gets the formatted result.
+     */
+    abstract public function getFormattedResult(): string;
 
     /**
      * Gets the result.

@@ -15,33 +15,36 @@ namespace App\Tests\Pivot\Field;
 
 use App\Pivot\Field\PivotWeekdayField;
 use App\Utils\FormatUtils;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class PivotWeekdayFieldTest extends TestCase
 {
-    public function testConstructor(): void
+    public static function getLongWeekdays(): \Generator
     {
-        $field = new PivotWeekdayField('name');
-        self::assertSame('name', $field->getName());
+        yield [1, 'Lundi'];
+        yield [2, 'Mardi'];
+        yield [3, 'Mercredi'];
+        yield [4, 'Jeudi'];
+        yield [5, 'Vendredi'];
+        yield [6, 'Samedi'];
+        yield [7, 'Dimanche'];
     }
 
-    public function testGetDisplayValue(): void
+    public function testInvalidValue(): void
+    {
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage('Invalid weekday value: 10, allowed value [1..7].');
+        $field = new PivotWeekdayField('name');
+        $field->getDisplayValue(10);
+    }
+
+    #[DataProvider('getLongWeekdays')]
+    public function testLongWeekdays(int $value, string $expected): void
     {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
-
         $field = new PivotWeekdayField('name');
-        $actual = $field->getDisplayValue(null);
-        self::assertNull($actual);
-
-        $actual = $field->getDisplayValue(2);
-        self::assertSame('Mardi', $actual);
-
-        $field = new PivotWeekdayField('name', short: true);
-
-        $actual = $field->getDisplayValue(2);
-        self::assertSame('Mar.', $actual);
-
-        $actual = $field->getDisplayValue(-1);
-        self::assertSame(-1, $actual);
+        $actual = $field->getDisplayValue($value);
+        self::assertSame($expected, $actual);
     }
 }

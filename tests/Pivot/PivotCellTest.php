@@ -24,80 +24,80 @@ final class PivotCellTest extends TestCase
     public function testConstructor(): void
     {
         $aggregator = new CountAggregator();
-        $node = $this->createNode($aggregator);
-        self::assertSame($aggregator, $node->getAggregator());
-        self::assertSame($aggregator, $node->getColumn()->getAggregator());
-        self::assertSame($aggregator, $node->getRow()->getAggregator());
+        $cell = $this->createCell($aggregator);
+        self::assertSame($aggregator, $cell->getAggregator());
+        self::assertSame($aggregator, $cell->getColumn()->getAggregator());
+        self::assertSame($aggregator, $cell->getRow()->getAggregator());
     }
 
     public function testEqualsKey(): void
     {
-        $node = $this->createNode();
-        self::assertTrue($node->equalsKey('column', 'row'));
-        self::assertFalse($node->equalsKey('fake', 'fake'));
+        $cell = $this->createCell();
+        self::assertTrue($cell->equalsKey('column', 'row'));
+        self::assertFalse($cell->equalsKey('fake', 'fake'));
     }
 
     public function testEqualsNode(): void
     {
-        $node = $this->createNode();
+        $cell = $this->createCell();
 
         $aggregator = new CountAggregator();
         $column = new PivotNode($aggregator);
         $row = new PivotNode($aggregator);
-        self::assertFalse($node->equalsNode($column, $row));
+        self::assertFalse($cell->equalsNode($column, $row));
 
-        $column = $node->getColumn();
-        $row = $node->getRow();
-        self::assertTrue($node->equalsNode($column, $row));
+        $column = $cell->getColumn();
+        $row = $cell->getRow();
+        self::assertTrue($cell->equalsNode($column, $row));
     }
 
     public function testEqualsPath(): void
     {
-        $node = $this->createNode();
-        self::assertTrue($node->equalsPath('', ''));
-        self::assertFalse($node->equalsPath('fake', 'fake'));
+        $cell = $this->createCell();
+        self::assertTrue($cell->equalsPath('', ''));
+        self::assertFalse($cell->equalsPath('fake', 'fake'));
     }
 
     public function testGetColumnPath(): void
     {
-        $node = $this->createNode();
-        self::assertSame('', $node->getColumnPath());
+        $cell = $this->createCell();
+        self::assertSame('', $cell->getColumnPath());
     }
 
     public function testGetColumnTitle(): void
     {
-        $node = $this->createNode();
+        $node = $this->createCell();
         self::assertSame('', $node->getColumnTitle());
-    }
-
-    public function testGetFormattedResult(): void
-    {
-        $node = $this->createNode();
-        self::assertSame(0, $node->getFormattedResult());
     }
 
     public function testGetResult(): void
     {
-        $node = $this->createNode();
-        self::assertSame(0, $node->getResult());
+        $cell = $this->createCell();
+        self::assertSame(0, $cell->getResult());
+    }
+
+    public function testGetRoundResult(): void
+    {
+        $cell = $this->createCell();
+        self::assertSame(0, $cell->getRoundResult());
     }
 
     public function testGetRowPath(): void
     {
-        $node = $this->createNode();
-        self::assertSame('', $node->getRowPath());
+        $cell = $this->createCell();
+        self::assertSame('', $cell->getRowPath());
     }
 
     public function testGetRowTitle(): void
     {
-        $node = $this->createNode();
-        self::assertSame('', $node->getRowTitle());
+        $cell = $this->createCell();
+        self::assertSame('', $cell->getRowTitle());
     }
 
     public function testJsonSerialize(): void
     {
-        $node = $this->createNode();
-        $actual = $node->jsonSerialize();
+        $cell = $this->createCell();
+        $actual = $cell->jsonSerialize();
         self::assertCount(3, $actual);
         self::assertArrayHasKey('row', $actual);
         self::assertArrayHasKey('col', $actual);
@@ -106,12 +106,12 @@ final class PivotCellTest extends TestCase
 
     public function testToString(): void
     {
-        $node = $this->createNode();
-        $actual = (string) $node;
+        $cell = $this->createCell();
+        $actual = (string) $cell;
         self::assertSame('PivotCell(0)', $actual);
     }
 
-    private function createNode(?AbstractAggregator $aggregator = null): PivotCell
+    private function createCell(?AbstractAggregator $aggregator = null): PivotCell
     {
         $aggregator ??= new CountAggregator();
         $column = new PivotNode($aggregator, 'column');

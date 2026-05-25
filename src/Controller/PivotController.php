@@ -156,7 +156,7 @@ class PivotController extends AbstractController
         }
 
         $title = $this->trans('calculation.list.title');
-        $data = PivotFieldFactory::float('item_overall', $this->trans('calculation.fields.overallTotal'));
+        $data = PivotFieldFactory::default('item_overall', $this->trans('calculation.fields.overallTotal'));
 
         return PivotTableFactory::instance($dataset, $operation, $title)
             ->setColumnFields(...$this->getColumnFields())
@@ -175,10 +175,8 @@ class PivotController extends AbstractController
 
         return [
             PivotFieldFactory::year('calculation_date', $this->trans('pivot.fields.year')),
-            PivotFieldFactory::semester('calculation_date', $this->trans('pivot.fields.semester'))
-                ->setFormatter($semesterFormatter),
-            PivotFieldFactory::quarter('calculation_date', $this->trans('pivot.fields.quarter'))
-                ->setFormatter($quarterFormatter),
+            PivotFieldFactory::semester('calculation_date', $this->trans('pivot.fields.semester'), $semesterFormatter),
+            PivotFieldFactory::quarter('calculation_date', $this->trans('pivot.fields.quarter'), $quarterFormatter),
             PivotFieldFactory::month('calculation_date', $this->trans('pivot.fields.month')),
         ];
     }

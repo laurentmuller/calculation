@@ -74,9 +74,9 @@ trait ArrayTrait
      * @param int<0, 2> $mode a flag determining what arguments are sent to callback:
      *                        <ul>
      *                        <li>0 - pass the value as the only argument</li>
-     *                        <li>ARRAY_FILTER_USE_KEY - pass key as the only argument to callback
-     *                        instead of the value</li>
-     *                        <li>ARRAY_FILTER_USE_BOTH - pass both value and key as arguments to
+     *                        <li>1 - ARRAY_FILTER_USE_BOTH - pass both value and key as arguments
+     *                        to callback instead of the value</li>
+     *                        <li>2 - ARRAY_FILTER_USE_KEY - pass key as the only argument to
      *                        callback instead of the value</li>
      *                        </ul>
      */
@@ -133,9 +133,9 @@ trait ArrayTrait
      * @param int<0, 2>                $mode     a flag determining what arguments are sent to callback:
      *                                           <ul>
      *                                           <li>0 - pass the value as the only argument</li>
-     *                                           <li>ARRAY_FILTER_USE_KEY - pass key as the only argument to callback
-     *                                           instead of the value</li>
-     *                                           <li>ARRAY_FILTER_USE_BOTH - pass both value and key as arguments to
+     *                                           <li>1 - ARRAY_FILTER_USE_BOTH - pass both value and key as arguments
+     *                                           to callback instead of the value</li>
+     *                                           <li>2 - ARRAY_FILTER_USE_KEY - pass key as the only argument to
      *                                           callback instead of the value</li>
      *                                           </ul>
      *
@@ -159,10 +159,10 @@ trait ArrayTrait
      * @param int<0, 2>                $mode     a flag determining what arguments are sent to callback:
      *                                           <ul>
      *                                           <li>0 - pass the value as the only argument</li>
-     *                                           <li>ARRAY_FILTER_USE_KEY - pass key as the only argument to callback instead
-     *                                           of the value</li>
-     *                                           <li>ARRAY_FILTER_USE_BOTH - pass both value and key as arguments to callback
-     *                                           instead of the value</li>
+     *                                           <li>1 - ARRAY_FILTER_USE_BOTH - pass both value and key as arguments
+     *                                           to callback instead of the value</li>
+     *                                           <li>2 - ARRAY_FILTER_USE_KEY - pass key as the only argument to
+     *                                           callback instead of the value</li>
      *                                           </ul>
      * @param int<0, 5>                $flags    the flags to be used to modify the comparison behavior
      *

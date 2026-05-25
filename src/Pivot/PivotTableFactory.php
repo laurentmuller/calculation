@@ -250,7 +250,7 @@ class PivotTableFactory
     {
         return \implode(
             PivotTable::PATH_SEPARATOR,
-            \array_map(static fn (PivotField $field): string => (string) $field->getTitle(), $fields)
+            \array_map(static fn (PivotField $field): string => $field->getTitle(), $fields)
         );
     }
 
@@ -262,6 +262,7 @@ class PivotTableFactory
     private function setNodeValue(array $fields, array $row, PivotNode $node, mixed $value): PivotNode
     {
         foreach ($fields as $field) {
+            /** @var string|int $key */
             $key = $field->getValue($row);
             $child = $node->find($key);
             if (!$child instanceof PivotNode) {

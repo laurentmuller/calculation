@@ -47,10 +47,10 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
 
     /**
      * @param AbstractAggregator $aggregator the aggregator function
-     * @param mixed              $key        the key
+     * @param string|int         $key        the key
      * @param mixed              $value      the initial value
      */
-    public function __construct(AbstractAggregator $aggregator, private readonly mixed $key = null, mixed $value = null)
+    public function __construct(AbstractAggregator $aggregator, private readonly string|int $key = '', mixed $value = null)
     {
         parent::__construct($aggregator, $value);
     }
@@ -58,19 +58,19 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     #[\Override]
     public function __toString(): string
     {
-        return \sprintf('%s(%s)', StringUtils::getShortName($this), 0);
+        return \sprintf('%s(0)', StringUtils::getShortName($this));
     }
 
     /**
      * Creates a new node and add it to this list of children.
      *
      * @param AbstractAggregator $aggregator the aggregator function
-     * @param mixed              $key        the key
+     * @param string|int         $key        the key
      * @param mixed              $value      the initial value
      *
      * @return self the newly created node
      */
-    public function add(AbstractAggregator $aggregator, mixed $key = null, mixed $value = null): self
+    public function add(AbstractAggregator $aggregator, string|int $key = '', mixed $value = null): self
     {
         $node = new self($aggregator, $key, $value);
         $this->addNode($node);
@@ -113,11 +113,11 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     /**
      * Returns if the given key is the same as this key.
      *
-     * @param mixed $key the key to compare to
+     * @param string|int $key the key to compare to
      *
      * @return bool true if equal
      */
-    public function equalsKey(mixed $key): bool
+    public function equalsKey(string|int $key): bool
     {
         return $key === $this->key;
     }
@@ -125,7 +125,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     /**
      * Returns if the given keys are the same as these keys.
      *
-     * @param array $keys the keys to compare to
+     * @param array<string|int> $keys the keys to compare to
      *
      * @return bool true if equal
      *
@@ -139,11 +139,11 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     /**
      * Finds a child node for the given key.
      *
-     * @param mixed $key the node key to search for
+     * @param string|int $key the node key to search for
      *
      * @return self|null the child node, if found; null otherwise
      */
-    public function find(mixed $key): ?self
+    public function find(string|int $key): ?self
     {
         return $this->findFirst(
             $this->children,
@@ -154,7 +154,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     /**
      * Finds a child node for the given array of keys.
      *
-     * @param array $keys the node keys to search for
+     * @param array<string|int> $keys the node keys to search for
      *
      * @return self|null the child node, if found; null otherwise
      */
@@ -173,47 +173,9 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     }
 
     /**
-     * Recursively finds a child node for the given key.
-     *
-     * @param mixed $key the node key to search for
-     *
-     * @return self|null the node, if found; null otherwise
-     */
-    public function findRecursive(mixed $key): ?self
-    {
-        foreach ($this->children as $child) {
-            if ($child->equalsKey($key)) {
-                return $child;
-            }
-            $found = $child->findRecursive($key);
-            if ($found instanceof self) {
-                return $found;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Gets the child at the given index (position).
-     *
-     * @param int $index the index
-     *
-     * @return self|null the child, if index is valid; null otherwise
-     */
-    public function getChild(int $index): ?self
-    {
-        if ($index >= 0 && $index < $this->count()) {
-            return $this->children[\array_keys($this->children)[$index]];
-        }
-
-        return null;
-    }
-
-    /**
      * Gets the children.
      *
-     * @return PivotNode[]
+     * @return array<int, PivotNode>
      */
     public function getChildren(): array
     {
@@ -248,7 +210,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     /**
      * Gets the key.
      */
-    public function getKey(): mixed
+    public function getKey(): string|int
     {
         return $this->key;
     }
@@ -256,11 +218,11 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     /**
      * Gets the keys.
      *
-     * @return array the keys or an empty array if this node is the root node
+     * @return array<string|int> the keys or an empty array if this node is the root node
      */
     public function getKeys(): array
     {
-        return $this->upToRoot(static fn (PivotNode $node): mixed => $node->key);
+        return $this->upToRoot(static fn (PivotNode $node): string|int => $node->key);
     }
 
     /**
@@ -338,7 +300,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
 
         return \implode(
             $separator,
-            \array_map(static fn (mixed $value): string => (string) $value, $this->getKeys())
+            \array_map(static fn (string|int $value): string => (string) $value, $this->getKeys())
         );
     }
 
@@ -354,8 +316,10 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
 
     /**
      * Gets the title.
+     *
+     * @return string the title or the key if not set
      */
-    public function getTitle(): ?string
+    public function getTitle(): string
     {
         return $this->title ?? (string) $this->key;
     }
@@ -367,7 +331,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      */
     public function getTitles(): array
     {
-        return $this->upToRoot(static fn (PivotNode $node): string => (string) $node->getTitle());
+        return $this->upToRoot(static fn (PivotNode $node): string => $node->getTitle());
     }
 
     /**
@@ -380,15 +344,11 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
         if ($this->isRoot()) {
             return -1;
         }
-        $index = 0;
-        foreach ($this->parent->getChildren() as $child) {
-            if ($child === $this) {
-                return $index;
-            }
-            ++$index;
-        }
 
-        return -1;
+        return \array_find_key(
+            $this->parent->getChildren(),
+            fn (PivotNode $child): bool => $child === $this
+        ) ?? -1;
     }
 
     /**
@@ -397,6 +357,8 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      * A leaf node is a node without children.
      *
      * @return bool true if leaf
+     *
+     * @phpstan-assert-if-false non-empty-array $this->children
      */
     public function isLeaf(): bool
     {

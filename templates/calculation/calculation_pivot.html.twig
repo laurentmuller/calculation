@@ -166,8 +166,7 @@
                     class: ['btn', 'btn-outline-secondary', 'dropdown-toggle'],
                     'data-bs-toggle': 'dropdown',
                     'data-bs-target': '#month',
-                    'aria-expanded': false}
-                -%}
+                    'aria-expanded': false} -%}
                 <button {{ html_attr(button_attrs) }}>
                     {{- icon('calendar-days far', 'timeline.interval') -}}
                 </button>
@@ -195,8 +194,7 @@
                     {%- set button_attrs = {
                         id: 'popover',
                         type: 'button',
-                        class: ['dropdown-item', popover ? 'dropdown-item-checked-right']}
-                    -%}
+                        class: ['dropdown-item', popover ? 'dropdown-item-checked-right']} -%}
                     <li>
                         <button {{ html_attr(button_attrs) }}>
                             {{- icon('message', 'pivot.popover') -}}
@@ -205,8 +203,7 @@
                     {%- set button_attrs = {
                         id: 'highlight',
                         type: 'button',
-                        class: ['dropdown-item', highlight ? 'dropdown-item-checked-right']}
-                    -%}
+                        class: ['dropdown-item', highlight ? 'dropdown-item-checked-right']} -%}
                     <li>
                         <button {{ html_attr(button_attrs) }}>
                             {{- icon('highlighter', 'pivot.highlight') -}}

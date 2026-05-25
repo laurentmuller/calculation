@@ -20,42 +20,51 @@ use Symfony\Component\Clock\DatePoint;
  */
 class PivotQuarterField extends PivotDateField
 {
-    /** @var ?\Closure(int): string */
-    private ?\Closure $formatter = null;
+    /** @var \Closure(int): string */
+    private readonly \Closure $formatter;
 
-    public function __construct(string $name, ?string $title = null)
+    /**
+     * @param ?\Closure(int): string $formatter the optional callback formatter
+     */
+    public function __construct(string $name, ?string $title = null, ?\Closure $formatter = null)
     {
         parent::__construct($name, self::PART_MONTH, $title);
+        $this->formatter = $formatter ?? self::getDefaultFormatter();
     }
 
+    /**
+     * Gets the default formatter.
+     *
+     * @return \Closure(int): string
+     */
+    public static function getDefaultFormatter(): \Closure
+    {
+        return static fn (int $semester): string => match ($semester) {
+            1 => '1st quarter',
+            2 => '2nd quarter',
+            3 => '3rd quarter',
+            4 => '4th quarter',
+            default => throw new \InvalidArgumentException(\sprintf('Invalid quarter value: %d, allowed values [1..4].', $semester))
+        };
+    }
+
+    /**
+     * @throws \InvalidArgumentException if the value is not between 1 and 4 inclusive
+     */
     #[\Override]
     public function getDisplayValue(mixed $value): string
     {
-        return $this->formatQuarter((int) $value);
+        return \call_user_func($this->formatter, (int) $value);
     }
 
     /**
      * Gets the callback used to format a quarter.
      *
-     * @return ?\Closure(int): string
+     * @return \Closure(int): string
      */
-    public function getFormatter(): ?callable
+    public function getFormatter(): \Closure
     {
         return $this->formatter;
-    }
-
-    /**
-     * Sets callback used to format a quarter.
-     *
-     * The function receives the quarter (1 to 4) as a parameter and must return a string.
-     *
-     * @param ?\Closure(int): string $formatter the optional callback
-     */
-    public function setFormatter(?\Closure $formatter): self
-    {
-        $this->formatter = $formatter;
-
-        return $this;
     }
 
     #[\Override]
@@ -64,25 +73,5 @@ class PivotQuarterField extends PivotDateField
         $value = parent::getDateValue($date);
 
         return (int) \ceil($value / 3);
-    }
-
-    /**
-     * Formats the quarter.
-     *
-     * @param int $quarter the quarter (1 to 4) to format
-     */
-    private function formatQuarter(int $quarter): string
-    {
-        if (\is_callable($this->formatter)) {
-            return \call_user_func($this->formatter, $quarter);
-        }
-
-        return match ($quarter) {
-            1 => '1st quarter',
-            2 => '2nd quarter',
-            3 => '3rd quarter',
-            4 => '4th quarter',
-            default => (string) $quarter,
-        };
     }
 }

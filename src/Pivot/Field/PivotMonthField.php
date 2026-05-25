@@ -30,17 +30,19 @@ class PivotMonthField extends PivotDateField
     /**
      * @param string  $name  the field name
      * @param ?string $title the field title
-     * @param bool    $short true to display the short month name, false to display the full month name
      */
-    public function __construct(string $name, ?string $title = null, bool $short = false)
+    public function __construct(string $name, ?string $title = null)
     {
         parent::__construct($name, self::PART_MONTH, $title);
-        $this->names = $short ? DateUtils::getShortMonths() : DateUtils::getMonths();
+        $this->names = DateUtils::getMonths();
     }
 
+    /**
+     * @throws \InvalidArgumentException if the value is not between 1 and 12 inclusive
+     */
     #[\Override]
     public function getDisplayValue(mixed $value): mixed
     {
-        return $this->names[(int) $value] ?? parent::getDisplayValue($value);
+        return $this->names[(int) $value] ?? throw new \InvalidArgumentException(\sprintf('Invalid month value: %d, allowed values [1..12].', $value));
     }
 }

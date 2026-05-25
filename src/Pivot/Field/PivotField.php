@@ -25,9 +25,8 @@ class PivotField implements \JsonSerializable
      * @param ?string $title the field title
      */
     public function __construct(
-        protected string $name,
-        protected ?string $title = null,
-        protected PivotMethod $method = PivotMethod::STRING
+        protected readonly string $name,
+        protected readonly ?string $title = null
     ) {
     }
 
@@ -46,14 +45,6 @@ class PivotField implements \JsonSerializable
     }
 
     /**
-     * Gets the conversion value method.
-     */
-    public function getMethod(): PivotMethod
-    {
-        return $this->method;
-    }
-
-    /**
      * Gets the field name.
      */
     public function getName(): string
@@ -63,10 +54,12 @@ class PivotField implements \JsonSerializable
 
     /**
      * Gets the field title.
+     *
+     * @return string the title or the name if not set
      */
-    public function getTitle(): ?string
+    public function getTitle(): string
     {
-        return $this->title;
+        return $this->title ?? $this->name;
     }
 
     /**
@@ -74,14 +67,9 @@ class PivotField implements \JsonSerializable
      *
      * @param array $row the dataset row
      */
-    public function getValue(array $row): float|int|string|DatePoint|null
+    public function getValue(array $row): DatePoint|int|float|string|null
     {
-        $value = $this->getRowValue($row);
-        if (\is_scalar($value)) {
-            return $this->method->convert($value);
-        }
-
-        return $value;
+        return $row[$this->name] ?? null;
     }
 
     #[\Override]
@@ -91,33 +79,5 @@ class PivotField implements \JsonSerializable
             'name' => $this->name,
             'title' => $this->title,
         ]);
-    }
-
-    /**
-     * Sets the conversion value method.
-     */
-    public function setMethod(PivotMethod $method): self
-    {
-        $this->method = $method;
-
-        return $this;
-    }
-
-    /**
-     * Sets the title.
-     */
-    public function setTitle(?string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * Gets the row value.
-     */
-    protected function getRowValue(array $row): mixed
-    {
-        return $row[$this->name] ?? null;
     }
 }

@@ -127,8 +127,8 @@ final class PivotTableFactoryTest extends TestCase
             PivotFieldFactory::default('group', 'Group'),
             PivotFieldFactory::default('category', 'Category'),
         ];
-        $keyField = PivotFieldFactory::integer('id', 'id');
-        $data = PivotFieldFactory::float('amount', 'Amount');
+        $keyField = PivotFieldFactory::default('id', 'id');
+        $data = PivotFieldFactory::default('amount', 'Amount');
         $dataset = $this->createDataset();
 
         return PivotTableFactory::instance($dataset, PivotOperation::SUM, 'Title')

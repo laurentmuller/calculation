@@ -36,11 +36,9 @@ final class PivotNodeTest extends TestCase
     {
         $aggregator = new CountAggregator();
         $node = $this->createNode($aggregator);
-        $child = $this->createChildNode($node);
+        $this->createChildNode($node);
         $actual = $node->getChildren();
         self::assertCount(1, $actual);
-        self::assertSame($child, $node->getChild(0));
-        self::assertNull($node->getChild(10));
     }
 
     public function testAddValue(): void
@@ -57,7 +55,7 @@ final class PivotNodeTest extends TestCase
         $aggregator = new CountAggregator();
         $node = $this->createNode($aggregator);
         self::assertSame($aggregator, $node->getAggregator());
-        self::assertSame(0, $node->getValue());
+        self::assertSame(0, $node->getResult());
         self::assertSame(0, $node->getRoundResult());
         self::assertSame('0', $node->getFormattedValue());
         self::assertSame('key', $node->getKey());
@@ -73,8 +71,6 @@ final class PivotNodeTest extends TestCase
     public function testEqualsKey(): void
     {
         $node = $this->createNode();
-        self::assertFalse($node->equalsKey(''));
-        self::assertFalse($node->equalsKey(null));
         self::assertTrue($node->equalsKey('key'));
     }
 
@@ -100,7 +96,7 @@ final class PivotNodeTest extends TestCase
         self::assertNotNull($actual);
     }
 
-    public function testFIndByKeys(): void
+    public function testFindByKeys(): void
     {
         $parent = $this->createNode();
         $actual = $parent->findByKeys(['fake']);
@@ -111,30 +107,15 @@ final class PivotNodeTest extends TestCase
         self::assertNotNull($actual);
     }
 
-    public function testFindRecursive(): void
-    {
-        $parent = $this->createNode();
-        $actual = $parent->findRecursive('fake');
-        self::assertNull($actual);
-
-        $child = $this->createChildNode($parent);
-        $actual = $parent->findRecursive('child');
-        self::assertNotNull($actual);
-
-        $this->createChildNode($child, 'sub-child');
-        $actual = $parent->findRecursive('sub-child');
-        self::assertNotNull($actual);
-    }
-
     public function testFloatAggregator(): void
     {
         $aggregator = new SumAggregator();
         $node = $this->createNode($aggregator);
-        self::assertSame(0.0, $node->getValue());
+        self::assertSame(0.0, $node->getResult());
         self::assertSame(0.00, $node->getRoundResult());
         self::assertSame('0.00', $node->getFormattedValue());
         $node->addValue(10.00);
-        self::assertSame(10.00, $node->getValue());
+        self::assertSame(10.00, $node->getResult());
         self::assertSame(10.00, $node->getRoundResult());
         self::assertSame('10.00', $node->getFormattedValue());
     }
@@ -263,11 +244,11 @@ final class PivotNodeTest extends TestCase
     {
         $aggregator = new CountAggregator();
         $node = $this->createNode($aggregator);
-        self::assertSame(0, $node->getValue());
+        self::assertSame(0, $node->getResult());
         self::assertSame(0, $node->getRoundResult());
         self::assertSame('0', $node->getFormattedValue());
         $node->addValue(10.00);
-        self::assertSame(1, $node->getValue());
+        self::assertSame(1, $node->getResult());
         self::assertSame(1, $node->getRoundResult());
         self::assertSame('1', $node->getFormattedValue());
     }
@@ -275,11 +256,15 @@ final class PivotNodeTest extends TestCase
     public function testIsLeaf(): void
     {
         $parent = $this->createNode();
+        self::assertTrue($parent->isRoot());
         self::assertTrue($parent->isLeaf());
 
         $child = $this->createChildNode($parent);
-        self::assertFalse($parent->isLeaf());
         self::assertTrue($child->isLeaf());
+        self::assertFalse($child->isRoot());
+
+        self::assertTrue($parent->isRoot());
+        self::assertFalse($parent->isLeaf());
     }
 
     public function testJsonSerialize(): void
@@ -366,7 +351,7 @@ final class PivotNodeTest extends TestCase
 
     private function createChildNode(PivotNode $parent, string $key = 'child'): PivotNode
     {
-        $node = $this->createNode($parent->getAggregator(), $key);
+        $node = $this->createNode(null, $key);
         $parent->addNode($node);
 
         return $node;

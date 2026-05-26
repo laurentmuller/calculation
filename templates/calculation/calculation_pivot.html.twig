@@ -51,7 +51,7 @@
             </td>
         {%- else -%}
             <td class="not-hover text-nowrap" data-bs-toggle="popover"
-                data-bs-html="{{ data_html|e }}"{{ _self.colspan(node.lastChildren|length) }}>
+                data-bs-html="{{ data_html|e }}"{{ _self.colspan(node.leafNodes|length) }}>
                 {{- node.title|raw -}}
             </td>
         {%- endif -%}
@@ -87,7 +87,7 @@
         <tr>
     {% endif -%}
     <td class="text-nowrap not-hover" data-bs-toggle="popover"
-        data-bs-html="{{ _self.outputPopoverTitle(row, separator)|e }}"{{ _self.rowspan(row.lastChildren|length) }}>
+        data-bs-html="{{ _self.outputPopoverTitle(row, separator)|e }}"{{ _self.rowspan(row.leafNodes|length) }}>
         {{- row.title -}}
     </td>
     {%- if row.leaf -%}
@@ -100,7 +100,7 @@
     {%- endif -%}
 {% endmacro outputRow %}
 
-{% macro outputTitle(table, col_level) -%}
+{% macro outputTitle(table, max_col_level) -%}
     <table class="table table-borderless m-0">
         <tbody>
         <tr class="skip">
@@ -113,7 +113,7 @@
                 {%- endif -%}
             </td>
         </tr>
-        {%- for i in 2..col_level - 1 -%}
+        {%- for i in 2..max_col_level - 1 -%}
             <tr class="skip">
                 <td class="not-hover" colspan="2">&nbsp;</td>
             </tr>
@@ -150,8 +150,8 @@
 {# parameters #}
 {%- set title = 'pivot.title' -%}
 {%- set title_icon = 'table' -%}
-{%- set row_level = table.rootRow.maxLevel -%}
-{%- set col_level = table.rootColumn.maxLevel -%}
+{%- set max_row_level = table.maxRowLevel -%}
+{%- set max_col_level = table.maxColumnLevel -%}
 {%- set total_title = table.totalTitle|default('calculation.fields.total'|trans) -%}
 {%- set separator = '<i class="fa-solid fa-caret-right mx-1"></i>' -%}
 {% block container_class 'container-fluid' %}
@@ -230,16 +230,16 @@
         <table id="pivot" class="table table-bordered table-sm popover-w-100 mb-0"
                data-session="{{ url('ajax_session_set') }}">
             <thead>
-            {%- for i in 1..col_level -%}
+            {%- for i in 1..max_col_level -%}
                 <tr>
                     {%- if i == 1 -%}
-                        <td class="text-nowrap not-hover p-0"{{ _self.rowspan(col_level) }}{{ _self.colspan(row_level) }}>
-                            {{- _self.outputTitle(table, col_level) -}}
+                        <td class="text-nowrap not-hover p-0"{{ _self.rowspan(max_col_level) }}{{ _self.colspan(max_row_level) }}>
+                            {{- _self.outputTitle(table, max_col_level) -}}
                         </td>
                     {%- endif -%}
-                    {{ _self.outputHeaders(table.rootColumn.childrenAtLevel(i), separator) }}
+                    {{ _self.outputHeaders(table.rootColumn.nodesAtLevel(i), separator) }}
                     {%- if i == 1 -%}
-                        <td{{ _self.rowspan(col_level) }} class="text-currency text-bg-success not-hover align-bottom">
+                        <td{{ _self.rowspan(max_col_level) }} class="text-currency text-bg-success not-hover align-bottom">
                             {{- total_title -}}
                         </td>
                     {%- endif -%}
@@ -247,21 +247,21 @@
             {%- endfor -%}
             </thead>
             <tbody>
-            {%- set columns = table.rootColumn.lastChildren -%}
+            {%- set columns = table.rootColumn.leafNodes -%}
             {%- for row in table.rootRow.children %}
                 {{ _self.outputRow(table, columns, row, separator) }}
             {%- endfor -%}
             </tbody>
             <tfoot>
-            <tr>
-                <td class="text-nowrap not-hover text-bg-success"{{ _self.colspan(row_level) }}>
-                    {{- total_title -}}
-                </td>
-                {%- for cell in table.rootColumn.childrenAtLevel(col_level) -%}
-                    {{ _self.outputPopoverTotal(cell, separator) }}
-                {%- endfor -%}
-                {{ _self.outputPopoverTotal(table, separator) }}
-            </tr>
+                <tr>
+                    <td class="text-nowrap not-hover text-bg-success"{{ _self.colspan(max_row_level) }}>
+                        {{- total_title -}}
+                    </td>
+                    {%- for cell in table.rootColumn.nodesAtLevel(max_col_level) -%}
+                        {{ _self.outputPopoverTotal(cell, separator) }}
+                    {%- endfor -%}
+                    {{ _self.outputPopoverTotal(table, separator) }}
+                </tr>
             </tfoot>
         </table>
     </div>

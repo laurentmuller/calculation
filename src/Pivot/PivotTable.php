@@ -45,9 +45,6 @@ class PivotTable extends AbstractPivotAggregator
     /** The data field. */
     private ?PivotField $dataField = null;
 
-    /** The key field. */
-    private ?PivotField $keyField = null;
-
     /** The root column. */
     private readonly PivotNode $rootColumn;
 
@@ -64,11 +61,11 @@ class PivotTable extends AbstractPivotAggregator
     /** The total title. */
     private ?string $totalTitle = null;
 
-    public function __construct(AbstractAggregator $aggregator, private ?string $title = null)
+    public function __construct(PivotOperation $operation, private ?string $title = null)
     {
-        parent::__construct($aggregator);
-        $this->rootColumn = new PivotNode(clone $aggregator, '');
-        $this->rootRow = new PivotNode(clone $aggregator, '');
+        parent::__construct($operation->createAggregator());
+        $this->rootColumn = new PivotNode($operation->createAggregator());
+        $this->rootRow = new PivotNode($operation->createAggregator());
     }
 
     /**
@@ -105,7 +102,7 @@ class PivotTable extends AbstractPivotAggregator
      * @param mixed $columnKey the column key to search for
      * @param mixed $rowKey    the row key to search for
      *
-     * @return PivotCell|null the cell, if found; null otherwise
+     * @return ?PivotCell the cell, if found; null otherwise
      */
     public function findCellByKey(mixed $columnKey, mixed $rowKey): ?PivotCell
     {
@@ -118,7 +115,7 @@ class PivotTable extends AbstractPivotAggregator
      * @param PivotNode $column the node column to search for
      * @param PivotNode $row    the node row to search for
      *
-     * @return PivotCell|null the cell, if found; null otherwise
+     * @return ?PivotCell the cell, if found; null otherwise
      */
     public function findCellByNode(PivotNode $column, PivotNode $row): ?PivotCell
     {
@@ -131,7 +128,7 @@ class PivotTable extends AbstractPivotAggregator
      * @param string $columnPath the column path to search for
      * @param string $rowPath    the row path to search for
      *
-     * @return PivotCell|null the cell, if found; null otherwise
+     * @return ?PivotCell the cell, if found; null otherwise
      */
     public function findCellByPath(string $columnPath, string $rowPath): ?PivotCell
     {
@@ -151,7 +148,7 @@ class PivotTable extends AbstractPivotAggregator
     /**
      * Gets the column fields.
      *
-     * @return PivotField[]|null
+     * @return ?PivotField[]
      */
     public function getColumnFields(): ?array
     {
@@ -167,11 +164,19 @@ class PivotTable extends AbstractPivotAggregator
     }
 
     /**
-     * Gets the key field.
+     * Gets the maximum level of the root column.
      */
-    public function getKeyField(): ?PivotField
+    public function getMaxColumnLevel(): int
     {
-        return $this->keyField;
+        return $this->rootColumn->getMaxLevel();
+    }
+
+    /**
+     * Gets the maximum level of the root row.
+     */
+    public function getMaxRowLevel(): int
+    {
+        return $this->rootRow->getMaxLevel();
     }
 
     /**
@@ -193,7 +198,7 @@ class PivotTable extends AbstractPivotAggregator
     /**
      * Gets the row fields.
      *
-     * @return PivotField[]|null
+     * @return ?PivotField[]
      */
     public function getRowFields(): ?array
     {
@@ -223,12 +228,11 @@ class PivotTable extends AbstractPivotAggregator
             'title' => $this->title,
             'aggregator' => StringUtils::getShortName($this->aggregator),
             'value' => $this->aggregator->getRoundResult(),
-            'keyField' => $this->keyField,
             'dataField' => $this->dataField,
             'columnFields' => $this->columnFields,
             'rowFields' => $this->rowFields,
-            'column' => $this->rootColumn,
-            'row' => $this->rootRow,
+            'rootColumn' => $this->rootColumn,
+            'rootRow' => $this->rootRow,
             'cells' => $this->cells,
         ]);
     }
@@ -251,16 +255,6 @@ class PivotTable extends AbstractPivotAggregator
     public function setDataField(PivotField $dataField): self
     {
         $this->dataField = $dataField;
-
-        return $this;
-    }
-
-    /**
-     * Sets the key field.
-     */
-    public function setKeyField(PivotField $keyField): self
-    {
-        $this->keyField = $keyField;
 
         return $this;
     }

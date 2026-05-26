@@ -100,7 +100,7 @@ final class PivotCellTest extends TestCase
         $actual = $cell->jsonSerialize();
         self::assertCount(3, $actual);
         self::assertArrayHasKey('row', $actual);
-        self::assertArrayHasKey('col', $actual);
+        self::assertArrayHasKey('column', $actual);
         self::assertArrayHasKey('value', $actual);
     }
 

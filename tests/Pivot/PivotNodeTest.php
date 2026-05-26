@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Pivot;
 
-use App\Interfaces\SortModeInterface;
 use App\Pivot\Aggregator\AbstractAggregator;
 use App\Pivot\Aggregator\CountAggregator;
 use App\Pivot\Aggregator\SumAggregator;
@@ -63,9 +62,8 @@ final class PivotNodeTest extends TestCase
         $actual = $node->getChildren();
         self::assertEmpty($actual);
         self::assertNull($node->getParent());
-        self::assertSame('key', $node->getTitle());
+        self::assertNull($node->getTitle());
         self::assertSame([], $node->getTitles());
-        self::assertSame(SortModeInterface::SORT_ASC, $node->getSortMode());
     }
 
     public function testEqualsKey(): void
@@ -120,21 +118,6 @@ final class PivotNodeTest extends TestCase
         self::assertSame('10.00', $node->getFormattedValue());
     }
 
-    public function testGetChildrenAtLevel(): void
-    {
-        $parent = $this->createNode();
-        $actual = $parent->getChildrenAtLevel(0);
-        self::assertSame([$parent], $actual);
-
-        $child1 = $this->createChildNode($parent, 'child1');
-        $actual = $parent->getChildrenAtLevel(1);
-        self::assertSame([$child1], $actual);
-
-        $child2 = $this->createChildNode($child1, 'child2');
-        $actual = $parent->getChildrenAtLevel(2);
-        self::assertSame([$child2], $actual);
-    }
-
     public function testGetKeys(): void
     {
         $parent = $this->createNode();
@@ -150,20 +133,20 @@ final class PivotNodeTest extends TestCase
         self::assertSame(['child', 'sub-child'], $actual);
     }
 
-    public function testGetLastChildren(): void
+    public function testGetLeafNodes(): void
     {
         $parent = $this->createNode();
-        $actual = $parent->getLastChildren();
+        $actual = $parent->getLeafNodes();
         self::assertSame([$parent], $actual);
 
         $child = $this->createChildNode($parent);
-        $actual = $parent->getLastChildren();
+        $actual = $parent->getLeafNodes();
         self::assertSame([$child], $actual);
 
         $subChild1 = $this->createChildNode($child, 'sub-child1');
         $subChild2 = $this->createChildNode($child, 'sub-child2');
 
-        $actual = $parent->getLastChildren();
+        $actual = $parent->getLeafNodes();
         self::assertSame([$subChild1, $subChild2], $actual);
     }
 
@@ -191,6 +174,21 @@ final class PivotNodeTest extends TestCase
         self::assertSame(2, $actual);
     }
 
+    public function testGetNodesAtLevel(): void
+    {
+        $parent = $this->createNode();
+        $actual = $parent->getNodesAtLevel(0);
+        self::assertSame([$parent], $actual);
+
+        $child1 = $this->createChildNode($parent, 'child1');
+        $actual = $parent->getNodesAtLevel(1);
+        self::assertSame([$child1], $actual);
+
+        $child2 = $this->createChildNode($child1, 'child2');
+        $actual = $parent->getNodesAtLevel(2);
+        self::assertSame([$child2], $actual);
+    }
+
     public function testGetPath(): void
     {
         $parent = $this->createNode();
@@ -214,10 +212,12 @@ final class PivotNodeTest extends TestCase
         self::assertSame([], $actual);
 
         $child = $this->createChildNode($parent);
+        $child->setTitle('child');
         $actual = $child->getTitles();
         self::assertSame(['child'], $actual);
 
         $subChild = $this->createChildNode($child, 'sub-child');
+        $subChild->setTitle('sub-child');
         $actual = $subChild->getTitles();
         self::assertSame(['child', 'sub-child'], $actual);
     }
@@ -293,60 +293,19 @@ final class PivotNodeTest extends TestCase
         $node->setParent($node);
     }
 
-    public function testSetSortMode(): void
-    {
-        $node = $this->createNode();
-        $actual = $node->getSortMode();
-        self::assertSame(SortModeInterface::SORT_ASC, $actual);
-
-        $node->setSortMode(SortModeInterface::SORT_DESC);
-        $actual = $node->getSortMode();
-        self::assertSame(SortModeInterface::SORT_DESC, $actual);
-
-        $node->setSortMode(SortModeInterface::SORT_DESC);
-        $actual = $node->getSortMode();
-        self::assertSame(SortModeInterface::SORT_DESC, $actual);
-    }
-
     public function testSetTitle(): void
     {
         $node = $this->createNode();
-        self::assertSame('key', $node->getTitle());
+        self::assertNull($node->getTitle());
         $node->setTitle('title');
         self::assertSame('title', $node->getTitle());
-    }
-
-    public function testSortAscending(): void
-    {
-        $parent = $this->createNode();
-        $parent->setSortMode(SortModeInterface::SORT_ASC);
-        $child = $this->createChildNode($parent);
-        self::assertSame($parent, $child->getParent());
-    }
-
-    public function testSortDescending(): void
-    {
-        $parent = $this->createNode();
-        $parent->setSortMode(SortModeInterface::SORT_DESC);
-        $child = $this->createChildNode($parent);
-        self::assertSame($parent, $child->getParent());
-    }
-
-    public function testSortDescendingMultiple(): void
-    {
-        $parent = $this->createNode();
-        $parent->setSortMode(SortModeInterface::SORT_DESC);
-        $child1 = $this->createChildNode($parent, 'child1');
-        $child2 = $this->createChildNode($parent, 'child2');
-        self::assertSame($parent, $child1->getParent());
-        self::assertSame($parent, $child2->getParent());
     }
 
     public function testToString(): void
     {
         $node = $this->createNode();
         $actual = (string) $node;
-        self::assertSame('PivotNode(0)', $actual);
+        self::assertSame('PivotNode()', $actual);
     }
 
     private function createChildNode(PivotNode $parent, string $key = 'child'): PivotNode

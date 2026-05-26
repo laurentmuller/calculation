@@ -47,12 +47,10 @@ class PivotCell extends AbstractPivotAggregator
     }
 
     /**
-     * Returns if this column and row these nodes are equal to the given nodes.
+     * Returns if this parent column and parent row are equal to the given nodes.
      *
-     * @param PivotNode $column the node column to compare to
-     * @param PivotNode $row    the node row to compare to
-     *
-     * @return bool true if equal
+     * @param PivotNode $column the parent column to compare to
+     * @param PivotNode $row    the parent row to compare to
      */
     public function equalsNode(PivotNode $column, PivotNode $row): bool
     {
@@ -79,7 +77,7 @@ class PivotCell extends AbstractPivotAggregator
     }
 
     /**
-     * Gets the column path.
+     * Gets the imploded column path.
      */
     public function getColumnPath(string $separator = PivotTable::PATH_SEPARATOR): string
     {
@@ -107,7 +105,7 @@ class PivotCell extends AbstractPivotAggregator
     }
 
     /**
-     * Gets the row path.
+     * Gets the imploded row path.
      */
     public function getRowPath(string $separator = PivotTable::PATH_SEPARATOR): string
     {
@@ -131,7 +129,7 @@ class PivotCell extends AbstractPivotAggregator
     {
         return [
             'row' => $this->getRowPath(),
-            'col' => $this->getColumnPath(),
+            'column' => $this->getColumnPath(),
             'value' => $this->aggregator->getRoundResult(),
         ];
     }

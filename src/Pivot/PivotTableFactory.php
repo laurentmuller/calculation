@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Pivot;
 
+use App\Pivot\Aggregator\AbstractAggregator;
 use App\Pivot\Field\PivotField;
 
 /**
@@ -29,9 +30,6 @@ class PivotTableFactory
 
     /** The data field. */
     private ?PivotField $dataField = null;
-
-    /** The key field. */
-    private ?PivotField $keyField = null;
 
     /**
      * The row fields.
@@ -53,7 +51,7 @@ class PivotTableFactory
     /**
      * Creates the pivot table.
      *
-     * @return PivotTable|null the pivot table or <code>null</code> if data are not valid
+     * @return ?PivotTable the pivot table or <code>null</code> if data are not valid
      */
     public function create(): ?PivotTable
     {
@@ -61,42 +59,36 @@ class PivotTableFactory
             return null;
         }
 
-        $keys = [];
-        $keyField = $this->keyField;
         $dataField = $this->dataField;
         $rowFields = $this->rowFields;
         $columnFields = $this->columnFields;
-        $aggregator = $this->operation->createAggregator();
-        $table = new PivotTable($aggregator, $this->title);
+        $table = new PivotTable($this->operation, $this->title);
+        $rootRow = $table->getRootRow();
+        $rootColumn = $table->getRootColumn();
 
+        // add cells
         foreach ($this->dataset as $row) {
-            // key
-            if ($keyField instanceof PivotField) {
-                $key = $keyField->getValue($row);
-                if (\in_array($key, $keys, true)) {
-                    continue;
-                }
-                $keys[] = $key;
-            }
-            $value = $dataField?->getValue($row);
-            $currentCol = $this->setNodeValue($columnFields, $row, $table->getRootColumn(), $value);
-            $currentRow = $this->setNodeValue($rowFields, $row, $table->getRootRow(), $value);
+            $value = $dataField->getValue($row);
+            $currentRow = $this->setNodeValue($rowFields, $row, $rootRow, $value);
+            $currentCol = $this->setNodeValue($columnFields, $row, $rootColumn, $value);
             $cell = $table->findCellByNode($currentCol, $currentRow);
             if ($cell instanceof PivotCell) {
                 $cell->addValue($value);
             } else {
-                $aggregator = $this->operation->createAggregator();
+                $aggregator = $this->createAggregator();
                 $table->addCellValue($aggregator, $currentCol, $currentRow, $value);
             }
             $table->addValue($value);
         }
 
-        $this->updateKeyField($table, $keyField)
-            ->updateDataField($table, $dataField)
-            ->updateRowFields($table, $rowFields)
-            ->updateColumnFields($table, $columnFields);
-        $table->getRootColumn()->setTitle($this->buildFieldsTitle($columnFields));
-        $table->getRootRow()->setTitle($this->buildFieldsTitle($rowFields));
+        // update titles
+        $rootColumn->setTitle($this->buildFieldsTitle($columnFields));
+        $rootRow->setTitle($this->buildFieldsTitle($rowFields));
+
+        // update table
+        $table->setColumnFields($columnFields)
+            ->setRowFields($rowFields)
+            ->setDataField($dataField);
 
         return $table;
     }
@@ -125,14 +117,6 @@ class PivotTableFactory
     public function getDataset(): array
     {
         return $this->dataset;
-    }
-
-    /**
-     * Returns the unique key field.
-     */
-    public function getKeyField(): ?PivotField
-    {
-        return $this->keyField;
     }
 
     /**
@@ -175,7 +159,12 @@ class PivotTableFactory
     }
 
     /**
-     * Returns a value indicating if data are valid.
+     * Returns a value indicating if inputs are valid.
+     *
+     * @phpstan-assert-if-true non-empty-array<array-key, array<array-key, mixed>> $this->dataset
+     * @phpstan-assert-if-true non-empty-array<PivotField> $this->columnFields
+     * @phpstan-assert-if-true non-empty-array<PivotField> $this->rowFields
+     * @phpstan-assert-if-true PivotField $this->dataField
      */
     public function isValid(): bool
     {
@@ -186,19 +175,17 @@ class PivotTableFactory
     /**
      * Sets the column fields.
      *
-     * @param PivotField ...$fields the fields to set
+     * @param PivotField[] $columnFields
      */
-    public function setColumnFields(PivotField ...$fields): static
+    public function setColumnFields(array $columnFields): static
     {
-        $this->columnFields = $fields;
+        $this->columnFields = $columnFields;
 
         return $this;
     }
 
     /**
      * Sets the data field.
-     *
-     * @param PivotField $dataField the data field to set
      */
     public function setDataField(PivotField $dataField): static
     {
@@ -208,23 +195,13 @@ class PivotTableFactory
     }
 
     /**
-     * Sets the unique key field.
-     */
-    public function setKeyField(?PivotField $keyField): static
-    {
-        $this->keyField = $keyField;
-
-        return $this;
-    }
-
-    /**
      * Sets the row fields.
      *
-     * @param PivotField ...$fields the fields to set
+     * @param PivotField[] $rowFields
      */
-    public function setRowFields(PivotField ...$fields): static
+    public function setRowFields(array $rowFields): static
     {
-        $this->rowFields = $fields;
+        $this->rowFields = $rowFields;
 
         return $this;
     }
@@ -243,8 +220,6 @@ class PivotTableFactory
      * Gets the title for the given fields.
      *
      * @param PivotField[] $fields the fields
-     *
-     * @return string the title
      */
     private function buildFieldsTitle(array $fields): string
     {
@@ -254,8 +229,13 @@ class PivotTableFactory
         );
     }
 
+    private function createAggregator(): AbstractAggregator
+    {
+        return $this->operation->createAggregator();
+    }
+
     /**
-     * Find or create a node and update the value.
+     * Find or create a node and add the value.
      *
      * @param PivotField[] $fields
      */
@@ -265,57 +245,17 @@ class PivotTableFactory
             /** @var string|int $key */
             $key = $field->getValue($row);
             $child = $node->find($key);
-            if (!$child instanceof PivotNode) {
-                $aggregator = $this->operation->createAggregator();
+            if ($child instanceof PivotNode) {
+                $node = $child;
+            } else {
+                $aggregator = $this->createAggregator();
                 $title = (string) $field->getDisplayValue($key);
                 $node = $node->add($aggregator, $key)
                     ->setTitle($title);
-            } else {
-                $node = $child;
             }
         }
         $node->addValue($value);
 
         return $node;
-    }
-
-    /**
-     * @param PivotField[] $columnFields
-     */
-    private function updateColumnFields(PivotTable $table, array $columnFields): void
-    {
-        if ([] !== $columnFields) {
-            $table->setColumnFields($columnFields);
-        }
-    }
-
-    private function updateDataField(PivotTable $table, ?PivotField $dataField): static
-    {
-        if ($dataField instanceof PivotField) {
-            $table->setDataField($dataField);
-        }
-
-        return $this;
-    }
-
-    private function updateKeyField(PivotTable $table, ?PivotField $keyField): static
-    {
-        if ($keyField instanceof PivotField) {
-            $table->setKeyField($keyField);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param PivotField[] $rowFields
-     */
-    private function updateRowFields(PivotTable $table, array $rowFields): static
-    {
-        if ([] !== $rowFields) {
-            $table->setRowFields($rowFields);
-        }
-
-        return $this;
     }
 }

@@ -28,7 +28,6 @@ final class PivotTableFactoryTest extends TestCase
         self::assertNull($factory->getTitle());
         self::assertSame(PivotOperation::SUM, $factory->getOperation());
         self::assertNull($factory->getDataField());
-        self::assertNull($factory->getKeyField());
         self::assertSame([], $factory->getDataset());
         self::assertSame([], $factory->getColumnFields());
         self::assertSame([], $factory->getRowFields());
@@ -46,11 +45,11 @@ final class PivotTableFactoryTest extends TestCase
 
     public function testSetColumnFields(): void
     {
-        $field = new PivotField('key');
+        $fields = [new PivotField('key')];
         $factory = PivotTableFactory::instance([]);
         self::assertSame([], $factory->getColumnFields());
-        $factory->setColumnFields($field);
-        self::assertSame([$field], $factory->getColumnFields());
+        $factory->setColumnFields($fields);
+        self::assertSame($fields, $factory->getColumnFields());
     }
 
     public function testSetDataField(): void
@@ -62,22 +61,13 @@ final class PivotTableFactoryTest extends TestCase
         self::assertSame($field, $factory->getDataField());
     }
 
-    public function testSetKeyField(): void
-    {
-        $field = new PivotField('key');
-        $factory = PivotTableFactory::instance([]);
-        self::assertNull($factory->getKeyField());
-        $factory->setKeyField($field);
-        self::assertSame($field, $factory->getKeyField());
-    }
-
     public function testSetRowFields(): void
     {
-        $field = new PivotField('key');
+        $fields = [new PivotField('key')];
         $factory = PivotTableFactory::instance([]);
         self::assertSame([], $factory->getRowFields());
-        $factory->setRowFields($field);
-        self::assertSame([$field], $factory->getRowFields());
+        $factory->setRowFields($fields);
+        self::assertSame($fields, $factory->getRowFields());
     }
 
     public function testSetTitle(): void
@@ -127,14 +117,12 @@ final class PivotTableFactoryTest extends TestCase
             PivotFieldFactory::default('group', 'Group'),
             PivotFieldFactory::default('category', 'Category'),
         ];
-        $keyField = PivotFieldFactory::default('id', 'id');
         $data = PivotFieldFactory::default('amount', 'Amount');
         $dataset = $this->createDataset();
 
         return PivotTableFactory::instance($dataset, PivotOperation::SUM, 'Title')
-            ->setColumnFields(...$columns)
-            ->setRowFields(...$rows)
-            ->setKeyField($keyField)
+            ->setColumnFields($columns)
+            ->setRowFields($rows)
             ->setDataField($data);
     }
 }

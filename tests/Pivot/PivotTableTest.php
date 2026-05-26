@@ -17,6 +17,7 @@ use App\Pivot\Aggregator\SumAggregator;
 use App\Pivot\Field\PivotField;
 use App\Pivot\PivotCell;
 use App\Pivot\PivotNode;
+use App\Pivot\PivotOperation;
 use App\Pivot\PivotTable;
 use PHPUnit\Framework\TestCase;
 
@@ -24,11 +25,8 @@ final class PivotTableTest extends TestCase
 {
     public function testAddCell(): void
     {
-        $aggregator = new SumAggregator();
-        $column = new PivotNode($aggregator, 'column');
-        $row = new PivotNode($aggregator, 'row');
-        $table = new PivotTable(new SumAggregator());
-        $cell = new PivotCell($aggregator, $column, $row);
+        $table = $this->createPivotTable();
+        $cell = $this->createPivotCell();
         $table->addCell($cell);
         self::assertSame([$cell], $table->getCells());
     }
@@ -38,7 +36,7 @@ final class PivotTableTest extends TestCase
         $aggregator = new SumAggregator();
         $column = new PivotNode($aggregator, 'column');
         $row = new PivotNode($aggregator, 'row');
-        $table = new PivotTable(new SumAggregator());
+        $table = $this->createPivotTable();
         $cell = $table->addCellValue($aggregator, $column, $row);
         self::assertSame($aggregator, $cell->getAggregator());
         self::assertSame($column, $cell->getColumn());
@@ -47,28 +45,26 @@ final class PivotTableTest extends TestCase
 
     public function testConstructor(): void
     {
-        $aggregator = new SumAggregator();
-        $table = new PivotTable($aggregator);
-        self::assertSame($aggregator, $table->getAggregator());
+        $table = $this->createPivotTable();
+        self::assertInstanceOf(SumAggregator::class, $table->getAggregator());
         self::assertNull($table->getTitle());
         self::assertNull($table->getTotalTitle());
         self::assertNull($table->getDataField());
-        self::assertNull($table->getKeyField());
 
         self::assertSame([], $table->getCells());
         self::assertSame([], $table->getColumnFields());
         self::assertSame([], $table->getRowFields());
         self::assertNotNull($table->getRootColumn());
         self::assertNotNull($table->getRootRow());
+
+        self::assertSame(0, $table->getMaxColumnLevel());
+        self::assertSame(0, $table->getMaxRowLevel());
     }
 
     public function testFindCellByKey(): void
     {
-        $aggregator = new SumAggregator();
-        $column = new PivotNode($aggregator, 'column');
-        $row = new PivotNode($aggregator, 'row');
-        $table = new PivotTable(new SumAggregator());
-        $cell = new PivotCell($aggregator, $column, $row);
+        $table = $this->createPivotTable();
+        $cell = $this->createPivotCell();
         $table->addCell($cell);
         $actual = $table->findCellByKey('fake', 'fake');
         self::assertNull($actual);
@@ -78,41 +74,51 @@ final class PivotTableTest extends TestCase
 
     public function testFindCellByNode(): void
     {
-        $aggregator = new SumAggregator();
-        $column = new PivotNode($aggregator, 'column');
-        $row = new PivotNode($aggregator, 'row');
-        $table = new PivotTable(new SumAggregator());
-        $cell = new PivotCell($aggregator, $column, $row);
+        $table = $this->createPivotTable();
+        $cell = $this->createPivotCell();
         $table->addCell($cell);
+
+        $column = $cell->getColumn();
+        $row = $cell->getRow();
         $actual = $table->findCellByNode($column, $row);
-        self::assertNotNull($actual);
+        self::assertSame($cell, $actual);
     }
 
     public function testFindCellByPath(): void
     {
-        $aggregator = new SumAggregator();
-        $column = new PivotNode($aggregator, 'column');
-        $row = new PivotNode($aggregator, 'row');
-        $table = new PivotTable(new SumAggregator());
-        $cell = new PivotCell($aggregator, $column, $row);
+        $table = $this->createPivotTable();
+        $cell = $this->createPivotCell();
         $table->addCell($cell);
         $actual = $table->findCellByPath('fake', 'fake');
         self::assertNull($actual);
         $actual = $table->findCellByPath('', '');
-        self::assertNotNull($actual);
+        self::assertSame($cell, $actual);
     }
 
     public function testJsonSerialize(): void
     {
-        $table = new PivotTable(new SumAggregator());
+        $table = $this->createPivotTable();
+        $table->setTitle('Title');
+        $cell = $this->createPivotCell();
+        $table->addCell($cell);
+
         $actual = $table->jsonSerialize();
-        self::assertArrayNotHasKey('title', $actual);
+        self::assertArrayHasKey('title', $actual);
         self::assertArrayHasKey('aggregator', $actual);
+
+        self::assertArrayNotHasKey('value', $actual);
+        self::assertArrayNotHasKey('dataField', $actual);
+        self::assertArrayNotHasKey('columnFields', $actual);
+        self::assertArrayNotHasKey('rowFields', $actual);
+
+        self::assertArrayHasKey('rootColumn', $actual);
+        self::assertArrayHasKey('rootRow', $actual);
+        self::assertArrayHasKey('cells', $actual);
     }
 
     public function testSetColumnFields(): void
     {
-        $table = new PivotTable(new SumAggregator());
+        $table = $this->createPivotTable();
         $field = new PivotField('name');
         $table->setColumnFields([$field]);
         self::assertSame([$field], $table->getColumnFields());
@@ -120,23 +126,15 @@ final class PivotTableTest extends TestCase
 
     public function testSetDataField(): void
     {
-        $table = new PivotTable(new SumAggregator());
+        $table = $this->createPivotTable();
         $field = new PivotField('name');
         $table->setDataField($field);
         self::assertSame($field, $table->getDataField());
     }
 
-    public function testSetKeyField(): void
-    {
-        $table = new PivotTable(new SumAggregator());
-        $field = new PivotField('name');
-        $table->setKeyField($field);
-        self::assertSame($field, $table->getKeyField());
-    }
-
     public function testSetRowFields(): void
     {
-        $table = new PivotTable(new SumAggregator());
+        $table = $this->createPivotTable();
         $field = new PivotField('name');
         $table->setRowFields([$field]);
         self::assertSame([$field], $table->getRowFields());
@@ -145,7 +143,7 @@ final class PivotTableTest extends TestCase
     public function testSetTitle(): void
     {
         $expected = 'Title';
-        $table = new PivotTable(new SumAggregator());
+        $table = $this->createPivotTable();
         $table->setTitle($expected);
         self::assertSame($expected, $table->getTitle());
     }
@@ -153,8 +151,21 @@ final class PivotTableTest extends TestCase
     public function testSetTotalTitle(): void
     {
         $expected = 'Title';
-        $table = new PivotTable(new SumAggregator());
+        $table = $this->createPivotTable();
         $table->setTotalTitle($expected);
         self::assertSame($expected, $table->getTotalTitle());
+    }
+
+    private function createPivotCell(): PivotCell
+    {
+        $column = new PivotNode(new SumAggregator(), 'column');
+        $row = new PivotNode(new SumAggregator(), 'row');
+
+        return new PivotCell(new SumAggregator(), $column, $row);
+    }
+
+    private function createPivotTable(): PivotTable
+    {
+        return new PivotTable(PivotOperation::SUM);
     }
 }

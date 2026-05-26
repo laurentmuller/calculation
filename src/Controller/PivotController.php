@@ -156,12 +156,12 @@ class PivotController extends AbstractController
         }
 
         $title = $this->trans('calculation.list.title');
-        $data = PivotFieldFactory::default('item_overall', $this->trans('calculation.fields.overallTotal'));
+        $dataField = PivotFieldFactory::default('item_overall', $this->trans('calculation.fields.overallTotal'));
 
         return PivotTableFactory::instance($dataset, $operation, $title)
-            ->setColumnFields(...$this->getColumnFields())
-            ->setRowFields(...$this->getRowFields())
-            ->setDataField($data)
+            ->setColumnFields($this->getColumnFields())
+            ->setRowFields($this->getRowFields())
+            ->setDataField($dataField)
             ->create();
     }
 
@@ -170,14 +170,25 @@ class PivotController extends AbstractController
      */
     private function getColumnFields(): array
     {
-        $semesterFormatter = fn (int $semestre): string => $this->trans('counters.semester', ['count' => $semestre]);
-        $quarterFormatter = fn (int $quarter): string => $this->trans('counters.quarter', ['count' => $quarter]);
-
         return [
-            PivotFieldFactory::year('calculation_date', $this->trans('pivot.fields.year')),
-            PivotFieldFactory::semester('calculation_date', $this->trans('pivot.fields.semester'), $semesterFormatter),
-            PivotFieldFactory::quarter('calculation_date', $this->trans('pivot.fields.quarter'), $quarterFormatter),
-            PivotFieldFactory::month('calculation_date', $this->trans('pivot.fields.month')),
+            PivotFieldFactory::year(
+                'calculation_date',
+                $this->trans('pivot.fields.year')
+            ),
+            PivotFieldFactory::semester(
+                'calculation_date',
+                $this->trans('pivot.fields.semester'),
+                fn (int $semestre): string => $this->trans('counters.semester', ['count' => $semestre])
+            ),
+            PivotFieldFactory::quarter(
+                'calculation_date',
+                $this->trans('pivot.fields.quarter'),
+                fn (int $quarter): string => $this->trans('counters.quarter', ['count' => $quarter])
+            ),
+            PivotFieldFactory::month(
+                'calculation_date',
+                $this->trans('pivot.fields.month')
+            ),
         ];
     }
 
@@ -187,9 +198,9 @@ class PivotController extends AbstractController
     private function getRowFields(): array
     {
         return [
-            PivotFieldFactory::default('calculation_state', $this->trans('calculationstate.name')),
-            PivotFieldFactory::default('item_group', $this->trans('group.name')),
-            PivotFieldFactory::default('item_category', $this->trans('category.name')),
+            PivotFieldFactory::default('state_code', $this->trans('calculationstate.name')),
+            PivotFieldFactory::default('group_code', $this->trans('group.name')),
+            PivotFieldFactory::default('category_code', $this->trans('category.name')),
         ];
     }
 

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Pivot;
 
-use App\Interfaces\SortModeInterface;
 use App\Pivot\Aggregator\AbstractAggregator;
 use App\Traits\ArrayTrait;
 use App\Utils\StringUtils;
@@ -21,26 +20,19 @@ use App\Utils\StringUtils;
 /**
  * Represents a pivot node.
  */
-class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringable, SortModeInterface
+class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringable
 {
     use ArrayTrait;
 
     /**
      * The children.
      *
-     * @var array<int, PivotNode>
+     * @var array<int|string, PivotNode>
      */
     private array $children = [];
 
     /** The parent node. */
     private ?PivotNode $parent = null;
-
-    /**
-     * The sort direction.
-     *
-     * @phpstan-var self::SORT_*
-     */
-    private string $sortMode = self::SORT_ASC;
 
     /** The title. */
     private ?string $title = null;
@@ -58,7 +50,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     #[\Override]
     public function __toString(): string
     {
-        return \sprintf('%s(0)', StringUtils::getShortName($this));
+        return \sprintf('%s()', StringUtils::getShortName($this));
     }
 
     /**
@@ -87,7 +79,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      */
     public function addNode(self $child): self
     {
-        $this->children[] = $child;
+        $this->children[$child->getKey()] = $child;
         $child->setParent($this);
 
         return $this->sort();
@@ -101,9 +93,6 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
         return $this->update();
     }
 
-    /**
-     * Gets the number of children.
-     */
     #[\Override]
     public function count(): int
     {
@@ -111,7 +100,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     }
 
     /**
-     * Returns if the given key is the same as this key.
+     * Returns if the given key is equal to this key.
      *
      * @param string|int $key the key to compare to
      *
@@ -123,7 +112,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     }
 
     /**
-     * Returns if the given keys are the same as these keys.
+     * Returns if the given keys are equal to these keys.
      *
      * @param array<string|int> $keys the keys to compare to
      *
@@ -141,22 +130,19 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      *
      * @param string|int $key the node key to search for
      *
-     * @return self|null the child node, if found; null otherwise
+     * @return ?self the child node, if found; null otherwise
      */
     public function find(string|int $key): ?self
     {
-        return $this->findFirst(
-            $this->children,
-            static fn (PivotNode $child): bool => $child->equalsKey($key)
-        );
+        return $this->children[$key] ?? null;
     }
 
     /**
      * Finds a child node for the given array of keys.
      *
-     * @param array<string|int> $keys the node keys to search for
+     * @param array<string|int> $keys the keys to search for
      *
-     * @return self|null the child node, if found; null otherwise
+     * @return ?self the child node, if found; null otherwise
      */
     public function findByKeys(array $keys): ?self
     {
@@ -175,36 +161,11 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     /**
      * Gets the children.
      *
-     * @return array<int, PivotNode>
+     * @return array<int|string, PivotNode>
      */
     public function getChildren(): array
     {
         return $this->children;
-    }
-
-    /**
-     * Gets all children for the given level.
-     *
-     * @param int $level the level
-     *
-     * @return PivotNode[]
-     */
-    public function getChildrenAtLevel(int $level): array
-    {
-        if ($this->getLevel() === $level) {
-            return [$this];
-        }
-
-        $result = [];
-        foreach ($this->children as $child) {
-            if ($child->getLevel() === $level) {
-                $result[] = $child;
-            } else {
-                $result = \array_merge($result, $child->getChildrenAtLevel($level));
-            }
-        }
-
-        return $result;
     }
 
     /**
@@ -226,32 +187,17 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     }
 
     /**
-     * Gets all children from the last level.
+     * Gets the leaf nodes; include this instance if applicable.
      *
-     * @return PivotNode[]
+     * @return PivotNode[] the leaf nodes
      */
-    public function getLastChildren(): array
+    public function getLeafNodes(): array
     {
-        if ($this->isLeaf()) {
-            return [$this];
-        }
-
-        $result = [];
-        foreach ($this->children as $child) {
-            if ($child->isLeaf()) {
-                $result[] = $child;
-            } else {
-                $result = \array_merge($result, $child->getLastChildren());
-            }
-        }
-
-        return $result;
+        return $this->filter(static fn (PivotNode $node): bool => $node->isLeaf());
     }
 
     /**
-     * Gets the level (0 for root, 1 for first level, etc...).
-     *
-     * @return int the level
+     * Gets this level (0 for root, 1 for first level, etc...).
      */
     public function getLevel(): int
     {
@@ -263,26 +209,36 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     }
 
     /**
-     * Gets the maximum deep level.
-     *
-     * @return int the deep level
+     * Gets the maximum level.
      */
     public function getMaxLevel(): int
     {
         $level = 0;
         $node = $this;
         while (!$node->isLeaf()) {
+            $node = \array_first($node->children);
             ++$level;
-            $node = $node->children[0];
         }
 
         return $level;
     }
 
     /**
+     * Gets nodes for the given level; include this instance if applicable.
+     *
+     * @param int $level the level to get the nodes for
+     *
+     * @return PivotNode[]
+     */
+    public function getNodesAtLevel(int $level): array
+    {
+        return $this->filter(static fn (PivotNode $node): bool => $node->getLevel() === $level);
+    }
+
+    /**
      * Gets the parent's node.
      *
-     * @return self|null the parent's node or null if the root
+     * @return ?self the parent's node or null if the root
      */
     public function getParent(): ?self
     {
@@ -290,7 +246,9 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     }
 
     /**
-     * Gets the path.
+     * Gets the imploded path.
+     *
+     * @return string the path or an empty string if this node is the root node
      */
     public function getPath(string $separator = PivotTable::PATH_SEPARATOR): string
     {
@@ -305,23 +263,11 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     }
 
     /**
-     * Gets the sort mode.
-     *
-     * @return self::SORT_*
-     */
-    public function getSortMode(): string
-    {
-        return $this->sortMode;
-    }
-
-    /**
      * Gets the title.
-     *
-     * @return string the title or the key if not set
      */
-    public function getTitle(): string
+    public function getTitle(): ?string
     {
-        return $this->title ?? (string) $this->key;
+        return $this->title;
     }
 
     /**
@@ -331,7 +277,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      */
     public function getTitles(): array
     {
-        return $this->upToRoot(static fn (PivotNode $node): string => $node->getTitle());
+        return $this->upToRoot(static fn (PivotNode $node): string => $node->getTitle() ?? '');
     }
 
     /**
@@ -345,10 +291,13 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
             return -1;
         }
 
-        return \array_find_key(
-            $this->parent->getChildren(),
-            fn (PivotNode $child): bool => $child === $this
-        ) ?? -1;
+        $index = \array_search(
+            $this->key,
+            \array_keys($this->parent->getChildren()),
+            true
+        );
+
+        return \is_int($index) ? $index : -1;
     }
 
     /**
@@ -386,12 +335,14 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
             'key' => $this->key,
             'title' => $this->title,
             'value' => $this->aggregator->getRoundResult(),
-            'children' => [] === $this->children ? null : $this->children,
+            'children' => $this->isLeaf() ? null : $this->children,
         ]);
     }
 
     /**
      * Sets the parent's node.
+     *
+     * @throws \InvalidArgumentException if the parent is this instance
      */
     public function setParent(?self $parent): self
     {
@@ -401,21 +352,6 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
         $this->parent = $parent;
 
         return $this;
-    }
-
-    /**
-     * Sets the sort mode and sort values if different from the current sort mode.
-     *
-     * @param self::SORT_* $sortMode the sort mode to set
-     */
-    public function setSortMode(string $sortMode): self
-    {
-        if ($this->sortMode === $sortMode) {
-            return $this;
-        }
-        $this->sortMode = $sortMode;
-
-        return $this->sort();
     }
 
     /**
@@ -448,18 +384,37 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     }
 
     /**
-     * Sort children.
+     * Filter this instance and all children recursively.
+     *
+     * @param callable(PivotNode): bool $callable the filter function
+     *
+     * @return PivotNode[]
+     */
+    private function filter(callable $callable): array
+    {
+        if ($callable($this)) {
+            return [$this];
+        }
+
+        $result = [];
+        foreach ($this->children as $child) {
+            if ($callable($child)) {
+                $result[] = $child;
+            } else {
+                $result = \array_merge($result, $child->filter($callable));
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Sort children; maintaining the index association.
      */
     private function sort(): self
     {
-        if ($this->count() <= 1) {
-            return $this;
-        }
-
-        if (self::SORT_ASC === $this->sortMode) {
+        if ($this->count() > 1) {
             \uasort($this->children, static fn (self $left, self $right): int => $left->getKey() <=> $right->getKey());
-        } else {
-            \uasort($this->children, static fn (self $left, self $right): int => $right->getKey() <=> $left->getKey());
         }
 
         return $this;

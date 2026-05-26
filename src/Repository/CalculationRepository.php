@@ -23,6 +23,7 @@ use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Types\DatePointType;
+use Symfony\Bridge\Doctrine\Types\DayPointType;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -48,9 +49,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *        calculation_date: DatePoint,
  *        calculation_overall_margin: float,
  *        calculation_overall_total: float,
- *        calculation_state: string,
- *        item_group: string,
- *        item_category: string,
+ *        state_code: string,
+ *        group_code: string,
+ *        category_code: string,
  *        item_description: string,
  *        item_price: float,
  *        item_quantity: float,
@@ -622,11 +623,11 @@ class CalculationRepository extends AbstractRepository
             ->addSelect('(e.overallTotal / e.itemsTotal) - 1 AS calculation_overall_margin')
             ->addSelect('e.overallTotal                      AS calculation_overall_total')
             // state
-            ->addSelect('s.code                              AS calculation_state')
+            ->addSelect('s.code                              AS state_code')
             // groupes
-            ->addSelect('g.code                              AS item_group')
+            ->addSelect('g.code                              AS group_code')
             // category
-            ->addSelect('c.code                              AS item_category')
+            ->addSelect('c.code                              AS category_code')
             // items
             ->addSelect('i.description                       AS item_description')
             ->addSelect('i.price                             AS item_price')
@@ -644,8 +645,8 @@ class CalculationRepository extends AbstractRepository
             // dates
             ->andWhere('e.date >= :startDate')
             ->andWhere('e.date < :endDate')
-            ->setParameter('startDate', $startDate, Types::DATE_IMMUTABLE)
-            ->setParameter('endDate', $endDate, Types::DATE_IMMUTABLE);
+            ->setParameter('startDate', $startDate, DayPointType::NAME)
+            ->setParameter('endDate', $endDate, DayPointType::NAME);
 
         return $builder->getQuery()
             ->getArrayResult();

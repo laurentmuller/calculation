@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Pivot\Field;
 
+use App\Pivot\Formatter\DefaultFormatter;
+use App\Pivot\Formatter\FormatterInterface;
 use Symfony\Component\Clock\DatePoint;
 
 /**
@@ -20,28 +22,27 @@ use Symfony\Component\Clock\DatePoint;
  */
 class PivotField implements \JsonSerializable
 {
+    private readonly FormatterInterface $formatter;
+
     /**
-     * @param string  $name  the field name
-     * @param ?string $title the field title
+     * @param string              $name      the field name
+     * @param ?string             $title     the field title
+     * @param ?FormatterInterface $formatter the optional formatter
      */
     public function __construct(
         protected readonly string $name,
-        protected readonly ?string $title = null
+        protected readonly ?string $title = null,
+        ?FormatterInterface $formatter = null
     ) {
+        $this->formatter = $formatter ?? new DefaultFormatter();
     }
 
     /**
      * Gets the display value.
-     *
-     * The default implementation returns the value as is. Subclass can override, for example, to map the value.
-     *
-     * @param mixed $value the field value
-     *
-     * @return mixed the display value
      */
-    public function getDisplayValue(mixed $value): mixed
+    public function getDisplayValue(int|float|string $value): int|float|string
     {
-        return $value;
+        return $this->formatter->format($value);
     }
 
     /**

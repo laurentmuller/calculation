@@ -36,4 +36,12 @@ final class PivotDateFieldTest extends TestCase
         $actual = $field->getValue($row);
         self::assertSame(3, $actual);
     }
+
+    public function testJsonSerialize(): void
+    {
+        $field = new PivotDateField('name', PivotDateField::PART_MONTH);
+        $actual = $field->jsonSerialize();
+        self::assertArrayHasKey('format', $actual);
+        self::assertSame(PivotDateField::PART_MONTH, $actual['format']);
+    }
 }

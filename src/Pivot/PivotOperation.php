@@ -29,8 +29,8 @@ use fpdf\Traits\PdfEnumDefaultTrait;
 /**
  * The pivot operation (function) enumeration.
  *
- * @implements EnumSortableInterface<PivotOperation>
  * @implements PdfEnumDefaultInterface<PivotOperation>
+ * @implements EnumSortableInterface<PivotOperation>
  */
 #[ReadableEnum(prefix: 'pivot.operation.', useValueAsDefault: true)]
 enum PivotOperation: string implements EnumSortableInterface, PdfEnumDefaultInterface, TranslatableEnumInterface

@@ -25,28 +25,28 @@ final class DateUtils
     /**
      * The month names.
      *
-     * @var array<int, string>|null
+     * @var non-empty-array<int, string>|null
      */
     private static ?array $monthNames = null;
 
     /**
      * The short month names.
      *
-     * @var array<int, string>|null
+     * @var non-empty-array<int, string>|null
      */
     private static ?array $shortMonthNames = null;
 
     /**
      * The short week day names.
      *
-     * @var array<string, array<int, string>>|null
+     * @var array<string, non-empty-array<int, string>>|null
      */
     private static ?array $shortWeekNames = null;
 
     /**
      * The week day names.
      *
-     * @var array<string, array<int, string>>|null
+     * @var array<string, non-empty-array<int, string>>|null
      */
     private static ?array $weekNames = null;
 
@@ -164,7 +164,7 @@ final class DateUtils
      * Janvier, Février, ...
      * </pre>.
      *
-     * @return array<int, string>
+     * @return non-empty-array<int, string>
      */
     public static function getMonths(): array
     {
@@ -178,7 +178,7 @@ final class DateUtils
      * Janv., Févr., ...
      * </pre>.
      *
-     * @return array<int, string>
+     * @return non-empty-array<int, string>
      */
     public static function getShortMonths(): array
     {
@@ -194,7 +194,7 @@ final class DateUtils
      *
      * @param string $firstDay The first day of the week, in English, like 'Sunday' or 'Monday'
      *
-     * @return array<int, string>
+     * @return non-empty-array<int, string>
      */
     public static function getShortWeekdays(string $firstDay = 'monday'): array
     {
@@ -223,7 +223,7 @@ final class DateUtils
      *
      * @param string $firstDay the first day of the week, in English, like 'Sunday' or 'Monday'
      *
-     * @return array<int, string>
+     * @return non-empty-array<int, string>
      */
     public static function getWeekdays(string $firstDay = 'monday'): array
     {
@@ -295,7 +295,7 @@ final class DateUtils
     /**
      * Gets week day names.
      *
-     * @return array<int, string>
+     * @return non-empty-array<int, string>
      */
     private static function getDayNames(string $pattern, string $firstDay): array
     {
@@ -319,7 +319,7 @@ final class DateUtils
     }
 
     /**
-     * @return array<int, string>
+     * @return non-empty-array<int, string>
      */
     private static function getMonthNames(string $pattern): array
     {

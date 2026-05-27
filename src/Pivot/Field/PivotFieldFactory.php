@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace App\Pivot\Field;
 
+use App\Pivot\Formatter\FormatterInterface;
+
 /**
- * Factory to create PivotField.
+ * Factory to create pivot fields.
  */
 class PivotFieldFactory
 {
@@ -43,14 +45,14 @@ class PivotFieldFactory
     /**
      * Creates a new quarter field instance.
      *
-     * @param string                 $name      the field name
-     * @param ?string                $title     the field title
-     * @param ?\Closure(int): string $formatter the optional callback formatter
+     * @param string              $name      the field name
+     * @param ?string             $title     the field title
+     * @param ?FormatterInterface $formatter the optional formatter
      */
     public static function quarter(
         string $name,
         ?string $title = null,
-        ?\Closure $formatter = null
+        ?FormatterInterface $formatter = null
     ): PivotQuarterField {
         return new PivotQuarterField($name, $title, $formatter);
     }
@@ -58,14 +60,14 @@ class PivotFieldFactory
     /**
      * Creates a semester field instance.
      *
-     * @param string                 $name      the field name
-     * @param ?string                $title     the field title
-     * @param ?\Closure(int): string $formatter the optional callback formatter
+     * @param string              $name      the field name
+     * @param ?string             $title     the field title
+     * @param ?FormatterInterface $formatter the optional formatter
      */
     public static function semester(
         string $name,
         ?string $title = null,
-        ?\Closure $formatter = null
+        ?FormatterInterface $formatter = null
     ): PivotSemesterField {
         return new PivotSemesterField($name, $title, $formatter);
     }

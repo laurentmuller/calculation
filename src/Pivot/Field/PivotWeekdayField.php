@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Pivot\Field;
 
+use App\Pivot\Formatter\ArrayFormatter;
 use App\Utils\DateUtils;
 
 /**
@@ -20,29 +21,8 @@ use App\Utils\DateUtils;
  */
 class PivotWeekdayField extends PivotDateField
 {
-    /**
-     * The weekday names.
-     *
-     * @var string[]
-     */
-    private readonly array $names;
-
-    /**
-     * @param string  $name  the field name
-     * @param ?string $title the field title
-     */
     public function __construct(string $name, ?string $title = null)
     {
-        parent::__construct($name, self::PART_WEEK_DAY, $title);
-        $this->names = DateUtils::getWeekdays();
-    }
-
-    /**
-     * @throws \InvalidArgumentException if the value is not between 1 and 7 inclusive
-     */
-    #[\Override]
-    public function getDisplayValue(mixed $value): mixed
-    {
-        return $this->names[(int) $value] ?? throw new \InvalidArgumentException(\sprintf('Invalid weekday value: %d, allowed value [1..7].', $value));
+        parent::__construct($name, self::PART_WEEK_DAY, $title, new ArrayFormatter(DateUtils::getWeekdays()));
     }
 }

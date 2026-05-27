@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Pivot\Field;
 
 use App\Pivot\Field\PivotSemesterField;
+use App\Pivot\Formatter\FormatterInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
 
@@ -25,10 +26,14 @@ final class PivotSemesterFieldTest extends TestCase
         $actual = $field->getDisplayValue(1);
         self::assertSame('1st semester', $actual);
 
-        $formatter = static fn (int $semester): string => (string) $semester;
+        $formatter = new class implements FormatterInterface {
+            #[\Override]
+            public function format(int|float|string $value): string
+            {
+                return (string) $value;
+            }
+        };
         $field = new PivotSemesterField('name', formatter: $formatter);
-        self::assertSame($formatter, $field->getFormatter());
-
         $actual = $field->getDisplayValue(1);
         self::assertSame('1', $actual);
     }
@@ -59,7 +64,7 @@ final class PivotSemesterFieldTest extends TestCase
     public function testInvalidValue(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessage('Invalid semester value: 5, allowed values [1,2].');
+        self::expectExceptionMessage('Invalid value: 5, allowed values [1..2].');
         $field = new PivotSemesterField('name');
         $field->getDisplayValue(5);
     }

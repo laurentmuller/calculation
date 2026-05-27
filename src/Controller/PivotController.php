@@ -19,6 +19,7 @@ use App\Attribute\IndexRoute;
 use App\Model\TranslatableFlashMessage;
 use App\Pivot\Field\PivotField;
 use App\Pivot\Field\PivotFieldFactory;
+use App\Pivot\Formatter\TranslateFormatter;
 use App\Pivot\PivotOperation;
 use App\Pivot\PivotTable;
 use App\Pivot\PivotTableFactory;
@@ -170,6 +171,8 @@ class PivotController extends AbstractController
      */
     private function getColumnFields(): array
     {
+        $translator = $this->getTranslator();
+
         return [
             PivotFieldFactory::year(
                 'calculation_date',
@@ -178,12 +181,12 @@ class PivotController extends AbstractController
             PivotFieldFactory::semester(
                 'calculation_date',
                 $this->trans('pivot.fields.semester'),
-                fn (int $semestre): string => $this->trans('counters.semester', ['count' => $semestre])
+                new TranslateFormatter($translator, 'counters.semester', 'count')
             ),
             PivotFieldFactory::quarter(
                 'calculation_date',
                 $this->trans('pivot.fields.quarter'),
-                fn (int $quarter): string => $this->trans('counters.quarter', ['count' => $quarter])
+                new TranslateFormatter($translator, 'counters.quarter', 'count')
             ),
             PivotFieldFactory::month(
                 'calculation_date',

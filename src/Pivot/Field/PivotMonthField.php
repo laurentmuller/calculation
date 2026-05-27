@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Pivot\Field;
 
+use App\Pivot\Formatter\ArrayFormatter;
 use App\Utils\DateUtils;
 
 /**
@@ -20,29 +21,8 @@ use App\Utils\DateUtils;
  */
 class PivotMonthField extends PivotDateField
 {
-    /**
-     * The month names.
-     *
-     * @var string[]
-     */
-    private readonly array $names;
-
-    /**
-     * @param string  $name  the field name
-     * @param ?string $title the field title
-     */
     public function __construct(string $name, ?string $title = null)
     {
-        parent::__construct($name, self::PART_MONTH, $title);
-        $this->names = DateUtils::getMonths();
-    }
-
-    /**
-     * @throws \InvalidArgumentException if the value is not between 1 and 12 inclusive
-     */
-    #[\Override]
-    public function getDisplayValue(mixed $value): mixed
-    {
-        return $this->names[(int) $value] ?? throw new \InvalidArgumentException(\sprintf('Invalid month value: %d, allowed values [1..12].', $value));
+        parent::__construct($name, self::PART_MONTH, $title, new ArrayFormatter(DateUtils::getMonths()));
     }
 }

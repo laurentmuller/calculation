@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Pivot\Field;
 
 use App\Pivot\Field\PivotQuarterField;
+use App\Pivot\Formatter\FormatterInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
 
@@ -25,10 +26,14 @@ final class PivotQuarterFieldTest extends TestCase
         $actual = $field->getDisplayValue(1);
         self::assertSame('1st quarter', $actual);
 
-        $formatter = static fn (int $quarter): string => (string) $quarter;
+        $formatter = new class implements FormatterInterface {
+            #[\Override]
+            public function format(int|float|string $value): string
+            {
+                return (string) $value;
+            }
+        };
         $field = new PivotQuarterField('name', formatter: $formatter);
-        self::assertSame($formatter, $field->getFormatter());
-
         $actual = $field->getDisplayValue(1);
         self::assertSame('1', $actual);
     }
@@ -65,7 +70,7 @@ final class PivotQuarterFieldTest extends TestCase
     public function testInvalidValue(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessage('Invalid quarter value: 5, allowed values [1..4].');
+        self::expectExceptionMessage('Invalid value: 5, allowed values [1..4].');
         $field = new PivotQuarterField('name');
         $field->getDisplayValue(5);
     }

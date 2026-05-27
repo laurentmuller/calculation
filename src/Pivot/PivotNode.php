@@ -81,13 +81,15 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     {
         $this->children[$child->getKey()] = $child;
         $child->setParent($this);
-        \ksort($this->children, \SORT_NATURAL | \SORT_FLAG_CASE);
+        if ($this->count() > 1) {
+            \ksort($this->children, \SORT_NATURAL | \SORT_FLAG_CASE);
+        }
 
         return $this;
     }
 
     #[\Override]
-    public function addValue(mixed $value): static
+    public function addValue(AbstractAggregator|int|float|null $value): static
     {
         parent::addValue($value);
 
@@ -127,11 +129,9 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     }
 
     /**
-     * Finds a child node for the given key.
+     * Finds a child for the given key.
      *
      * @param string|int $key the node key to search for
-     *
-     * @return ?self the child node, if found; null otherwise
      */
     public function find(string|int $key): ?self
     {

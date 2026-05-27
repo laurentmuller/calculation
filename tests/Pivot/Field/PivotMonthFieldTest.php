@@ -31,7 +31,7 @@ final class PivotMonthFieldTest extends TestCase
     public function testInvalidValue(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessage('Invalid month value: 0, allowed values [1..12].');
+        self::expectExceptionMessage('Invalid value: 0, allowed values [1..12].');
         $field = new PivotMonthField('name');
         $field->getDisplayValue(0);
     }

@@ -13,65 +13,23 @@ declare(strict_types=1);
 
 namespace App\Pivot\Field;
 
+use App\Pivot\Formatter\FormatterInterface;
+use App\Pivot\Formatter\QuarterFormatter;
 use Symfony\Component\Clock\DatePoint;
 
 /**
- * The pivot field that extracts quarter (1 or 4).
+ * The pivot field that extracts and format quarter (1 or 4).
  */
 class PivotQuarterField extends PivotDateField
 {
-    /** @var \Closure(int): string */
-    private readonly \Closure $formatter;
-
-    /**
-     * @param ?\Closure(int): string $formatter the optional callback formatter
-     */
-    public function __construct(string $name, ?string $title = null, ?\Closure $formatter = null)
+    public function __construct(string $name, ?string $title = null, ?FormatterInterface $formatter = null)
     {
-        parent::__construct($name, self::PART_MONTH, $title);
-        $this->formatter = $formatter ?? self::getDefaultFormatter();
-    }
-
-    /**
-     * Gets the default formatter.
-     *
-     * @return \Closure(int): string
-     */
-    public static function getDefaultFormatter(): \Closure
-    {
-        return static fn (int $semester): string => match ($semester) {
-            1 => '1st quarter',
-            2 => '2nd quarter',
-            3 => '3rd quarter',
-            4 => '4th quarter',
-            default => throw new \InvalidArgumentException(\sprintf('Invalid quarter value: %d, allowed values [1..4].', $semester))
-        };
-    }
-
-    /**
-     * @throws \InvalidArgumentException if the value is not between 1 and 4 inclusive
-     */
-    #[\Override]
-    public function getDisplayValue(mixed $value): string
-    {
-        return \call_user_func($this->formatter, (int) $value);
-    }
-
-    /**
-     * Gets the callback used to format a quarter.
-     *
-     * @return \Closure(int): string
-     */
-    public function getFormatter(): \Closure
-    {
-        return $this->formatter;
+        parent::__construct($name, self::PART_MONTH, $title, $formatter ?? new QuarterFormatter());
     }
 
     #[\Override]
     protected function getDateValue(DatePoint $date): int
     {
-        $value = parent::getDateValue($date);
-
-        return (int) \ceil($value / 3);
+        return (int) \ceil(parent::getDateValue($date) / 3);
     }
 }

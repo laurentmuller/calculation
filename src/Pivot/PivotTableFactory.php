@@ -19,6 +19,8 @@ use Symfony\Component\Clock\DatePoint;
 
 /**
  * Factory to create a pivot table.
+ *
+ * @phpstan-type RowType array<array-key, DatePoint|int|float|string>
  */
 class PivotTableFactory
 {
@@ -40,7 +42,7 @@ class PivotTableFactory
     private array $rowFields = [];
 
     /**
-     * @param array<array<array-key, DatePoint|int|float|string>> $dataset
+     * @param RowType[] $dataset
      */
     public function __construct(
         private readonly array $dataset,
@@ -150,7 +152,7 @@ class PivotTableFactory
     /**
      * Creates a new instance.
      *
-     * @param array<array<array-key, mixed>> $dataset
+     * @param RowType[] $dataset
      */
     public static function instance(
         array $dataset,
@@ -163,7 +165,7 @@ class PivotTableFactory
     /**
      * Returns a value indicating if inputs are valid.
      *
-     * @phpstan-assert-if-true non-empty-array<array-key, array<array-key, mixed>> $this->dataset
+     * @phpstan-assert-if-true non-empty-array<RowType> $this->dataset
      * @phpstan-assert-if-true non-empty-array<PivotField> $this->columnFields
      * @phpstan-assert-if-true non-empty-array<PivotField> $this->rowFields
      * @phpstan-assert-if-true PivotField $this->dataField
@@ -241,7 +243,7 @@ class PivotTableFactory
      *
      * @param PivotField[] $fields
      */
-    private function setNodeValue(array $fields, array $row, PivotNode $node, int|float|string|null $value): PivotNode
+    private function setNodeValue(array $fields, array $row, PivotNode $node, int|float|null $value): PivotNode
     {
         foreach ($fields as $field) {
             /** @var string|int $key */
@@ -249,12 +251,12 @@ class PivotTableFactory
             $child = $node->find($key);
             if ($child instanceof PivotNode) {
                 $node = $child;
-            } else {
-                $aggregator = $this->createAggregator();
-                $title = (string) $field->getDisplayValue($key);
-                $node = $node->add($aggregator, $key)
-                    ->setTitle($title);
+                continue;
             }
+            $aggregator = $this->createAggregator();
+            $title = (string) $field->getDisplayValue($key);
+            $node = $node->add($aggregator, $key)
+                ->setTitle($title);
         }
         $node->addValue($value);
 

@@ -34,7 +34,7 @@ final class PivotWeekdayFieldTest extends TestCase
     public function testInvalidValue(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessage('Invalid weekday value: 10, allowed value [1..7].');
+        self::expectExceptionMessage('Invalid value: 10, allowed values [1..7].');
         $field = new PivotWeekdayField('name');
         $field->getDisplayValue(10);
     }

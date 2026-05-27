@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Pivot\Field;
 
+use App\Pivot\Formatter\FormatterInterface;
 use Symfony\Component\Clock\DatePoint;
 
 /**
@@ -33,13 +34,15 @@ class PivotDateField extends PivotField
     public const string PART_YEAR = 'Y';
 
     /**
-     * @param string       $name   the field name
      * @param self::PART_* $format the format used to extract the date part
-     * @param ?string      $title  the field title
      */
-    public function __construct(string $name, private readonly string $format, ?string $title = null)
-    {
-        parent::__construct($name, $title);
+    public function __construct(
+        string $name,
+        private readonly string $format,
+        ?string $title = null,
+        ?FormatterInterface $formatter = null
+    ) {
+        parent::__construct($name, $title, $formatter);
     }
 
     #[\Override]

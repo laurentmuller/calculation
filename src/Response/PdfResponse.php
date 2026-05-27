@@ -17,7 +17,7 @@ use fpdf\Enums\PdfDestination;
 use fpdf\PdfDocument;
 
 /**
- * Represents an HTTP streamed response, within a Portable Document Format (*.pdf) document.
+ * Represents an HTTP streamed response within a Portable Document Format (*.pdf) document.
  *
  * @see PdfDocument
  */

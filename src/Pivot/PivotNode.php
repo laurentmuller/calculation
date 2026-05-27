@@ -71,7 +71,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     }
 
     /**
-     * Adds a child to the list of children.
+     * Adds a child to this list of children.
      *
      * <b>NB:</b> The children are sorted after insertion.
      *
@@ -81,8 +81,9 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     {
         $this->children[$child->getKey()] = $child;
         $child->setParent($this);
+        \ksort($this->children, \SORT_NATURAL | \SORT_FLAG_CASE);
 
-        return $this->sort();
+        return $this;
     }
 
     #[\Override]
@@ -335,7 +336,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
             'key' => $this->key,
             'title' => $this->title,
             'value' => $this->aggregator->getRoundResult(),
-            'children' => $this->isLeaf() ? null : $this->children,
+            'children' => $this->children,
         ]);
     }
 
@@ -406,18 +407,6 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
         }
 
         return $result;
-    }
-
-    /**
-     * Sort children; maintaining the index association.
-     */
-    private function sort(): self
-    {
-        if ($this->count() > 1) {
-            \uasort($this->children, static fn (self $left, self $right): int => $left->getKey() <=> $right->getKey());
-        }
-
-        return $this;
     }
 
     /**

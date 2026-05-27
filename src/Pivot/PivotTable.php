@@ -97,42 +97,16 @@ class PivotTable extends AbstractPivotAggregator
     }
 
     /**
-     * Finds a pivot cell for the given keys.
-     *
-     * @param mixed $columnKey the column key to search for
-     * @param mixed $rowKey    the row key to search for
-     *
-     * @return ?PivotCell the cell, if found; null otherwise
-     */
-    public function findCellByKey(mixed $columnKey, mixed $rowKey): ?PivotCell
-    {
-        return $this->findFirst($this->cells, static fn (PivotCell $cell): bool => $cell->equalsKey($columnKey, $rowKey));
-    }
-
-    /**
-     * Finds a pivot cell for the given nodes.
+     * Finds a cell for the given nodes.
      *
      * @param PivotNode $column the node column to search for
      * @param PivotNode $row    the node row to search for
      *
      * @return ?PivotCell the cell, if found; null otherwise
      */
-    public function findCellByNode(PivotNode $column, PivotNode $row): ?PivotCell
+    public function findCell(PivotNode $column, PivotNode $row): ?PivotCell
     {
         return $this->findFirst($this->cells, static fn (PivotCell $cell): bool => $cell->equalsNode($column, $row));
-    }
-
-    /**
-     * Finds a pivot cell for the given paths.
-     *
-     * @param string $columnPath the column path to search for
-     * @param string $rowPath    the row path to search for
-     *
-     * @return ?PivotCell the cell, if found; null otherwise
-     */
-    public function findCellByPath(string $columnPath, string $rowPath): ?PivotCell
-    {
-        return $this->findFirst($this->cells, static fn (PivotCell $cell): bool => $cell->equalsPath($columnPath, $rowPath));
     }
 
     /**

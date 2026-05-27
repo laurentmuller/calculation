@@ -71,7 +71,7 @@
 {%- endmacro outputValue %}
 
 {% macro outputCell(table, column, row, class, separator) -%}
-    {%- set cell = table.findCellByNode(column, row) -%}
+    {%- set cell = table.findCell(column, row) -%}
     {{ _self.outputValue(cell, class, separator) }}
 {%- endmacro outputCell %}
 

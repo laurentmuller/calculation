@@ -15,6 +15,7 @@ namespace App\Pivot;
 
 use App\Pivot\Aggregator\AbstractAggregator;
 use App\Pivot\Field\PivotField;
+use Symfony\Component\Clock\DatePoint;
 
 /**
  * Factory to create a pivot table.
@@ -39,7 +40,7 @@ class PivotTableFactory
     private array $rowFields = [];
 
     /**
-     * @param array<array<array-key, mixed>> $dataset
+     * @param array<array<array-key, DatePoint|int|float|string>> $dataset
      */
     public function __construct(
         private readonly array $dataset,
@@ -71,7 +72,7 @@ class PivotTableFactory
             $value = $dataField->getValue($row);
             $currentRow = $this->setNodeValue($rowFields, $row, $rootRow, $value);
             $currentCol = $this->setNodeValue($columnFields, $row, $rootColumn, $value);
-            $cell = $table->findCellByNode($currentCol, $currentRow);
+            $cell = $table->findCell($currentCol, $currentRow);
             if ($cell instanceof PivotCell) {
                 $cell->addValue($value);
             } else {

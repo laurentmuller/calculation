@@ -61,18 +61,7 @@ final class PivotTableTest extends TestCase
         self::assertSame(0, $table->getMaxRowLevel());
     }
 
-    public function testFindCellByKey(): void
-    {
-        $table = $this->createPivotTable();
-        $cell = $this->createPivotCell();
-        $table->addCell($cell);
-        $actual = $table->findCellByKey('fake', 'fake');
-        self::assertNull($actual);
-        $actual = $table->findCellByKey('column', 'row');
-        self::assertNotNull($actual);
-    }
-
-    public function testFindCellByNode(): void
+    public function testFindCell(): void
     {
         $table = $this->createPivotTable();
         $cell = $this->createPivotCell();
@@ -80,18 +69,7 @@ final class PivotTableTest extends TestCase
 
         $column = $cell->getColumn();
         $row = $cell->getRow();
-        $actual = $table->findCellByNode($column, $row);
-        self::assertSame($cell, $actual);
-    }
-
-    public function testFindCellByPath(): void
-    {
-        $table = $this->createPivotTable();
-        $cell = $this->createPivotCell();
-        $table->addCell($cell);
-        $actual = $table->findCellByPath('fake', 'fake');
-        self::assertNull($actual);
-        $actual = $table->findCellByPath('', '');
+        $actual = $table->findCell($column, $row);
         self::assertSame($cell, $actual);
     }
 

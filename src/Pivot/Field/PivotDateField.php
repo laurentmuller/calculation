@@ -53,6 +53,12 @@ class PivotDateField extends PivotField
         return $value;
     }
 
+    #[\Override]
+    public function jsonSerialize(): array
+    {
+        return parent::jsonSerialize() + ['format' => $this->format];
+    }
+
     /**
      * Gets the value for the given date.
      */

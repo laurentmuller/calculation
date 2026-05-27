@@ -21,16 +21,16 @@ use App\Pivot\Aggregator\AbstractAggregator;
 class PivotCell extends AbstractPivotAggregator
 {
     /**
-     * @param AbstractAggregator $aggregator the aggregator function
-     * @param PivotNode          $column     the parent column
-     * @param PivotNode          $row        the parent row
-     * @param mixed              $value      the initial value
+     * @param AbstractAggregator                $aggregator the aggregator function
+     * @param PivotNode                         $column     the parent column
+     * @param PivotNode                         $row        the parent row
+     * @param AbstractAggregator|int|float|null $value      the initial value
      */
     public function __construct(
         AbstractAggregator $aggregator,
         private readonly PivotNode $column,
         private readonly PivotNode $row,
-        mixed $value = null
+        AbstractAggregator|int|float|null $value = null
     ) {
         parent::__construct($aggregator, $value);
     }

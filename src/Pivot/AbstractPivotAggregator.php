@@ -22,10 +22,10 @@ use App\Utils\StringUtils;
 abstract class AbstractPivotAggregator implements \JsonSerializable, \Stringable
 {
     /**
-     * @param AbstractAggregator $aggregator the aggregator function
-     * @param mixed              $value      the initial value
+     * @param AbstractAggregator                $aggregator the aggregator function
+     * @param AbstractAggregator|int|float|null $value      the initial value
      */
-    public function __construct(protected AbstractAggregator $aggregator, mixed $value = null)
+    public function __construct(protected AbstractAggregator $aggregator, AbstractAggregator|int|float|null $value = null)
     {
         $this->addValue($value);
     }
@@ -39,7 +39,7 @@ abstract class AbstractPivotAggregator implements \JsonSerializable, \Stringable
     /**
      * Adds the given value to this aggregator.
      */
-    public function addValue(mixed $value): static
+    public function addValue(AbstractAggregator|int|float|null $value): static
     {
         $this->aggregator->add($value);
 

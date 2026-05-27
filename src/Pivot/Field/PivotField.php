@@ -65,7 +65,7 @@ class PivotField implements \JsonSerializable
     /**
      * Gets the field value.
      *
-     * @param array $row the dataset row
+     * @param array<array-key, DatePoint|int|float|string> $row the dataset row
      */
     public function getValue(array $row): DatePoint|int|float|string|null
     {

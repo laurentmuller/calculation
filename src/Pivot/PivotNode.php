@@ -38,11 +38,11 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     private ?string $title = null;
 
     /**
-     * @param AbstractAggregator $aggregator the aggregator function
-     * @param string|int         $key        the key
-     * @param mixed              $value      the initial value
+     * @param AbstractAggregator                $aggregator the aggregator function
+     * @param string|int                        $key        the key
+     * @param AbstractAggregator|int|float|null $value      the initial value
      */
-    public function __construct(AbstractAggregator $aggregator, private readonly string|int $key = '', mixed $value = null)
+    public function __construct(AbstractAggregator $aggregator, private readonly string|int $key = '', AbstractAggregator|int|float|null $value = null)
     {
         parent::__construct($aggregator, $value);
     }
@@ -58,11 +58,11 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      *
      * @param AbstractAggregator $aggregator the aggregator function
      * @param string|int         $key        the key
-     * @param mixed              $value      the initial value
+     * @param int|float|null     $value      the initial value
      *
      * @return self the newly created node
      */
-    public function add(AbstractAggregator $aggregator, string|int $key = '', mixed $value = null): self
+    public function add(AbstractAggregator $aggregator, string|int $key = '', int|float|null $value = null): self
     {
         $node = new self($aggregator, $key, $value);
         $this->addNode($node);

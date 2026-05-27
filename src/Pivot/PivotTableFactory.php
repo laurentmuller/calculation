@@ -69,6 +69,7 @@ class PivotTableFactory
 
         // add cells
         foreach ($this->dataset as $row) {
+            /** @var int|float|null $value */
             $value = $dataField->getValue($row);
             $currentRow = $this->setNodeValue($rowFields, $row, $rootRow, $value);
             $currentCol = $this->setNodeValue($columnFields, $row, $rootColumn, $value);
@@ -240,7 +241,7 @@ class PivotTableFactory
      *
      * @param PivotField[] $fields
      */
-    private function setNodeValue(array $fields, array $row, PivotNode $node, mixed $value): PivotNode
+    private function setNodeValue(array $fields, array $row, PivotNode $node, int|float|string|null $value): PivotNode
     {
         foreach ($fields as $field) {
             /** @var string|int $key */

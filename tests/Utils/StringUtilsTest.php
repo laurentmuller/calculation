@@ -188,7 +188,7 @@ final class StringUtilsTest extends TestCase
     public function testEncodeJson(): void
     {
         $expected = '{"key":"value"}';
-        $decoded = \json_decode($expected, true);
+        $decoded = \json_decode(json: $expected, associative: true);
         $actual = StringUtils::encodeJson($decoded);
         self::assertSame($expected, $actual);
     }

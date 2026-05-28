@@ -49,7 +49,7 @@ final class CaptchaControllerTest extends ControllerTestCase
 
         $response = $controller->image($service);
         $content = (string) $response->getContent();
-        $actual = (array) \json_decode($content, true, \JSON_THROW_ON_ERROR);
+        $actual = (array) \json_decode(json: $content, associative: true, flags: \JSON_THROW_ON_ERROR);
         self::assertFalse($actual['result']);
         self::assertSame('captcha.generate', $actual['message']);
     }

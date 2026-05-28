@@ -69,7 +69,7 @@ readonly class AES256EncryptorService
             return false;
         }
 
-        return \json_decode($decoded, $assoc, flags: $flags | \JSON_THROW_ON_ERROR);
+        return \json_decode(json: $decoded, associative: $assoc, flags: $flags | \JSON_THROW_ON_ERROR);
     }
 
     public function encrypt(string $data): string|false

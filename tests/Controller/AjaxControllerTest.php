@@ -199,7 +199,7 @@ final class AjaxControllerTest extends ControllerTestCase
     private function assertContentException(string|false $content): void
     {
         self::assertIsString($content);
-        $actual = \json_decode($content, true);
+        $actual = \json_decode(json: $content, associative: true);
         self::assertIsArray($actual);
 
         self::assertArrayHasKey('result', $actual);
@@ -216,7 +216,7 @@ final class AjaxControllerTest extends ControllerTestCase
     private function assertContentValid(string|false $content): void
     {
         self::assertIsString($content);
-        $actual = \json_decode($content, true);
+        $actual = \json_decode(json: $content, associative: true);
         self::assertIsBool($actual);
         self::assertTrue($actual);
     }

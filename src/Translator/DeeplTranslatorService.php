@@ -175,7 +175,7 @@ class DeeplTranslatorService extends AbstractTranslatorService
         if ('' === $content) {
             return false;
         }
-        $values = \json_decode($content, true);
+        $values = \json_decode(json: $content, associative: true);
         if ([] === $values || !isset($values['message'])) {
             return false;
         }

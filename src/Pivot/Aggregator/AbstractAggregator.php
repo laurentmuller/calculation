@@ -16,14 +16,14 @@ namespace App\Pivot\Aggregator;
 use App\Utils\StringUtils;
 
 /**
- * Abstract aggregator.
+ * Abstract implementation of the aggregator interface.
  */
-abstract class AbstractAggregator implements \JsonSerializable, \Stringable
+abstract class AbstractAggregator implements AggregatorInterface
 {
     /**
-     * @param AbstractAggregator|int|float|null $value the initial value
+     * @param AggregatorInterface|int|float|null $value the initial value
      */
-    public function __construct(self|int|float|null $value = null)
+    public function __construct(AggregatorInterface|int|float|null $value = null)
     {
         $this->initialize();
         $this->add($value);
@@ -35,33 +35,11 @@ abstract class AbstractAggregator implements \JsonSerializable, \Stringable
         return \sprintf('%s(%s)', StringUtils::getShortName($this), $this->getFormattedResult());
     }
 
-    /**
-     * Add the given value.
-     */
-    abstract public function add(self|int|float|null $value): static;
-
-    /*
-     * Gets the formatted result.
-     */
-    abstract public function getFormattedResult(): string;
-
-    /**
-     * Gets the result.
-     */
-    abstract public function getResult(): int|float;
-
-    /**
-     * Gets the rounded result.
-     */
+    #[\Override]
     public function getRoundResult(): int|float
     {
         return $this->getResult();
     }
-
-    /**
-     * Initialize the result.
-     */
-    abstract public function initialize(): static;
 
     #[\Override]
     public function jsonSerialize(): array

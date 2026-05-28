@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Pivot;
 
-use App\Pivot\Aggregator\AbstractAggregator;
+use App\Pivot\Aggregator\AggregatorInterface;
 use App\Utils\StringUtils;
 
 /**
@@ -22,10 +22,10 @@ use App\Utils\StringUtils;
 abstract class AbstractPivotAggregator implements \JsonSerializable, \Stringable
 {
     /**
-     * @param AbstractAggregator                $aggregator the aggregator function
-     * @param AbstractAggregator|int|float|null $value      the initial value
+     * @param AggregatorInterface                $aggregator the aggregator function
+     * @param AggregatorInterface|int|float|null $value      the initial value
      */
-    public function __construct(protected AbstractAggregator $aggregator, AbstractAggregator|int|float|null $value = null)
+    public function __construct(protected AggregatorInterface $aggregator, AggregatorInterface|int|float|null $value = null)
     {
         $this->addValue($value);
     }
@@ -39,7 +39,7 @@ abstract class AbstractPivotAggregator implements \JsonSerializable, \Stringable
     /**
      * Adds the given value to this aggregator.
      */
-    public function addValue(AbstractAggregator|int|float|null $value): static
+    public function addValue(AggregatorInterface|int|float|null $value): self
     {
         $this->aggregator->add($value);
 
@@ -49,7 +49,7 @@ abstract class AbstractPivotAggregator implements \JsonSerializable, \Stringable
     /**
      * Gets the aggregator function.
      */
-    public function getAggregator(): AbstractAggregator
+    public function getAggregator(): AggregatorInterface
     {
         return $this->aggregator;
     }

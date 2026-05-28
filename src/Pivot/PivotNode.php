@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Pivot;
 
-use App\Pivot\Aggregator\AbstractAggregator;
+use App\Pivot\Aggregator\AggregatorInterface;
 use App\Traits\ArrayTrait;
 use App\Utils\StringUtils;
 
@@ -38,11 +38,11 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     private ?string $title = null;
 
     /**
-     * @param AbstractAggregator                $aggregator the aggregator function
-     * @param string|int                        $key        the key
-     * @param AbstractAggregator|int|float|null $value      the initial value
+     * @param AggregatorInterface                $aggregator the aggregator function
+     * @param string|int                         $key        the key
+     * @param AggregatorInterface|int|float|null $value      the initial value
      */
-    public function __construct(AbstractAggregator $aggregator, private readonly string|int $key = '', AbstractAggregator|int|float|null $value = null)
+    public function __construct(AggregatorInterface $aggregator, private readonly string|int $key = '', AggregatorInterface|int|float|null $value = null)
     {
         parent::__construct($aggregator, $value);
     }
@@ -56,13 +56,13 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     /**
      * Creates a new node and add it to this list of children.
      *
-     * @param AbstractAggregator $aggregator the aggregator function
-     * @param string|int         $key        the key
-     * @param int|float|null     $value      the initial value
+     * @param AggregatorInterface $aggregator the aggregator function
+     * @param string|int          $key        the key
+     * @param int|float|null      $value      the initial value
      *
      * @return self the newly created node
      */
-    public function add(AbstractAggregator $aggregator, string|int $key = '', int|float|null $value = null): self
+    public function add(AggregatorInterface $aggregator, string|int $key = '', int|float|null $value = null): self
     {
         $node = new self($aggregator, $key, $value);
         $this->addNode($node);
@@ -89,7 +89,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     }
 
     #[\Override]
-    public function addValue(AbstractAggregator|int|float|null $value): static
+    public function addValue(AggregatorInterface|int|float|null $value): self
     {
         parent::addValue($value);
 
@@ -370,7 +370,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      *
      * <b>NB:</b> This method is called recursively for the parents (if any).
      */
-    protected function update(): static
+    protected function update(): self
     {
         if (!$this->isLeaf()) {
             $this->aggregator->initialize();

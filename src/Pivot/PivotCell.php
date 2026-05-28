@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Pivot;
 
-use App\Pivot\Aggregator\AbstractAggregator;
+use App\Pivot\Aggregator\AggregatorInterface;
 
 /**
  * Represents a data cell.
@@ -21,16 +21,16 @@ use App\Pivot\Aggregator\AbstractAggregator;
 class PivotCell extends AbstractPivotAggregator
 {
     /**
-     * @param AbstractAggregator                $aggregator the aggregator function
-     * @param PivotNode                         $column     the parent column
-     * @param PivotNode                         $row        the parent row
-     * @param AbstractAggregator|int|float|null $value      the initial value
+     * @param AggregatorInterface                $aggregator the aggregator function
+     * @param PivotNode                          $column     the parent column
+     * @param PivotNode                          $row        the parent row
+     * @param AggregatorInterface|int|float|null $value      the initial value
      */
     public function __construct(
-        AbstractAggregator $aggregator,
+        AggregatorInterface $aggregator,
         private readonly PivotNode $column,
         private readonly PivotNode $row,
-        AbstractAggregator|int|float|null $value = null
+        AggregatorInterface|int|float|null $value = null
     ) {
         parent::__construct($aggregator, $value);
     }

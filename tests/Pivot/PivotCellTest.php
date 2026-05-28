@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Pivot;
 
-use App\Pivot\Aggregator\AbstractAggregator;
+use App\Pivot\Aggregator\AggregatorInterface;
 use App\Pivot\Aggregator\CountAggregator;
 use App\Pivot\PivotCell;
 use App\Pivot\PivotNode;
@@ -111,7 +111,7 @@ final class PivotCellTest extends TestCase
         self::assertSame('PivotCell(0)', $actual);
     }
 
-    private function createCell(?AbstractAggregator $aggregator = null): PivotCell
+    private function createCell(?AggregatorInterface $aggregator = null): PivotCell
     {
         $aggregator ??= new CountAggregator();
         $column = new PivotNode($aggregator, 'column');

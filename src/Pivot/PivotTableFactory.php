@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Pivot;
 
-use App\Pivot\Aggregator\AbstractAggregator;
+use App\Pivot\Aggregator\AggregatorInterface;
 use App\Pivot\Field\PivotField;
 use Symfony\Component\Clock\DatePoint;
 
@@ -181,7 +181,7 @@ class PivotTableFactory
      *
      * @param PivotField[] $columnFields
      */
-    public function setColumnFields(array $columnFields): static
+    public function setColumnFields(array $columnFields): self
     {
         $this->columnFields = $columnFields;
 
@@ -191,7 +191,7 @@ class PivotTableFactory
     /**
      * Sets the data field.
      */
-    public function setDataField(PivotField $dataField): static
+    public function setDataField(PivotField $dataField): self
     {
         $this->dataField = $dataField;
 
@@ -203,7 +203,7 @@ class PivotTableFactory
      *
      * @param PivotField[] $rowFields
      */
-    public function setRowFields(array $rowFields): static
+    public function setRowFields(array $rowFields): self
     {
         $this->rowFields = $rowFields;
 
@@ -213,7 +213,7 @@ class PivotTableFactory
     /**
      * Sets the table title.
      */
-    public function setTitle(?string $title): static
+    public function setTitle(?string $title): self
     {
         $this->title = $title;
 
@@ -233,7 +233,7 @@ class PivotTableFactory
         );
     }
 
-    private function createAggregator(): AbstractAggregator
+    private function createAggregator(): AggregatorInterface
     {
         return $this->operation->createAggregator();
     }

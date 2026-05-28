@@ -31,13 +31,11 @@ readonly class ArrayFormatter implements FormatterInterface
     #[\Override]
     public function format(int|float|string $value): string
     {
-        return $this->mapping[(int) $value] ?? throw new \InvalidArgumentException(\sprintf('Invalid value: %d, allowed values %s.', $value, $this->getRange()));
+        return $this->mapping[(int) $value] ?? throw new \InvalidArgumentException(\sprintf('Invalid value: %s, allowed values %s.', $value, $this->getRange()));
     }
 
     private function getRange(): string
     {
-        $Keys = \array_keys($this->mapping);
-
-        return \sprintf('[%d..%d]', \min($Keys), \max($Keys));
+        return \sprintf('[%s..%s]', \array_key_first($this->mapping), \array_key_last($this->mapping));
     }
 }

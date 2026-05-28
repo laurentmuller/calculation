@@ -22,7 +22,7 @@ abstract class AbstractIntAggregator extends AbstractAggregator
 {
     protected int $result;
 
-    public function __construct(AbstractAggregator|int|float|null $value = null)
+    public function __construct(AggregatorInterface|int|float|null $value = null)
     {
         $this->result = $this->getInitialValue();
         parent::__construct($value);
@@ -41,7 +41,7 @@ abstract class AbstractIntAggregator extends AbstractAggregator
     }
 
     #[\Override]
-    public function initialize(): static
+    public function initialize(): self
     {
         $this->result = $this->getInitialValue();
 

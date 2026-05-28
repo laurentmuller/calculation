@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Pivot;
 
 use App\Interfaces\EnumSortableInterface;
-use App\Pivot\Aggregator\AbstractAggregator;
+use App\Pivot\Aggregator\AggregatorInterface;
 use App\Pivot\Aggregator\AverageAggregator;
 use App\Pivot\Aggregator\CountAggregator;
 use App\Pivot\Aggregator\MaxAggregator;
@@ -52,7 +52,7 @@ enum PivotOperation: string implements EnumSortableInterface, PdfEnumDefaultInte
     /**
      * Creates a new aggregator instance.
      */
-    public function createAggregator(): AbstractAggregator
+    public function createAggregator(): AggregatorInterface
     {
         return new ($this->getAggregator())();
     }
@@ -60,7 +60,7 @@ enum PivotOperation: string implements EnumSortableInterface, PdfEnumDefaultInte
     /**
      * Gets the aggregator class name.
      *
-     * @return class-string<AbstractAggregator>
+     * @return class-string<AggregatorInterface>
      */
     public function getAggregator(): string
     {

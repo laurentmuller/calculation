@@ -18,17 +18,17 @@ namespace App\Pivot\Aggregator;
  */
 abstract class AbstractCompositeAggregator extends AbstractAggregator
 {
-    /** @var non-empty-array<string, AbstractAggregator> */
+    /** @var non-empty-array<string, AggregatorInterface> */
     protected readonly array $aggregators;
 
-    public function __construct(AbstractAggregator|int|float|null $value = null)
+    public function __construct(AggregatorInterface|int|float|null $value = null)
     {
         $this->aggregators = $this->createAggregators();
         parent::__construct($value);
     }
 
     #[\Override]
-    public function add(AbstractAggregator|int|float|null $value): static
+    public function add(AggregatorInterface|int|float|null $value): self
     {
         if ($value instanceof self) {
             foreach ($this->aggregators as $name => $aggregator) {
@@ -44,7 +44,7 @@ abstract class AbstractCompositeAggregator extends AbstractAggregator
     }
 
     #[\Override]
-    public function initialize(): static
+    public function initialize(): self
     {
         foreach ($this->aggregators as $aggregator) {
             $aggregator->initialize();
@@ -54,7 +54,7 @@ abstract class AbstractCompositeAggregator extends AbstractAggregator
     }
 
     /**
-     * @return non-empty-array<string, AbstractAggregator>
+     * @return non-empty-array<string, AggregatorInterface>
      */
     abstract protected function createAggregators(): array;
 }

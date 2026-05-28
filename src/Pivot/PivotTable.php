@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Pivot;
 
-use App\Pivot\Aggregator\AbstractAggregator;
+use App\Pivot\Aggregator\AggregatorInterface;
 use App\Pivot\Field\PivotField;
 use App\Traits\ArrayTrait;
 use App\Utils\StringUtils;
@@ -81,18 +81,18 @@ class PivotTable extends AbstractPivotAggregator
     /**
      * Creates and adds a cell.
      *
-     * @param AbstractAggregator                $aggregator the aggregator
-     * @param PivotNode                         $column     the parent column
-     * @param PivotNode                         $row        the parent row
-     * @param AbstractAggregator|int|float|null $value      the initial value
+     * @param AggregatorInterface                $aggregator the aggregator
+     * @param PivotNode                          $column     the parent column
+     * @param PivotNode                          $row        the parent row
+     * @param AggregatorInterface|int|float|null $value      the initial value
      *
      * @return PivotCell the newly created cell
      */
     public function addCellValue(
-        AbstractAggregator $aggregator,
+        AggregatorInterface $aggregator,
         PivotNode $column,
         PivotNode $row,
-        AbstractAggregator|int|float|null $value = null
+        AggregatorInterface|int|float|null $value = null
     ): PivotCell {
         $cell = new PivotCell($aggregator, $column, $row, $value);
         $this->addCell($cell);

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Pivot;
 
-use App\Pivot\Aggregator\AbstractAggregator;
+use App\Pivot\Aggregator\AggregatorInterface;
 use App\Pivot\Aggregator\CountAggregator;
 use App\Pivot\Aggregator\SumAggregator;
 use App\Pivot\PivotNode;
@@ -316,7 +316,7 @@ final class PivotNodeTest extends TestCase
         return $node;
     }
 
-    private function createNode(?AbstractAggregator $aggregator = null, string $key = 'key'): PivotNode
+    private function createNode(?AggregatorInterface $aggregator = null, string $key = 'key'): PivotNode
     {
         $aggregator ??= new CountAggregator();
 

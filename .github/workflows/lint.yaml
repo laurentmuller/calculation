@@ -19,9 +19,6 @@ jobs:
             -   name: Install dependencies
                 run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-            -   name: Lint YAML
-                run: php bin/console lint:yaml translations .github/workflows --parse-tags
-
             -   name: Lint Container
                 run: php bin/console lint:container
 

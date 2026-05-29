@@ -23,3 +23,6 @@ jobs:
 
     validate-twig:
         uses: laurentmuller/.github/.github/workflows/validate-twig.yaml@main
+
+    validate-yaml:
+        uses: laurentmuller/.github/.github/workflows/validate-yaml.yaml@main

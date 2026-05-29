@@ -1,0 +1,13 @@
+name: CI
+
+on: [ push, pull_request ]
+
+jobs:
+    php-cs-fixer:
+        uses: laurentmuller/.github/.github/workflows/php-cs-fixer.yaml@main
+
+    phpstan:
+        uses: laurentmuller/.github/.github/workflows/phpstan.yaml@main
+
+    rector:
+        uses: laurentmuller/.github/.github/workflows/rector.yaml@main

@@ -15,5 +15,11 @@ jobs:
     twig-cs-fixer:
         uses: laurentmuller/.github/.github/workflows/twig-cs-fixer.yaml@main
 
-    composer-validate:
-        uses: laurentmuller/.github/.github/workflows/composer-validate.yaml@main
+    validate-composer:
+        uses: laurentmuller/.github/.github/workflows/validate-composer.yaml@main
+
+    validate-markdown:
+        uses: laurentmuller/.github/.github/workflows/validate-markdown.yaml@main
+
+    validate-twig:
+        uses: laurentmuller/.github/.github/workflows/validate-twig.yaml@main

@@ -1,4 +1,4 @@
-name: Lint
+name: Validate Schema
 
 on: [ push, pull_request ]
 

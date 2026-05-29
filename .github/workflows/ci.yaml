@@ -18,6 +18,12 @@ jobs:
     validate-composer:
         uses: laurentmuller/.github/.github/workflows/validate-composer.yaml@main
 
+    validate-container:
+        uses: laurentmuller/.github/.github/workflows/validate-container.yaml@main
+
+    validate-translation:
+        uses: laurentmuller/.github/.github/workflows/validate-translation.yaml@main
+
     validate-markdown:
         uses: laurentmuller/.github/.github/workflows/validate-markdown.yaml@main
 

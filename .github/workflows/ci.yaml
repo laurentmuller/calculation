@@ -32,3 +32,9 @@ jobs:
 
     validate-yaml:
         uses: laurentmuller/.github/.github/workflows/validate-yaml.yaml@main
+
+    phpunit:
+        uses: laurentmuller/.github/.github/workflows/phpunit.yaml@main
+        with:
+            ini-values: 'intl.default_locale=fr_CH.UTF-8, date.timezone=Europe/Zurich'
+            extensions: 'imagick'

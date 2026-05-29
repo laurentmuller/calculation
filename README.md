@@ -30,5 +30,4 @@ Ce programme est distribué avec une [licence propriétaire](LICENSE.md) et une
 
 [![CI](https://github.com/laurentmuller/calculation/actions/workflows/ci.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/ci.yaml)
 [![PHPUnit](https://github.com/laurentmuller/calculation/actions/workflows/php_unit.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/php_unit.yaml)
-[![Lint](https://github.com/laurentmuller/calculation/actions/workflows/lint.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/lint.yaml)
-[![StyleCI](https://github.styleci.io/repos/229945132/shield?branch=master)](https://github.styleci.io/repos/229945132?branch=master)
+[![Validate Schema](https://github.com/laurentmuller/calculation/actions/workflows/validate-schema.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/validate-schema.yaml)

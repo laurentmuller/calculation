@@ -11,3 +11,9 @@ jobs:
 
     rector:
         uses: laurentmuller/.github/.github/workflows/rector.yaml@main
+
+    twig-cs-fixer:
+        uses: laurentmuller/.github/.github/workflows/twig-cs-fixer.yaml@main
+
+    composer-validate:
+        uses: laurentmuller/.github/.github/workflows/composer-validate.yaml@main

@@ -36,6 +36,3 @@ jobs:
 
             -   name: Validate Schema
                 run: php bin/console doctrine:schema:validate --skip-sync -vvv --no-interaction
-
-            -   name: Validate Composer
-                run: composer validate --strict

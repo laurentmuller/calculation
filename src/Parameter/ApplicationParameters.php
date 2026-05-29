@@ -138,7 +138,8 @@ class ApplicationParameters extends AbstractParameters
         ]);
 
         // special case for minimum margin
-        $values[DefaultParameter::getCacheKey()]['minMargin'] *= 100.0; // @phpstan-ignore assignOp.invalid
+        /** @phpstan-var array<string, array<string, float>> $values */
+        $values[DefaultParameter::getCacheKey()]['minMargin'] *= 100.0;
 
         return $values;
     }

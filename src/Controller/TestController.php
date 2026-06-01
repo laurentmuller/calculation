@@ -130,7 +130,7 @@ class TestController extends AbstractController
     }
 
     /**
-     * Search zip codes, cities and streets from Switzerland.
+     * Search zip codes, cities, and streets from Switzerland.
      */
     #[GetRoute(path: '/swiss', name: 'swiss')]
     public function swiss(

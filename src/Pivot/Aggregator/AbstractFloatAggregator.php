@@ -20,18 +20,12 @@ use App\Utils\FormatUtils;
  */
 abstract class AbstractFloatAggregator extends AbstractAggregator
 {
-    protected float $result;
-
-    public function __construct(AggregatorInterface|int|float|null $value = null)
-    {
-        $this->result = $this->getInitialValue();
-        parent::__construct($value);
-    }
+    protected float $result = 0.0;
 
     #[\Override]
     public function getFormattedResult(): string
     {
-        return FormatUtils::formatAmount($this->result);
+        return FormatUtils::formatAmount($this->getResult());
     }
 
     #[\Override]
@@ -47,18 +41,10 @@ abstract class AbstractFloatAggregator extends AbstractAggregator
     }
 
     #[\Override]
-    public function initialize(): self
+    public function initialize(): static
     {
-        $this->result = $this->getInitialValue();
+        $this->result = 0.0;
 
         return $this;
-    }
-
-    /**
-     * Gets the initial value.
-     */
-    protected function getInitialValue(): float
-    {
-        return 0.0;
     }
 }

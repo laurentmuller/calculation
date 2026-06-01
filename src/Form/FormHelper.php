@@ -112,11 +112,12 @@ class FormHelper
     private array $rowAttributes = self::DEFAULT_ROW_ATTRIBUTES;
 
     /**
-     * @param FormBuilderInterface        $builder     the parent builder
-     * @param ?string                     $labelPrefix the label prefix.
-     *                                                 If the prefix is not null, the label is added automatically
-     *                                                 when the field property is set.
-     * @param FormBuilderInterface<mixed> $builder
+     * @param FormBuilderInterface $builder     the parent builder
+     * @param ?string              $labelPrefix the label prefix.
+     *                                          If the prefix is not null, the label is added automatically
+     *                                          when the field property is set.
+     *
+     * @phpstan-param FormBuilderInterface<mixed> $builder
      */
     public function __construct(private readonly FormBuilderInterface $builder, ?string $labelPrefix = null)
     {
@@ -244,11 +245,9 @@ class FormHelper
     /**
      * Add an enum type to the builder and reset all values to the default.
      *
-     * @param string $class the enumeration class
-     *
      * @template T of \UnitEnum
      *
-     * @param class-string<T> $class
+     * @param class-string<T> $class the enumeration class
      */
     public function addEnumType(string $class): self
     {
@@ -514,7 +513,7 @@ class FormHelper
     }
 
     /**
-     * Sets constraints option.
+     * Sets constraints.
      */
     public function constraints(Constraint ...$constrains): self
     {

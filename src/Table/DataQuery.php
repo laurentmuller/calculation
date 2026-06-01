@@ -113,7 +113,7 @@ class DataQuery implements SortModeInterface
     }
 
     /**
-     * Gets a parameter value as string.
+     * Gets a parameter value as a string.
      */
     public function getStringParameter(string $key, string $default = ''): string
     {

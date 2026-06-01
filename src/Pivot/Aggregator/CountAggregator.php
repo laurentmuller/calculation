@@ -19,13 +19,21 @@ namespace App\Pivot\Aggregator;
 class CountAggregator extends AbstractIntAggregator
 {
     #[\Override]
-    public function add(AggregatorInterface|int|float|null $value): self
+    public function add(AggregatorInterface|int|float|null $value): static
     {
         if ($value instanceof self) {
-            $this->result += $value->result;
-        } elseif (null !== $value) {
-            ++$this->result;
+            return $this->updateValue($value->result);
         }
+        if (null !== $value) {
+            return $this->updateValue(1);
+        }
+
+        return $this;
+    }
+
+    private function updateValue(int $value): static
+    {
+        $this->result += $value;
 
         return $this;
     }

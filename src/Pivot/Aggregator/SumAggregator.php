@@ -19,13 +19,21 @@ namespace App\Pivot\Aggregator;
 class SumAggregator extends AbstractFloatAggregator
 {
     #[\Override]
-    public function add(AggregatorInterface|int|float|null $value): self
+    public function add(AggregatorInterface|int|float|null $value): static
     {
         if ($value instanceof self) {
-            $this->result += $value->result;
-        } elseif (\is_numeric($value)) {
-            $this->result += (float) $value;
+            return $this->updateValue($value->result);
         }
+        if (\is_float($value) || \is_int($value)) {
+            return $this->updateValue((float) $value);
+        }
+
+        return $this;
+    }
+
+    private function updateValue(float $value): static
+    {
+        $this->result += $value;
 
         return $this;
     }

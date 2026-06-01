@@ -14,24 +14,14 @@ declare(strict_types=1);
 namespace App\Tests\Pivot\Aggregator;
 
 use App\Pivot\Aggregator\MaxAggregator;
-use App\Utils\FormatUtils;
 use PHPUnit\Framework\TestCase;
 
 final class MaxAggregatorTest extends TestCase
 {
-    private float $initialValue;
-
-    #[\Override]
-    protected function setUp(): void
-    {
-        $this->initialValue = (float) \PHP_INT_MIN;
-        parent::setUp();
-    }
-
     public function testAdd(): void
     {
         $aggregator = new MaxAggregator();
-        self::assertSame($this->initialValue, $aggregator->getResult());
+        self::assertSame(0.0, $aggregator->getResult());
 
         $aggregator->add(10.0);
         self::assertSame(10.0, $aggregator->getResult());
@@ -43,7 +33,7 @@ final class MaxAggregatorTest extends TestCase
     public function testConstructor(): void
     {
         $aggregator = new MaxAggregator();
-        self::assertSame($this->initialValue, $aggregator->getResult());
+        self::assertSame(0.0, $aggregator->getResult());
 
         $aggregator = new MaxAggregator(10.0);
         self::assertSame(10.0, $aggregator->getResult());
@@ -67,14 +57,14 @@ final class MaxAggregatorTest extends TestCase
         self::assertSame(10.0, $aggregator->getResult());
 
         $aggregator->initialize();
-        self::assertSame($this->initialValue, $aggregator->getResult());
+        self::assertSame(0.0, $aggregator->getResult());
     }
 
     public function testJsonSerialize(): void
     {
         $expected = [
             'name' => 'MaxAggregator',
-            'value' => $this->initialValue,
+            'value' => 0.0,
         ];
         $aggregator = new MaxAggregator();
         $actual = $aggregator->jsonSerialize();
@@ -93,9 +83,7 @@ final class MaxAggregatorTest extends TestCase
     {
         $aggregator = new MaxAggregator();
         $actual = (string) $aggregator;
-        $formatted = FormatUtils::formatAmount($this->initialValue);
-        $expected = \sprintf('MaxAggregator(%s)', $formatted);
-        self::assertSame($expected, $actual);
+        self::assertSame('MaxAggregator(0.00)', $actual);
 
         $aggregator = new MaxAggregator(10.0);
         $actual = (string) $aggregator;

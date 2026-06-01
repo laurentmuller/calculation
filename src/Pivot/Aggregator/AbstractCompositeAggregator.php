@@ -28,7 +28,7 @@ abstract class AbstractCompositeAggregator extends AbstractAggregator
     }
 
     #[\Override]
-    public function add(AggregatorInterface|int|float|null $value): self
+    public function add(AggregatorInterface|int|float|null $value): static
     {
         if ($value instanceof self) {
             foreach ($this->aggregators as $name => $aggregator) {
@@ -44,7 +44,7 @@ abstract class AbstractCompositeAggregator extends AbstractAggregator
     }
 
     #[\Override]
-    public function initialize(): self
+    public function initialize(): static
     {
         foreach ($this->aggregators as $aggregator) {
             $aggregator->initialize();

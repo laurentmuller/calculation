@@ -14,25 +14,41 @@ declare(strict_types=1);
 namespace App\Pivot\Aggregator;
 
 /**
- * Aggregator to get the maximum value.
+ * Aggregator to get the maximum value or 0.0 if no value is added.
  */
 class MaxAggregator extends AbstractFloatAggregator
 {
+    private bool $initialized = false;
+
     #[\Override]
-    public function add(AggregatorInterface|int|float|null $value): self
+    public function add(AggregatorInterface|int|float|null $value): static
     {
         if ($value instanceof self) {
-            $this->result = \max($this->result, $value->result);
-        } elseif (\is_numeric($value)) {
-            $this->result = \max($this->result, (float) $value);
+            return $this->updateValue($value->result);
+        }
+        if (\is_float($value) || \is_int($value)) {
+            return $this->updateValue((float) $value);
         }
 
         return $this;
     }
 
     #[\Override]
-    protected function getInitialValue(): float
+    public function initialize(): static
     {
-        return (float) \PHP_INT_MIN;
+        $this->initialized = false;
+
+        return parent::initialize();
+    }
+
+    private function updateValue(float $value): static
+    {
+        if (!$this->initialized) {
+            $this->result = \PHP_INT_MIN;
+            $this->initialized = true;
+        }
+        $this->result = \max($this->result, $value);
+
+        return $this;
     }
 }

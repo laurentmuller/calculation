@@ -18,7 +18,7 @@ interface AggregatorInterface extends \JsonSerializable, \Stringable
     /**
      * Add the given value.
      */
-    public function add(self|int|float|null $value): self;
+    public function add(self|int|float|null $value): static;
 
     /*
     * Gets the formatted result.
@@ -38,5 +38,5 @@ interface AggregatorInterface extends \JsonSerializable, \Stringable
     /**
      * Initialize the result.
      */
-    public function initialize(): self;
+    public function initialize(): static;
 }

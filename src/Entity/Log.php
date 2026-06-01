@@ -128,7 +128,7 @@ class Log extends AbstractEntity implements ComparableInterface
     }
 
     /**
-     * Gets the creation date as the unix timestamp.
+     * Gets the creation date as the Unix timestamp.
      */
     public function getTimestamp(): int
     {

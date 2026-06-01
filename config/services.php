@@ -77,7 +77,9 @@ return App::config([
                 '$dateFormat' => LogParserService::DATE_FORMAT,
             ],
             'calls' => [
-                ['setBasePath' => ['%kernel.project_dir%']],
+                [
+                    'setBasePath' => ['%kernel.project_dir%'],
+                ],
             ],
         ],
     ],

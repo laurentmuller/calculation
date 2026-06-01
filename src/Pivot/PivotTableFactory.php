@@ -228,7 +228,7 @@ class PivotTableFactory
     private function buildFieldsTitle(array $fields): string
     {
         return \implode(
-            PivotTable::PATH_SEPARATOR,
+            PivotNode::PATH_SEPARATOR,
             \array_map(static fn (PivotField $field): string => $field->getTitle(), $fields)
         );
     }

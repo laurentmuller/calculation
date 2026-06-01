@@ -25,9 +25,6 @@ class PivotTable extends AbstractPivotAggregator
 {
     use ArrayTrait;
 
-    /** The default path separator. */
-    public const string PATH_SEPARATOR = \DIRECTORY_SEPARATOR;
-
     /**
      * The cell data.
      *
@@ -126,9 +123,9 @@ class PivotTable extends AbstractPivotAggregator
     /**
      * Gets the column fields.
      *
-     * @return ?PivotField[]
+     * @return PivotField[]
      */
-    public function getColumnFields(): ?array
+    public function getColumnFields(): array
     {
         return $this->columnFields;
     }
@@ -176,9 +173,9 @@ class PivotTable extends AbstractPivotAggregator
     /**
      * Gets the row fields.
      *
-     * @return ?PivotField[]
+     * @return PivotField[]
      */
-    public function getRowFields(): ?array
+    public function getRowFields(): array
     {
         return $this->rowFields;
     }

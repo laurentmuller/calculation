@@ -24,6 +24,9 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
 {
     use ArrayTrait;
 
+    /** The default path separator. */
+    public const string PATH_SEPARATOR = \DIRECTORY_SEPARATOR;
+
     /**
      * The children.
      *
@@ -251,7 +254,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      *
      * @return string the path or an empty string if this node is the root node
      */
-    public function getPath(string $separator = PivotTable::PATH_SEPARATOR): string
+    public function getPath(string $separator = self::PATH_SEPARATOR): string
     {
         if ($this->isRoot()) {
             return '';

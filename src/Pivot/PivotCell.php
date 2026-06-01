@@ -79,7 +79,7 @@ class PivotCell extends AbstractPivotAggregator
     /**
      * Gets the imploded column path.
      */
-    public function getColumnPath(string $separator = PivotTable::PATH_SEPARATOR): string
+    public function getColumnPath(string $separator = PivotNode::PATH_SEPARATOR): string
     {
         return $this->column->getPath($separator);
     }
@@ -91,7 +91,7 @@ class PivotCell extends AbstractPivotAggregator
      *
      * @see PivotNode::getTitles()
      */
-    public function getColumnTitle(string $separator = PivotTable::PATH_SEPARATOR): string
+    public function getColumnTitle(string $separator = PivotNode::PATH_SEPARATOR): string
     {
         return \implode($separator, $this->column->getTitles());
     }
@@ -107,7 +107,7 @@ class PivotCell extends AbstractPivotAggregator
     /**
      * Gets the imploded row path.
      */
-    public function getRowPath(string $separator = PivotTable::PATH_SEPARATOR): string
+    public function getRowPath(string $separator = PivotNode::PATH_SEPARATOR): string
     {
         return $this->row->getPath($separator);
     }
@@ -119,7 +119,7 @@ class PivotCell extends AbstractPivotAggregator
      *
      * @see PivotNode::getTitles()
      */
-    public function getRowTitle(string $separator = PivotTable::PATH_SEPARATOR): string
+    public function getRowTitle(string $separator = PivotNode::PATH_SEPARATOR): string
     {
         return \implode($separator, $this->row->getTitles());
     }

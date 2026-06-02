@@ -145,6 +145,18 @@ enum ImageExtension: string implements PdfEnumDefaultInterface
     }
 
     /**
+     * Returns if the given file has the same extension as this value.
+     */
+    public function isSameExtension(\SplFileInfo|string $file): bool
+    {
+        if ($file instanceof \SplFileInfo) {
+            $file = $file->getPathname();
+        }
+
+        return Path::getExtension($file, true) === $this->value;
+    }
+
+    /**
      * Output an image to either the browser or a file.
      *
      * @param \GdImage|ImageService   $image   a GdImage object, returned by one of the image creation functions or an
@@ -187,6 +199,19 @@ enum ImageExtension: string implements PdfEnumDefaultInterface
             ImageExtension::XBM => \imagexbm($image, (string) $file, $options['foreground_color']),
             ImageExtension::XPM => false,
         };
+    }
+
+    /**
+     * Try to find the image extension from the given file.
+     */
+    public static function tryFromFile(\SplFileInfo|string $file): ?self
+    {
+        if ($file instanceof \SplFileInfo) {
+            $file = $file->getPathname();
+        }
+        $extension = Path::getExtension($file, true);
+
+        return ImageExtension::tryFrom($extension);
     }
 
     /**

@@ -52,7 +52,7 @@ final class VichListenerTest extends TestCase
     {
         $namer = new class extends UserNamer {
             #[\Override]
-            public function name(object $object, PropertyMapping $mapping): string
+            public function name(object|array $object, PropertyMapping $mapping): string
             {
                 return '';
             }

@@ -131,8 +131,7 @@ class ImageService
      */
     public static function fromFile(string $filename): self
     {
-        $fileExtension = Path::getExtension($filename, true);
-        $imageExtension = ImageExtension::tryFrom($fileExtension);
+        $imageExtension = ImageExtension::tryFromFile($filename);
         if (!$imageExtension instanceof ImageExtension) {
             throw new \InvalidArgumentException(\sprintf('Unsupported file image extension "%s".', $filename));
         }

@@ -192,6 +192,21 @@ final class ImageExtensionTest extends TestCase
         }
     }
 
+    public function testIsSameExtension(): void
+    {
+        $file = 'test.png';
+        self::assertTrue(ImageExtension::PNG->isSameExtension($file));
+        self::assertFalse(ImageExtension::JPEG->isSameExtension($file));
+        $file = 'test.PNG';
+        self::assertTrue(ImageExtension::PNG->isSameExtension($file));
+        $file = new \SplFileInfo($file);
+        self::assertTrue(ImageExtension::PNG->isSameExtension($file));
+        self::assertFalse(ImageExtension::JPEG->isSameExtension($file));
+        $file = 'test';
+        self::assertFalse(ImageExtension::PNG->isSameExtension($file));
+        self::assertFalse(ImageExtension::JPEG->isSameExtension($file));
+    }
+
     public function testSaveImageService(): void
     {
         $file = FileUtils::tempFile();

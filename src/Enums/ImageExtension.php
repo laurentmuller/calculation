@@ -202,7 +202,7 @@ enum ImageExtension: string implements PdfEnumDefaultInterface
     }
 
     /**
-     * Try to find the image extension from the given file.
+     * Try to find an instance from the given file's extension.
      */
     public static function tryFromFile(\SplFileInfo|string $file): ?self
     {

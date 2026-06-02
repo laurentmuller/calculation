@@ -23,15 +23,8 @@
     </php>
 
     <testsuites>
-        <testsuite name="test-full">
+        <testsuite name="calculation">
             <directory>tests</directory>
-        </testsuite>
-        <testsuite name="test-controller">
-            <directory>tests/Controller</directory>
-        </testsuite>
-        <testsuite name="test-no-controller">
-            <directory>tests</directory>
-            <exclude>tests/Controller</exclude>
         </testsuite>
     </testsuites>
 

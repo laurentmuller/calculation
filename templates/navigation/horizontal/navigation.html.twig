@@ -52,7 +52,6 @@
                 {% if is_granted_data and app.current_route !== 'search' -%}
                     {{ include('navigation/horizontal/navigation_search.html.twig') }}
                 {% endif %}
-                {{ include('navigation/menu/_menu_theme.html.twig') }}
                 {% if is_granted(IS_AUTHENTICATED_REMEMBERED) -%}
                     {{ include('navigation/horizontal/navigation_user.html.twig') }}
                 {% endif %}

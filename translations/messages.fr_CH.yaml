@@ -1012,11 +1012,11 @@ product:
         submit: Mettre à jour
 profile:
     password:
-        title: Modifier le mot de passe
+        title: Modifier mon mot de passe
         success: <b>%username%</b>, votre mot de passe a été modifié avec succès.
         failure: Impossible de trouver l'utilisateur actuel.
     edit:
-        title: Modifier le profil
+        title: Modifier mon profil
         success: <b>%username%</b>, votre profil a été mis à jour avec succès.
         failure: Impossible de trouver l'utilisateur actuel.
         submit: Mettre à jour
@@ -1455,7 +1455,7 @@ user:
         super_admin: Administrateur du site
         user: Utilisateur
     parameters:
-        title: Préférences
+        title: Mes préférences
         description: Définition de vos préférences.
         success: Vos préférences ont été mises à jour avec succès.
     show:

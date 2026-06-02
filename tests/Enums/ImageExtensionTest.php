@@ -72,6 +72,32 @@ final class ImageExtensionTest extends TestCase
         }
     }
 
+    public static function getIsSameExtensions(): \Generator
+    {
+        yield [ImageExtension::PNG, 'test.png', true];
+        yield [ImageExtension::PNG, 'test.PNG', true];
+        yield [ImageExtension::JPG, 'test.png', false];
+        yield [ImageExtension::JPG, 'test', false];
+
+        yield [ImageExtension::PNG, new \SplFileInfo('test.png'), true];
+        yield [ImageExtension::PNG, new \SplFileInfo('test.PNG'), true];
+        yield [ImageExtension::JPG, new \SplFileInfo('test.png'), false];
+        yield [ImageExtension::JPG, new \SplFileInfo('test'), false];
+    }
+
+    public static function getTryFromFiles(): \Generator
+    {
+        yield ['test.png', ImageExtension::PNG];
+        yield ['test.PNG', ImageExtension::PNG];
+        yield ['test.fake', null];
+        yield ['test', null];
+
+        yield [new \SplFileInfo('test.png'), ImageExtension::PNG];
+        yield [new \SplFileInfo('test.PNG'), ImageExtension::PNG];
+        yield [new \SplFileInfo('test.fake'), null];
+        yield [new \SplFileInfo('test'), null];
+    }
+
     public static function getTryFromTypes(): \Generator
     {
         yield [\IMAGETYPE_BMP, ImageExtension::BMP];
@@ -192,19 +218,11 @@ final class ImageExtensionTest extends TestCase
         }
     }
 
-    public function testIsSameExtension(): void
+    #[DataProvider('getIsSameExtensions')]
+    public function testIsSameExtension(ImageExtension $extension, \SplFileInfo|string $file, bool $expected): void
     {
-        $file = 'test.png';
-        self::assertTrue(ImageExtension::PNG->isSameExtension($file));
-        self::assertFalse(ImageExtension::JPEG->isSameExtension($file));
-        $file = 'test.PNG';
-        self::assertTrue(ImageExtension::PNG->isSameExtension($file));
-        $file = new \SplFileInfo($file);
-        self::assertTrue(ImageExtension::PNG->isSameExtension($file));
-        self::assertFalse(ImageExtension::JPEG->isSameExtension($file));
-        $file = 'test';
-        self::assertFalse(ImageExtension::PNG->isSameExtension($file));
-        self::assertFalse(ImageExtension::JPEG->isSameExtension($file));
+        $actual = $extension->isSameExtension($file);
+        self::assertSame($expected, $actual);
     }
 
     public function testSaveImageService(): void
@@ -220,6 +238,13 @@ final class ImageExtensionTest extends TestCase
         } finally {
             FileUtils::remove($file);
         }
+    }
+
+    #[DataProvider('getTryFromFiles')]
+    public function testTryFromFile(\SplFileInfo|string $file, ?ImageExtension $expected): void
+    {
+        $actual = ImageExtension::tryFromFile($file);
+        self::assertSame($expected, $actual);
     }
 
     #[DataProvider('getTryFromTypes')]

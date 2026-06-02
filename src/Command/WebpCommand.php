@@ -174,7 +174,7 @@ class WebpCommand
 
     private function getImageExtension(SplFileInfo $file): ?ImageExtension
     {
-        $extension = ImageExtension::tryFrom(\strtolower($file->getExtension()));
+        $extension = ImageExtension::tryFromFile($file);
         if (!$extension instanceof ImageExtension || ImageExtension::WEBP === $extension) {
             return null;
         }

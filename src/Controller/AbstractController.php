@@ -225,10 +225,10 @@ abstract class AbstractController extends BaseController
     /**
      * Creates and returns a form helper instance.
      *
-     * @param ?string    $labelPrefix the label prefix. If the prefix is not null, the label is automatically added
-     *                                when the field property is set.
-     * @param mixed|null $data        the initial data
-     * @param array      $options     the initial options
+     * @param ?string $labelPrefix the label prefix. If the prefix is not null, the label is automatically added
+     *                             when the field property is set.
+     * @param mixed   $data        the initial data
+     * @param array   $options     the initial options
      */
     protected function createFormHelper(?string $labelPrefix = null, mixed $data = null, array $options = []): FormHelper
     {

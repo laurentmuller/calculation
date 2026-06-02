@@ -1,5 +1,5 @@
 {
-    "name": "bibi/calculation",
+    "name": "laurentmuller/calculation",
     "type": "project",
     "description": "Computational program based on the Symfony 7.x development environment.",
     "keywords": [

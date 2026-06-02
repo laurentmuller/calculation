@@ -51,6 +51,7 @@ class ProfileEditType extends AbstractEntityType
 
         $helper->field('currentPassword')
             ->label('user.password.current')
+            ->notMapped()
             ->addCurrentPasswordType();
 
         $helper->field('imageFile')

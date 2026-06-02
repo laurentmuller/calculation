@@ -10,11 +10,11 @@
     or is_granted(PERMISSION_LIST, ENTITY_GLOBAL_MARGIN)
 -%}
 <ul class="dropdown-menu {{ dropdown_class }}">
-    {{ dropdownItem(logout_path(), 'index.logout', 'sign-out-alt') }}
-    {{ dropdownItem(path('user_profile_edit'), 'profile.edit.title', 'user-pen') }}
-    {{ dropdownItem(path('user_profile_password'), 'profile.password.title', 'unlock') }}
+    {{ include('navigation/menu/_menu_theme.html.twig') }}
     {{ dropdownSeparator() }}
     {{ dropdownItem(path('user_parameters'), 'user.parameters.title', 'user-gear') }}
+    {{ dropdownItem(path('user_profile_edit'), 'profile.edit.title', 'user-pen') }}
+    {{ dropdownItem(path('user_profile_password'), 'profile.password.title', 'unlock') }}
     {% if app_mode == 'dev' -%}
         {{ dropdownSeparator() }}
         {{ dropdownItem(link_prod, 'environment.switch', 'location-arrow', {'%name%': 'environment.prod'|trans}) }}
@@ -34,6 +34,8 @@
         {{ dropdownSeparator() }}
         {{ dropdownItem(path('about_index'), 'index.menu_info', 'info-circle', {'%app_name%': app_name}) }}
     {% endif %}
+    {{ dropdownSeparator() }}
+    {{ dropdownItem(logout_path(), 'index.logout', 'sign-out-alt') }}
     {% if is_granted(IS_IMPERSONATOR) -%}
         {{ dropdownSeparator() }}
         {{ dropdownItem(impersonation_exit_path(path('user_index', {id: app.user.id})), 'user.switch.exit.title', 'user-slash') }}

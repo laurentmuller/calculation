@@ -29,7 +29,8 @@ trait CheckSubClassTrait
      */
     public function checkSubClass(string|object $source, string $target): void
     {
-        if (!\is_a($source, $target, true) && !\is_subclass_of($source, $target)) {
+        $allowString = \is_string($source);
+        if (!\is_a($source, $target, $allowString) && !\is_subclass_of($source, $target, $allowString)) {
             throw new \InvalidArgumentException(\sprintf('%s expected, %s given.', $target, StringUtils::getDebugType($source)));
         }
     }

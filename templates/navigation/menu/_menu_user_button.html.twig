@@ -1,6 +1,6 @@
 {% set button_attrs = {
-    class: ['dropdown-toggle', 'nav-link']|merge(button_class|default([])),
-    title: app.user.userIdentifier ~ ' - ' ~ app.user.role|role_name,
+    class: ['nav-link', 'dropdown-toggle']|merge(button_class),
+    title: full_width ? app.user.role|role_name : app.user.userIdentifier ~ ' - ' ~ app.user.role|role_name,
     'data-bs-toggle': 'dropdown',
     'aria-expanded': false,
 } %}
@@ -11,6 +11,6 @@
     {%- else -%}
         <span class="badge rounded-circle text-bg-secondary user-image-empty">{{ app.user.initials }}</span>
     {%- endif -%}
-    <span class="d-lg-none ms-2">{{ app.user.userIdentifier }}</span>
+    <span class="ms-2{% if not full_width %} d-lg-none{% endif %}">{{ app.user.userIdentifier }}</span>
 </button>
 {{ include('navigation/menu/_menu_user.html.twig', {dropdown_class: dropdown_class}) }}

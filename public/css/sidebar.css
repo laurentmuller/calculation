@@ -65,26 +65,6 @@ body.sidebar-show .navbar-horizontal {
     padding-left: var(--bs-navbar-nav-link-padding-x);
 }
 
-.navbar-vertical .theme-switcher,
-.navbar-vertical .dropup .nav-link {
-    color: var(--bs-navbar-color);
-    padding: var(--bs-navbar-toggler-padding-y) var(--bs-navbar-nav-link-padding-x);
-}
-
-.navbar-vertical .theme-switcher:hover,
-.navbar-vertical .theme-switcher:focus,
-.navbar-vertical .dropup .nav-link:hover,
-.navbar-vertical .dropup .nav-link:focus {
-    color: var(--bs-navbar-hover-color);
-}
-
-.navbar-vertical .theme-switcher.disabled,
-.navbar-vertical .dropup .nav-link.disabled {
-    color: var(--bs-navbar-disabled-color);
-    pointer-events: none;
-    cursor: default;
-}
-
 /* toggle menu with drop-down arrow on the right */
 .navbar-vertical .nav-link-toggle {
     text-align: left;
@@ -149,6 +129,10 @@ html[data-bs-theme=dark] .navbar-vertical::-webkit-scrollbar-thumb {
 
 .navbar-vertical ul:not(.dropdown-menu-default) .dropdown-item:active {
     color: var(--bs-dropdown-link-active-color) !important;
+}
+
+.navbar-vertical ul:not(.dropdown-menu-default) .dropdown-item:hover {
+    color: var(--bs-navbar-hover-color) !important;
 }
 
 /**

@@ -45,11 +45,11 @@ class ProfileController extends AbstractController
     public function edit(#[CurrentUser] User $user, Request $request): Response
     {
         return $this->handleForm(
-            $user,
-            $request,
-            ProfileEditType::class,
-            'profile/profile_edit.html.twig',
-            'profile.edit.success'
+            user: $user,
+            request: $request,
+            type: ProfileEditType::class,
+            template: 'profile/profile_edit.html.twig',
+            message: 'profile.edit.success'
         );
     }
 
@@ -60,12 +60,12 @@ class ProfileController extends AbstractController
     public function password(#[CurrentUser] User $user, Request $request, PasswordTooltipService $service): Response
     {
         return $this->handleForm(
-            $user,
-            $request,
-            ProfilePasswordType::class,
-            'profile/profile_password.html.twig',
-            'profile.password.success',
-            ['tooltips' => $service->getTooltips()]
+            user: $user,
+            request: $request,
+            type: ProfilePasswordType::class,
+            template: 'profile/profile_password.html.twig',
+            message: 'profile.password.success',
+            parameters: ['tooltips' => $service->getTooltips()]
         );
     }
 

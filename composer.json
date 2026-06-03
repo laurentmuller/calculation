@@ -131,6 +131,7 @@
         "preferred-install": {
             "*": "dist"
         },
+        "process-timeout": 900,
         "optimize-autoloader": true,
         "sort-packages": true,
         "platform-check": true,
@@ -166,22 +167,24 @@
     },
     "scripts": {
         "app-lint": [
-            "@php bin/console lint:yaml translations .github/workflows --parse-tags",
+            "@php bin/console lint:yaml .github/workflows translations --parse-tags",
             "@php bin/console lint:twig templates --show-deprecations",
             "@php bin/console lint:container",
-            "@php bin/console lint:translations --locale fr_CH",
+            "@php bin/console lint:translations",
             "@php bin/console doctrine:schema:validate --skip-sync",
             "@composer validate --strict"
         ],
         "app-fixer": "vendor-bin/php-cs-fixer/vendor/bin/php-cs-fixer fix --diff --dry-run",
         "app-fixer-fix": "vendor-bin/php-cs-fixer/vendor/bin/php-cs-fixer fix --diff",
+        "app-stan": "vendor-bin/phpstan/vendor/bin/phpstan analyse --configuration phpstan.neon --memory-limit 2G",
         "app-rector": "vendor-bin/rector/vendor/bin/rector process --dry-run --config rector.php",
         "app-rector-fix": "vendor-bin/rector/vendor/bin/rector process --config rector.php",
         "app-twig": "vendor-bin/twig-cs-fixer/vendor/bin/twig-cs-fixer lint --config=.twig-cs-fixer.php",
         "app-twig-fix": "vendor-bin/twig-cs-fixer/vendor/bin/twig-cs-fixer lint --fix --config=.twig-cs-fixer.php",
-        "app-stan": "vendor-bin/phpstan/vendor/bin/phpstan analyse --configuration phpstan.neon --memory-limit 2G",
-        "app-test": "vendor/bin/phpunit --testsuite test-full",
         "app-markdown": "markdownlint-cli2",
+        "app-test": "vendor/bin/phpunit",
+        "app-test-controller": "vendor/bin/phpunit --filter ControllerTest",
+        "app-test-no-controller": "vendor/bin/phpunit --exclude-filter ControllerTest",
         "app-dump-dev": "composer dump-autoload --dev",
         "app-all": [
             "@app-lint",
@@ -189,8 +192,8 @@
             "@app-stan",
             "@app-rector",
             "@app-twig",
-            "@app-test",
-            "@app-markdown"
+            "@app-markdown",
+            "@app-test"
         ]
     }
 }

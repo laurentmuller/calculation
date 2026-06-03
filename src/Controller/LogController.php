@@ -69,9 +69,8 @@ class LogController extends AbstractController
         }
 
         $file = $logFile->getFile();
-        $form = $this->createForm(FormType::class)
-            ->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $this->createForm(FormType::class);
+        if ($this->handleRequestForm($request, $form)) {
             try {
                 $fs->remove($file);
 

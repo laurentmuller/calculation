@@ -42,9 +42,8 @@ class AdminCacheController extends AbstractController
         CacheService $service,
         LoggerInterface $logger
     ): Response {
-        $form = $this->createForm(FormType::class)
-            ->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $this->createForm(FormType::class);
+        if ($this->handleRequestForm($request, $form)) {
             try {
                 if ($service->clear()) {
                     return $this->redirectToHomePage(

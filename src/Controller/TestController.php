@@ -81,9 +81,8 @@ class TestController extends AbstractController
             ->updateOption('expectedAction', $expectedAction)
             ->add(ReCaptchaType::class)
             ->getBuilder()->setAttribute('block_name', '');
-        $form = $helper->createForm()
-            ->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $helper->createForm();
+        if ($this->handleRequestForm($request, $form)) {
             $response = $service->getLastResponse();
             $message = $response instanceof ReCaptchaResponse ?
                 $responseService->format($response) : 'test.recaptcha_success';

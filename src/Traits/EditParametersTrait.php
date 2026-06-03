@@ -46,9 +46,8 @@ trait EditParametersTrait
         string $message
     ): Response {
         $options = ['default_values' => $parameters->getDefaultValues()];
-        $form = $this->createForm($type, $parameters, $options)
-            ->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $this->createForm($type, $parameters, $options);
+        if ($this->handleRequestForm($request, $form)) {
             if (!$parameters->save()) {
                 return $this->redirectToHomePage();
             }

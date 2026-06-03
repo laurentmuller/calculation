@@ -66,9 +66,8 @@ class RegistrationController extends AbstractController
     public function register(Request $request, AuthenticationUtils $utils): Response
     {
         $user = new User();
-        $form = $this->createForm(UserRegistrationType::class, $user)
-            ->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $this->createForm(UserRegistrationType::class, $user);
+        if ($this->handleRequestForm($request, $form)) {
             $this->repository->persist($user);
 
             try {

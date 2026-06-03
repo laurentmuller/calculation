@@ -53,9 +53,8 @@ class CalculationArchiveController extends AbstractController
         $application = $this->getApplicationParameters();
         $datesParameter = $application->getDates();
 
-        $form = $this->createQueryForm($service, $query)
-            ->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $this->createQueryForm($service, $query);
+        if ($this->handleRequestForm($request, $form)) {
             $service->saveQuery($query);
             $result = $service->update($query);
             if (!$query->isSimulate() && $result->isValid()) {

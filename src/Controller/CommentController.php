@@ -53,9 +53,8 @@ class CommentController extends AbstractController
             from: $from,
             to: ApplicationService::getOwnerAddress()
         );
-        $form = $this->createForm(UserCommentType::class, $comment)
-            ->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $this->createForm(UserCommentType::class, $comment);
+        if ($this->handleRequestForm($request, $form)) {
             try {
                 $service->sendComment($comment);
 

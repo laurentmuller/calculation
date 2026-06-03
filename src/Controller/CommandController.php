@@ -105,9 +105,8 @@ class CommandController extends AbstractController
         $data = $this->getCommandData($session, $dataService, $key, $command);
 
         // form
-        $form = $formService->createForm($command, $data)
-            ->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $formService->createForm($command, $data);
+        if ($this->handleRequestForm($request, $form)) {
             try {
                 /** @var array<string, array|scalar|null> $data */
                 $data = $form->getData();

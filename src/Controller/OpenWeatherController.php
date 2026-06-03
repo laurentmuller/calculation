@@ -238,9 +238,8 @@ class OpenWeatherController extends AbstractController
     #[GetPostRoute(path: '/import', name: 'import')]
     public function import(Request $request, OpenWeatherCityUpdater $updater): Response
     {
-        $form = $updater->createForm()
-            ->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $updater->createForm();
+        if ($this->handleRequestForm($request, $form)) {
             /** @var UploadedFile $file */
             $file = $form->get('file')->getData();
             $results = $updater->import($file);
@@ -259,9 +258,8 @@ class OpenWeatherController extends AbstractController
     public function search(Request $request, OpenWeatherSearchService $service): Response
     {
         $data = $this->getData($request);
-        $form = $this->createSearchForm($data)
-            ->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $this->createSearchForm($data);
+        if ($this->handleRequestForm($request, $form)) {
             /** @phpstan-var OpenWeatherSearchType $data */
             $data = $form->getData();
             $query = $data[OpenWeatherService::PARAM_QUERY];

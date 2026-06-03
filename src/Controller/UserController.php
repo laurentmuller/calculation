@@ -157,9 +157,8 @@ class UserController extends AbstractEntityController
             );
         }
         $comment = UserComment::instance(ApplicationService::APP_FULL_NAME, $from, $user);
-        $form = $this->createForm(UserCommentType::class, $comment)
-            ->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $this->createForm(UserCommentType::class, $comment);
+        if ($this->handleRequestForm($request, $form)) {
             try {
                 $service->sendComment($comment);
 
@@ -188,9 +187,8 @@ class UserController extends AbstractEntityController
     #[GetPostRoute(path: '/password/{id}', name: 'password', requirements: self::ID_REQUIREMENT)]
     public function password(Request $request, User $item, PasswordTooltipService $service): Response
     {
-        $form = $this->createForm(UserChangePasswordType::class, $item)
-            ->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $this->createForm(UserChangePasswordType::class, $item);
+        if ($this->handleRequestForm($request, $form)) {
             $this->saveToDatabase($item);
 
             return $this->redirectToDefaultRoute($request, $item);
@@ -243,9 +241,8 @@ class UserController extends AbstractEntityController
         $data = ['users' => $users];
         $form = $this->createFormBuilder($data)
             ->add('users', ResetAllPasswordType::class)
-            ->getForm()
-            ->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+            ->getForm();
+        if ($this->handleRequestForm($request, $form)) {
             /** @var User[] $users */
             $users = $form->get('users')->getData();
             $repository->resetPasswordRequest($users);
@@ -269,9 +266,8 @@ class UserController extends AbstractEntityController
     public function resetPasswordRequest(Request $request, User $item): Response
     {
         $parameters = ['%name%' => $item];
-        $form = $this->createForm(FormType::class)
-            ->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $this->createForm(FormType::class);
+        if ($this->handleRequestForm($request, $form)) {
             if ($this->removeResetPasswordRequest($item)) {
                 return $this->redirectToDefaultRoute(
                     request: $request,
@@ -321,9 +317,8 @@ class UserController extends AbstractEntityController
         }
 
         $default = $this->getDefaultRole($builder, $item);
-        $form = $this->createForm(UserRightsType::class, $item)
-            ->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $this->createForm(UserRightsType::class, $item);
+        if ($this->handleRequestForm($request, $form)) {
             if ($item->getRights() === $default->getRights()) {
                 $item->setRights(null);
                 if ($item->isEnabled()) {
@@ -379,9 +374,8 @@ class UserController extends AbstractEntityController
     public function sendPasswordRequest(Request $request, User $item, ResetPasswordService $service): Response
     {
         $parameters = ['%name%' => $item];
-        $form = $this->createForm(FormType::class)
-            ->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $this->createForm(FormType::class);
+        if ($this->handleRequestForm($request, $form)) {
             $this->removeResetPasswordRequest($item);
             $result = $service->sendEmail($request, $item);
             if (false === $result) {

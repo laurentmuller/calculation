@@ -77,9 +77,8 @@ class ResetPasswordController extends AbstractController
     #[GetPostRoute(path: IndexRoute::PATH, name: self::ROUTE_REQUEST)]
     public function request(Request $request, AuthenticationUtils $utils): Response
     {
-        $form = $this->createForm(RequestChangePasswordType::class)
-            ->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $this->createForm(RequestChangePasswordType::class);
+        if ($this->handleRequestForm($request, $form)) {
             $user = (string) $form->get('user')->getData();
 
             return $this->sendEmail($request, $user);
@@ -116,9 +115,8 @@ class ResetPasswordController extends AbstractController
             return $this->redirectToRoute(self::ROUTE_REQUEST);
         }
 
-        $form = $this->createForm(ResetChangePasswordType::class, $user)
-            ->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $this->createForm(ResetChangePasswordType::class, $user);
+        if ($this->handleRequestForm($request, $form)) {
             $this->helper->removeResetRequest($token);
             $this->service->flush();
             $this->cleanSessionAfterReset();

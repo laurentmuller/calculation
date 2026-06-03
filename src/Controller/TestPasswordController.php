@@ -116,9 +116,8 @@ class TestPasswordController extends AbstractController
             ->label('captcha.label')
             ->add(AlphaCaptchaType::class);
 
-        $form = $helper->createForm()
-            ->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $helper->createForm();
+        if ($this->handleRequestForm($request, $form)) {
             $data = $form->getData();
             $message = $this->trans('password.success');
             $message .= '<ul>';

@@ -37,6 +37,7 @@ use App\Word\WordDocument;
 use fpdf\PdfDocument;
 use Psr\Container\ContainerExceptionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -275,6 +276,22 @@ abstract class AbstractController extends BaseController
     {
         /** @phpstan-var string */
         return $this->getParameter('cookie_path');
+    }
+
+    /**
+     * Inspects the given request and calls submit() if the form was submitted.
+     *
+     * @template T of mixed
+     *
+     * @param FormInterface<T> $form
+     *
+     * @return bool true if the form is is submitted and is valid
+     */
+    protected function handleRequestForm(Request $request, FormInterface $form): bool
+    {
+        $form->handleRequest($request);
+
+        return $form->isSubmitted() && $form->isValid();
     }
 
     /**

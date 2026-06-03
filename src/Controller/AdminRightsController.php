@@ -74,9 +74,8 @@ class AdminRightsController extends AbstractController
         Role $role,
         Role $default
     ): Response {
-        $form = $this->createForm(RoleRightsType::class, $role)
-            ->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $this->createForm(RoleRightsType::class, $role);
+        if ($this->handleRequestForm($request, $form)) {
             $rights = $role->getRights();
             if ($role->isAdmin()) {
                 $parameters->getRights()->setAdminRights($rights);

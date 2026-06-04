@@ -58,7 +58,7 @@ class CountryFlagType extends AbstractType
     }
 
     /**
-     * @param Options<array> $options
+     * @param Options<array{choice_translation_locale: ?string, only_flag: bool, ...}> $options
      */
     private function getChoiceLoader(Options $options): ChoiceLoaderInterface
     {
@@ -66,15 +66,13 @@ class CountryFlagType extends AbstractType
     }
 
     /**
-     * @param Options<array> $options
+     * @param Options<array{choice_translation_locale: ?string, only_flag: bool, ...}> $options
      */
     private function loadChoices(Options $options): array
     {
-        /** @var string|null $locale */
-        $locale = $options['choice_translation_locale'];
-        /** @var bool $flagOnly */
-        $flagOnly = $options['only_flag'];
-
-        return $this->service->getChoices($locale, $flagOnly);
+        return $this->service->getChoices(
+            $options['choice_translation_locale'],
+            $options['only_flag']
+        );
     }
 }

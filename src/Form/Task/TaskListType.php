@@ -52,17 +52,11 @@ class TaskListType extends AbstractListEntityType
     }
 
     /**
-     * @param Options<array> $options
+     * @param Options<array{em: EntityManagerInterface, query_all: bool, ...}> $options
      */
     private function getSortedBuilder(Options $options): QueryBuilder
     {
-        /** @var bool $all */
-        $all = $options['query_all'];
-
-        /** @var EntityManagerInterface $manager */
-        $manager = $options['em'];
-
-        return $manager->getRepository(Task::class)
-            ->getSortedBuilder($all);
+        return $options['em']->getRepository(Task::class)
+            ->getSortedBuilder($options['query_all']);
     }
 }

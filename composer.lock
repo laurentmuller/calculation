@@ -1701,16 +1701,16 @@
         },
         {
             "name": "imagine/imagine",
-            "version": "1.5.2",
+            "version": "1.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-imagine/Imagine.git",
-                "reference": "f9ed796eefb77c2f0f2167e1d4e36bc2b5ed6b0c"
+                "reference": "8bc9773b65d123930efe82f89320f248a739ffbf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-imagine/Imagine/zipball/f9ed796eefb77c2f0f2167e1d4e36bc2b5ed6b0c",
-                "reference": "f9ed796eefb77c2f0f2167e1d4e36bc2b5ed6b0c",
+                "url": "https://api.github.com/repos/php-imagine/Imagine/zipball/8bc9773b65d123930efe82f89320f248a739ffbf",
+                "reference": "8bc9773b65d123930efe82f89320f248a739ffbf",
                 "shasum": ""
             },
             "require": {
@@ -1757,9 +1757,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-imagine/Imagine/issues",
-                "source": "https://github.com/php-imagine/Imagine/tree/1.5.2"
+                "source": "https://github.com/php-imagine/Imagine/tree/1.5.3"
             },
-            "time": "2026-01-09T10:45:12+00:00"
+            "time": "2026-06-03T10:24:10+00:00"
         },
         {
             "name": "jms/metadata",

@@ -27,9 +27,9 @@ class CountryFlagService
      * Gets choice values used for the country type form.
      *
      * @param ?string $locale   the locale used to translate country names or null to use default
-     * @param bool    $flagOnly true to return a flag only; false to return flags and country names
+     * @param bool    $flagOnly true to return flags only; false to return country names and flags
      *
-     * @return array<string, string> an array where the key is the flag and the country name (if applicable)
+     * @return array<string, string> an array where the key is the country name (if applicable) and the flag
      *                               and value is the country code
      */
     public function getChoices(?string $locale = null, bool $flagOnly = false): array
@@ -84,8 +84,6 @@ class CountryFlagService
 
     private function getEmojiChar(string $chr): string
     {
-        $order = \mb_ord($chr, 'UTF-8');
-
-        return \mb_chr(self::REGIONAL_OFFSET + $order, 'UTF-8');
+        return \mb_chr(self::REGIONAL_OFFSET + \mb_ord($chr, 'UTF-8'), 'UTF-8');
     }
 }

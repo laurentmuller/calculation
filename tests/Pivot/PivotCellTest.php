@@ -98,10 +98,11 @@ final class PivotCellTest extends TestCase
     {
         $cell = $this->createCell();
         $actual = $cell->jsonSerialize();
-        self::assertCount(3, $actual);
+        self::assertCount(4, $actual);
         self::assertArrayHasKey('row', $actual);
         self::assertArrayHasKey('column', $actual);
         self::assertArrayHasKey('value', $actual);
+        self::assertArrayHasKey('class', $actual);
     }
 
     public function testToString(): void

@@ -271,11 +271,11 @@ final class PivotNodeTest extends TestCase
     {
         $node = $this->createNode();
         $actual = $node->jsonSerialize();
-        self::assertCount(1, $actual);
+        self::assertCount(2, $actual);
 
         $node->setTitle('title');
         $actual = $node->jsonSerialize();
-        self::assertCount(2, $actual);
+        self::assertCount(3, $actual);
     }
 
     public function testSetParent(): void

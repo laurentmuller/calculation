@@ -51,13 +51,17 @@ final class PivotFieldTest extends TestCase
     public function testJsonSerialize(): void
     {
         $field = new PivotField('name');
-        $expected = ['name' => 'name'];
+        $expected = [
+            'name' => 'name',
+            'class' => 'PivotField',
+        ];
         $actual = $field->jsonSerialize();
         self::assertSame($expected, $actual);
 
         $expected = [
             'name' => 'name',
             'title' => 'title',
+            'class' => 'PivotField',
         ];
         $field = new PivotField('name', 'title');
         $actual = $field->jsonSerialize();

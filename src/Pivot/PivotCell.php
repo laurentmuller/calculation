@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Pivot;
 
 use App\Pivot\Aggregator\AggregatorInterface;
+use App\Utils\StringUtils;
 
 /**
  * Represents a data cell.
@@ -131,6 +132,7 @@ class PivotCell extends AbstractPivotAggregator
             'row' => $this->getRowTitle(),
             'column' => $this->getColumnTitle(),
             'value' => $this->aggregator->getRoundResult(),
+            'class' => StringUtils::getShortName($this),
         ];
     }
 }

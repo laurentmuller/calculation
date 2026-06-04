@@ -15,6 +15,7 @@ namespace App\Pivot\Field;
 
 use App\Pivot\Formatter\DefaultFormatter;
 use App\Pivot\Formatter\FormatterInterface;
+use App\Utils\StringUtils;
 use Symfony\Component\Clock\DatePoint;
 
 /**
@@ -79,6 +80,7 @@ class PivotField implements \JsonSerializable
         return \array_filter([
             'name' => $this->name,
             'title' => $this->title,
+            'class' => StringUtils::getShortName($this),
         ]);
     }
 }

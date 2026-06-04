@@ -203,6 +203,7 @@ class PivotTable extends AbstractPivotAggregator
             'title' => $this->title,
             'aggregator' => StringUtils::getShortName($this->aggregator),
             'value' => $this->aggregator->getRoundResult(),
+            'class' => StringUtils::getShortName($this),
             'dataField' => $this->dataField,
             'columnFields' => $this->columnFields,
             'rowFields' => $this->rowFields,

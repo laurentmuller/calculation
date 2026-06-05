@@ -4,3 +4,40 @@
         <i class="theme-icon {{ current.icon }}"></i><span class="theme-text ms-1">{{ current|trans }}</span>
     </button>
 </li>
+{#
+<li>
+    <div class="btn-group btn-group-sm w-100 px-3 px-3 py-1" role="group" aria-label="{{ 'theme.help'|trans }}">
+        {% for theme in themes() %}
+            {% set attrs = {
+                type: 'radio',
+                class: ['btn-check'],
+                name: 'radio-theme',
+                id: 'radio-theme-' ~ theme.value,
+                autocomplete: 'off',
+                checked: theme == current,
+                value: theme.value,
+                'data-success': theme.success|trans,
+            } %}
+            <input {{ html_attr(attrs) }}>
+            {% set attrs = {
+                title: theme|trans,
+                for: 'radio-theme-' ~ theme.value,
+                class: ['btn', 'btn-outline-secondary', loop.first ? 'rounded-start-pill'],
+            } %}
+            <label {{ html_attr(attrs) }}>
+                <i class="{{ theme.icon }}"></i>
+            </label>
+        {% endfor %}
+        {% set attrs = {
+            type: 'button',
+            role: 'button',
+            class: ['btn', 'btn-outline-secondary', 'rounded-end-pill', 'px-0', 'theme-switcher'],
+            title: 'theme.help'|trans,
+            'data-url': path('theme_dialog'),
+        } %}
+        <button {{ html_attr(attrs) }}>
+            <i class="fa-solid fa-ellipsis-v"></i>
+        </button>
+    </div>
+</li>
+#}

@@ -46,9 +46,9 @@
         {% endif %}
     </ul>
     {# bottom menus #}
-    <div class="d-flex-wrap-center border-top w-100 py-2">
-        {% if is_granted(IS_AUTHENTICATED_REMEMBERED) -%}
+    {% if is_granted(IS_AUTHENTICATED_REMEMBERED) -%}
+        <div class="d-flex-wrap-center border-top w-100 py-2">
             {{ include('navigation/vertical/navigation_user.html.twig') }}
-        {% endif %}
-    </div>
+        </div>
+    {% endif %}
 </div>

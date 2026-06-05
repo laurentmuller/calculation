@@ -119,7 +119,7 @@ $(function () {
         }
 
         /**
-         * Load dialog from server.
+         * Load dialog from the server.
          * @private
          */
         _loadDialog() {
@@ -277,7 +277,6 @@ $(function () {
             if (oldTheme === newTheme) {
                 return;
             }
-            this._setCookieValue(newTheme);
             const $link = $(this._getInputCheckedSelector());
             if ($link.length) {
                 const message = $link.data(this.options.success);
@@ -349,13 +348,14 @@ $(function () {
             $settings.on('click', (e) => this._onSettingsClick(e));
         }
 
+
         /**
-         * Return if prefers color scheme color is dark.
-         * @return {boolean} true if dark.
+         * Gets the preferred color scheme theme.
+         * @return {string}
          * @private
          */
-        _isMediaDark() {
-            return window.matchMedia('(prefers-color-scheme: dark)').matches;
+        _getMediaTheme() {
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? THEME_DARK : THEME_LIGHT;
         }
 
         /**
@@ -379,7 +379,7 @@ $(function () {
             if (theme && theme !== THEME_AUTO) {
                 return theme;
             }
-            return this._isMediaDark() ? THEME_DARK : THEME_LIGHT;
+            return this._getMediaTheme();
         }
 
         /**
@@ -389,11 +389,12 @@ $(function () {
          */
         _setTheme(theme) {
             if (!theme || theme === THEME_AUTO) {
-                theme = this._isMediaDark() ? THEME_DARK : THEME_LIGHT;
+                theme = this._getMediaTheme();
             }
             if (this._getTheme() === theme) {
                 return;
             }
+            this._setCookieValue(theme);
             const callback = () => document.documentElement.setAttribute(THEME_ATTRIBUTE, theme);
             if (this._supportTransition()) {
                 document.startViewTransition(callback);
@@ -458,18 +459,29 @@ $(function () {
      * The default options.
      */
     ThemeListener.DEFAULTS = {
-        // the URL to get dialog
-        url: null, // the dialog identifier
-        dialogId: '#theme_modal', // the target selector where to add dialog
-        targetId: 'body', // the radio inputs selector
-        input: '.form-check-input', // the title message selector in the modal dialog
-        title: '.modal-title', // the success data message selector in the dialog
-        success: 'success', // the OK button selector in the modal dialog
-        ok: '.btn-ok', // the choosing color mode selector in the modal dialog
-        settings: '.btn-settings', // the data key for the icon class
-        icon: 'class', // the data key for the text content
-        text: 'text', // the theme switcher text selector
-        switcherText: '.theme-switcher .theme-text', // the theme switcher icon selector
+        /** the URL to get dialog */
+        url: null,
+        /** the dialog identifier */
+        dialogId: '#theme_modal',
+        /** the target selector where to add dialog */
+        targetId: 'body',
+        /** the radio inputs selector */
+        input: '.form-check-input',
+        /** the title message selector in the modal dialog */
+        title: '.modal-title',
+        /** the success data message selector in the dialog */
+        success: 'success',
+        /** the OK button selector in the modal dialog */
+        ok: '.btn-ok',
+        /** the choosing color mode selector in the modal dialog */
+        settings: '.btn-settings',
+        /** the data key for the icon class */
+        icon: 'class',
+        /** the data key for the text content */
+        text: 'text',
+        /** the theme switcher text selector */
+        switcherText: '.theme-switcher .theme-text',
+        /** the theme switcher icon selector */
         switcherIcon: '.theme-switcher .theme-icon'
     };
 

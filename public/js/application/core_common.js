@@ -77,6 +77,15 @@ $(function () {
                 $this.themeListener();
             }
         });
+        /*
+        $('[name="radio-theme"]').on('input', function () {
+            const theme = $(this).val();
+            $('.theme-switcher').each(function () {
+                const plugin = $(this).data('bs.theme-listener');
+                plugin._setTheme(theme);
+            });
+        });
+        */
     }
 
     /**

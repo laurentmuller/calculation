@@ -186,6 +186,8 @@
         "app-test-controller": "vendor/bin/phpunit --filter ControllerTest",
         "app-test-no-controller": "vendor/bin/phpunit --exclude-filter ControllerTest",
         "app-dump-dev": "composer dump-autoload --dev",
+        "app-twig-space": "php bin/console app:twig-space -d",
+        "app-twig-space-fix": "php bin/console app:twig-space",
         "app-all": [
             "@app-lint",
             "@app-fixer",
@@ -193,6 +195,7 @@
             "@app-rector",
             "@app-twig",
             "@app-markdown",
+            "@app-twig-space",
             "@app-test"
         ]
     }

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Command;
 
 use App\Utils\FileUtils;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Filesystem\Path;
 
 final class TwigSpaceCommandTest extends CommandTestCase
@@ -27,10 +28,10 @@ final class TwigSpaceCommandTest extends CommandTestCase
             'path' => $path,
             '--dry-run' => true,
         ];
-        $output = $this->execute($input);
+        $output = $this->execute($input, statusCode: Command::FAILURE);
         self::assertOutputContainsString(
             $output,
-            '[OK]',
+            '[ERROR]',
             'Find consecutive spaces:',
             'Simulate updated 1 template(s) successfully',
             'Line',

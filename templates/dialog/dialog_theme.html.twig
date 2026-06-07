@@ -1,4 +1,4 @@
-{% from 'macros/_icons.html.twig' import button_ok, modal_title, modal_close_button %}
+{% from 'macros/_icons.html.twig' import modal_title, modal_close_button %}
 {# output a theme entry #}
 {% macro output_theme(theme, checked) -%}
     {% set id = 'form_theme_' ~ theme.value %}
@@ -42,7 +42,7 @@
                 {% endfor %}
             </div>
             <div class="modal-footer">
-                {{ button_ok() }}
+                <button type="button" class="btn btn-ok btn-form btn-primary">{{- 'common.button_ok'|trans -}}</button>
                 {{ modal_close_button(label: 'common.button_cancel', data_target: dialog_id) }}
                 <button type="button" class="btn btn-settings btn-form btn-success" disabled>
                     {{- 'theme.settings'|trans -}}

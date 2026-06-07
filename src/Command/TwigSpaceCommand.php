@@ -79,14 +79,22 @@ class TwigSpaceCommand
 
         if (0 === $count) {
             $message = 'No template updated from "%1$s" directory. %3$s.';
-        } elseif ($dryRun) {
-            $message = 'Simulate updated %2$d template(s) successfully from "%1$s" directory. %3$s.';
-        } else {
-            $message = 'Updated %2$d template(s) successfully from "%1$s" directory. %3$s.';
-        }
-        $io->success(\sprintf($message, $path, $count, $this->stop()));
+            $io->success(\sprintf($message, $path, $count, $this->stop()));
 
-        return Command::SUCCESS;
+            return Command::SUCCESS;
+        }
+
+        if (!$dryRun) {
+            $message = 'Updated %2$d template(s) successfully from "%1$s" directory. %3$s.';
+            $io->success(\sprintf($message, $path, $count, $this->stop()));
+
+            return Command::SUCCESS;
+        }
+
+        $message = 'Simulate updated %2$d template(s) successfully from "%1$s" directory. %3$s.';
+        $io->error(\sprintf($message, $path, $count, $this->stop()));
+
+        return Command::FAILURE;
     }
 
     private function createFinder(string $path): Finder

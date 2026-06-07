@@ -111,14 +111,12 @@
     <button {{ html_attr(attrs) }}>{{ text|trans }}</button>
 {%- endmacro button_submit %}
 
-{% macro button_ok(href = '#', text = 'common.button_ok', class = 'btn btn-ok btn-form btn-primary') -%}
+{% macro button_ok(href, text = 'common.button_ok', class = 'btn btn-ok btn-form btn-primary') -%}
     {{- _self.link(href: href, text: text, class: class) -}}
 {%- endmacro button_ok %}
 
-{% macro button_cancel(href = '#', text = 'common.button_cancel', class = 'btn btn-cancel btn-form btn-secondary') -%}
-    {%- set text = text|default('common.button_cancel') -%}
-    {%- set class = class|default('btn btn-cancel btn-form btn-secondary') -%}
-    {{- _self.link(href, text, class) -}}
+{% macro button_cancel(href, text = 'common.button_cancel', class = 'btn btn-cancel btn-form btn-secondary') -%}
+    {{- _self.link(href: href, text: text, class: class) -}}
 {%- endmacro button_cancel %}
 
 {% macro link_pdf(route, class = null) -%}
@@ -159,24 +157,21 @@
     </div>
 {% endmacro modal_title %}
 
-{% macro modal_footer(label = null, data_target = false) %}
+{% macro modal_footer(label = 'common.button_close', data_target = false) %}
     <div class="modal-footer">
         {{ _self.modal_close_button(label: label, data_target: data_target) }}
     </div>
 {% endmacro modal_footer %}
 
-{% macro modal_close_button(for_header = false, label = null, data_target = false) -%}
-    {% set label = label|default('common.button_close')|trans %}
+{% macro modal_close_button(for_header = false, label = 'common.button_close', data_target = false) -%}
     {% set attrs = {
         type: 'button',
+        class: for_header ? ['btn-close'] : ['btn', 'btn-form', 'btn-secondary'],
+        title: for_header ? label|trans : null,
         'data-bs-dismiss': 'modal',
         'data-target': data_target ? '#' ~ data_target : null,
     } %}
-    {% if for_header %}
-        <button {{ html_attr(attrs|merge({class: 'btn-close', title: label})) }}></button>
-    {% else %}
-        <button {{ html_attr(attrs|merge({class: ['btn', 'btn-form', 'btn-secondary']})) }}>{{- label -}}</button>
-    {% endif %}
+    <button {{ html_attr(attrs) }}>{%- if not for_header %}{{ label|trans }}{% endif -%}</button>
 {%- endmacro modal_close_button %}
 
 {% macro footer_center() -%}

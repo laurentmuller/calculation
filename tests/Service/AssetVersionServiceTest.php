@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\AssetVersionService;
-use App\Service\EnvironmentService;
+use App\Service\KernelEnvironment;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
@@ -36,7 +36,7 @@ final class AssetVersionServiceTest extends TestCase
         }
         $this->defaultVersion = (string) \filemtime($projectDir . '/composer.lock');
         $this->imagesVersion = (string) \filemtime($imagesDir);
-        $this->service = new AssetVersionService($projectDir, new EnvironmentService('test'), new ArrayAdapter());
+        $this->service = new AssetVersionService($projectDir, new KernelEnvironment('test'), new ArrayAdapter());
     }
 
     public static function getPaths(): \Generator

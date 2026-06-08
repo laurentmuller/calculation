@@ -134,8 +134,8 @@
     <table id="data-table-symfony" class="table table-sm table-hover mb-0">
         <tbody>
         {{ tools.headerInfo('Kernel') }}
-        {{ tools.rowInfo('Environment', kernelService.environment|trans) }}
-        {{ tools.rowInfo('Running Mode', kernelService.mode|trans) }}
+        {{ tools.rowInfo('Environment', kernelService.kernelEnvironment|trans) }}
+        {{ tools.rowInfo('Running Mode', kernelService.applicationEnvironment|trans) }}
         {{ tools.rowInfo('Status', symfonyService.maintenanceStatus) }}
         {{ tools.rowInfo('Release', symfonyService.releaseDate) }}
         {{ tools.rowInfoBoolean('Long-Term support', symfonyService.longTermSupport) }}

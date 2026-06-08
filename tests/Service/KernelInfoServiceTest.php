@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Enums\Environment;
+use App\Service\ApplicationEnvironment;
+use App\Service\KernelEnvironment;
 use App\Service\KernelInfoService;
 use App\Service\SymfonyInfoService;
 use App\Utils\FileUtils;
@@ -24,6 +26,13 @@ final class KernelInfoServiceTest extends TestCase
 {
     private const string CHARSET = 'utf-8';
     private const Environment ENVIRONMENT = Environment::TEST;
+
+    public function testGetApplicationEnvironment(): void
+    {
+        $service = $this->createService();
+        $actual = $service->getApplicationEnvironment();
+        self::assertSame(self::ENVIRONMENT, $actual);
+    }
 
     public function testGetBuildInfo(): void
     {
@@ -53,10 +62,10 @@ final class KernelInfoServiceTest extends TestCase
         self::assertSame(SymfonyInfoService::LABEL_DISABLED, $actual);
     }
 
-    public function testGetEnvironment(): void
+    public function testGetKernelEnvironment(): void
     {
         $service = $this->createService();
-        $actual = $service->getEnvironment();
+        $actual = $service->getKernelEnvironment();
         self::assertSame(self::ENVIRONMENT, $actual);
     }
 
@@ -65,13 +74,6 @@ final class KernelInfoServiceTest extends TestCase
         $service = $this->createService();
         $actual = $service->getLogInfo();
         self::assertSame('Logs', $actual['name']);
-    }
-
-    public function testGetMode(): void
-    {
-        $service = $this->createService();
-        $actual = $service->getMode();
-        self::assertSame(self::ENVIRONMENT, $actual);
     }
 
     public function testGetProjectDir(): void
@@ -108,6 +110,10 @@ final class KernelInfoServiceTest extends TestCase
         $kernel->method('getLogDir')
             ->willReturn($dir);
 
-        return new KernelInfoService($kernel, $mode);
+        return new KernelInfoService(
+            $kernel,
+            new KernelEnvironment($mode),
+            new ApplicationEnvironment($mode)
+        );
     }
 }

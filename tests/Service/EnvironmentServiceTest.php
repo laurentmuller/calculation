@@ -14,7 +14,8 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Enums\Environment;
-use App\Service\EnvironmentService;
+use App\Service\ApplicationEnvironment;
+use App\Service\KernelEnvironment;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -51,7 +52,11 @@ final class EnvironmentServiceTest extends TestCase
     #[DataProvider('getEnvironment')]
     public function testGetEnvironment(string $env, Environment $expected): void
     {
-        $service = new EnvironmentService($env);
+        $service = new KernelEnvironment($env);
+        $actual = $service->getEnvironment();
+        self::assertSame($expected, $actual);
+
+        $service = new ApplicationEnvironment($env);
         $actual = $service->getEnvironment();
         self::assertSame($expected, $actual);
     }
@@ -59,13 +64,17 @@ final class EnvironmentServiceTest extends TestCase
     public function testInvalidEnvironment(): void
     {
         self::expectException(\ValueError::class);
-        new EnvironmentService('fake');
+        new KernelEnvironment('fake');
     }
 
     #[DataProvider('getIsDevelopment')]
     public function testIsDevelopment(string $env, bool $expected): void
     {
-        $service = new EnvironmentService($env);
+        $service = new KernelEnvironment($env);
+        $actual = $service->isDevelopment();
+        self::assertSame($expected, $actual);
+
+        $service = new ApplicationEnvironment($env);
         $actual = $service->isDevelopment();
         self::assertSame($expected, $actual);
     }
@@ -73,7 +82,11 @@ final class EnvironmentServiceTest extends TestCase
     #[DataProvider('getIsProduction')]
     public function testIsProduction(string $env, bool $expected): void
     {
-        $service = new EnvironmentService($env);
+        $service = new KernelEnvironment($env);
+        $actual = $service->isProduction();
+        self::assertSame($expected, $actual);
+
+        $service = new ApplicationEnvironment($env);
         $actual = $service->isProduction();
         self::assertSame($expected, $actual);
     }
@@ -81,7 +94,11 @@ final class EnvironmentServiceTest extends TestCase
     #[DataProvider('getIsTest')]
     public function testIsTest(string $env, bool $expected): void
     {
-        $service = new EnvironmentService($env);
+        $service = new KernelEnvironment($env);
+        $actual = $service->isTest();
+        self::assertSame($expected, $actual);
+
+        $service = new ApplicationEnvironment($env);
         $actual = $service->isTest();
         self::assertSame($expected, $actual);
     }

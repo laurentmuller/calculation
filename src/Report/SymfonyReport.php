@@ -144,8 +144,8 @@ class SymfonyReport extends AbstractReport
             );
         $table->setGroupKey('Kernel')->outputHeaders();
         $this->outputRow($table, 'Version', $symfony->getVersion());
-        $this->outputRow($table, 'Environment', $this->trans($kernel->getEnvironment()))
-            ->outputRow($table, 'Running Mode', $this->trans($kernel->getMode()))
+        $this->outputRow($table, 'Environment', $this->trans($kernel->getKernelEnvironment()))
+            ->outputRow($table, 'Running Mode', $this->trans($kernel->getApplicationEnvironment()))
             ->outputRow($table, 'Version status', $symfony->getMaintenanceStatus())
             ->outputRowEnabled($table, 'Long-Term support', $symfony->isLongTermSupport())
             ->outputRow($table, 'End of maintenance', $symfony->getEndOfMaintenance())

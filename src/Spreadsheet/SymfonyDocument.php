@@ -125,8 +125,8 @@ class SymfonyDocument extends AbstractDocument
         ]);
         $this->outputGroup($sheet, $row++, 'Kernel')
             ->outputRow($sheet, $row++, 'Version', $symfony->getVersion())
-            ->outputRow($sheet, $row++, 'Environment', $this->trans($kernel->getEnvironment()))
-            ->outputRow($sheet, $row++, 'Running Mode', $this->trans($kernel->getMode()))
+            ->outputRow($sheet, $row++, 'Environment', $this->trans($kernel->getKernelEnvironment()))
+            ->outputRow($sheet, $row++, 'Running Mode', $this->trans($kernel->getApplicationEnvironment()))
             ->outputRow($sheet, $row++, 'Version status', $symfony->getMaintenanceStatus())
             ->outputRowEnabled($sheet, $row++, 'Long-Term support', $symfony->isLongTermSupport())
             ->outputRow($sheet, $row++, 'End of maintenance', $symfony->getEndOfMaintenance())

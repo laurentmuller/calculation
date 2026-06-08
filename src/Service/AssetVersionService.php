@@ -52,7 +52,7 @@ class AssetVersionService extends StaticVersionStrategy implements DisableListen
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
         string $projectDir,
-        EnvironmentService $service,
+        KernelEnvironment $service,
         #[Target(CacheAttributes::CACHE_ASSET)]
         private readonly CacheInterface $cache,
     ) {
@@ -87,7 +87,7 @@ class AssetVersionService extends StaticVersionStrategy implements DisableListen
         return parent::getVersion($path);
     }
 
-    private function getBaseVersion(string $projectDir, EnvironmentService $service): string
+    private function getBaseVersion(string $projectDir, KernelEnvironment $service): string
     {
         $file = $service->isProduction() ? '.htdeployment' : 'composer.lock';
 

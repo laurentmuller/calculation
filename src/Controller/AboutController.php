@@ -19,12 +19,12 @@ use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
 use App\Attribute\WordRoute;
-use App\Enums\Environment;
 use App\Report\HtmlReport;
 use App\Response\PdfResponse;
 use App\Response\WordResponse;
+use App\Service\ApplicationEnvironment;
 use App\Service\ApplicationService;
-use App\Service\EnvironmentService;
+use App\Service\KernelEnvironment;
 use App\Service\MarkdownService;
 use App\Word\HtmlDocument;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -52,7 +52,8 @@ class AboutController extends AbstractController
         #[Autowire('%kernel.project_dir%')]
         private readonly string $projectDir,
         private readonly MarkdownService $service,
-        private readonly EnvironmentService $environment,
+        private readonly KernelEnvironment $kernelEnvironment,
+        private readonly ApplicationEnvironment $applicationEnvironment,
         private readonly CacheInterface $cache
     ) {
     }
@@ -65,11 +66,11 @@ class AboutController extends AbstractController
     }
 
     #[IndexRoute]
-    public function index(#[Autowire('%app_mode%')] string $app_mode): Response
+    public function index(): Response
     {
         return $this->render('about/about.html.twig', [
-            'kernel_environment' => $this->environment->getEnvironment(),
-            'application_environment' => Environment::from($app_mode),
+            'kernel_environment' => $this->kernelEnvironment,
+            'application_environment' => $this->applicationEnvironment,
             'deploy' => $this->getDeploy(),
         ]);
     }
@@ -114,7 +115,7 @@ class AboutController extends AbstractController
 
     private function loadDeploy(): int
     {
-        $file = $this->environment->isProduction() ? '.htdeployment' : 'composer.lock';
+        $file = $this->kernelEnvironment->isProduction() ? '.htdeployment' : 'composer.lock';
 
         return (int) \filemtime(Path::join($this->projectDir, $file));
     }

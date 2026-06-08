@@ -15,7 +15,6 @@ namespace App\Service;
 
 use App\Enums\Environment;
 use App\Utils\FileUtils;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
@@ -29,18 +28,22 @@ use Symfony\Component\HttpKernel\KernelInterface;
  */
 readonly class KernelInfoService
 {
-    private Environment $environment;
-    private Environment $mode;
     private string $projectDir;
 
     public function __construct(
         private KernelInterface $kernel,
-        #[Autowire('%app_mode%')]
-        string $app_mode
+        private KernelEnvironment $kernelEnvironment,
+        private ApplicationEnvironment $applicationEnvironment,
     ) {
-        $this->projectDir = FileUtils::normalize($this->kernel->getProjectDir());
-        $this->environment = Environment::fromKernel($this->kernel);
-        $this->mode = Environment::from($app_mode);
+        $this->projectDir = FileUtils::normalize($kernel->getProjectDir());
+    }
+
+    /**
+     * Gets the application mode.
+     */
+    public function getApplicationEnvironment(): Environment
+    {
+        return $this->applicationEnvironment->getEnvironment();
     }
 
     /**
@@ -82,9 +85,9 @@ readonly class KernelInfoService
     /**
      * Gets the kernel environment.
      */
-    public function getEnvironment(): Environment
+    public function getKernelEnvironment(): Environment
     {
-        return $this->environment;
+        return $this->kernelEnvironment->getEnvironment();
     }
 
     /**
@@ -95,14 +98,6 @@ readonly class KernelInfoService
     public function getLogInfo(): array
     {
         return $this->getDirectoryInfo('Logs', $this->kernel->getLogDir());
-    }
-
-    /**
-     * Gets the application mode.
-     */
-    public function getMode(): Environment
-    {
-        return $this->mode;
     }
 
     /**

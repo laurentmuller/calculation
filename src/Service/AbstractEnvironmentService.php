@@ -14,23 +14,22 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Enums\Environment;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Contracts\Translation\TranslatableInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Service to detect environment variable.
+ * Abstract service to detect environment variable.
  */
-readonly class EnvironmentService
+abstract readonly class AbstractEnvironmentService implements TranslatableInterface
 {
     private Environment $environment;
 
     /**
-     * @throws \ValueError If there is no matching case defined
+     * @throws \ValueError If the $environment parameter is a string and there is no matching case defined
      */
-    public function __construct(
-        #[Autowire('%kernel.environment%')]
-        string $environment
-    ) {
-        $this->environment = Environment::from($environment);
+    public function __construct(Environment|string $environment)
+    {
+        $this->environment = $environment instanceof Environment ? $environment : Environment::from($environment);
     }
 
     public function getEnvironment(): Environment
@@ -51,5 +50,11 @@ readonly class EnvironmentService
     public function isTest(): bool
     {
         return $this->environment->isTest();
+    }
+
+    #[\Override]
+    public function trans(TranslatorInterface $translator, ?string $locale = null): string
+    {
+        return $this->environment->trans($translator, $locale);
     }
 }

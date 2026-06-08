@@ -34,6 +34,9 @@ about:
         title: Dépendances du paquet
         not_found: Impossible de trouver les dépendances du paquet.
         not_loaded: Impossible de charger les dépendances du paquet.
+    advanced:
+        title: Paramètres avancés de la configuration
+        action: Avancé
 admin:
     rights:
         title: Droits d'accès

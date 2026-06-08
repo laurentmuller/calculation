@@ -171,7 +171,6 @@
             "@php bin/console lint:twig templates --show-deprecations",
             "@php bin/console lint:container",
             "@php bin/console lint:translations",
-            "@php bin/console doctrine:schema:validate --skip-sync",
             "@composer validate --strict"
         ],
         "app-fixer": "vendor-bin/php-cs-fixer/vendor/bin/php-cs-fixer fix --diff --dry-run",

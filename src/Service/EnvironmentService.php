@@ -17,7 +17,7 @@ use App\Enums\Environment;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
- * Service to detect environnement variable.
+ * Service to detect environment variable.
  */
 readonly class EnvironmentService
 {

@@ -1,0 +1,33 @@
+{% from 'about/_about_macro.html.twig' import rowInfo, rowInfoLink %}
+{% set attrs = {
+    id: 'configuration',
+    class: 'phpversion',
+    'data-collapse': 'common.collapse'|trans,
+    'data-expand': 'common.expand'|trans,
+    'data-error': 'about.load.error'|trans,
+} %}
+<div {{ html_attr(attrs) }}>
+    <table id="data-table-application" class="table table-sm table-hover mb-0">
+        <tbody>
+        <tr class="h">
+            <td colspan="2">
+                <div class="d-inline-flex align-items-end">
+                    <img alt="{{ 'application.name'|trans }}" width="64" height="64" class="rounded-1 me-2" src="{{ asset_icon(72) }}">
+                    <h1>{{ 'about.version'|trans({'%version%': app_version}) }}</h1>
+                </div>
+            </td>
+        </tr>
+        {{ rowInfo('application.name'|trans, app_name) }}
+        {{ rowInfo('application.version'|trans, app_version) }}
+        {{ rowInfo('application.description'|trans, app_description) }}
+        {% if full_info %}
+            {{ rowInfo('application.environment'|trans, kernel_environment|trans) }}
+            {{ rowInfo('application.mode'|trans, application_environment|trans) }}
+            {{ rowInfo('application.deploy'|trans, deploy|locale_date('long')) }}
+            {{ rowInfoLink('application.customer'|trans, customer.name, customer.url) }}
+            {{ rowInfoLink('application.owner'|trans, app_owner_name|title, app_owner_url) }}
+            {{ rowInfoLink('application.github'|trans, 'application.github_url'|trans, 'https://github.com/laurentmuller/calculation') }}
+        {% endif %}
+        </tbody>
+    </table>
+</div>

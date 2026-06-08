@@ -37,6 +37,8 @@ enum Environment: string implements TranslatableEnumInterface
 
     /**
      * Gets the environment from the given kernel interface.
+     *
+     * @throws \ValueError If there is no matching case defined
      */
     public static function fromKernel(KernelInterface $kernel): self
     {

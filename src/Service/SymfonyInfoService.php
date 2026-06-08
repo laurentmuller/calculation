@@ -26,7 +26,8 @@ use Symfony\Contracts\Cache\CacheInterface;
 /**
  * Service to get information about Symfony.
  *
- * @see https://github.com/symfony/symfony/blob/7.1/src/Symfony/Bundle/FrameworkBundle/Command/AboutCommand.php
+ * @see https://github.com/symfony/symfony/blob/7.4/src/Symfony/Bundle/FrameworkBundle/Command/AboutCommand.php
+ * @see https://github.com/symfony/symfony/blob/7.4/src/Symfony/Component/HttpKernel/DataCollector/ConfigDataCollector.php
  * @see https://github.com/EasyCorp/easy-doc-bundle/blob/master/src/Command/DocCommand.php
  */
 readonly class SymfonyInfoService
@@ -72,7 +73,10 @@ readonly class SymfonyInfoService
      */
     public function getEndOfLife(): string
     {
-        return $this->formatMonthYear(Kernel::END_OF_LIFE);
+        $date = $this->formatMonthYear(Kernel::END_OF_LIFE);
+        $days = $this->getDaysBeforeExpiration(Kernel::END_OF_LIFE);
+
+        return \sprintf('%s (%s)', $date, $days);
     }
 
     /**
@@ -80,7 +84,10 @@ readonly class SymfonyInfoService
      */
     public function getEndOfMaintenance(): string
     {
-        return $this->formatMonthYear(Kernel::END_OF_MAINTENANCE);
+        $date = $this->formatMonthYear(Kernel::END_OF_MAINTENANCE);
+        $days = $this->getDaysBeforeExpiration(Kernel::END_OF_MAINTENANCE);
+
+        return \sprintf('%s (%s)', $date, $days);
     }
 
     /**
@@ -199,6 +206,14 @@ readonly class SymfonyInfoService
     private function formatMonthYear(string $date): string
     {
         return $this->createDate($date)->format('F Y');
+    }
+
+    private function getDaysBeforeExpiration(string $date): string
+    {
+        $today = DateUtils::createDatePoint();
+        $endOfMonth = $this->getEndOfMonth($date);
+
+        return $today->diff($endOfMonth)->format('%R%a days');
     }
 
     private function getEndOfMonth(string $date): DatePoint

@@ -21,13 +21,19 @@ final class AboutControllerTest extends ControllerTestCase
     public static function getRoutes(): \Generator
     {
         yield ['/about', '', Response::HTTP_FOUND];
-        // redirect to login page
+
         yield ['/about', self::ROLE_USER];
         yield ['/about', self::ROLE_ADMIN];
         yield ['/about', self::ROLE_SUPER_ADMIN];
+
+        yield ['/about/advanced', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/about/advanced', self::ROLE_ADMIN];
+        yield ['/about/advanced', self::ROLE_SUPER_ADMIN];
+
         yield ['/about/pdf', self::ROLE_USER];
         yield ['/about/pdf', self::ROLE_ADMIN];
         yield ['/about/pdf', self::ROLE_SUPER_ADMIN];
+
         yield ['/about/word', self::ROLE_USER];
         yield ['/about/word', self::ROLE_ADMIN];
         yield ['/about/word', self::ROLE_SUPER_ADMIN];

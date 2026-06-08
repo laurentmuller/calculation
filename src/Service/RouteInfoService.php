@@ -76,7 +76,7 @@ readonly class RouteInfoService
 
     private function isDebugRoute(string $name): bool
     {
-        return StringUtils::startWith($name, '_');
+        return '_' === $name[0];
     }
 
     /**

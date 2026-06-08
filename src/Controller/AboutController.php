@@ -13,10 +13,13 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForAdmin;
 use App\Attribute\ForUser;
+use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
 use App\Attribute\WordRoute;
+use App\Enums\Environment;
 use App\Report\HtmlReport;
 use App\Response\PdfResponse;
 use App\Response\WordResponse;
@@ -54,10 +57,19 @@ class AboutController extends AbstractController
     ) {
     }
 
+    #[ForAdmin]
+    #[GetRoute('/advanced', name: 'advanced')]
+    public function advanced(): Response
+    {
+        return $this->render('about/about_advanced.html.twig');
+    }
+
     #[IndexRoute]
-    public function index(): Response
+    public function index(#[Autowire('%app_mode%')] string $app_mode): Response
     {
         return $this->render('about/about.html.twig', [
+            'kernel_environment' => $this->environment->getEnvironment(),
+            'application_environment' => Environment::from($app_mode),
             'deploy' => $this->getDeploy(),
         ]);
     }
@@ -86,11 +98,7 @@ class AboutController extends AbstractController
 
     private function getDeploy(): int
     {
-        return $this->cache->get('about-controller-deploy', function (): int {
-            $file = $this->environment->isProduction() ? '.htdeployment' : 'composer.lock';
-
-            return (int) \filemtime(Path::join($this->projectDir, $file));
-        });
+        return $this->cache->get('about-controller-deploy', fn (): int => $this->loadDeploy());
     }
 
     private function loadContent(): string
@@ -102,6 +110,13 @@ class AboutController extends AbstractController
 
             return $license . $policy;
         });
+    }
+
+    private function loadDeploy(): int
+    {
+        $file = $this->environment->isProduction() ? '.htdeployment' : 'composer.lock';
+
+        return (int) \filemtime(Path::join($this->projectDir, $file));
     }
 
     private function processFile(string $name): string

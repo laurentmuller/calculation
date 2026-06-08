@@ -1,9 +1,9 @@
 {% extends 'cards/card_base.html.twig' %}
 {% from 'about/_about_macro.html.twig' import card %}
-{% from 'macros/_icons.html.twig' import link, homepage, button_pdf, button_word %}
+{% from 'macros/_icons.html.twig' import link, homepage %}
 {# parameters #}
-{%- set title = 'index.menu_info' -%}
-{%- set title_icon = 'info-circle' -%}
+{%- set title = 'about.advanced.title' -%}
+{%- set title_icon = 'screwdriver-wrench' -%}
 {%- set title_parameters = {'%app_name%': app_name} -%}
 {% set customer = application_parameters.customerInformation %}
 {# class #}
@@ -13,23 +13,19 @@
 {# card body #}
 {% block card_body %}
     {# application #}
-    {{ include('about/_about_configuration.html.twig', {full_info: true}) }}
+    {{ include('about/_about_configuration.html.twig', {full_info: false}) }}
 {% endblock card_body %}
 {# body #}
 {% block body %}
     {{ parent() }}
     <div class="card card-collapse" id="aboutAccordion">
-        {{ card(id: 'licence', title: 'about.licence.title', pdf_route: 'about_licence_pdf', word_route: 'about_licence_word') }}
-        {{ card(id: 'policy', title: 'about.policy.title', pdf_route: 'about_policy_pdf', word_route: 'about_policy_word') }}
+        {{ card(id: 'symfony', title: 'about.symfony.title', pdf_route: 'about_symfony_pdf', excel_route: 'about_symfony_excel') }}
+        {{ card(id: 'php', title: 'about.php.title', pdf_route: 'about_php_pdf', excel_route: 'about_php_excel') }}
+        {{ card(id: 'database', title: 'about.database.title', pdf_route: 'about_database_pdf', excel_route: 'about_database_excel') }}
     </div>
     <div class="d-flex-wrap-center mt-2 pb-3 d-print-none">
         {{ homepage() }}
-        {{ link(path('user_comment'), 'user.comment.title', 'btn btn-form btn-secondary', 'envelope far', 'user.comment.description') }}
-        {{ button_pdf('about_pdf') }}
-        {{ button_word('about_word') }}
-        {% if is_granted(ROLE_ADMIN) %}
-            {{ link(path('about_advanced'), 'about.advanced.action', 'btn btn-form btn-outline-info', 'screwdriver-wrench', 'about.advanced.title') }}
-        {% endif %}
+        {{ link(path('about_index'), 'about.title', 'btn btn-form btn-outline-info', 'info-circle') }}
     </div>
 {% endblock body %}
 {# stylesheets #}

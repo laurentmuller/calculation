@@ -63,16 +63,30 @@ class SymfonyReport extends AbstractReport
         return true;
     }
 
+    private function createTable(string $title, PdfColumn ...$columns): PdfGroupTable
+    {
+        if ($this->isPrintable(self::LINE_HEIGHT * 4.0)) {
+            $this->halfLineBreak();
+        } else {
+            $this->addPage();
+        }
+        $this->addBookmark($title);
+
+        return PdfGroupTable::instance($this)
+            ->setGroupStyle(PdfStyle::getHeaderStyle())
+            ->setGroupBeforeHeader(true)
+            ->addColumns(...$columns)
+            ->setGroupKey($title)
+            ->outputHeaders();
+    }
+
     private function getStyle(bool $enabled): ?PdfStyle
     {
         if ($enabled) {
             return null;
         }
-        if ($this->style instanceof PdfStyle) {
-            return $this->style;
-        }
 
-        return $this->style = PdfStyle::getCellStyle()->setTextColor(PdfTextColor::darkGray());
+        return $this->style ??= PdfStyle::getCellStyle()->setTextColor(PdfTextColor::darkGray());
     }
 
     private function halfLineBreak(): void
@@ -86,21 +100,22 @@ class SymfonyReport extends AbstractReport
         if ([] === $bundles) {
             return;
         }
-        $this->halfLineBreak();
-        $this->addBookmark('Bundles');
-        $table = PdfGroupTable::instance($this)
-            ->setGroupStyle(PdfStyle::getHeaderStyle())
-            ->addColumns(
-                PdfColumn::left('Name', 40),
-                PdfColumn::left('Path', 70),
-                PdfColumn::right('Files', 18, true),
-                PdfColumn::right('Size', 18, true)
-            )
-            ->setGroupBeforeHeader(true)
-            ->setGroupKey('Bundles')
-            ->outputHeaders();
+
+        $table = $this->createTable(
+            'Bundles',
+            PdfColumn::left('Name', 45),
+            PdfColumn::left('Path', 65),
+            PdfColumn::right('Files', 18, true),
+            PdfColumn::right('Size', 18, true)
+        );
+
         foreach ($bundles as $bundle) {
-            $table->addRow($bundle['name'], $bundle['path'], $bundle['files'], $bundle['size']);
+            $table->addRow(
+                $bundle['name'],
+                $bundle['path'],
+                $bundle['files'],
+                $bundle['size']
+            );
         }
     }
 
@@ -166,18 +181,14 @@ class SymfonyReport extends AbstractReport
         if ([] === $packages) {
             return;
         }
-        $this->halfLineBreak();
-        $this->addBookmark($title);
-        $table = PdfGroupTable::instance($this)
-            ->setGroupStyle(PdfStyle::getHeaderStyle())
-            ->addColumns(
-                PdfColumn::left('Name', 40),
-                PdfColumn::left('Version', 18, true),
-                PdfColumn::left('Description', 70)
-            )
-            ->setGroupBeforeHeader(true)
-            ->setGroupKey($title)
-            ->outputHeaders();
+
+        $table = $this->createTable(
+            $title,
+            PdfColumn::left('Name', 40),
+            PdfColumn::left('Version', 18, true),
+            PdfColumn::left('Description', 70)
+        );
+
         foreach ($packages as $package) {
             $table->startRow()
                 ->add($package['name'], link: $package['homepage'])
@@ -195,18 +206,14 @@ class SymfonyReport extends AbstractReport
         if ([] === $routes) {
             return;
         }
-        $this->halfLineBreak();
-        $this->addBookmark($title);
-        $table = PdfGroupTable::instance($this)
-            ->setGroupStyle(PdfStyle::getHeaderStyle())
-            ->addColumns(
-                PdfColumn::left('Name', 40),
-                PdfColumn::left('Path', 50),
-                PdfColumn::left('Method', 25, true)
-            )
-            ->setGroupBeforeHeader(true)
-            ->setGroupKey($title)
-            ->outputHeaders();
+
+        $table = $this->createTable(
+            $title,
+            PdfColumn::left('Name', 40),
+            PdfColumn::left('Path', 50),
+            PdfColumn::left('Method', 25, true)
+        );
+
         foreach ($routes as $route) {
             $table->addRow(
                 $route['name'],
@@ -237,7 +244,7 @@ class SymfonyReport extends AbstractReport
 
     private function trimDescription(?string $description): ?string
     {
-        if (null === $description || '' === $description) {
+        if (!StringUtils::isString($description)) {
             return $description;
         }
 

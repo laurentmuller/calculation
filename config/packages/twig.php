@@ -38,6 +38,7 @@ return App::config([
         ],
         'globals' => [
             // application
+            'app_env' => '%app_env%',
             'app_mode' => '%app_mode%',
             'app_name' => ApplicationService::APP_NAME,
             'app_version' => ApplicationService::APP_VERSION,

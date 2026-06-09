@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Enums\Environment;
-use App\Service\ApplicationEnvironment;
-use App\Service\KernelEnvironment;
 use App\Service\KernelInfoService;
 use App\Service\SymfonyInfoService;
 use App\Utils\FileUtils;
@@ -110,10 +108,6 @@ final class KernelInfoServiceTest extends TestCase
         $kernel->method('getLogDir')
             ->willReturn($dir);
 
-        return new KernelInfoService(
-            $kernel,
-            new KernelEnvironment($mode),
-            new ApplicationEnvironment($mode)
-        );
+        return new KernelInfoService($kernel, self::ENVIRONMENT, self::ENVIRONMENT);
     }
 }

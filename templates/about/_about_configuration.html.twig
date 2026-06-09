@@ -21,8 +21,8 @@
         {{ rowInfo('application.version'|trans, app_version) }}
         {{ rowInfo('application.description'|trans, app_description) }}
         {% if full_info %}
-            {{ rowInfo('application.environment'|trans, kernel_environment|trans) }}
-            {{ rowInfo('application.mode'|trans, application_environment|trans) }}
+            {{ rowInfo('application.environment'|trans, app_env|trans) }}
+            {{ rowInfo('application.mode'|trans, app_mode|trans) }}
             {{ rowInfo('application.deploy'|trans, deploy|locale_date('long')) }}
             {{ rowInfoLink('application.customer'|trans, customer.name, customer.url) }}
             {{ rowInfoLink('application.owner'|trans, app_owner_name|title, app_owner_url) }}

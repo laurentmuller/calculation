@@ -15,6 +15,7 @@ namespace App\Service;
 
 use App\Constants\CacheAttributes;
 use App\Entity\User;
+use App\Enums\Environment;
 use App\Interfaces\DisableListenerInterface;
 use App\Traits\DisableListenerTrait;
 use App\Utils\StringUtils;
@@ -52,13 +53,14 @@ class AssetVersionService extends StaticVersionStrategy implements DisableListen
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
         string $projectDir,
-        KernelEnvironment $service,
+        #[Autowire('%app_env%')]
+        Environment $environment,
         #[Target(CacheAttributes::CACHE_ASSET)]
         private readonly CacheInterface $cache,
     ) {
         $version = $this->cache->get(
             'key_asset_version',
-            fn (): string => $this->getBaseVersion($projectDir, $service)
+            fn (): string => $this->getBaseVersion($projectDir, $environment)
         );
         $this->imagesPath = $this->cache->get(
             'key_images_path',
@@ -87,9 +89,9 @@ class AssetVersionService extends StaticVersionStrategy implements DisableListen
         return parent::getVersion($path);
     }
 
-    private function getBaseVersion(string $projectDir, KernelEnvironment $service): string
+    private function getBaseVersion(string $projectDir, Environment $environment): string
     {
-        $file = $service->isProduction() ? '.htdeployment' : 'composer.lock';
+        $file = $environment->isProduction() ? '.htdeployment' : 'composer.lock';
 
         return $this->getFileTime(Path::join($projectDir, $file), Kernel::VERSION);
     }

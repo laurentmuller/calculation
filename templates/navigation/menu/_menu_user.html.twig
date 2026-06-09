@@ -15,10 +15,10 @@
     {{ dropdownItem(path('user_parameters'), 'user.parameters.title', 'user-gear') }}
     {{ dropdownItem(path('user_profile_edit'), 'profile.edit.title', 'user-pen') }}
     {{ dropdownItem(path('user_profile_password'), 'profile.password.title', 'unlock') }}
-    {% if app_mode == 'dev' -%}
+    {% if app_mode.development -%}
         {{ dropdownSeparator() }}
         {{ dropdownItem(link_prod, 'environment.switch', 'location-arrow', {'%name%': 'environment.prod'|trans}) }}
-    {% elseif app_mode == 'prod' or app_mode == 'local' -%}
+    {% elseif app_mode.production -%}
         {{ dropdownSeparator() }}
         {{ dropdownItem(link_dev, 'environment.switch', 'location-arrow', {'%name%': 'environment.dev'|trans}) }}
     {% endif %}
@@ -26,7 +26,7 @@
     {% if is_granted_data %}
         {{ dropdownItem(path('site_map'), 'index.menu_site_map', 'sitemap') }}
     {% endif %}
-    {% if app_mode == 'dev' %}
+    {% if app_mode.development %}
         {{ dropdownItem(path('help_index'), 'help.title', 'question-circle') }}
     {% endif %}
     {{ dropdownItem(path('user_comment'), 'user.comment.title', 'envelope far') }}

@@ -15,6 +15,7 @@ namespace App\Service;
 
 use App\Enums\Environment;
 use App\Utils\FileUtils;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
@@ -32,8 +33,10 @@ readonly class KernelInfoService
 
     public function __construct(
         private KernelInterface $kernel,
-        private KernelEnvironment $kernelEnvironment,
-        private ApplicationEnvironment $applicationEnvironment,
+        #[Autowire('%app_env%')]
+        private Environment $kernelEnvironment,
+        #[Autowire('%app_mode%')]
+        private Environment $applicationEnvironment,
     ) {
         $this->projectDir = FileUtils::normalize($kernel->getProjectDir());
     }
@@ -43,7 +46,7 @@ readonly class KernelInfoService
      */
     public function getApplicationEnvironment(): Environment
     {
-        return $this->applicationEnvironment->getEnvironment();
+        return $this->applicationEnvironment;
     }
 
     /**
@@ -87,7 +90,7 @@ readonly class KernelInfoService
      */
     public function getKernelEnvironment(): Environment
     {
-        return $this->kernelEnvironment->getEnvironment();
+        return $this->kernelEnvironment;
     }
 
     /**

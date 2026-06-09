@@ -106,7 +106,7 @@ abstract class AbstractHttpClientService
     /**
      * Returns if the last error is set.
      *
-     * @phpstan-assert-if-true HttpClientError $this->lastError
+     * @phpstan-assert-if-true HttpClientError $this->getLastError()
      */
     public function hasLastError(): bool
     {
@@ -144,10 +144,11 @@ abstract class AbstractHttpClientService
      */
     protected function getCacheValue(string $key, callable $callback): mixed
     {
-        return $this->cache->get($key, function (CacheItemInterface $item) use ($callback): mixed {
-            $item->expiresAfter($this->getCacheTimeout());
+        return $this->cache->get($key, function (CacheItemInterface $item, bool &$save) use ($callback): mixed {
+            $result = \call_user_func($callback);
+            $save = !$this->hasLastError();
 
-            return \call_user_func($callback);
+            return $result;
         });
     }
 

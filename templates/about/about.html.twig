@@ -28,7 +28,7 @@
         {{ button_pdf('about_pdf') }}
         {{ button_word('about_word') }}
         {% if is_granted(ROLE_ADMIN) %}
-            {{ link(path('about_advanced'), 'about.advanced.action', 'btn btn-form btn-outline-info', 'screwdriver-wrench', 'about.advanced.title') }}
+            {{ link(path('about_advanced'), 'about.advanced.action', 'btn btn-form btn-outline-secondary', 'screwdriver-wrench', 'about.advanced.title') }}
         {% endif %}
     </div>
 {% endblock body %}

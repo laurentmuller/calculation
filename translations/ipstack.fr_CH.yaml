@@ -1,7 +1,7 @@
 404_not_found: La ressource demandée n'existe pas.
 missing_access_key: Aucune clé de l'interface de programmation de l'application (API) n'a été spécifiée.
 invalid_access_key: Aucune clé de l'interface de programmation de l'application (API) n'a été spécifiée ou la clé spécifiée est invalide.
-inactive_user: Le compte d'utilisateur actuel n'est pas actif.
+inactive_user: Le compte de l'utilisateur actuel n'est pas actif.
 invalid_api_function: Le point de terminaison de l'interface de programmation de l'application (API) demandé n'existe pas.
 usage_limit_reached: Le nombre maximal autorisé de demandes de l'interface de programmation de l'application (API) mensuelles a été atteint.
 function_access_restricted: Le plan d'abonnement actuel ne prend pas en charge ce point de terminaison de l'interface de programmation de l'application (API).

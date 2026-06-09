@@ -30,8 +30,12 @@ class IpStackController extends AbstractController
     {
         $results = $service->getIpInfo($request);
         if ($service->hasLastError()) {
-            return $this->render('bundles/TwigBundle/Exception/error_client.html.twig', [
-                'error' => $service->getLastError(),
+            $lastError = $service->getLastError();
+
+            return $this->render('bundles/TwigBundle/Exception/error_base.html.twig', [
+                'status_code' => $lastError->getCode(),
+                'description' => $lastError->getMessage(),
+                'exception' => $lastError->getException(),
             ]);
         }
 

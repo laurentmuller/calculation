@@ -25,18 +25,15 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\UnitOfWork;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 
 final class IndexServiceTest extends TestCase
 {
     public function testClear(): void
     {
-        $cache = $this->createMock(ArrayAdapter::class);
-        $cache->method('withSubNamespace')
-            ->willReturn($cache);
+        $cache = $this->createMock(TagAwareAdapter::class);
         $cache->expects(self::once())
-            ->method('withSubNamespace');
-        $cache->expects(self::once())
-            ->method('clear');
+            ->method('invalidateTags');
         $service = $this->createService(cache: $cache);
         $service->clear();
     }
@@ -147,10 +144,10 @@ final class IndexServiceTest extends TestCase
 
     private function createService(
         ?EntityManagerInterface $manager = null,
-        ?ArrayAdapter $cache = null
+        ?TagAwareAdapter $cache = null
     ): IndexService {
         $manager ??= $this->createMock(EntityManagerInterface::class);
-        $cache ??= new ArrayAdapter();
+        $cache ??= new TagAwareAdapter(new ArrayAdapter());
 
         return new IndexService($manager, $cache);
     }

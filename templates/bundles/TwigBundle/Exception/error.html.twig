@@ -1,7 +1,7 @@
 {% extends 'bundles/TwigBundle/Exception/error_base.html.twig' %}
 {# status_code #}
 {% set suggestion = 'http_error.suggestion'|trans({'%url%': path('homepage')}) %}
-{% switch status_code -%}
+{% switch status_code|default(0) -%}
 {% case 403 %}
     {% set description = 'http_error_403.description'|trans %}
     {% set suggestion = 'http_error_403.suggestion'|trans %}

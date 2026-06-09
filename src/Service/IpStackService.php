@@ -17,6 +17,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -42,7 +43,7 @@ class IpStackService extends AbstractHttpClientService
     private const int CACHE_TIMEOUT = 3600;
 
     /** The host name. */
-    private const string HOST_NAME = 'http://api.ipstack.com/';
+    private const string HOST_NAME = 'https://api.ipstack.com/';
 
     /** The API endpoint for detecting the IP address. */
     private const string URI_CHECK = 'check';
@@ -86,19 +87,22 @@ class IpStackService extends AbstractHttpClientService
 
     /**
      * @phpstan-return IpStackType|null
-     *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     private function doGetIpInfo(string $url): ?array
     {
         try {
             /** @phpstan-var IpStackType $response */
             $response = $this->requestGet($url)->toArray();
-            if ($this->isValidResponse($response)) {
+            if ($this->validateResponse($response)) {
                 return $this->updateResponse($response);
             }
         } catch (\Exception $e) {
             $this->setLastError(404, $this->translateError('unknown'), $e);
+            if ($e instanceof HttpExceptionInterface) {
+                /** @phpstan-var IpStackType $data */
+                $data = $e->getResponse()->toArray(false);
+                $this->validateResponse($data, $e);
+            }
         }
 
         return null;
@@ -106,10 +110,7 @@ class IpStackService extends AbstractHttpClientService
 
     private function getClientIp(?Request $request = null): string
     {
-        if (!$request instanceof Request) {
-            return self::URI_CHECK;
-        }
-        $clientIp = $request->getClientIp();
+        $clientIp = $request?->getClientIp();
         if (null === $clientIp || '127.0.0.1' === $clientIp) {
             return self::URI_CHECK;
         }
@@ -123,26 +124,10 @@ class IpStackService extends AbstractHttpClientService
         $query = \http_build_query([
             'language' => self::getAcceptLanguage(),
             'access_key' => $this->key,
-            'output' => 'json',
             'hostname' => 1,
         ]);
 
         return \sprintf('%s%s?%s', self::HOST_NAME, $clientIp, $query);
-    }
-
-    /**
-     * @phpstan-param IpStackType $response
-     */
-    private function isValidResponse(array $response): bool
-    {
-        if (isset($response['error'])) {
-            $code = $response['error']['code'] ?? 404;
-            $type = $response['error']['type'] ?? 'unknown';
-
-            return $this->setLastError($code, $this->translateError($type));
-        }
-
-        return true;
     }
 
     private function translateError(string $id): string
@@ -170,5 +155,21 @@ class IpStackService extends AbstractHttpClientService
         }
 
         return $response;
+    }
+
+    /**
+     * @phpstan-param IpStackType $response
+     */
+    private function validateResponse(array $response, ?\Throwable $exception = null): bool
+    {
+        if (isset($response['error'])) {
+            $code = $response['error']['code'] ?? 404;
+            $type = $response['error']['type'] ?? 'unknown';
+            $message = $this->translateError($type);
+
+            return $this->setLastError($code, $message, $exception);
+        }
+
+        return true;
     }
 }

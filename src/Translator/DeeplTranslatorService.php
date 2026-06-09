@@ -77,11 +77,13 @@ class DeeplTranslatorService extends AbstractTranslatorService
     #[\Override]
     public function translate(TranslateQuery $query): array|false
     {
-        $params = [
+        $params = \array_filter([
             'source_lang' => $query->from,
             'target_lang' => $query->to,
             'text' => [$query->text],
-        ];
+            'tag_handling' => $query->html ? 'html' : null,
+            'tag_handling_version' => $query->html ? 'v2' : null,
+        ]);
 
         $response = $this->requestPost(self::URI_TRANSLATE, [self::JSON => $params]);
         if (Response::HTTP_OK !== $response->getStatusCode()) {

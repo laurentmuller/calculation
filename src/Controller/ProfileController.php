@@ -84,6 +84,9 @@ class ProfileController extends AbstractController
     ): Response {
         $form = $this->createForm($type, $user);
         if ($this->handleRequestForm($request, $form)) {
+            if (!$this->isChangeSets($user)) {
+                return $this->redirectToHomePage();
+            }
             $this->manager->flush();
 
             return $this->redirectToHomePage(
@@ -95,5 +98,13 @@ class ProfileController extends AbstractController
         }
 
         return $this->render($template, \array_merge(['form' => $form], $parameters));
+    }
+
+    private function isChangeSets(User $user): bool
+    {
+        $uow = $this->manager->getUnitOfWork();
+        $uow->computeChangeSets();
+
+        return [] !== $uow->getEntityChangeSet($user);
     }
 }

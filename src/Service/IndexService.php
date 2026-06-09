@@ -28,11 +28,11 @@ use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
-use Psr\Cache\CacheItemPoolInterface;
+use Psr\Cache\CacheException;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Contracts\Cache\CacheInterface;
-use Symfony\Contracts\Cache\NamespacedPoolInterface;
+use Symfony\Contracts\Cache\ItemInterface;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
 /**
  * Service to cache computed values for the home page (index page).
@@ -51,17 +51,13 @@ class IndexService
         'calculationState' => CalculationState::class,
     ];
 
-    private readonly CacheItemPoolInterface&CacheInterface&NamespacedPoolInterface $cache;
+    private const string TAG_NAME = 'index.service';
 
-    /**
-     * @noinspection PhpFieldAssignmentTypeMismatchInspection
-     */
     public function __construct(
         private readonly EntityManagerInterface $manager,
         #[Target(CacheAttributes::CACHE_PARAMETERS)]
-        CacheItemPoolInterface&CacheInterface&NamespacedPoolInterface $cache
+        private readonly TagAwareCacheInterface $cache
     ) {
-        $this->cache = $cache->withSubNamespace('index.service');
     }
 
     /**
@@ -69,7 +65,7 @@ class IndexService
      */
     public function clear(): void
     {
-        $this->cache->clear();
+        $this->cache->invalidateTags([self::TAG_NAME]);
     }
 
     /**
@@ -79,7 +75,10 @@ class IndexService
      */
     public function getCatalog(): array
     {
-        return $this->cache->get('index.catalog', $this->loadCatalog(...));
+        return $this->cache->get(
+            'index.catalog',
+            fn (ItemInterface $item): array => $this->loadCatalog($item)
+        );
     }
 
     /**
@@ -90,13 +89,14 @@ class IndexService
      */
     public function getLastCalculations(int $maxResults, ?User $user = null): array
     {
-        $key = \sprintf('index.calculations.last.%d.%d', $maxResults, $user?->getId() ?? 0);
-
-        return $this->cache->get($key, fn (): array => $this->loadLastCalculations($maxResults, $user));
+        return $this->cache->get(
+            \sprintf('index.calculations.last.%d.%d', $maxResults, $user?->getId() ?? 0),
+            fn (ItemInterface $item): array => $this->loadLastCalculations($item, $maxResults, $user)
+        );
     }
 
     /**
-     * Gets the calculations grouped by years and months sorted by date in descending order.
+     * Gets the data used to display the calculations by month.
      *
      * @param int $maxResults the maximum number of results to retrieve (the "limit")
      */
@@ -104,16 +104,19 @@ class IndexService
     {
         return $this->cache->get(
             \sprintf('index.calculations.months.%d', $maxResults),
-            fn (): MonthChartData => $this->loadMonthChartData($maxResults)
+            fn (ItemInterface $item): MonthChartData => $this->loadMonthChartData($item, $maxResults)
         );
     }
 
     /**
-     * Gets calculations grouped by state.
+     * Gets the data used to display the calculations by state.
      */
     public function getStateChartData(): StateChartData
     {
-        return $this->cache->get('index.calculations.states', $this->loadStateChartData(...));
+        return $this->cache->get(
+            'index.calculations.states',
+            fn (ItemInterface $item): StateChartData => $this->loadStateChartData($item)
+        );
     }
 
     public function onFlush(OnFlushEventArgs $args): void
@@ -142,26 +145,45 @@ class IndexService
 
     /**
      * @return array<string, int>
+     *
+     * @throws CacheException
      */
-    private function loadCatalog(): array
+    private function loadCatalog(ItemInterface $item): array
     {
+        $item->tag(self::TAG_NAME);
+
         return \array_replace(self::CATALOG, \array_map($this->countEntities(...), self::CATALOG));
     }
 
-    private function loadLastCalculations(int $maxResults, ?UserInterface $user): array
+    /**
+     * @throws CacheException
+     */
+    private function loadLastCalculations(ItemInterface $item, int $maxResults, ?UserInterface $user): array
     {
+        $item->tag(self::TAG_NAME);
+
         return $this->manager->getRepository(Calculation::class)
             ->getLastCalculations($maxResults, $user);
     }
 
-    private function loadMonthChartData(int $maxResults): MonthChartData
+    /**
+     * @throws CacheException
+     */
+    private function loadMonthChartData(ItemInterface $item, int $maxResults): MonthChartData
     {
+        $item->tag(self::TAG_NAME);
+
         return $this->manager->getRepository(Calculation::class)
             ->getMonthChartData($maxResults);
     }
 
-    private function loadStateChartData(): StateChartData
+    /**
+     * @throws CacheException
+     */
+    private function loadStateChartData(ItemInterface $item): StateChartData
     {
+        $item->tag(self::TAG_NAME);
+
         return $this->manager->getRepository(CalculationState::class)
             ->getStateChartData();
     }

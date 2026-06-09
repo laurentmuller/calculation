@@ -19,6 +19,7 @@ use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
 use App\Attribute\WordRoute;
+use App\Constants\CacheAttributes;
 use App\Enums\Environment;
 use App\Report\HtmlReport;
 use App\Response\PdfResponse;
@@ -27,6 +28,7 @@ use App\Service\ApplicationService;
 use App\Service\MarkdownService;
 use App\Word\HtmlDocument;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -50,9 +52,10 @@ class AboutController extends AbstractController
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
         private readonly string $projectDir,
-        private readonly MarkdownService $service,
         #[Autowire('%app_env%')]
         private readonly Environment $environment,
+        private readonly MarkdownService $service,
+        #[Target(CacheAttributes::CACHE_SYMFONY)]
         private readonly CacheInterface $cache
     ) {
     }

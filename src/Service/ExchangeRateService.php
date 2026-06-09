@@ -116,15 +116,13 @@ class ExchangeRateService extends AbstractHttpClientService
     }
 
     /**
-     * Gets the deadline, the allowed and the remaining calls.
+     * Gets the deadline, the allowed, and the remaining calls.
      *
      * @phpstan-return ExchangeQuotaType|null
      */
     public function getQuota(): ?array
     {
-        $url = self::URI_QUOTA;
-
-        return $this->getUrlCacheValue($url, fn (): ?array => $this->doGetQuota($url));
+        return $this->getUrlCacheValue(self::URI_QUOTA, fn (): ?array => $this->doGetQuota());
     }
 
     /**
@@ -168,9 +166,7 @@ class ExchangeRateService extends AbstractHttpClientService
      */
     public function getSupportedCodes(): array
     {
-        $url = self::URI_CODES;
-
-        return $this->getUrlCacheValue($url, fn (): array => $this->doGetSupportedCodes($url));
+        return $this->getUrlCacheValue(self::URI_CODES, fn (): array => $this->doGetSupportedCodes());
     }
 
     #[\Override]
@@ -218,10 +214,10 @@ class ExchangeRateService extends AbstractHttpClientService
      *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
-    private function doGetQuota(string $url): ?array
+    private function doGetQuota(): ?array
     {
         /** @phpstan-var ResponseType|null $response */
-        $response = $this->get($url);
+        $response = $this->get(self::URI_QUOTA);
         if (!\is_array($response)) {
             return null;
         }
@@ -283,9 +279,9 @@ class ExchangeRateService extends AbstractHttpClientService
      *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
-    private function doGetSupportedCodes(string $url): array
+    private function doGetSupportedCodes(): array
     {
-        $response = $this->get($url);
+        $response = $this->get(self::URI_CODES);
         if (!\is_array($response)) {
             return [];
         }
@@ -394,21 +390,16 @@ class ExchangeRateService extends AbstractHttpClientService
      */
     private function mapCodes(array $codes): array
     {
-        /** @var string[] $codes */
+        // filter codes
         $codes = $this->getColumnFilter($codes, 0, Currencies::exists(...));
 
         // remove invalid codes
-        $invalidCodes = [
+        $codes = \array_diff($codes, [
             'XCG', // Caribbean guilder
             'CNH', // Chinese Yuan Renminbi Offshore
-        ];
-        foreach ($invalidCodes as $code) {
-            $key = \array_search($code, $codes, true);
-            if (false !== $key) {
-                unset($codes[$key]);
-            }
-        }
+        ]);
 
+        // build and sort the result
         $result = $this->mapToKeyValue($codes, fn (string $code): array => [$code => $this->mapCode($code)]);
         \uasort($result, static fn (array $a, array $b): int => $a['name'] <=> $b['name']);
 

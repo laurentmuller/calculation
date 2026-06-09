@@ -33,7 +33,6 @@ use App\Table\LogTable;
 use App\Traits\TableTrait;
 use App\Utils\FileUtils;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -61,7 +60,7 @@ class LogController extends AbstractController
      * Delete the content of the log file (if any).
      */
     #[GetPostRoute(path: '/delete', name: 'delete')]
-    public function delete(Request $request, Filesystem $fs, LoggerInterface $logger): Response
+    public function delete(Request $request, LoggerInterface $logger): Response
     {
         $logFile = $this->getLogFile();
         if (!$logFile instanceof LogFile) {
@@ -72,7 +71,10 @@ class LogController extends AbstractController
         $form = $this->createForm(FormType::class);
         if ($this->handleRequestForm($request, $form)) {
             try {
-                $fs->remove($file);
+                $result = \file_put_contents($file, '');
+                if (false === $result) {
+                    throw new \RuntimeException(\sprintf('Failed to delete the log file "%s".', $file));
+                }
 
                 return $this->redirectToHomePage(message: 'log.delete.success');
             } catch (\Exception $e) {

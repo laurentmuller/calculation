@@ -38,15 +38,12 @@ final class ProfileControllerTest extends ControllerTestCase
     public function testEditWithChange(): void
     {
         $user = $this->loadUser(self::ROLE_USER);
-        $oldUserName = $user->getUsername();
         self::assertNotNull($user);
-
         $data = [
             'username' => 'new_username',
             'email' => $user->getEmail(),
             'currentPassword' => $user->getPassword(),
         ];
-
         $this->checkForm(
             uri: '/user/profile/edit',
             data: $data,

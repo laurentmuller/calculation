@@ -33,7 +33,7 @@ final class ExchangeRateServiceTest extends TestCase
     public function testGetLatestError(): void
     {
         $response = $this->getErrorResponse();
-        $client = new MockHttpClient([$response]);
+        $client = new MockHttpClient($response);
         $service = $this->createService();
         $service->setClient($client);
         $actual = $service->getLatest('chf');
@@ -51,7 +51,7 @@ final class ExchangeRateServiceTest extends TestCase
                 ],
             ]
         );
-        $client = new MockHttpClient([$response]);
+        $client = new MockHttpClient($response);
         $service = $this->createService();
         $service->setClient($client);
         $actual = $service->getLatest('chf');
@@ -68,7 +68,7 @@ final class ExchangeRateServiceTest extends TestCase
                 'result' => 'success',
             ]
         );
-        $client = new MockHttpClient([$response]);
+        $client = new MockHttpClient($response);
         $service = $this->createService();
         $service->setClient($client);
         $actual = $service->getLatest('chf');
@@ -78,7 +78,7 @@ final class ExchangeRateServiceTest extends TestCase
     public function testGetQuotaError(): void
     {
         $response = $this->getErrorResponse();
-        $client = new MockHttpClient([$response]);
+        $client = new MockHttpClient($response);
         $service = $this->createService();
         $service->setClient($client);
         $actual = $service->getQuota();
@@ -97,7 +97,7 @@ final class ExchangeRateServiceTest extends TestCase
                 'documentation' => 'Documentation',
             ]
         );
-        $client = new MockHttpClient([$response]);
+        $client = new MockHttpClient($response);
         $service = $this->createService();
         $service->setClient($client);
         $actual = $service->getQuota();
@@ -114,7 +114,7 @@ final class ExchangeRateServiceTest extends TestCase
     public function testGetRateAndDatesError(): void
     {
         $response = $this->getErrorResponse();
-        $client = new MockHttpClient([$response]);
+        $client = new MockHttpClient($response);
         $service = $this->createService();
         $service->setClient($client);
         $actual = $service->getRateAndDates('CHF', 'USD');
@@ -132,7 +132,7 @@ final class ExchangeRateServiceTest extends TestCase
                 'time_next_update_unix' => 100 + \time(),
             ]
         );
-        $client = new MockHttpClient([$response]);
+        $client = new MockHttpClient($response);
         $service = $this->createService();
         $service->setClient($client);
         $actual = $service->getRateAndDates('CHF', 'USD');
@@ -153,7 +153,7 @@ final class ExchangeRateServiceTest extends TestCase
                 'conversion_rate' => null,
             ]
         );
-        $client = new MockHttpClient([$response]);
+        $client = new MockHttpClient($response);
         $service = $this->createService();
         $service->setClient($client);
         $actual = $service->getRateAndDates('CHF', 'USD');
@@ -163,7 +163,7 @@ final class ExchangeRateServiceTest extends TestCase
     public function testGetRateError(): void
     {
         $response = $this->getErrorResponse();
-        $client = new MockHttpClient([$response]);
+        $client = new MockHttpClient($response);
         $service = $this->createService();
         $service->setClient($client);
         $actual = $service->getRate('CHF', 'USD');
@@ -179,7 +179,7 @@ final class ExchangeRateServiceTest extends TestCase
                 'conversion_rate' => 1.00,
             ]
         );
-        $client = new MockHttpClient([$response]);
+        $client = new MockHttpClient($response);
         $service = $this->createService();
         $service->setClient($client);
         $actual = $service->getRate('CHF', 'USD');
@@ -193,7 +193,7 @@ final class ExchangeRateServiceTest extends TestCase
                 'result' => 'success',
             ]
         );
-        $client = new MockHttpClient([$response]);
+        $client = new MockHttpClient($response);
         $service = $this->createService();
         $service->setClient($client);
         $actual = $service->getRate('CHF', 'USD');
@@ -203,7 +203,7 @@ final class ExchangeRateServiceTest extends TestCase
     public function testGetSupportedCodesError(): void
     {
         $response = $this->getErrorResponse();
-        $client = new MockHttpClient([$response]);
+        $client = new MockHttpClient($response);
         $service = $this->createService();
         $service->setClient($client);
         $actual = $service->getSupportedCodes();
@@ -224,7 +224,7 @@ final class ExchangeRateServiceTest extends TestCase
                 ],
             ]
         );
-        $client = new MockHttpClient([$response]);
+        $client = new MockHttpClient($response);
         $service = $this->createService();
         $service->setClient($client);
         $actual = $service->getSupportedCodes();
@@ -250,7 +250,7 @@ final class ExchangeRateServiceTest extends TestCase
                 'result' => 'success',
             ]
         );
-        $client = new MockHttpClient([$response]);
+        $client = new MockHttpClient($response);
         $service = $this->createService();
         $service->setClient($client);
         $actual = $service->getSupportedCodes();
@@ -262,11 +262,18 @@ final class ExchangeRateServiceTest extends TestCase
         $response = new MockResponse([
             new \RuntimeException('Error at transport level'),
         ]);
-        $client = new MockHttpClient([$response]);
+        $client = new MockHttpClient($response);
         $service = $this->createService();
         $service->setClient($client);
         $service->getQuota();
         $this->assertError($service, 'unknown');
+    }
+
+    public function testTimeout(): void
+    {
+        $service = $this->createService();
+        $actual = $service->getCacheTimeout();
+        self::assertSame(600, $actual);
     }
 
     private function assertError(ExchangeRateService $service, string $message = self::ERROR_MESSAGE): void

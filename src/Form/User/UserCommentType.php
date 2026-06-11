@@ -36,12 +36,12 @@ class UserCommentType extends AbstractType
     {
         $helper = new FormHelper($builder, 'user.fields.');
         $helper->field('to')
-            ->updateOption('prepend_icon', 'fa-solid fa-user')
+            ->prependIcon('fa-solid fa-user')
             ->modelTransformer(new AddressTransformer())
             ->addPlainType();
 
         $helper->field('subject')
-            ->updateOption('prepend_icon', 'fa-regular fa-message')
+            ->prependIcon('fa-regular fa-message')
             ->addTextType();
 
         $helper->field('message')
@@ -50,7 +50,7 @@ class UserCommentType extends AbstractType
 
         $helper->field('importance')
             ->label('importance.name')
-            ->updateOption('prepend_icon', 'fa-solid fa-exclamation')
+            ->prependIcon('fa-solid fa-exclamation')
             ->addEnumType(Importance::class);
 
         $helper->field('attachments')

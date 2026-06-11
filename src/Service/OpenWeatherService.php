@@ -79,7 +79,7 @@ class OpenWeatherService extends AbstractHttpClientService
     public const string PARAM_UNITS = 'units';
 
     /** The cache timeout (15 minutes). */
-    private const int CACHE_TIMEOUT = 60 * 15;
+    private const int CACHE_TIMEOUT = 900;
 
     /** The host name version 2.5. */
     private const string HOST_NAME_V_2_5 = 'https://api.openweathermap.org/data/2.5/';

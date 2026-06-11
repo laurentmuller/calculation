@@ -54,7 +54,7 @@ final class AkismetServiceTest extends TestCase
 
     public function testActivityInvalidCode(): void
     {
-        $client = new MockHttpClient([$this->getInvalidCodeResponse()]);
+        $client = new MockHttpClient($this->getInvalidCodeResponse());
         $service = $this->createService();
         $service->setClient($client);
         $actual = $service->activity();
@@ -63,7 +63,7 @@ final class AkismetServiceTest extends TestCase
 
     public function testActivityLastError(): void
     {
-        $client = new MockHttpClient([$this->getLastErrorResponse()]);
+        $client = new MockHttpClient($this->getLastErrorResponse());
         $service = $this->createService();
         $service->setClient($client);
         $actual = $service->activity();
@@ -95,7 +95,7 @@ final class AkismetServiceTest extends TestCase
             ]
         );
 
-        $client = new MockHttpClient([$response]);
+        $client = new MockHttpClient($response);
         $service = $this->createService();
         $service->setClient($client);
         $actual = $service->activity();
@@ -121,7 +121,7 @@ final class AkismetServiceTest extends TestCase
         $this->requestStack->method('getCurrentRequest')
             ->willReturn($request);
 
-        $client = new MockHttpClient([$this->getInvalidCodeResponse()]);
+        $client = new MockHttpClient($this->getInvalidCodeResponse());
         $service = $this->createService();
         $service->setClient($client);
         $actual = $service->isSpam('content');
@@ -138,7 +138,7 @@ final class AkismetServiceTest extends TestCase
         self::assertTrue($actual);
     }
 
-    public function testIsSpamSuccess(): void
+    public function testIsSpamSuccessDefault(): void
     {
         $request = new Request();
         $this->requestStack->method('getCurrentRequest')
@@ -149,13 +149,27 @@ final class AkismetServiceTest extends TestCase
         self::assertTrue($actual);
     }
 
+    public function testIsSpamSuccessFalse(): void
+    {
+        $request = new Request();
+        $this->requestStack->method('getCurrentRequest')
+            ->willReturn($request);
+
+        $response = new JsonMockResponse(false);
+        $client = new MockHttpClient($response);
+        $service = $this->createService();
+        $service->setClient($client);
+        $actual = $service->isSpam('content');
+        self::assertFalse($actual);
+    }
+
     public function testIsValidKeyInvalidCode(): void
     {
         $request = new Request();
         $this->requestStack->method('getCurrentRequest')
             ->willReturn($request);
 
-        $client = new MockHttpClient([$this->getInvalidCodeResponse()]);
+        $client = new MockHttpClient($this->getInvalidCodeResponse());
         $service = $this->createService();
         $service->setClient($client);
         $actual = $service->isValidKey();
@@ -168,7 +182,7 @@ final class AkismetServiceTest extends TestCase
         $this->requestStack->method('getCurrentRequest')
             ->willReturn($request);
 
-        $client = new MockHttpClient([$this->getLastErrorResponse()]);
+        $client = new MockHttpClient($this->getLastErrorResponse());
         $service = $this->createService();
         $service->setClient($client);
         $actual = $service->isValidKey();
@@ -196,11 +210,18 @@ final class AkismetServiceTest extends TestCase
             ->willReturn($request);
 
         $response = new MockResponse('valid');
-        $client = new MockHttpClient([$response]);
+        $client = new MockHttpClient($response);
         $service = $this->createService();
         $service->setClient($client);
         $actual = $service->isValidKey();
         self::assertTrue($actual);
+    }
+
+    public function testTimeout(): void
+    {
+        $service = $this->createService();
+        $actual = $service->getCacheTimeout();
+        self::assertSame(900, $actual);
     }
 
     public function testUsageException(): void
@@ -215,7 +236,7 @@ final class AkismetServiceTest extends TestCase
 
     public function testUsageInvalidCode(): void
     {
-        $client = new MockHttpClient([$this->getInvalidCodeResponse()]);
+        $client = new MockHttpClient($this->getInvalidCodeResponse());
         $service = $this->createService();
         $service->setClient($client);
         $actual = $service->usage();
@@ -224,7 +245,7 @@ final class AkismetServiceTest extends TestCase
 
     public function testUsageLastError(): void
     {
-        $client = new MockHttpClient([$this->getLastErrorResponse()]);
+        $client = new MockHttpClient($this->getLastErrorResponse());
         $service = $this->createService();
         $service->setClient($client);
         $actual = $service->usage();
@@ -246,7 +267,7 @@ final class AkismetServiceTest extends TestCase
             ]
         );
 
-        $client = new MockHttpClient([$response]);
+        $client = new MockHttpClient($response);
         $service = $this->createService();
         $service->setClient($client);
         $actual = $service->usage();
@@ -259,7 +280,7 @@ final class AkismetServiceTest extends TestCase
         $this->requestStack->method('getCurrentRequest')
             ->willReturn($request);
 
-        $client = new MockHttpClient([$this->getLastErrorResponse()]);
+        $client = new MockHttpClient($this->getLastErrorResponse());
         $service = $this->createService();
         $service->setClient($client);
         $actual = $service->isSpam('content');

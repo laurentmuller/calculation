@@ -485,7 +485,7 @@ class FormHelper
      */
     public function addUserNameType(string|bool $autocomplete = 'username'): self
     {
-        return $this->updateOption('prepend_icon', 'fa-regular fa-user')
+        return $this->prependIcon('fa-regular fa-user')
             ->autocomplete($autocomplete)
             ->updateAttributes([
                 'minLength' => UserInterface::MIN_USERNAME_LENGTH,
@@ -723,6 +723,14 @@ class FormHelper
     public function percent(bool $visible): self
     {
         return $this->updateOption('symbol', $visible ? FormatUtils::PERCENT_SYMBOL : false);
+    }
+
+    /**
+     * Sets the prepend icon option.
+     */
+    public function prependIcon(string $icon): self
+    {
+        return $this->updateOption('prepend_icon', $icon);
     }
 
     /**

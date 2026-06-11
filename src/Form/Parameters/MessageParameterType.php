@@ -32,7 +32,7 @@ class MessageParameterType extends AbstractParameterType
     {
         $helper->field('position')
             ->label('parameters.fields.message_position')
-            ->updateOption('prepend_icon', 'fa-solid fa-crosshairs')
+            ->prependIcon('fa-solid fa-crosshairs')
             ->addEnumType(MessagePosition::class);
 
         $helper->field('timeout')

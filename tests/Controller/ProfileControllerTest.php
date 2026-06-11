@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use App\Repository\UserRepository;
+use PHPUnit\Framework\Attributes\Depends;
+
 final class ProfileControllerTest extends ControllerTestCase
 {
     #[\Override]
@@ -27,7 +30,32 @@ final class ProfileControllerTest extends ControllerTestCase
         yield ['/user/profile/edit', self::ROLE_SUPER_ADMIN];
     }
 
-    public function testEdit(): void
+    /**
+     * Must the last one because it changes the username.
+     */
+    #[Depends('testRoutes')]
+    #[Depends('testPassword')]
+    #[Depends('testEditWithoutChange')]
+    public function testEditWithChange(): void
+    {
+        $user = $this->loadUser(self::ROLE_USER);
+        $oldUserName = $user->getUsername();
+        self::assertNotNull($user);
+
+        $data = [
+            'username' => 'new_username',
+            'email' => $user->getEmail(),
+            'currentPassword' => $user->getPassword(),
+        ];
+
+        $this->checkForm(
+            uri: '/user/profile/edit',
+            data: $data,
+            userName: self::ROLE_USER
+        );
+    }
+
+    public function testEditWithoutChange(): void
     {
         $user = $this->loadUser(self::ROLE_USER);
         self::assertNotNull($user);

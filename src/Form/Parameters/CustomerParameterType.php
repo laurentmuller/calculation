@@ -26,18 +26,18 @@ class CustomerParameterType extends AbstractParameterType
     {
         $helper->field('name')
             ->label('parameters.fields.customer_name')
-            ->updateOption('prepend_icon', 'fa-solid fa-user-group')
+            ->prependIcon('fa-solid fa-user-group')
             ->addTextType();
 
         $helper->field('address')
             ->label('parameters.fields.customer_address')
-            ->updateOption('prepend_icon', 'fa-solid fa-location-dot')
+            ->prependIcon('fa-solid fa-location-dot')
             ->notRequired()
             ->addTextType();
 
         $helper->field('zipCity')
             ->label('parameters.fields.customer_zip_city')
-            ->updateOption('prepend_icon', 'fa-solid fa-map-location-dot')
+            ->prependIcon('fa-solid fa-map-location-dot')
             ->notRequired()
             ->addTextType();
 

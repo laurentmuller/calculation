@@ -163,6 +163,12 @@ final class OpenWeatherServiceTest extends KernelServiceTestCase
         self::assertFalse($result);
     }
 
+    public function testTimeout(): void
+    {
+        $actual = $this->service->getCacheTimeout();
+        self::assertSame(900, $actual);
+    }
+
     private function validateCoord(array $data): void
     {
         self::assertIsNumeric($data['lon']);

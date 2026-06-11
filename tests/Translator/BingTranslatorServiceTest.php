@@ -206,6 +206,13 @@ final class BingTranslatorServiceTest extends TestCase
         self::assertSame('Bing', $actual);
     }
 
+    public function testTimeout(): void
+    {
+        $translator = $this->createTranslator();
+        $actual = $translator->getCacheTimeout();
+        self::assertSame(900, $actual);
+    }
+
     public function testTranslateFalse(): void
     {
         $response = new JsonMockResponse(

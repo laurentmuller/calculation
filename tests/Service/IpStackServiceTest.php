@@ -35,7 +35,7 @@ final class IpStackServiceTest extends TestCase
     public function testGetIpInfoError(): void
     {
         $response = $this->getErrorResponse();
-        $client = new MockHttpClient([$response]);
+        $client = new MockHttpClient($response);
         $service = $this->createService();
         $service->setClient($client);
         $actual = $service->getIpInfo();
@@ -46,7 +46,7 @@ final class IpStackServiceTest extends TestCase
     public function testGetIpInfoSuccess(): void
     {
         $response = $this->getValidResponse();
-        $client = new MockHttpClient([$response]);
+        $client = new MockHttpClient($response);
         $service = $this->createService();
         $service->setClient($client);
         $actual = $service->getIpInfo();
@@ -60,7 +60,7 @@ final class IpStackServiceTest extends TestCase
         $request->method('getClientIp')
             ->willReturn('62.202.191.50');
 
-        $client = new MockHttpClient([$response]);
+        $client = new MockHttpClient($response);
         $service = $this->createService();
         $service->setClient($client);
         $actual = $service->getIpInfo($request);
@@ -71,7 +71,7 @@ final class IpStackServiceTest extends TestCase
     {
         $response = $this->getValidResponse();
         $request = new Request();
-        $client = new MockHttpClient([$response]);
+        $client = new MockHttpClient($response);
         $service = $this->createService();
         $service->setClient($client);
         $actual = $service->getIpInfo($request);
@@ -80,14 +80,24 @@ final class IpStackServiceTest extends TestCase
 
     public function testGetWithException(): void
     {
-        $response = new MockResponse([
-            new \RuntimeException('Error at transport level'),
+        $content = '{"error": {"code": 404, "type": "unknown"}}';
+        $response = new MockResponse($content, [
+            'http_code' => 404,
+            'response_headers' => ['content-type' => 'application/json'],
         ]);
-        $client = new MockHttpClient([$response]);
+        $client = new MockHttpClient($response);
         $service = $this->createService();
         $service->setClient($client);
-        $service->getIpInfo();
-        $this->assertError($service, 'unknown');
+        $actual = $service->getIpInfo();
+        self::assertTrue($service->hasLastError());
+        self::assertNull($actual);
+    }
+
+    public function testTimeout(): void
+    {
+        $service = $this->createService();
+        $actual = $service->getCacheTimeout();
+        self::assertSame(3600, $actual);
     }
 
     private function assertError(IpStackService $service, string $message = self::ERROR_MESSAGE): void

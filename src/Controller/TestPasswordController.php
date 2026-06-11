@@ -78,7 +78,7 @@ class TestPasswordController extends AbstractController
         $helper->listenerPreSubmit($listener);
         $helper->field('input')
             ->widgetClass('password-strength')
-            ->updateOption('prepend_icon', 'fa-solid fa-lock')
+            ->prependIcon('fa-solid fa-lock')
             ->updateAttributes([
                 'data-url' => $this->generateUrl(route: 'ajax_password', referenceType: UrlGeneratorInterface::ABSOLUTE_URL),
                 'data-strength' => $strengthLevel->value,
@@ -98,14 +98,14 @@ class TestPasswordController extends AbstractController
         }
 
         $helper->field('user_name')
-            ->updateOption('prepend_icon', 'fa-regular fa-user')
+            ->prependIcon('fa-regular fa-user')
             ->label('user.fields.username_full')
             ->addPlainType();
         $helper->field('user_email')
             ->addHiddenType();
         $helper->field('level')
             ->label('password.strengthLevel')
-            ->updateOption('prepend_icon', 'fa-solid fa-hand-fist')
+            ->prependIcon('fa-solid fa-hand-fist')
             ->addEnumType(StrengthLevel::class);
         $helper->field('captcha')
             ->label('captcha.label')

@@ -110,6 +110,13 @@ final class DeeplTranslatorServiceTest extends TestCase
         self::assertCount(2, $actual);
     }
 
+    public function testTimeout(): void
+    {
+        $translator = $this->createTranslator();
+        $actual = $translator->getCacheTimeout();
+        self::assertSame(900, $actual);
+    }
+
     public function testTranslateEmptyBody(): void
     {
         $response = new MockResponse(

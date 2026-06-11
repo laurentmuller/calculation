@@ -50,7 +50,7 @@ class UserType extends AbstractEntityType
             ->add(RoleChoiceType::class);
 
         $helper->field('enabled')
-            ->updateOption('prepend_icon', 'fa-solid fa-user-check')
+            ->prependIcon('fa-solid fa-user-check')
             ->addTrueFalseType('common.value_enabled', 'common.value_disabled');
 
         $helper->field('imageFile')

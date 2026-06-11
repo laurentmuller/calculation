@@ -34,7 +34,7 @@ class UserRightsType extends AbstractRightsType
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('username')
-            ->updateOption('prepend_icon', 'fa-regular fa-user')
+            ->prependIcon('fa-regular fa-user')
             ->label('user.fields.username_full')
             ->addPlainType();
         $helper->field('enabled')

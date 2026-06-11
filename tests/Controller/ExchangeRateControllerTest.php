@@ -52,6 +52,29 @@ final class ExchangeRateControllerTest extends ControllerTestCase
         );
     }
 
+    public function testGetCodesWithoutError(): void
+    {
+        $supportedCodes = [
+            'CHF' => [
+                'symbol' => 'CHF',
+                'name' => 'Swiss Franc',
+                'numericCode' => 41,
+                'fractionDigits' => 2,
+                'roundingIncrement' => 0.01,
+            ],
+        ];
+        $service = $this->createMock(ExchangeRateService::class);
+        $service->method('getSupportedCodes')
+            ->willReturn($supportedCodes);
+        $this->setService(ExchangeRateService::class, $service);
+
+        $this->checkRoute(
+            url: '/exchange/codes',
+            username: self::ROLE_SUPER_ADMIN,
+            xmlHttpRequest: true
+        );
+    }
+
     public function testGetLatestSuccess(): void
     {
         $data = ['USD' => 1.0];

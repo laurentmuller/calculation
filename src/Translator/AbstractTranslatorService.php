@@ -30,7 +30,7 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     final protected const int ERROR_NOT_FOUND = 199;
 
     /** The cache timeout (15 minutes). */
-    private const int CACHE_TIMEOUT = 60 * 15;
+    private const int CACHE_TIMEOUT = 900;
 
     /** The property accessor to get values. */
     private ?PropertyAccessorInterface $accessor = null;

@@ -535,6 +535,19 @@ final class FormHelperTest extends TypeTestCase
         );
     }
 
+    public function testPrependIcon(): void
+    {
+        $icon = 'fa-user';
+        $form = $this->createFormHelper()
+            ->prependIcon($icon)
+            ->addTextType()
+            ->createForm();
+        $this->validateForm(
+            form: $form,
+            options: ['prepend_icon' => $icon]
+        );
+    }
+
     public function testReadonly(): void
     {
         $form = $this->createFormHelper()

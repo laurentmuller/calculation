@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Repository\UserRepository;
 use PHPUnit\Framework\Attributes\Depends;
 
 final class ProfileControllerTest extends ControllerTestCase

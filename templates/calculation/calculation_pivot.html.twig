@@ -197,7 +197,7 @@
                         class: ['dropdown-item', popover ? 'dropdown-item-checked-right']} -%}
                     <li>
                         <button {{ html_attr(button_attrs) }}>
-                            {{- icon('message', 'pivot.popover') -}}
+                            {{- icon(icon: 'message', text: 'pivot.popover') -}}
                         </button>
                     </li>
                     {%- set button_attrs = {
@@ -206,7 +206,7 @@
                         class: ['dropdown-item', highlight ? 'dropdown-item-checked-right']} -%}
                     <li>
                         <button {{ html_attr(button_attrs) }}>
-                            {{- icon('highlighter', 'pivot.highlight') -}}
+                            {{- icon(icon: 'highlighter', text: 'pivot.highlight') -}}
                         </button>
                     </li>
                     {{ dropdownSeparator() }}

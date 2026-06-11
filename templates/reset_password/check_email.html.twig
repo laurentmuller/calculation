@@ -11,26 +11,38 @@
 {% block card_container_class ' col-xl-8 offset-xl-2 my-auto h-75' %}
 {# body #}
 {% block card_body -%}
-<p>
-    Un courrier électronique vous a été envoyé. Il contient un lien sur lequel il vous faudra cliquer pour réinitialiser votre mot de passe.
-</p>
-<p>
-    Si vous ne recevez pas de courrier électronique, veuillez vérifier votre dossier de courrier indésirable (pourriel) ou <a href="{{ path('app_forgot_password_request') }}">essayer à nouveau</a>.
-</p>
-<p class="mb-1">
-    <b>Remarque :</b>
-</p>
-<ul class="mb-0">
-    <li>La demande de changement du nouveau mot de passe expire dans {{ expires_life_time }} (à {{ expires_date|locale_time('short') }}).</li>
-    <li>Vous ne pouvez demander un nouveau mot de passe que dans {{ throttle_life_time }} (à {{ throttle_date|locale_time('short') }}).</li>
-</ul>
+    <p>
+        Un courrier électronique vous a été envoyé. Il contient un lien sur lequel il vous faudra cliquer pour
+        réinitialiser votre mot de passe.
+    </p>
+    <p>
+        Si vous ne recevez pas de courrier électronique, veuillez vérifier votre dossier de courrier indésirable
+        (pourriel) ou <a href="{{ path('app_forgot_password_request') }}">essayer à nouveau</a>.
+    </p>
+    <p class="mb-1">
+        <b>Remarque :</b>
+    </p>
+    <ul class="mb-0">
+        <li>La demande de changement du nouveau mot de passe expire dans {{ expires_life_time }}
+            (à {{ expires_date|locale_time('short') }}).
+        </li>
+        <li>Vous ne pouvez demander un nouveau mot de passe que dans {{ throttle_life_time }}
+            (à {{ throttle_date|locale_time('short') }}).
+        </li>
+    </ul>
 {%- endblock card_body %}
 {# footer #}
 {% block card_footer -%}
-{{ link(path('app_login'), 'security.login.submit', 'btn btn-form btn-primary', title: 'security.login.description') }}
-{{ footer_center() }}
+    {{ link(
+        href: path('app_login'),
+        text: 'security.login.submit',
+        class: 'btn btn-form btn-primary',
+        icon: 'sign-in-alt',
+        title: 'security.login.description',
+        inline: true) }}
+    {{ footer_center() }}
 {%- endblock card_footer %}
 {# stylesheets #}
 {% block stylesheets -%}
-{{ asset_css('css/center.css') }}
+    {{ asset_css('css/center.css') }}
 {% endblock stylesheets %}

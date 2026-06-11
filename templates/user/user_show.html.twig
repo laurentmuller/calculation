@@ -33,6 +33,11 @@
 {% block actions_form %}
 {{ parent() -}}
 {% if rights_path %}
-    {{ link(rights_path, 'user.rights.title', 'btn btn-form btn-outline-secondary') }}
+    {{ link(
+        href: rights_path,
+        text: 'user.rights.title',
+        class: 'btn btn-form btn-outline-secondary',
+        icon: 'unlock',
+        inline: true) }}
 {% endif %}
 {% endblock actions_form %}

@@ -1,7 +1,7 @@
 {% extends 'cards/card_base.html.twig' %}
 {% from 'macros/_icons.html.twig' import button_ok, link %}
 {# parameters #}
-{% set title_icon = ICON_SHOW %}
+{%- set title_icon = ICON_SHOW -%}
 {# body #}
 {% block card_body %}
 <div class="{% block table_responsive_class %}table-responsive{% endblock table_responsive_class %}">
@@ -25,13 +25,24 @@
 <div class="d-flex-wrap-center">
     {% block actions_form %}
         {% if cancel_path|default(false) %}
-            {{ button_ok(cancel_path) }}
+            {{ button_ok(href: cancel_path, icon: 'check') }}
         {% endif %}
         {% if edit_path|default(false) %}
-            {{ link(edit_path, 'common.button_edit', 'btn btn-form btn-outline-success') }}
+            {{ link(
+                href: edit_path,
+                text: 'common.button_edit',
+                class: 'btn btn-form btn-outline-success',
+                icon: ICON_EDIT,
+                inline: true)
+            }}
         {% endif %}
         {% if delete_path|default(false) %}
-            {{ link(delete_path, 'common.button_delete', 'btn btn-form btn-outline-danger') }}
+            {{ link(
+                href: delete_path,
+                text: 'common.button_delete',
+                class: 'btn btn-form btn-outline-danger',
+                icon: ICON_DELETE,
+                inline: true) }}
         {% endif %}
     {% endblock actions_form %}
 </div>

@@ -86,7 +86,12 @@
 {% block card_footer %}
 <div class="d-flex-wrap-center">
     {{ homepage() }}
-    {{ link(path('admin_product'), 'product.result.new_update', 'btn btn-form btn-secondary') }}
+    {{ link(
+        href: path('admin_product'),
+        text: 'product.result.new_update',
+        class: 'btn btn-form btn-secondary',
+        icon: 'plus',
+        inline: true) }}
     {{ sitemap() }}
 </div>
 {% endblock card_footer %}

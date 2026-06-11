@@ -50,14 +50,22 @@
 {% macro item_path(path, text, icon, class = '') %}
 {%- set class = ('dropdown-item dropdown-item-path rowlink-skip ' ~ class)|trim -%}
 <li>
-    {{- link(path, text, class, icon ~ ' fa-fw') -}}
+    {{- link(
+        href: path,
+        text: text,
+        class: class,
+        icon: icon ~ ' fa-fw') -}}
 </li>
 {%- endmacro item_path %}
 {# output an external drop-down item path #}
-{% macro item_path_external(path, text, icon, class = '') %}
+{% macro item_path_external(href, text, icon, class = '') %}
 {%- set class = ('dropdown-item dropdown-item-path rowlink-skip ' ~ class)|trim -%}
 <li>
-    {{- linkExternal(path, text, class, icon ~ ' fa-fw') -}}
+    {{- linkExternal(
+        href: href,
+        text: text,
+        class: class,
+        icon: icon ~ ' fa-fw') -}}
 </li>
 {%- endmacro item_path_external %}
 {# output a global drop-down item #}
@@ -68,7 +76,11 @@
 {% macro item_external(path, text, icon, class = '') %}
 {%- set class = ('dropdown-item rowlink-skip ' ~ class)|trim -%}
 <li>
-    {{- linkExternal(path, text, class, icon ~ ' fa-fw') -}}
+    {{- linkExternal(
+        href: path,
+        text: text,
+        class: class,
+        icon: icon ~ ' fa-fw') -}}
 </li>
 {%- endmacro item_external %}
 {# output a drop-down separator #}

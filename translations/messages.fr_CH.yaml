@@ -1047,7 +1047,7 @@ report:
         total: Total
         error_qr_code: Une erreur s'est produite lors de la génération du code QR.
 resetting:
-    link: Mot de passe oublié ?
+    link: Mot de passe oublié
     not_found_password_token: Aucun jeton de réinitialisation du mot de passe n'a été trouvé dans l'URL ou dans la session.
     request:
         description: Entrez votre nom d'utilisateur ou votre adresse e-mail pour demander une réinitialisation du mot de passe.

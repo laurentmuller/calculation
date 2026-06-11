@@ -28,7 +28,7 @@
                 </div>
                 <div class="modal-footer justify-content-start align-items-start">
                     <button type="submit" id="dialog_submit_button" class="btn btn-form btn-primary">
-                        {{- 'common.button_ok'|trans -}}
+                        {{- icon(icon: 'floppy-disk', text: 'common.button_ok', inline: true) -}}
                     </button>
                     {{- modal_close_button(for_header: false, data_target: dialog_id) }}
                     {%- block modal_buttons -%}{%- endblock modal_buttons -%}

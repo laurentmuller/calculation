@@ -64,7 +64,11 @@
 
 {% macro home_button() -%}
     {% from 'macros/_icons.html.twig' import link %}
-    {{ link(path('help_index'), null, 'btn btn-outline-secondary', 'home', 'help.home_menu') }}
+    {{ link(
+        href: path('help_index'),
+        class: 'btn btn-outline-secondary',
+        icon: 'home',
+        title: 'help.home_menu') }}
 {%- endmacro home_button %}
 
 {% macro export_button() %}
@@ -74,12 +78,20 @@
 
 {% macro dialogs_button() %}
     {% from 'macros/_icons.html.twig' import link %}
-    {{ link(path('help_dialogs'), '', 'btn btn-outline-secondary', 'file-code', 'help.dialog_menu') }}
+    {{ link(
+        href: path('help_dialogs'),
+        class: 'btn btn-outline-secondary',
+        icon: 'file-code',
+        title: 'help.dialog_menu') }}
 {% endmacro dialogs_button %}
 
 {% macro entities_button() %}
     {% from 'macros/_icons.html.twig' import link %}
-    {{ link(path('help_entities'), '', 'btn btn-outline-secondary', 'database', 'help.entity_menu') }}
+    {{ link(
+        href: path('help_entities'),
+        class: 'btn btn-outline-secondary',
+        icon: 'database',
+        title: 'help.entity_menu') }}
 {% endmacro entities_button %}
 
 {% macro output_links(links, service) -%}

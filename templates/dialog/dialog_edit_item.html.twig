@@ -1,4 +1,5 @@
 {# Modal dialog to edit a calculation item #}
+{% from 'macros/_icons.html.twig' import icon %}
 {% extends 'dialog/dialog_edit.html.twig' %}
 {# parameters #}
 {%- set form_prefix = 'item' -%}
@@ -50,6 +51,6 @@
 {# buttons #}
 {% block modal_buttons %}
     <button type="button" id="item_delete_button" class="btn btn-form btn-outline-danger">
-        {{- 'common.button_delete'|trans -}}
+        {{- icon(icon: ICON_DELETE, text: 'common.button_delete', inline: true) -}}
     </button>
 {% endblock modal_buttons %}

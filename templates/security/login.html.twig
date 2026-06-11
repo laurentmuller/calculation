@@ -1,4 +1,5 @@
 {% extends 'cards/card_edit_center.html.twig' %}
+{% from 'macros/_icons.html.twig' import link %}
 {# parameters #}
 {%- set title = 'security.login.title' -%}
 {%- set title_description = 'security.login.description' -%}
@@ -15,8 +16,13 @@
 {# actions #}
 {% block actions_form %}
     {{ parent() }}
-    <a href="{{ path('app_forgot_password_request') }}" class="align-self-center"
-       title="{{ 'resetting.request.description'|trans }}">{{ 'resetting.link'|trans }}</a>
+    {{ link(
+        href: path('app_forgot_password_request'),
+        text: 'resetting.link',
+        class: 'btn btn-form btn-secondary',
+        icon: 'circle-question',
+        title: 'resetting.request.description',
+        inline: true) }}
 {% endblock actions_form %}
 {# javascripts #}
 {% block javascripts %}

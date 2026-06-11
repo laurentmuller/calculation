@@ -20,15 +20,32 @@
     {% if is_remembered %}
         {{ homepage() }}
         {% if not accepted %}
-            {{ link(path('policy_accept'), 'cookie_banner.accept', 'btn btn-form btn-success', title: 'cookie_banner.accept_title') }}
+            {{ link(
+                href: path('policy_accept'),
+                text: 'cookie_banner.accept',
+                class: 'btn btn-form btn-success',
+                icon: 'check',
+                title: 'cookie_banner.accept_title',
+                inline: true) }}
         {% endif %}
     {% else %}
-        {{ link(path('app_login'), 'index.login', 'btn btn-form btn-outline-primary') }}
+        {{ link(
+            href: path('app_login'),
+            text: 'index.login',
+            class: 'btn btn-form btn-outline-primary',
+            icon: 'sign-in-alt',
+            inline: true) }}
     {% endif %}
     {{ sitemap() }}
     {% set caller = app.request.query.string('caller') %}
     {% set params = caller ? {caller: caller} : {} %}
-    {{ link(path('about_policy_index', params), 'about.policy.title', 'btn btn-form btn-secondary') }}
+    {{ link(
+        href: path('about_policy_index', params),
+        text: 'about.policy.title',
+        class: 'btn btn-form btn-secondary',
+        icon: 'info-circle',
+        inline: true)
+    }}
     {{ button_pdf('about_licence_pdf') }}
     {{ button_word('about_licence_word') }}
 </div>

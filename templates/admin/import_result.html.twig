@@ -63,8 +63,13 @@
 {% endblock card_body %}
 {# footer #}
 {% block card_footer %}
-{{- homepage() -}}
-{% if not result.valid %}
-    {{ link(path('admin_import'), 'swisspost.result.new_import', 'btn btn-outline-secondary') -}}
-{%- endif %}
+    {{- homepage() }}
+    {% if not result.valid %}
+        {{ link(
+            href: path('admin_import'),
+            text: 'swisspost.result.new_import',
+            class: 'btn btn-outline-secondary',
+            icon: 'rotate-left',
+            inline: true) -}}
+    {%- endif %}
 {% endblock card_footer %}

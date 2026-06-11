@@ -52,7 +52,12 @@
 {% block actions_form -%}
 {{ parent() }}
 {% if is_granted(ROLE_ADMIN) %}
-    {{ link(path('openweather_import'), 'common.button_import', 'btn btn-form btn-outline-secondary') }}
+    {{ link(
+        href: path('openweather_import'),
+        text: 'common.button_import',
+        class: 'btn btn-form btn-outline-secondary',
+        icon: 'download',
+        inline: true) }}
 {% endif %}
 {% endblock actions_form %}
 {# stylesheets #}

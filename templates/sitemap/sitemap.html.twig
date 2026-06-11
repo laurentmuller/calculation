@@ -29,13 +29,19 @@
 {% macro entry_content(entry, route) %}
 {% set icon = entry.icon is defined ? entry.icon ~ ' fa-fw' : false %}
 {% if route == 'app_logout' %}
-    <a href="{{ logout_path() }}">{{ icon(icon, entry.text) }}</a>
+    <a href="{{ logout_path() }}">{{ icon(icon: icon, text: entry.text) }}</a>
 {% elseif route and entry.external|default(false) %}
-    {{ linkExternal(path(route), entry.text, null, icon) }}
+    {{ linkExternal(
+        href: path(route),
+        text: entry.text,
+        icon: icon) }}
 {% elseif route %}
-    {{ link(path(route, {caller: path('site_map')}), entry.text, icon: icon) }}
+    {{ link(
+        href: path(route, {caller: path('site_map')}),
+        text: entry.text,
+        icon: icon) }}
 {% else %}
-    <span>{{ icon(icon, entry.text) }}</span>
+    <span>{{ icon(icon: icon, text: entry.text) }}</span>
 {% endif %}
 {%- endmacro entry_content %}
 {# parameters #}

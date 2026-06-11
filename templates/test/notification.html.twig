@@ -1,43 +1,44 @@
 {% extends 'cards/card_base.html.twig' %}
-{% from 'macros/_icons.html.twig' import homepage %}
+{% from 'macros/_icons.html.twig' import homepage, icon %}
 {# macros #}
 {% macro button(type) -%}
-{%- set text = ('background.' ~ type)|trans -%}
-<button type="button"
-        data-type="{{ type }}"
-        data-bs-html="true"
-        data-bs-trigger="hover"
-        data-bs-toggle="popover"
-        data-bs-placement="right"
-        data-bs-custom-class="popover-{{ type }}"
-        data-bs-title="{{ 'test.notification'|trans }}"
-        data-bs-content="Affiche une notification de type <b>{{ text }}</b> avec des données aléatoires."
-        class="btn btn-notify btn-{{ type }} flex-fill">
-    {{- text -}}
-</button>
+    {%- set text = ('background.' ~ type)|trans -%}
+    <button type="button"
+            data-type="{{ type }}"
+            data-bs-html="true"
+            data-bs-trigger="hover"
+            data-bs-toggle="popover"
+            data-bs-placement="right"
+            data-bs-custom-class="popover-{{ type }}"
+            data-bs-title="{{ 'test.notification'|trans }}"
+            data-bs-content="Affiche une notification de type <b>{{ text }}</b> avec des données aléatoires."
+            class="btn btn-notify btn-{{ type }} flex-fill">
+        {{- text -}}
+    </button>
 {%- endmacro button %}
 
 {% macro position(position, selection) -%}
-{%- set value = position.value -%}
-<option value="{{ value }}"{% if position == selection %} selected{% endif %}>{{ position|trans }}</option>
+    {%- set value = position.value -%}
+    <option value="{{ value }}"{% if position == selection %} selected{% endif %}>{{ position|trans }}</option>
 {%- endmacro position %}
 
 {% macro timeout(seconds, selection) -%}
-{%- set milliseconds = seconds * 1000 -%}
-{%- set text = 'counters.seconds'|trans({'%count%': seconds}) -%}
-<option value="{{ milliseconds }}"{% if milliseconds == selection %} selected{% endif %}>{{ text }}</option>
+    {%- set milliseconds = seconds * 1000 -%}
+    {%- set text = 'counters.seconds'|trans({'%count%': seconds}) -%}
+    <option value="{{ milliseconds }}"{% if milliseconds == selection %} selected{% endif %}>{{ text }}</option>
 {%- endmacro timeout %}
 
 {% macro progress(pixels, selection) -%}
-{%- set text = 'counters.pixels'|trans({'%count%': pixels}) -%}
-<option value="{{ pixels }}"{% if pixels == selection %} selected{% endif %}>{{ text }}</option>
+    {%- set text = 'counters.pixels'|trans({'%count%': pixels}) -%}
+    <option value="{{ pixels }}"{% if pixels == selection %} selected{% endif %}>{{ text }}</option>
 {%- endmacro progress %}
 
 {% macro checkbox(id, text, checked = true) -%}
-<div class="form-check form-check-inline form-switch form-check-option">
-  <input type="checkbox" class="form-check-input form-check-input-option" name="{{ id }}" id="{{ id }}" data-default="{{ checked|json_encode }}"{% if checked %} checked{% endif %}>
-  <label class="form-check-label" for="{{ id }}">{{ text|trans }}</label>
-</div>
+    <div class="form-check form-check-inline form-switch form-check-option">
+        <input type="checkbox" class="form-check-input form-check-input-option" name="{{ id }}" id="{{ id }}"
+               data-default="{{ checked|json_encode }}"{% if checked %} checked{% endif %}>
+        <label class="form-check-label" for="{{ id }}">{{ text|trans }}</label>
+    </div>
 {%- endmacro checkbox %}
 {# parameters #}
 {%- set title = 'test.notification' -%}
@@ -47,67 +48,71 @@
 {%- set progress = user_parameters.message.progress %}
 {# body #}
 {% block card_body %}
-<span class="form-label horizontal-line">Type de message</span>
-<div class="d-flex flex-wrap justify-content-center gap-2">
-    {{ _self.button('success') }}
-    {{ _self.button('warning') }}
-    {{ _self.button('danger') }}
-    {{ _self.button('info') }}
-    {{ _self.button('primary') }}
-    {{ _self.button('secondary') }}
-    {{ _self.button('dark') }}
-</div>
-<hr>
-<div class="row">
-    <div class="col-md-6 col-lg-3 mb-3">
-        <label class="form-label" for="position">{{ 'parameters.fields.message_position'|trans }}</label>
-        <select id="position" name="position" class="form-select" data-failure="{{ 'parameters.failure'|trans }}" data-default="{{ position.value }}" data-position="{{ position.value }}" data-random="{{ url('ajax_random_text') }}">
-        {% for current in positions %}
-            {{ _self.position(current, position) }}
-        {% endfor %}
-        </select>
+    <span class="form-label horizontal-line">Type de message</span>
+    <div class="d-flex flex-wrap justify-content-center gap-2">
+        {{ _self.button('success') }}
+        {{ _self.button('warning') }}
+        {{ _self.button('danger') }}
+        {{ _self.button('info') }}
+        {{ _self.button('primary') }}
+        {{ _self.button('secondary') }}
+        {{ _self.button('dark') }}
     </div>
-    <div class="col-md-6 col-lg-3 mb-3">
-        <label class="form-label" for="timeout">{{ 'parameters.fields.message_timeout'|trans }}</label>
-        <select id="timeout" name="timeout" data-default="{{ timeout }}" class="form-select">
-            {% for seconds in 1..5 %}
-                {{ _self.timeout(seconds, timeout) }}
-            {% endfor %}
-        </select>
+    <hr>
+    <div class="row">
+        <div class="col-md-6 col-lg-3 mb-3">
+            <label class="form-label" for="position">{{ 'parameters.fields.message_position'|trans }}</label>
+            <select id="position" name="position" class="form-select" data-failure="{{ 'parameters.failure'|trans }}"
+                    data-default="{{ position.value }}" data-position="{{ position.value }}"
+                    data-random="{{ url('ajax_random_text') }}">
+                {% for current in positions %}
+                    {{ _self.position(current, position) }}
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-3">
+            <label class="form-label" for="timeout">{{ 'parameters.fields.message_timeout'|trans }}</label>
+            <select id="timeout" name="timeout" data-default="{{ timeout }}" class="form-select">
+                {% for seconds in 1..5 %}
+                    {{ _self.timeout(seconds, timeout) }}
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-3">
+            <label class="form-label" for="progress">{{ 'parameters.fields.message_progress'|trans }}</label>
+            <select id="progress" name="progress" data-default="{{ progress }}" class="form-select">
+                {% for i in 0..5 %}
+                    {{ _self.progress(i, progress) }}
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-3">
+            <label class="form-label" for="maxNbChars">Nombre de caractères</label>
+            <select id="maxNbChars" name="maxNbChars" data-default="{{ 150 }}" class="form-select">
+                {% for i in range(50, 500, 50) %}
+                    <option value="{{ i }}"{% if i == 150 %} selected{% endif %}>{{ i }}</option>
+                {% endfor %}
+            </select>
+        </div>
     </div>
-    <div class="col-md-6 col-lg-3 mb-3">
-        <label class="form-label" for="progress">{{ 'parameters.fields.message_progress'|trans }}</label>
-        <select id="progress" name="progress" data-default="{{ progress }}" class="form-select">
-            {% for i in 0..5 %}
-                {{ _self.progress(i, progress) }}
-            {% endfor %}
-        </select>
+    <span class="form-label horizontal-line">{{ 'parameters.group_options'|trans }}</span>
+    <div class="d-flex-wrap-center">
+        {{ _self.checkbox('title', 'parameters.fields.message_title', user_parameters.message.title) }}
+        {{ _self.checkbox('icon', 'parameters.fields.message_icon', user_parameters.message.icon) }}
+        {{ _self.checkbox('subtitle', 'parameters.fields.message_sub_title', user_parameters.message.subTitle) }}
+        {{ _self.checkbox('close', 'parameters.fields.message_close', user_parameters.message.close) }}
+        {{ _self.checkbox('autohide', 'parameters.fields.message_auto_close') }}
     </div>
-    <div class="col-md-6 col-lg-3 mb-3">
-        <label class="form-label" for="maxNbChars">Nombre de caractères</label>
-        <select id="maxNbChars" name="maxNbChars" data-default="{{ 150 }}" class="form-select">
-            {% for i in range(50, 500, 50) %}
-                <option value="{{ i }}"{% if i == 150 %} selected{% endif %}>{{ i }}</option>
-            {% endfor %}
-        </select>
-    </div>
-</div>
-<span class="form-label horizontal-line">{{ 'parameters.group_options'|trans }}</span>
-<div class="d-flex-wrap-center">
-    {{ _self.checkbox('title', 'parameters.fields.message_title', user_parameters.message.title) }}
-    {{ _self.checkbox('icon', 'parameters.fields.message_icon', user_parameters.message.icon) }}
-    {{ _self.checkbox('subtitle', 'parameters.fields.message_sub_title', user_parameters.message.subTitle) }}
-    {{ _self.checkbox('close', 'parameters.fields.message_close', user_parameters.message.close) }}
-    {{ _self.checkbox('autohide', 'parameters.fields.message_auto_close') }}
-</div>
 {% endblock card_body %}
 {# footer #}
 {% block card_footer %}
-{{ homepage() }}
-<button type="button" class="btn btn-default btn-outline-success">{{ 'parameters.default'|trans }}</button>
+    {{ homepage() }}
+    <button type="button" class="btn btn-form btn-default btn-outline-success">
+        {{- icon('rotate-left', 'parameters.default') -}}
+    </button>
 {% endblock card_footer %}
 {# javascripts #}
 {% block javascripts %}
-{{ parent() }}
-{{ asset_js('js/test/notification.js') }}
+    {{ parent() }}
+    {{ asset_js('js/test/notification.js') }}
 {%- endblock javascripts %}

@@ -168,8 +168,8 @@
                         $this.focusSimpleEditor();
                     });
 
-                    // focus
-                    if (options.focus) {
+                    // focus only for medium screen
+                    if (options.focus && window.innerWidth > 768 && window.innerHeight > 768) {
                         $this.focusSimpleEditor();
                     }
                 });

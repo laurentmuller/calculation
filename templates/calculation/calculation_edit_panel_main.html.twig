@@ -38,7 +38,12 @@
                 {% if is_granted(PERMISSION_EDIT, ENTITY_CALCULATION) %}
                     {%- set state_params = route_params(app.request, item) -%}
                     {%- set state_path = path('calculation_state', state_params) -%}
-                    {{ link(state_path, 'calculation.list.state_title', 'btn btn-form btn-outline-success') -}}
+                    {{ link(
+                        href: state_path,
+                        text: 'calculation.list.state_title',
+                        class: 'btn btn-form btn-outline-success',
+                        icon: ICON_CALCULATION_STATE,
+                        inline: true) -}}
                 {% endif %}
             {%- endif -%}
         </div>

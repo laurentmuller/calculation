@@ -139,7 +139,11 @@
 {% block actions_form %}
 {{ parent() }}
 {% if state_path %}
-    {{ link(state_path, 'calculation.list.state_title', 'btn btn-form btn-outline-success') -}}
+    {{ link(
+        href: state_path,
+        text: 'calculation.list.state_title',
+        class: 'btn btn-form btn-outline-success',
+        inline: true) -}}
 {% endif %}
 <p id="error-all" class="ms-auto d-none">
     <span id="error-duplicate" class="d-none"><span class="duplicate-cell"></span>{{ 'duplicate.title'|trans }}</span>

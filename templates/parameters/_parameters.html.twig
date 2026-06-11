@@ -1,5 +1,5 @@
 {% extends 'cards/card_edit.html.twig' %}
-{% from 'macros/_icons.html.twig' import icon %}
+{% from 'macros/_icons.html.twig' import icon, dropdownItemButton %}
 {% form_theme form with _self %}
 {# parameters #}
 {%- set cancel_path = path('homepage') -%}
@@ -47,21 +47,25 @@
 {% block actions_form -%}
     {{ parent() }}
     <div class="dropdown">
-        <button class="btn btn-form btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                aria-expanded="false" title="{{ 'parameters.default_help'|trans }}">
-            {{- 'parameters.default'|trans -}}
+        {% set attrs = {
+            type: 'button',
+            class: ['btn', 'btn-form', 'btn-outline-success', 'dropdown-toggle'],
+            title: 'parameters.default_help'|trans,
+            'data-bs-toggle': 'dropdown',
+            'aria-expanded': false,
+        } %}
+        <button {{ html_attr(attrs) }}>
+            {{- icon(icon: 'rotate-left', text: 'parameters.default', inline: true) -}}
         </button>
         <ul class="dropdown-menu">
-            <li>
-                <button type="button" class="dropdown-item btn-item-visible">
-                    {{- 'parameters.default_visible'|trans -}}
-                </button>
-            </li>
-            <li>
-                <button type="button" class="dropdown-item btn-item-all">
-                    {{- 'parameters.default_all'|trans -}}
-                </button>
-            </li>
+            {{- dropdownItemButton(
+                text: 'parameters.default_visible',
+                icon: 'reply',
+                class: 'btn-item-visible') -}}
+            {{- dropdownItemButton(
+                text: 'parameters.default_all',
+                icon: 'reply-all',
+                class: 'btn-item-all') -}}
         </ul>
     </div>
 {%- endblock actions_form %}

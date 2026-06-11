@@ -8,18 +8,18 @@
         <div class="modal-content{% if not raw_data %} border-danger{% endif %}">
             {{- modal_title(id: 'modal-data-title', title_icon: 'code', title_text: 'dialog_raw_data.title', data_target: dialog_id, header_class: raw_data ? null : 'text-bg-danger') -}}
             <div class="modal-body">
-            {%- if raw_data -%}
-                {% if description ?? false %}
-                    <span class="form-label">{{ description }}</span>
-                {% endif %}
-                <div class="border pre-scrollable pre-scrollable-highlight-php scrollbar-thin font-monospace">
-                    {{- raw_data|var_export_php(raw_data_id) -}}
-                </div>
-            {%- else -%}
-                <p class="text-center my-4">
-                    {{- 'dialog_raw_data.empty'|trans -}}
-                </p>
-            {%- endif -%}
+                {%- if raw_data -%}
+                    {% if description ?? false %}
+                        <span class="form-label">{{ description }}</span>
+                    {% endif %}
+                    <div class="border pre-scrollable pre-scrollable-highlight-php scrollbar-thin font-monospace">
+                        {{- raw_data|var_export_php(raw_data_id) -}}
+                    </div>
+                {%- else -%}
+                    <p class="text-center my-4">
+                        {{- 'dialog_raw_data.empty'|trans -}}
+                    </p>
+                {%- endif -%}
             </div>
             <div class="modal-footer justify-content-start">
                 {% if raw_data and (allow_copy ?? false) %}

@@ -1,4 +1,4 @@
-{% from 'macros/_icons.html.twig' import modal_title, modal_close_button %}
+{% from 'macros/_icons.html.twig' import modal_title, modal_close_button, icon %}
 {# output a theme entry #}
 {% macro output_theme(theme, checked) -%}
     {% set id = 'form_theme_' ~ theme.value %}
@@ -38,14 +38,16 @@
             <div class="modal-body mx-3">
                 <span class="form-label mb-3">{{ 'theme.help'|trans }}</span>
                 {% for theme in themes() %}
-                    {{ _self.output_theme(theme: theme, checked: (theme == selection)) }}
+                    {{ _self.output_theme(theme: theme, checked: theme == selection) }}
                 {% endfor %}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-ok btn-form btn-primary">{{- 'common.button_ok'|trans -}}</button>
+                <button type="button" class="btn btn-ok btn-form btn-primary">
+                    {{- icon(icon: 'floppy-disk', text: 'common.button_ok', inline: true) -}}
+                </button>
                 {{ modal_close_button(label: 'common.button_cancel', data_target: dialog_id) }}
                 <button type="button" class="btn btn-settings btn-form btn-success" disabled>
-                    {{- 'theme.settings'|trans -}}
+                    {{- icon(icon: 'gear', text: 'theme.settings', inline: true) -}}
                 </button>
             </div>
         </div>

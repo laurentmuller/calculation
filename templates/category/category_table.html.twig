@@ -8,7 +8,10 @@
 {# header actions #}
 {% block header_actions -%}
 {% if allow_add %}
-    {{ link(path('category_add', params), 'category.add.title', 'add-link p-0') }}
+    {{ link(
+        href: path('category_add', params),
+        text: 'category.add.title',
+        class: 'add-link p-0') }}
 {% endif %}
 {%- endblock header_actions %}
 {# toolbar actions #}

@@ -7,7 +7,10 @@
 {# header #}
 {% block header_actions -%}
 {% if allow_add %}
-    {{ link(path('task_add', params), 'task.add.title', 'add-link p-0') }}
+    {{ link(
+        href: path('task_add', params),
+        text: 'task.add.title',
+        class: 'add-link p-0') }}
 {% endif %}
 {%- endblock header_actions %}
 {# actions #}

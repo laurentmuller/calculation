@@ -7,7 +7,10 @@
 {# header actions #}
 {% block header_actions -%}
 {% if allow_add %}
-    {{ link(path('calculationstate_add', params), 'calculationstate.add.title', 'add-link p-0') }}
+    {{ link(
+        href: path('calculationstate_add', params),
+        text: 'calculationstate.add.title',
+        class: 'add-link p-0') }}
 {% endif %}
 {%- endblock header_actions %}
 {# global actions #}

@@ -27,8 +27,12 @@
 {# footer #}
 {% block card_footer %}
 {% if back_page and item %}
-    {%- set href = cancel_url(app.request, item.id, back_page) -%}
-    {{ link(href, back_text, back_class, back_icon) }}
+    {{ link(
+        href: cancel_url(app.request, item.id, back_page),
+        text: back_text,
+        class: back_class,
+        icon: back_icon,
+        inline: true) }}
 {% else %}
     {{ homepage() }}
 {% endif %}

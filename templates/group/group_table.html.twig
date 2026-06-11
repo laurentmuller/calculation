@@ -9,7 +9,10 @@
 {# header actions #}
 {% block header_actions -%}
 {% if allow_add %}
-    {{ link(path('group_add', params), 'group.add.title', 'add-link p-0') }}
+    {{ link(
+        href: path('group_add', params),
+        text: 'group.add.title',
+        class: 'add-link p-0') }}
 {% endif %}
 {%- endblock header_actions %}
 {# global actions #}

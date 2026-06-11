@@ -100,7 +100,12 @@
 {% block card_footer %}
     <div class="d-flex-wrap-center">
         {{ homepage() }}
-        {{ link(path('admin_archive'), 'archive.result.new_archive', 'btn btn-form btn-secondary') -}}
+        {{ link(
+            href: path('admin_archive'),
+            text: 'archive.result.new_archive',
+            class: 'btn btn-form btn-secondary',
+            icon: 'plus',
+            inline: true) }}
         {{ sitemap() }}
     </div>
 {% endblock card_footer %}

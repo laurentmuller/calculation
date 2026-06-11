@@ -1,4 +1,5 @@
 {% extends 'cards/card_edit_center.html.twig' %}
+{% from 'macros/_icons.html.twig' import link %}
 {# parameters #}
 {%- set title = 'resetting.request.title' -%}
 {%- set title_icon = 'eraser' -%}
@@ -9,7 +10,13 @@
 {# actions #}
 {% block actions_form %}
     {{ parent() }}
-    <a href="{{ path('app_login') }}" class="align-self-center">{{ 'security.link'|trans }}</a>
+    {{ link(
+        href: path('app_login'),
+        text: 'security.login.submit',
+        class: 'btn btn-form btn-secondary',
+        icon: 'sign-in-alt',
+        title: 'security.login.description',
+        inline: true) }}
 {% endblock actions_form %}
 {# javascripts #}
 {% block javascripts %}

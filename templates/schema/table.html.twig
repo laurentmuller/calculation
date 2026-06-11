@@ -116,7 +116,13 @@
 {# footer #}
 {% block card_footer -%}
     {{ homepage() }}
-    {{ link(path('schema_index'), 'schema.index.title', 'btn btn-form btn-success', title: 'schema.index.description') }}
+    {{ link(
+        href: path('schema_index'),
+        text: 'schema.index.title',
+        class: 'btn btn-form btn-success',
+        icon: 'table',
+        title: 'schema.index.description',
+        inline: true) }}
 {%- endblock card_footer %}
 {# javascripts #}
 {% block javascripts %}

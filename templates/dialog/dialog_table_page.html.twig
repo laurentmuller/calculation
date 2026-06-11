@@ -1,4 +1,4 @@
-{% from 'macros/_icons.html.twig' import modal_title, modal_close_button %}
+{% from 'macros/_icons.html.twig' import modal_title, modal_close_button, icon %}
 <div class="modal fade" id="modal-page" tabindex="-1" aria-labelledby="modal-page-title" aria-hidden="true"
      data-page="{{ 'datatable.dialog_page'|trans }}" data-record="{{ 'datatable.dialog_record'|trans }}">
     <div class="modal-dialog modal-lg">
@@ -14,7 +14,7 @@
             </div>
             <div class="modal-footer justify-content-start">
                 <button type="button" class="btn btn-form btn-primary" id="page-button">
-                    {{- 'common.button_ok'|trans -}}
+                    {{- icon(icon: 'floppy-disk', text: 'common.button_ok', inline: true) -}}
                 </button>
                 {{- modal_close_button(label: 'common.button_cancel') }}
             </div>

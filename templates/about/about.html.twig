@@ -24,11 +24,23 @@
     </div>
     <div class="d-flex-wrap-center mt-2 pb-3 d-print-none">
         {{ homepage() }}
-        {{ link(path('user_comment'), 'user.comment.title', 'btn btn-form btn-secondary', 'envelope far', 'user.comment.description') }}
+        {{ link(
+            href: path('user_comment'),
+            text: 'user.comment.title',
+            class: 'btn btn-form btn-secondary',
+            icon: 'envelope far',
+            title: 'user.comment.description',
+            inline: true) }}
         {{ button_pdf('about_pdf') }}
         {{ button_word('about_word') }}
         {% if is_granted(ROLE_ADMIN) %}
-            {{ link(path('about_advanced'), 'about.advanced.action', 'btn btn-form btn-outline-secondary', 'screwdriver-wrench', 'about.advanced.title') }}
+            {{ link(
+                href: path('about_advanced'),
+                text: 'about.advanced.action',
+                class: 'btn btn-form btn-outline-secondary',
+                icon: 'screwdriver-wrench',
+                title: 'about.advanced.title',
+                inline: true) }}
         {% endif %}
     </div>
 {% endblock body %}

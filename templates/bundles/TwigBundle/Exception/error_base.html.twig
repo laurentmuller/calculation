@@ -106,8 +106,12 @@
 {# footer #}
 {% block card_footer %}
     {% if page_list ?? false %}
-        {%- set href = cancel_url(app.request, id|default(null), page_list) -%}
-        {{ link(href, 'common.button_back_list', 'btn btn-form btn-primary', 'chevron-left') }}
+        {{ link(
+            href: cancel_url(app.request, id|default(null), page_list),
+            text: 'common.button_back_list',
+            class: 'btn btn-form btn-primary',
+            icon: 'chevron-left',
+            inline: true) }}
     {% else %}
         {{ homepage() }}
     {% endif %}

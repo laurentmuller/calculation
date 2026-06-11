@@ -1,5 +1,5 @@
 {# macros for icons, links and navigation entries #}
-{% macro icon(icon, text, parameters = []) -%}
+{% macro icon(icon, text, parameters = [], inline = false) -%}
     {%- if icon -%}
         {%- if 'fab' in icon -%}
             {%- set class = 'fa-brands fa-' ~ icon|split(' ')|filter(c => c != 'fab')|join(' ') -%}
@@ -8,34 +8,36 @@
         {%- else -%}
             {%- set class = 'fa-solid fa-' ~ icon -%}
         {%- endif -%}
-        {%- if text -%}
+        {% if text and not inline %}
             {%- set class = class ~ ' me-1' -%}
-        {%- endif -%}
+        {% endif %}
         <i class="{{ class }}"></i>
     {%- endif %}
     {%- if text -%}
-        {% if icon %}
-            <span class="d-none d-md-inline-block">
-                {{- text|trans(parameters) -}}
-            </span>
-        {% else %}
+        {%- if icon and inline -%}
+            <span class="ms-1 d-none d-md-inline-block">{{- text|trans(parameters) -}}</span>
+        {%- else -%}
             {{- text|trans(parameters) -}}
-        {% endif %}
+        {%- endif -%}
     {%- endif %}
 {%- endmacro icon %}
 
-{% macro link(href, text, class, icon = null, title = null, parameters = []) -%}
+{% macro link(href, text, class, icon = null, title = null, parameters = [], inline = false) -%}
     {% set attrs = {
         href: href,
         role: (class and 'btn' in class) ? 'button' : null,
         title: title ? title|trans(parameters) : null,
         class: class} %}
     <a {{ html_attr(attrs) }}>
-        {{- _self.icon(icon, text, parameters) -}}
+        {{- _self.icon(
+            icon: icon,
+            text: text,
+            parameters: parameters,
+            inline: inline) -}}
     </a>
 {%- endmacro link %}
 
-{% macro linkExternal(href, text, class, icon = null, title = null, parameters = []) -%}
+{% macro linkExternal(href, text, class, icon = null, title = null, parameters = [], inline = false) -%}
     {% set attrs = {
         href: href,
         target: '_blank',
@@ -44,33 +46,55 @@
         title: title ? title|trans(parameters) : null,
         class: class} %}
     <a {{ html_attr(attrs) }}>
-        {{- _self.icon(icon, text, parameters) -}}
+        {{- _self.icon(
+            icon: icon,
+            text: text,
+            parameters: parameters,
+            inline: inline) -}}
     </a>
 {%- endmacro linkExternal %}
 
 {% macro apiLink(href, class = null, icon = null) -%}
-    {{ _self.linkExternal(href, 'common.api_documentation', class, icon, 'common.api_documentation_help') -}}
+    {{ _self.linkExternal(
+        href: href,
+        text: 'common.api_documentation',
+        class: class,
+        icon: icon,
+        title: 'common.api_documentation_help') -}}
 {%- endmacro apiLink %}
 
 {% macro dropdownItem(href, text, icon = null, parameters = []) -%}
     <li>
-        {{- _self.link(href, text, 'dropdown-item rowlink-skip', (icon ? icon ~ ' fa-fw' : null), null, parameters) -}}
+        {{- _self.link(
+            href: href,
+            text: text,
+            class: 'dropdown-item rowlink-skip',
+            icon: icon ? icon ~ ' fa-fw' : null,
+            parameters: parameters) -}}
     </li>
 {%- endmacro dropdownItem %}
 
 {% macro dropdownItemExternal(href, text, icon = null, parameters = []) -%}
     <li>
-        {{- _self.linkExternal(href, text, 'dropdown-item rowlink-skip', (icon ? icon ~ ' fa-fw' : null), null, parameters) -}}
+        {{- _self.linkExternal(
+            href: href,
+            text: text,
+            class: 'dropdown-item rowlink-skip',
+            icon: icon ? icon ~ ' fa-fw' : null,
+            parameters: parameters) -}}
     </li>
 {%- endmacro dropdownItemExternal %}
 
 {% macro dropdownItemWithClass(href, text, icon = null, class, hidden, parameters = []) -%}
     {% set attrs = {
         href: href,
-        class: ['dropdown-item', 'rowlink-skip', class, hidden ? 'd-none' : null]} %}
+        class: ['dropdown-item', 'rowlink-skip', class, hidden ? 'd-none']} %}
     <li>
         <a {{ html_attr(attrs) }}>
-            {{- _self.icon((icon ? icon ~ ' fa-fw' : null), text, parameters) -}}
+            {{- _self.icon(
+                icon: icon ? icon ~ ' fa-fw' : null,
+                text: text,
+                parameters: parameters) -}}
         </a>
     </li>
 {%- endmacro dropdownItemWithClass %}
@@ -78,16 +102,19 @@
 {% macro dropdownItemButton(text, icon, class = null, hidden = false, parameters = []) -%}
     {% set attrs = {
         type: 'button',
-        class: ['dropdown-item', 'rowlink-skip', class, hidden ? 'd-none' : null]} %}
+        class: ['dropdown-item', 'rowlink-skip', class, hidden ? 'd-none']} %}
     <li>
         <button {{ html_attr(attrs) }}>
-            {{- _self.icon((icon ? icon ~ ' fa-fw' : null), text, parameters) -}}
+            {{- _self.icon(
+                icon: icon ? icon ~ ' fa-fw' : null,
+                text: text,
+                parameters: parameters) -}}
         </button>
     </li>
 {%- endmacro dropdownItemButton %}
 
 {% macro dropdownSeparator(hidden = false, class = null) -%}
-    {% set attrs = {class: [class, hidden ? 'd-none' : null]} %}
+    {% set attrs = {class: [class, hidden ? 'd-none']} %}
     <li {{ html_attr(attrs) }}>
         <hr class="dropdown-divider">
     </li>
@@ -95,69 +122,122 @@
 
 {% macro dropdownEllipsis(id = null) -%}
     {% set attrs = {
-        type: 'button',
         id: id,
+        type: 'button',
+        title: 'common.actions'|trans,
         class: ['btn', 'btn-sm', 'btn-outline-secondary', 'border-0', 'px-1'],
         'data-bs-toggle': 'dropdown',
-        'aria-expanded': false,
-        title: 'common.actions'|trans} %}
+        'aria-expanded': false} %}
     <button {{ html_attr(attrs) }}>{{- _self.icon('ellipsis-v') -}}</button>
 {%- endmacro dropdownEllipsis %}
 
 {% macro homepage() -%}
-    {{- _self.link(path('homepage'), 'index.title', 'btn btn-form btn-primary', 'home', 'index.title_help') -}}
+    {{- _self.link(
+        href: path('homepage'),
+        text: 'index.title',
+        class: 'btn btn-form btn-primary',
+        icon: 'home',
+        title: 'index.title_help',
+        inline: true) -}}
 {%- endmacro homepage %}
 
-{% macro button_submit(text = 'common.button_ok', class = 'btn-primary', parameters = []) -%}
+{% macro button_submit(text = 'common.button_ok', class = 'btn-primary', attributes = {}, icon = 'floppy-disk') -%}
     {% set attrs = {
         type: 'submit',
         role: 'button',
         class: ['btn', 'btn-form', 'btn-submit', class],
-    }|merge(parameters) %}
-    <button {{ html_attr(attrs) }}>{{ text|trans }}</button>
+    } %}
+    <button {{ html_attr(attrs, attributes) }}>{{ _self.icon(icon: icon, text: text, inline: true) }}</button>
 {%- endmacro button_submit %}
 
-{% macro button_ok(href, text = 'common.button_ok', class = 'btn btn-ok btn-form btn-primary') -%}
-    {{- _self.link(href: href, text: text, class: class) -}}
+{% macro button_ok(href, text = 'common.button_ok', class = 'btn btn-ok btn-form btn-primary', icon = 'floppy-disk') -%}
+    {{- _self.link(
+        href: href,
+        icon: icon,
+        text: text,
+        class: class,
+        inline: true) -}}
 {%- endmacro button_ok %}
 
 {% macro button_cancel(href, text = 'common.button_cancel', class = 'btn btn-cancel btn-form btn-secondary') -%}
-    {{- _self.link(href: href, text: text, class: class) -}}
+    {{- _self.link(
+        href: href,
+        icon: 'xmark',
+        text: text,
+        class: class,
+        inline: true) -}}
 {%- endmacro button_cancel %}
 
 {% macro link_pdf(route, class = null) -%}
-    {{- _self.linkExternal(path(route), null, class, ICON_PDF, 'common.button_export_pdf') -}}
+    {{- _self.linkExternal(
+        href: path(route),
+        class: class,
+        icon: ICON_PDF,
+        title: 'common.button_export_pdf',
+        inline: true) -}}
 {%- endmacro link_pdf %}
 
 {% macro button_pdf(route) -%}
-    {{- _self.linkExternal(path(route), 'common.button_pdf', 'btn btn-form btn-outline-secondary', ICON_PDF, 'common.button_export_pdf') -}}
+    {{- _self.linkExternal(
+        href: path(route),
+        text: 'common.button_pdf',
+        class: 'btn btn-form btn-outline-secondary',
+        icon: ICON_PDF,
+        title: 'common.button_export_pdf',
+        inline: true) -}}
 {%- endmacro button_pdf %}
 
 {% macro link_excel(route, class = null) -%}
-    {{ _self.linkExternal(path(route), null, class, ICON_EXCEL, 'common.button_export_excel') }}
+    {{ _self.linkExternal(
+        href: path(route),
+        class: class,
+        icon: ICON_EXCEL,
+        title: 'common.button_export_excel',
+        inline: true) }}
 {%- endmacro link_excel %}
 
 {% macro button_excel(route) -%}
-    {{- _self.linkExternal(path(route), 'common.button_export', 'btn btn-form btn-outline-secondary', ICON_EXCEL, 'common.button_export_excel') -}}
+    {{- _self.linkExternal(
+        href: path(route),
+        text: 'common.button_export',
+        class: 'btn btn-form btn-outline-secondary',
+        icon: ICON_EXCEL,
+        title: 'common.button_export_excel',
+        inline: true) -}}
 {%- endmacro button_excel %}
 
 {% macro link_word(route, class = null) -%}
-    {{- _self.linkExternal(path(route), null, class, ICON_WORD, 'common.button_export_word') -}}
+    {{- _self.linkExternal(
+        href: path(route),
+        class: class,
+        icon: ICON_WORD,
+        title: 'common.button_export_word',
+        inline: true) -}}
 {%- endmacro link_word %}
 
 {% macro button_word(route) -%}
-    {{- _self.linkExternal(path(route), 'common.button_export', 'btn btn-form btn-outline-secondary', ICON_WORD, 'common.button_export_word') -}}
+    {{- _self.linkExternal(
+        href: path(route),
+        text: 'common.button_export',
+        class: 'btn btn-form btn-outline-secondary',
+        icon: ICON_WORD,
+        title: 'common.button_export_word',
+        inline: true) -}}
 {%- endmacro button_word %}
 
 {% macro copyright_link(class = null) -%}
-    {%- set parameters = {'%year%': 'now'|date('Y'), '%owner%': app_owner_name} -%}
-    {{- _self.linkExternal(app_owner_url, 'footer.copyright', class, null, 'footer.copyright_title', parameters) -}}
+    {{- _self.linkExternal(
+        href: app_owner_url,
+        text: 'footer.copyright',
+        class: class,
+        title: 'footer.copyright_title',
+        parameters: {'%year%': 'now'|date('Y'), '%owner%': app_owner_name}) -}}
 {%- endmacro copyright_link %}
 
 {% macro modal_title(id, title_icon, title_text, data_target = false, header_class = null) %}
     <div {{ html_attr({class: ['modal-header', header_class]}) }}>
         <h5 {{ html_attr({class: 'modal-title', id: id}) }}>
-            {{- _self.icon(title_icon, title_text) -}}
+            {{- _self.icon(icon: title_icon, text: title_text) -}}
         </h5>
         {{- _self.modal_close_button(for_header: true, data_target: data_target) -}}
     </div>
@@ -177,7 +257,9 @@
         'data-bs-dismiss': 'modal',
         'data-target': data_target ? '#' ~ data_target : null,
     } %}
-    <button {{ html_attr(attrs) }}>{%- if not for_header %}{{ label|trans }}{% endif -%}</button>
+    <button {{ html_attr(attrs) }}>
+        {%- if not for_header %}{{ _self.icon(icon: 'xmark', text: label, inline: true) }}{% endif -%}
+    </button>
 {%- endmacro modal_close_button %}
 
 {% macro footer_center() -%}
@@ -197,7 +279,11 @@
 {% macro sitemap() -%}
     {% set caller = app.request.query.string('caller')|default %}
     {% if app.user and caller === path('site_map') %}
-        {{ _self.link(caller, 'index.menu_site_map', 'btn btn-form btn-outline-success') }}
+        {{- _self.link(
+            href: caller,
+            text: 'index.menu_site_map',
+            class: 'btn btn-form btn-outline-success',
+            icon: 'sitemap') -}}
     {% endif %}
 {% endmacro sitemap %}
 
@@ -212,5 +298,5 @@
         'data-hide-modal': hide_modal,
         'data-clipboard-target': target,
     } %}
-    <button {{ html_attr(attrs) }}>{{- 'common.button_copy'|trans -}}</button>
+    <button {{ html_attr(attrs) }}>{{ _self.icon(icon: 'copy', text: 'common.button_copy', inline: true) }}</button>
 {% endmacro button_copy %}

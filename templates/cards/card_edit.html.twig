@@ -1,9 +1,10 @@
 {% extends 'cards/card_base.html.twig' %}
 {% from 'macros/_icons.html.twig' import button_submit, button_cancel %}
 {# parameters #}
+{%- set submit_icon = submit_icon|default('floppy-disk') -%}
 {%- set submit_text = submit_text|default('common.button_ok') -%}
 {%- set submit_class = submit_class|default('btn-primary') -%}
-{%- set submit_params = submit_params|default({}) -%}
+{%- set submit_attributes = submit_attributes|default({}) -%}
 {%- set submit_title = submit_title|default('common.save_data') -%}
 {%- set form_attr = form_attr|default({})|merge({id: 'edit-form', 'data-save': submit_title|trans, class: 'position-relative'}) -%}
 {%- set cancel_text = cancel_text|default('common.button_cancel') -%}
@@ -31,8 +32,13 @@
 {%- set show_required = show_required ?? true -%}
 <div class="d-flex-wrap">
     {% block actions_form -%}
-        {{ button_submit(submit_text, submit_class, submit_params) }}
-        {% if cancel_path|default(false) -%}
+        {{ button_submit(
+            text: submit_text,
+            class: submit_class,
+            attributes: submit_attributes,
+            icon: submit_icon)
+        }}
+        {% if cancel_path -%}
             {{ button_cancel(cancel_path, cancel_text) }}
         {%- endif %}
     {%- endblock actions_form %}

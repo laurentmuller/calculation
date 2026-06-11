@@ -6,44 +6,48 @@
 {%- set title_description = 'openweather.result.description' -%}
 {# class #}
 {% block card_class -%}
-{% if result %}{{ parent() }}{% else %} border-danger{% endif %}
+    {% if result %}{{ parent() }}{% else %} border-danger{% endif %}
 {%- endblock card_class %}
 {% block card_header_class -%}
-{% if result %}{{ parent() }}{% else %} text-bg-danger{% endif %}
+    {% if result %}{{ parent() }}{% else %} text-bg-danger{% endif %}
 {%- endblock card_header_class %}
 {# body #}
 {% block card_body %}
-{%- if result %}
-<p>{{ 'openweather.result.success'|trans }}</p>
-<table class="table table-bordered table-sm mb-0">
-    <thead>
-        <tr>
-            <th>{{ 'openweather.result.object'|trans }}</th>
-            <th class="text-currency">{{ 'openweather.result.error'|trans }}</th>
-            <th class="text-currency">{{ 'openweather.result.valid'|trans }}</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>{{ 'openweather.result.city'|trans }}</td>
-            <td class="text-currency">{{ error|integer }}</td>
-            <td class="text-currency">{{ valid|integer }}</td>
-        </tr>
-        <tr>
-            <th>{{ 'openweather.result.total'|trans }}</th>
-            <th class="text-currency">{{ error|integer }}</th>
-            <th class="text-currency">{{ valid|integer }}</th>
-        </tr>
-    </tbody>
-</table>
-{%- else -%}
-<p class="mb-0">
-    {{- 'openweather.result.failure'|trans }}{% if message ?? false %} {{ message }}{% endif -%}
-</p>
-{%- endif %}
+    {%- if result %}
+        <p>{{ 'openweather.result.success'|trans }}</p>
+        <table class="table table-bordered table-sm mb-0">
+            <thead>
+            <tr>
+                <th>{{ 'openweather.result.object'|trans }}</th>
+                <th class="text-currency">{{ 'openweather.result.error'|trans }}</th>
+                <th class="text-currency">{{ 'openweather.result.valid'|trans }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ 'openweather.result.city'|trans }}</td>
+                <td class="text-currency">{{ error|integer }}</td>
+                <td class="text-currency">{{ valid|integer }}</td>
+            </tr>
+            <tr>
+                <th>{{ 'openweather.result.total'|trans }}</th>
+                <th class="text-currency">{{ error|integer }}</th>
+                <th class="text-currency">{{ valid|integer }}</th>
+            </tr>
+            </tbody>
+        </table>
+    {%- else -%}
+        <p class="mb-0">
+            {{- 'openweather.result.failure'|trans }}{% if message ?? false %} {{ message }}{% endif -%}
+        </p>
+    {%- endif %}
 {% endblock card_body %}
 {# footer #}
 {% block card_footer %}
-{{ homepage() }}
-{{ link(path('openweather_search'), 'common.button_search', 'btn btn-form btn-secondary') }}
+    {{ homepage() }}
+    {{ link(
+        href: path('openweather_search'),
+        text: 'common.button_search',
+        class: 'btn btn-form btn-secondary',
+        inline: true) }}
 {% endblock card_footer %}

@@ -1,5 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
-{% from 'macros/_icons.html.twig' import button_pdf %}
+{% from 'macros/_icons.html.twig' import button_pdf, icon %}
 {% from 'command/_command.htm.twig' import encode_query %}
 {# parameters #}
 {%- set title = 'command.list.title' -%}
@@ -30,7 +30,7 @@
 {% block card_footer %}
 <div class="d-flex-wrap">
     <a id="execute" href="{{ encode_query('command_execute', query) }}" class="btn btn-form btn-warning btn-execute">
-        {{- 'command.execute.title'|trans -}}
+        {{- icon(icon: 'terminal', text: 'command.execute.title', inline: true) -}}
     </a>
     {{ button_pdf('command_pdf') }}
     <small class="ms-sm-auto">{{ 'command.list.counter'|trans({'%count%': count|integer}) }}</small>

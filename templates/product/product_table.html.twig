@@ -7,7 +7,10 @@
 {# header actions #}
 {% block header_actions -%}
 {% if allow_add %}
-    {{ link(path('product_add', params), 'product.add.title', 'add-link p-0') }}
+    {{ link(
+        href: path('product_add', params),
+        text: 'product.add.title',
+        class: 'add-link p-0') }}
 {% endif %}
 {%- endblock header_actions %}
 {# toolbar actions #}

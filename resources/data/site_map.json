@@ -303,7 +303,7 @@
                 },
                 {
                     "route": "about_policy_index",
-                    "text": "about.policy",
+                    "text": "about.policy.title",
                     "icon": "info-circle"
                 },
                 {

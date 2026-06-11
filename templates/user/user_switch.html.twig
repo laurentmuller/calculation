@@ -5,8 +5,14 @@
     {% set original = app.token?.originalToken.user %}
     <div class="alert alert-warning my-0" role="alert">
         <div class="d-flex-wrap-center">
-            <span class="flex-fill">{{- 'user.switch.connected'|trans({'%original%': original, '%current%': current})|raw -}}</span>
-            {{- link(impersonation_exit_path(path('user_index', {id: id})), 'user.switch.exit.title', 'alert-link fw-normal', 'user-slash') -}}
+            <span class="flex-fill">
+                {{- 'user.switch.connected'|trans({'%original%': original, '%current%': current})|raw -}}
+            </span>
+            {{- link(
+                href: impersonation_exit_path(path('user_index', {id: id})),
+                text: 'user.switch.exit.title',
+                class: 'alert-link fw-normal',
+                icon: 'user-slash') -}}
         </div>
     </div>
 {% endif %}

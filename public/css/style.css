@@ -100,7 +100,7 @@ footer span {
     min-width: 120px !important;
 }
 
-@media (max-width: 767.98px) {
+@media (width <= 768px) {
     .btn-form:has(span) {
         min-width: 90px !important;
     }

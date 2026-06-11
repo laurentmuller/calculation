@@ -84,17 +84,32 @@
             {# today year #}
             {% if today %}
                 {% set href = path('calendar_year', {year: today}) %}
-                {{ link(href, null, 'btn btn-primary', 'arrows-alt', 'calendar.year_current', {'%year%': today}) }}
+                {{ link(
+                    href: href,
+                    class: 'btn btn-primary',
+                    icon: 'arrows-alt',
+                    title: 'calendar.year_current',
+                    parameters: {'%year%': today}) }}
             {% endif %}
             {# previous year #}
             {% if previous %}
                 {% set href = path('calendar_year', {year: previous}) %}
-                {{ link(href, null, 'btn btn-primary', 'chevron-left', 'calendar.year_previous', {'%year%': previous}) }}
+                {{ link(
+                    href: href,
+                    class: 'btn btn-primary',
+                    icon: 'chevron-left',
+                    title: 'calendar.year_previous',
+                    parameters: {'%year%': previous}) }}
             {% endif %}
             {# next year #}
             {% if next %}
                 {% set href = path('calendar_year', {year: next}) %}
-                {{ link(href, null, 'btn btn-primary', 'chevron-right', 'calendar.year_next', {'%year%': next}) }}
+                {{ link(
+                    href: href,
+                    class: 'btn btn-primary',
+                    icon: 'chevron-right',
+                    title: 'calendar.year_next',
+                    parameters: {'%year%': next}) }}
             {% endif %}
             {# calculations #}
             {{ linkCalculations(calendar.year, calendar.year, calculations|length, 'btn btn-primary') }}

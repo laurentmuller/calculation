@@ -9,13 +9,20 @@
     <div class="d-flex">
         <div class="me-auto">
             {%- if index_route -%}
-                {{- link(href: path(index_route), text: entity_text, icon: icon, title: entity_title) -}}
+                {{- link(
+                    href: path(index_route),
+                    text: entity_text,
+                    icon: icon,
+                    title: entity_title) -}}
             {%- else -%}
                 <div>{{ entity|trans }}</div>
             {%- endif -%}
         </div>
         {%- if add_route -%}
-            {{- link(href: path(add_route, {caller: path(app.current_route)}), icon: 'pen-to-square fa-fw', title: add_title) -}}
+            {{- link(
+                href: path(add_route, {caller: path(app.current_route)}),
+                icon: 'pen-to-square fa-fw',
+                title: add_title) -}}
         {%- endif -%}
     </div>
     <h4 class="fw-normal my-0">

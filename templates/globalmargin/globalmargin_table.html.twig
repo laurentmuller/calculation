@@ -30,7 +30,12 @@
 {% block page_list %}
 {{ parent() }}
 {% if allow_edit -%}
-    {{ link(path('globalmargin_edit'), 'common.button_edit', 'btn btn-outline-secondary', ICON_EDIT, 'globalmargin.edit.title') }}
+    {{ link(
+        href: path('globalmargin_edit'),
+        text: 'common.button_edit',
+        class: 'btn btn-outline-secondary',
+        icon: ICON_EDIT,
+        title: 'globalmargin.edit.title') }}
 {% endif %}
 {%- endblock page_list %}
 

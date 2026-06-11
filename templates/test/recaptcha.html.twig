@@ -3,7 +3,7 @@
 {%- set title = 'test.recaptcha' -%}
 {%- set title_icon = 'google fab' -%}
 {%- set cancel_path = path('homepage') -%}
-{%- set submit_params = {'data-toggle': 'recaptcha'} -%}
+{%- set submit_attributes = {'data-toggle': 'recaptcha'} -%}
 {# body #}
 {% block card_body %}
     {{ parent() }}

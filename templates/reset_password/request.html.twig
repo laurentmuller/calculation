@@ -1,4 +1,5 @@
 {% extends 'cards/card_edit_center.html.twig' %}
+{% from 'macros/_icons.html.twig' import link %}
 {# parameters #}
 {%- set title = 'resetting.request.title' -%}
 {%- set title_description = 'resetting.request.description' -%}
@@ -9,17 +10,23 @@
 {%- set form_attr = form_attr|default({})|merge({'data-check-user': url('ajax_check_user_both')}) -%}
 {# actions #}
 {% block actions_form %}
-{{ parent() }}
-<a href="{{ path('app_login') }}" class="align-self-center" title="{{ 'security.login.description'|trans }}">{{ 'security.login.submit'|trans }}</a>
+    {{ parent() }}
+    {{ link(
+        href: path('app_login'),
+        text: 'security.login.submit',
+        class: 'btn btn-form btn-secondary',
+        icon: 'sign-in-alt',
+        title: 'security.login.description',
+        inline: true) }}
 {% endblock actions_form %}
 {# javascripts #}
 {% block javascripts %}
-{% if is_js_debug %}
-    {{ parent() }}
-    {{ asset_js('js/extensions/password-extensions.js') }}
-    {{ asset_js('js/application/user_recaptcha.js') }}
-    {{ asset_js('js/application/user_request.js') }}
-{% else %}
-    {{ asset_js('js/compiled/user_request.js') }}
-{% endif %}
+    {% if is_js_debug %}
+        {{ parent() }}
+        {{ asset_js('js/extensions/password-extensions.js') }}
+        {{ asset_js('js/application/user_recaptcha.js') }}
+        {{ asset_js('js/application/user_request.js') }}
+    {% else %}
+        {{ asset_js('js/compiled/user_request.js') }}
+    {% endif %}
 {%- endblock javascripts %}

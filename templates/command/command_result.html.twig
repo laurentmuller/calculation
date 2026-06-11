@@ -38,8 +38,18 @@
 {# footer #}
 {% block card_footer %}
 <div class="d-flex-wrap">
-    {{ link(encode_query('command_index', query), 'command.list.title', 'btn btn-form btn-primary') }}
-    {{ link(encode_query('command_execute', query), 'command.result.re_run', 'btn btn-form btn-warning') }}
+    {{ link(
+        href: encode_query('command_index', query),
+        text: 'command.list.title',
+        class: 'btn btn-form btn-primary',
+        icon: 'code',
+        inline: true) }}
+    {{ link(
+        href: encode_query('command_execute', query),
+        text: 'command.result.re_run',
+        class: 'btn btn-form btn-warning',
+        icon: 'rotate-left',
+        inline: true) }}
     {% if result.content %}
         {{ button_copy(target: '#result') }}
     {% endif %}

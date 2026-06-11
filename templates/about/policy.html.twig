@@ -16,20 +16,36 @@
 {% endblock card_body %}
 {# footer #}
 {% block card_footer %}
-<div class="d-flex-wrap">
-    {% if is_remembered %}
-        {{ homepage() }}
-        {% if not accepted %}
-            {{ link(path('policy_accept'), 'cookie_banner.accept', 'btn btn-form btn-success', title: 'cookie_banner.accept_title') }}
+    <div class="d-flex-wrap">
+        {% if is_remembered %}
+            {{ homepage() }}
+            {% if not accepted %}
+                {{ link(
+                    href: path('policy_accept'),
+                    text: 'cookie_banner.accept',
+                    class: 'btn btn-form btn-success',
+                    icon: 'check',
+                    title: 'cookie_banner.accept_title',
+                    inline: true) }}
+            {% endif %}
+        {% else %}
+            {{ link(
+                href: path('app_login'),
+                text: 'index.login',
+                class: 'btn btn-form btn-outline-primary',
+                icon: 'sign-in-alt',
+                inline: true) }}
         {% endif %}
-    {% else %}
-        {{ link(path('app_login'), 'index.login', 'btn btn-form btn-outline-primary') }}
-    {% endif %}
-    {{ sitemap() }}
-    {% set caller = app.request.query.string('caller') %}
-    {% set params = caller ? {caller: caller} : {} %}
-    {{ link(path('about_licence_index', params), 'about.licence.title', 'btn btn-form btn-secondary') }}
-    {{ button_pdf('about_policy_pdf') }}
-    {{ button_word('about_policy_word') }}
-</div>
+        {{ sitemap() }}
+        {% set caller = app.request.query.string('caller') %}
+        {% set params = caller ? {caller: caller} : {} %}
+        {{ link(
+            href: path('about_licence_index', params),
+            text: 'about.licence.title',
+            class: 'btn btn-form btn-secondary',
+            icon: 'info-circle',
+            inline: true) }}
+        {{ button_pdf('about_policy_pdf') }}
+        {{ button_word('about_policy_word') }}
+    </div>
 {% endblock card_footer %}

@@ -25,7 +25,12 @@
     </div>
     <div class="d-flex-wrap-center mt-2 pb-3 d-print-none">
         {{ homepage() }}
-        {{ link(path('about_index'), 'about.title', 'btn btn-form btn-outline-secondary', 'info-circle') }}
+        {{ link(
+            href: path('about_index'),
+            text: 'about.title',
+            class: 'btn btn-form btn-outline-secondary',
+            icon: 'info-circle',
+            inline: true) }}
     </div>
 {% endblock body %}
 {# stylesheets #}

@@ -86,7 +86,12 @@
 {% block card_footer %}
     <div class="d-flex-wrap-center">
         {{ homepage() }}
-        {{ link(path('admin_update'), 'calculation.result.update', 'btn btn-form btn-secondary') -}}
+        {{ link(
+            href: path('admin_update'),
+            text: 'calculation.result.update',
+            class: 'btn btn-form btn-secondary',
+            icon: 'plus',
+            inline: true) -}}
         {{ sitemap() }}
     </div>
 {% endblock card_footer %}

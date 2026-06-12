@@ -18,8 +18,9 @@ jobs:
     validate-composer:
         uses: laurentmuller/.github/.github/workflows/validate-composer.yaml@main
 
-    validate-container:
-        uses: laurentmuller/.github/.github/workflows/validate-container.yaml@main
+    # suspend until https://github.com/symfony/symfony/issues/64575 is fixed
+    # validate-container:
+    #    uses: laurentmuller/.github/.github/workflows/validate-container.yaml@main
 
     validate-translation:
         uses: laurentmuller/.github/.github/workflows/validate-translation.yaml@main

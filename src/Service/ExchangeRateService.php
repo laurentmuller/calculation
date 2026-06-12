@@ -53,7 +53,7 @@ class ExchangeRateService extends AbstractHttpClientService
     use ArrayTrait;
 
     /** The default cache timeout (15 minutes). */
-    private const int CACHE_TIMEOUT = 60 * 15;
+    private const int CACHE_TIMEOUT = 900;
 
     /** The host name. */
     private const string HOST_NAME = 'https://v6.exchangerate-api.com/v6/%s/';

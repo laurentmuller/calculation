@@ -121,14 +121,17 @@
 {%- endmacro dropdownSeparator %}
 
 {% macro dropdownEllipsis(id = null) -%}
-    {% set attrs = {
-        id: id,
-        type: 'button',
-        title: 'common.actions'|trans,
+    {{ _self.button(
+        text: null,
         class: ['btn', 'btn-sm', 'btn-outline-secondary', 'border-0', 'px-1'],
-        'data-bs-toggle': 'dropdown',
-        'aria-expanded': false} %}
-    <button {{ html_attr(attrs) }}>{{- _self.icon('ellipsis-v') -}}</button>
+        icon: 'ellipsis-v',
+        inline: false,
+        attributes: {
+            id: id,
+            title: 'common.actions'|trans,
+            'data-bs-toggle': 'dropdown',
+            'aria-expanded': false})
+    }}
 {%- endmacro dropdownEllipsis %}
 
 {% macro homepage() -%}
@@ -141,16 +144,27 @@
         inline: true) -}}
 {%- endmacro homepage %}
 
-{% macro button_submit(text = 'common.button_ok', class = 'btn-primary', attributes = {}, icon = 'floppy-disk') -%}
+{% macro button(text, class, icon, inline = true, attributes = {}, type = 'button') -%}
     {% set attrs = {
-        type: 'submit',
+        type: type,
         role: 'button',
-        class: ['btn', 'btn-form', 'btn-submit', class],
+        class: class,
     } %}
-    <button {{ html_attr(attrs, attributes) }}>{{ _self.icon(icon: icon, text: text, inline: true) }}</button>
+    <button {{ html_attr(attrs, attributes) }}>{{ _self.icon(icon: icon, text: text, inline: inline) }}</button>
+{%- endmacro button %}
+
+{% macro button_submit(text = 'common.button_ok', class = 'btn-primary', attributes = {}, icon = 'check') -%}
+    {{ _self.button(
+        text: text,
+        class: ['btn', 'btn-form', 'btn-submit', class],
+        icon: icon,
+        inline: true,
+        attributes: attributes,
+        type: 'submit')
+    }}
 {%- endmacro button_submit %}
 
-{% macro button_ok(href, text = 'common.button_ok', class = 'btn btn-ok btn-form btn-primary', icon = 'floppy-disk') -%}
+{% macro button_ok(href, text = 'common.button_ok', class = 'btn btn-ok btn-form btn-primary', icon = 'check') -%}
     {{- _self.link(
         href: href,
         icon: icon,
@@ -250,16 +264,14 @@
 {% endmacro modal_footer %}
 
 {% macro modal_close_button(for_header = false, label = 'common.button_close', data_target = false) -%}
-    {% set attrs = {
-        type: 'button',
+    {{ _self.button(
+        text: for_header ? null : label,
         class: for_header ? ['btn-close'] : ['btn', 'btn-form', 'btn-secondary'],
-        title: for_header ? label|trans : null,
-        'data-bs-dismiss': 'modal',
-        'data-target': data_target ? '#' ~ data_target : null,
-    } %}
-    <button {{ html_attr(attrs) }}>
-        {%- if not for_header %}{{ _self.icon(icon: 'xmark', text: label, inline: true) }}{% endif -%}
-    </button>
+        icon: for_header ? null : 'xmark',
+        attributes: {
+            'data-bs-dismiss': 'modal',
+            'data-target': data_target ? '#' ~ data_target : null,
+        }) }}
 {%- endmacro modal_close_button %}
 
 {% macro footer_center() -%}
@@ -288,15 +300,16 @@
 {% endmacro sitemap %}
 
 {% macro button_copy(target, class = 'btn-success', hide_modal = false, disabled = false) %}
-    {% set attrs = {
-        type: 'button',
+    {{ _self.button(
+        text: 'common.button_copy',
         class: ['btn', 'btn-copy', 'btn-form', class],
-        disabled: disabled,
-        'data-title': 'common.copy_title'|trans,
-        'data-success': 'common.copy_success'|trans,
-        'data-error': 'common.copy_error'|trans,
-        'data-hide-modal': hide_modal,
-        'data-clipboard-target': target,
-    } %}
-    <button {{ html_attr(attrs) }}>{{ _self.icon(icon: 'copy', text: 'common.button_copy', inline: true) }}</button>
+        icon: 'copy',
+        attributes: {
+            disabled: disabled,
+            'data-title': 'common.copy_title'|trans,
+            'data-success': 'common.copy_success'|trans,
+            'data-error': 'common.copy_error'|trans,
+            'data-hide-modal': hide_modal,
+            'data-clipboard-target': target})
+    }}
 {% endmacro button_copy %}

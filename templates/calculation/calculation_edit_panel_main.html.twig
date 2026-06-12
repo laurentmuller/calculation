@@ -32,7 +32,7 @@
             {%- if editable -%}
                 {{ button_submit(submit_text) }}
                 {{ button_cancel(cancel_path) }}
-                <small class="ms-sm-auto">{{ 'common.required'|trans|raw }}</small>
+                <small class="small-required ms-sm-auto">{{ 'common.required'|trans }}</small>
             {%- else -%}
                 {{ button_ok(cancel_path, 'common.button_close') }}
                 {% if is_granted(PERMISSION_EDIT, ENTITY_CALCULATION) %}

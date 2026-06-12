@@ -28,11 +28,11 @@
                 </div>
                 <div class="modal-footer justify-content-start align-items-start">
                     <button type="submit" id="dialog_submit_button" class="btn btn-form btn-primary">
-                        {{- icon(icon: 'floppy-disk', text: 'common.button_ok', inline: true) -}}
+                        {{- icon(icon: 'check', text: 'common.button_ok', inline: true) -}}
                     </button>
                     {{- modal_close_button(for_header: false, data_target: dialog_id) }}
                     {%- block modal_buttons -%}{%- endblock modal_buttons -%}
-                    <small class="flex-grow-1 text-sm-end">{{ 'common.required'|trans|raw }}</small>
+                    <small class="small-required flex-grow-1 text-sm-end">{{ 'common.required'|trans }}</small>
                 </div>
             </form>
         </div>

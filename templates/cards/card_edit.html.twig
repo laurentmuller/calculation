@@ -1,7 +1,7 @@
 {% extends 'cards/card_base.html.twig' %}
 {% from 'macros/_icons.html.twig' import button_submit, button_cancel %}
 {# parameters #}
-{%- set submit_icon = submit_icon|default('floppy-disk') -%}
+{%- set submit_icon = submit_icon|default('check') -%}
 {%- set submit_text = submit_text|default('common.button_ok') -%}
 {%- set submit_class = submit_class|default('btn-primary') -%}
 {%- set submit_attributes = submit_attributes|default({}) -%}
@@ -43,7 +43,7 @@
         {%- endif %}
     {%- endblock actions_form %}
     {% if show_required -%}
-        <small class="ms-sm-auto">{{ 'common.required'|trans|raw }}</small>
+        <small class="small-required ms-sm-auto">{{ 'common.required'|trans }}</small>
     {%- endif %}
 </div>
 {%- endblock card_footer %}

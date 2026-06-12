@@ -145,6 +145,7 @@ abstract class AbstractHttpClientService
     protected function getCacheValue(string $key, callable $callback): mixed
     {
         return $this->cache->get($key, function (CacheItemInterface $item, bool &$save) use ($callback): mixed {
+            $item->expiresAfter($this->getCacheTimeout());
             $result = \call_user_func($callback);
             $save = !$this->hasLastError();
 

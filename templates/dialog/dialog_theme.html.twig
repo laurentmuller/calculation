@@ -1,4 +1,4 @@
-{% from 'macros/_icons.html.twig' import modal_title, modal_close_button, icon %}
+{% from 'macros/_icons.html.twig' import modal_title, button, modal_close_button, icon %}
 {# output a theme entry #}
 {% macro output_theme(theme, checked) -%}
     {% set id = 'form_theme_' ~ theme.value %}
@@ -42,13 +42,16 @@
                 {% endfor %}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-ok btn-form btn-primary">
-                    {{- icon(icon: 'floppy-disk', text: 'common.button_ok', inline: true) -}}
-                </button>
+                {{ button(
+                    text: 'common.button_ok',
+                    class: 'btn btn-ok btn-form btn-primary',
+                    icon: 'check') }}
                 {{ modal_close_button(label: 'common.button_cancel', data_target: dialog_id) }}
-                <button type="button" class="btn btn-settings btn-form btn-success" disabled>
-                    {{- icon(icon: 'gear', text: 'theme.settings', inline: true) -}}
-                </button>
+                {{ button(
+                    text: 'theme.settings',
+                    class: 'btn btn-settings btn-form btn-success',
+                    icon: 'gear',
+                    attributes: {disabled: true}) }}
             </div>
         </div>
     </div>

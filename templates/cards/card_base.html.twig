@@ -2,7 +2,6 @@
 {% from 'macros/_icons.html.twig' import icon %}
 {# body #}
 {% block body -%}
-<div class="row g-0">
     {% block start_card_container -%}
     <div class="col{% block card_container_class %} col-xl-8 offset-xl-2{% endblock card_container_class -%}">
     {% endblock start_card_container %}
@@ -31,5 +30,4 @@
         {%- block end_card_container %}
     </div>
     {%- endblock end_card_container %}
-</div>
 {%- endblock body %}

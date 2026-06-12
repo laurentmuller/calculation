@@ -237,10 +237,8 @@ class OpenWeatherService extends AbstractHttpClientService
         OpenWeatherUnits $units = OpenWeatherUnits::METRIC,
         string ...$exclude
     ): array|false {
-        $key = \sprintf('oneCall-%f-%f-%s-%s', $latitude, $longitude, $units->value, \implode(',', $exclude));
-
         return $this->getCacheValue(
-            $key,
+            \sprintf('oneCall-%f-%f-%s-%s', $latitude, $longitude, $units->value, \implode(',', $exclude)),
             fn (): array|false => $this->doGetOneCall($latitude, $longitude, $units, ...$exclude)
         );
     }
@@ -465,11 +463,7 @@ class OpenWeatherService extends AbstractHttpClientService
         return $this->getCacheValue(
             \sprintf('time_zone_%d', $offset),
             static fn (): \DateTimeZone => new \DateTimeZone(
-                \sprintf(
-                    '%+03d%02d',
-                    \intdiv($offset, 3600),
-                    \abs(\intdiv($offset, 60) % 60)
-                )
+                \sprintf('%+03d%02d', \intdiv($offset, 3600), \abs(\intdiv($offset, 60) % 60))
             )
         );
     }

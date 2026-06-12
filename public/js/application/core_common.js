@@ -113,6 +113,30 @@ $(function () {
     }
 
     /**
+     * Handles the button titles.
+     */
+    function initButtonTitles() {
+        $(window).on('resize', function () {
+            const $elements = $('.btn-form:not([title]):has(.d-md-inline-block)');
+            if (!$elements.length) {
+                return;
+            }
+            if ($(this).width() < 768) {
+                $elements.each(function () {
+                    const $this = $(this);
+                    $this.attr('title', $this.find('.d-md-inline-block').text());
+                });
+            } else {
+                $elements.removeAttr('title');
+            }
+        }).trigger('resize');
+
+        $('body').on('show.bs.modal', '.modal', function () {
+            $(window).trigger('resize');
+        });
+    }
+
+    /**
      * Show the flash bag messages.
      */
     function showFlashBag() {
@@ -139,6 +163,7 @@ $(function () {
 
     initHorizontalSearch();
     initThemeSwitcher();
+    initButtonTitles();
     initBackToTop();
     initSidebar();
     showFlashBag();

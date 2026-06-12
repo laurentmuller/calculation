@@ -1,4 +1,5 @@
 {% extends 'cards/card_delete.html.twig' %}
+{% from 'macros/_icons.html.twig' import button %}
 {# parameters #}
 {%- set title = 'clear_cache.title' -%}
 {%- set submit_text = 'clear_cache.submit' -%}
@@ -13,7 +14,13 @@
 {# actions #}
 {% block actions_form -%}
     {{ parent() }}
-    <button type="button" class="btn btn-form btn-outline-info" data-bs-toggle="modal" data-bs-target="#modal-cache-list">
-        {{- 'clear_cache.list'|trans -}}
-    </button>
+    {{ button(
+        text: 'clear_cache.list',
+        class: 'btn btn-form btn-outline-info',
+        icon: 'list-check',
+        attributes: {
+            'data-bs-toggle': 'modal',
+            'data-bs-target': '#modal-cache-list',
+        })
+    }}
 {% endblock actions_form %}

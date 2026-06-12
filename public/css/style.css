@@ -116,6 +116,11 @@ footer span {
     color: var(--bs-danger);
 }
 
+.small-required::before {
+    content: '* ';
+    color: var(--bs-danger);
+}
+
 /* card-title (same as h5) */
 h1.card-title,
 .h1.card-title {

@@ -11,6 +11,7 @@
 {%- if cancel_path is not defined -%}
     {%- set cancel_path = cancel_url(app.request, item|default(null), page_list|default('homepage')) -%}
 {%- endif -%}
+{%- set show_required = show_required ?? true -%}
 {# container #}
 {% block start_card_container %}
     {{ parent() -}}
@@ -29,39 +30,39 @@
 {% endblock card_body %}
 {# footer #}
 {% block card_footer -%}
-{%- set show_required = show_required ?? true -%}
-<div class="d-flex-wrap">
-    {% block actions_form -%}
-        {{ button_submit(
-            text: submit_text,
-            class: submit_class,
-            attributes: submit_attributes,
-            icon: submit_icon)
-        }}
-        {% if cancel_path -%}
-            {{ button_cancel(cancel_path, cancel_text) }}
+    <div class="d-flex-wrap justify-content-between">
+        <div class="d-flex-wrap">
+            {% block actions_form -%}
+                {{ button_submit(
+                    text: submit_text,
+                    class: submit_class,
+                    attributes: submit_attributes,
+                    icon: submit_icon) }}
+                {% if cancel_path -%}
+                    {{ button_cancel(cancel_path, cancel_text) }}
+                {%- endif %}
+            {%- endblock actions_form %}
+        </div>
+        {% if show_required -%}
+            <small class="small-required">{{ 'common.required'|trans }}</small>
         {%- endif %}
-    {%- endblock actions_form %}
-    {% if show_required -%}
-        <small class="small-required ms-sm-auto">{{ 'common.required'|trans }}</small>
-    {%- endif %}
-</div>
+    </div>
 {%- endblock card_footer %}
 {# end container #}
 {% block end_card_container -%}
-{% block end_form -%}{{ form_end(form) }}{%- endblock end_form %}
-{{ parent() }}
+    {% block end_form -%}{{ form_end(form) }}{%- endblock end_form %}
+    {{ parent() }}
 {%- endblock end_card_container %}
 {# javascript #}
 {% block javascripts %}
-{% if is_js_debug %}
-    {{- parent() -}}
-    {{- asset_js('build/jquery-validation/jquery.validate.js') }}
-    {{- asset_js('build/jquery-validation/additional-methods.js') }}
-    {{- asset_js('build/jquery-validation/messages_fr.js') }}
-    {{- asset_js('js/extensions/validator-extensions.js') }}
-    {{- asset_js('js/extensions/validator-extensions-fr.js') -}}
-{% else %}
-    {{- asset_js('js/compiled/core_edit.js') }}
-{% endif %}
+    {% if is_js_debug %}
+        {{- parent() -}}
+        {{- asset_js('build/jquery-validation/jquery.validate.js') }}
+        {{- asset_js('build/jquery-validation/additional-methods.js') }}
+        {{- asset_js('build/jquery-validation/messages_fr.js') }}
+        {{- asset_js('js/extensions/validator-extensions.js') }}
+        {{- asset_js('js/extensions/validator-extensions-fr.js') -}}
+    {% else %}
+        {{- asset_js('js/compiled/core_edit.js') }}
+    {% endif %}
 {%- endblock javascripts %}

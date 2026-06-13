@@ -54,14 +54,14 @@
     </a>
 {%- endmacro linkExternal %}
 
-{% macro apiLink(href, class = null, icon = null) -%}
+{% macro linkApi(href, class = null, icon = 'code-branch') -%}
     {{ _self.linkExternal(
         href: href,
         text: 'common.api_documentation',
         class: class,
         icon: icon,
         title: 'common.api_documentation_help') -}}
-{%- endmacro apiLink %}
+{%- endmacro linkApi %}
 
 {% macro dropdownItem(href, text, icon = null, parameters = []) -%}
     <li>

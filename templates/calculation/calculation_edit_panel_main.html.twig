@@ -28,12 +28,16 @@
         </div>
     </div>
     <div class="card-footer d-print-none">
-        <div class="d-flex-wrap">
-            {%- if editable -%}
-                {{ button_submit(submit_text) }}
-                {{ button_cancel(cancel_path) }}
-                <small class="small-required ms-sm-auto">{{ 'common.required'|trans }}</small>
-            {%- else -%}
+        {%- if editable -%}
+            <div class="d-flex-wrap justify-content-between">
+                <div class="d-flex-wrap">
+                    {{ button_submit(submit_text) }}
+                    {{ button_cancel(cancel_path) }}
+                </div>
+                <small class="small-required">{{ 'common.required'|trans }}</small>
+            </div>
+        {%- else -%}
+            <div class="d-flex-wrap">
                 {{ button_ok(cancel_path, 'common.button_close') }}
                 {% if is_granted(PERMISSION_EDIT, ENTITY_CALCULATION) %}
                     {%- set state_params = route_params(app.request, item) -%}
@@ -45,7 +49,7 @@
                         icon: ICON_CALCULATION_STATE,
                         inline: true) -}}
                 {% endif %}
-            {%- endif -%}
-        </div>
+            </div>
+        {%- endif -%}
     </div>
 </div>

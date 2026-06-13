@@ -1,5 +1,5 @@
 {# edit modal dialog #}
-{% from 'macros/_icons.html.twig' import icon, modal_close_button %}
+{% from 'macros/_icons.html.twig' import button, modal_close_button, icon %}
 {# parameters #}
 {%- set form_prefix = form_prefix|default('edit') -%}
 {%- set dialog_icon = dialog_icon|default(ICON_EDIT) -%}
@@ -15,7 +15,7 @@
 {# modal #}
 <div class="modal fade" id="{{ dialog_id }}" tabindex="-1" aria-labelledby="{{ dialog_id }}" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-       <div class="modal-content">
+        <div class="modal-content">
             <form {{ html_attr(form_attr) }}>
                 <div class="modal-header">
                     <h5 class="modal-title" id="{{ dialog_id }}">
@@ -26,13 +26,21 @@
                 <div class="modal-body">
                     {% block modal_body %}{% endblock modal_body %}
                 </div>
-                <div class="modal-footer justify-content-start align-items-start">
-                    <button type="submit" id="dialog_submit_button" class="btn btn-form btn-primary">
-                        {{- icon(icon: 'check', text: 'common.button_ok', inline: true) -}}
-                    </button>
-                    {{- modal_close_button(for_header: false, data_target: dialog_id) }}
-                    {%- block modal_buttons -%}{%- endblock modal_buttons -%}
-                    <small class="small-required flex-grow-1 text-sm-end">{{ 'common.required'|trans }}</small>
+                <div class="modal-footer justify-content-start">
+                    <div class="d-flex-wrap justify-content-between w-100">
+                        <div class="d-flex-wrap">
+                            {{ button(
+                                text: 'common.button_ok',
+                                class: 'btn btn-form btn-primary',
+                                icon: 'check',
+                                type: 'submit',
+                                attributes: {id: 'dialog_submit_button'})
+                            }}
+                            {{- modal_close_button(for_header: false, data_target: dialog_id) }}
+                            {%- block modal_buttons -%}{%- endblock modal_buttons -%}
+                        </div>
+                        <small class="small-required">{{ 'common.required'|trans }}</small>
+                    </div>
                 </div>
             </form>
         </div>

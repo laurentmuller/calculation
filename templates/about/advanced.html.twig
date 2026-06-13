@@ -7,12 +7,10 @@
 {%- set title_parameters = {'%app_name%': app_name} -%}
 {% set customer = application_parameters.customerInformation %}
 {# class #}
-{% block card_class ' mb-2' %}
 {% block card_container_class '' %}
 {% block card_footer_class ' d-none' %}
 {# card body #}
 {% block card_body %}
-    {# application #}
     {{ include('about/_about_configuration.html.twig', {full_info: false}) }}
 {% endblock card_body %}
 {# body #}

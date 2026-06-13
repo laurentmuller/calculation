@@ -1,6 +1,6 @@
 {% extends 'cards/card_edit.html.twig' %}
 {# macros #}
-{% from 'macros/_icons.html.twig' import apiLink, button_copy %}
+{% from 'macros/_icons.html.twig' import button_copy, linkApi %}
 {% macro fillLanguages(languages, language = false) %}
 {% for key, value in languages -%}
     <option value="{{ value }}"{% if value == language %} selected{% endif %}>{{ key }}</option>
@@ -76,7 +76,7 @@
         <span id="detected" class="text-body-secondary"></span>
     </div>
     <div class="col-md-6 text-md-end d-print-none">
-        {{ apiLink(service.apiUrl, 'api-url') }}
+        {{ linkApi(service.apiUrl, 'api-url') }}
     </div>
 </div>
 {% endblock card_body %}

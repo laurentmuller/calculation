@@ -1,5 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
-{% from 'macros/_icons.html.twig' import apiLink %}
+{% from 'macros/_icons.html.twig' import linkApi %}
 {% from 'openweather/_weather_macro.html.twig' import value_temp %}
 {# macros #}
 {% macro system(units, selection, route, id, count) -%}
@@ -66,7 +66,7 @@
             </h3>
         </div>
         <div class="small d-print-none">
-            {{- apiLink(api_url) -}}
+            {{- linkApi(api_url) -}}
         </div>
     </div>
     <div class="row">

@@ -1,5 +1,5 @@
 {% extends 'cards/card_edit.html.twig' %}
-{% from 'macros/_icons.html.twig' import homepage, apiLink %}
+{% from 'macros/_icons.html.twig' import homepage, linkApi %}
 {# macros #}
 {% macro fillCodes(codes, selection = '') %}
 {% for key, code in codes -%}
@@ -82,7 +82,7 @@
         {{- 'exchange_rate.quota'|trans({'%date%': quota.date|locale_date('long'), '%remaining%': quota.remaining|integer, '%allowed%': quota.allowed|integer}) -}}
     </span>
         <span>
-        {{- apiLink(quota.documentation) -}}
+        {{- linkApi(quota.documentation) -}}
     </span>
     </div>
 {% endif %}

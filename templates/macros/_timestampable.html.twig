@@ -6,8 +6,8 @@
         {% if separator %}
             <hr class="card-footer-line">
         {% endif %}
-        <div class="d-flex-wrap-center text-body-tertiary small{% if separator %} mt-2{% endif %}">
-            <span class="me-auto">{{- created -}}</span><span>{{- updated -}}</span>
+        <div class="d-flex-wrap-center justify-content-between text-body-tertiary small{% if separator %} mt-2{% endif %}">
+            <span>{{- created -}}</span><span>{{- updated -}}</span>
         </div>
     {% endif %}
 {% endmacro timestampable_footer %}

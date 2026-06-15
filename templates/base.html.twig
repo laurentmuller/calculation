@@ -1,6 +1,7 @@
 {# parameters #}
 {%- set title_parameters = title_parameters|default({}) -%}
 {%- set title_text = app_name ~ ' - ' ~ title|trans(title_parameters) -%}
+{%- set navigation_show = navigation_show ?? true -%}
 {%- set sidebar_show = app.user and app.user.enabled and app.request.cookies.boolean('MENU_SIDEBAR_SHOW') -%}
 {%- set statusbar_show = statusbar_show ?? (app.user and app.user.enabled and user_parameters.homePage.statusBar) -%}
 {%- set is_js_debug = app.debug -%}
@@ -35,27 +36,25 @@
 } %}
 <body {{ html_attr(body_attrs) }}>
 {# vertical navigation #}
-{% block navigation_vertical %}
-    {% if sidebar_show %}
-        {{ include('navigation/vertical/navigation.html.twig') }}
-    {% endif %}
-{% endblock navigation_vertical %}
+{% if navigation_show and sidebar_show %}
+    {{ include('navigation/vertical/navigation.html.twig') }}
+{% endif %}
 {# horizontal navigation #}
-{% block navigation_horizontal %}
-    {% if not sidebar_show %}
-        {{ include('navigation/horizontal/navigation.html.twig') }}
-    {% endif %}
-{% endblock navigation_horizontal %}
+{% if navigation_show and not sidebar_show %}
+    {{ include('navigation/horizontal/navigation.html.twig') }}
+{% endif %}
 {# main content #}
 <div class="page-content">
     {# container #}
     <div role="main" class="{% block container_class 'container' %}">
-        {% block body -%}{%- endblock body %}
+        <div class="row g-0">
+            {% block body -%}{%- endblock body %}
+        </div>
     </div>
     {# messages #}
-    {% block flashbag -%}{{ include('flash_bag.html.twig') }}{%- endblock flashbag %}
+    {{ include('flash_bag.html.twig') }}
     {# back to top #}
-    {% block back_to_top -%}{{ include('back_to_top.html.twig') }}{%- endblock back_to_top %}
+    {{ include('back_to_top.html.twig') }}
 </div>
 {# footer #}
 {% block footer -%}{% if statusbar_show %}{{ include('footer.html.twig') }}{% endif %}{%- endblock footer %}

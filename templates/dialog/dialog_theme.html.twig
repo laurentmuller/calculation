@@ -42,16 +42,18 @@
                 {% endfor %}
             </div>
             <div class="modal-footer">
-                {{ button(
+                {{- button(
                     text: 'common.button_ok',
                     class: 'btn btn-ok btn-form btn-primary',
-                    icon: 'check') }}
+                    icon: 'check')
+                -}}
                 {{ modal_close_button(label: 'common.button_cancel', data_target: dialog_id) }}
-                {{ button(
+                {{- button(
                     text: 'theme.settings',
                     class: 'btn btn-settings btn-form btn-success',
                     icon: 'gear',
-                    attributes: {disabled: true}) }}
+                    attributes: {disabled: true})
+                -}}
             </div>
         </div>
     </div>

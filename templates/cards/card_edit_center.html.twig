@@ -1,12 +1,10 @@
 {% extends 'cards/card_edit.html.twig' %}
 {% from 'macros/_icons.html.twig' import footer_center %}
-{# parameters #}
+{# hide status bar and navigation #}
 {%- set statusbar_show = false -%}
-{# hide navigation and footer #}
-{% block navigation_horizontal %}{% endblock navigation_horizontal %}
-{% block navigation_vertical -%}{% endblock navigation_vertical %}
+{%- set navigation_show = false -%}
 {# class styles #}
-{% block card_container_class ' col-md-8 offset-md-2 col-xl-6 offset-xl-3 my-auto h-75' %}
+{% block card_container_class ' col-md-8 offset-md-2 col-xl-6 offset-xl-3' %}
 {# header #}
 {% block card_header -%}
 {{ parent() }}

@@ -3,18 +3,18 @@
 {# macros #}
 {% macro button(type) -%}
     {%- set text = ('background.' ~ type)|trans -%}
-    <button type="button"
-            data-type="{{ type }}"
-            data-bs-html="true"
-            data-bs-trigger="hover"
-            data-bs-toggle="popover"
-            data-bs-placement="right"
-            data-bs-custom-class="popover-{{ type }}"
-            data-bs-title="{{ 'test.notification'|trans }}"
-            data-bs-content="Affiche une notification de type <b>{{ text }}</b> avec des données aléatoires."
-            class="btn btn-notify btn-{{ type }} flex-fill">
-        {{- text -}}
-    </button>
+    {% set attrs = {
+        class: ['btn', 'btn-notify', 'btn-' ~ type, 'flex-fill'],
+        'data-type': type,
+        'data-bs-html': true,
+        'data-bs-trigger': 'hover',
+        'data-bs-toggle': 'popover',
+        'data-bs-placement': 'right',
+        'data-bs-custom-class': 'popover-' ~ type,
+        'data-bs-title': 'test.notification'|trans,
+        'data-bs-content': 'Affiche une notification de type <b>' ~ text ~ '</b> avec des données aléatoires.',
+    } %}
+    <button {{ html_attr(attrs) }}>{{- text -}}</button>
 {%- endmacro button %}
 
 {% macro position(position, selection) -%}

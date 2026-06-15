@@ -257,11 +257,11 @@
     </div>
 {% endmacro modal_title %}
 
-{% macro modal_footer(label = 'common.button_close', data_target = false) %}
+{% macro modal_footer(label = 'common.button_close', data_target = false) -%}
     <div class="modal-footer">
         {{ _self.modal_close_button(label: label, data_target: data_target) }}
     </div>
-{% endmacro modal_footer %}
+{%- endmacro modal_footer %}
 
 {% macro modal_close_button(for_header = false, label = 'common.button_close', data_target = false) -%}
     {{ _self.button(
@@ -299,7 +299,7 @@
     {% endif %}
 {% endmacro sitemap %}
 
-{% macro button_copy(target, class = 'btn-success', hide_modal = false, disabled = false) %}
+{% macro button_copy(target, class = 'btn-success', hide_modal = false, disabled = false) -%}
     {{ _self.button(
         text: 'common.button_copy',
         class: ['btn', 'btn-copy', 'btn-form', class],
@@ -312,4 +312,4 @@
             'data-hide-modal': hide_modal,
             'data-clipboard-target': target})
     }}
-{% endmacro button_copy %}
+{%- endmacro button_copy %}

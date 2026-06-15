@@ -25,33 +25,33 @@
                     </option>
                 {% endfor %}
             </select>
-            {{ button(
+            {{- button(
                 class: 'btn btn-outline-secondary btn-zoom-in',
                 icon: 'magnifying-glass-plus',
                 inline: false,
                 attributes: {title: 'diagram.zoom_in'|trans})
-            }}
-            {{ button(
+            -}}
+            {{- button(
                 class: 'btn btn-outline-secondary btn-zoom dropdown-toggle',
                 attributes: {
                     title: 'diagram.zoom'|trans,
                     'data-bs-toggle': 'dropdown',
                     'data-bs-target': '#dropdownZoom',
                     'aria-expanded': 'false'})
-            }}
-            {{ button(
+            -}}
+            {{- button(
                 class: 'btn btn-outline-secondary btn-zoom-out',
                 icon: 'magnifying-glass-minus',
                 inline: false,
                 attributes: {title: 'diagram.zoom_out'|trans})
-            }}
-            {{ button(
+            -}}
+            {{- button(
                 class: 'btn btn-outline-secondary btn-reset',
                 icon: 'arrows-to-dot',
                 inline: false,
                 attributes: {title: 'diagram.reset'|trans})
-            }}
-            {{ button(
+            -}}
+            {{- button(
                 class: 'btn btn-outline-secondary btn-code',
                 icon: 'code',
                 inline: false,
@@ -59,16 +59,16 @@
                     title: 'diagram.reset'|trans,
                     'data-bs-toggle': 'modal',
                     'data-bs-target': '#diagram-modal'})
-            }}
+            -}}
             <div id="dropdownZoom" class="dropdown-menu dropdown-menu-end px-2 py-3">
                 <div class="d-flex-no-wrap-center">
                     <input id="rangeZoom" type="range" class="form-range range-zoom border rounded-pill px-1 py-2"
                            aria-label="{{ 'diagram.zoom'|trans }}">
-                    {{ button(
+                    {{- button(
                         class: 'btn btn-sm btn-link btn-reset-zoom',
                         icon: 'rotate-left',
                         attributes: {title: 'diagram.reset_zoom'|trans})
-                    }}
+                    -}}
                 </div>
             </div>
         </div>

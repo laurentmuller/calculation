@@ -1,24 +1,17 @@
 {% extends 'base.html.twig' %}
 {# parameters #}
 {%- set title = 'index.title' -%}
-{%- set enabled = app.user and app.user.enabled -%}
+{%- set navigation_show = app.user and app.user.enabled -%}
 {%- set header_attributes = {
     class: 'drop-down-icon-left card-title flex-fill',
     'data-bs-toggle': 'collapse',
     'data-collapse': 'common.collapse'|trans,
     'data-expand': 'common.expand'|trans} -%}
-{# navigation #}
-{%- block navigation_vertical -%}
-    {%- if enabled -%}{{ parent() }}{% endif %}
-{%- endblock navigation_vertical %}
-{% block navigation_horizontal -%}
-    {%- if enabled -%}{{ parent() }}{%- endif -%}
-{%- endblock navigation_horizontal %}
 {# container_class #}
 {% block container_class 'container mb-5' %}
 {# body #}
 {% block body -%}
-    {% if enabled %}
+    {% if navigation_show %}
         {{ include('index/panel_calculation.html.twig') }}
         {% if months ?? false %}
             {{ include('index/panel_month.html.twig') }}
@@ -41,19 +34,19 @@
 {%- endblock body %}
 {# footer #}
 {% block footer -%}
-    {%- if enabled -%}{{- parent() -}}{%- endif -%}
+    {%- if navigation_show -%}{{- parent() -}}{%- endif -%}
 {%- endblock footer %}
 {# stylesheets #}
 {% block stylesheets -%}
-    {{ preload_css(enabled ? 'css/calculation.css' : 'css/center.css') }}
-    {{ asset_css(enabled ? 'css/calculation.css' : 'css/center.css') }}
+    {{ preload_css(navigation_show ? 'css/calculation.css' : 'css/center.css') }}
+    {{ asset_css(navigation_show ? 'css/calculation.css' : 'css/center.css') }}
     <style nonce="{{ csp_nonce() }}">
         {{- css_border() }}
     </style>
 {%- endblock stylesheets %}
 {# javascripts #}
 {% block javascripts -%}
-{% if enabled %}
+{% if navigation_show %}
     {% if is_js_debug %}
         {{ parent() -}}
         {{ asset_js('build/jquery-contextmenu/jquery.contextMenu.js') }}

@@ -14,13 +14,12 @@
 {# actions #}
 {% block actions_form -%}
     {{ parent() }}
-    {{ button(
+    {{- button(
         text: 'clear_cache.list',
         class: 'btn btn-form btn-outline-info',
         icon: 'list-check',
         attributes: {
             'data-bs-toggle': 'modal',
-            'data-bs-target': '#modal-cache-list',
-        })
-    }}
+            'data-bs-target': '#modal-cache-list'})
+    -}}
 {% endblock actions_form %}

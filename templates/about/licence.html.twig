@@ -4,11 +4,9 @@
 {%- set title = 'about.licence.title' -%}
 {%- set title_icon = 'info-circle' -%}
 {%- set accepted = app.request.cookies.boolean(constant('App\\Controller\\PolicyController::POLICY_ACCEPTED')) -%}
-{%- set is_remembered = is_granted(IS_AUTHENTICATED_REMEMBERED) -%}
+{%- set navigation_show = is_granted(IS_AUTHENTICATED_REMEMBERED) -%}
 {# navigation #}
-{% block card_container_class is_remembered ? '' : ' mt-3' %}
-{% block navigation_horizontal -%}{% if is_remembered %}{{ parent() }}{% endif %}{%- endblock navigation_horizontal %}
-{% block navigation_vertical -%}{% if is_remembered %}{{ parent() }}{% endif %}{%- endblock navigation_vertical %}
+{% block card_container_class navigation_show ? '' : ' mt-3' %}
 {% block cookie_banner -%}{% endblock cookie_banner %}
 {# body #}
 {% block card_body %}
@@ -17,7 +15,7 @@
 {# footer #}
 {% block card_footer %}
 <div class="d-flex-wrap">
-    {% if is_remembered %}
+    {% if navigation_show %}
         {{ homepage() }}
         {% if not accepted %}
             {{ link(

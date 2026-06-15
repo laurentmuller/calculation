@@ -50,10 +50,10 @@
 {% endblock modal_body %}
 {# buttons #}
 {% block modal_buttons %}
-    {{ button(
+    {{- button(
         text: 'common.button_delete',
         class: 'btn btn-form btn-outline-danger',
         icon: ICON_DELETE,
         attributes: {id: 'item_delete_button'})
-    }}
+    -}}
 {% endblock modal_buttons %}

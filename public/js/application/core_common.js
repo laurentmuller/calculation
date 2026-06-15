@@ -112,28 +112,32 @@ $(function () {
         });
     }
 
+
+    /**
+     * Update the button titles.
+     */
+    function updateButtonTitles() {
+        if ($(window).width() >= 768) {
+            $('.btn-form[data-title]').removeAttr('title');
+            return;
+        }
+        $('.btn-form:not([title]):has(.d-md-inline-block)').each(function () {
+            const $this = $(this);
+            const title = $this.find('.d-md-inline-block').text();
+            $this.attr({
+                title: title,
+                'data-title': true
+            });
+        });
+    }
+
     /**
      * Handles the button titles.
      */
     function initButtonTitles() {
-        $(window).on('resize', function () {
-            const $elements = $('.btn-form:not([title]):has(.d-md-inline-block)');
-            if (!$elements.length) {
-                return;
-            }
-            if ($(this).width() < 768) {
-                $elements.each(function () {
-                    const $this = $(this);
-                    $this.attr('title', $this.find('.d-md-inline-block').text());
-                });
-            } else {
-                $elements.removeAttr('title');
-            }
-        }).trigger('resize');
-
-        $('body').on('show.bs.modal', '.modal', function () {
-            $(window).trigger('resize');
-        });
+        $(window).on('resize', () => updateButtonTitles());
+        $('body').on('show.bs.modal', '.modal', () => updateButtonTitles());
+        updateButtonTitles();
     }
 
     /**

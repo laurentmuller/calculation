@@ -4,9 +4,7 @@
 {%- set title = 'resetting.request.title' -%}
 {%- set title_icon = 'eraser' -%}
 {%- set statusbar_show = false -%}
-{# hide navigation and footer #}
-{% block navigation_horizontal %}{% endblock navigation_horizontal %}
-{% block navigation_vertical -%}{% endblock navigation_vertical %}
+{%- set navigation_show = false -%}
 {# class styles #}
 {% block card_container_class ' col-xl-8 offset-xl-2 my-auto h-75' %}
 {# body #}

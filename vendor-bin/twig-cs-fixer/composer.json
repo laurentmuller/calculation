@@ -1,7 +1,7 @@
 {
     "require": {
         "php": "^8.3",
-        "vincentlanglet/twig-cs-fixer": "^3.0"
+        "vincentlanglet/twig-cs-fixer": "^4.0"
     },
     "config": {
         "preferred-install": {

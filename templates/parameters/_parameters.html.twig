@@ -1,5 +1,5 @@
 {% extends 'cards/card_edit.html.twig' %}
-{% from 'macros/_icons.html.twig' import icon, dropdownItemButton %}
+{% from 'macros/_icons.html.twig' import icon, button, dropdownItemButton %}
 {% form_theme form with _self %}
 {# parameters #}
 {%- set cancel_path = path('homepage') -%}
@@ -9,13 +9,21 @@
 {% block _message_progress_widget -%}
     <div class="input-group">
         {{- block('choice_widget') -}}
-        <button type="button" class="btn btn-notify btn-outline-secondary d-print-none"
-                title="{{ 'parameters.action_test'|trans }}">
-            <i class="fa-regular fa-bell"></i>
-        </button>
-        <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split"
-                title="{{ 'parameters.action_test'|trans }}" data-bs-toggle="dropdown" aria-expanded="false">
-        </button>
+        {{- button(
+            text: null,
+            class: 'btn btn-notify btn-outline-secondary d-print-none',
+            icon: 'bell far',
+            inline: false,
+            attributes: {title: 'parameters.action_test'|trans})
+        -}}
+        {{- button(
+            text: null,
+            class: 'btn btn-outline-secondary dropdown-toggle dropdown-toggle-split',
+            attributes: {
+                title: 'parameters.action_test'|trans,
+                'data-bs-toggle': 'dropdown',
+                'aria-expanded': false})
+        -}}
         <ul class="dropdown-menu dropdown-menu-end">
             {% for type in enum_cases('App\\Enums\\FlashType') %}
                 <li>
@@ -31,11 +39,17 @@
 {% macro renderHeader(href, icon, expanded = false) %}
     {%- set show = 'common.expand'|trans -%}
     {%- set hide = 'common.collapse'|trans -%}
-    {%- set title = expanded ? hide : show -%}
+    {%- set attrs = {
+        href: '#' ~ href,
+        class: ['drop-down-icon-right', 'card-title', expanded ? 'show' : null],
+        title: expanded ? hide : show,
+        'data-bs-toggle': 'collapse',
+        'data-show': show,
+        'data-hide': hide,
+        'aria-expanded': expanded,
+    } -%}
     <div class="card-header d-flex-wrap-center">
-        <a class="drop-down-icon-right card-title {% if expanded %} show{% endif %}" href="#{{ href }}"
-           data-bs-toggle="collapse" data-show="{{ show }}" data-hide="{{ hide }}" title="{{ title }}"
-           aria-expanded="{{ expanded|json_encode }}">
+        <a {{ html_attr(attrs) }}>
             {{- icon(icon ~ ' fa-fw', 'parameters.group_' ~ href) -}}
         </a>
     </div>
@@ -47,13 +61,13 @@
 {% block actions_form -%}
     {{ parent() }}
     <div class="dropdown">
-        {% set attrs = {
+        {%- set attrs = {
             type: 'button',
             class: ['btn', 'btn-form', 'btn-outline-success', 'dropdown-toggle'],
             title: 'parameters.default_help'|trans,
             'data-bs-toggle': 'dropdown',
             'aria-expanded': false,
-        } %}
+        } -%}
         <button {{ html_attr(attrs) }}>
             {{- icon(icon: 'rotate-left', text: 'parameters.default', inline: true) -}}
         </button>

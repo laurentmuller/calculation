@@ -15,11 +15,13 @@ use TwigCsFixer\Config\Config;
 use TwigCsFixer\File\Finder;
 use TwigCsFixer\Rules\Delimiter\EndBlockNameRule;
 use TwigCsFixer\Ruleset\Ruleset;
+use TwigCsFixer\Standard\Symfony;
 use TwigCsFixer\Standard\TwigCsFixer;
 
 $cacheFile = __DIR__ . '/var/cache/twig-cs-fixer/.twig-cs-fixer.cache';
 
 $ruleset = new Ruleset();
+$ruleset->addStandard(new Symfony());
 $ruleset->addStandard(new TwigCsFixer());
 $ruleset->addRule(new EndBlockNameRule());
 

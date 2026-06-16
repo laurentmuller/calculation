@@ -42,7 +42,7 @@
             {{ link(
                 href: path('chart_state_index'),
                 class: 'btn btn-link p-0 d-print-none',
-                icon: 'chart-pie fa-fw',
+                icon: 'fa-solid fa-chart-pie fa-fw',
                 title: 'index.menu_chart_title') }}
             {% if is_granted(PERMISSION_EXPORT, ENTITY_CALCULATION) %}
                 {{ linkExternal(
@@ -53,7 +53,7 @@
             {% endif %}
         {%- endif -%}
         <button type="button" class="btn btn-link hide-panel text-body p-0" title="{{ 'index.panel_state_hide'|trans }}">
-            {{- icon('xmark fa-fw') -}}
+            {{- icon('fa-solid fa-xmark fa-fw') -}}
         </button>
     </div>
     <div class="collapse{% if panel_show %} show{% endif %}" id="{{ panel_key }}">

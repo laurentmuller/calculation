@@ -7,7 +7,7 @@
 {%- set title_parameters = {'%year%': week.year, '%week%': week.number} -%}
 {# body #}
 {% block body %}
-<div class="row">
+<div class="row g-0">
     <div class="col-md-4">
         <h2 class="mb-0">{{ title|trans(title_parameters) }}</h2>
         <p class="text-body-secondary mb-1">{{ start_date|locale_date('long') }} - {{ end_date|locale_date('long') }}</p>
@@ -23,7 +23,7 @@
                 {{ link(
                     href: href,
                     class: 'btn btn-primary',
-                    icon: 'arrows-alt',
+                    icon: 'fa-solid fa-arrows-alt',
                     title: 'calendar.week_current',
                     parameters: {'%year%': today.year, '%week%': today.week}) }}
             {% endif %}
@@ -33,7 +33,7 @@
                 {{ link(
                     href: href,
                     class: 'btn btn-primary',
-                    icon: 'chevron-left',
+                    icon: 'fa-solid fa-chevron-left',
                     title: 'calendar.week_previous',
                     parameters: {'%year%': previous.year, '%week%': previous.week}) }}
             {% endif %}
@@ -43,7 +43,7 @@
                 {{ link(
                     href: href,
                     class: 'btn btn-primary',
-                    icon: 'chevron-right',
+                    icon: 'fa-solid fa-chevron-right',
                     title: 'calendar.week_next',
                     parameters: {'%year%': next.year, '%week%': next.week}) }}
             {% endif %}
@@ -55,7 +55,7 @@
                 {{ link(
                     href: href,
                     class: 'btn btn-primary',
-                    icon: 'calendar-week',
+                    icon: 'fa-solid fa-calendar-week',
                     title: 'calendar.month_show',
                     parameters: {'%year%': month.year, '%month%': month.name}) }}
             {%- endif %}
@@ -65,7 +65,7 @@
                 {{ link(
                     href: href,
                     class: 'btn btn-primary',
-                    icon: 'calendar-alt far',
+                    icon: 'fa-regular fa-calendar-alt',
                     title: 'calendar.year_show',
                     parameters: {'%year%': next.year}) }}
             {% endif %}

@@ -3,7 +3,7 @@
 {% from 'openweather/_weather_macro.html.twig' import value_temp %}
 {# parameters #}
 {%- set title = 'openweather.search.title' -%}
-{%- set title_icon = 'search' -%}
+{%- set title_icon = 'fa-solid fa-search' -%}
 {%- set submit_text = 'common.button_search' -%}
 {%- set submit_title = 'openweather.search.submit' -%}
 {%- set city = app.session.get('openweather.city', false) -%}
@@ -56,7 +56,7 @@
         href: path('openweather_import'),
         text: 'common.button_import',
         class: 'btn btn-form btn-outline-secondary',
-        icon: 'download',
+        icon: 'fa-solid fa-download',
         inline: true) }}
 {% endif %}
 {% endblock actions_form %}

@@ -1,5 +1,5 @@
 {% from 'parameters/_parameters.html.twig' import renderHeader, renderDescription %}
-{{ renderHeader('customer', 'user-tie', true) }}
+{{ renderHeader('customer', 'fa-solid fa-user-tie', true) }}
 <div id="customer" class="card-body pt-0 collapse show" data-bs-parent=".card-parameter">
     {{ renderDescription('customer') }}
     {{ form_row(form.name) }}
@@ -12,7 +12,7 @@
         <div class="col-md-6">{{ form_row(form.email) }}</div>
     </div>
 </div>
-{{ renderHeader('social', 'network-wired') }}
+{{ renderHeader('social', 'fa-solid fa-network-wired') }}
 <div id="social" class="card-body pt-0 collapse" data-bs-parent=".card-parameter">
     {{ renderDescription('social') }}
     <div class="row">

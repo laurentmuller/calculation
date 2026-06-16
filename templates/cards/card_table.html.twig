@@ -201,7 +201,7 @@
             <input class="form-control form-control-search" id="control-search" placeholder="{{ 'datatable.search'|trans }}" aria-label="{{ 'datatable.search'|trans }}" autocomplete="off" type="text">
             {% block toolbar_actions -%}{%- endblock toolbar_actions %}
             <button id="clear_search" name="clear_search" type="button" class="btn btn-outline-secondary" title="{{ 'datatable.clear'|trans }}">
-                <i class="fa-solid fa-eraser"></i>
+                <i class="{{ ICON_DELETE }}"></i>
             </button>
          </div>
     {% endif %}
@@ -234,13 +234,13 @@
                     {{ _self.item_separator() }}
                     <li>
                         <button type="button" class="dropdown-item btn-sort-data" data-url="{{ url('ajax_dialog_sort') }}">
-                            {{- icon('sort-amount-down-alt fa-fw', 'list.sort_title') -}}
+                            {{- icon('fa-solid fa-sort-amount-down-alt fa-fw', 'list.sort_title') -}}
                         </button>
                     </li>
                 {% endif %}
                 <li>
                     <button type="button" class="dropdown-item btn-show-page" data-url="{{ url('ajax_dialog_page') }}">
-                        {{- icon('arrow-up-right-dots fa-fw', 'datatable.dialog_title') -}}
+                        {{- icon('fa-solid fa-arrow-up-right-dots fa-fw', 'datatable.dialog_title') -}}
                     </button>
                 </li>
                 {% if allow_global %}

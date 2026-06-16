@@ -8,7 +8,7 @@
 <li>{{ dropdownSeparator() }}</li>
 <li class="nav-item nav-item-dropdown">
     <button class="nav-link nav-link-toggle{{ toggle_class }}" data-bs-toggle="collapse" data-bs-target="#{{ id }}" aria-expanded="{{ expanded|json_encode }}" title="{{ toggle_title|trans }}">
-        {{- icon('gear fa-fw', 'index.menu_admin') -}}
+        {{- icon('fa-solid fa-gear fa-fw', 'index.menu_admin') -}}
     </button>
     <div class="collapse{{ collapse_class }}" id="{{ id }}">
         {{ include('navigation/menu/_menu_admin.html.twig') }}

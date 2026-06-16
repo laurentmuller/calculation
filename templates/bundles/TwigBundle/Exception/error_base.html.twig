@@ -2,7 +2,7 @@
 {# imports #}
 {% from 'macros/_icons.html.twig' import link, homepage, button_copy %}
 {# parameters #}
-{%- set title_icon = 'exclamation-circle' -%}
+{%- set title_icon = 'fa-solid fa-exclamation-circle' -%}
 {% set status_code = status_code|default(0) %}
 {% if not title is defined %}
     {% if status_code != 0 %}
@@ -110,7 +110,7 @@
             href: cancel_url(app.request, id|default(null), page_list),
             text: 'common.button_back_list',
             class: 'btn btn-form btn-primary',
-            icon: 'chevron-left',
+            icon: 'fa-solid fa-chevron-left',
             inline: true) }}
     {% else %}
         {{ homepage() }}

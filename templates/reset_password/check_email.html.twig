@@ -2,7 +2,7 @@
 {% from 'macros/_icons.html.twig' import link, footer_center %}
 {# parameters #}
 {%- set title = 'resetting.request.title' -%}
-{%- set title_icon = 'eraser' -%}
+{%- set title_icon = ICON_DELETE -%}
 {%- set statusbar_show = false -%}
 {%- set navigation_show = false -%}
 {# class styles #}
@@ -35,7 +35,7 @@
         href: path('app_login'),
         text: 'security.login.submit',
         class: 'btn btn-form btn-primary',
-        icon: 'sign-in-alt',
+        icon: 'fa-solid fa-sign-in-alt',
         title: 'security.login.description',
         inline: true) }}
     {{ footer_center() }}

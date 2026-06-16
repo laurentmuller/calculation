@@ -259,7 +259,7 @@ class CalculationStateRepository extends AbstractRepository
             if (!\array_key_exists($key, $result)) {
                 $result[$key] = [
                     'id' => $key,
-                    'icon' => 1 === $key ? 'circle-check fa-lg far' : 'circle-xmark fa-lg far',
+                    'icon' => 1 === $key ? 'fa-regular fa-circle-check fa-lg' : 'fa-regular fa-circle-xmark fa-lg',
                     'text' => 1 === $key ? 'calculationstate.list.editable_1' : 'calculationstate.list.editable_0',
                     'states' => [],
                 ];

@@ -292,7 +292,7 @@ class UserController extends AbstractEntityController
         return $this->render('cards/card_delete.html.twig', [
             'form' => $form,
             'title' => 'user.reset.title',
-            'title_icon' => 'eraser',
+            'title_icon' => 'fa-solid fa-eraser',
             'message' => 'user.reset.confirmation',
             'message_parameters' => $parameters,
         ]);
@@ -415,7 +415,7 @@ class UserController extends AbstractEntityController
         return $this->render('cards/card_confirm.html.twig', [
             'form' => $form,
             'title' => 'user.send.title',
-            'title_icon' => 'envelope-circle-check fas',
+            'title_icon' => 'fa-solid fa-envelope-circle-check',
             'message' => 'user.send.message',
             'message_parameters' => $parameters,
             'submit_text' => 'user.send.submit',

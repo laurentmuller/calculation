@@ -3,7 +3,7 @@
 {% from 'macros/_icons.html.twig' import link, button_copy %}
 {# parameters #}
 {%- set title = 'command.result.title' -%}
-{%- set title_icon = 'code' -%}
+{%- set title_icon = 'fa-solid fa-code' -%}
 {%- set title_description = 'command.result.description' -%}
 {%- set cancel_path = encode_query('command_index', query) -%}
 {% block card_container_class ' col col-xl-10 offset-xl-1' %}
@@ -42,13 +42,13 @@
         href: encode_query('command_index', query),
         text: 'command.list.title',
         class: 'btn btn-form btn-primary',
-        icon: 'code',
+        icon: 'fa-solid fa-code',
         inline: true) }}
     {{ link(
         href: encode_query('command_execute', query),
         text: 'command.result.re_run',
         class: 'btn btn-form btn-warning',
-        icon: 'rotate-left',
+        icon: 'fa-solid fa-rotate-left',
         inline: true) }}
     {% if result.content %}
         {{ button_copy(target: '#result') }}

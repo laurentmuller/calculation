@@ -46,29 +46,29 @@ final class ConstantExtension extends AbstractExtension implements ConstantsInte
     {
         return [
             // entity
-            'ICON_CALCULATION' => 'calculator',
-            'ICON_CALCULATION_STATE' => 'flag far',
-            'ICON_CATEGORY' => 'folder far',
-            'ICON_CUSTOMER' => 'address-card far',
-            'ICON_GLOBAL_MARGIN' => 'percent',
-            'ICON_GROUP' => 'folder-closed far',
-            'ICON_LOG' => 'book',
-            'ICON_PRODUCT' => 'file-alt far',
-            'ICON_TASK' => 'tasks',
-            'ICON_USER' => 'user far',
+            'ICON_CALCULATION' => 'fa-solid fa-calculator',
+            'ICON_CALCULATION_STATE' => 'fa-regular fa-flag',
+            'ICON_CATEGORY' => 'fa-regular fa-folder',
+            'ICON_CUSTOMER' => 'fa-regular fa-address-card',
+            'ICON_GLOBAL_MARGIN' => 'fa-solid fa-percent',
+            'ICON_GROUP' => 'fa-regular fa-folder-closed',
+            'ICON_LOG' => 'fa-solid fa-book',
+            'ICON_PRODUCT' => 'fa-regular fa-file-alt',
+            'ICON_TASK' => 'fa-solid fa-tasks',
+            'ICON_USER' => 'fa-regular fa-user',
             // action
-            'ICON_SHOW' => 'wrench',
-            'ICON_ADD' => 'file far',
-            'ICON_EDIT' => 'pencil',
-            'ICON_DELETE' => 'eraser',
-            'ICON_COPY' => 'copy far',
+            'ICON_SHOW' => 'fa-solid fa-wrench',
+            'ICON_ADD' => 'fa-regular fa-file',
+            'ICON_EDIT' => 'fa-solid fa-pencil',
+            'ICON_DELETE' => 'fa-solid fa-eraser',
+            'ICON_COPY' => 'fa-regular fa-copy',
             // export
-            'ICON_PDF' => 'file-pdf far',
-            'ICON_EXCEL' => 'file-excel far',
-            'ICON_WORD' => 'file-word far',
+            'ICON_PDF' => 'fa-regular fa-file-pdf',
+            'ICON_EXCEL' => 'fa-regular fa-file-excel',
+            'ICON_WORD' => 'fa-regular fa-file-word',
             // view
-            'ICON_VIEW_TABLE' => 'table-list',
-            'ICON_VIEW_CUSTOM' => 'grip-horizontal',
+            'ICON_VIEW_TABLE' => 'fa-solid fa-table-list',
+            'ICON_VIEW_CUSTOM' => 'fa-solid fa-grip-horizontal',
         ];
     }
 

@@ -12,32 +12,32 @@
 <ul class="dropdown-menu {{ dropdown_class }}">
     {{ include('navigation/menu/_menu_theme.html.twig') }}
     {{ dropdownSeparator() }}
-    {{ dropdownItem(path('user_parameters'), 'user.parameters.title', 'user-gear') }}
-    {{ dropdownItem(path('user_profile_edit'), 'profile.edit.title', 'user-pen') }}
-    {{ dropdownItem(path('user_profile_password'), 'profile.password.title', 'unlock') }}
+    {{ dropdownItem(path('user_parameters'), 'user.parameters.title', 'fa-solid fa-user-gear') }}
+    {{ dropdownItem(path('user_profile_edit'), 'profile.edit.title', 'fa-solid fa-user-pen') }}
+    {{ dropdownItem(path('user_profile_password'), 'profile.password.title', 'fa-solid fa-unlock') }}
     {% if app_mode.development -%}
         {{ dropdownSeparator() }}
-        {{ dropdownItem(link_prod, 'environment.switch', 'location-arrow', {'%name%': 'environment.prod'|trans}) }}
+        {{ dropdownItem(link_prod, 'environment.switch', 'fa-solid fa-location-arrow', {'%name%': 'environment.prod'|trans}) }}
     {% elseif app_mode.production -%}
         {{ dropdownSeparator() }}
-        {{ dropdownItem(link_dev, 'environment.switch', 'location-arrow', {'%name%': 'environment.dev'|trans}) }}
+        {{ dropdownItem(link_dev, 'environment.switch', 'fa-solid fa-location-arrow', {'%name%': 'environment.dev'|trans}) }}
     {% endif %}
     {{ dropdownSeparator() }}
     {% if is_granted_data %}
-        {{ dropdownItem(path('site_map'), 'index.menu_site_map', 'sitemap') }}
+        {{ dropdownItem(path('site_map'), 'index.menu_site_map', 'fa-solid fa-sitemap') }}
     {% endif %}
     {% if app_mode.development %}
-        {{ dropdownItem(path('help_index'), 'help.title', 'question-circle') }}
+        {{ dropdownItem(path('help_index'), 'help.title', 'fa-solid fa-question-circle') }}
     {% endif %}
-    {{ dropdownItem(path('user_comment'), 'user.comment.title', 'envelope far') }}
+    {{ dropdownItem(path('user_comment'), 'user.comment.title', 'fa-regular fa-envelope') }}
     {% if not user_parameters.homePage.statusBar %}
         {{ dropdownSeparator() }}
-        {{ dropdownItem(path('about_index'), 'index.menu_info', 'info-circle', {'%app_name%': app_name}) }}
+        {{ dropdownItem(path('about_index'), 'index.menu_info', 'fa-solid fa-info-circle', {'%app_name%': app_name}) }}
     {% endif %}
     {{ dropdownSeparator() }}
-    {{ dropdownItem(logout_path(), 'index.logout', 'sign-out-alt') }}
+    {{ dropdownItem(logout_path(), 'index.logout', 'fa-solid fa-sign-out-alt') }}
     {% if is_granted(IS_IMPERSONATOR) -%}
         {{ dropdownSeparator() }}
-        {{ dropdownItem(impersonation_exit_path(path('user_index', {id: app.user.id})), 'user.switch.exit.title', 'user-slash') }}
+        {{ dropdownItem(impersonation_exit_path(path('user_index', {id: app.user.id})), 'user.switch.exit.title', 'fa-solid fa-user-slash') }}
     {% endif %}
 </ul>

@@ -1,17 +1,10 @@
 {# macros for icons, links and navigation entries #}
 {% macro icon(icon, text, parameters = [], inline = false) -%}
     {%- if icon -%}
-        {%- if 'fab' in icon -%}
-            {%- set class = 'fa-brands fa-' ~ icon|split(' ')|filter(c => c != 'fab')|join(' ') -%}
-        {%- elseif 'far' in icon -%}
-            {%- set class = 'fa-regular fa-' ~ icon|split(' ')|filter(c => c != 'far')|join(' ') -%}
-        {%- else -%}
-            {%- set class = 'fa-solid fa-' ~ icon -%}
+        {%- if text and not inline -%}
+            {%- set icon = icon ~ ' me-1' -%}
         {%- endif -%}
-        {% if text and not inline %}
-            {%- set class = class ~ ' me-1' -%}
-        {% endif %}
-        <i class="{{ class }}"></i>
+        <i class="{{ icon }}"></i>
     {%- endif %}
     {%- if text -%}
         {%- if icon and inline -%}
@@ -54,12 +47,12 @@
     </a>
 {%- endmacro linkExternal %}
 
-{% macro linkApi(href, class = null, icon = 'code-branch') -%}
+{% macro linkApi(href, class = null) -%}
     {{ _self.linkExternal(
         href: href,
         text: 'common.api_documentation',
         class: class,
-        icon: icon,
+        icon: 'fa-solid fa-code-branch',
         title: 'common.api_documentation_help') -}}
 {%- endmacro linkApi %}
 
@@ -124,7 +117,7 @@
     {{ _self.button(
         text: null,
         class: ['btn', 'btn-sm', 'btn-outline-secondary', 'border-0', 'px-1'],
-        icon: 'ellipsis-v',
+        icon: 'fa-solid fa-ellipsis-v',
         inline: false,
         attributes: {
             id: id,
@@ -139,7 +132,7 @@
         href: path('homepage'),
         text: 'index.title',
         class: 'btn btn-form btn-primary',
-        icon: 'home',
+        icon: 'fa-solid fa-home',
         title: 'index.title_help',
         inline: true) -}}
 {%- endmacro homepage %}
@@ -164,7 +157,7 @@
     }}
 {%- endmacro button_submit %}
 
-{% macro button_ok(href, text = 'common.button_ok', class = 'btn btn-ok btn-form btn-primary', icon = 'check') -%}
+{% macro button_ok(href, text = 'common.button_ok', class = 'btn btn-ok btn-form btn-primary', icon = 'fa-solid fa-check') -%}
     {{- _self.link(
         href: href,
         icon: icon,
@@ -176,7 +169,7 @@
 {% macro button_cancel(href, text = 'common.button_cancel', class = 'btn btn-cancel btn-form btn-secondary') -%}
     {{- _self.link(
         href: href,
-        icon: 'xmark',
+        icon: 'fa-solid fa-xmark',
         text: text,
         class: class,
         inline: true) -}}
@@ -251,7 +244,7 @@
 {% macro modal_title(id, title_icon, title_text, data_target = false, header_class = null) %}
     <div {{ html_attr({class: ['modal-header', header_class]}) }}>
         <h5 {{ html_attr({class: 'modal-title', id: id}) }}>
-            {{- _self.icon(icon: title_icon, text: title_text) -}}
+            {{- _self.icon(title_icon, title_text) -}}
         </h5>
         {{- _self.modal_close_button(for_header: true, data_target: data_target) -}}
     </div>
@@ -267,7 +260,7 @@
     {{ _self.button(
         text: for_header ? null : label,
         class: for_header ? ['btn-close'] : ['btn', 'btn-form', 'btn-secondary'],
-        icon: for_header ? null : 'xmark',
+        icon: for_header ? null : 'fa-solid fa-xmark',
         attributes: {
             'data-bs-dismiss': 'modal',
             'data-target': data_target ? '#' ~ data_target : null,
@@ -295,7 +288,7 @@
             href: caller,
             text: 'index.menu_site_map',
             class: 'btn btn-form btn-outline-success',
-            icon: 'sitemap') -}}
+            icon: 'fa-solid fa-sitemap') -}}
     {% endif %}
 {% endmacro sitemap %}
 
@@ -303,7 +296,7 @@
     {{ _self.button(
         text: 'common.button_copy',
         class: ['btn', 'btn-copy', 'btn-form', class],
-        icon: 'copy',
+        icon: ICON_COPY,
         attributes: {
             disabled: disabled,
             'data-title': 'common.copy_title'|trans,

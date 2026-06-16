@@ -42,7 +42,7 @@
 {%- endmacro checkbox %}
 {# parameters #}
 {%- set title = 'test.notification' -%}
-{%- set title_icon = 'bell far' -%}
+{%- set title_icon = 'fa-regular fa-bell' -%}
 {%- set timeout = user_parameters.message.timeout -%}
 {%- set position = user_parameters.message.position %}
 {%- set progress = user_parameters.message.progress %}
@@ -108,7 +108,7 @@
 {% block card_footer %}
     {{ homepage() }}
     <button type="button" class="btn btn-form btn-default btn-outline-success">
-        {{- icon('rotate-left', 'parameters.default') -}}
+        {{- icon('fa-solid fa-rotate-left', 'parameters.default') -}}
     </button>
 {% endblock card_footer %}
 {# javascripts #}

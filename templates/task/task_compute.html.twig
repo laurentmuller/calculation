@@ -2,7 +2,7 @@
 {% from 'macros/_icons.html.twig' import button_cancel, homepage, sitemap %}
 {# parameters #}
 {%- set title = 'task_compute.title' -%}
-{%- set title_icon = 'keyboard' -%}
+{%- set title_icon = 'fa-solid fa-keyboard' -%}
 {%- set form_attr = form_attr|default({})|merge({action: path('ajax_task'), 'data-failed': 'task_compute.failed'|trans}) -%}
 {%- set submit_text = 'task_compute.button_ok' -%}
 {%- set service = form.vars.value -%}

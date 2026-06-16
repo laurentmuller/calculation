@@ -8,7 +8,7 @@
     {% if margin < min_margin %} title="{{ 'calculation.list.margin_below'|trans({'%margin%': margin|percent, '%minimum%': min_margin|percent}) }}"{% endif %}
 {%- endmacro margin_below_tooltip %}
 {# parameters #}
-{%- set title_icon = title_icon|default('area-chart') -%}
+{%- set title_icon = title_icon|default('fa-solid fa-area-chart') -%}
 {%- set list_path = 'calculation_index' -%}
 {# body #}
 {% block card_body %}

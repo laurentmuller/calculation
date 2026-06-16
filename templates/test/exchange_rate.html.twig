@@ -2,18 +2,21 @@
 {% from 'macros/_icons.html.twig' import homepage, linkApi %}
 {# macros #}
 {% macro fillCodes(codes, selection = '') %}
-{% for key, code in codes -%}
-    <option value="{{ key }}" data-name="{{ code.symbol }}" data-digits="{{ code.fractionDigits }}"{% if key == selection %} selected{% endif %}>{{ code.name ~ ' - ' ~ code.symbol }}</option>
-{% endfor -%}
+    {% for key, code in codes -%}
+        <option value="{{ key }}" data-name="{{ code.symbol }}"
+                data-digits="{{ code.fractionDigits }}"{% if key == selection %} selected{% endif %}>{{ code.name ~ ' - ' ~ code.symbol }}</option>
+    {% endfor -%}
 {% endmacro fillCodes %}
 {% macro fillEntries(codes, selection = '') %}
-{% for key, code in codes -%}
-    <button class="dropdown-item{% if key == selection %} active{% endif %}" type="button" data-value="{{ key }}" data-name="{{ code.symbol }}" data-digits="{{ code.fractionDigits }}">{{ code.name ~ ' - ' ~ code.symbol }}</button>
-{% endfor -%}
+    {% for key, code in codes -%}
+        <button class="dropdown-item{% if key == selection %} active{% endif %}" type="button" data-value="{{ key }}"
+                data-name="{{ code.symbol }}"
+                data-digits="{{ code.fractionDigits }}">{{ code.name ~ ' - ' ~ code.symbol }}</button>
+    {% endfor -%}
 {% endmacro fillEntries %}
 {# parameters #}
 {%- set title = 'exchange_rate.title' -%}
-{%- set title_icon = 'comments-dollar' -%}
+{%- set title_icon = 'fa-solid fa-comments-dollar' -%}
 {%- set title_description = 'exchange_rate.description' -%}
 {%- set form_attr = form_attr|default({})|merge({
     action: url('exchange_rate'),
@@ -21,86 +24,86 @@
     'data-rate': 'exchange_rate.rate'|trans}) -%}
 {# body #}
 {% block card_body %}
-{{ parent() }}
-<div class="row mb-3">
-    <div class="col-md-5">
-        <div class="form-group mb-3">
-            <label class="form-label required" for="baseCode">{{ 'exchange_rate.source'|trans }}</label>
-            <select class="form-select w-100" id="baseCode" name="baseCode" required="required">
-                {{ _self.fillCodes(codes, 'CHF') }}
-            </select>
+    {{ parent() }}
+    <div class="row mb-3">
+        <div class="col-md-5">
+            <div class="form-group mb-3">
+                <label class="form-label required" for="baseCode">{{ 'exchange_rate.source'|trans }}</label>
+                <select class="form-select w-100" id="baseCode" name="baseCode" required="required">
+                    {{ _self.fillCodes(codes, 'CHF') }}
+                </select>
+            </div>
+        </div>
+        <div class="col-md-2 d-print-none">
+            <div class="form-group mb-3 text-md-center">
+                <span class="form-label">{{ 'exchange_rate.swap_label'|trans }}</span>
+                <button type="button" class="btn btn-swap btn-secondary form-control"
+                        title="{{ 'exchange_rate.swap_label'|trans }}">
+                    <i class="fa-solid fa-exchange-alt"></i>
+                </button>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="form-group mb-3">
+                <label class="form-label required" for="targetCode">{{ 'exchange_rate.target'|trans }}</label>
+                <select class="form-select w-100" id="targetCode" name="targetCode" required="required">
+                    {{ _self.fillCodes(codes, 'EUR') }}
+                </select>
+            </div>
         </div>
     </div>
-    <div class="col-md-2 d-print-none">
-        <div class="form-group mb-3 text-md-center">
-            <span class="form-label">{{ 'exchange_rate.swap_label'|trans }}</span>
-            <button type="button" class="btn btn-swap btn-secondary form-control" title="{{ 'exchange_rate.swap_label'|trans }}">
-                <i class="fa-solid fa-exchange-alt"></i>
-            </button>
+    <p class="text-center mb-3" id="rate">&nbsp;</p>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label class="form-label required" for="amount">{{ 'exchange_rate.amount'|trans }}</label>
+                <input type="number" class="form-control text-end" id="amount" name="amount" value="100"
+                       required="required">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label class="form-label" for="result">{{ 'exchange_rate.result'|trans }}</label>
+                <input type="text" class="form-control text-end" id="result" name="result" value="1.00" readonly>
+            </div>
         </div>
     </div>
-    <div class="col-md-5">
-        <div class="form-group mb-3">
-            <label class="form-label required" for="targetCode">{{ 'exchange_rate.target'|trans }}</label>
-            <select class="form-select w-100" id="targetCode" name="targetCode" required="required">
-                {{ _self.fillCodes(codes, 'EUR') }}
-            </select>
+    <div class="d-flex-wrap small text-body-secondary">
+        <div id="last-update" data-text="{{ 'exchange_rate.last_update'|trans }}" class="me-auto">
+            {{- 'exchange_rate.last_update'|trans({'%date%': 'common.entity_empty_date'|trans}) -}}
+        </div>
+        <div id="next-update" data-text="{{ 'exchange_rate.next_update'|trans }}">
+            {{- 'exchange_rate.next_update'|trans({'%date%': 'common.entity_empty_date'|trans}) -}}
         </div>
     </div>
-</div>
-<p class="text-center mb-3" id="rate">&nbsp;</p>
-<div class="row mb-3">
-    <div class="col-md-6">
-        <div class="form-group mb-3">
-            <label class="form-label required" for="amount">{{ 'exchange_rate.amount'|trans }}</label>
-            <input type="number" class="form-control text-end" id="amount" name="amount" value="100" required="required">
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="form-group mb-3">
-            <label class="form-label" for="result">{{ 'exchange_rate.result'|trans }}</label>
-            <input type="text" class="form-control text-end" id="result" name="result" value="1.00" readonly>
-        </div>
-    </div>
-</div>
-<div class="d-flex-wrap small text-body-secondary">
-    <div id="last-update" data-text="{{ 'exchange_rate.last_update'|trans }}" class="me-auto">
-        {{- 'exchange_rate.last_update'|trans({'%date%': 'common.entity_empty_date'|trans}) -}}
-    </div>
-    <div id="next-update" data-text="{{ 'exchange_rate.next_update'|trans }}">
-        {{- 'exchange_rate.next_update'|trans({'%date%': 'common.entity_empty_date'|trans}) -}}
-    </div>
-</div>
 {% endblock card_body %}
 {# footer #}
 {% block card_footer -%}
-{{ parent() }}
-{% if quota %}
-    <hr class="card-footer-line">
-    <div class="d-flex-wrap text-body-secondary small mt-2">
-    <span class="me-auto">
-        {{- 'exchange_rate.quota'|trans({'%date%': quota.date|locale_date('long'), '%remaining%': quota.remaining|integer, '%allowed%': quota.allowed|integer}) -}}
-    </span>
-        <span>
-        {{- linkApi(quota.documentation) -}}
-    </span>
-    </div>
-{% endif %}
+    {{ parent() }}
+    {% if quota %}
+        <hr class="card-footer-line">
+        <div class="d-flex-wrap text-body-secondary small mt-2">
+            <span class="me-auto">
+                {{- 'exchange_rate.quota'|trans({'%date%': quota.date|locale_date('long'), '%remaining%': quota.remaining|integer, '%allowed%': quota.allowed|integer}) -}}
+            </span>
+            <span>{{- linkApi(quota.documentation) -}}</span>
+        </div>
+    {% endif %}
 {% endblock card_footer %}
 {# actions #}
 {% block actions_form -%}
-{{ homepage() }}
+    {{ homepage() }}
 {%- endblock actions_form %}
 {# stylesheets #}
 {% block stylesheets %}
-{{ asset_css('build/currency-flags/currency-flags.css') }}
-{{ asset_css('css/select2.css') }}
+    {{ asset_css('build/currency-flags/currency-flags.css') }}
+    {{ asset_css('css/select2.css') }}
 {%- endblock stylesheets -%}
 {# javascripts #}
 {% block javascripts %}
-{{ parent() }}
-{{ asset_js('build/select2/js/select2.js') }}
-{{ asset_js('build/select2/js/i18n/fr.js') }}
-{{ asset_js('js/extensions/select2-extensions.js') }}
-{{ asset_js('js/test/exchange-rate.js') }}
+    {{ parent() }}
+    {{ asset_js('build/select2/js/select2.js') }}
+    {{ asset_js('build/select2/js/i18n/fr.js') }}
+    {{ asset_js('js/extensions/select2-extensions.js') }}
+    {{ asset_js('js/test/exchange-rate.js') }}
 {%- endblock javascripts %}

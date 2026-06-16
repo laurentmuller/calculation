@@ -3,7 +3,7 @@
 {% from 'macros/_icons.html.twig' import link, homepage %}
 {# parameters #}
 {%- set title = 'about.advanced.title' -%}
-{%- set title_icon = 'screwdriver-wrench' -%}
+{%- set title_icon = 'fa-solid fa-screwdriver-wrench' -%}
 {%- set title_parameters = {'%app_name%': app_name} -%}
 {% set customer = application_parameters.customerInformation %}
 {# class #}
@@ -27,7 +27,7 @@
             href: path('about_index'),
             text: 'about.title',
             class: 'btn btn-form btn-outline-secondary',
-            icon: 'info-circle',
+            icon: 'fa-solid fa-info-circle',
             inline: true) }}
     </div>
 {% endblock body %}

@@ -32,7 +32,7 @@
         <thead>
             <tr class="text-center">
                 <th class="text-start text-nowrap fw-normal">
-                    {{- icon('arrow-down me-1', 'user.rights.table_title') }}{{ icon('arrow-right ms-1') -}}
+                    {{- icon('fa-solid fa-arrow-down me-1', 'user.rights.table_title') }}{{ icon('fa-solid fa-arrow-right ms-1') -}}
                 </th>
                 {% for entity in entities %}
                     {{ _self.header(entity, overwrite) }}
@@ -74,14 +74,14 @@
 {% from 'macros/_icons.html.twig' import icon %}
 <div class="dropdown">
     <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-        {{ icon('bars', 'common.actions') }}
+        {{ icon('fa-solid fa-bars', 'common.actions') }}
     </button>
     <ul class="dropdown-menu dropdown-menu-end">
-        {{ _self.action('all', 'check-circle', overwrite) }}
-        {{ _self.action('none', 'times-circle', overwrite) }}
-        {{ _self.action('toggle', 'right-left', overwrite) }}
+        {{ _self.action('all', 'fa-solid fa-check-circle', overwrite) }}
+        {{ _self.action('none', 'fa-solid fa-times-circle', overwrite) }}
+        {{ _self.action('toggle', 'fa-solid fa-right-left', overwrite) }}
         <li><hr class="dropdown-divider"></li>
-        {{ _self.action('default', 'rotate-left', true) }}
+        {{ _self.action('default', 'fa-solid fa-rotate-left', true) }}
     </ul>
 </div>
 {% endmacro actions %}

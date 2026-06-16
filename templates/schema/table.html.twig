@@ -6,16 +6,16 @@
 {%- endmacro output_checkbox %}
 {% macro output_association(inverse) -%}
     {%- if inverse -%}
-        {{- icon('arrow-right-to-bracket', 'schema.table.one_to_many') -}}
+        {{- icon('fa-solid fa-arrow-right-to-bracket', 'schema.table.one_to_many') -}}
     {%- else -%}
-        {{- icon('arrow-right-from-bracket', 'schema.table.many_to_one') -}}
+        {{- icon('fa-solid fa-arrow-right-from-bracket', 'schema.table.many_to_one') -}}
     {%- endif -%}
 {%- endmacro output_association %}
 {# parameters #}
 {%- set title = 'schema.table.title' -%}
 {%- set title_description = 'schema.table.description' -%}
 {%- set title_parameters = {'%name%': name} -%}
-{%- set title_icon = 'table-columns' -%}
+{%- set title_icon = 'fa-solid fa-table-columns' -%}
 {# class styles #}
 {% block card_container_class ' col col-xl-10 offset-xl-1' %}
 {# body #}
@@ -120,7 +120,7 @@
         href: path('schema_index'),
         text: 'schema.index.title',
         class: 'btn btn-form btn-success',
-        icon: 'table',
+        icon: 'fa-solid fa-table',
         title: 'schema.index.description',
         inline: true) }}
 {%- endblock card_footer %}

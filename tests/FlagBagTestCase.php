@@ -17,7 +17,7 @@ use Elao\Enum\FlagBag;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Extend test case for FlagBag class.
+ * Extend the test case for the FlagBag class.
  */
 abstract class FlagBagTestCase extends TestCase
 {

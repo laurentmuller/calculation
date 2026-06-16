@@ -25,7 +25,7 @@
 <div class="d-flex-wrap-center">
     {% block actions_form %}
         {% if cancel_path|default(false) %}
-            {{ button_ok(href: cancel_path, icon: 'check') }}
+            {{ button_ok(href: cancel_path, icon: 'fa-solid fa-check') }}
         {% endif %}
         {% if edit_path|default(false) %}
             {{ link(

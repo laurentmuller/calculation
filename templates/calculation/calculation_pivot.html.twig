@@ -21,7 +21,7 @@
             <td class="text-currency">{{ cell.row.formattedValue }}</td>
         </tr>
         <tr>
-            <td class="border-top">{{ icon('calculator', 'pivot.value') }}</td>
+            <td class="border-top">{{ icon('fa-solid fa-calculator', 'pivot.value') }}</td>
             <td class="border-top text-currency">{{ cell.formattedValue }}</td>
         </tr>
         </tbody>
@@ -149,7 +149,7 @@
 
 {# parameters #}
 {%- set title = 'pivot.title' -%}
-{%- set title_icon = 'table' -%}
+{%- set title_icon = 'fa-solid fa-table' -%}
 {%- set max_row_level = table.maxRowLevel -%}
 {%- set max_col_level = table.maxColumnLevel -%}
 {%- set total_title = table.totalTitle|default('calculation.fields.total'|trans) -%}
@@ -168,7 +168,7 @@
                     'data-bs-target': '#month',
                     'aria-expanded': false} -%}
                 <button {{ html_attr(button_attrs) }}>
-                    {{- icon('calendar-days far', 'timeline.interval') -}}
+                    {{- icon('fa-regular fa-calendar-days', 'timeline.interval') -}}
                 </button>
                 <ul id="month" class="dropdown-menu dropdown-menu-checked-sm">
                     {% for i in [1, 2, 3, 6, 12] -%}
@@ -176,7 +176,7 @@
                     {%- endfor -%}
                 </ul>
                 <button {{ html_attr(button_attrs|merge({'data-bs-target': '#operation'})) }}>
-                    {{- icon('calculator', 'pivot.operation.title') -}}
+                    {{- icon('fa-solid fa-calculator', 'pivot.operation.title') -}}
                 </button>
                 <ul id="operation" class="dropdown-menu dropdown-menu-checked-sm">
                     {% for current in enum_sorted('App\\Pivot\\PivotOperation') -%}
@@ -188,7 +188,7 @@
                     title: 'common.actions'|trans,
                     'data-bs-target': '#actions'}) -%}
                 <button {{ html_attr(button_attrs) }}>
-                    {{- icon('ellipsis-v') -}}
+                    {{- icon('fa-solid fa-ellipsis-v') -}}
                 </button>
                 <ul id="actions" class="dropdown-menu">
                     {%- set button_attrs = {
@@ -197,7 +197,7 @@
                         class: ['dropdown-item', popover ? 'dropdown-item-checked-right']} -%}
                     <li>
                         <button {{ html_attr(button_attrs) }}>
-                            {{- icon(icon: 'message', text: 'pivot.popover') -}}
+                            {{- icon('fa-solid fa-message', 'pivot.popover') -}}
                         </button>
                     </li>
                     {%- set button_attrs = {
@@ -206,7 +206,7 @@
                         class: ['dropdown-item', highlight ? 'dropdown-item-checked-right']} -%}
                     <li>
                         <button {{ html_attr(button_attrs) }}>
-                            {{- icon(icon: 'highlighter', text: 'pivot.highlight') -}}
+                            {{- icon('fa-solid fa-highlighter', 'pivot.highlight') -}}
                         </button>
                     </li>
                     {{ dropdownSeparator() }}
@@ -214,13 +214,13 @@
                         {{- dropdownItemExternal(
                             href: path('calculation_pivot_csv', {months: months}),
                             text: 'common.button_export_csv',
-                            icon: 'file-csv') -}}
+                            icon: 'fa-solid fa-file-csv') -}}
                     </li>
                     <li>
                         {{- dropdownItemExternal(
                             href: path('calculation_pivot_json', {months: months, operation: operation.value}),
                             text: 'common.button_export_json',
-                            icon: 'folder-tree') -}}
+                            icon: 'fa-solid fa-folder-tree') -}}
                     </li>
                 </ul>
             </div>

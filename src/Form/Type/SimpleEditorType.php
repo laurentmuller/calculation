@@ -84,7 +84,7 @@ class SimpleEditorType extends AbstractType
      */
     private function filterAction(array $action): bool
     {
-        return ($action['exec'] ?? '') !== '' || $this->isActions($action);
+        return ($action['exec'] ?? '') !== '' || $this->hasActions($action);
     }
 
     /**
@@ -109,7 +109,7 @@ class SimpleEditorType extends AbstractType
      */
     private function getGroupedActions(array $options): array
     {
-        if (!$this->isActions($options)) {
+        if (!$this->hasActions($options)) {
             return [];
         }
 
@@ -139,7 +139,7 @@ class SimpleEditorType extends AbstractType
      *
      * @phpstan-assert-if-true ActionType[] $action['actions']
      */
-    private function isActions(array $action): bool
+    private function hasActions(array $action): bool
     {
         return isset($action['actions']) && [] !== $action['actions'];
     }
@@ -183,7 +183,7 @@ class SimpleEditorType extends AbstractType
      */
     private function updateClass(array &$action, string $class): self
     {
-        if ($this->isActions($action)) {
+        if ($this->hasActions($action)) {
             $class .= ' dropdown-toggle';
         }
         if (isset($action['class'])) {
@@ -199,7 +199,7 @@ class SimpleEditorType extends AbstractType
      */
     private function updateDropDown(array &$action): void
     {
-        if (!$this->isActions($action)) {
+        if (!$this->hasActions($action)) {
             return;
         }
 

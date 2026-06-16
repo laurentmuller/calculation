@@ -4,17 +4,17 @@
             "permission": "export",
             "external": true,
             "text": "common.button_pdf",
-            "icon": "file-pdf"
+            "icon": "fa-solid fa-file-pdf"
         },
         "excel": {
             "permission": "export",
             "external": true,
             "text": "common.button_export",
-            "icon": "file-excel"
+            "icon": "fa-solid fa-file-excel"
         },
         "add": {
             "permission": "add",
-            "icon": "file"
+            "icon": "fa-solid fa-file"
         }
     },
     "primary": [
@@ -22,14 +22,14 @@
             "route": "homepage",
             "class": "home",
             "text": "index.title",
-            "icon": "home"
+            "icon": "fa-solid fa-home"
         },
         {
             "route": "calculation_index",
             "entity": "Calculation",
             "permission": "list",
             "text": "calculation.list.title",
-            "icon": "calculator",
+            "icon": "fa-solid fa-calculator",
             "entries": [
                 {
                     "route": "calculation_add",
@@ -48,14 +48,14 @@
         },
         {
             "text": "index.menu_data",
-            "icon": "database",
+            "icon": "fa-solid fa-database",
             "entries": [
                 {
                     "route": "product_index",
                     "entity": "Product",
                     "permission": "list",
                     "text": "product.list.title",
-                    "icon": "file-alt",
+                    "icon": "fa-solid fa-file-alt",
                     "entries": [
                         {
                             "route": "product_add",
@@ -77,7 +77,7 @@
                     "entity": "Task",
                     "permission": "list",
                     "text": "task.list.title",
-                    "icon": "tasks",
+                    "icon": "fa-solid fa-tasks",
                     "entries": [
                         {
                             "route": "task_add",
@@ -99,7 +99,7 @@
                     "entity": "Category",
                     "permission": "list",
                     "text": "category.list.title",
-                    "icon": "folder",
+                    "icon": "fa-solid fa-folder",
                     "entries": [
                         {
                             "route": "category_add",
@@ -121,7 +121,7 @@
                     "entity": "Group",
                     "permission": "list",
                     "text": "group.list.title",
-                    "icon": "code-branch",
+                    "icon": "fa-solid fa-code-branch",
                     "entries": [
                         {
                             "route": "group_add",
@@ -143,7 +143,7 @@
                     "entity": "CalculationState",
                     "permission": "list",
                     "text": "calculationstate.list.title",
-                    "icon": "flag",
+                    "icon": "fa-solid fa-flag",
                     "entries": [
                         {
                             "route": "calculationstate_add",
@@ -165,13 +165,13 @@
                     "entity": "GlobalMargin",
                     "permission": "list",
                     "text": "globalmargin.list.title",
-                    "icon": "percent",
+                    "icon": "fa-solid fa-percent",
                     "entries": [
                         {
                             "route": "globalmargin_edit",
                             "permission": "edit",
                             "text": "common.button_edit",
-                            "icon": "pencil"
+                            "icon": "fa-solid fa-pencil"
                         },
                         {
                             "route": "globalmargin_pdf",
@@ -189,132 +189,132 @@
             "text": "index.menu_graphics",
             "entity": "Calculation",
             "permission": "list",
-            "icon": "chart-area",
+            "icon": "fa-solid fa-chart-area",
             "entries": [
                 {
                     "route": "chart_month_index",
                     "text": "index.menu_graphics_month",
-                    "icon": "calendar-alt far"
+                    "icon": "fa-regular fa-calendar-alt"
                 },
                 {
                     "route": "chart_state_index",
                     "text": "index.menu_graphics_state",
-                    "icon": "flag"
+                    "icon": "fa-solid fa-flag"
                 }
             ]
         },
         {
             "text": "index.menu_tools",
-            "icon": "tools",
+            "icon": "fa-solid fa-tools",
             "entries": [
                 {
                     "route": "search",
                     "text": "search.title",
-                    "icon": "search"
+                    "icon": "fa-solid fa-search"
                 },
                 {
                     "route": "calculation_below_index",
                     "text": "below.title",
-                    "icon": "percent"
+                    "icon": "fa-solid fa-percent"
                 },
                 {
                     "route": "calculation_duplicate_index",
                     "text": "duplicate.title",
-                    "icon": "copy far"
+                    "icon": "fa-regular fa-copy"
                 },
                 {
                     "route": "calculation_empty_index",
                     "text": "empty.title",
-                    "icon": "file-code far"
+                    "icon": "fa-regular fa-file-code"
                 },
                 {
                     "entity": "Task",
                     "route": "task_compute",
                     "permission": "list",
                     "text": "task_compute.title",
-                    "icon": "keyboard"
+                    "icon": "fa-solid fa-keyboard"
                 }
             ]
         },
         {
             "text": "index.menu_admin",
             "role": "admin",
-            "icon": "gear",
+            "icon": "fa-solid fa-gear",
             "entries": [
                 {
                     "route": "admin_product",
                     "text": "product.update.title",
-                    "icon": "file-alt"
+                    "icon": "fa-solid fa-file-alt"
                 },
                 {
                     "route": "admin_update",
                     "text": "calculation.update.title",
-                    "icon": "pencil"
+                    "icon": "fa-solid fa-pencil"
                 },
                 {
                     "route": "admin_archive",
                     "text": "archive.title",
-                    "icon": "calendar-xmark far"
+                    "icon": "fa-regular fa-calendar-xmark"
                 },
                 {
                     "route": "user_index",
                     "entity": "User",
                     "permission": "list",
                     "text": "user.list.title",
-                    "icon": "user far"
+                    "icon": "fa-regular fa-user"
                 },
                 {
                     "route": "admin_rights_user",
                     "text": "index.menu_rights_user",
-                    "icon": "user-check"
+                    "icon": "fa-solid fa-user-check"
                 },
                 {
                     "route": "admin_rights_admin",
                     "role": "super_admin",
                     "text": "index.menu_rights_admin",
-                    "icon": "user-shield"
+                    "icon": "fa-solid fa-user-shield"
                 },
                 {
                     "route": "admin_parameters",
                     "text": "parameters.title",
-                    "icon": "cogs"
+                    "icon": "fa-solid fa-cogs"
                 },
                 {
                     "route": "log_index",
                     "text": "log.title",
-                    "icon": "book"
+                    "icon": "fa-solid fa-book"
                 },
                 {
                     "route": "admin_clear",
                     "text": "clear_cache.title",
-                    "icon": "times"
+                    "icon": "fa-solid fa-times"
                 }
             ]
         },
         {
             "route": "about_index",
             "text": "about.title",
-            "icon": "info-circle",
+            "icon": "fa-solid fa-info-circle",
             "entries": [
                 {
                     "route": "about_licence_index",
                     "text": "about.licence.title",
-                    "icon": "info-circle"
+                    "icon": "fa-solid fa-info-circle"
                 },
                 {
                     "route": "about_policy_index",
                     "text": "about.policy.title",
-                    "icon": "info-circle"
+                    "icon": "fa-solid fa-info-circle"
                 },
                 {
                     "route": "user_comment",
                     "text": "user.comment.title",
-                    "icon": "envelope far"
+                    "icon": "fa-regular fa-envelope"
                 },
                 {
                     "route": "help_index",
                     "text": "help.title",
-                    "icon": "question-circle"
+                    "icon": "fa-solid fa-question-circle"
                 }
             ]
         }
@@ -323,22 +323,22 @@
         {
             "route": "user_parameters",
             "text": "user.parameters.title",
-            "icon": "user-gear"
+            "icon": "fa-solid fa-user-gear"
         },
         {
             "route": "user_profile_edit",
             "text": "profile.edit.title",
-            "icon": "user-pen"
+            "icon": "fa-solid fa-user-pen"
         },
         {
             "route": "user_profile_password",
             "text": "profile.password.title",
-            "icon": "unlock-alt"
+            "icon": "fa-solid fa-unlock-alt"
         },
         {
             "route": "app_logout",
             "text": "index.logout",
-            "icon": "sign-out-alt"
+            "icon": "fa-solid fa-sign-out-alt"
         }
     ]
 }

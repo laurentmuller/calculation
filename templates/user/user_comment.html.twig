@@ -1,10 +1,10 @@
 {% extends 'cards/card_edit.html.twig' %}
 {# parameters #}
-{%- set title_icon = 'envelope far' -%}
+{%- set title_icon = 'fa-regular fa-envelope' -%}
 {%- set title = message ? 'user.message.title' : 'user.comment.title' -%}
 {%- set title_description = message ? 'user.message.description' : 'user.comment.description' -%}
 {%- set page_list = message ? 'user_index' : 'homepage' -%}
-{%- set submit_icon = 'envelope far' -%}
+{%- set submit_icon = 'fa-regular fa-envelope' -%}
 {%- set submit_text = 'common.button_send' -%}
 {# body #}
 {% block card_body %}

@@ -6,16 +6,16 @@
 {% from 'navigation/menu/_menu_data.html.twig' import dropdownItemCount %}
 <ul class="dropdown-menu">
     {{ dropdownItem(path('admin_product'), 'product.update.title', ICON_PRODUCT) }}
-    {{ dropdownItem(path('admin_update'), 'calculation.update.title', 'pencil') }}
-    {{ dropdownItem(path('admin_archive'), 'archive.title', 'calendar-xmark far') }}
+    {{ dropdownItem(path('admin_update'), 'calculation.update.title', 'fa-solid fa-pencil') }}
+    {{ dropdownItem(path('admin_archive'), 'archive.title', 'fa-regular fa-calendar-xmark') }}
     {{ dropdownSeparator() }}
     {{ dropdownItemCount('user_index', ICON_USER, 'user.list.title', index_service.catalog.user) }}
-    {{ dropdownItem(path('admin_rights_user'), 'index.menu_rights_user', 'user-check') }}
+    {{ dropdownItem(path('admin_rights_user'), 'index.menu_rights_user', 'fa-solid fa-user-check') }}
     {% if is_super_admin -%}
-        {{ dropdownItem(path('admin_rights_admin'), 'index.menu_rights_admin', 'user-shield') }}
+        {{ dropdownItem(path('admin_rights_admin'), 'index.menu_rights_admin', 'fa-solid fa-user-shield') }}
     {% endif %}
     {{ dropdownSeparator() }}
-    {{ dropdownItem(path('admin_parameters'), 'parameters.title', 'cogs') }}
+    {{ dropdownItem(path('admin_parameters'), 'parameters.title', 'fa-solid fa-cogs') }}
     {% if is_super_admin or is_log %}
         {{ dropdownSeparator() }}
     {% endif %}

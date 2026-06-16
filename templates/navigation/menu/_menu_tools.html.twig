@@ -2,17 +2,17 @@
 {% from 'macros/_icons.html.twig' import dropdownSeparator, dropdownItem %}
 {%- set is_admin = is_granted(ROLE_ADMIN) -%}
 <ul class="dropdown-menu">
-    {{ dropdownItem(path('search'), 'search.title', 'search') }}
+    {{ dropdownItem(path('search'), 'search.title', 'fa-solid fa-search') }}
     {% if is_admin %}
         {{ dropdownSeparator() }}
         {{ dropdownItem(path('calculation_below_index'), 'below.title', ICON_GLOBAL_MARGIN) }}
         {{ dropdownItem(path('calculation_duplicate_index'), 'duplicate.title', ICON_COPY) }}
-        {{ dropdownItem(path('calculation_empty_index'), 'empty.title', 'file-code far') }}
+        {{ dropdownItem(path('calculation_empty_index'), 'empty.title', 'fa-regular fa-file-code') }}
     {% endif -%}
     {%- if is_granted(PERMISSION_LIST, ENTITY_CALCULATION) -%}
         {% if is_admin -%}
             {{ dropdownSeparator() }}
         {% endif %}
-        {{ dropdownItem(path('task_compute'), 'task_compute.title', 'keyboard') }}
+        {{ dropdownItem(path('task_compute'), 'task_compute.title', 'fa-solid fa-keyboard') }}
     {% endif -%}
 </ul>

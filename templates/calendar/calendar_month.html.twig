@@ -27,7 +27,7 @@
 {%- set month_index = month.number -%}
 
 {% block body %}
-<div class="row">
+<div class="row g-0">
     <div class="col-md-4">
         <h2>{{ title|trans(title_parameters) }}</h2>
     </div>
@@ -42,7 +42,7 @@
                 {{ link(
                     href: href,
                     class: 'btn btn-primary',
-                    icon: 'arrows-alt',
+                    icon: 'fa-solid fa-arrows-alt',
                     title: 'calendar.month_current',
                     parameters: {'%year%': today.year, '%month%': calendar.monthNames[today.month]}) }}
             {% endif %}
@@ -52,7 +52,7 @@
                 {{ link(
                     href: href,
                     class: 'btn btn-primary',
-                    icon: 'chevron-left',
+                    icon: 'fa-solid fa-chevron-left',
                     title: 'calendar.month_previous',
                     parameters: {'%year%': previous.year, '%month%': calendar.monthNames[previous.month]}) }}
             {% endif %}
@@ -62,7 +62,7 @@
                 {{ link(
                     href: href,
                     class: 'btn btn-primary',
-                    icon: 'chevron-right',
+                    icon: 'fa-solid fa-chevron-right',
                     title: 'calendar.month_next',
                     parameters: {'%year%': next.year, '%month%': calendar.monthNames[next.month]}) }}
             {% endif %}
@@ -71,7 +71,7 @@
             {{ link(
                 href: href,
                 class: 'btn btn-primary',
-                icon: 'calendar-alt far',
+                icon: 'fa-regular fa-calendar-alt',
                 title: 'calendar.year_show',
                 parameters: {'%year%': calendar.year}) }}
             {# calculations #}

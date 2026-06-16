@@ -3,7 +3,7 @@
      data-page="{{ 'datatable.dialog_page'|trans }}" data-record="{{ 'datatable.dialog_record'|trans }}">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            {{ modal_title(id: 'modal-page-title', title_icon: 'arrow-up-right-dots', title_text: 'datatable.dialog_title', data_target: 'modal-page') }}
+            {{ modal_title(id: 'modal-page-title', title_icon: 'fa-solid fa-arrow-up-right-dots', title_text: 'datatable.dialog_title', data_target: 'modal-page') }}
             <div class="modal-body p-4">
                 <label for="page-range" class="form-label">{{ 'datatable.dialog_message'|trans }}</label>
                 <input id="page-range" type="range" class="form-range border rounded-pill px-1 py-2" min="1" max="100" step="1" value="1">
@@ -14,7 +14,7 @@
             </div>
             <div class="modal-footer justify-content-start">
                 <button type="button" class="btn btn-form btn-primary" id="page-button">
-                    {{- icon(icon: 'check', text: 'common.button_ok', inline: true) -}}
+                    {{- icon(icon: 'fa-solid fa-check', text: 'common.button_ok', inline: true) -}}
                 </button>
                 {{- modal_close_button(label: 'common.button_cancel') }}
             </div>

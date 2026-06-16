@@ -2,7 +2,7 @@
 {% from 'macros/_icons.html.twig' import link, homepage, sitemap, button_pdf, button_word %}
 {# parameters #}
 {%- set title = 'about.licence.title' -%}
-{%- set title_icon = 'info-circle' -%}
+{%- set title_icon = 'fa-solid fa-info-circle' -%}
 {%- set accepted = app.request.cookies.boolean(constant('App\\Controller\\PolicyController::POLICY_ACCEPTED')) -%}
 {%- set navigation_show = is_granted(IS_AUTHENTICATED_REMEMBERED) -%}
 {# navigation #}
@@ -22,7 +22,7 @@
                 href: path('policy_accept'),
                 text: 'cookie_banner.accept',
                 class: 'btn btn-form btn-success',
-                icon: 'check',
+                icon: 'fa-solid fa-check',
                 title: 'cookie_banner.accept_title',
                 inline: true) }}
         {% endif %}
@@ -31,7 +31,7 @@
             href: path('app_login'),
             text: 'index.login',
             class: 'btn btn-form btn-outline-primary',
-            icon: 'sign-in-alt',
+            icon: 'fa-solid fa-sign-in-alt',
             inline: true) }}
     {% endif %}
     {{ sitemap() }}
@@ -41,7 +41,7 @@
         href: path('about_policy_index', params),
         text: 'about.policy.title',
         class: 'btn btn-form btn-secondary',
-        icon: 'info-circle',
+        icon: 'fa-solid fa-info-circle',
         inline: true)
     }}
     {{ button_pdf('about_licence_pdf') }}

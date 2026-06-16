@@ -3,7 +3,7 @@
 {% from 'macros/_icons.html.twig' import link, homepage, button_pdf, button_word %}
 {# parameters #}
 {%- set title = 'index.menu_info' -%}
-{%- set title_icon = 'info-circle' -%}
+{%- set title_icon = 'fa-solid fa-info-circle' -%}
 {%- set title_parameters = {'%app_name%': app_name} -%}
 {% set customer = application_parameters.customerInformation %}
 {# class #}
@@ -26,7 +26,7 @@
             href: path('user_comment'),
             text: 'user.comment.title',
             class: 'btn btn-form btn-secondary',
-            icon: 'envelope far',
+            icon: 'fa-regular fa-envelope',
             title: 'user.comment.description',
             inline: true) }}
         {{ button_pdf('about_pdf') }}
@@ -36,7 +36,7 @@
                 href: path('about_advanced'),
                 text: 'about.advanced.action',
                 class: 'btn btn-form btn-outline-secondary',
-                icon: 'screwdriver-wrench',
+                icon: 'fa-solid fa-screwdriver-wrench',
                 title: 'about.advanced.title',
                 inline: true) }}
         {% endif %}

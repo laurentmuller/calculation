@@ -12,7 +12,7 @@
         {{- button(
             text: null,
             class: 'btn btn-notify btn-outline-secondary d-print-none',
-            icon: 'bell far',
+            icon: 'fa-regular fa-bell',
             inline: false,
             attributes: {title: 'parameters.action_test'|trans})
         -}}
@@ -69,17 +69,17 @@
             'aria-expanded': false,
         } -%}
         <button {{ html_attr(attrs) }}>
-            {{- icon(icon: 'rotate-left', text: 'parameters.default', inline: true) -}}
+            {{- icon(icon: 'fa-solid fa-rotate-left', text: 'parameters.default', inline: true) -}}
         </button>
         <ul class="dropdown-menu">
             {{- dropdownItemButton(
                 text: 'parameters.default_visible',
-                icon: 'reply',
+                icon: 'fa-solid fa-reply',
                 class: 'btn-item-visible')
             -}}
             {{- dropdownItemButton(
                 text: 'parameters.default_all',
-                icon: 'reply-all',
+                icon: 'fa-solid fa-reply-all',
                 class: 'btn-item-all')
             -}}
         </ul>

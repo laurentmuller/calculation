@@ -32,10 +32,10 @@ final class FlashTypeTest extends TestCase
 
     public static function getIcons(): \Generator
     {
-        yield [FlashType::DANGER, 'fas fa-lg fa-exclamation-triangle'];
-        yield [FlashType::INFO, 'fas fa-lg fa-info-circle'];
-        yield [FlashType::SUCCESS, 'fas fa-lg fa-check-circle'];
-        yield [FlashType::WARNING, 'fas fa-lg fa-exclamation-circle'];
+        yield [FlashType::DANGER, 'fa-solid fa-lg fa-exclamation-triangle'];
+        yield [FlashType::INFO, 'fa-solid fa-lg fa-info-circle'];
+        yield [FlashType::SUCCESS, 'fa-solid fa-lg fa-check-circle'];
+        yield [FlashType::WARNING, 'fa-solid fa-lg fa-exclamation-circle'];
     }
 
     public static function getLabels(): \Generator

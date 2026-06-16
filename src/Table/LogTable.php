@@ -157,11 +157,10 @@ class LogTable extends AbstractTable implements \Countable
      */
     private function mapChannels(array $channels): array
     {
-        foreach ($channels as &$channel) {
-            $channel = $this->replaceIcon($channel->getChannelIcon());
-        }
-
-        return $channels;
+        return \array_combine(
+            \array_keys($channels),
+            \array_map(static fn (LogChannel $channel): string => $channel->getChannelIcon(), $channels)
+        );
     }
 
     /**
@@ -169,16 +168,10 @@ class LogTable extends AbstractTable implements \Countable
      */
     private function mapLevels(array $levels): array
     {
-        foreach ($levels as &$level) {
-            $level = $this->replaceIcon($level->getLevelIcon()) . ' ' . $level->getLevelColor();
-        }
-
-        return $levels;
-    }
-
-    private function replaceIcon(string $icon): string
-    {
-        return \str_replace('fa-fw fa-solid fa-', '', $icon) . ' fa-fw';
+        return \array_combine(
+            \array_keys($levels),
+            \array_map(static fn (LogLevel $level): string => $level->getFullLevelIcon(), $levels)
+        );
     }
 
     /**

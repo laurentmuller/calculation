@@ -3,7 +3,7 @@
 {% from 'command/_command.htm.twig' import encode_query %}
 {# parameters #}
 {%- set title = 'command.list.title' -%}
-{%- set title_icon = 'code' -%}
+{%- set title_icon = 'fa-solid fa-code' -%}
 {%- set title_description = 'command.list.description' -%}
 {% block card_container_class ' col col-xl-10 offset-xl-1' %}
 {# body #}
@@ -30,7 +30,7 @@
 {% block card_footer %}
 <div class="d-flex-wrap">
     <a id="execute" href="{{ encode_query('command_execute', query) }}" class="btn btn-form btn-warning btn-execute">
-        {{- icon(icon: 'terminal', text: 'command.execute.title', inline: true) -}}
+        {{- icon(icon: 'fa-solid fa-terminal', text: 'command.execute.title', inline: true) -}}
     </a>
     {{ button_pdf('command_pdf') }}
     <small class="ms-sm-auto">{{ 'command.list.counter'|trans({'%count%': count|integer}) }}</small>

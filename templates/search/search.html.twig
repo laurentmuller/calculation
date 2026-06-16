@@ -2,7 +2,7 @@
 {% from 'macros/_icons.html.twig' import icon %}
 {# parameters #}
 {%- set title = 'search.title' -%}
-{%- set title_icon = 'search' -%}
+{%- set title_icon = 'fa-solid fa-search' -%}
 {%- set path = path('homepage') -%}
 {%- set allow_global = false -%}
 {%- set entity = customData.entity -%}
@@ -17,9 +17,9 @@
 {% block toolbar_actions -%}
     {% set data_default = 'search.entity'|trans %}
     {% set input_text = entity ? customData.entities[entity].name|trans : data_default %}
-    {{ _self.output_dropdown_menu('entity', 'database', input_text, 'search.entity_help', entity, data_default) }}
+    {{ _self.output_dropdown_menu('entity', 'fa-solid fa-database', input_text, 'search.entity_help', entity, data_default) }}
     <ul class="dropdown-menu" aria-labelledby="entity">
-        {{ _self.output_dropdown_item('entity', '', entity, 'search.all_entities'|trans, 'filter-circle-xmark') }}
+        {{ _self.output_dropdown_item('entity', '', entity, 'search.all_entities'|trans, 'fa-solid fa-filter-circle-xmark') }}
         {{ _self.item_separator() }}
         {% for key, entry in customData.entities %}
             {{ _self.output_dropdown_item('entity', key, entity, entry.name|trans, entry.icon) }}

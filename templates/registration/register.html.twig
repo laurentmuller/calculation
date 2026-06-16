@@ -2,7 +2,7 @@
 {% from 'macros/_icons.html.twig' import link %}
 {# parameters #}
 {%- set title = 'registration.register.title' -%}
-{%- set title_icon = 'user-plus' -%}
+{%- set title_icon = 'fa-solid fa-user-plus' -%}
 {%- set submit_text = 'registration.register.submit' -%}
 {%- set cancel_path = false -%}
 {%- set form_attr = form_attr|default({})|merge({'data-equal_to': 'password.mismatch'|trans([], 'validators')}) -%}
@@ -13,14 +13,14 @@
         href: path('app_login'),
         text: 'security.login.submit',
         class: 'btn btn-form btn-secondary',
-        icon: 'sign-in-alt',
+        icon: 'fa-solid fa-sign-in-alt',
         title: 'security.login.description',
         inline: true) }}
     {{ link(
         href: path('app_forgot_password_request'),
         text: 'resetting.link',
         class: 'btn btn-form btn-outline-secondary',
-        icon: 'circle-question',
+        icon: 'fa-solid fa-circle-question',
         title: 'resetting.request.description',
         inline: true) }}
 {% endblock actions_form %}

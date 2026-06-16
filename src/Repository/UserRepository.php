@@ -267,13 +267,13 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     /**
      * @see PasswordUpgraderInterface
      *
-     * @phpstan-param User $user
+     * @param User $user
      */
     #[\Override]
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
         $user->setPassword($newHashedPassword);
-        $this->flush();
+        $this->persist($user);
     }
 
     private function createResettableQueryBuilder(): QueryBuilder

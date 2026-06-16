@@ -18,9 +18,9 @@
 {% if customData.levels|length %}
     {% set data_default = 'log.fields.level'|trans %}
     {% set text = level|length ? level|capitalize : data_default %}
-    {{ _self.output_dropdown_menu('level', 'layer-group', text, 'log.list.level_help', level, data_default) }}
+    {{ _self.output_dropdown_menu('level', 'fa-solid fa-layer-group', text, 'log.list.level_help', level, data_default) }}
     <ul class="dropdown-menu" aria-labelledby="level">
-        {{ _self.output_dropdown_item('level', '', level, 'log.list.level_all'|trans, 'filter-circle-xmark') }}
+        {{ _self.output_dropdown_item('level', '', level, 'log.list.level_all'|trans, 'fa-solid fa-filter-circle-xmark') }}
         {{ _self.item_separator() }}
         {% for key, icon in customData.levels %}
             {{ _self.output_dropdown_item('level', key, level, key|capitalize, icon) }}
@@ -31,9 +31,9 @@
 {% if customData.channels|length %}
     {% set data_default = 'log.fields.channel'|trans %}
     {% set text = channel|length ? channel|capitalize : data_default %}
-    {{ _self.output_dropdown_menu('channel', 'tools', text, 'log.list.channel_help', channel, data_default) }}
+    {{ _self.output_dropdown_menu('channel', 'fa-solid fa-tools', text, 'log.list.channel_help', channel, data_default) }}
     <ul class="dropdown-menu" aria-labelledby="channel">
-        {{ _self.output_dropdown_item('channel', '', channel, 'log.list.channel_all'|trans, 'filter-circle-xmark') }}
+        {{ _self.output_dropdown_item('channel', '', channel, 'log.list.channel_all'|trans, 'fa-solid fa-filter-circle-xmark') }}
         {{ _self.item_separator() }}
         {% for key, icon in customData.channels %}
             {{ _self.output_dropdown_item('channel', key, channel, key|capitalize, icon) }}
@@ -44,12 +44,12 @@
 {# global actions #}
 {% block global_actions -%}
 {%- set route = app.current_route -%}
-{{- _self.item_global(path('log_refresh', {route: route}), 'log.list.refresh_title', 'sync-alt') }}
+{{- _self.item_global(path('log_refresh', {route: route}), 'log.list.refresh_title', 'fa-solid fa-sync-alt') }}
 {{- _self.item_global(path('log_delete', {route: route}), 'log.delete.title', ICON_DELETE) }}
 {{- _self.item_separator() }}
 {{- _self.item_external(path('log_pdf'), 'log.list.pdf_title', ICON_PDF) }}
 {{- _self.item_external(path('log_excel'), 'log.list.excel_title', ICON_EXCEL) }}
-{{- _self.item_external(path('log_download'), 'log.list.download_title', 'file-arrow-down') }}
+{{- _self.item_external(path('log_download'), 'log.list.download_title', 'fa-solid fa-file-arrow-down') }}
 {%- endblock global_actions %}
 {# show_actions #}
 {% block show_actions -%}

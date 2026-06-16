@@ -179,7 +179,7 @@ class TestController extends AbstractController
                 $node = [
                     'id' => \sprintf('group-%d', (int) $group->getId()),
                     'text' => $group->getCode(),
-                    'icon' => 'fas fa-code-branch fa-fw',
+                    'icon' => 'fa-solid fa-code-branch fa-fw',
                     'badgeValue' => $group->countItems(),
                 ];
                 foreach ($group->getCategories() as $category) {
@@ -187,7 +187,7 @@ class TestController extends AbstractController
                     $node['nodes'][] = [
                         'id' => \sprintf('category-%d', (int) $category->getId()),
                         'text' => $category->getCode(),
-                        'icon' => 'far fa-folder fa-fw',
+                        'icon' => 'fa-regular fa-folder fa-fw',
                         'badgeValue' => $category->countItems(),
                     ];
                 }
@@ -196,7 +196,7 @@ class TestController extends AbstractController
             $root = [
                 'id' => 'root',
                 'text' => 'Catalogue',
-                'icon' => 'fas fa-table fa-fw',
+                'icon' => 'fa-solid fa-table fa-fw',
                 'nodes' => $nodes,
                 'expanded' => true,
                 'badgeValue' => $count,

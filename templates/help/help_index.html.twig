@@ -110,7 +110,7 @@
 {%- block container_class 'container-fluid' -%}
 {# title #}
 {% block help_title -%}
-    {{- output_icon('question-circle', 'help.title') -}}
+    {{- output_icon('fa-solid fa-question-circle', 'help.title') -}}
 {%- endblock help_title %}
 {# body #}
 {% block help_body -%}
@@ -120,13 +120,13 @@
         {# main menu #}
         {% set main_menus = service.mainMenus %}
         <div class="col-xl-4 col-lg-6 items">
-            {{ _self.output_header('bars', 'help.navigation_menu') }}
+            {{ _self.output_header('fa-solid fa-bars', 'help.navigation_menu') }}
             {{ _self.output_menus(main_menus, service) }}
         </div>
         {# dialogs #}
         {% set groups = service.getDialogsByGroup() %}
         <div class="col-xl-4 col-lg-6 items">
-            {{ _self.output_header('file-code far', 'help.dialog_menu') }}
+            {{ _self.output_header('fa-regular fa-file-code', 'help.dialog_menu') }}
             {% for group, dialogs in groups %}
                 {% set group_id = 'group-' ~ loop.index %}
                 <div class="help-item">
@@ -147,7 +147,7 @@
         {# entities #}
         {% set entities = service.entities %}
         <div class="col-xl-4 col-lg-6 items">
-            {{ _self.output_header('database', 'help.entity_menu') }}
+            {{ _self.output_header('fa-solid fa-database', 'help.entity_menu') }}
             <div class="help-item">
                 <div id="entities" class="collapse">
                     {% for entity in entities %}

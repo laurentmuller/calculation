@@ -34,7 +34,7 @@
 <div class="modal fade" id="{{ dialog_id }}" tabindex="-1" aria-labelledby="theme-title" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            {{ modal_title(id: 'theme-title', title_icon: 'image', title_text: 'theme.title', data_target: dialog_id) }}
+            {{ modal_title(id: 'theme-title', title_icon: 'fa-solid fa-image', title_text: 'theme.title', data_target: dialog_id) }}
             <div class="modal-body mx-3">
                 <span class="form-label mb-3">{{ 'theme.help'|trans }}</span>
                 {% for theme in themes() %}
@@ -45,13 +45,13 @@
                 {{- button(
                     text: 'common.button_ok',
                     class: 'btn btn-ok btn-form btn-primary',
-                    icon: 'check')
+                    icon: 'fa-solid fa-check')
                 -}}
                 {{ modal_close_button(label: 'common.button_cancel', data_target: dialog_id) }}
                 {{- button(
                     text: 'theme.settings',
                     class: 'btn btn-settings btn-form btn-success',
-                    icon: 'gear',
+                    icon: 'fa-solid fa-gear',
                     attributes: {disabled: true})
                 -}}
             </div>

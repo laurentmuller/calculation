@@ -2,7 +2,7 @@
 {% from 'macros/_icons.html.twig' import button %}
 {# parameters #}
 {%- set title = 'diagram.title' -%}
-{%- set title_icon = 'diagram-project' -%}
+{%- set title_icon = 'fa-solid fa-diagram-project' -%}
 {% block container_class 'container-fluid' %}
 {% block card_container_class '' %}
 {% block card_header_class ' d-flex-wrap-center' %}
@@ -27,7 +27,7 @@
             </select>
             {{- button(
                 class: 'btn btn-outline-secondary btn-zoom-in',
-                icon: 'magnifying-glass-plus',
+                icon: 'fa-solid fa-magnifying-glass-plus',
                 inline: false,
                 attributes: {title: 'diagram.zoom_in'|trans})
             -}}
@@ -41,19 +41,19 @@
             -}}
             {{- button(
                 class: 'btn btn-outline-secondary btn-zoom-out',
-                icon: 'magnifying-glass-minus',
+                icon: 'fa-solid fa-magnifying-glass-minus',
                 inline: false,
                 attributes: {title: 'diagram.zoom_out'|trans})
             -}}
             {{- button(
                 class: 'btn btn-outline-secondary btn-reset',
-                icon: 'arrows-to-dot',
+                icon: 'fa-solid fa-arrows-to-dot',
                 inline: false,
                 attributes: {title: 'diagram.reset'|trans})
             -}}
             {{- button(
                 class: 'btn btn-outline-secondary btn-code',
-                icon: 'code',
+                icon: 'fa-solid fa-code',
                 inline: false,
                 attributes: {
                     title: 'diagram.reset'|trans,
@@ -66,7 +66,7 @@
                            aria-label="{{ 'diagram.zoom'|trans }}">
                     {{- button(
                         class: 'btn btn-sm btn-link btn-reset-zoom',
-                        icon: 'rotate-left',
+                        icon: 'fa-solid fa-rotate-left',
                         attributes: {title: 'diagram.reset_zoom'|trans})
                     -}}
                 </div>

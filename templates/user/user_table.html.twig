@@ -17,7 +17,7 @@
 {# global actions #}
 {% block global_actions -%}
 {% if customData.resetPasswords %}
-    {{- _self.item_path(path('user_reset_all', params), 'user.reset_all.title', 'eraser') }}
+    {{- _self.item_path(path('user_reset_all', params), 'user.reset_all.title', ICON_DELETE) }}
     {{- _self.item_separator() }}
 {% endif %}
 {{- _self.item_external(path('user_pdf'), 'user.list.pdf_title', ICON_PDF) }}
@@ -33,8 +33,8 @@
 {# edit actions #}
 {% block edit_actions -%}
 {{- _self.item_path(path('user_edit', params), 'user.edit.title', ICON_EDIT, edit_class) }}
-{{- _self.item_path(path('user_rights', params), 'user.rights.action', 'unlock', 'btn-rights') }}
-{{- _self.item_path(path('user_password', params), 'user.change_password.title', 'unlock-alt', 'btn-password') }}
+{{- _self.item_path(path('user_rights', params), 'user.rights.action', 'fa-solid fa-unlock', 'btn-rights') }}
+{{- _self.item_path(path('user_password', params), 'user.change_password.title', 'fa-solid fa-unlock-alt', 'btn-password') }}
 {%- endblock edit_actions %}
 {# delete actions #}
 {% block delete_actions -%}
@@ -50,17 +50,17 @@
     {% if allow_edit or allow_delete or allow_add or allow_show %}
         {{- _self.item_separator('user-message-divider') }}
     {% endif %}
-    {{- _self.item_path(path('user_message', params), 'user.message.title', 'envelope far', 'btn-user-message') }}
+    {{- _self.item_path(path('user_message', params), 'user.message.title', 'fa-regular fa-envelope', 'btn-user-message') }}
     {{- _self.item_separator('user-reset-divider') }}
     {% if is_granted(ROLE_SUPER_ADMIN) %}
-        {{- _self.item_path(path('user_reset_send', params), 'user.send.title', 'envelope-circle-check', 'btn-user-send') }}
+        {{- _self.item_path(path('user_reset_send', params), 'user.send.title', 'fa-solid fa-envelope-circle-check', 'btn-user-send') }}
     {% endif %}
-    {{- _self.item_path(path('user_reset', params), 'user.reset.title', 'eraser', 'btn-user-reset') }}
+    {{- _self.item_path(path('user_reset', params), 'user.reset.title', ICON_DELETE, 'btn-user-reset') }}
 {% endif %}
 {%- if not is_granted(IS_IMPERSONATOR) and is_granted(ROLE_SUPER_ADMIN) -%}
     {%- set param_name = constant('App\\Listener\\SwitchUserListener::SWITCH_USER_PARAMETER') -%}
     {{- _self.item_separator('user-switch-divider') }}
-    {{- _self.item_path(path('homepage', {(param_name): '_username_'}), 'user.switch.take.title', 'user-plus', 'btn-user-switch btn-skip-href') }}
+    {{- _self.item_path(path('homepage', {(param_name): '_username_'}), 'user.switch.take.title', 'fa-solid fa-user-plus', 'btn-user-switch btn-skip-href') }}
 {%- endif -%}
 {%- endblock other_actions %}
 {# custom view header #}

@@ -4,7 +4,7 @@
 {% set entity_text = entity ~ '.list.title' %}
 {% set entity_title = 'index.panel_title_' ~ entity %}
 {% set counter_title = 'index.panel_count_' ~ entity %}
- {% set add_title = entity ~ '.add.title' %}
+{% set add_title = entity ~ '.add.title' %}
 <div class="border index-child item-hover p-2 m-1">
     <div class="d-flex">
         <div class="me-auto">
@@ -21,7 +21,7 @@
         {%- if add_route -%}
             {{- link(
                 href: path(add_route, {caller: path(app.current_route)}),
-                icon: 'pen-to-square fa-fw',
+                icon: 'fa-solid fa-pen-to-square fa-fw',
                 title: add_title) -}}
         {%- endif -%}
     </div>
@@ -54,10 +54,10 @@
 <div class="card card-collapse card-catalog mb-2" data-path="{{ path('homepage_hide_catalog') }}">
     <div class="card-header d-flex-wrap-center">
         <a {{ html_attr(header_attributes) }}>
-            {{- icon('database ms-1', 'index.panel_catalog') -}}
+            {{- icon('fa-solid fa-database ms-1', 'index.panel_catalog') -}}
         </a>
         <button type="button" class="btn btn-link hide-panel text-body p-0" title="{{ 'index.panel_catalog_hide'|trans }}">
-            {{- icon('xmark fa-fw') -}}
+            {{- icon('fa-solid fa-xmark fa-fw') -}}
         </button>
     </div>
     <div class="collapse{% if panel_show %} show{% endif %}" id="{{ panel_key }}">

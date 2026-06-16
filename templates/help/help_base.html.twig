@@ -13,7 +13,7 @@
                 {% block help_search %}
                     <input id="help-search" class="form-control" type="text" placeholder="{{ 'datatable.search'|trans }}" aria-label="{{ 'datatable.search'|trans }}">
                     <button class="btn btn-outline-secondary btn-help-search" type="button" disabled title="{{ 'datatable.clear'|trans }}">
-                        <i class="fa-solid fa-eraser"></i>
+                        <i class="{{ ICON_DELETE }}"></i>
                     </button>
                 {% endblock help_search %}
                 {% block help_actions -%}{%- endblock help_actions %}

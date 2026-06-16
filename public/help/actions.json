@@ -2,7 +2,7 @@
     "back_home": {
         "description": "Retourne à la page précédente ou à la page principale de l'application (page d'accueil).",
         "dialog": "index.title",
-        "icon": "home",
+        "icon": "fa-solid fa-home",
         "id": "index.title"
     },
     "back_ok": {
@@ -15,76 +15,76 @@
     },
     "delete_forbidden": {
         "description": "Retourne à la page précédente sans supprimer l'objet.",
-        "icon": "chevron-left",
+        "icon": "fa-solid fa-chevron-left",
         "id": "common.button_back_list"
     },
     "entity_add": {
         "description": "Affiche la page de création d'un nouvel objet.",
-        "icon": "file far",
+        "icon": "fa-regular fa-file",
         "id": "common.button_add"
     },
     "entity_clone": {
         "description": "Crée un nouvel objet en copiant les valeurs d'un objet existant et affiche la page de création.",
-        "icon": "copy far",
+        "icon": "fa-regular fa-copy",
         "id": "common.button_clone"
     },
     "entity_delete": {
         "description": "Affiche la page de suppression de l'objet.",
-        "icon": "times",
+        "icon": "fa-solid fa-times",
         "id": "common.button_delete"
     },
     "entity_edit": {
         "description": "Affiche la page d'édition de l'objet.",
-        "icon": "pencil",
+        "icon": "fa-solid fa-pencil",
         "id": "common.button_edit"
     },
     "entity_show": {
         "description": "Affiche la page des propriétés de l'objet.",
-        "icon": "display"
+        "icon": "fa-solid fa-display"
     },
     "list_clear": {
         "description": "Efface tous les critères de recherche et les filtres.",
-        "icon": "eraser",
+        "icon": "fa-solid fa-eraser",
         "id": "help.actions.clear"
     },
     "list_custom": {
         "description": "Menu permettant d'afficher les objets sous forme de mosaïque.",
-        "icon": "grip-horizontal",
+        "icon": "fa-solid fa-grip-horizontal",
         "id": "table_view.custom"
     },
     "list_excel": {
         "description": "Exporte les données vers format Microsoft® Excel®.",
-        "icon": "file-excel far"
+        "icon": "fa-regular fa-file-excel"
     },
     "list_page": {
         "description": "Affiche une boîte de dialog permettant de sélectionner une page à afficher.",
         "dialog": "datatable.dialog_title",
-        "icon": "arrow-up-right-dots",
+        "icon": "fa-solid fa-arrow-up-right-dots",
         "id": "datatable.dialog_title"
     },
     "list_pdf": {
         "description": "Exporte les données vers le format de document portable (PDF).",
-        "icon": "file-pdf far"
+        "icon": "fa-regular fa-file-pdf"
     },
     "list_search": {
         "description": "Zone de text pour rechercher les données.",
-        "icon": "pen-to-square",
+        "icon": "fa-solid fa-pen-to-square",
         "id": "help.actions.search"
     },
     "list_size": {
         "description": "Permet de définir le nombre d'éléments à afficher.",
-        "icon": "list-ol",
+        "icon": "fa-solid fa-list-ol",
         "id": "help.actions.pages"
     },
     "list_sort": {
         "description": "Affiche une boîte de dialog permettant de trier les objets.",
         "dialog": "list.sort_title",
-        "icon": "sort-amount-down-alt",
+        "icon": "fa-solid fa-sort-amount-down-alt",
         "id": "list.sort_title"
     },
     "list_table": {
         "description": "Menu permettant d'afficher les objets sous forme tabulaire.",
-        "icon": "table",
+        "icon": "fa-solid fa-table",
         "id": "table_view.table"
     },
     "send": {

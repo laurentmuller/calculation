@@ -23,7 +23,7 @@
             },
             {
                 "description": "Affiche la page de modification du statut de la calculation.",
-                "icon": "flag far",
+                "icon": "fa-regular fa-flag",
                 "id": "calculation.list.state_title"
             },
             {
@@ -106,7 +106,7 @@
                 "required": false
             }
         ],
-        "icon": "calculator",
+        "icon": "fa-solid fa-calculator",
         "links": [
             {
                 "id": "calculation.list.title",
@@ -171,7 +171,7 @@
                 "type": "collection"
             }
         ],
-        "icon": "flag far",
+        "icon": "fa-regular fa-flag",
         "links": [
             {
                 "id": "calculationstate.list.title",
@@ -239,7 +239,7 @@
                 "type": "collection"
             }
         ],
-        "icon": "folder far",
+    "icon": "fa-regular fa-folder",
         "links": [
             {
                 "id": "category.list.title",
@@ -285,7 +285,7 @@
                 "type": "percent"
             }
         ],
-        "icon": "percent",
+        "icon": "fa-solid fa-percent",
         "links": [
             {
                 "id": "globalmargin.list.title",
@@ -346,7 +346,7 @@
                 "type": "collection"
             }
         ],
-        "icon": "code-branch",
+        "icon": "fa-solid fa-code-branch",
         "links": [
             {
                 "id": "group.list.title",
@@ -396,7 +396,7 @@
                 "required": false
             }
         ],
-        "icon": "book",
+        "icon": "fa-solid fa-book",
         "links": [
             {
                 "id": "log.list.title",
@@ -465,7 +465,7 @@
                 "required": false
             }
         ],
-        "icon": "file-alt far",
+        "icon": "fa-regular fa-file-alt",
         "links": [
             {
                 "id": "product.list.title",
@@ -497,7 +497,7 @@
             },
             {
                 "description": "Permet de simuler le calcul d'une tâche.",
-                "icon": "keyboard",
+                "icon": "fa-solid fa-keyboard",
                 "id": "task_compute.title"
             }
         ],
@@ -531,7 +531,7 @@
                 "type": "collection"
             }
         ],
-        "icon": "tasks",
+        "icon": "fa-solid fa-tasks",
         "links": [
             {
                 "id": "task.list.title",
@@ -559,22 +559,22 @@
             },
             {
                 "description": "Page permettant de modifier le mot de passe de l'utilisateur.",
-                "icon": "unlock-alt",
+                "icon": "fa-solid fa-unlock-alt",
                 "id": "user.change_password.title"
             },
             {
                 "description": "Page permettant d'envoyer un message pour permettre à l'utilisateur sélectionné de changer son mot de passe.",
-                "icon": "envelope-circle-check fas",
+                "icon": "fa-solid fa-envelope-circle-check",
                 "id": "user.send.title"
             },
             {
                 "description": "Page permettant de définir les droits d'accès à l'application.",
-                "icon": "unlock",
+                "icon": "fa-solid fa-unlock",
                 "id": "user.rights.title"
             },
             {
                 "description": "Page permettant d'envoyer un message à l'utilisateur.",
-                "icon": "envelope far",
+                "icon": "fa-regular fa-envelope",
                 "id": "user.message.title"
             }
         ],
@@ -624,7 +624,7 @@
                 "type": "date"
             }
         ],
-        "icon": "user far",
+        "icon": "fa-regular fa-user",
         "links": [
             {
                 "id": "user.list.title",

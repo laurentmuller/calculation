@@ -2,7 +2,7 @@
 {% from 'macros/_icons.html.twig' import link, homepage %}
 {# parameters #}
 {%- set title = 'swisspost.title' -%}
-{%- set title_icon = 'download' -%}
+{%- set title_icon = 'fa-solid fa-download' -%}
 {%- set title_description = 'swisspost.result.description' -%}
 {# class #}
 {% block card_class -%}
@@ -69,7 +69,7 @@
             href: path('admin_import'),
             text: 'swisspost.result.new_import',
             class: 'btn btn-outline-secondary',
-            icon: 'rotate-left',
+            icon: 'fa-solid fa-rotate-left',
             inline: true) -}}
     {%- endif %}
 {% endblock card_footer %}

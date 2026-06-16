@@ -42,7 +42,7 @@ class ProductParameterType extends AbstractParameterType
             ->add(ProductListType::class);
 
         $helper->field('quantity')
-            ->updateOption('append_icon', 'fa-solid fa-plus-minus')
+            ->prependIcon('fa-solid fa-plus-minus')
             ->label('parameters.fields.default_product_quantity')
             ->widgetClass('input-number')
             ->addNumberType();

@@ -9,7 +9,7 @@
 {%- endmacro add_line_info %}
 {# parameters #}
 {%- set title = 'calculation.update.title' -%}
-{%- set title_icon = 'pencil' -%}
+{%- set title_icon = 'fa-solid fa-pencil' -%}
 {%- set title_description = 'calculation.result.description' -%}
 {%- set cancel_path = path('homepage') -%}
 {%- set results = result.results -%}
@@ -90,7 +90,7 @@
             href: path('admin_update'),
             text: 'calculation.result.update',
             class: 'btn btn-form btn-secondary',
-            icon: 'plus',
+            icon: 'fa-solid fa-plus',
             inline: true) -}}
         {{ sitemap() }}
     </div>

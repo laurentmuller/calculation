@@ -29,6 +29,14 @@ trait LogLevelTrait
     private string $level = PsrLevel::INFO;
 
     /**
+     * Get the icon and color classes.
+     */
+    public function getFullLevelIcon(): string
+    {
+        return $this->getLevelIcon() . ' ' . $this->getLevelColor();
+    }
+
+    /**
      * Get the level.
      *
      * @return PsrLevel::*

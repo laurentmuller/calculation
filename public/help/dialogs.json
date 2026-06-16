@@ -2,7 +2,7 @@
     "about.title": {
         "group": "Utilisateur (connecté)",
         "image": "about/about_list",
-        "icon": "info-circle",
+        "icon": "fa-solid fa-info-circle",
         "description": "Cette page affiche des informations sur l'application tel que son nom, sa version ou son environnent.",
         "name": "A propos de"
     },
@@ -10,7 +10,7 @@
         "group": "Administration",
         "entity": "calculation",
         "image": "admin/admin_archive_result",
-        "icon": "calendar-xmark far",
+        "icon": "fa-regular fa-calendar-xmark",
         "description": "Cette page affiche le résultat de l'archivage des calculations.",
         "editActions": [
             {
@@ -42,7 +42,7 @@
         "group": "Administration",
         "entity": "calculation",
         "image": "admin/admin_archive_query",
-        "icon": "calendar-xmark far",
+        "icon": "fa-regular fa-calendar-xmark",
         "description": "Cette page vous permet d'archiver des calculations en modifiant leur statut. Cette page n'est accessible qu'aux administrateurs.",
         "editActions": [
             {
@@ -75,7 +75,7 @@
     "below.title": {
         "group": "Outils",
         "image": "calculation/calculation_below",
-        "icon": "percent",
+        "icon": "fa-solid fa-percent",
         "entity": "calculation",
         "description": "Cette page affiche les calculations contenant une marge globale inférieure à la marge définit dans les paramètres de l'application. Cette page n'est accessible qu'aux administrateurs.",
         "fields": [
@@ -151,7 +151,7 @@
     "calculation.clone.title": {
         "entity": "calculation",
         "image": "calculation/calculation_clone",
-        "icon": "copy far",
+        "icon": "fa-regular fa-copy",
         "description": "Cette page permet de créer une nouvelle calculation en copiant les valeurs d'une calculation existante.",
         "displayEntityFields": true,
         "editActions": [
@@ -178,7 +178,7 @@
     "calculation.delete.title": {
         "entity": "calculation",
         "image": "calculation/calculation_delete",
-        "icon": "times",
+        "icon": "fa-solid fa-times",
         "description": "Cette page permet de confirmer la suppression d'une calculation.",
         "editActions": [
             {
@@ -244,7 +244,7 @@
             },
             {
                 "id": "calculationstate.name",
-                "icon": "flag far",
+                "icon": "fa-regular fa-flag",
                 "description": "Menu déroulant permettant de filtrer les calculations selon un statut."
             },
             {
@@ -275,12 +275,12 @@
             },
             {
                 "id": "archive.title",
-                "icon": "calendar-xmark far",
+                "icon": "fa-regular fa-calendar-xmark",
                 "description": "Affiche la page permettant d'archiver des calculations en modifiant leur statut."
             },
             {
                 "id": "calculation.update.title",
-                "icon": "pencil",
+                "icon": "fa-solid fa-pencil",
                 "description": "Affiche la page permettant de recalculer et de mettre à jour le total général des calculations."
             }
         ],
@@ -289,7 +289,7 @@
     },
     "calculation.result.description": {
         "group": "Administration",
-        "icon": "pencil",
+        "icon": "fa-solid fa-pencil",
         "image": "admin/admin_update_result",
         "description": "Cette page affiche les résultats de la mise à jour des calculations. Cette page n'est accessible qu'aux administrateurs.",
         "entity": "calculation",
@@ -322,7 +322,7 @@
     "calculation.show.title": {
         "entity": "calculation",
         "image": "calculation/calculation_show",
-        "icon": "display",
+        "icon": "fa-solid fa-display",
         "description": "Cette page affiche les propriétés de la calculation.",
         "editActions": [
             {
@@ -347,7 +347,7 @@
     },
     "calculation.update.title": {
         "group": "Administration",
-        "icon": "pencil",
+        "icon": "fa-solid fa-pencil",
         "image": "admin/admin_update_query",
         "entity": "calculation",
         "description": "Cette page vous permet de recalculer et de mettre à jour le total général des calculations. Cette page n'est accessible qu'aux administrateurs.",
@@ -399,7 +399,7 @@
     "calculationstate.clone.title": {
         "entity": "calculationstate",
         "image": "calculationstate/calculationstate_clone",
-        "icon": "copy far",
+        "icon": "fa-regular fa-copy",
         "description": "Cette page permet de créer un nouveau statut en copiant les valeurs d'un statut existant.",
         "editActions": [
             {
@@ -422,7 +422,7 @@
                 "action": "delete_forbidden"
             }
         },
-        "icon": "times",
+        "icon": "fa-solid fa-times",
         "description": "Cette page permet de confirmer la suppression d'un statut.",
         "editActions": [
             {
@@ -494,7 +494,7 @@
     "calculationstate.show.title": {
         "entity": "calculationstate",
         "image": "calculationstate/calculationstate_show",
-        "icon": "display",
+        "icon": "fa-solid fa-display",
         "description": "Cette page affiche les propriétés du statut.",
         "editActions": [
             {
@@ -531,7 +531,7 @@
     "category.clone.title": {
         "entity": "category",
         "image": "category/category_clone",
-        "icon": "copy far",
+        "icon": "fa-regular fa-copy",
         "description": "Cette page permet de créer une nouvelle catégorie en copiant les valeurs d'une catégorie existante.",
         "editActions": [
             {
@@ -554,7 +554,7 @@
                 "action": "delete_forbidden"
             }
         },
-        "icon": "times",
+        "icon": "fa-solid fa-times",
         "description": "Cette page permet de confirmer la suppression d'une catégorie.",
         "editActions": [
             {
@@ -595,7 +595,7 @@
             },
             {
                 "id": "group.name",
-                "icon": "code-branch",
+                "icon": "fa-solid fa-code-branch",
                 "description": "Menu déroulant permettant de filtrer les catégories selon un groupe."
             },
             {
@@ -631,7 +631,7 @@
     "category.show.title": {
         "entity": "category",
         "image": "category/category_show",
-        "icon": "display",
+        "icon": "fa-solid fa-display",
         "description": "Cette page affiche les propriétés de la catégorie.",
         "editActions": [
             {
@@ -652,7 +652,7 @@
     "chart.month.title": {
         "image": "chart/chart_month",
         "group": "Statistiques",
-        "icon": "calendar-alt far",
+        "icon": "fa-regular fa-calendar-alt",
         "description": "Cette page affiche un graphique et un tableau des calculations par mois.",
         "editActions": [
             {
@@ -660,7 +660,7 @@
             },
             {
                 "id": "common.button_pdf",
-                "icon": "file-pdf",
+                "icon": "fa-solid fa-file-pdf",
                 "description": "Exporte le graphique et les données vers le format de document portable (PDF)."
             }
         ],
@@ -706,7 +706,7 @@
     "chart.state.title": {
         "image": "chart/chart_state",
         "group": "Statistiques",
-        "icon": "flag far",
+        "icon": "fa-regular fa-flag",
         "description": "Cette page affiche un graphique et un tableau des calculations par statut.",
         "editActions": [
             {
@@ -714,7 +714,7 @@
             },
             {
                 "id": "common.button_pdf",
-                "icon": "file-pdf",
+                "icon": "fa-solid fa-file-pdf",
                 "description": "Exporte le graphique et les données vers le format de document portable (PDF)."
             }
         ],
@@ -750,7 +750,7 @@
     },
     "clear_cache.title": {
         "group": "Administration",
-        "icon": "times",
+        "icon": "fa-solid fa-times",
         "image": "admin/admin_clear",
         "description": "Cette page permet de vider le cache de l'application. Cette page n'est accessible qu'aux administrateurs.",
         "editActions": [
@@ -771,7 +771,7 @@
     "datatable.dialog_title": {
         "group": "Dialogue",
         "image": "dialog_page",
-        "icon": "arrow-up-right-dots",
+        "icon": "fa-solid fa-arrow-up-right-dots",
         "description": "Cette boîte de dialogue permet de sélectionner une page de la table.",
         "editActions": [
             {
@@ -794,7 +794,7 @@
     "duplicate.title": {
         "group": "Outils",
         "image": "calculation/calculation_duplicate",
-        "icon": "copy far",
+        "icon": "fa-regular fa-copy",
         "entity": "calculation",
         "description": "Cette page affiche les calculations contenant le même article plus d'une fois. Cette page n'est accessible qu'aux administrateurs.",
         "fields": [
@@ -838,7 +838,7 @@
     "empty.title": {
         "group": "Outils",
         "image": "calculation/calculation_empty",
-        "icon": "file-code far",
+        "icon": "fa-regular fa-file-code",
         "entity": "calculation",
         "description": "Cette page affiche les calculations contenant contenant un article avec une quantité ou un prix égale à 0. Cette page n'est accessible qu'aux administrateurs.",
         "fields": [
@@ -937,7 +937,7 @@
     "globalmargin.show.title": {
         "entity": "globalmargin",
         "image": "globalmargin/globalmargin_show",
-        "icon": "display",
+        "icon": "fa-solid fa-display",
         "description": "Cette page affiche les propriétés de la marge globale.",
         "editActions": [
             {
@@ -977,7 +977,7 @@
     "group.clone.title": {
         "entity": "group",
         "image": "group/group_clone",
-        "icon": "copy far",
+        "icon": "fa-regular fa-copy",
         "description": "Cette page permet de créer un nouveau groupe en copiant les valeurs d'un groupe existant.",
         "editActions": [
             {
@@ -993,7 +993,7 @@
     "group.delete.title": {
         "entity": "group",
         "image": "group/group_delete",
-        "icon": "times",
+        "icon": "fa-solid fa-times",
         "description": "Cette page permet de confirmer la suppression d'un groupe.",
         "editActions": [
             {
@@ -1072,7 +1072,7 @@
     "group.show.title": {
         "entity": "group",
         "image": "group/group_show",
-        "icon": "display",
+        "icon": "fa-solid fa-display",
         "description": "Cette page affiche les propriétés du groupe.",
         "editActions": [
             {
@@ -1092,7 +1092,7 @@
     },
     "index.menu_rights_admin": {
         "group": "Administration",
-        "icon": "user-shield",
+        "icon": "fa-solid fa-user-shield",
         "image": "admin/admin_list",
         "description": "Cette page définit les droits d'accès par défaut à l'application pour les administrateurs. Cette page n'est accessible qu'aux administrateurs du site.",
         "editActions": [
@@ -1113,7 +1113,7 @@
     },
     "index.menu_rights_user": {
         "group": "Administration",
-        "icon": "user-check",
+        "icon": "fa-solid fa-user-check",
         "image": "admin/admin_user",
         "description": "Cette page définit les droits d'accès par défaut à l'application pour les utilisateurs. Cette page n'est accessible qu'aux administrateurs.",
         "editActions": [
@@ -1134,7 +1134,7 @@
     },
     "index.title": {
         "image": "index",
-        "icon": "home",
+        "icon": "fa-solid fa-home",
         "description": "Page principale de l'application.",
         "details": [
             "Cette page est divisée en quatre parties :",
@@ -1182,7 +1182,7 @@
         "group": "Administration",
         "entity": "log",
         "image": "log/log_delete",
-        "icon": "times",
+        "icon": "fa-solid fa-times",
         "description": "Cette page permet de confirmer la suppression du journal de l'application. Cette page n'est accessible qu'aux administrateurs.",
         "editActions": [
             {
@@ -1198,7 +1198,7 @@
     },
     "log.list.title": {
         "group": "Administration",
-        "icon": "book",
+        "icon": "fa-solid fa-book",
         "entity": "log",
         "image": "log/log_list",
         "description": "Affiche les entrées du journal de l'application. Cette page n'est accessible qu'aux administrateurs.",
@@ -1210,12 +1210,12 @@
             },
             {
                 "id": "log.fields.channel",
-                "icon": "layer-group",
+                "icon": "fa-solid fa-layer-group",
                 "description": "Menu déroulant permettant de filtrer les entrées du journal selon un canal."
             },
             {
                 "id": "log.fields.level",
-                "icon": "tools",
+                "icon": "fa-solid fa-tools",
                 "description": "Menu déroulant permettant de filtrer les entrées du journal selon un niveau."
             },
             {
@@ -1238,12 +1238,12 @@
             },
             {
                 "id": "common.button_refresh",
-                "icon": "sync-alt",
+                "icon": "fa-solid fa-sync-alt",
                 "description": "Actualise la liste des entrées du journal."
             },
             {
                 "id": "log.delete.title",
-                "icon": "times",
+                "icon": "fa-solid fa-times",
                 "description": "Supprime la liste des entrées du journal."
             },
             {
@@ -1261,7 +1261,7 @@
         "group": "Administration",
         "entity": "log",
         "image": "log/log_show",
-        "icon": "display",
+        "icon": "fa-solid fa-display",
         "displayEntityColumns": true,
         "description": "Cette page affiche les propriétés d'une entrée dans le journal de l'application. Cette page n'est accessible qu'aux administrateurs.",
         "editActions": [
@@ -1275,7 +1275,7 @@
     "parameters.title": {
         "group": "Administration",
         "image": "admin/admin_parameters",
-        "icon": "cogs",
+        "icon": "fa-solid fa-cogs",
         "description": "Cette page affiche les paramètres globaux de l'application. Cette page n'est accessible qu'aux administrateurs.",
         "editActions": [
             {
@@ -1310,7 +1310,7 @@
     "product.clone.title": {
         "entity": "product",
         "image": "product/product_clone",
-        "icon": "copy far",
+        "icon": "fa-regular fa-copy",
         "description": "Cette page permet de créer un nouvel article en copiant les valeurs d'un article existant.",
         "editActions": [
             {
@@ -1326,7 +1326,7 @@
     "product.delete.title": {
         "entity": "product",
         "image": "product/product_delete",
-        "icon": "times",
+        "icon": "fa-solid fa-times",
         "description": "Cette page permet de confirmer la suppression d'un article.",
         "editActions": [
             {
@@ -1367,7 +1367,7 @@
             },
             {
                 "id": "category.name",
-                "icon": "folder far",
+                "icon": "fa-regular fa-folder",
                 "description": "Menu déroulant permettant de filtrer les articles selon un groupe ou une catégorie."
             },
             {
@@ -1408,7 +1408,7 @@
     "product.result.description": {
         "group": "Administration",
         "image": "admin/admin_product_result",
-        "icon": "file-alt far",
+        "icon": "fa-regular fa-file-alt",
         "entity": "product",
         "description": "Cette page affiche le résultat de la mise à jour des articles.",
         "editActions": [
@@ -1432,7 +1432,7 @@
     "product.show.title": {
         "entity": "product",
         "image": "product/product_show",
-        "icon": "display",
+        "icon": "fa-solid fa-display",
         "description": "Cette page affiche les propriétés de l'article.",
         "editActions": [
             {
@@ -1453,7 +1453,7 @@
     "product.update.title": {
         "group": "Administration",
         "image": "admin/admin_product_query",
-        "icon": "file-alt far",
+        "icon": "fa-regular fa-file-alt",
         "entity": "product",
         "description": "Cette page permet de mettre jour le prix des articles pour une catégorie. Cette page n'est accessible qu'aux administrateurs.",
         "editActions": [
@@ -1485,7 +1485,7 @@
         "group": "Utilisateur (connecté)",
         "image": "profile/profile_edit",
         "entity": "user",
-        "icon": "user-pen",
+        "icon": "fa-solid fa-user-pen",
         "description": "Cette page permet de modifier son profile.",
         "editActions": [
             {
@@ -1512,7 +1512,7 @@
         "group": "Utilisateur (connecté)",
         "image": "profile/profile_change-password",
         "entity": "user",
-        "icon": "unlock-alt",
+        "icon": "fa-solid fa-unlock-alt",
         "description": "Cette page permet de modifier son mot de passe.",
         "editActions": [
             {
@@ -1545,7 +1545,7 @@
             },
             {
                 "id": "search.entity",
-                "icon": "database",
+                "icon": "fa-solid fa-database",
                 "description": "Menu déroulant permettant de filtrer les objets."
             },
             {
@@ -1606,7 +1606,7 @@
     "task.clone.title": {
         "entity": "task",
         "image": "task/task_clone",
-        "icon": "copy far",
+        "icon": "fa-regular fa-copy",
         "description": "Cette page permet de créer une nouvelle tâche en copiant les valeurs d'une tâche existante.",
         "editActions": [
             {
@@ -1622,7 +1622,7 @@
     "task.delete.title": {
         "entity": "task",
         "image": "task/task_delete",
-        "icon": "times",
+        "icon": "fa-solid fa-times",
         "description": "Cette page permet de confirmer la suppression d'une tâche.",
         "editActions": [
             {
@@ -1663,7 +1663,7 @@
             },
             {
                 "id": "category.name",
-                "icon": "folder far",
+                "icon": "fa-regular fa-folder",
                 "description": "Menu déroulant permettant de filtrer les tâches selon un groupe ou une catégorie."
             },
             {
@@ -1699,7 +1699,7 @@
     "task.show.title": {
         "entity": "task",
         "image": "task/task_show",
-        "icon": "display",
+        "icon": "fa-solid fa-display",
         "description": "Cette page affiche les propriétés de la tâche.",
         "editActions": [
             {
@@ -1720,7 +1720,7 @@
     "task_compute.title": {
         "entity": "task",
         "image": "task/task_compute",
-        "icon": "keyboard",
+        "icon": "fa-solid fa-keyboard",
         "description": "Permet de calculer une tâche.",
         "details": [
             "L'utilisateur doit sélectionner une <b>tâche</b>, une <b>quantité</b> et une ou plusieurs <b>opérations</b>.",
@@ -1752,7 +1752,7 @@
     },
     "user.change_password.title": {
         "image": "user/user_password",
-        "icon": "unlock-alt",
+        "icon": "fa-solid fa-unlock-alt",
         "entity": "user",
         "description": "Cette page permet de modifier le mot de passe de l'utilisateur.",
         "editActions": [
@@ -1784,7 +1784,7 @@
     "user.delete.title": {
         "entity": "user",
         "image": "user/user_delete",
-        "icon": "times",
+        "icon": "fa-solid fa-times",
         "description": "Cette page permet de confirmer la suppression d'un utilisateur.",
         "editActions": [
             {
@@ -1872,7 +1872,7 @@
         "group": "Utilisateur (connecté)",
         "image": "user/user_parameters",
         "entity": "user",
-        "icon": "user-gear",
+        "icon": "fa-solid fa-user-gear",
         "description": "Cette page permet de modifier ses préférence dans l'application.",
         "editActions": [
             {
@@ -1901,7 +1901,7 @@
     },
     "user.rights.title": {
         "image": "user/user_rights",
-        "icon": "unlock",
+        "icon": "fa-solid fa-unlock",
         "entity": "user",
         "description": "Cette page permet de définir les droits d'accès à l'application pour l'utilisateur.",
         "editActions": [
@@ -1916,7 +1916,7 @@
         "name": "Droits d'accès"
     },
     "user.send.title": {
-        "icon": "envelope-circle-check fas",
+        "icon": "fa-solid fa-envelope-circle-check",
         "image": "user/user_send",
         "entity": "user",
         "description": "Cette page permet d'envoyer un message pour permettre à l'utilisateur sélectionné de changer son mot de passe.",
@@ -1935,7 +1935,7 @@
     "user.show.title": {
         "entity": "user",
         "image": "user/user_show",
-        "icon": "display",
+        "icon": "fa-solid fa-display",
         "description": "Cette page affiche les propriétés de l'utilisateur.",
         "editActions": [
             {

@@ -67,7 +67,7 @@
     {{ link(
         href: path('help_index'),
         class: 'btn btn-outline-secondary',
-        icon: 'home',
+        icon: 'fa-solid fa-home',
         title: 'help.home_menu') }}
 {%- endmacro home_button %}
 
@@ -81,7 +81,7 @@
     {{ link(
         href: path('help_dialogs'),
         class: 'btn btn-outline-secondary',
-        icon: 'file-code',
+        icon: 'fa-solid fa-file-code',
         title: 'help.dialog_menu') }}
 {% endmacro dialogs_button %}
 
@@ -90,7 +90,7 @@
     {{ link(
         href: path('help_entities'),
         class: 'btn btn-outline-secondary',
-        icon: 'database',
+        icon: 'fa-solid fa-database',
         title: 'help.entity_menu') }}
 {% endmacro entities_button %}
 
@@ -105,7 +105,7 @@
                     {% if dialog %}
                         {%- set href = path('help_dialog', {id: dialog.id}) -%}
                         <li>
-                            <a href="{{ href }}">{{- _self.output_icon('file-code far', dialog.name) -}}</a>
+                            <a href="{{ href }}">{{- _self.output_icon('fa-regular fa-file-code', dialog.name) -}}</a>
                         </li>
                     {% endif %}
                 {% elseif type == 'entity' %}
@@ -113,12 +113,12 @@
                     {% if entity %}
                         {%- set href = path('help_entity', {id: entity.id}) -%}
                         <li>
-                            <a href="{{ href }}">{{- _self.output_icon('database', entity.name) -}}</a>
+                            <a href="{{ href }}">{{- _self.output_icon('fa-solid fa-database', entity.name) -}}</a>
                         </li>
                     {% endif %}
                 {% elseif (link.href ?? false) and (link.text ?? false) %}
                     <li>
-                        <a href="{{ link.href }}">{{- _self.output_icon('link', link.text) -}}</a>
+                        <a href="{{ link.href }}">{{- _self.output_icon('fa-solid fa-link', link.text) -}}</a>
                     </li>
                 {% endif %}
             {% endfor %}

@@ -4,7 +4,7 @@
     "menus": [
         {
             "id": "help.main_menu",
-            "icon": "sitemap",
+            "icon": "fa-solid fa-sitemap",
             "description": "",
             "menus": [
                 {
@@ -13,7 +13,7 @@
                 },
                 {
                     "id": "calculation.list.title",
-                    "icon": "calculator",
+                    "icon": "fa-solid fa-calculator",
                     "description": "Gestion des calculations.",
                     "dialog": "calculation.list.title"
                 }
@@ -21,42 +21,42 @@
         },
         {
             "id": "index.menu_data",
-            "icon": "database",
+            "icon": "fa-solid fa-database",
             "description": "Menu d'accès aux données du catalogue.",
             "menus": [
                 {
                     "id": "product.list.title",
-                    "icon": "file-alt far",
+                    "icon": "fa-regular fa-file-alt",
                     "description": "Gestion des articles du catalogue.",
                     "dialog": "product.list.title"
                 },
                 {
                     "id": "task.list.title",
-                    "icon": "tasks",
+                    "icon": "fa-solid fa-tasks",
                     "description": "Gestion des tâches du catalogue.",
                     "dialog": "task.list.title"
                 },
                 {
                     "id": "category.list.title",
-                    "icon": "folder far",
+                    "icon": "fa-regular fa-folder",
                     "description": "Gestion des catégories du catalogue.",
                     "dialog": "category.list.title"
                 },
                 {
                     "id": "group.list.title",
-                    "icon": "code-branch",
+                    "icon": "fa-solid fa-code-branch",
                     "description": "Gestion des groupes du catalogue.",
                     "dialog": "group.list.title"
                 },
                 {
                     "id": "calculationstate.list.title",
-                    "icon": "flag far",
+                    "icon": "fa-regular fa-flag",
                     "description": "Gestion des statuts du catalogue.",
                     "dialog": "calculationstate.list.title"
                 },
                 {
                     "id": "globalmargin.list.title",
-                    "icon": "percent",
+                    "icon": "fa-solid fa-percent",
                     "description": "Gestion des marge globales du catalogue.",
                     "dialog": "globalmargin.list.title"
                 }
@@ -64,18 +64,18 @@
         },
         {
             "id": "index.menu_graphics",
-            "icon": "chart-area",
+            "icon": "fa-solid fa-chart-area",
             "description": "Menu d'accès aux statistiques.",
             "menus": [
                 {
                     "id": "chart.month.title",
-                    "icon": "calendar-alt far",
+                    "icon": "fa-regular fa-calendar-alt",
                     "description": "Page affichant un graphique des calculations par mois.",
                     "dialog": "chart.month.title"
                 },
                 {
                     "id": "chart.state.title",
-                    "icon": "flag far",
+                    "icon": "fa-regular fa-flag",
                     "description": "Page affichant un graphique des calculations par statut.",
                     "dialog": "chart.state.title"
                 }
@@ -83,36 +83,36 @@
         },
         {
             "id": "index.menu_tools",
-            "icon": "tools",
+            "icon": "fa-solid fa-tools",
             "description": "Menu d'accès aux outils de l'application.",
             "menus": [
                 {
                     "id": "search.title",
-                    "icon": "search",
+                    "icon": "fa-solid fa-search",
                     "description": "Page pour rechercher des données dans le catalogue.",
                     "dialog": "search.title"
                 },
                 {
                     "id": "below.title",
-                    "icon": "percent",
+                    "icon": "fa-solid fa-percent",
                     "description": "Page pour afficher les calculations contenant une marge globale inférieure au seuil définit.",
                     "dialog": "below.title"
                 },
                 {
                     "id": "duplicate.title",
-                    "icon": "copy far",
+                    "icon": "fa-regular fa-copy",
                     "description": "Page pour afficher les calculations contenant le même article plus d'une fois.",
                     "dialog": "duplicate.title"
                 },
                 {
                     "id": "empty.title",
-                    "icon": "file-code far",
+                    "icon": "fa-regular fa-file-code",
                     "description": "Page pour afficher les calculations contenant un article avec une quantité ou un prix égale à 0.",
                     "dialog": "empty.title"
                 },
                 {
                     "id": "task_compute.title",
-                    "icon": "keyboard",
+                    "icon": "fa-solid fa-keyboard",
                     "description": "Page pour calculer une tâche.",
                     "dialog": "task_compute.title"
                 }
@@ -120,60 +120,60 @@
         },
         {
             "id": "index.menu_admin",
-            "icon": "gear",
+            "icon": "fa-solid fa-gear",
             "description": "Menu réservé aux administrateurs du site.",
             "menus": [
                 {
                     "id": "product.update.title",
-                    "icon": "file-alt far",
+                    "icon": "fa-regular fa-file-alt",
                     "description": "Page pour mettre à jour le prix des articles.",
                     "dialog": "product.update.title"
                 },
                 {
                     "id": "calculation.update.title",
-                    "icon": "pencil",
+                    "icon": "fa-solid fa-pencil",
                     "description": "Page pour recalculer et mettre à jour le total général des calculations.",
                     "dialog": "calculation.update.title"
                 },
                 {
                     "id": "archive.title",
-                    "icon": "file-alt far",
+                    "icon": "fa-regular fa-file-alt",
                     "description": "Page pour archiver des calculations.",
                     "dialog": "archive.title"
                 },
                 {
                     "id": "user.list.title",
-                    "icon": "user",
+                    "icon": "fa-solid fa-user",
                     "description": "Gestion des utilisateurs.",
                     "dialog": "user.list.title"
                 },
                 {
                     "id": "index.menu_rights_user",
-                    "icon": "user-check",
+                    "icon": "fa-solid fa-user-check",
                     "description": "Page pour définir les droits d'accès à l'application pour les utilisateurs.",
                     "dialog": "index.menu_rights_user"
                 },
                 {
                     "id": "index.menu_rights_admin",
-                    "icon": "user-shield",
+                    "icon": "fa-solid fa-user-shield",
                     "description": "Page pour définir les droits d'accès à l'application pour les administrateurs.",
                     "dialog": "index.menu_rights_admin"
                 },
                 {
                     "id": "parameters.title",
-                    "icon": "cogs",
+                    "icon": "fa-solid fa-cogs",
                     "description": "Page pour définir les paramètres globaux de l'application.",
                     "dialog": "parameters.title"
                 },
                 {
                     "id": "log.list.title",
-                    "icon": "book",
+                    "icon": "fa-solid fa-book",
                     "description": "Affiche les entrées du journal de l'application.",
                     "dialog": "log.list.title"
                 },
                 {
                     "id": "clear_cache.title",
-                    "icon": "times",
+                    "icon": "fa-solid fa-times",
                     "description": "Page pour de vider le cache de l'application.",
                     "dialog": "clear_cache.title"
                 }
@@ -181,56 +181,56 @@
         },
         {
             "id": "user.name",
-            "icon": "user",
+            "icon": "fa-solid fa-user",
             "description": "Menu afficher lorsque l'utilisateur est connecté à l'application.",
             "menus": [
                 {
                     "id": "theme.title",
-                    "icon": "circle-half-stroke",
+                    "icon": "fa-solid fa-circle-half-stroke",
                     "description": "Permet d'appliquer un thème clair ou sombre sur ce site."
                 },
                 {
                     "id": "profile.edit.title",
-                    "icon": "user-pen",
+                    "icon": "fa-solid fa-user-pen",
                     "dialog": "profile.edit.title",
                     "description": "Page permettant de modifier son profile."
                 },
                 {
                     "id": "profile.password.title",
-                    "icon": "unlock-alt",
+                    "icon": "fa-solid fa-unlock-alt",
                     "dialog": "profile.password.title",
                     "description": "Page permettant de modifier son mot de passe."
                 },
                 {
                     "id": "user.parameters.title",
-                    "icon": "user-gear",
+                    "icon": "fa-solid fa-user-gear",
                     "description": "Page permettant de modifier ses préférence dans l'application.",
                     "dialog": "user.parameters.title"
                 },
                 {
                     "id": "help.labels.switch",
-                    "icon": "location-arrow",
+                    "icon": "fa-solid fa-location-arrow",
                     "description": "Permet de basculer entre le mode Production et le mode Développement."
                 },
                 {
                     "id": "index.menu_site_map",
-                    "icon": "sitemap",
+                    "icon": "fa-solid fa-sitemap",
                     "description": "Affiche le plan du site."
                 },
                 {
                     "id": "user.comment.title",
-                    "icon": "envelope far",
+                    "icon": "fa-regular fa-envelope",
                     "description": "Page pour envoyer un commentaire à l'administrateur du site.",
                     "dialog": "user.comment.title"
                 },
                 {
                     "id": "help.title",
-                    "icon": "question-circle",
+                    "icon": "fa-solid fa-question-circle",
                     "description": "Page affichant l'aide de l'application (page actuelle)."
                 },
                 {
                     "id": "about.title",
-                    "icon": "info-circle",
+                    "icon": "fa-solid fa-info-circle",
                     "description": "Page affichant des informations sur l'application.",
                     "dialog": "about.title"
                 }

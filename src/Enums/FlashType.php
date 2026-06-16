@@ -29,19 +29,19 @@ enum FlashType: string implements TranslatableEnumInterface
     use TranslatableEnumTrait;
 
     /** Danger flash bag. */
-    #[EnumCase(extras: ['icon' => 'fas fa-lg fa-exclamation-triangle'])]
+    #[EnumCase(extras: ['icon' => 'fa-solid fa-lg fa-exclamation-triangle'])]
     case DANGER = 'danger';
 
     /** Information flash bag. */
-    #[EnumCase(extras: ['icon' => 'fas fa-lg fa-info-circle'])]
+    #[EnumCase(extras: ['icon' => 'fa-solid fa-lg fa-info-circle'])]
     case INFO = 'info';
 
     /** Success flash bag. */
-    #[EnumCase(extras: ['icon' => 'fas fa-lg fa-check-circle'])]
+    #[EnumCase(extras: ['icon' => 'fa-solid fa-lg fa-check-circle'])]
     case SUCCESS = 'success';
 
     /** Warning flash-bag. */
-    #[EnumCase(extras: ['icon' => 'fas fa-lg fa-exclamation-circle'])]
+    #[EnumCase(extras: ['icon' => 'fa-solid fa-lg fa-exclamation-circle'])]
     case WARNING = 'warning';
 
     /**

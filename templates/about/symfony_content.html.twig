@@ -46,7 +46,7 @@
                             {{- dropdownItemWithClass(
                                 href: path('about_symfony_license', {name: package.name}),
                                 text: 'about.licence.title',
-                                icon: 'book-open-reader fa-fw',
+                                icon: 'fa-solid fa-book-open-reader fa-fw',
                                 class: 'link-license') -}}
                         {% endif %}
                         {%- if is_links -%}
@@ -57,13 +57,13 @@
                                 {{- dropdownItemExternal(
                                     href: package.homepage,
                                     text: 'about.link_homepage',
-                                    icon: 'arrow-up-right-from-square fa-fw') -}}
+                                    icon: 'fa-solid fa-arrow-up-right-from-square fa-fw') -}}
                             {%- endif -%}
                             {%- if package.source -%}
                                 {{- dropdownItemExternal(
                                     href: package.source,
                                     text: 'about.link_source',
-                                    icon: 'github fab fa-fw') -}}
+                                    icon: 'fa-brands fa-github fa-fw') -}}
                             {%- endif -%}
                         {%- endif -%}
                         {%- if is_dependance -%}
@@ -73,7 +73,7 @@
                             {{- dropdownItemWithClass(
                                 href: path('about_symfony_dependency', {name: package.name}),
                                 text: 'about.package.title',
-                                icon: 'file-code fa-fw',
+                                icon: 'fa-solid fa-file-code fa-fw',
                                 class: 'link-package') -}}
                         {% endif %}
                     </ul>

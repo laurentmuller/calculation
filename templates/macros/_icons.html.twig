@@ -146,7 +146,7 @@
     <button {{ html_attr(attrs, attributes) }}>{{ _self.icon(icon: icon, text: text, inline: inline) }}</button>
 {%- endmacro button %}
 
-{% macro button_submit(text = 'common.button_ok', class = 'btn-primary', attributes = {}, icon = 'check') -%}
+{% macro button_submit(text = 'common.button_ok', class = 'btn-primary', attributes = {}, icon = 'fa-solid fa-check') -%}
     {{ _self.button(
         text: text,
         class: ['btn', 'btn-form', 'btn-submit', class],

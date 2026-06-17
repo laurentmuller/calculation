@@ -35,7 +35,7 @@
         <td class="text-id">{{ package.version }}</td>
         <td class="text">{{ package.description|default('&nbsp;') }}</td>
         <td>
-            {%- set is_license = package.license -%}
+            {%- set is_license = package.licenseFile -%}
             {%- set is_links = package.homepage or package.source -%}
             {%- set is_dependance = package.production|length or package.development|length -%}
             {%- if is_license or is_links or is_dependance -%}

@@ -186,6 +186,7 @@ class SymfonyReport extends AbstractReport
             $title,
             PdfColumn::left('Name', 40),
             PdfColumn::left('Version', 18, true),
+            PdfColumn::left('License', 25, true),
             PdfColumn::left('Description', 70)
         );
 
@@ -193,6 +194,7 @@ class SymfonyReport extends AbstractReport
             $table->startRow()
                 ->add($package['name'], link: $package['homepage'])
                 ->add($package['version'])
+                ->add(\implode("\n", $package['licenseType']))
                 ->add($this->trimDescription($package['description']))
                 ->endRow();
         }

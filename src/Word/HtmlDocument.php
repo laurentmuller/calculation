@@ -41,7 +41,7 @@ class HtmlDocument extends AbstractWordDocument
         $parser = new HtmlWordParser();
         $content = $parser->parse($this->content);
         $section = $this->createDefaultSection();
-        Html::addHtml($section, $content, false, false);
+        Html::addHtml(element: $section, html: $content, preserveWhiteSpace: false);
 
         return true;
     }

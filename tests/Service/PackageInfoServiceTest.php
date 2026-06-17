@@ -73,7 +73,7 @@ final class PackageInfoServiceTest extends TestCase
     public function testLicenseFound(): void
     {
         $package = $this->service->getPackage('symfony/finder');
-        self::assertNotNull($package['license']);
+        self::assertNotNull($package['licenseFile']);
     }
 
     private function createService(): PackageInfoService

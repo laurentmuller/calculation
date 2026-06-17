@@ -31,7 +31,8 @@ use Symfony\Contracts\Cache\CacheInterface;
  *       version: string,
  *       description: string|null,
  *       homepage: string|null,
- *       license: string|null,
+ *       licenseFile: string|null,
+ *       licenseType: string[],
  *       source: string|null,
  *       time: string,
  *       debug: bool,
@@ -41,6 +42,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  *      name: string,
  *      version: string,
  *      description?: string,
+ *      license?: string|string[]|null,
  *      homepage?: string,
  *      source?: array{url: string|null},
  *      time: string,
@@ -192,7 +194,7 @@ readonly class PackageInfoService implements \Countable
     /**
      * @phpstan-param PackageSourceType $package
      */
-    private function parseLicense(array $package): ?string
+    private function parseLicenseFile(array $package): ?string
     {
         $files = \glob($this->getLicensePattern($package), \GLOB_BRACE | \GLOB_NOSORT);
 
@@ -201,6 +203,18 @@ readonly class PackageInfoService implements \Countable
 
     /**
      * @phpstan-param PackageSourceType $package
+     *
+     * @return string[]
+     */
+    private function parseLicenseType(array $package): array
+    {
+        $license = (array) ($package['license'] ?? []);
+
+        return [] === $license ? ['Unknown'] : $license;
+    }
+
+    /**
+     * @param PackageSourceType $package
      *
      * @return PackageType
      */
@@ -212,7 +226,8 @@ readonly class PackageInfoService implements \Countable
             'time' => $this->parseTime($package),
             'source' => $this->parseSource($package),
             'version' => $this->parseVersion($package),
-            'license' => $this->parseLicense($package),
+            'licenseFile' => $this->parseLicenseFile($package),
+            'licenseType' => $this->parseLicenseType($package),
             'homepage' => $this->parseHomepage($package),
             'description' => $this->parseDescription($package),
             'production' => $this->parseProduction($package),

@@ -20,13 +20,13 @@ use PHPUnit\Framework\TestCase;
 
 final class DatabaseReportTest extends TestCase
 {
-    public const array CONFIGURATION = [
+    private const array CONFIGURATION = [
         'Key' => 'Value',
         'On' => 'on',
         'Off' => 'off',
     ];
 
-    public const array DATABASE = [
+    private const array DATABASE = [
         'Name' => 'FixtureDatabase',
         'Version' => '5.7.32',
     ];

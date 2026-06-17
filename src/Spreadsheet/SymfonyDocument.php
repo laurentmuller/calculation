@@ -58,9 +58,6 @@ class SymfonyDocument extends AbstractDocument
         return true;
     }
 
-    /**
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
-     */
     private function outputBundles(): void
     {
         $bundles = $this->bundleService->getBundles();
@@ -98,9 +95,6 @@ class SymfonyDocument extends AbstractDocument
         );
     }
 
-    /**
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
-     */
     private function outputGroup(WorksheetDocument $sheet, int $row, string $group): self
     {
         $sheet->setRowValues($row, [$group]);
@@ -110,9 +104,6 @@ class SymfonyDocument extends AbstractDocument
         return $this;
     }
 
-    /**
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
-     */
     private function outputInfo(): void
     {
         $symfony = $this->symfonyService;
@@ -162,21 +153,19 @@ class SymfonyDocument extends AbstractDocument
 
     /**
      * @phpstan-param array<string, PackageType> $packages
-     *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     private function outputPackages(string $title, array $packages): void
     {
         if ([] === $packages) {
             return;
         }
-        $row = 1;
         $sheet = $this->createSheetAndTitle($this->controller, $title);
-        $sheet->setHeaders([
+        $row = $sheet->setHeaders([
             'Name' => HeaderFormat::instance(),
             'Version' => HeaderFormat::instance(),
+            'License' => HeaderFormat::instance(),
             'Description' => HeaderFormat::instance(),
-        ], 1, $row++);
+        ]);
         foreach ($packages as $package) {
             $this->outputLinkRow(
                 $sheet,
@@ -184,21 +173,20 @@ class SymfonyDocument extends AbstractDocument
                 $package['homepage'] ?? '',
                 $package['name'],
                 $package['version'],
+                \implode(', ', $package['licenseType']),
                 $package['description'] ?? ''
             );
         }
-        $sheet->getStyle('A:C')
+        $sheet->getStyle('A:D')
             ->getAlignment()
             ->setVertical(Alignment::VERTICAL_TOP);
-        $sheet->setAutoSize(1, 2)
-            ->setColumnWidth(3, 70, true)
+        $sheet->setAutoSize(1, 2, 3)
+            ->setColumnWidth(4, 70, true)
             ->finish();
     }
 
     /**
      * @phpstan-param RouteType[] $routes
-     *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     private function outputRoutes(string $title, array $routes): void
     {

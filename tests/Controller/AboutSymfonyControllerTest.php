@@ -63,7 +63,8 @@ final class AboutSymfonyControllerTest extends ControllerTestCase
             'version' => '1.8.2',
             'description' => 'Finder description.',
             'homepage' => 'https://symfony.com/',
-            'license' => __DIR__ . '/../../vendor/symfony/finder/LICENSE',
+            'licenseFile' => __DIR__ . '/../../vendor/symfony/finder/LICENSE',
+            'licenseType' => ['MIT'],
             'time' => '01.01.2025',
             'debug' => false,
             'production' => ['composer-plugin-api' => '^2.0'],
@@ -74,7 +75,8 @@ final class AboutSymfonyControllerTest extends ControllerTestCase
             'version' => '1.8.2',
             'description' => 'Asset description.',
             'homepage' => 'https://symfony.com/',
-            'license' => null,
+            'licenseFile' => null,
+            'licenseType' => ['MIT'],
             'time' => '02.01.2025',
             'debug' => true,
             'production' => [],
@@ -93,17 +95,9 @@ final class AboutSymfonyControllerTest extends ControllerTestCase
         $service->method('getDebugPackages')
             ->willReturn($packages);
         $service->method('hasPackage')
-            ->willReturnCallback(static fn (string $name): bool => match ($name) {
-                'symfony/finder',
-                'symfony/asset' => true,
-                default => false,
-            });
+            ->willReturnCallback(static fn (string $name): bool => \array_key_exists($name, $packages));
         $service->method('getPackage')
-            ->willReturnCallback(static fn (string $name): array => match ($name) {
-                'symfony/finder' => $finderPackage,
-                'symfony/asset' => $assetPackage,
-                default => [],
-            });
+            ->willReturnCallback(static fn (string $name): array => $packages[$name] ?? []);
 
         return $service;
     }

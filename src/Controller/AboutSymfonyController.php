@@ -121,7 +121,7 @@ class AboutSymfonyController extends AbstractController
             return $this->jsonFalse(['message' => $this->trans('about.licence.not_found')]);
         }
         $package = $service->getPackage($name);
-        if (null === $package['license']) {
+        if (null === $package['licenseFile']) {
             return $this->jsonFalse(['message' => $this->trans('about.licence.not_found')]);
         }
         $content = $this->getMarkdownLicense($markdown, $package);
@@ -166,7 +166,7 @@ class AboutSymfonyController extends AbstractController
      */
     private function getMarkdownLicense(MarkdownInterface $markdown, array $package): string
     {
-        $file = (string) $package['license'];
+        $file = (string) $package['licenseFile'];
         $license = (string) FileUtils::readFile($file);
         $license = StringUtils::pregReplace('/#{1,4} /', '##### ', $license);
         $content = $this->implodeHeader($package) . $license;
@@ -181,9 +181,10 @@ class AboutSymfonyController extends AbstractController
     private function implodeHeader(array $package): string
     {
         return \sprintf(
-            "##### %s\n\nVersion %s - Date %s\n***\n",
+            "##### %s\n\nVersion : %s - Type : %s - Date : %s\n***\n",
             $package['name'],
             $package['version'],
+            \implode(', ', $package['licenseType']),
             $package['time']
         );
     }

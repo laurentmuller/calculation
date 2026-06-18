@@ -10,7 +10,7 @@
 <!--#include file="../../build/jquery-contextmenu/jquery.ui.position.js" -->
 
 /**
- * ../plugins files
+ * Plugins files
  */
 <!--#include file="../plugins/plugin-rowlink.js" -->
 <!--#include file="../plugins/plugin-cookie.js" -->

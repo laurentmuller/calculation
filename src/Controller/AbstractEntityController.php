@@ -161,6 +161,7 @@ abstract class AbstractEntityController extends AbstractController
             'new' => $isNew,
             'item' => $item,
             'form' => $form,
+            'submit_icon' => $isNew ? 'fa-solid fa-plus' : 'fa-solid fa-check',
             'submit_text' => $isNew ? 'common.button_submit_add' : 'common.button_submit_edit',
         ], $parameters);
         $this->updateQueryParameters($request, $parameters, $item);

@@ -1,4 +1,4 @@
-/* globals Toaster */
+/* globals Toaster, MenuBuilder */
 
 (function ($) {
     'use strict';
@@ -16,6 +16,16 @@
 
     // jQuery extensions
     $.fn.extend({
+
+        /**
+         * Gets the parent row.
+         *
+         * @returns {jQuery<HTMLTableRowElement>} The parent row.
+         */
+        getParentRow: function () {
+            return $(this).parents('tr:first');
+        },
+
         /**
          * Load and replace the HTML content.
          */
@@ -69,8 +79,7 @@
          * @param {string} content the HTML content to display
          */
         displayDialogContent: function ($dialog, content) {
-            const $this = $(this);
-            const $row = $this.parents('tr');
+            const $row = $(this).getParentRow();
             const $button = $row.find('button[data-bs-toggle="dropdown"]');
             // content
             $dialog.find('.modal-data').html(content);
@@ -111,7 +120,7 @@
                 $this.fadeOut();
                 notifyWarning(response.message || $dialog.data('found-error'));
             });
-        }
+        },
     });
 
     /**

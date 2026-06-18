@@ -168,7 +168,7 @@
                     'data-bs-target': '#month',
                     'aria-expanded': false} -%}
                 <button {{ html_attr(button_attrs) }}>
-                    {{- icon('fa-regular fa-calendar-days', 'timeline.interval') -}}
+                    {{- icon(icon: 'fa-regular fa-calendar-days', text: 'timeline.interval', inline: true) -}}
                 </button>
                 <ul id="month" class="dropdown-menu dropdown-menu-checked-sm">
                     {% for i in [1, 2, 3, 6, 12] -%}
@@ -176,7 +176,7 @@
                     {%- endfor -%}
                 </ul>
                 <button {{ html_attr(button_attrs|merge({'data-bs-target': '#operation'})) }}>
-                    {{- icon('fa-solid fa-calculator', 'pivot.operation.title') -}}
+                    {{- icon(icon: 'fa-solid fa-calculator', text: 'pivot.operation.title', inline: true) -}}
                 </button>
                 <ul id="operation" class="dropdown-menu dropdown-menu-checked-sm">
                     {% for current in enum_sorted('App\\Pivot\\PivotOperation') -%}

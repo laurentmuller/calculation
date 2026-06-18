@@ -31,6 +31,7 @@
 {# parameters #}
 {%- set title = new ? 'calculation.add.title' : 'calculation.edit.title' -%}
 {%- set title_parameters = new ? {} : {'%id%': item.id|identifier} -%}
+{%- set submit_icon = new ? 'fa-solid fa-plus' : 'fa-solid fa-check' -%}
 {%- if editable -%}
     {%- set form_attr = {
          id: 'edit-form',

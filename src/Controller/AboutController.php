@@ -64,13 +64,15 @@ class AboutController extends AbstractController
     #[GetRoute('/advanced', name: 'advanced')]
     public function advanced(): Response
     {
-        return $this->render('about/advanced.html.twig');
+        return $this->render('about/about_advanced.html.twig', [
+            'deploy' => $this->getDeploy(),
+        ]);
     }
 
     #[IndexRoute]
     public function index(): Response
     {
-        return $this->render('about/about.html.twig', [
+        return $this->render('about/about_index.html.twig', [
             'deploy' => $this->getDeploy(),
         ]);
     }

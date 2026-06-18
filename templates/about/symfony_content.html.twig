@@ -22,66 +22,65 @@
 {%- endmacro rowBundle %}
 {% macro headerPackage() %}
     <thead>
-    <tr>
-        <th>Name</th>
-        <th class="text-id">Version</th>
-        <th colspan="2">Description</th>
-    </tr>
+        <tr>
+            <th>Name</th>
+            <th class="text-id">Version</th>
+            <th colspan="2">Description</th>
+        </tr>
     </thead>
 {% endmacro headerPackage %}
 {% macro rowPackage(package) -%}
-    <tr>
+    {%- set is_license = package.licenseFile -%}
+    {%- set is_links = package.homepage or package.source -%}
+    {%- set is_dependance = package.production|length or package.development|length -%}
+    {%- set is_dropdown = is_license or is_links or is_dependance -%}
+    <tr class="row-package">
         <td class="e">{{ package.name }}</td>
         <td class="text-id">{{ package.version }}</td>
-        <td class="text">{{ package.description|default('&nbsp;') }}</td>
-        <td>
-            {%- set is_license = package.licenseFile -%}
-            {%- set is_links = package.homepage or package.source -%}
-            {%- set is_dependance = package.production|length or package.development|length -%}
-            {%- if is_license or is_links or is_dependance -%}
-                <div class="dropdown">
-                    {{ dropdownEllipsis() }}
-                    <ul class="dropdown-menu dropdown-menu-end">
+        {% if is_dropdown %}
+            <td class="text">{{ package.description|default('&nbsp;') }}</td>
+            <td class="cell-dropdown">
+                {{ dropdownEllipsis() }}
+                <ul class="dropdown-menu dropdown-menu-end">
+                    {%- if is_license -%}
+                        {{- dropdownItemWithClass(
+                            href: path('about_symfony_license', {name: package.name}),
+                            text: 'about.licence.title',
+                            icon: 'fa-fw fa-solid fa-book-open-reader',
+                            class: 'link-license') -}}
+                    {% endif %}
+                    {%- if is_links -%}
                         {%- if is_license -%}
-                            {{- dropdownItemWithClass(
-                                href: path('about_symfony_license', {name: package.name}),
-                                text: 'about.licence.title',
-                                icon: 'fa-solid fa-book-open-reader fa-fw',
-                                class: 'link-license') -}}
-                        {% endif %}
-                        {%- if is_links -%}
-                            {%- if is_license -%}
-                                {{ dropdownSeparator() }}
-                            {%- endif -%}
-                            {%- if package.homepage -%}
-                                {{- dropdownItemExternal(
-                                    href: package.homepage,
-                                    text: 'about.link_homepage',
-                                    icon: 'fa-solid fa-arrow-up-right-from-square fa-fw') -}}
-                            {%- endif -%}
-                            {%- if package.source -%}
-                                {{- dropdownItemExternal(
-                                    href: package.source,
-                                    text: 'about.link_source',
-                                    icon: 'fa-brands fa-github fa-fw') -}}
-                            {%- endif -%}
+                            {{ dropdownSeparator() }}
                         {%- endif -%}
-                        {%- if is_dependance -%}
-                            {%- if is_license or is_links -%}
-                                {{ dropdownSeparator() }}
-                            {%- endif -%}
-                            {{- dropdownItemWithClass(
-                                href: path('about_symfony_dependency', {name: package.name}),
-                                text: 'about.package.title',
-                                icon: 'fa-solid fa-file-code fa-fw',
-                                class: 'link-package') -}}
-                        {% endif %}
-                    </ul>
-                </div>
-            {%- else -%}
-                &nbsp;
-            {%- endif %}
-        </td>
+                        {%- if package.homepage -%}
+                            {{- dropdownItemExternal(
+                                href: package.homepage,
+                                text: 'about.link_homepage',
+                                icon: 'fa-fw fa-solid fa-arrow-up-right-from-square') -}}
+                        {%- endif -%}
+                        {%- if package.source -%}
+                            {{- dropdownItemExternal(
+                                href: package.source,
+                                text: 'about.link_source',
+                                icon: 'fa-fw fa-brands fa-github') -}}
+                        {%- endif -%}
+                    {%- endif -%}
+                    {%- if is_dependance -%}
+                        {%- if is_license or is_links -%}
+                            {{ dropdownSeparator() }}
+                        {%- endif -%}
+                        {{- dropdownItemWithClass(
+                            href: path('about_symfony_dependency', {name: package.name}),
+                            text: 'about.package.title',
+                            icon: 'fa-fw fa-solid fa-file-code',
+                            class: 'link-package') -}}
+                    {% endif %}
+                </ul>
+            </td>
+        {% else %}
+            <td class="text" colspan="2">{{ package.description|default('&nbsp;') }}</td>
+        {% endif %}
     </tr>
 {%- endmacro rowPackage %}
 {% macro headerRoute() -%}

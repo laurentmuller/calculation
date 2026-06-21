@@ -14,12 +14,16 @@ declare(strict_types=1);
 namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
+use App\Pdf\Html\HtmlBootstrapColor;
+use App\Pdf\Html\HtmlGrayedColor;
 use App\Service\BundleInfoService;
 use App\Service\KernelInfoService;
 use App\Service\PackageInfoService;
 use App\Service\RouteInfoService;
 use App\Service\SymfonyInfoService;
+use PhpOffice\PhpSpreadsheet\RichText\RichText;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Document containing Symfony configuration.
@@ -56,6 +60,31 @@ class SymfonyDocument extends AbstractDocument
         $this->setActiveSheetIndex(0);
 
         return true;
+    }
+
+    /**
+     * @param string[] $methods
+     */
+    private function formatMethods(array $methods): RichText
+    {
+        $richText = new RichText();
+        $lastValue = \end($methods);
+        foreach ($methods as $method) {
+            $color = match ($method) {
+                Request::METHOD_GET => HtmlBootstrapColor::SUCCESS,
+                Request::METHOD_POST => HtmlBootstrapColor::SECONDARY,
+                Request::METHOD_DELETE => HtmlBootstrapColor::DANGER,
+                default => HtmlGrayedColor::Gray500,
+            };
+            $richText->createTextRun($method)
+                ->getFont()?->getColor()
+                ->setARGB($color->getPhpOfficeColor());
+            if ($method !== $lastValue) {
+                $richText->createTextRun(', ');
+            }
+        }
+
+        return $richText;
     }
 
     private function outputBundles(): void
@@ -205,14 +234,14 @@ class SymfonyDocument extends AbstractDocument
                 $row++,
                 $route['name'],
                 $route['path'],
-                \implode(', ', $route['methods'])
+                $this->formatMethods($route['methods'])
             );
         }
         $sheet->setAutoSize(1, 2)
             ->finish();
     }
 
-    private function outputRow(WorksheetDocument $sheet, int $row, string ...$values): self
+    private function outputRow(WorksheetDocument $sheet, int $row, string|RichText ...$values): self
     {
         $sheet->setRowValues($row, $values);
 

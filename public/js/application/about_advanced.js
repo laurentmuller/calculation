@@ -18,7 +18,6 @@
                 elements: $elements
             }).getItems();
         }
-
     });
 
     /**
@@ -27,12 +26,17 @@
     $(function () {
         // context menu
         const show = function () {
-            $.hideDropDownMenus();
             $(this).getParentRow().addClass('table-primary');
         };
         const hide = function () {
             $(this).getParentRow().removeClass('table-primary');
         };
-        $('body').initContextMenu('.row-package td:not(.cell-dropdown)', show, hide);
+        const $container = $('#aboutAccordion');
+        $container.initContextMenu('.row-package td:not(.rowlink-skip)', show, hide);
+
+        // row link
+        $container.rowlink({
+            target: '.link-license, .link-homepage, .link_source, .link-package'
+        });
     });
 }(jQuery));

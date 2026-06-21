@@ -67,12 +67,12 @@
     </li>
 {%- endmacro dropdownItem %}
 
-{% macro dropdownItemExternal(href, text, icon = null, parameters = []) -%}
+{% macro dropdownItemExternal(href, text, icon = null, parameters = [], class = '') -%}
     <li>
         {{- _self.linkExternal(
             href: href,
             text: text,
-            class: 'dropdown-item rowlink-skip',
+            class: ('dropdown-item rowlink-skip ' ~ class)|trim,
             icon: icon ? icon ~ ' fa-fw' : null,
             parameters: parameters) -}}
     </li>

@@ -25,6 +25,9 @@ parameters:
     strictRules:
         strictArrayFilter: false
 
+    dynamicConstantNames:
+        - Symfony\Component\HttpKernel\Kernel::MINOR_VERSION
+
     type_coverage:
         constant: 100
         declare: 100

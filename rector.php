@@ -91,6 +91,7 @@ $rules = [
 return RectorConfig::configure()
     ->withCache(__DIR__ . '/var/cache/rector')
     ->withRootFiles()
+    ->reportUnusedSkips()
     ->withPaths($paths)
     ->withSkip($skip)
     ->withSets($sets)

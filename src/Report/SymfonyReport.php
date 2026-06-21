@@ -15,6 +15,10 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Pdf\Colors\PdfTextColor;
+use App\Pdf\Events\PdfCellTextEvent;
+use App\Pdf\Html\HtmlBootstrapColor;
+use App\Pdf\Html\HtmlGrayedColor;
+use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
@@ -24,6 +28,7 @@ use App\Service\PackageInfoService;
 use App\Service\RouteInfoService;
 use App\Service\SymfonyInfoService;
 use App\Utils\StringUtils;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Report containing Symfony configuration.
@@ -33,7 +38,7 @@ use App\Utils\StringUtils;
  * @phpstan-import-type PackageType from PackageInfoService
  * @phpstan-import-type DirectoryType from KernelInfoService
  */
-class SymfonyReport extends AbstractReport
+class SymfonyReport extends AbstractReport implements PdfDrawCellTextInterface
 {
     private ?PdfStyle $style = null;
 
@@ -47,6 +52,34 @@ class SymfonyReport extends AbstractReport
     ) {
         parent::__construct($controller);
         $this->setTranslatedTitle('about.symfony.title');
+    }
+
+    #[\Override]
+    public function drawCellText(PdfCellTextEvent $event): bool
+    {
+        if ($event->table->isHeaders() || 2 !== $event->index) {
+            return false;
+        }
+
+        $parent = $event->getDocument();
+        $values = \explode('|', $event->text);
+        $lastValue = \end($values);
+        foreach ($values as $value) {
+            $color = match ($value) {
+                Request::METHOD_GET => HtmlBootstrapColor::SUCCESS,
+                Request::METHOD_POST => HtmlBootstrapColor::SECONDARY,
+                Request::METHOD_DELETE => HtmlBootstrapColor::DANGER,
+                default => HtmlGrayedColor::Gray500,
+            };
+            $color->applyTextColor($parent);
+            $parent->cell(width: $parent->getStringWidth($value), text: $value);
+            $parent->setTextColor(PdfTextColor::black());
+            if ($value !== $lastValue) {
+                $parent->cell(width: $parent->getStringWidth(', '), text: ', ');
+            }
+        }
+
+        return true;
     }
 
     #[\Override]
@@ -216,13 +249,15 @@ class SymfonyReport extends AbstractReport
             PdfColumn::left('Method', 25, true)
         );
 
+        $table->setTextListener($this);
         foreach ($routes as $route) {
             $table->addRow(
                 $route['name'],
                 $route['path'],
-                \implode(', ', $route['methods'])
+                \implode('|', $route['methods'])
             );
         }
+        $table->setTextListener(null);
     }
 
     private function outputRow(PdfGroupTable $table, string $key, string $value): self

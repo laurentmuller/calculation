@@ -29,8 +29,8 @@
 {%- endmacro headerInfo %}
 
 {% macro rowInfo(name, value, name_class = '', value_class = '') -%}
-    {%- set name_class = ('e ' ~ name_class|default(''))|trim -%}
-    {%- set value_class = ('v ' ~ value_class|default(''))|trim -%}
+    {%- set name_class = ('e ' ~ name_class|default)|trim -%}
+    {%- set value_class = ('v ' ~ value_class|default)|trim -%}
     <tr>
         <td class="{{ name_class }}">{{ name }}</td>
         <td class="{{ value_class }}">{{- value -}}</td>
@@ -38,14 +38,12 @@
 {%- endmacro rowInfo %}
 
 {% macro rowInfoLink(name, value, href, name_class = '', value_class = '') -%}
-    {%- set name_class = ('e ' ~ name_class|default(''))|trim -%}
-    {%- set value_class = ('v ' ~ value_class|default(''))|trim -%}
+    {%- set name_class = ('e ' ~ name_class|default)|trim -%}
+    {%- set value_class = ('v ' ~ value_class|default)|trim -%}
     <tr>
         <td class="{{ name_class }}">{{ name }}</td>
         <td class="{{ value_class }}">
-            <a href="{{ href }}" class="card-link" target="_blank" rel="noopener noreferrer">
-                {{- value -}}
-            </a>
+            <a href="{{ href }}" class="card-link" target="_blank" rel="noopener noreferrer">{{- value -}}</a>
         </td>
     </tr>
 {%- endmacro rowInfoLink %}

@@ -22,7 +22,7 @@
 {% block card_body %}
     <p id="error-message">
         {% block error_message -%}
-            {{- description|default('')|raw }} {{ suggestion|default('')|raw -}}
+            {{- description|default|raw }} {{ suggestion|default|raw -}}
         {%- endblock error_message %}
     </p>
     <div class="d-flex-wrap-center d-print-none">

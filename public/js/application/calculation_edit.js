@@ -1557,7 +1557,6 @@
         const $tableEdit = $('.table-edit');
         const selector = '.table-edit th:not(.d-print-none),.table-edit td:not(.d-print-none,:has(:input))';
         const show = function () {
-            $.hideDropDownMenus();
             $(this).parents('tr').addClass('table-primary');
         };
         const hide = function () {

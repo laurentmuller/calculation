@@ -3,8 +3,8 @@
 {# parameters #}
 {%- set title = 'log.title' -%}
 {%- set title_icon = ICON_LOG -%}
-{%- set channel = customData.channel|default('') -%}
-{%- set level = customData.level|default('') -%}
+{%- set channel = customData.channel|default -%}
+{%- set level = customData.level|default -%}
 {%- set object_type = ENTITY_LOG -%}
 {%- set allow_add = false -%}
 {%- set allow_edit = false -%}

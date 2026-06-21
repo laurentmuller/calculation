@@ -181,7 +181,7 @@ class AboutSymfonyController extends AbstractController
     private function implodeHeader(array $package): string
     {
         return \sprintf(
-            "##### %s\n\nVersion : %s - Type : %s - Date : %s\n***\n",
+            "##### %s\n\nVersion : %s\n***\nType : %s - Date : %s\n***\n",
             $package['name'],
             $package['version'],
             \implode(', ', $package['licenseType']),

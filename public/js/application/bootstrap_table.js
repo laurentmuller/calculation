@@ -391,11 +391,7 @@ function initializeContextMenus($table) {
     const tableClass = ['.bootstrap-table', 'table', '.table-primary', 'td:not(:has(.rowlink-skip))'].join(' ');
     const cardClass = ['.bootstrap-table', '.fixed-table-custom-view', '.table-primary', 'div:not(:has(.rowlink-skip, .item-link))'].join(' ');
     const selector = [tableClass, cardClass].join(',');
-    const hideMenus = function () {
-        $.hideDropDownMenus();
-        return true;
-    };
-    $table.getTableContainer().initContextMenu(selector, hideMenus);
+    $table.getTableContainer().initContextMenu(selector);
 
     // key handler
     $(document.body).on('contextmenu', function () {

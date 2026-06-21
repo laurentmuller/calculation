@@ -59,7 +59,7 @@
 {%- endmacro outputHeaders %}
 
 {% macro outputValue(cell, class, separator) -%}
-    {%- set class = ('text-currency ' ~ class|default(''))|trim -%}
+    {%- set class = ('text-currency ' ~ class|default)|trim -%}
     {% if cell %}
         {%- set popover = 'not-hover' not in class -%}
         <td class="{{ class }}"{% if popover %} data-bs-toggle="popover" data-bs-html="{{ _self.outputPopoverCell(cell, separator)|e }}"{% endif %}>
@@ -210,18 +210,14 @@
                         </button>
                     </li>
                     {{ dropdownSeparator() }}
-                    <li>
-                        {{- dropdownItemExternal(
-                            href: path('calculation_pivot_csv', {months: months}),
-                            text: 'common.button_export_csv',
-                            icon: 'fa-solid fa-file-csv') -}}
-                    </li>
-                    <li>
-                        {{- dropdownItemExternal(
-                            href: path('calculation_pivot_json', {months: months, operation: operation.value}),
-                            text: 'common.button_export_json',
-                            icon: 'fa-solid fa-folder-tree') -}}
-                    </li>
+                    {{- dropdownItemExternal(
+                        href: path('calculation_pivot_csv', {months: months}),
+                        text: 'common.button_export_csv',
+                        icon: 'fa-solid fa-file-csv') -}}
+                    {{- dropdownItemExternal(
+                        href: path('calculation_pivot_json', {months: months, operation: operation.value}),
+                        text: 'common.button_export_json',
+                        icon: 'fa-solid fa-folder-tree') -}}
                 </ul>
             </div>
         </div>

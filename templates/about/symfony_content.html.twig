@@ -34,12 +34,15 @@
     {%- set is_links = package.homepage or package.source -%}
     {%- set is_dependance = package.production|length or package.development|length -%}
     {%- set is_dropdown = is_license or is_links or is_dependance -%}
-    <tr class="row-package">
+    {% set attrs = {
+        class: is_dropdown ? ['row-package', 'rowlink'] : ['row-package'],
+    } %}
+    <tr {{ html_attr(attrs) }}>
         <td class="e">{{ package.name }}</td>
         <td class="text-id">{{ package.version }}</td>
         {% if is_dropdown %}
             <td class="text">{{ package.description|default('&nbsp;') }}</td>
-            <td class="cell-dropdown">
+            <td class="rowlink-skip">
                 {{ dropdownEllipsis() }}
                 <ul class="dropdown-menu dropdown-menu-end">
                     {%- if is_license -%}
@@ -57,13 +60,15 @@
                             {{- dropdownItemExternal(
                                 href: package.homepage,
                                 text: 'about.link_homepage',
-                                icon: 'fa-fw fa-solid fa-arrow-up-right-from-square') -}}
+                                icon: 'fa-fw fa-solid fa-arrow-up-right-from-square',
+                                class: 'link-homepage') -}}
                         {%- endif -%}
                         {%- if package.source -%}
                             {{- dropdownItemExternal(
                                 href: package.source,
                                 text: 'about.link_source',
-                                icon: 'fa-fw fa-brands fa-github') -}}
+                                icon: 'fa-fw fa-brands fa-github',
+                                class: 'link-source') -}}
                         {%- endif -%}
                     {%- endif -%}
                     {%- if is_dependance -%}
@@ -85,11 +90,11 @@
 {%- endmacro rowPackage %}
 {% macro headerRoute() -%}
     <thead>
-    <tr>
-        <th class="w-40">Name</th>
-        <th class="w-50">Path</th>
-        <th class="text-category">Method</th>
-    </tr>
+        <tr>
+            <th class="w-40">Name</th>
+            <th class="w-50">Path</th>
+            <th class="text-category">Method</th>
+        </tr>
     </thead>
 {%- endmacro headerRoute %}
 {% macro rowRoute(route) -%}
@@ -97,27 +102,27 @@
         <td class="w-40">{{ route.name }}</td>
         <td class="w-50">{{ route.path }}</td>
         <td class="text-category">
-            {% for method in route.methods %}
-                {% switch method %}
-                {% case 'GET' %}
-                    <span class="badge rounded me-1 text-bg-success">{{ method }}</span>
-                {% case 'POST' %}
-                    <span class="badge rounded me-1 text-bg-secondary">{{ method }}</span>
-                {% case 'DELETE' %}
-                    <span class="badge rounded me-1 text-bg-danger">{{ method }}</span>
-                {% default %}
-                    <span class="badge rounded me-1 text-bg-light">{{ method }}</span>
-                {% endswitch %}
-            {% endfor %}
+        {% for method in route.methods %}
+            {% switch method %}
+            {% case 'GET' %}
+                <span class="badge rounded me-1 text-bg-success">{{ method }}</span>
+            {% case 'POST' %}
+                <span class="badge rounded me-1 text-bg-secondary">{{ method }}</span>
+            {% case 'DELETE' %}
+                <span class="badge rounded me-1 text-bg-danger">{{ method }}</span>
+            {% default %}
+                <span class="badge rounded me-1 text-bg-light">{{ method }}</span>
+            {% endswitch %}
+        {% endfor %}
         </td>
     </tr>
 {%- endmacro rowRoute %}
 {% macro headerNameValue() %}
     <thead>
-    <tr>
-        <th>Name</th>
-        <th>Value</th>
-    </tr>
+        <tr>
+            <th>Name</th>
+            <th>Value</th>
+        </tr>
     </thead>
 {% endmacro headerNameValue %}
 {% macro rowDirectory(directory) -%}
@@ -132,14 +137,14 @@
     {{ tools.headerLink('symfony.com', symfonyService.version, 'symfony') }}
     <table id="data-table-symfony" class="table table-sm table-hover mb-0">
         <tbody>
-        {{ tools.headerInfo('Kernel') }}
-        {{ tools.rowInfo('Environment', kernelService.kernelEnvironment|trans) }}
-        {{ tools.rowInfo('Running Mode', kernelService.applicationEnvironment|trans) }}
-        {{ tools.rowInfo('Status', symfonyService.maintenanceStatus) }}
-        {{ tools.rowInfo('Release', symfonyService.releaseDate) }}
-        {{ tools.rowInfoBoolean('Long-Term support', symfonyService.longTermSupport) }}
-        {{ tools.rowInfo('End of maintenance', symfonyService.endOfMaintenance) }}
-        {{ tools.rowInfo('End of product life', symfonyService.endOfLife) }}
+            {{ tools.headerInfo('Kernel') }}
+            {{ tools.rowInfo('Environment', kernelService.kernelEnvironment|trans) }}
+            {{ tools.rowInfo('Running Mode', kernelService.applicationEnvironment|trans) }}
+            {{ tools.rowInfo('Status', symfonyService.maintenanceStatus) }}
+            {{ tools.rowInfo('Release', symfonyService.releaseDate) }}
+            {{ tools.rowInfoBoolean('Long-Term support', symfonyService.longTermSupport) }}
+            {{ tools.rowInfo('End of maintenance', symfonyService.endOfMaintenance) }}
+            {{ tools.rowInfo('End of product life', symfonyService.endOfLife) }}
         </tbody>
     </table>
     {# Configuration #}
@@ -152,11 +157,11 @@
             <table class="table table-sm table-hover mb-0">
                 {{ _self.headerNameValue() }}
                 <tbody>
-                {{ tools.rowInfo('Architecture', symfonyService.architecture) }}
-                {{ tools.rowInfo('Charset', kernelService.charset) }}
-                {{ tools.rowInfo('Intl Locale', symfonyService.localeName) }}
-                {{ tools.rowInfo('Timezone', symfonyService.timezone) }}
-                {{ tools.rowInfoBoolean('Debug', kernelService.debugStatus, kernelService.debug) }}
+                    {{ tools.rowInfo('Architecture', symfonyService.architecture) }}
+                    {{ tools.rowInfo('Charset', kernelService.charset) }}
+                    {{ tools.rowInfo('Intl Locale', symfonyService.localeName) }}
+                    {{ tools.rowInfo('Timezone', symfonyService.timezone) }}
+                    {{ tools.rowInfoBoolean('Debug', kernelService.debugStatus, kernelService.debug) }}
                 </tbody>
             </table>
         </div>
@@ -167,9 +172,9 @@
             <table class="table table-sm table-hover mb-0">
                 {{ _self.headerNameValue() }}
                 <tbody>
-                {{ tools.rowInfoBoolean('APCu', symfonyService.apcuStatus, symfonyService.apcuEnabled) }}
-                {{ tools.rowInfoBoolean('OPcache', symfonyService.opCacheStatus, symfonyService.opCacheEnabled) }}
-                {{ tools.rowInfoBoolean('Xdebug', symfonyService.xDebugStatus, symfonyService.xdebugEnabled) }}
+                    {{ tools.rowInfoBoolean('APCu', symfonyService.apcuStatus, symfonyService.apcuEnabled) }}
+                    {{ tools.rowInfoBoolean('OPcache', symfonyService.opCacheStatus, symfonyService.opCacheEnabled) }}
+                    {{ tools.rowInfoBoolean('Xdebug', symfonyService.xDebugStatus, symfonyService.xdebugEnabled) }}
                 </tbody>
             </table>
         </div>
@@ -179,20 +184,20 @@
              data-bs-parent="#symfonyAccordion">
             <table class="table table-sm table-hover mb-0">
                 <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Path</th>
-                    <th class="text-percent">Size</th>
-                </tr>
+                    <tr>
+                        <th>Name</th>
+                        <th>Path</th>
+                        <th class="text-percent">Size</th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td class="e">Project</td>
-                    <td class="v" colspan="2">{{ kernelService.projectDir }}</td>
-                </tr>
-                {{ _self.rowDirectory(kernelService.cacheInfo) }}
-                {{ _self.rowDirectory(kernelService.buildInfo) }}
-                {{ _self.rowDirectory(kernelService.logInfo) }}
+                    <tr>
+                        <td class="e">Project</td>
+                        <td class="v" colspan="2">{{ kernelService.projectDir }}</td>
+                    </tr>
+                    {{ _self.rowDirectory(kernelService.cacheInfo) }}
+                    {{ _self.rowDirectory(kernelService.buildInfo) }}
+                    {{ _self.rowDirectory(kernelService.logInfo) }}
                 </tbody>
             </table>
         </div>
@@ -204,12 +209,12 @@
                  data-bs-parent="#symfonyAccordion">
                 <table class="table table-sm table-hover mb-0">
                     <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Path</th>
-                        <th class="text-percent">Files</th>
-                        <th class="text-percent">Size</th>
-                    </tr>
+                        <tr>
+                            <th>Name</th>
+                            <th>Path</th>
+                            <th class="text-percent">Files</th>
+                            <th class="text-percent">Size</th>
+                        </tr>
                     </thead>
                     <tbody>
                     {% for bundle in bundles %}

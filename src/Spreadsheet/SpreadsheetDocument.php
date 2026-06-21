@@ -43,7 +43,7 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Add external sheet.
+     * Add an external sheet.
      *
      * @param Worksheet $worksheet  the external sheet to add
      * @param ?int      $sheetIndex the index where the sheet should go (0, 1, ... or null for last)

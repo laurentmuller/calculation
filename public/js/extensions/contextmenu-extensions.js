@@ -281,6 +281,7 @@ const MenuBuilder = class { /* exported MenuBuilder */
                             return false;
                         },
                         events: {
+                            preShow:  $.hideDropDownMenus(),
                             show: fnShow || $.noop,
                             hide: fnHide || $.noop
                         }

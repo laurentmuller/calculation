@@ -179,7 +179,7 @@ readonly class SymfonyInfoService
      */
     public function isLongTermSupport(): bool
     {
-        return 4 === \intdiv(Kernel::VERSION_ID, 100) % 10;
+        return 4 === Kernel::MINOR_VERSION;
     }
 
     /**

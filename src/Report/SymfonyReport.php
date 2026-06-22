@@ -27,7 +27,6 @@ use App\Service\KernelInfoService;
 use App\Service\PackageInfoService;
 use App\Service\RouteInfoService;
 use App\Service\SymfonyInfoService;
-use App\Utils\StringUtils;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -228,7 +227,7 @@ class SymfonyReport extends AbstractReport implements PdfDrawCellTextInterface
                 ->add($package['name'], link: $package['homepage'])
                 ->add($package['version'])
                 ->add(\implode("\n", $package['licenseType']))
-                ->add($this->trimDescription($package['description']))
+                ->add($package['description'])
                 ->endRow();
         }
     }
@@ -277,18 +276,5 @@ class SymfonyReport extends AbstractReport implements PdfDrawCellTextInterface
             ->endRow();
 
         return $this;
-    }
-
-    private function trimDescription(?string $description): ?string
-    {
-        if (!StringUtils::isString($description)) {
-            return $description;
-        }
-
-        return StringUtils::unicode($description)
-            ->ascii()
-            ->replace('?', '')
-            ->trim()
-            ->toString();
     }
 }

@@ -1,4 +1,4 @@
-/* globals Toaster, MenuBuilder */
+/* globals Toaster */
 
 (function ($) {
     'use strict';

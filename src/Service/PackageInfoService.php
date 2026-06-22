@@ -169,6 +169,9 @@ readonly class PackageInfoService implements \Countable
         }
 
         return StringUtils::unicode($description)
+            ->ascii()
+            ->replace('?', '')
+            ->trim()
             ->ensureEnd('.')
             ->toString();
     }

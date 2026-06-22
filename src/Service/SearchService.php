@@ -66,16 +66,16 @@ class SearchService implements ServiceSubscriberInterface
     /** The field column name. */
     public const string COLUMN_FIELD = 'field';
 
-    /** The field column name. */
+    /** The field name column name. */
     public const string COLUMN_FIELD_NAME = 'fieldName';
 
-    /** The delete granted column name. */
+    /** The granted delete column name. */
     public const string COLUMN_GRANTED_DELETE = 'allowDelete';
 
-    /** The edit granted column name. */
+    /** The granted edit column name. */
     public const string COLUMN_GRANTED_EDIT = 'allowEdit';
 
-    /** The show granted column name. */
+    /** The granted show column name. */
     public const string COLUMN_GRANTED_SHOW = 'allowShow';
 
     /** The identifier column name. */
@@ -315,11 +315,9 @@ class SearchService implements ServiceSubscriberInterface
      *
      * @template TEntity of EntityInterface
      *
-     * @param class-string $class   the entity class
-     * @param string       $field   the field name
-     * @param ?string      $content the field content to search in or null to use the field name
-     *
-     * @phpstan-param class-string<TEntity> $class
+     * @param class-string<TEntity> $class   the entity class
+     * @param string                $field   the field name
+     * @param ?string               $content the field content to search in or null to use the field name
      */
     private function createQueryBuilder(string $class, string $field, ?string $content = null): QueryBuilder
     {

@@ -1,45 +1,47 @@
-{# macros #}
+1{# macros #}
 {% macro header(permission, overwrite) %}
-<th>
-    <button type="button" class="btn btn-link btn-col p-0" title="{{ 'user.rights.col_title'|trans }}"{%- if not overwrite -%} disabled{%- endif -%}>
-        {{- permission|trans -}}
-    </button>
-</th>
+    <th>
+        <button type="button" class="btn btn-link btn-col p-0"
+                title="{{ 'user.rights.col_title'|trans }}"{%- if not overwrite -%} disabled{%- endif -%}>
+            {{- permission|trans -}}
+        </button>
+    </th>
 {%- endmacro header %}
 
 {% macro row(entries, permission, overwrite) -%}
-<tr class="text-center">
-    <td class="text-start">
-        <button type="button" class="btn btn-link btn-row p-0" title="{{ 'user.rights.row_title'|trans }}"{%- if not overwrite -%} disabled{%- endif -%}>
-            {{- entries.vars.label|trans -}}
-        </button>
-    </td>
-    {% for entry in entries %}
-        {%- set checked = permission.hasBits(entry.vars.value) -%}
-        {%- set attr = {'data-default': checked|json_encode, class: 'form-check-no-label'} -%}
-        {%- if not overwrite -%}
-            {%- set attr = attr|merge({disabled: 'disabled', checked: checked}) -%}
-        {%- endif -%}
-        <td>{{ form_widget(entry, {attr: attr}) }}</td>
-    {% endfor %}
-</tr>
+    <tr class="text-center">
+        <td class="text-start">
+            <button type="button" class="btn btn-link btn-row p-0"
+                    title="{{ 'user.rights.row_title'|trans }}"{%- if not overwrite -%} disabled{%- endif -%}>
+                {{- entries.vars.label|trans -}}
+            </button>
+        </td>
+        {% for entry in entries %}
+            {%- set checked = permission.hasBits(entry.vars.value) -%}
+            {%- set attr = {'data-default': checked|json_encode, class: 'form-check-no-label'} -%}
+            {%- if not overwrite -%}
+                {%- set attr = attr|merge({disabled: 'disabled', checked: checked}) -%}
+            {%- endif -%}
+            <td>{{ form_widget(entry, {attr: attr}) }}</td>
+        {% endfor %}
+    </tr>
 {%- endmacro row %}
 
 {% macro table(rights, permissions, entities, overwrite = true) %}
-{% from 'macros/_icons.html.twig' import icon %}
-<div class="table-responsive mb-3">
-    <table class="table table-bordered table-list" id="table-edit">
-        <thead>
+    {% from 'macros/_icons.html.twig' import icon %}
+    <div class="table-responsive mb-3">
+        <table class="table table-bordered table-list" id="table-edit">
+            <thead>
             <tr class="text-center">
                 <th class="text-start text-nowrap fw-normal">
-                    {{- icon('fa-solid fa-arrow-down me-1', 'user.rights.table_title') }}{{ icon('fa-solid fa-arrow-right ms-1') -}}
+                    {{- icon('fa-solid fa-arrow-down', 'user.rights.table_title') }}{{ icon('fa-solid fa-arrow-right ms-1') -}}
                 </th>
                 {% for entity in entities %}
                     {{ _self.header(entity, overwrite) }}
                 {% endfor %}
             </tr>
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
             {{ _self.row(rights.Calculation, permissions.Calculation, overwrite) }}
             {{ _self.row(rights.Product, permissions.Product, overwrite) }}
             {{ _self.row(rights.Task, permissions.Task, overwrite) }}
@@ -56,32 +58,41 @@
             {%- if rights.Log ?? false -%}
                 {{ _self.row(rights.Log, permissions.Log, overwrite) }}
             {%- endif -%}
-        </tbody>
-    </table>
-</div>
+            </tbody>
+        </table>
+    </div>
 {% endmacro table %}
 
 {% macro action(id, icon, overwrite) %}
-{% from 'macros/_icons.html.twig' import icon %}
-<li>
-    <button type="button" id="{{ id }}" class="dropdown-item"{%- if not overwrite -%} disabled{%- endif -%}>
-        {{- icon(icon ~ ' fa-fw', 'user.rights.' ~ id ~ '_title') -}}
-    </button>
-</li>
+    {% from 'macros/_icons.html.twig' import button %}
+    <li>
+        {{ button(
+            text: 'user.rights.' ~ id ~ '_title',
+            class: ['dropdown-item'],
+            icon: icon,
+            inline: false,
+            attributes: {
+                id: id,
+                disabled: not overwrite}) }}
+    </li>
 {% endmacro action %}
 
 {% macro actions(overwrite = true) %}
-{% from 'macros/_icons.html.twig' import icon %}
-<div class="dropdown">
-    <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-        {{ icon('fa-solid fa-bars', 'common.actions') }}
-    </button>
-    <ul class="dropdown-menu dropdown-menu-end">
-        {{ _self.action('all', 'fa-solid fa-check-circle', overwrite) }}
-        {{ _self.action('none', 'fa-solid fa-times-circle', overwrite) }}
-        {{ _self.action('toggle', 'fa-solid fa-right-left', overwrite) }}
-        <li><hr class="dropdown-divider"></li>
-        {{ _self.action('default', 'fa-solid fa-rotate-left', true) }}
-    </ul>
-</div>
+    {% from 'macros/_icons.html.twig' import button, dropdownSeparator %}
+    <div class="dropdown">
+        {{ button(
+            text: 'common.actions',
+            class: 'btn btn-sm btn-outline-secondary dropdown-toggle',
+            icon: 'fa-solid fa-bars',
+            attributes: {
+                'data-bs-toggle': 'dropdown',
+                'aria-expanded': false}) }}
+        <ul class="dropdown-menu dropdown-menu-end">
+            {{ _self.action('all', 'fa-fw fa-solid fa-check-circle', overwrite) }}
+            {{ _self.action('none', 'fa-fw fa-solid fa-times-circle', overwrite) }}
+            {{ _self.action('toggle', 'fa-fw fa-solid fa-right-left', overwrite) }}
+            {{ dropdownSeparator() }}
+            {{ _self.action('default', 'fa-fw fa-solid fa-rotate-left', true) }}
+        </ul>
+    </div>
 {% endmacro actions %}

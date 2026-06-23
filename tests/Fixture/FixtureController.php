@@ -15,12 +15,9 @@ namespace App\Tests\Fixture;
 
 use App\Controller\AbstractController;
 use App\Form\FormHelper;
-use App\Response\PdfResponse;
-use App\Response\SpreadsheetResponse;
-use App\Response\WordResponse;
-use App\Spreadsheet\SpreadsheetDocument;
-use App\Word\WordDocument;
-use fpdf\PdfDocument;
+use App\Traits\RenderPdfDocumentTrait;
+use App\Traits\RenderSpreadsheetDocumentTrait;
+use App\Traits\RenderWordDocumentTrait;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -28,6 +25,16 @@ use Psr\Container\ContainerInterface;
  */
 class FixtureController extends AbstractController
 {
+    use RenderPdfDocumentTrait {
+        renderPdfDocument as public;
+    }
+    use RenderSpreadsheetDocumentTrait {
+        renderSpreadsheetDocument as public;
+    }
+    use RenderWordDocumentTrait {
+        renderWordDocument as public;
+    }
+
     public function __construct(ContainerInterface $container)
     {
         $this->setContainer($container);
@@ -49,32 +56,5 @@ class FixtureController extends AbstractController
     public function getCookiePath(): string
     {
         return parent::getCookiePath();
-    }
-
-    #[\Override]
-    public function renderPdfDocument(
-        PdfDocument $doc,
-        bool $inline = true,
-        string $name = ''
-    ): PdfResponse {
-        return parent::renderPdfDocument($doc, $inline, $name);
-    }
-
-    #[\Override]
-    public function renderSpreadsheetDocument(
-        SpreadsheetDocument $doc,
-        bool $inline = true,
-        string $name = ''
-    ): SpreadsheetResponse {
-        return parent::renderSpreadsheetDocument($doc, $inline, $name);
-    }
-
-    #[\Override]
-    public function renderWordDocument(
-        WordDocument $doc,
-        bool $inline = true,
-        string $name = ''
-    ): WordResponse {
-        return parent::renderWordDocument($doc, $inline, $name);
     }
 }

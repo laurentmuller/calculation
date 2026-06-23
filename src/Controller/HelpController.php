@@ -23,6 +23,7 @@ use App\Model\HelpDownloadQuery;
 use App\Report\HelpReport;
 use App\Response\PdfResponse;
 use App\Service\HelpService;
+use App\Traits\RenderPdfDocumentTrait;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
@@ -41,6 +42,8 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(path: '/help', name: 'help_')]
 class HelpController extends AbstractController
 {
+    use RenderPdfDocumentTrait;
+
     public function __construct(private readonly HelpService $service)
     {
     }

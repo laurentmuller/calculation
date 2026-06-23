@@ -24,6 +24,8 @@ use App\Resolver\DataQueryValueResolver;
 use App\Spreadsheet\CalculationsDuplicateDocument;
 use App\Table\CalculationDuplicateTable;
 use App\Table\DataQuery;
+use App\Traits\RenderPdfDocumentTrait;
+use App\Traits\RenderSpreadsheetDocumentTrait;
 use App\Traits\TableTrait;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -40,6 +42,8 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(path: '/calculation/duplicate', name: 'calculation_duplicate_')]
 class CalculationDuplicateController extends AbstractController
 {
+    use RenderPdfDocumentTrait;
+    use RenderSpreadsheetDocumentTrait;
     use TableTrait;
 
     /**

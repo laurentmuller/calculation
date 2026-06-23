@@ -30,6 +30,8 @@ use App\Service\LogService;
 use App\Spreadsheet\LogsDocument;
 use App\Table\DataQuery;
 use App\Table\LogTable;
+use App\Traits\RenderPdfDocumentTrait;
+use App\Traits\RenderSpreadsheetDocumentTrait;
 use App\Traits\TableTrait;
 use App\Utils\FileUtils;
 use Psr\Log\LoggerInterface;
@@ -47,6 +49,8 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(path: '/log', name: 'log_')]
 class LogController extends AbstractController
 {
+    use RenderPdfDocumentTrait;
+    use RenderSpreadsheetDocumentTrait;
     use TableTrait;
 
     /** The key to save the display context state. */

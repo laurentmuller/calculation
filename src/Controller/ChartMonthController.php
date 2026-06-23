@@ -22,6 +22,7 @@ use App\Enums\EntityPermission;
 use App\Report\CalculationByMonthReport;
 use App\Repository\CalculationRepository;
 use App\Response\PdfResponse;
+use App\Traits\RenderPdfDocumentTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -35,6 +36,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 #[Route(path: '/chart/month', name: 'chart_month_')]
 class ChartMonthController extends AbstractController
 {
+    use RenderPdfDocumentTrait;
+
     private const string KEY_MONTHS = 'chart_months';
 
     #[IndexRoute]

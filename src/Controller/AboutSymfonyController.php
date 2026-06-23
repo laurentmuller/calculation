@@ -28,6 +28,8 @@ use App\Service\RouteInfoService;
 use App\Service\SymfonyInfoService;
 use App\Spreadsheet\SymfonyDocument;
 use App\Traits\ArrayTrait;
+use App\Traits\RenderPdfDocumentTrait;
+use App\Traits\RenderSpreadsheetDocumentTrait;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -45,6 +47,8 @@ use Twig\Extra\Markdown\MarkdownInterface;
 class AboutSymfonyController extends AbstractController
 {
     use ArrayTrait;
+    use RenderPdfDocumentTrait;
+    use RenderSpreadsheetDocumentTrait;
 
     #[GetRoute(path: '/content', name: 'content')]
     public function content(

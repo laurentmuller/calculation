@@ -22,6 +22,8 @@ use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Service\PhpInfoService;
 use App\Spreadsheet\PhpIniDocument;
+use App\Traits\RenderPdfDocumentTrait;
+use App\Traits\RenderSpreadsheetDocumentTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -32,6 +34,9 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(path: '/about/php', name: 'about_php_')]
 class AboutPhpController extends AbstractController
 {
+    use RenderPdfDocumentTrait;
+    use RenderSpreadsheetDocumentTrait;
+
     #[GetRoute(path: '/content', name: 'content')]
     public function content(PhpInfoService $service): JsonResponse
     {

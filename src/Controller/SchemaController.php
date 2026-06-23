@@ -21,6 +21,7 @@ use App\Report\SchemaReport;
 use App\Response\PdfResponse;
 use App\Service\FontAwesomeImageService;
 use App\Service\SchemaService;
+use App\Traits\RenderPdfDocumentTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -31,6 +32,8 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(path: '/schema', name: 'schema_')]
 class SchemaController extends AbstractController
 {
+    use RenderPdfDocumentTrait;
+
     /**
      * Display information for tables.
      */

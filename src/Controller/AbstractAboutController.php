@@ -23,6 +23,8 @@ use App\Report\HtmlReport;
 use App\Response\PdfResponse;
 use App\Response\WordResponse;
 use App\Service\MarkdownService;
+use App\Traits\RenderPdfDocumentTrait;
+use App\Traits\RenderWordDocumentTrait;
 use App\Word\HtmlDocument;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Path;
@@ -37,6 +39,9 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 abstract class AbstractAboutController extends AbstractController
 {
+    use RenderPdfDocumentTrait;
+    use RenderWordDocumentTrait;
+
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
         private readonly string $projectDir,

@@ -22,6 +22,8 @@ use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Service\DatabaseInfoService;
 use App\Spreadsheet\DatabaseDocument;
+use App\Traits\RenderPdfDocumentTrait;
+use App\Traits\RenderSpreadsheetDocumentTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -32,6 +34,9 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(path: '/about/database', name: 'about_database_')]
 class AboutDatabaseController extends AbstractController
 {
+    use RenderPdfDocumentTrait;
+    use RenderSpreadsheetDocumentTrait;
+
     #[GetRoute(path: '/content', name: 'content')]
     public function content(DatabaseInfoService $service): JsonResponse
     {

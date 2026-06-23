@@ -49,11 +49,12 @@ final class HelpControllerTest extends ControllerTestCase
         foreach ($routes as $route) {
             yield [$route, self::ROLE_USER];
         }
-    }
 
-    public function testDialogNotFound(): void
-    {
-        $this->checkRoute('/help/dialog/fake_dialog_fake', self::ROLE_USER, Response::HTTP_NOT_FOUND);
+        // not found
+        yield ['/help/dialog/fake_dialog_fake', self::ROLE_USER, Response::HTTP_NOT_FOUND];
+        yield ['/help/entity/fake_entity_fake', self::ROLE_USER, Response::HTTP_NOT_FOUND];
+        yield ['/help/pdf/dialog/fake_dialog_fake', self::ROLE_USER, Response::HTTP_NOT_FOUND];
+        yield ['/help/pdf/entity/fake_entity_fake', self::ROLE_USER, Response::HTTP_NOT_FOUND];
     }
 
     public function testDialogs(): void
@@ -122,26 +123,11 @@ final class HelpControllerTest extends ControllerTestCase
         }
     }
 
-    public function testEntityNotFound(): void
-    {
-        $this->checkRoute('/help/entity/fake_entity_fake', self::ROLE_USER, Response::HTTP_NOT_FOUND);
-    }
-
     public function testImages(): void
     {
         foreach ($this->getImages() as $file) {
             self::assertFileExists($file);
         }
-    }
-
-    public function testPdfDialogNotFound(): void
-    {
-        $this->checkRoute('/help/pdf/dialog/fake_dialog_fake', self::ROLE_USER, Response::HTTP_NOT_FOUND);
-    }
-
-    public function testPdfEntityNotFound(): void
-    {
-        $this->checkRoute('/help/pdf/entity/fake_entity_fake', self::ROLE_USER, Response::HTTP_NOT_FOUND);
     }
 
     public function testUnusedImages(): void

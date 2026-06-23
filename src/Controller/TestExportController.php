@@ -32,6 +32,8 @@ use App\Response\WordResponse;
 use App\Service\FontAwesomeImageService;
 use App\Service\FontAwesomeService;
 use App\Service\PdfLabelService;
+use App\Traits\RenderPdfDocumentTrait;
+use App\Traits\RenderWordDocumentTrait;
 use App\Utils\StringUtils;
 use App\Word\HtmlDocument;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -42,6 +44,9 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(path: '/test', name: 'test_')]
 class TestExportController extends AbstractController
 {
+    use RenderPdfDocumentTrait;
+    use RenderWordDocumentTrait;
+
     /**
      * Output a report with HTML and Boostrap colors.
      */

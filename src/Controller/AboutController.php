@@ -26,6 +26,8 @@ use App\Response\PdfResponse;
 use App\Response\WordResponse;
 use App\Service\ApplicationService;
 use App\Service\MarkdownService;
+use App\Traits\RenderPdfDocumentTrait;
+use App\Traits\RenderWordDocumentTrait;
 use App\Word\HtmlDocument;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
@@ -41,6 +43,9 @@ use Symfony\Contracts\Cache\CacheInterface;
 #[Route(path: '/about', name: 'about_')]
 class AboutController extends AbstractController
 {
+    use RenderPdfDocumentTrait;
+    use RenderWordDocumentTrait;
+
     private const array TAGS = [
         ['h4', 'h6', 'bookmark bookmark-3'],
         ['h3', 'h5', 'bookmark bookmark-2'],

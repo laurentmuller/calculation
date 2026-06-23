@@ -21,21 +21,12 @@ use App\Model\CustomerInformation;
 use App\Model\TranslatableFlashMessage;
 use App\Parameter\ApplicationParameters;
 use App\Parameter\UserParameters;
-use App\Report\AbstractReport;
-use App\Response\PdfResponse;
-use App\Response\SpreadsheetResponse;
-use App\Response\WordResponse;
 use App\Service\UrlGeneratorService;
-use App\Spreadsheet\AbstractDocument;
-use App\Spreadsheet\SpreadsheetDocument;
 use App\Traits\JsonResponseTrait;
 use App\Traits\RequestTrait;
 use App\Traits\TranslatorFlashMessageAwareTrait;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
-use App\Word\AbstractWordDocument;
-use App\Word\WordDocument;
-use fpdf\PdfDocument;
 use Psr\Container\ContainerExceptionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
 use Symfony\Component\Form\FormInterface;
@@ -277,71 +268,5 @@ abstract class AbstractController extends BaseController implements DocumentHelp
         $form->handleRequest($request);
 
         return $form->isSubmitted() && $form->isValid();
-    }
-
-    /**
-     * Render the given PDF document and output the response.
-     *
-     * @param PdfDocument $doc    the document to render
-     * @param bool        $inline <code>true</code> to send the file inline to the browser. The PDF viewer is used if
-     *                            available. <code>false</code> to send to the browser and force a file download with
-     *                            the name given.
-     * @param string      $name   the name of the file (without an extension) or '' to use default ('document')
-     */
-    protected function renderPdfDocument(PdfDocument $doc, bool $inline = true, string $name = ''): PdfResponse
-    {
-        if ($doc instanceof AbstractReport && !$doc->render()) {
-            throw $this->createTranslatedNotFoundException('errors.render_document');
-        }
-        if (!StringUtils::isString($name) && StringUtils::isString($doc->getProperties()->getTitle())) {
-            $name = $doc->getProperties()->getTitle();
-        }
-
-        return new PdfResponse($doc, $inline, $name);
-    }
-
-    /**
-     * Render the given Spreadsheet document and output the response.
-     *
-     * @param SpreadsheetDocument $doc    the document to render
-     * @param bool                $inline <code>true</code> to send the file inline to the browser. The Spreadsheet
-     *                                    viewer is used if available.
-     *                                    <code>false</code> to send to the browser and force a file download.
-     * @param string              $name   the name of the file (without an extension) or '' to use default ('document')
-     */
-    protected function renderSpreadsheetDocument(
-        SpreadsheetDocument $doc,
-        bool $inline = true,
-        string $name = ''
-    ): SpreadsheetResponse {
-        if ($doc instanceof AbstractDocument && !$doc->render()) {
-            throw $this->createTranslatedNotFoundException('errors.render_document');
-        }
-        if (!StringUtils::isString($name) && StringUtils::isString($doc->getTitle())) {
-            $name = $doc->getTitle();
-        }
-
-        return new SpreadsheetResponse($doc, $inline, $name);
-    }
-
-    /**
-     * Render the given Word document and output the response.
-     *
-     * @param WordDocument $doc    the document to render
-     * @param bool         $inline <code>true</code> to send the file inline to the browser. The PDF viewer is used
-     *                             if available. <code>false</code> to send to the browser and force a file download
-     *                             with the name given.
-     * @param string       $name   the name of the file (without an extension) or '' to use default ('document')
-     */
-    protected function renderWordDocument(WordDocument $doc, bool $inline = true, string $name = ''): WordResponse
-    {
-        if ($doc instanceof AbstractWordDocument && !$doc->render()) {
-            throw $this->createTranslatedNotFoundException('errors.render_document');
-        }
-        if (!StringUtils::isString($name) && StringUtils::isString($doc->getTitle())) {
-            $name = $doc->getTitle();
-        }
-
-        return new WordResponse($doc, $inline, $name);
     }
 }

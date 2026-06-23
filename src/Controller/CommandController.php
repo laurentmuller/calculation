@@ -26,6 +26,7 @@ use App\Service\CommandFormService;
 use App\Service\CommandService;
 use App\Traits\CacheKeyTrait;
 use App\Traits\FormExceptionTrait;
+use App\Traits\RenderPdfDocumentTrait;
 use App\Utils\StringUtils;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -46,6 +47,7 @@ class CommandController extends AbstractController
 {
     use CacheKeyTrait;
     use FormExceptionTrait;
+    use RenderPdfDocumentTrait;
 
     private const string KEY_QUERY_COMMAND = 'last_command';
 

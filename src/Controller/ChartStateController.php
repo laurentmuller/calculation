@@ -22,6 +22,7 @@ use App\Enums\EntityPermission;
 use App\Report\CalculationByStateReport;
 use App\Repository\CalculationStateRepository;
 use App\Response\PdfResponse;
+use App\Traits\RenderPdfDocumentTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -33,6 +34,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 #[Route(path: '/chart/state', name: 'chart_state_')]
 class ChartStateController extends AbstractController
 {
+    use RenderPdfDocumentTrait;
+
     #[IndexRoute]
     public function index(StateChart $chart): Response
     {

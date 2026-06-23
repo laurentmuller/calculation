@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\AbstractController;
 use App\Entity\Group;
+use App\Interfaces\DocumentHelperInterface;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Report\Table\ReportTable;
@@ -33,10 +33,10 @@ class GroupsReport extends AbstractArrayReport
      * @param Group[] $entities
      */
     public function __construct(
-        AbstractController $controller,
+        DocumentHelperInterface $helper,
         array $entities
     ) {
-        parent::__construct($controller, $entities, PdfOrientation::LANDSCAPE);
+        parent::__construct($helper, $entities, PdfOrientation::LANDSCAPE);
         $this->setTranslatedTitle('group.list.title');
     }
 

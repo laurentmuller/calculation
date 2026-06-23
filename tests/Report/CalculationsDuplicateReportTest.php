@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Report;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Report\CalculationsDuplicateReport;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
@@ -22,7 +22,7 @@ final class CalculationsDuplicateReportTest extends TestCase
 {
     public function testRender(): void
     {
-        $controller = self::createStub(AbstractController::class);
+        $helper = self::createStub(DocumentHelperInterface::class);
         $data = [
             'id' => 1,
             'date' => new DatePoint(),
@@ -38,7 +38,7 @@ final class CalculationsDuplicateReportTest extends TestCase
                 ],
             ],
         ];
-        $report = new CalculationsDuplicateReport($controller, [$data]);
+        $report = new CalculationsDuplicateReport($helper, [$data]);
         $actual = $report->render();
         self::assertTrue($actual);
     }

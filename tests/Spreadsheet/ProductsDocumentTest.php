@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Spreadsheet;
 
-use App\Controller\AbstractController;
 use App\Entity\Category;
 use App\Entity\Group;
 use App\Entity\Product;
+use App\Interfaces\DocumentHelperInterface;
 use App\Spreadsheet\ProductsDocument;
 use PHPUnit\Framework\TestCase;
 
@@ -36,8 +36,8 @@ final class ProductsDocumentTest extends TestCase
         $group->addCategory($category);
         $category->addProduct($product);
 
-        $controller = self::createStub(AbstractController::class);
-        $document = new ProductsDocument($controller, [$product]);
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $document = new ProductsDocument($helper, [$product]);
         $actual = $document->render();
         self::assertTrue($actual);
     }

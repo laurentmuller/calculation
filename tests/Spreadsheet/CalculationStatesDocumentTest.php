@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Spreadsheet;
 
-use App\Controller\AbstractController;
 use App\Entity\CalculationState;
+use App\Interfaces\DocumentHelperInterface;
 use App\Spreadsheet\CalculationStatesDocument;
 use PHPUnit\Framework\TestCase;
 
@@ -29,8 +29,8 @@ final class CalculationStatesDocumentTest extends TestCase
         $state2->setCode('Code2')
             ->setColor('');
 
-        $controller = self::createStub(AbstractController::class);
-        $document = new CalculationStatesDocument($controller, [$state1, $state2]);
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $document = new CalculationStatesDocument($helper, [$state1, $state2]);
         $actual = $document->render();
         self::assertTrue($actual);
     }

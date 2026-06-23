@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 
@@ -29,9 +29,9 @@ abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
     /**
      * @phpstan-param CalculationItemType[] $entities
      */
-    public function __construct(AbstractController $controller, array $entities, string $title)
+    public function __construct(DocumentHelperInterface $helper, array $entities, string $title)
     {
-        parent::__construct($controller, $entities);
+        parent::__construct($helper, $entities);
         $this->setTitle($title);
     }
 

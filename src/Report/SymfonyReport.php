@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Events\PdfCellTextEvent;
 use App\Pdf\Html\HtmlBootstrapColor;
@@ -42,14 +42,14 @@ class SymfonyReport extends AbstractReport implements PdfDrawCellTextInterface
     private ?PdfStyle $style = null;
 
     public function __construct(
-        AbstractController $controller,
+        DocumentHelperInterface $helper,
         private readonly BundleInfoService $bundleService,
         private readonly KernelInfoService $kernelService,
         private readonly RouteInfoService $routeService,
         private readonly PackageInfoService $packageService,
         private readonly SymfonyInfoService $symfonyService
     ) {
-        parent::__construct($controller);
+        parent::__construct($helper);
         $this->setTranslatedTitle('about.symfony.title');
     }
 

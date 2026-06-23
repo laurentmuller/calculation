@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Model\FontAwesomeImage;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfFontAwesomeCell;
@@ -33,9 +33,9 @@ class FontAwesomeReport extends AbstractReport
 
     private const int COLUMNS = 3;
 
-    public function __construct(AbstractController $controller, private readonly FontAwesomeImageService $service)
+    public function __construct(DocumentHelperInterface $helper, private readonly FontAwesomeImageService $service)
     {
-        parent::__construct($controller);
+        parent::__construct($helper);
         $this->properties->setTitle('Font Awesome Icons');
     }
 

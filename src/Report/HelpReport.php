@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
@@ -45,12 +45,12 @@ class HelpReport extends AbstractReport
      * @phpstan-param HelpEntityType|null $entity
      */
     public function __construct(
-        AbstractController $controller,
+        DocumentHelperInterface $helper,
         private readonly HelpService $service,
         private readonly ?array $dialog = null,
         private readonly ?array $entity = null
     ) {
-        parent::__construct($controller);
+        parent::__construct($helper);
         $this->properties->setTitle($this->buildTitle(), true);
         $this->defaultStyle = PdfStyle::default();
         $this->headerStyle = PdfStyle::getHeaderStyle();

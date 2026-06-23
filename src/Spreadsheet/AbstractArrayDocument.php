@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 
 /**
  * Abstract Spreadsheet document to render an array of objects.
@@ -23,12 +23,11 @@ use App\Controller\AbstractController;
 abstract class AbstractArrayDocument extends AbstractDocument
 {
     /**
-     * @param AbstractController $controller the parent controller
-     * @param T[]                $entities   the entities to render
+     * @param T[] $entities the entities to render
      */
-    public function __construct(AbstractController $controller, protected array $entities)
+    public function __construct(DocumentHelperInterface $helper, protected array $entities)
     {
-        parent::__construct($controller);
+        parent::__construct($helper);
     }
 
     #[\Override]

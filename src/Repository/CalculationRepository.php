@@ -755,7 +755,7 @@ class CalculationRepository extends AbstractRepository
         } else {
             $builder->orderBy('s.editable', self::SORT_DESC)
                 ->addOrderBy('s.code', self::SORT_ASC)
-                ->addOrderBy('e.id', self::SORT_ASC);
+                ->addOrderBy('e.id', self::SORT_DESC);
         }
 
         return $builder;

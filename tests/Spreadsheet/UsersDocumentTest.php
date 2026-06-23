@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Spreadsheet;
 
-use App\Controller\AbstractController;
 use App\Entity\User;
+use App\Interfaces\DocumentHelperInterface;
 use App\Service\RoleService;
 use App\Spreadsheet\UsersDocument;
 use PHPUnit\Framework\TestCase;
@@ -25,7 +25,7 @@ final class UsersDocumentTest extends TestCase
     public function testRender(): void
     {
         $document = new UsersDocument(
-            self::createStub(AbstractController::class),
+            self::createStub(DocumentHelperInterface::class),
             $this->createUsers(),
             self::createStub(RoleService::class),
             self::createStub(StorageInterface::class)

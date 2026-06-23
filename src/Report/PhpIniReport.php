@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTable;
@@ -31,9 +31,9 @@ class PhpIniReport extends AbstractReport
 {
     use ClosureSortTrait;
 
-    public function __construct(AbstractController $controller, private readonly PhpInfoService $service)
+    public function __construct(DocumentHelperInterface $helper, private readonly PhpInfoService $service)
     {
-        parent::__construct($controller);
+        parent::__construct($helper);
         $this->setTranslatedTitle('about.php.title');
         $file = \php_ini_loaded_file();
         if (\is_string($file)) {

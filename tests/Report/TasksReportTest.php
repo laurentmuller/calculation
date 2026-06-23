@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Report;
 
-use App\Controller\AbstractController;
 use App\Entity\Category;
 use App\Entity\Group;
 use App\Entity\Task;
 use App\Entity\TaskItem;
 use App\Entity\TaskItemMargin;
+use App\Interfaces\DocumentHelperInterface;
 use App\Report\TasksReport;
 use PHPUnit\Framework\TestCase;
 
@@ -26,7 +26,7 @@ final class TasksReportTest extends TestCase
 {
     public function testRender(): void
     {
-        $controller = self::createStub(AbstractController::class);
+        $helper = self::createStub(DocumentHelperInterface::class);
 
         $group = new Group();
         $group->setCode('Group');
@@ -67,7 +67,7 @@ final class TasksReportTest extends TestCase
         $task3->setName('Task3');
         $category->addTask($task3);
 
-        $report = new TasksReport($controller, [$task1, $task2, $task3]);
+        $report = new TasksReport($helper, [$task1, $task2, $task3]);
         $actual = $report->render();
         self::assertTrue($actual);
     }

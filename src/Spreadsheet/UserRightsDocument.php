@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use App\Controller\AbstractController;
 use App\Entity\User;
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
+use App\Interfaces\DocumentHelperInterface;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Parameter\ApplicationParameters;
@@ -35,17 +35,16 @@ class UserRightsDocument extends AbstractArrayDocument
 {
     use ArrayTrait;
 
-    private readonly ApplicationParameters $parameters;
     private readonly bool $superAdmin;
 
     public function __construct(
-        AbstractController $controller,
+        DocumentHelperInterface $helper,
         array $entities,
+        private readonly ApplicationParameters $parameters,
         private readonly RoleService $roleService,
         private readonly RoleBuilderService $roleBuilderService
     ) {
-        parent::__construct($controller, $entities);
-        $this->parameters = $controller->getApplicationParameters();
+        parent::__construct($helper, $entities);
         $this->superAdmin = $this->anyMatch($entities, static fn (User $user): bool => $user->isSuperAdmin());
     }
 

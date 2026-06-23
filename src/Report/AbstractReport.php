@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Pdf\Traits\PdfCleanTextTrait;
@@ -47,28 +47,25 @@ abstract class AbstractReport extends PdfDocument
 
     /**
      * Create a new instance.
-     *
-     * @param AbstractController $controller  the controller to get services from
-     * @param PdfOrientation     $orientation the page orientation
      */
     public function __construct(
-        AbstractController $controller,
+        DocumentHelperInterface $helper,
         PdfOrientation $orientation = PdfOrientation::PORTRAIT
     ) {
         parent::__construct($orientation);
+
         $this->setAutoPageBreak(true, $this->getBottomMargin() - self::LINE_HEIGHT)
             ->setLayout(PdfLayout::SINGLE_PAGE)
             ->setZoom(PdfZoom::FULL_PAGE);
 
-        $this->translator = $controller->getTranslator();
-
+        $this->translator = $helper->getTranslator();
         $this->header = ReportHeader::instance($this)
-            ->setCustomer($controller->getCustomer());
+            ->setCustomer($helper->getCustomer());
         $this->footer = ReportFooter::instance($this)
             ->setContent(ApplicationService::APP_FULL_NAME, ApplicationService::OWNER_URL);
-
         $this->properties->setCreator(ApplicationService::APP_FULL_NAME);
-        $user = $controller->getUserIdentifier();
+
+        $user = $helper->getUserIdentifier();
         if (null !== $user) {
             $this->properties->setAuthor($user);
         }

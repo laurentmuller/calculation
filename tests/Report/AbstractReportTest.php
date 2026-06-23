@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Report;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfTable;
 use App\Report\AbstractReport;
@@ -39,10 +39,10 @@ final class AbstractReportTest extends TestCase
 
     public function testRenderCount(): void
     {
-        $controller = $this->createMock(AbstractController::class);
-        $controller->method('getUserIdentifier')
+        $helper = $this->createMock(DocumentHelperInterface::class);
+        $helper->method('getUserIdentifier')
             ->willReturn('user');
-        $report = $this->createReport($controller);
+        $report = $this->createReport($helper);
 
         $report->addPage();
         $table = new PdfTable($report);
@@ -61,11 +61,11 @@ final class AbstractReportTest extends TestCase
         self::assertTrue($actual);
     }
 
-    private function createReport(?AbstractController $controller = null): AbstractReport
+    private function createReport(?DocumentHelperInterface $helper = null): AbstractReport
     {
-        $controller ??= $this->createMock(AbstractController::class);
+        $helper ??= $this->createMock(DocumentHelperInterface::class);
 
-        return new class($controller) extends AbstractReport {
+        return new class($helper) extends AbstractReport {
             #[\Override]
             public function render(): bool
             {

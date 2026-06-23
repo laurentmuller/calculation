@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Spreadsheet;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Spreadsheet\SpreadsheetDocument;
 use App\Spreadsheet\WorksheetDocument;
 use App\Tests\TranslatorMockTrait;
@@ -63,9 +63,9 @@ final class SpreadsheetDocumentTest extends TestCase
 
     public function testCreateSheetAndTitle(): void
     {
-        $controller = self::createStub(AbstractController::class);
+        $helper = self::createStub(DocumentHelperInterface::class);
         $doc = $this->createDocument();
-        $actual = $doc->createSheetAndTitle($controller, 'My Title');
+        $actual = $doc->createSheetAndTitle($helper, 'My Title');
         self::assertSame('My Title', $actual->getTitle());
         self::assertSame($actual, $doc->getActiveSheet());
     }
@@ -88,13 +88,13 @@ final class SpreadsheetDocumentTest extends TestCase
     {
         $expected = 'Active Title';
         $doc = new class($this->createMockTranslator()) extends SpreadsheetDocument {
-            public function runInitialize(AbstractController $controller, string $title, bool $landscape = false): void
+            public function runInitialize(DocumentHelperInterface $helper, string $title, bool $landscape = false): void
             {
-                parent::initialize($controller, $title, $landscape);
+                parent::initialize($helper, $title, $landscape);
             }
         };
-        $controller = self::createStub(AbstractController::class);
-        $doc->runInitialize($controller, $expected, true);
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $doc->runInitialize($helper, $expected, true);
         self::assertSame($expected, $doc->getTitle());
     }
 
@@ -123,7 +123,7 @@ final class SpreadsheetDocumentTest extends TestCase
     public function testSetActiveTitle(): void
     {
         $expected = 'Active Title';
-        $controller = self::createStub(AbstractController::class);
+        $controller = self::createStub(DocumentHelperInterface::class);
         $doc = $this->createDocument();
         $doc->setActiveTitle($expected, $controller);
         $actual = $doc->getActiveSheet()->getTitle();

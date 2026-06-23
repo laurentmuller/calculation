@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\AbstractController;
 use App\Entity\User;
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
+use App\Interfaces\DocumentHelperInterface;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Parameter\ApplicationParameters;
@@ -47,20 +47,19 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     private ?PdfStyle $bulletStyle = null;
     private ?PdfStyle $entityStyle = null;
     private ?PdfStyle $italicStyle = null;
-    private readonly ApplicationParameters $parameters;
     private readonly bool $superAdmin;
 
     public function __construct(
-        AbstractController $controller,
+        DocumentHelperInterface $helper,
         array $entities,
+        private readonly ApplicationParameters $parameters,
         private readonly RoleService $roleService,
         private readonly RoleBuilderService $roleBuilderService,
         private readonly FontAwesomeService $fontAwesomeService
     ) {
-        parent::__construct($controller, $entities);
+        parent::__construct($helper, $entities);
         $this->setTranslatedTitle(id: 'user.rights.title', isUTF8: true)
             ->setTranslatedDescription('user.rights.description');
-        $this->parameters = $controller->getApplicationParameters();
         $this->superAdmin = $this->anyMatch($entities, static fn (User $user): bool => $user->isSuperAdmin());
     }
 

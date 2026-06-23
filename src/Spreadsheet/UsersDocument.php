@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use App\Controller\AbstractController;
 use App\Entity\User;
+use App\Interfaces\DocumentHelperInterface;
 use App\Service\RoleService;
 use App\Traits\ImageSizeTrait;
 use App\Utils\FormatUtils;
@@ -37,12 +37,12 @@ class UsersDocument extends AbstractArrayDocument
      * @param User[] $entities
      */
     public function __construct(
-        AbstractController $controller,
+        DocumentHelperInterface $helper,
         array $entities,
         private readonly RoleService $roleService,
         private readonly StorageInterface $storage
     ) {
-        parent::__construct($controller, $entities);
+        parent::__construct($helper, $entities);
     }
 
     /**

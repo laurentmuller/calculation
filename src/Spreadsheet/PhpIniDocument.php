@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Service\PhpInfoService;
 use App\Traits\ClosureSortTrait;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -31,9 +31,9 @@ class PhpIniDocument extends AbstractDocument
 {
     use ClosureSortTrait;
 
-    public function __construct(AbstractController $controller, private readonly PhpInfoService $service)
+    public function __construct(DocumentHelperInterface $helper, private readonly PhpInfoService $service)
     {
-        parent::__construct($controller);
+        parent::__construct($helper);
     }
 
     #[\Override]
@@ -41,7 +41,7 @@ class PhpIniDocument extends AbstractDocument
     {
         $content = $this->service->asArray();
         $this->start($this->trans('about.php.title'));
-        $this->setActiveTitle('Configuration', $this->controller);
+        $this->setActiveTitle('Configuration', $this->helper);
         $sheet = $this->getActiveSheet();
 
         if ([] === $content) {

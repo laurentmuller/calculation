@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Pdf\Html\HtmlParentChunk;
 use App\Pdf\Html\HtmlParser;
 use fpdf\PdfMargins;
@@ -25,9 +25,9 @@ class HtmlReport extends AbstractReport
 {
     private readonly PdfMargins $defaultMargins;
 
-    public function __construct(AbstractController $controller, private readonly string $html)
+    public function __construct(DocumentHelperInterface $helper, private readonly string $html)
     {
-        parent::__construct($controller);
+        parent::__construct($helper);
         $this->defaultMargins = $this->getMargins();
     }
 

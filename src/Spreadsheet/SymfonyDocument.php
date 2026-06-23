@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Pdf\Html\HtmlBootstrapColor;
 use App\Pdf\Html\HtmlGrayedColor;
 use App\Service\BundleInfoService;
@@ -36,21 +36,21 @@ use Symfony\Component\HttpFoundation\Request;
 class SymfonyDocument extends AbstractDocument
 {
     public function __construct(
-        AbstractController $controller,
+        DocumentHelperInterface $helper,
         private readonly BundleInfoService $bundleService,
         private readonly KernelInfoService $kernelService,
         private readonly RouteInfoService $routeService,
         private readonly PackageInfoService $packageService,
         private readonly SymfonyInfoService $symfonyService
     ) {
-        parent::__construct($controller);
+        parent::__construct($helper);
     }
 
     #[\Override]
     public function render(): bool
     {
         $this->start($this->trans('about.symfony.title'));
-        $this->setActiveTitle('Configuration', $this->controller);
+        $this->setActiveTitle('Configuration', $this->helper);
         $this->outputInfo();
         $this->outputBundles();
         $this->outputPackages('Packages', $this->packageService->getRuntimePackages());
@@ -93,7 +93,7 @@ class SymfonyDocument extends AbstractDocument
         if ([] === $bundles) {
             return;
         }
-        $sheet = $this->createSheetAndTitle($this->controller, 'Bundles');
+        $sheet = $this->createSheetAndTitle($this->helper, 'Bundles');
         $row = $sheet->setHeaders([
             'Name' => HeaderFormat::instance(),
             'Path' => HeaderFormat::instance(),
@@ -137,7 +137,7 @@ class SymfonyDocument extends AbstractDocument
     {
         $symfony = $this->symfonyService;
         $kernel = $this->kernelService;
-        $this->setActiveTitle('Symfony', $this->controller);
+        $this->setActiveTitle('Symfony', $this->helper);
         $sheet = $this->getActiveSheet();
         $row = $sheet->setHeaders([
             'Name' => HeaderFormat::instance(),
@@ -188,7 +188,7 @@ class SymfonyDocument extends AbstractDocument
         if ([] === $packages) {
             return;
         }
-        $sheet = $this->createSheetAndTitle($this->controller, $title);
+        $sheet = $this->createSheetAndTitle($this->helper, $title);
         $row = $sheet->setHeaders([
             'Name' => HeaderFormat::instance(),
             'Version' => HeaderFormat::instance(),
@@ -222,7 +222,7 @@ class SymfonyDocument extends AbstractDocument
         if ([] === $routes) {
             return;
         }
-        $sheet = $this->createSheetAndTitle($this->controller, $title);
+        $sheet = $this->createSheetAndTitle($this->helper, $title);
         $row = $sheet->setHeaders([
             'Name' => HeaderFormat::instance(),
             'Path' => HeaderFormat::instance(),

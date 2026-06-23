@@ -119,7 +119,10 @@ class LogController extends AbstractController
             return $this->getEmptyResponse();
         }
 
-        return $this->renderSpreadsheetDocument(new LogsDocument($this, $logFile));
+        $relativePath = $this->getRelativePath($logFile->getFile());
+        $doc = new LogsDocument($this, $logFile, $relativePath);
+
+        return $this->renderSpreadsheetDocument($doc);
     }
 
     /**
@@ -146,7 +149,10 @@ class LogController extends AbstractController
             return $this->getEmptyResponse();
         }
 
-        return $this->renderPdfDocument(new LogsReport($this, $logFile, $service));
+        $relativePath = $this->getRelativePath($logFile->getFile());
+        $doc = new LogsReport($this, $logFile, $relativePath, $service);
+
+        return $this->renderPdfDocument($doc);
     }
 
     /**

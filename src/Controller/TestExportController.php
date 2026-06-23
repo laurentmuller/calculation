@@ -114,7 +114,7 @@ class TestExportController extends AbstractController
         FontAwesomeService $service
     ): PdfResponse {
         $report = new MemoryImageReport(
-            controller: $this,
+            helper: $this,
             logoFile: $logoFile,
             iconFile: $iconFile,
             transparencyFile: $iconFile,

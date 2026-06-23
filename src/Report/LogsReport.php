@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\AbstractController;
 use App\Entity\Log;
+use App\Interfaces\DocumentHelperInterface;
 use App\Model\LogChannel;
 use App\Model\LogFile;
 use App\Model\LogLevel;
@@ -53,14 +53,14 @@ class LogsReport extends AbstractReport
     private array $colors = [];
 
     public function __construct(
-        AbstractController $controller,
+        DocumentHelperInterface $helper,
         private readonly LogFile $logFile,
+        string $relativePath,
         private readonly FontAwesomeService $service
     ) {
-        parent::__construct($controller, PdfOrientation::LANDSCAPE);
-        $file = $controller->getRelativePath($this->logFile->getFile());
+        parent::__construct($helper, PdfOrientation::LANDSCAPE);
         $this->setTranslatedTitle('log.title')
-            ->setTranslatedDescription('log.list.file', ['%file%' => $file]);
+            ->setTranslatedDescription('log.list.file', ['%file%' => $relativePath]);
     }
 
     #[\Override]

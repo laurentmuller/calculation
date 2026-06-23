@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Spreadsheet;
 
-use App\Controller\AbstractController;
 use App\Entity\Customer;
+use App\Interfaces\DocumentHelperInterface;
 use App\Spreadsheet\CustomersDocument;
 use PHPUnit\Framework\TestCase;
 
@@ -37,8 +37,8 @@ final class CustomersDocumentTest extends TestCase
             ->setLastName('')
             ->setEmail('email@email.com');
 
-        $controller = self::createStub(AbstractController::class);
-        $document = new CustomersDocument($controller, [$customer1, $customer2, $customer3]);
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $document = new CustomersDocument($helper, [$customer1, $customer2, $customer3]);
         $actual = $document->render();
         self::assertTrue($actual);
     }

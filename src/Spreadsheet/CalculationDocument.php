@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use App\Controller\AbstractController;
 use App\Entity\Calculation;
+use App\Interfaces\DocumentHelperInterface;
 use App\Traits\CalculationDocumentMarginTrait;
 use App\Traits\MathTrait;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -39,13 +39,12 @@ class CalculationDocument extends AbstractDocument
     private readonly float $minMargin;
 
     /**
-     * @param AbstractController $controller  the parent controller
-     * @param Calculation        $calculation the calculation to render
+     * @param Calculation $calculation the calculation to render
      */
-    public function __construct(AbstractController $controller, private readonly Calculation $calculation)
+    public function __construct(DocumentHelperInterface $helper, private readonly Calculation $calculation)
     {
-        parent::__construct($controller);
-        $this->minMargin = $controller->getMinMargin();
+        parent::__construct($helper);
+        $this->minMargin = $helper->getMinMargin();
     }
 
     #[\Override]

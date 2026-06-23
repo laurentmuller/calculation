@@ -13,16 +13,15 @@ declare(strict_types=1);
 
 namespace App\Tests\Report;
 
-use App\Controller\AbstractController;
 use App\Entity\Customer;
+use App\Interfaces\DocumentHelperInterface;
 use App\Report\CustomersReport;
 use PHPUnit\Framework\TestCase;
 
 final class CustomersReportTest extends TestCase
 {
-    public function testRenderGrouped(): void
+    public function testRender(): void
     {
-        $controller = self::createStub(AbstractController::class);
         $customer1 = new Customer();
         $customer1->setFirstName('First Name')
             ->setLastName('A Last Name')
@@ -38,20 +37,8 @@ final class CustomersReportTest extends TestCase
             ->setLastName('')
             ->setEmail('email@email.com');
 
-        $report = new CustomersReport($controller, [$customer1, $customer2, $customer3]);
-        $actual = $report->render();
-        self::assertTrue($actual);
-    }
-
-    public function testRenderNotGrouped(): void
-    {
-        $controller = self::createStub(AbstractController::class);
-        $customer = new Customer();
-        $customer->setFirstName('First Name')
-            ->setLastName('Last Name')
-            ->setEmail('email@email.com');
-
-        $report = new CustomersReport($controller, [$customer], false);
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $report = new CustomersReport($helper, [$customer1, $customer2, $customer3]);
         $actual = $report->render();
         self::assertTrue($actual);
     }

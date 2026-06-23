@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Report;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Report\AbstractArrayReport;
 use PHPUnit\Framework\TestCase;
 
@@ -35,9 +35,9 @@ final class AbstractArrayReportTest extends TestCase
      */
     private function createReport(array $entities = []): AbstractArrayReport
     {
-        $controller = $this->createMock(AbstractController::class);
+        $helper = self::createStub(DocumentHelperInterface::class);
 
-        return new class($controller, $entities) extends AbstractArrayReport {
+        return new class($helper, $entities) extends AbstractArrayReport {
             #[\Override]
             protected function doRender(array $entities): bool
             {

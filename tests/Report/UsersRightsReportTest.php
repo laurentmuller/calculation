@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Report;
 
-use App\Controller\AbstractController;
 use App\Entity\User;
+use App\Interfaces\DocumentHelperInterface;
 use App\Interfaces\RoleInterface;
 use App\Parameter\ApplicationParameters;
 use App\Parameter\RightsParameter;
@@ -32,10 +32,6 @@ final class UsersRightsReportTest extends TestCase
         $parameters->method('getRights')
             ->willReturn(new RightsParameter());
 
-        $controller = $this->createMock(AbstractController::class);
-        $controller->method('getApplicationParameters')
-            ->willReturn($parameters);
-
         $users = [];
         foreach (\range(1, 5) as $index) {
             $users[] = (new User())
@@ -44,8 +40,9 @@ final class UsersRightsReportTest extends TestCase
         }
 
         $report = new UsersRightsReport(
-            $controller,
+            self::createStub(DocumentHelperInterface::class),
             $users,
+            $parameters,
             self::createStub(RoleService::class),
             new RoleBuilderService(),
             self::createStub(FontAwesomeService::class)
@@ -57,8 +54,9 @@ final class UsersRightsReportTest extends TestCase
     public function testRenderEmpty(): void
     {
         $report = new UsersRightsReport(
-            self::createStub(AbstractController::class),
+            self::createStub(DocumentHelperInterface::class),
             [],
+            self::createStub(ApplicationParameters::class),
             self::createStub(RoleService::class),
             self::createStub(RoleBuilderService::class),
             self::createStub(FontAwesomeService::class)

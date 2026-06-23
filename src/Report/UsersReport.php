@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\AbstractController;
 use App\Entity\User;
+use App\Interfaces\DocumentHelperInterface;
 use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfCell;
@@ -46,13 +46,13 @@ class UsersReport extends AbstractArrayReport
      * @param User[] $entities
      */
     public function __construct(
-        AbstractController $controller,
+        DocumentHelperInterface $helper,
         array $entities,
         private readonly StorageInterface $storage,
         private readonly RoleService $roleService,
         private readonly FontAwesomeService $fontService,
     ) {
-        parent::__construct($controller, $entities);
+        parent::__construct($helper, $entities);
         $this->setTranslatedTitle('user.list.title');
     }
 

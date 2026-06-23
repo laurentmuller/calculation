@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Model\LogFile;
 use App\Pdf\Html\HtmlBootstrapColor;
 use App\Utils\StringUtils;
@@ -33,11 +33,13 @@ class LogsDocument extends AbstractDocument
      */
     private array $colors = [];
 
-    public function __construct(AbstractController $controller, private readonly LogFile $logFile)
-    {
-        parent::__construct($controller);
-        $file = $controller->getRelativePath($this->logFile->getFile());
-        $this->setTranslatedDescription('log.list.file', ['%file%' => $file]);
+    public function __construct(
+        DocumentHelperInterface $helper,
+        private readonly LogFile $logFile,
+        string $relativePath,
+    ) {
+        parent::__construct($helper);
+        $this->setTranslatedDescription('log.list.file', ['%file%' => $relativePath]);
     }
 
     #[\Override]

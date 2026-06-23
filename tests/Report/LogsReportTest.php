@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Report;
 
-use App\Controller\AbstractController;
 use App\Entity\Log;
+use App\Interfaces\DocumentHelperInterface;
 use App\Model\FontAwesomeImage;
 use App\Model\ImageSize;
 use App\Model\LogChannel;
@@ -34,8 +34,9 @@ final class LogsReportTest extends TestCase
         $logFile->method('isEmpty')
             ->willReturn(true);
         $report = new LogsReport(
-            self::createStub(AbstractController::class),
+            self::createStub(DocumentHelperInterface::class),
             $logFile,
+            __DIR__,
             self::createStub(FontAwesomeService::class)
         );
         $actual = $report->render();
@@ -76,8 +77,9 @@ final class LogsReportTest extends TestCase
             ->willReturn($image);
 
         $report = new LogsReport(
-            self::createStub(AbstractController::class),
+            self::createStub(DocumentHelperInterface::class),
             $logFile,
+            __DIR__,
             $service
         );
         $actual = $report->render();

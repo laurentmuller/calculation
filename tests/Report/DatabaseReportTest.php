@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Report;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Report\DatabaseReport;
 use App\Service\DatabaseInfoService;
 use PHPUnit\Framework\TestCase;
@@ -61,8 +61,8 @@ final class DatabaseReportTest extends TestCase
 
     private function createDocument(array $database, array $configuration): DatabaseReport
     {
-        $controller = $this->createMock(AbstractController::class);
-        $service = $this->createMock(DatabaseInfoService::class);
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $service = self::createMock(DatabaseInfoService::class);
         $service->method('getDatabase')
             ->willReturn($database);
         $service->method('getConfiguration')
@@ -72,6 +72,6 @@ final class DatabaseReportTest extends TestCase
         $service->method('isDisabledValue')
             ->willReturnCallback(static fn (string $value): bool => 'off' === $value);
 
-        return new DatabaseReport($controller, $service);
+        return new DatabaseReport($helper, $service);
     }
 }

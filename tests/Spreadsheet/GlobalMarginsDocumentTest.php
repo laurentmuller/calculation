@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Spreadsheet;
 
-use App\Controller\AbstractController;
 use App\Entity\GlobalMargin;
+use App\Interfaces\DocumentHelperInterface;
 use App\Spreadsheet\GlobalMarginsDocument;
 use PHPUnit\Framework\TestCase;
 
@@ -26,16 +26,16 @@ final class GlobalMarginsDocumentTest extends TestCase
         $margins->setMaximum(100.0)
             ->setMargin(1.1);
 
-        $controller = self::createStub(AbstractController::class);
-        $document = new GlobalMarginsDocument($controller, [$margins]);
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $document = new GlobalMarginsDocument($helper, [$margins]);
         $actual = $document->render();
         self::assertTrue($actual);
     }
 
     public function testRenderEmpty(): void
     {
-        $controller = self::createStub(AbstractController::class);
-        $document = new GlobalMarginsDocument($controller, []);
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $document = new GlobalMarginsDocument($helper, []);
         $actual = $document->render();
         self::assertFalse($actual);
     }

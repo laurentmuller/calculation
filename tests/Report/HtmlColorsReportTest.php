@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Report;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Report\HtmlColorsReport;
 use PHPUnit\Framework\TestCase;
 
@@ -21,8 +21,8 @@ final class HtmlColorsReportTest extends TestCase
 {
     public function testReport(): void
     {
-        $controller = self::createStub(AbstractController::class);
-        $report = new HtmlColorsReport($controller);
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $report = new HtmlColorsReport($helper);
         $actual = $report->render();
         self::assertTrue($actual);
     }

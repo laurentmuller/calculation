@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Spreadsheet;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Spreadsheet\CalculationsDocument;
 use App\Utils\DateUtils;
 use PHPUnit\Framework\TestCase;
@@ -22,7 +22,7 @@ final class CalculationsDocumentTest extends TestCase
 {
     public function testRender(): void
     {
-        $controller = self::createStub(AbstractController::class);
+        $helper = self::createStub(DocumentHelperInterface::class);
         $calculation = [
             'id' => 1,
             'date' => DateUtils::createDate('2019-01-01'),
@@ -33,7 +33,7 @@ final class CalculationsDocumentTest extends TestCase
             'code' => 'State 1',
             'editable' => true,
         ];
-        $document = new CalculationsDocument($controller, [$calculation]);
+        $document = new CalculationsDocument($helper, [$calculation]);
         $actual = $document->render();
         self::assertTrue($actual);
     }

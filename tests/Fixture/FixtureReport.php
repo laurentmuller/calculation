@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Fixture;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Report\AbstractReport;
 
 /**
@@ -21,9 +21,9 @@ use App\Report\AbstractReport;
  */
 class FixtureReport extends AbstractReport
 {
-    public function __construct(AbstractController $controller, private readonly bool $render = true)
+    public function __construct(DocumentHelperInterface $helper, private readonly bool $render = true)
     {
-        parent::__construct($controller);
+        parent::__construct($helper);
     }
 
     #[\Override]

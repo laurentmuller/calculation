@@ -27,7 +27,6 @@ class ProductsDocument extends AbstractArrayDocument
     protected function doRender(array $entities): bool
     {
         $this->start('product.list.title');
-
         $sheet = $this->getActiveSheet();
         $row = $sheet->setHeaders([
             'product.fields.description' => HeaderFormat::instance(),

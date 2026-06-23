@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Spreadsheet;
 
-use App\Controller\AbstractController;
 use App\Entity\Log;
+use App\Interfaces\DocumentHelperInterface;
 use App\Model\LogChannel;
 use App\Model\LogFile;
 use App\Model\LogLevel;
@@ -27,19 +27,19 @@ final class LogsDocumentTest extends TestCase
 {
     public function testEmpty(): void
     {
-        $controller = self::createStub(AbstractController::class);
+        $helper = self::createStub(DocumentHelperInterface::class);
         $logFile = $this->createMock(LogFile::class);
         $logFile->method('isEmpty')
             ->willReturn(true);
 
-        $report = new LogsDocument($controller, $logFile);
+        $report = new LogsDocument($helper, $logFile, __DIR__);
         $actual = $report->render();
         self::assertTrue($actual);
     }
 
     public function testRender(): void
     {
-        $controller = self::createStub(AbstractController::class);
+        $helper = self::createStub(DocumentHelperInterface::class);
 
         $log1 = Log::instance(1);
         $level1 = new LogLevel($log1->getLevel());
@@ -83,7 +83,7 @@ final class LogsDocumentTest extends TestCase
                 $log2->getChannel() => $channel2,
             ]);
 
-        $report = new LogsDocument($controller, $logFile);
+        $report = new LogsDocument($helper, $logFile, __DIR__);
         $actual = $report->render();
         self::assertTrue($actual);
     }

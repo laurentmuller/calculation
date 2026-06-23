@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Spreadsheet;
 
-use App\Controller\AbstractController;
 use App\Entity\Group;
 use App\Entity\GroupMargin;
+use App\Interfaces\DocumentHelperInterface;
 use App\Spreadsheet\GroupsDocument;
 use PHPUnit\Framework\TestCase;
 
@@ -28,8 +28,8 @@ final class GroupsDocumentTest extends TestCase
         $group->addMargin(new GroupMargin())
             ->addMargin(new GroupMargin());
 
-        $controller = self::createStub(AbstractController::class);
-        $document = new GroupsDocument($controller, [$group]);
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $document = new GroupsDocument($helper, [$group]);
         $actual = $document->render();
         self::assertTrue($actual);
     }
@@ -39,8 +39,8 @@ final class GroupsDocumentTest extends TestCase
         $group = new Group();
         $group->setCode('Group');
 
-        $controller = self::createStub(AbstractController::class);
-        $document = new GroupsDocument($controller, [$group]);
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $document = new GroupsDocument($helper, [$group]);
         $actual = $document->render();
         self::assertTrue($actual);
     }

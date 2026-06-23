@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Model\ChartDataItem;
 use App\Model\StateChartData;
 use App\Model\StateChartDataItem;
@@ -52,13 +52,13 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
     private ChartDataItem $total;
 
     public function __construct(
-        AbstractController $controller,
+        DocumentHelperInterface $helper,
         StateChartData $stateChartData,
         private readonly UrlGeneratorInterface $generator
     ) {
-        parent::__construct($controller, $stateChartData->items);
+        parent::__construct($helper, $stateChartData->items);
         $this->setTranslatedTitle('chart.state.title');
-        $this->minMargin = $controller->getMinMargin();
+        $this->minMargin = $helper->getMinMargin();
         $this->total = $stateChartData->total;
     }
 

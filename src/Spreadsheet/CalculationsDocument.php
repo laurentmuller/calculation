@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Repository\CalculationRepository;
 use App\Traits\CalculationDocumentMarginTrait;
 use App\Traits\MathTrait;
@@ -31,15 +31,14 @@ class CalculationsDocument extends AbstractDocument
     private readonly float $minMargin;
 
     /**
-     * @param AbstractController $controller the parent controller
-     * @param iterable<array>    $entities   the calculations to render
+     * @param iterable<array> $entities the calculations to render
      *
      * @phpstan-param iterable<ExportType> $entities
      */
-    public function __construct(AbstractController $controller, private readonly iterable $entities)
+    public function __construct(DocumentHelperInterface $helper, private readonly iterable $entities)
     {
-        parent::__construct($controller);
-        $this->minMargin = $controller->getMinMargin();
+        parent::__construct($helper);
+        $this->minMargin = $helper->getMinMargin();
     }
 
     #[\Override]

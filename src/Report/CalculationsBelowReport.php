@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfStyle;
 use App\Report\Table\ReportTable;
@@ -42,15 +42,14 @@ class CalculationsBelowReport extends AbstractReport
     private float $overall = 0.0;
 
     /**
-     * @param AbstractController $controller the parent controller
-     * @param iterable<array>    $entities   the iterable calculations to render
+     * @param iterable<array> $entities the iterable calculations to render
      *
      * @phpstan-param iterable<ExportType> $entities
      */
-    public function __construct(AbstractController $controller, private readonly iterable $entities)
+    public function __construct(DocumentHelperInterface $helper, private readonly iterable $entities)
     {
-        parent::__construct(controller: $controller, orientation: PdfOrientation::LANDSCAPE);
-        $margin = FormatUtils::formatPercent($controller->getMinMargin());
+        parent::__construct(helper: $helper, orientation: PdfOrientation::LANDSCAPE);
+        $margin = FormatUtils::formatPercent($helper->getMinMargin());
         $this->setTranslatedTitle('below.title')
             ->setTranslatedDescription('below.description', ['%margin%' => $margin]);
     }

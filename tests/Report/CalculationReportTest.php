@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Report;
 
-use App\Controller\AbstractController;
 use App\Entity\Calculation;
 use App\Entity\CalculationCategory;
 use App\Entity\CalculationGroup;
 use App\Entity\CalculationItem;
+use App\Interfaces\DocumentHelperInterface;
 use App\Report\CalculationReport;
 use Endroid\QrCode\Exception\ValidationException;
 use PHPUnit\Framework\TestCase;
@@ -36,8 +36,8 @@ final class CalculationReportTest extends TestCase
             ->setGlobalMargin(1.0)
             ->setItemsTotal(1000.0)
             ->setUserMargin(0.1);
-        $controller = self::createStub(AbstractController::class);
-        $report = new CalculationReport($controller, $calculation, 1.1, '');
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $report = new CalculationReport($helper, $calculation, 1.1, '');
         $actual = $report->render();
         self::assertTrue($actual);
     }
@@ -59,8 +59,8 @@ final class CalculationReportTest extends TestCase
         $group->setCode('Group');
         $calculation->addGroup($group);
 
-        $controller = self::createStub(AbstractController::class);
-        $report = new CalculationReport($controller, $calculation, 1.1, 'qrcode');
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $report = new CalculationReport($helper, $calculation, 1.1, 'qrcode');
         $actual = $report->render();
         self::assertTrue($actual);
     }
@@ -92,8 +92,8 @@ final class CalculationReportTest extends TestCase
         $group->addCategory($category);
         $calculation->addGroup($group);
 
-        $controller = self::createStub(AbstractController::class);
-        $report = new CalculationReport($controller, $calculation, 2.0, 'qrcode');
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $report = new CalculationReport($helper, $calculation, 2.0, 'qrcode');
         $actual = $report->render();
         self::assertTrue($actual);
     }
@@ -125,8 +125,8 @@ final class CalculationReportTest extends TestCase
         $group->addCategory($category);
         $calculation->addGroup($group);
 
-        $controller = self::createStub(AbstractController::class);
-        $report = new CalculationReport($controller, $calculation, 2.0, '');
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $report = new CalculationReport($helper, $calculation, 2.0, '');
         $actual = $report->render();
         self::assertTrue($actual);
     }

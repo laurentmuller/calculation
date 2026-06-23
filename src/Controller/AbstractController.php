@@ -16,6 +16,7 @@ namespace App\Controller;
 use App\Enums\EntityPermission;
 use App\Enums\FlashType;
 use App\Form\FormHelper;
+use App\Interfaces\DocumentHelperInterface;
 use App\Model\CustomerInformation;
 use App\Model\TranslatableFlashMessage;
 use App\Parameter\ApplicationParameters;
@@ -50,7 +51,7 @@ use Twig\Attribute\AsTwigFilter;
 /**
  * Provides common features needed in controllers.
  */
-abstract class AbstractController extends BaseController
+abstract class AbstractController extends BaseController implements DocumentHelperInterface
 {
     use JsonResponseTrait;
     use RequestTrait;
@@ -76,20 +77,14 @@ abstract class AbstractController extends BaseController
         return $this->getUserParameters()->getApplication();
     }
 
-    /**
-     * Gets the customer information.
-     *
-     * This is a shortcut to get customer information from the user parameters.
-     */
+    #[\Override]
     public function getCustomer(): CustomerInformation
     {
         return $this->getUserParameters()
             ->getCustomerInformation();
     }
 
-    /**
-     * Gets the minimum margin, in percent, for a calculation.
-     */
+    #[\Override]
     public function getMinMargin(): float
     {
         return $this->getApplicationParameters()->getMinMargin();
@@ -144,13 +139,7 @@ abstract class AbstractController extends BaseController
         ];
     }
 
-    /**
-     * Gets the translator.
-     *
-     * @throws \LogicException if the service cannot be found
-     *
-     * @phpstan-ignore method.missingOverride
-     */
+    #[\Override]
     public function getTranslator(): TranslatorInterface
     {
         $id = TranslatorInterface::class;
@@ -178,11 +167,7 @@ abstract class AbstractController extends BaseController
         }
     }
 
-    /**
-     * Gets the connected user identifier.
-     *
-     * @return string|null the user identifier or null if not connected
-     */
+    #[\Override]
     public function getUserIdentifier(): ?string
     {
         return $this->getUser()?->getUserIdentifier();
@@ -220,7 +205,7 @@ abstract class AbstractController extends BaseController
             return $this->getUrlGenerator()->redirect($request);
         }
 
-        return $this->redirectToRoute(self::HOME_PAGE);
+        return $this->redirectToRoute(static::HOME_PAGE);
     }
 
     /**

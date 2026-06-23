@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Chart\MonthChart;
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Model\MonthChartData;
 use App\Model\MonthChartDataItem;
 use App\Pdf\Colors\PdfFillColor;
@@ -71,14 +71,14 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
     private float $minMargin;
 
     public function __construct(
-        AbstractController $controller,
+        DocumentHelperInterface $helper,
         private readonly MonthChartData $monthChartData,
         private readonly UrlGeneratorInterface $generator
     ) {
         $orientation = $monthChartData->count() > 12 ? PdfOrientation::LANDSCAPE : PdfOrientation::PORTRAIT;
-        parent::__construct($controller, $monthChartData->items, $orientation);
+        parent::__construct($helper, $monthChartData->items, $orientation);
         $this->setTranslatedTitle('chart.month.title');
-        $this->minMargin = $controller->getMinMargin();
+        $this->minMargin = $helper->getMinMargin();
         $this->colors = new \WeakMap();
     }
 

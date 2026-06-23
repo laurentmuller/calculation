@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Model\FontAwesomeImage;
 use App\Model\LogChannel;
 use App\Model\LogLevel;
@@ -49,14 +49,14 @@ class MemoryImageReport extends AbstractReport
     use PdfTransparencyTrait;
 
     public function __construct(
-        AbstractController $controller,
+        DocumentHelperInterface $helper,
         private readonly ?string $logoFile = null,
         private readonly ?string $iconFile = null,
         private readonly ?string $transparencyFile = null,
         private readonly ?string $screenshotFile = null,
         private readonly ?FontAwesomeService $service = null,
     ) {
-        parent::__construct($controller);
+        parent::__construct($helper);
         $this->properties->setTitle('In memory Images');
     }
 

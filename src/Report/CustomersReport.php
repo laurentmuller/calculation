@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\AbstractController;
 use App\Entity\Customer;
+use App\Interfaces\DocumentHelperInterface;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Utils\StringUtils;
@@ -30,13 +30,11 @@ class CustomersReport extends AbstractArrayReport
     private readonly string $other;
 
     /**
-     * @param AbstractController $controller the parent controller
-     * @param Customer[]         $entities   the customers to export
-     * @param bool               $grouped    true if the customers are grouped by the first letter
+     * @param Customer[] $entities the customers to export
      */
-    public function __construct(AbstractController $controller, array $entities, private readonly bool $grouped = true)
+    public function __construct(DocumentHelperInterface $helper, array $entities)
     {
-        parent::__construct($controller, $entities, PdfOrientation::LANDSCAPE);
+        parent::__construct($helper, $entities, PdfOrientation::LANDSCAPE);
         $this->setTranslatedTitle('customer.list.title');
         $this->other = $this->trans('report.other');
     }
@@ -45,30 +43,37 @@ class CustomersReport extends AbstractArrayReport
     protected function doRender(array $entities): bool
     {
         $this->addPage();
-        $table = PdfGroupTable::instance($this)
+        $table = $this->createTable();
+        $groups = $this->getGroupedCustomers($entities);
+        foreach ($groups as $key => $customers) {
+            $this->addBookmark((string) $key);
+            $table->setGroupKey($key);
+            foreach ($customers as $customer) {
+                $this->outputCustomer($table, $customer);
+            }
+        }
+
+        return $this->renderCount($table, $entities, 'counters.customers');
+    }
+
+    private function createTable(): PdfGroupTable
+    {
+        return PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
                 $this->leftColumn('customer.fields.nameAndCompany', 50),
                 $this->leftColumn('customer.fields.address', 25),
                 $this->leftColumn('customer.fields.zipCity', 25)
             )->outputHeaders();
-
-        if ($this->grouped) {
-            $this->outputGrouped($table, $entities);
-        } else {
-            $this->outputList($table, $entities);
-        }
-
-        return $this->renderCount($table, $entities, 'counters.customers');
     }
 
     private function getFirstChar(?string $text): string
     {
-        if (null === $text || '' === $text) {
-            return $this->other;
+        if (StringUtils::isString($text)) {
+            return \strtoupper(StringUtils::slug($text)[0]);
         }
 
-        return \strtoupper(StringUtils::slug($text)[0]);
+        return $this->other;
     }
 
     /**
@@ -76,12 +81,12 @@ class CustomersReport extends AbstractArrayReport
      *
      * @return array<string|int, Customer[]>
      */
-    private function groupCustomers(array $entities): array
+    private function getGroupedCustomers(array $entities): array
     {
         $result = [];
-        foreach ($entities as $c) {
-            $key = $this->getFirstChar($c->getNameAndCompany());
-            $result[$key][] = $c;
+        foreach ($entities as $entity) {
+            $key = $this->getFirstChar($entity->getNameAndCompany());
+            $result[$key][] = $entity;
         }
         \uksort($result, function (string $str1, string $str2): int {
             if ($str1 === $this->other) {
@@ -104,30 +109,5 @@ class CustomersReport extends AbstractArrayReport
             $customer->getAddress(),
             $customer->getZipCity()
         );
-    }
-
-    /**
-     * @param Customer[] $entities
-     */
-    private function outputGrouped(PdfGroupTable $table, array $entities): void
-    {
-        $groups = $this->groupCustomers($entities);
-        foreach ($groups as $key => $customers) {
-            $this->addBookmark((string) $key);
-            $table->setGroupKey($key);
-            foreach ($customers as $customer) {
-                $this->outputCustomer($table, $customer);
-            }
-        }
-    }
-
-    /**
-     * @param Customer[] $entities
-     */
-    private function outputList(PdfGroupTable $table, array $entities): void
-    {
-        foreach ($entities as $entity) {
-            $this->outputCustomer($table, $entity);
-        }
     }
 }

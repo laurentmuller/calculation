@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Report;
 
-use App\Controller\AbstractController;
 use App\Entity\Category;
 use App\Entity\Group;
 use App\Entity\Product;
+use App\Interfaces\DocumentHelperInterface;
 use App\Report\ProductsReport;
 use PHPUnit\Framework\TestCase;
 
@@ -24,7 +24,7 @@ final class ProductsReportTest extends TestCase
 {
     public function testRender(): void
     {
-        $controller = self::createStub(AbstractController::class);
+        $helper = self::createStub(DocumentHelperInterface::class);
         $group = new Group();
         $group->setCode('Group');
         $category = new Category();
@@ -35,7 +35,7 @@ final class ProductsReportTest extends TestCase
         $group->addCategory($category);
         $category->addProduct($product);
 
-        $report = new ProductsReport($controller, [$product]);
+        $report = new ProductsReport($helper, [$product]);
         $actual = $report->render();
         self::assertTrue($actual);
     }

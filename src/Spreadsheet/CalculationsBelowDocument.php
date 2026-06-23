@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Repository\CalculationRepository;
 use App\Utils\FormatUtils;
 
@@ -25,15 +25,14 @@ use App\Utils\FormatUtils;
 class CalculationsBelowDocument extends CalculationsDocument
 {
     /**
-     * @param AbstractController $controller the parent controller
-     * @param iterable<array>    $entities   the calculations to render
+     * @param iterable<array> $entities the calculations to render
      *
      * @phpstan-param iterable<ExportType> $entities
      */
-    public function __construct(AbstractController $controller, iterable $entities)
+    public function __construct(DocumentHelperInterface $helper, iterable $entities)
     {
-        parent::__construct($controller, $entities);
-        $margin = FormatUtils::formatPercent($controller->getMinMargin());
+        parent::__construct($helper, $entities);
+        $margin = FormatUtils::formatPercent($helper->getMinMargin());
         $this->setTranslatedDescription('below.description', ['%margin%' => $margin]);
     }
 

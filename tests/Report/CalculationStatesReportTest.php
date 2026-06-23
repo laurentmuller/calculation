@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Report;
 
-use App\Controller\AbstractController;
 use App\Entity\CalculationState;
+use App\Interfaces\DocumentHelperInterface;
 use App\Report\CalculationStatesReport;
 use PHPUnit\Framework\TestCase;
 
@@ -22,7 +22,7 @@ final class CalculationStatesReportTest extends TestCase
 {
     public function testRender(): void
     {
-        $controller = self::createStub(AbstractController::class);
+        $helper = self::createStub(DocumentHelperInterface::class);
 
         $state1 = new CalculationState();
         $state1->setCode('Code1');
@@ -31,7 +31,7 @@ final class CalculationStatesReportTest extends TestCase
         $state2->setCode('Code2')
             ->setColor('');
 
-        $report = new CalculationStatesReport($controller, [$state1, $state2]);
+        $report = new CalculationStatesReport($helper, [$state1, $state2]);
         $actual = $report->render();
         self::assertTrue($actual);
     }

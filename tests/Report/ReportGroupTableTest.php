@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Report;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Pdf\PdfColumn;
 use App\Report\Table\ReportGroupTable;
 use App\Tests\Fixture\FixtureReport;
@@ -65,10 +65,10 @@ final class ReportGroupTableTest extends TestCase
 
     private function createReport(): FixtureReport
     {
-        $controller = $this->createMock(AbstractController::class);
-        $controller->method('getTranslator')
+        $helper = $this->createMock(DocumentHelperInterface::class);
+        $helper->method('getTranslator')
             ->willReturn($this->translator);
 
-        return new FixtureReport($controller);
+        return new FixtureReport($helper);
     }
 }

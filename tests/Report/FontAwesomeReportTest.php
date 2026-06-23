@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Report;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Model\FontAwesomeImage;
 use App\Model\ImageSize;
 use App\Report\FontAwesomeReport;
@@ -50,10 +50,10 @@ final class FontAwesomeReportTest extends TestCase
 
     private function createReport(?FontAwesomeImage $image): FontAwesomeReport
     {
-        $controller = $this->createMock(AbstractController::class);
+        $helper = self::createStub(DocumentHelperInterface::class);
         $service = $this->createService($image);
 
-        return new FontAwesomeReport($controller, $service);
+        return new FontAwesomeReport($helper, $service);
     }
 
     private function createService(?FontAwesomeImage $image): MockObject&FontAwesomeImageService

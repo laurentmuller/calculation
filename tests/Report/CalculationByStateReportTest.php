@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Report;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Model\StateChartData;
 use App\Model\StateChartDataItem;
 use App\Report\CalculationByStateReport;
@@ -24,8 +24,8 @@ final class CalculationByStateReportTest extends TestCase
 {
     public function testRender(): void
     {
-        $controller = $this->createMock(AbstractController::class);
-        $controller->method('getMinMargin')
+        $helper = $this->createMock(DocumentHelperInterface::class);
+        $helper->method('getMinMargin')
             ->willReturn(1.1);
         $generator = self::createStub(UrlGeneratorInterface::class);
         $items = [
@@ -49,7 +49,7 @@ final class CalculationByStateReportTest extends TestCase
             ),
         ];
         $stateChartData = new StateChartData($items);
-        $report = new CalculationByStateReport($controller, $stateChartData, $generator);
+        $report = new CalculationByStateReport($helper, $stateChartData, $generator);
         $actual = $report->render();
         self::assertTrue($actual);
     }

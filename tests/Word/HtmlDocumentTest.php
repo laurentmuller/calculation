@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Word;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Word\HtmlDocument;
 use PHPUnit\Framework\TestCase;
 
@@ -21,8 +21,8 @@ final class HtmlDocumentTest extends TestCase
 {
     public function testEmptyContent(): void
     {
-        $controller = self::createStub(AbstractController::class);
-        $doc = new HtmlDocument($controller, '');
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $doc = new HtmlDocument($helper, '');
         $actual = $doc->render();
         self::assertFalse($actual);
     }
@@ -33,8 +33,8 @@ final class HtmlDocumentTest extends TestCase
             <i>Test</i>
             <div>Text</div>
             XML;
-        $controller = self::createStub(AbstractController::class);
-        $doc = new HtmlDocument($controller, $content);
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $doc = new HtmlDocument($helper, $content);
         $actual = $doc->render();
         self::assertTrue($actual);
     }
@@ -45,8 +45,8 @@ final class HtmlDocumentTest extends TestCase
             <i>Test</i>
             <div>Text</div>
             XML;
-        $controller = self::createStub(AbstractController::class);
-        $doc = new HtmlDocument($controller, $content);
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $doc = new HtmlDocument($helper, $content);
         $doc->setTitle('Title');
         $actual = $doc->render();
         self::assertTrue($actual);
@@ -58,8 +58,8 @@ final class HtmlDocumentTest extends TestCase
             <i>Test</i>
             <div>Text</div>
             XML;
-        $controller = self::createStub(AbstractController::class);
-        $doc = new HtmlDocument($controller, $content);
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $doc = new HtmlDocument($helper, $content);
         $doc->setTitle('Title');
         $actual = $doc->render();
         self::assertTrue($actual);

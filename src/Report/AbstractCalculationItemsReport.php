@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
@@ -35,9 +35,9 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
     /**
      * @phpstan-param CalculationItemType[] $entities
      */
-    protected function __construct(AbstractController $controller, array $entities, string $title, string $description)
+    protected function __construct(DocumentHelperInterface $helper, array $entities, string $title, string $description)
     {
-        parent::__construct($controller, $entities, PdfOrientation::LANDSCAPE);
+        parent::__construct($helper, $entities, PdfOrientation::LANDSCAPE);
         $this->setTranslatedTitle(id: $title, isUTF8: true)
             ->setTranslatedDescription($description);
     }

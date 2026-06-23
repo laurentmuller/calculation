@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Model\FontAwesomeImage;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfCell;
@@ -48,11 +48,11 @@ class SchemaReport extends AbstractReport
     private array $tableLinks = [];
 
     public function __construct(
-        AbstractController $controller,
+        DocumentHelperInterface $helper,
         private readonly SchemaService $schemaService,
         private readonly FontAwesomeImageService $imageService
     ) {
-        parent::__construct($controller);
+        parent::__construct($helper);
         $this->setTranslatedTitle(id: 'schema.name', isUTF8: true)
             ->setTranslatedDescription('schema.description');
     }

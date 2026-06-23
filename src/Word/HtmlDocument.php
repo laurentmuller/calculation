@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Word;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use PhpOffice\PhpWord\Shared\Html;
 
 /**
@@ -22,12 +22,11 @@ use PhpOffice\PhpWord\Shared\Html;
 class HtmlDocument extends AbstractWordDocument
 {
     /**
-     * @param AbstractController $controller the parent's controller
-     * @param string             $content    the HTML content to render
+     * @param string $content the HTML content to render
      */
-    public function __construct(AbstractController $controller, private readonly string $content)
+    public function __construct(DocumentHelperInterface $helper, private readonly string $content)
     {
-        parent::__construct($controller);
+        parent::__construct($helper);
     }
 
     #[\Override]

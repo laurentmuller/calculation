@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Pdf\Traits;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Enums\PdfPointStyle;
 use App\Pdf\Interfaces\PdfChartInterface;
@@ -125,8 +125,8 @@ final class PdfChartLegendTraitTest extends TestCase
 
     private function createReport(): FixturePdfChartLegendReport
     {
-        $controller = $this->createMock(AbstractController::class);
-        $report = new FixturePdfChartLegendReport($controller);
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $report = new FixturePdfChartLegendReport($helper);
         $report->resetStyle()
             ->addPage();
 

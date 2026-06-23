@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Report;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Model\MonthChartData;
 use App\Model\MonthChartDataItem;
 use App\Report\CalculationByMonthReport;
@@ -67,12 +67,12 @@ final class CalculationByMonthReportTest extends TestCase
      */
     private function createReport(array $items): CalculationByMonthReport
     {
-        $controller = $this->createMock(AbstractController::class);
-        $controller->method('getMinMargin')
+        $helper = $this->createMock(DocumentHelperInterface::class);
+        $helper->method('getMinMargin')
             ->willReturn(1.1);
 
         return new CalculationByMonthReport(
-            $controller,
+            $helper,
             new MonthChartData($items),
             self::createStub(UrlGeneratorInterface::class),
         );

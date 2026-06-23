@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Report;
 
-use App\Controller\AbstractController;
 use App\Entity\User;
+use App\Interfaces\DocumentHelperInterface;
 use App\Interfaces\RoleInterface;
 use App\Report\UsersReport;
 use App\Service\FontAwesomeService;
@@ -75,7 +75,7 @@ final class UsersReportTest extends TestCase
             ->willReturn($imagePath);
 
         return new UsersReport(
-            self::createStub(AbstractController::class),
+            self::createStub(DocumentHelperInterface::class),
             [$user1, $user2],
             self::createStub(StorageInterface::class),
             self::createStub(RoleService::class),

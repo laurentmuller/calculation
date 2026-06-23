@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Spreadsheet;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Spreadsheet\CalculationsDuplicateDocument;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
@@ -37,8 +37,8 @@ final class CalculationsDuplicateDocumentTest extends TestCase
                 ],
             ],
         ];
-        $controller = self::createStub(AbstractController::class);
-        $document = new CalculationsDuplicateDocument($controller, [$data]);
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $document = new CalculationsDuplicateDocument($helper, [$data]);
         $actual = $document->render();
         self::assertTrue($actual);
     }

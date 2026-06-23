@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Report;
 
-use App\Controller\AbstractController;
 use App\Entity\Group;
 use App\Entity\GroupMargin;
+use App\Interfaces\DocumentHelperInterface;
 use App\Report\GroupsReport;
 use PHPUnit\Framework\TestCase;
 
@@ -23,7 +23,7 @@ final class GroupsReportTest extends TestCase
 {
     public function testRender(): void
     {
-        $controller = self::createStub(AbstractController::class);
+        $helper = self::createStub(DocumentHelperInterface::class);
 
         $group1 = new Group();
         $group1->setCode('Group1');
@@ -35,7 +35,7 @@ final class GroupsReportTest extends TestCase
         $group2 = new Group();
         $group2->setCode('Group2');
 
-        $report = new GroupsReport($controller, [$group1, $group2]);
+        $report = new GroupsReport($helper, [$group1, $group2]);
         $actual = $report->render();
         self::assertTrue($actual);
     }

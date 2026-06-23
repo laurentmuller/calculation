@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use PhpOffice\PhpSpreadsheet\Exception;
 
 /**
@@ -21,12 +21,9 @@ use PhpOffice\PhpSpreadsheet\Exception;
  */
 abstract class AbstractDocument extends SpreadsheetDocument
 {
-    /**
-     * @param AbstractController $controller the parent controller
-     */
-    public function __construct(protected AbstractController $controller)
+    public function __construct(protected readonly DocumentHelperInterface $helper)
     {
-        parent::__construct($controller->getTranslator());
+        parent::__construct($this->helper->getTranslator());
     }
 
     /**
@@ -46,6 +43,6 @@ abstract class AbstractDocument extends SpreadsheetDocument
      */
     protected function start(string $title, bool $landscape = false): static
     {
-        return $this->initialize($this->controller, $title, $landscape);
+        return $this->initialize($this->helper, $title, $landscape);
     }
 }

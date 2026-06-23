@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Report;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Model\FontAwesomeImage;
 use App\Model\ImageSize;
 use App\Report\MemoryImageReport;
@@ -27,34 +27,34 @@ final class MemoryImageReportTest extends TestCase
     public function testImageEmpty(): void
     {
         self::expectException(PdfException::class);
-        $controller = self::createStub(AbstractController::class);
+        $helper = self::createStub(DocumentHelperInterface::class);
         $image = __DIR__ . '/../files/txt/empty.txt';
-        $report = new MemoryImageReport($controller, $image);
+        $report = new MemoryImageReport($helper, $image);
         $report->render();
     }
 
     public function testImageInvalid(): void
     {
         self::expectException(PdfException::class);
-        $controller = self::createStub(AbstractController::class);
-        $report = new MemoryImageReport($controller, __FILE__);
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $report = new MemoryImageReport($helper, __FILE__);
         $report->render();
     }
 
     public function testRender(): void
     {
-        $controller = self::createStub(AbstractController::class);
+        $helper = self::createStub(DocumentHelperInterface::class);
         $image = $this->getTestFile();
-        $report = new MemoryImageReport($controller, $image);
+        $report = new MemoryImageReport($helper, $image);
         $actual = $report->render();
         self::assertTrue($actual);
     }
 
     public function testRenderIconFile(): void
     {
-        $controller = self::createStub(AbstractController::class);
+        $helper = self::createStub(DocumentHelperInterface::class);
         $iconFile = $this->getImageFile('icons/favicon-114x114.png');
-        $report = new MemoryImageReport($controller, iconFile: $iconFile);
+        $report = new MemoryImageReport($helper, iconFile: $iconFile);
         $actual = $report->render();
         self::assertTrue($actual);
     }
@@ -62,25 +62,25 @@ final class MemoryImageReportTest extends TestCase
     public function testRenderIconFileInvalid(): void
     {
         self::expectException(PdfException::class);
-        $controller = self::createStub(AbstractController::class);
-        $report = new MemoryImageReport($controller, iconFile: 'fake');
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $report = new MemoryImageReport($helper, iconFile: 'fake');
         $report->render();
     }
 
     public function testRenderLogoFile(): void
     {
-        $controller = self::createStub(AbstractController::class);
+        $helper = self::createStub(DocumentHelperInterface::class);
         $logoFile = $this->getImageFile('icons/favicon-114x114.png');
-        $report = new MemoryImageReport($controller, logoFile: $logoFile);
+        $report = new MemoryImageReport($helper, logoFile: $logoFile);
         $actual = $report->render();
         self::assertTrue($actual);
     }
 
     public function testRenderScreenshot(): void
     {
-        $controller = self::createStub(AbstractController::class);
+        $helper = self::createStub(DocumentHelperInterface::class);
         $screenshotFile = $this->getImageFile('screenshots/home_light.png');
-        $report = new MemoryImageReport($controller, screenshotFile: $screenshotFile);
+        $report = new MemoryImageReport($helper, screenshotFile: $screenshotFile);
         $actual = $report->render();
         self::assertTrue($actual);
     }
@@ -95,8 +95,8 @@ final class MemoryImageReportTest extends TestCase
         $service->method('getImage')
             ->willReturn($image);
 
-        $controller = self::createStub(AbstractController::class);
-        $report = new MemoryImageReport(controller: $controller, service: $service);
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $report = new MemoryImageReport(helper: $helper, service: $service);
         $actual = $report->render();
         self::assertTrue($actual);
     }
@@ -108,8 +108,8 @@ final class MemoryImageReportTest extends TestCase
         $service->method('getPath')
             ->willReturn($path);
 
-        $controller = self::createStub(AbstractController::class);
-        $report = new MemoryImageReport(controller: $controller, service: $service);
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $report = new MemoryImageReport(helper: $helper, service: $service);
         $actual = $report->render();
         self::assertTrue($actual);
     }
@@ -121,8 +121,8 @@ final class MemoryImageReportTest extends TestCase
         $service->method('getImage')
             ->willReturn($image);
 
-        $controller = self::createStub(AbstractController::class);
-        $report = new MemoryImageReport(controller: $controller, service: $service);
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $report = new MemoryImageReport(helper: $helper, service: $service);
         $actual = $report->render();
         self::assertTrue($actual);
     }
@@ -130,9 +130,9 @@ final class MemoryImageReportTest extends TestCase
     public function testRenderTransparencyImage(): void
     {
         $transparencyFile = $this->getImageFile('icons/favicon-114x114.png');
-        $controller = self::createStub(AbstractController::class);
+        $helper = self::createStub(DocumentHelperInterface::class);
         $report = new MemoryImageReport(
-            controller: $controller,
+            helper: $helper,
             transparencyFile: $transparencyFile
         );
         $actual = $report->render();
@@ -143,9 +143,9 @@ final class MemoryImageReportTest extends TestCase
     {
         self::expectException(PdfException::class);
         $transparencyFile = Path::join(__DIR__, 'fake.txt');
-        $controller = self::createStub(AbstractController::class);
+        $helper = self::createStub(DocumentHelperInterface::class);
         $report = new MemoryImageReport(
-            controller: $controller,
+            helper: $helper,
             transparencyFile: $transparencyFile
         );
         $report->render();
@@ -156,9 +156,9 @@ final class MemoryImageReportTest extends TestCase
         $logoFile = $this->getImageFile('logo/customer_148_148.png');
         $iconFile = $this->getImageFile('icons/favicon-144x144.png');
         $screenshotFile = $this->getImageFile('screenshots/home_light.png');
-        $controller = self::createStub(AbstractController::class);
+        $helper = self::createStub(DocumentHelperInterface::class);
         $report = new MemoryImageReport(
-            controller: $controller,
+            helper: $helper,
             logoFile: $logoFile,
             iconFile: $iconFile,
             transparencyFile: $iconFile,
@@ -170,8 +170,8 @@ final class MemoryImageReportTest extends TestCase
 
     public function testWithNoArgument(): void
     {
-        $controller = self::createStub(AbstractController::class);
-        $report = new MemoryImageReport($controller);
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $report = new MemoryImageReport($helper);
         $actual = $report->render();
         self::assertTrue($actual);
     }

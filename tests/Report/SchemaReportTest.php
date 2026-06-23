@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Report;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Model\FontAwesomeImage;
 use App\Model\ImageSize;
 use App\Report\SchemaReport;
@@ -26,10 +26,10 @@ final class SchemaReportTest extends TestCase
 {
     public function testEmpty(): void
     {
-        $controller = $this->createController();
+        $helper = $this->createHelper();
         $schemaService = $this->createSchemaService();
         $imageService = $this->createImageService();
-        $report = new SchemaReport($controller, $schemaService, $imageService);
+        $report = new SchemaReport($helper, $schemaService, $imageService);
         $actual = $report->render();
         self::assertFalse($actual);
     }
@@ -75,7 +75,7 @@ final class SchemaReportTest extends TestCase
             'sql' => '',
         ];
 
-        $controller = $this->createController();
+        $helper = $this->createHelper();
         $schemaService = $this->createSchemaService([
             'table1' => $table1,
             'table2' => $table2,
@@ -87,7 +87,7 @@ final class SchemaReportTest extends TestCase
                 $this->createFontAwesomeImage(),
                 null
             );
-        $report = new SchemaReport($controller, $schemaService, $imageService);
+        $report = new SchemaReport($helper, $schemaService, $imageService);
         $actual = $report->render();
         self::assertTrue($actual);
     }
@@ -103,11 +103,11 @@ final class SchemaReportTest extends TestCase
             'size' => 0,
             'sql' => '',
         ];
-        $controller = $this->createController();
+        $helper = $this->createHelper();
         $schemaService = $this->createSchemaService(['table' => $table]);
 
         $imageService = $this->createImageService();
-        $report = new SchemaReport($controller, $schemaService, $imageService);
+        $report = new SchemaReport($helper, $schemaService, $imageService);
         $actual = $report->render();
         self::assertTrue($actual);
     }
@@ -155,17 +155,12 @@ final class SchemaReportTest extends TestCase
             'size' => 0,
             'sql' => '',
         ];
-        $controller = $this->createController();
+        $helper = $this->createHelper();
         $schemaService = $this->createSchemaService(['table' => $table]);
         $imageService = $this->createImageService();
-        $report = new SchemaReport($controller, $schemaService, $imageService);
+        $report = new SchemaReport($helper, $schemaService, $imageService);
         $actual = $report->render();
         self::assertTrue($actual);
-    }
-
-    private function createController(): AbstractController
-    {
-        return self::createStub(AbstractController::class);
     }
 
     private function createFontAwesomeImage(): FontAwesomeImage
@@ -175,6 +170,11 @@ final class SchemaReportTest extends TestCase
         $size = new ImageSize(124, 147);
 
         return new FontAwesomeImage($content, $size, 96);
+    }
+
+    private function createHelper(): DocumentHelperInterface
+    {
+        return self::createStub(DocumentHelperInterface::class);
     }
 
     private function createImageService(): MockObject&FontAwesomeImageService

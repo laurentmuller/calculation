@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Traits\EmptyItemsTrait;
 
 /**
@@ -28,9 +28,9 @@ class CalculationsEmptyDocument extends AbstractCalculationItemsDocument
     /**
      * @phpstan-param CalculationItemType[] $entities
      */
-    public function __construct(AbstractController $controller, array $entities)
+    public function __construct(DocumentHelperInterface $helper, array $entities)
     {
-        parent::__construct($controller, $entities, 'empty.title');
+        parent::__construct($helper, $entities, 'empty.title');
         $this->setTranslatedDescription('empty.description');
     }
 

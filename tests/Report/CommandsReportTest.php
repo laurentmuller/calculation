@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Report;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Report\CommandsReport;
 use App\Service\CommandService;
 use PHPUnit\Framework\TestCase;
@@ -25,7 +25,7 @@ final class CommandsReportTest extends TestCase
 {
     public function testRender(): void
     {
-        $controller = self::createStub(AbstractController::class);
+        $helper = self::createStub(DocumentHelperInterface::class);
 
         $argument1 = [
             'name' => 'Argument',
@@ -87,7 +87,7 @@ final class CommandsReportTest extends TestCase
             'options' => [],
         ];
         $commands = [$command1, $command2];
-        $report = new CommandsReport($controller, ['Group' => $commands]);
+        $report = new CommandsReport($helper, ['Group' => $commands]);
         $actual = $report->render();
         self::assertTrue($actual);
     }

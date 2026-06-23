@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Spreadsheet;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Model\CustomerInformation;
 use App\Model\ImageSize;
 use App\Spreadsheet\HeaderFormat;
@@ -79,9 +79,9 @@ final class WorksheetDocumentTest extends TestCase
 
     public function testSetActiveTitle(): void
     {
-        $controller = self::createStub(AbstractController::class);
+        $helper = self::createStub(DocumentHelperInterface::class);
         $doc = new SpreadsheetDocument($this->createMockTranslator());
-        $doc->setActiveTitle('My Title', $controller);
+        $doc->setActiveTitle('My Title', $helper);
         $sheet = $doc->getActiveSheet();
         self::assertSame('My Title', $sheet->getTitle());
     }

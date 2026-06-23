@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Spreadsheet;
 
-use App\Controller\AbstractController;
 use App\Entity\Category;
 use App\Entity\Group;
 use App\Entity\Task;
 use App\Entity\TaskItem;
 use App\Entity\TaskItemMargin;
+use App\Interfaces\DocumentHelperInterface;
 use App\Spreadsheet\TasksDocument;
 use PHPUnit\Framework\TestCase;
 
@@ -65,8 +65,8 @@ final class TasksDocumentTest extends TestCase
         $task3->setName('Task3');
         $category->addTask($task3);
 
-        $controller = self::createStub(AbstractController::class);
-        $document = new TasksDocument($controller, [$task1, $task2, $task3]);
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $document = new TasksDocument($helper, [$task1, $task2, $task3]);
         $actual = $document->render();
         self::assertTrue($actual);
     }

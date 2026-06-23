@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Service\ApplicationService;
 use App\Traits\TranslatorTrait;
 use App\Utils\StringUtils;
@@ -103,7 +103,7 @@ class SpreadsheetDocument extends Spreadsheet
      * @return WorksheetDocument the newly created worksheet
      */
     public function createSheetAndTitle(
-        AbstractController $controller,
+        DocumentHelperInterface $helper,
         ?string $title = null,
         ?int $sheetIndex = null
     ): WorksheetDocument {
@@ -112,12 +112,10 @@ class SpreadsheetDocument extends Spreadsheet
         if (null !== $title) {
             $sheet->setTitle($title);
         }
-
         $this->setActiveSheetIndex($sheetIndex);
-        $customer = $controller->getCustomer();
 
         return $sheet->setPrintGridlines(true)
-            ->updateHeaderFooter($customer);
+            ->updateHeaderFooter($helper->getCustomer());
     }
 
     /**
@@ -228,12 +226,12 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * If this parent's controller is not null, the header and footer are also updated.
      */
-    public function setActiveTitle(string $title, ?AbstractController $controller = null): static
+    public function setActiveTitle(string $title, ?DocumentHelperInterface $helper = null): static
     {
         $sheet = $this->getActiveSheet()
             ->setTitle($title);
-        if ($controller instanceof AbstractController) {
-            $customer = $controller->getCustomer();
+        if ($helper instanceof DocumentHelperInterface) {
+            $customer = $helper->getCustomer();
             $sheet->updateHeaderFooter($customer);
         }
 
@@ -352,14 +350,14 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Initialize this spreadsheet.
      *
-     * @param AbstractController $controller the controller to get properties
-     * @param string             $title      the spreadsheet title to translate
-     * @param bool               $landscape  true to set landscape orientation, false for default (portrait)
+     * @param DocumentHelperInterface $helper    the helper to get properties
+     * @param string                  $title     the spreadsheet title to translate
+     * @param bool                    $landscape true to set landscape orientation, false for default (portrait)
      */
-    protected function initialize(AbstractController $controller, string $title, bool $landscape = false): static
+    protected function initialize(DocumentHelperInterface $helper, string $title, bool $landscape = false): static
     {
-        $customer = $controller->getCustomer();
-        $userName = $controller->getUserIdentifier();
+        $customer = $helper->getCustomer();
+        $userName = $helper->getUserIdentifier();
         $title = $this->trans($title);
 
         $sheet = $this->getActiveSheet()

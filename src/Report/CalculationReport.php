@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\AbstractController;
 use App\Entity\Calculation;
+use App\Interfaces\DocumentHelperInterface;
 use App\Model\ImageData;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfStyle;
@@ -42,12 +42,12 @@ class CalculationReport extends AbstractReport
     private const float QR_CODE_SIZE = 38.0;
 
     public function __construct(
-        AbstractController $controller,
+        DocumentHelperInterface $helper,
         private readonly Calculation $calculation,
         private readonly float $minMargin,
         private readonly string $qrcode
     ) {
-        parent::__construct($controller);
+        parent::__construct($helper);
         $this->setTranslatedTitle(
             'calculation.edit.title',
             ['%id%' => $calculation->getFormattedId()],

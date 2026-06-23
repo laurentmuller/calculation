@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Report;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Report\CalculationsReport;
 use App\Utils\DateUtils;
 use PHPUnit\Framework\TestCase;
@@ -22,8 +22,8 @@ final class CalculationsReportTest extends TestCase
 {
     public function testRender(): void
     {
-        $controller = self::createStub(AbstractController::class);
-        $controller->method('getMinMargin')
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $helper->method('getMinMargin')
             ->willReturn(1.1);
         $calculation1 = [
             'id' => 1,
@@ -45,7 +45,7 @@ final class CalculationsReportTest extends TestCase
             'code' => 'State 1',
             'editable' => true,
         ];
-        $report = new CalculationsReport($controller, [$calculation1, $calculation2]);
+        $report = new CalculationsReport($helper, [$calculation1, $calculation2]);
         $actual = $report->render();
         self::assertTrue($actual);
     }

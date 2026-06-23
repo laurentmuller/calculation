@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
@@ -28,9 +28,9 @@ class DatabaseReport extends AbstractReport
     private ?PdfStyle $disableStyle = null;
     private ?PdfStyle $enableStyle = null;
 
-    public function __construct(AbstractController $controller, private readonly DatabaseInfoService $service)
+    public function __construct(DocumentHelperInterface $helper, private readonly DatabaseInfoService $service)
     {
-        parent::__construct($controller);
+        parent::__construct($helper);
         $this->setTranslatedTitle('about.database.title');
     }
 

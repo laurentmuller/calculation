@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Spreadsheet;
 
-use App\Controller\AbstractController;
 use App\Entity\Category;
 use App\Entity\Group;
+use App\Interfaces\DocumentHelperInterface;
 use App\Spreadsheet\CategoriesDocument;
 use PHPUnit\Framework\TestCase;
 
@@ -30,8 +30,8 @@ final class CategoriesDocumentTest extends TestCase
         $category->setCode('Category');
         $group->addCategory($category);
 
-        $controller = self::createStub(AbstractController::class);
-        $document = new CategoriesDocument($controller, [$category]);
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $document = new CategoriesDocument($helper, [$category]);
         $actual = $document->render();
         self::assertTrue($actual);
     }

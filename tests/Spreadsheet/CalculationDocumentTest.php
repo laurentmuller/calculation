@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Spreadsheet;
 
-use App\Controller\AbstractController;
 use App\Entity\Calculation;
 use App\Entity\CalculationCategory;
 use App\Entity\CalculationGroup;
 use App\Entity\CalculationItem;
+use App\Interfaces\DocumentHelperInterface;
 use App\Spreadsheet\CalculationDocument;
 use PHPUnit\Framework\TestCase;
 
@@ -45,8 +45,8 @@ final class CalculationDocumentTest extends TestCase
         $category->addItem($item);
         $calculation->addGroup($group);
 
-        $controller = self::createStub(AbstractController::class);
-        $document = new CalculationDocument($controller, $calculation);
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $document = new CalculationDocument($helper, $calculation);
         $actual = $document->render();
         self::assertTrue($actual);
     }
@@ -61,8 +61,8 @@ final class CalculationDocumentTest extends TestCase
             ->setItemsTotal(1000.0)
             ->setUserMargin(0.1);
 
-        $controller = self::createStub(AbstractController::class);
-        $document = new CalculationDocument($controller, $calculation);
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $document = new CalculationDocument($helper, $calculation);
         $actual = $document->render();
         self::assertTrue($actual);
     }
@@ -88,8 +88,8 @@ final class CalculationDocumentTest extends TestCase
         $category->addItem($item);
         $calculation->addGroup($group);
 
-        $controller = self::createStub(AbstractController::class);
-        $document = new CalculationDocument($controller, $calculation);
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $document = new CalculationDocument($helper, $calculation);
         $actual = $document->render();
         self::assertTrue($actual);
     }

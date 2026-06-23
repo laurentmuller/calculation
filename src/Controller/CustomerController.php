@@ -102,15 +102,14 @@ class CustomerController extends AbstractEntityController
      * Export the customers to a PDF document.
      */
     #[PdfRoute]
-    public function pdf(Request $request, CustomerRepository $repository): PdfResponse
+    public function pdf(CustomerRepository $repository): PdfResponse
     {
-        $entities = $repository->findByNameAndCompany();
+        $entities = $repository->findAll();
         if ([] === $entities) {
             throw $this->createTranslatedNotFoundException('customer.list.empty');
         }
-        $grouped = $this->getRequestBoolean($request, 'grouped', true);
 
-        return $this->renderPdfDocument(new CustomersReport($this, $entities, $grouped));
+        return $this->renderPdfDocument(new CustomersReport($this, $entities));
     }
 
     /**

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Spreadsheet;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Service\PhpInfoService;
 use App\Spreadsheet\PhpIniDocument;
 use PHPUnit\Framework\TestCase;
@@ -49,8 +49,8 @@ final class PhpIniDocumentTest extends TestCase
 
     private function createDocument(array $data): PhpIniDocument
     {
-        $controller = $this->createMock(AbstractController::class);
-        $service = $this->createMock(PhpInfoService::class);
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $service = self::createMock(PhpInfoService::class);
         $service->method('getVersion')
             ->willReturn(\PHP_VERSION);
         $service->method('asArray')
@@ -60,6 +60,6 @@ final class PhpIniDocumentTest extends TestCase
         $service->method('isColor')
             ->willReturnCallback(static fn (string $value): bool => \str_starts_with($value, '#'));
 
-        return new PhpIniDocument($controller, $service);
+        return new PhpIniDocument($helper, $service);
     }
 }

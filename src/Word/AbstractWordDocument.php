@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Word;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Model\CustomerInformation;
 use App\Service\ApplicationService;
 use App\Traits\TranslatorTrait;
@@ -34,16 +34,10 @@ abstract class AbstractWordDocument extends WordDocument
 
     private readonly WordHeader $header;
 
-    private readonly TranslatorInterface $translator;
-
-    /**
-     * @param AbstractController $controller the parent's controller
-     */
-    public function __construct(protected readonly AbstractController $controller)
+    public function __construct(protected readonly DocumentHelperInterface $helper)
     {
         parent::__construct();
-        $this->translator = $this->controller->getTranslator();
-        $this->customer = $this->controller->getCustomer();
+        $this->customer = $this->helper->getCustomer();
         $this->header = new WordHeader($this);
         $this->footer = new WordFooter($this);
     }
@@ -51,7 +45,7 @@ abstract class AbstractWordDocument extends WordDocument
     #[\Override]
     public function getTranslator(): TranslatorInterface
     {
-        return $this->translator;
+        return $this->helper->getTranslator();
     }
 
     /**
@@ -123,16 +117,14 @@ abstract class AbstractWordDocument extends WordDocument
         parent::initialize();
         $properties = $this->getDocInfo();
         $properties->setCategory(ApplicationService::APP_FULL_NAME);
-        $user = $this->controller->getUserIdentifier();
+        $user = $this->helper->getUserIdentifier();
         if (null !== $user) {
             $properties->setCreator($user);
         }
-        $customer = $this->controller
-            ->getApplicationParameters()
-            ->getCustomer()
+        $name = $this->helper->getCustomer()
             ->getName();
-        if (null !== $customer) {
-            $properties->setCompany($customer);
+        if (null !== $name) {
+            $properties->setCompany($name);
         }
     }
 }

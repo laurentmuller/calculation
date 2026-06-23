@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Traits\DuplicateItemsTrait;
 
 /**
@@ -29,9 +29,9 @@ class CalculationsDuplicateReport extends AbstractCalculationItemsReport
     /**
      * @phpstan-param CalculationItemType[] $entities
      */
-    public function __construct(AbstractController $controller, array $entities)
+    public function __construct(DocumentHelperInterface $helper, array $entities)
     {
-        parent::__construct($controller, $entities, 'duplicate.title', 'duplicate.description');
+        parent::__construct($helper, $entities, 'duplicate.title', 'duplicate.description');
     }
 
     /**

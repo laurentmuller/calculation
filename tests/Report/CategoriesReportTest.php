@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Report;
 
-use App\Controller\AbstractController;
 use App\Entity\Category;
 use App\Entity\Group;
+use App\Interfaces\DocumentHelperInterface;
 use App\Report\CategoriesReport;
 use PHPUnit\Framework\TestCase;
 
@@ -23,14 +23,14 @@ final class CategoriesReportTest extends TestCase
 {
     public function testRender(): void
     {
-        $controller = self::createStub(AbstractController::class);
+        $helper = self::createStub(DocumentHelperInterface::class);
         $group = new Group();
         $group->setCode('Group');
         $category = new Category();
         $category->setCode('Category');
         $group->addCategory($category);
 
-        $report = new CategoriesReport($controller, [$category]);
+        $report = new CategoriesReport($helper, [$category]);
         $actual = $report->render();
         self::assertTrue($actual);
     }

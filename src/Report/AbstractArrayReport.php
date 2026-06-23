@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use fpdf\Enums\PdfOrientation;
 
 /**
@@ -27,11 +27,11 @@ abstract class AbstractArrayReport extends AbstractReport
      * @param T[] $entities the entities to render
      */
     public function __construct(
-        AbstractController $controller,
+        DocumentHelperInterface $helper,
         protected array $entities,
         PdfOrientation $orientation = PdfOrientation::PORTRAIT
     ) {
-        parent::__construct($controller, $orientation);
+        parent::__construct($helper, $orientation);
     }
 
     #[\Override]

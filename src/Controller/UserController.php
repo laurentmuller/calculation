@@ -345,10 +345,16 @@ class UserController extends AbstractEntityController
     public function rightsExcel(RoleService $roleService, RoleBuilderService $roleBuilderService): SpreadsheetResponse
     {
         $entities = $this->getEntitiesByUserName();
-
-        return $this->renderSpreadsheetDocument(
-            new UserRightsDocument($this, $entities, $roleService, $roleBuilderService)
+        $parameters = $this->getApplicationParameters();
+        $doc = new UserRightsDocument(
+            $this,
+            $entities,
+            $parameters,
+            $roleService,
+            $roleBuilderService
         );
+
+        return $this->renderSpreadsheetDocument($doc);
     }
 
     /**
@@ -361,10 +367,17 @@ class UserController extends AbstractEntityController
         FontAwesomeService $fontAwesomeService
     ): PdfResponse {
         $entities = $this->getEntitiesByUserName();
-
-        return $this->renderPdfDocument(
-            new UsersRightsReport($this, $entities, $roleService, $roleBuilderService, $fontAwesomeService)
+        $parameters = $this->getApplicationParameters();
+        $doc = new UsersRightsReport(
+            $this,
+            $entities,
+            $parameters,
+            $roleService,
+            $roleBuilderService,
+            $fontAwesomeService
         );
+
+        return $this->renderPdfDocument($doc);
     }
 
     /**

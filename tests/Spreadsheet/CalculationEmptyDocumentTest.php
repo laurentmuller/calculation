@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Spreadsheet;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Spreadsheet\CalculationsEmptyDocument;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
@@ -37,8 +37,8 @@ final class CalculationEmptyDocumentTest extends TestCase
                 ],
             ],
         ];
-        $controller = self::createStub(AbstractController::class);
-        $document = new CalculationsEmptyDocument($controller, [$data]);
+        $helper = self::createStub(DocumentHelperInterface::class);
+        $document = new CalculationsEmptyDocument($helper, [$data]);
         $actual = $document->render();
         self::assertTrue($actual);
     }

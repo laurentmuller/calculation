@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use App\Controller\AbstractController;
+use App\Interfaces\DocumentHelperInterface;
 use App\Service\DatabaseInfoService;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 
@@ -25,9 +25,9 @@ class DatabaseDocument extends AbstractDocument
     private ?Color $disabledColor = null;
     private ?Color $enabledColor = null;
 
-    public function __construct(AbstractController $controller, private readonly DatabaseInfoService $service)
+    public function __construct(DocumentHelperInterface $helper, private readonly DatabaseInfoService $service)
     {
-        parent::__construct($controller);
+        parent::__construct($helper);
     }
 
     #[\Override]

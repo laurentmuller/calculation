@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Report;
 
-use App\Controller\AbstractController;
 use App\Entity\GlobalMargin;
+use App\Interfaces\DocumentHelperInterface;
 use App\Report\GlobalMarginsReport;
 use PHPUnit\Framework\TestCase;
 
@@ -22,12 +22,12 @@ final class GlobalMarginsReportTest extends TestCase
 {
     public function testRender(): void
     {
-        $controller = self::createStub(AbstractController::class);
+        $helper = self::createStub(DocumentHelperInterface::class);
         $margin = new GlobalMargin();
         $margin->setMinimum(0.0)
             ->setMaximum(100.0)
             ->setMargin(1.1);
-        $report = new GlobalMarginsReport($controller, [$margin]);
+        $report = new GlobalMarginsReport($helper, [$margin]);
         $actual = $report->render();
         self::assertTrue($actual);
     }

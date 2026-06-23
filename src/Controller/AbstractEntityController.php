@@ -21,14 +21,11 @@ use App\Model\TranslatableFlashMessage;
 use App\Repository\AbstractRepository;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
-use App\Response\WordResponse;
 use App\Spreadsheet\SpreadsheetDocument;
 use App\Traits\RenderPdfDocumentTrait;
 use App\Traits\RenderSpreadsheetDocumentTrait;
-use App\Traits\RenderWordDocumentTrait;
 use App\Traits\TableTrait;
 use App\Utils\StringUtils;
-use App\Word\WordDocument;
 use Doctrine\Common\Collections\Criteria;
 use fpdf\PdfDocument;
 use Psr\Log\LoggerInterface;
@@ -52,9 +49,6 @@ abstract class AbstractEntityController extends AbstractController
     }
     use RenderSpreadsheetDocumentTrait {
         renderSpreadsheetDocument as renderSpreadsheetDocumentTrait;
-    }
-    use RenderWordDocumentTrait {
-        renderWordDocument as renderWordDocumentTrait;
     }
     use TableTrait;
 
@@ -280,13 +274,6 @@ abstract class AbstractEntityController extends AbstractController
         $this->checkPermission(EntityPermission::EXPORT);
 
         return $this->renderSpreadsheetDocumentTrait($doc, $inline, $name);
-    }
-
-    protected function renderWordDocument(WordDocument $doc, bool $inline = true, string $name = ''): WordResponse
-    {
-        $this->checkPermission(EntityPermission::EXPORT);
-
-        return $this->renderWordDocumentTrait($doc, $inline, $name);
     }
 
     /**

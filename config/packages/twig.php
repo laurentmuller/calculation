@@ -49,10 +49,10 @@ return App::config([
             'app_owner_email' => ApplicationService::OWNER_EMAIL,
             'app_owner_url' => ApplicationService::OWNER_URL,
             // links
-            'link_dev' => '%link_dev%',
-            'link_prod' => '%link_prod%',
+            'link_dev' => '%env(string:LINK_DEV)%',
+            'link_prod' => '%env(string:LINK_PROD)%',
             // cokies
-            'cookie_path' => '%cookie_path%',
+            'cookie_path' => '%env(string:COOKIE_PATH)%',
             // services and parameters
             'index_service' => '@' . IndexService::class,
             'user_parameters' => '@' . UserParameters::class,

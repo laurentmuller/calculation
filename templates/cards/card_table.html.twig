@@ -1,5 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
-{% from 'macros/_icons.html.twig' import icon, link, linkExternal, dropdownItem, dropdownSeparator, dropdownEllipsis %}
+{% from 'macros/_icons.html.twig' import button, icon, link, linkExternal, dropdownItem, dropdownItemWithClass, dropdownItemExternal, dropdownSeparator, dropdownEllipsis %}
 {# output a column #}
 {% macro output_column(column) -%}
 <th {{ html_data_attr(column.attributes) }}>
@@ -11,8 +11,8 @@
 {% set html_icon = icon(icon) %}
 {%- set attrs = {
     id: id,
-    title: title|trans,
     type: 'button',
+    title: title|trans,
     class: ['btn', 'btn-outline-secondary', 'dropdown-toggle', 'dropdown-input'],
     'aria-expanded': false,
     'data-bs-toggle': 'dropdown',
@@ -21,17 +21,17 @@
     'data-default': default} -%}
 <button {{ html_attr(attrs) }}>
     <span class="dropdown-icon">{{- html_icon -}}</span>
-    <span class="dropdown-label ms-1 d-none d-sm-inline">{{- text -}}</span>
+    <span class="dropdown-label ms-1 d-none d-md-inline-block">{{- text -}}</span>
 </button>
 {% endmacro output_dropdown_menu %}
 {# output a drop-down item #}
 {% macro output_dropdown_item(suffix, value, selection, text, icon, attributes = []) -%}
-    {% set active = value == selection ? ' active' : '' %}
     {% set attributes = attributes|merge({
         type: 'button',
         role: 'button',
         'data-value': value,
-        class: ('dropdown-item dropdown-' ~ suffix ~ active)|trim}) %}
+        class: ['dropdown-item dropdown-' ~ suffix, value == selection ? 'active']})
+    %}
     <li>
         <button {{ html_attr(attributes) }}>
             <span class="dropdown-icon">{{- icon(icon) -}}</span>
@@ -47,26 +47,21 @@
     </h6>
 {%- endmacro output_dropdown_header %}
 {# output a drop-down item path #}
-{% macro item_path(path, text, icon, class = '') %}
-{%- set class = ('dropdown-item dropdown-item-path rowlink-skip ' ~ class)|trim -%}
-<li>
-    {{- link(
-        href: path,
+{% macro item_path(href, text, icon, class = '') %}
+    {{- dropdownItemWithClass(
+        href: href,
         text: text,
-        class: class,
-        icon: icon ~ ' fa-fw') -}}
-</li>
+        icon: icon,
+        class: ('dropdown-item-path ' ~ class)|trim,
+        hidden: false) -}}
 {%- endmacro item_path %}
 {# output an external drop-down item path #}
 {% macro item_path_external(href, text, icon, class = '') %}
-{%- set class = ('dropdown-item dropdown-item-path rowlink-skip ' ~ class)|trim -%}
-<li>
-    {{- linkExternal(
+    {{- dropdownItemExternal(
         href: href,
         text: text,
-        class: class,
-        icon: icon ~ ' fa-fw') -}}
-</li>
+        icon: icon,
+        class: ('dropdown-item-path ' ~ class)|trim) -}}
 {%- endmacro item_path_external %}
 {# output a global drop-down item #}
 {% macro item_global(path, text, icon) %}
@@ -213,17 +208,30 @@
             {% if is_page_list %}
                 <div class="btn-group btn-group-sm dropdown" role="group">
                     {# menu is created on the prebody event #}
-                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="button_page" data-value="{{ limit }}" data-bs-toggle="dropdown" title="{{ 'list.limit_title'|trans }}" aria-expanded="false">
-                        {{- limit -}}
-                    </button>
+                    {% set list_attrs = {
+                        id: 'button_page',
+                        type: 'button',
+                        title: 'list.limit_title'|trans,
+                        class: 'btn btn-outline-secondary dropdown-toggle',
+                        'data-value': limit,
+                        'data-bs-toggle': 'dropdown',
+                        'aria-expanded': false} %}
+                    <button {{ html_attr(list_attrs) }}>{{- limit -}}</button>
                     <ul class="dropdown-menu dropdown-menu-page" aria-labelledby="button_page"></ul>
                 </div>
             {% endif %}
         {% endblock page_list %}
         <div class="btn-group btn-group-sm" role="group">
-            <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="button_other_actions" data-bs-toggle="dropdown" title="{{ 'common.global_actions'|trans }}" aria-expanded="false">
-                <i class="fa-solid fa-bars"></i><span class="ms-1 d-none d-sm-inline">{{- 'common.actions'|trans -}}</span>
-            </button>
+            {{ button(
+                text: 'common.actions',
+                class: 'btn btn-outline-secondary dropdown-toggle',
+                icon: 'fa-solid fa-bars',
+                attributes: {
+                    id: 'button_other_actions',
+                    title: 'common.global_actions'|trans,
+                    'data-bs-toggle': 'dropdown',
+                    'aria-expanded': false})
+            }}
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="button_other_actions">
                 {# display mode #}
                 {% block display_mode %}
@@ -233,15 +241,23 @@
                 {% if sortable %}
                     {{ _self.item_separator() }}
                     <li>
-                        <button type="button" class="dropdown-item btn-sort-data" data-url="{{ url('ajax_dialog_sort') }}">
-                            {{- icon('fa-solid fa-sort-amount-down-alt fa-fw', 'list.sort_title') -}}
-                        </button>
+                        {{ button(
+                            text: 'list.sort_title',
+                            class: 'dropdown-item btn-sort-data',
+                            icon: 'fa-solid fa-sort-amount-down-alt fa-fw',
+                            inline: false,
+                            attributes: {'data-url': url('ajax_dialog_sort')})
+                        }}
                     </li>
                 {% endif %}
                 <li>
-                    <button type="button" class="dropdown-item btn-show-page" data-url="{{ url('ajax_dialog_page') }}">
-                        {{- icon('fa-solid fa-arrow-up-right-dots fa-fw', 'datatable.dialog_title') -}}
-                    </button>
+                    {{ button(
+                        text: 'datatable.dialog_title',
+                        class: 'dropdown-item btn-show-page',
+                        icon: 'fa-solid fa-arrow-up-right-dots fa-fw',
+                        inline: false,
+                        attributes: {'data-url': url('ajax_dialog_page')})
+                    }}
                 </li>
                 {% if allow_global %}
                     {{ _self.item_separator() }}

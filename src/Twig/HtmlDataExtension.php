@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Twig;
 
-use App\Utils\StringUtils;
 use Twig\Attribute\AsTwigFunction;
 use Twig\Environment;
 use Twig\Error\RuntimeError;
@@ -34,12 +33,14 @@ class HtmlDataExtension
         /** @var array<string, mixed> $args */
         $args = HtmlExtension::htmlAttrMerge(...$args);
         foreach ($args as $name => $value) {
+            if (!\str_starts_with($name, 'data-')) {
+                $name = 'data-' . $name;
+            }
             if (\is_bool($value)) {
                 $value = \json_encode($value);
+            } elseif ($value instanceof \BackedEnum) {
+                $value = $value->value;
             }
-            $name = StringUtils::unicode($name)
-                ->ensureStart('data-')
-                ->toString();
             $attr[$name] = $value;
         }
 

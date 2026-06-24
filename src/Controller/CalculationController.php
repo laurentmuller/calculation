@@ -160,8 +160,9 @@ class CalculationController extends AbstractEntityController
     {
         $minMargin = $this->getMinMargin();
         $qrcode = $this->getQrCode($calculation);
+        $report = new CalculationReport($this, $calculation, $minMargin, $qrcode);
 
-        return $this->renderPdfDocument(new CalculationReport($this, $calculation, $minMargin, $qrcode));
+        return $this->renderPdfDocument($report);
     }
 
     /**

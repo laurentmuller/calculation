@@ -78,7 +78,7 @@
     </li>
 {%- endmacro dropdownItemExternal %}
 
-{% macro dropdownItemWithClass(href, text, icon = null, class, hidden, parameters = []) -%}
+{% macro dropdownItemWithClass(href, text, icon = null, class = null, hidden = false, parameters = []) -%}
     {% set attrs = {
         href: href,
         class: ['dropdown-item', 'rowlink-skip', class, hidden ? 'd-none']} %}

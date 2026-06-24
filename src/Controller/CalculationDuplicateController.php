@@ -57,8 +57,9 @@ class CalculationDuplicateController extends AbstractController
             return $response;
         }
         $items = $this->getItems($repository);
+        $document = new CalculationsDuplicateDocument($this, $items);
 
-        return $this->renderSpreadsheetDocument(new CalculationsDuplicateDocument($this, $items));
+        return $this->renderSpreadsheetDocument($document);
     }
 
     /**

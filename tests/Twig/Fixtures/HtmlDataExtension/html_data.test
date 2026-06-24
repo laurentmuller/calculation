@@ -5,6 +5,7 @@
 {{ html_data_attr({'value-false': false}) }}
 {{ html_data_attr({'value-integer': 0}) }}
 {{ html_data_attr({'value-one': 1}, {'value-two': 2}) }}
+{{ html_data_attr({'value-enum': enum('App\\Enums\\TableView').TABLE}) }}
 {{ html_data_attr({'data-value': 'data'}) }}
 {{ html_data_attr({'value-empty': ''}) }}
 {{ html_data_attr({'value-null': null}) }}
@@ -15,5 +16,6 @@ data-value-true="true"
 data-value-false="false"
 data-value-integer="0"
 data-value-one="1" data-value-two="2"
+data-value-enum="table"
 data-value="data"
 data-value-empty=""

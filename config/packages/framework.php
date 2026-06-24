@@ -25,7 +25,7 @@ return App::config([
         'enabled_locales' => [FormatUtils::DEFAULT_LOCALE],
         'session' => [
             'name' => 'CALCULATION_SESSION_ID',
-            'cookie_path' => '%cookie_path%',
+            'cookie_path' => '%env(COOKIE_PATH)%',
             'enabled' => true,
         ],
         'mailer' => [

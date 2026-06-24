@@ -120,8 +120,9 @@ class UserController extends AbstractEntityController
     public function excel(RoleService $roleService, StorageInterface $storage): SpreadsheetResponse
     {
         $entities = $this->getEntitiesByUserName();
+        $document = new UsersDocument($this, $entities, $roleService, $storage);
 
-        return $this->renderSpreadsheetDocument(new UsersDocument($this, $entities, $roleService, $storage));
+        return $this->renderSpreadsheetDocument($document);
     }
 
     /**
@@ -211,8 +212,9 @@ class UserController extends AbstractEntityController
         FontAwesomeService $fontService,
     ): PdfResponse {
         $entities = $this->getEntitiesByUserName();
+        $report = new UsersReport($this, $entities, $storage, $roleService, $fontService);
 
-        return $this->renderPdfDocument(new UsersReport($this, $entities, $storage, $roleService, $fontService));
+        return $this->renderPdfDocument($report);
     }
 
     /**

@@ -89,8 +89,8 @@ return App::config([
                 'remember_me' => [
                     'signature_properties' => ['email', 'password'],
                     'remember_me_parameter' => SecurityAttributes::REMEMBER_FIELD,
-                    'secret' => '%app_secret%',
-                    'path' => '%cookie_path%',
+                    'secret' => '%env(string:APP_SECRET)%',
+                    'path' => '%env(string:COOKIE_PATH)%',
                     'lifetime' => CacheAttributes::LIFE_TIME_ONE_MONTH,
                     'samesite' => Cookie::SAMESITE_LAX,
                     'secure' => true,

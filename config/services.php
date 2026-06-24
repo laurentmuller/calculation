@@ -46,8 +46,6 @@ return App::config([
     ],
     'services' => [
         '_defaults' => [
-            'autowire' => true,
-            'autoconfigure' => true,
             'bind' => [
                 // Twig\Extra\Markdown\MarkdownInterface
                 MarkdownInterface::class . ' $markdown' => '@twig.markdown.default',
@@ -63,11 +61,11 @@ return App::config([
                 $path . 'Faker',
                 $path . 'Model',
                 $path . 'Pdf',
+                $path . 'Reader',
                 $path . 'Report',
                 $path . 'Response',
                 $path . 'Spreadsheet',
                 $path . 'Traits',
-                $path . 'Util',
                 $path . 'Word',
             ],
         ],

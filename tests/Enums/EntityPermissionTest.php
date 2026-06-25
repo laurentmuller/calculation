@@ -166,7 +166,7 @@ final class EntityPermissionTest extends TestCase
     }
 
     #[DataProvider('getTryFromName')]
-    public function testTryFromName(mixed $expected, string $value): void
+    public function testTryFromName(?EntityPermission $expected, string $value): void
     {
         $actual = EntityPermission::tryFromName($value);
         self::assertSame($expected, $actual);

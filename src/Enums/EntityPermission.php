@@ -126,17 +126,9 @@ enum EntityPermission: int implements ConstantsInterface, EnumSortableInterface,
      */
     public static function tryFromName(string $name): ?self
     {
-        foreach (self::cases() as $permission) {
-            if ($permission->match($name)) {
-                return $permission;
-            }
-        }
-
-        return null;
-    }
-
-    private function match(string $name): bool
-    {
-        return StringUtils::equalIgnoreCase($name, $this->name);
+        return \array_find(
+            self::cases(),
+            static fn (self $permission): bool => StringUtils::equalIgnoreCase($name, $permission->name),
+        );
     }
 }

@@ -62,4 +62,19 @@ final class RightsTraitTest extends FlagBagTestCase implements RoleInterface
         $actual = $this->getPermission(EntityName::CALCULATION)->getValue();
         self::assertSame($expected, $actual);
     }
+
+    public function testSetPermissions(): void
+    {
+        $this->setPermissions(
+            FlagBag::from(EntityPermission::SHOW),
+            EntityName::CALCULATION,
+        );
+        $expected = FlagBag::from(EntityPermission::SHOW);
+        $actual = $this->getPermission(EntityName::CALCULATION);
+        self::assertSameFlagBag($expected, $actual);
+
+        $expected = new FlagBag(EntityPermission::class);
+        $actual = $this->getPermission(EntityName::CATEGORY);
+        self::assertSameFlagBag($expected, $actual);
+    }
 }

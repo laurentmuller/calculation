@@ -112,6 +112,20 @@ trait RightsTrait
     }
 
     /**
+     * Sets the given permission of the given entities.
+     *
+     * @param FlagBag<EntityPermission> $permission
+     */
+    public function setPermissions(FlagBag $permission, EntityName ...$entities): static
+    {
+        foreach ($entities as $entity) {
+            $this->setPermission($entity, $permission);
+        }
+
+        return $this;
+    }
+
+    /**
      * Sets the rights.
      *
      * @param int[]|null $rights

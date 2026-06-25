@@ -74,20 +74,23 @@ class RoleBuilderService
      */
     public function getRoleUser(): Role
     {
-        $all = EntityPermission::getAllPermission();
-        $none = EntityPermission::getNonePermission();
-        $default = EntityPermission::getDefaultPermission();
         $role = new Role(RoleInterface::ROLE_USER);
-        $role->setPermission(EntityName::CALCULATION, $all);
-        $role->setPermission(EntityName::CALCULATION_STATE, $default);
-        $role->setPermission(EntityName::GROUP, $default);
-        $role->setPermission(EntityName::CATEGORY, $default);
-        $role->setPermission(EntityName::PRODUCT, $default);
-        $role->setPermission(EntityName::TASK, $default);
-        $role->setPermission(EntityName::CUSTOMER, $default);
-        $role->setPermission(EntityName::GLOBAL_MARGIN, $default);
-        $role->setPermission(EntityName::USER, $none);
-        $role->setPermission(EntityName::LOG, $none);
+        $role->setPermission(EntityName::CALCULATION, EntityPermission::getAllPermission());
+        $role->setPermissions(
+            EntityPermission::getDefaultPermission(),
+            EntityName::CALCULATION_STATE,
+            EntityName::GROUP,
+            EntityName::CATEGORY,
+            EntityName::PRODUCT,
+            EntityName::TASK,
+            EntityName::CUSTOMER,
+            EntityName::GLOBAL_MARGIN,
+        );
+        $role->setPermissions(
+            EntityPermission::getNonePermission(),
+            EntityName::USER,
+            EntityName::LOG
+        );
 
         return $role;
     }
@@ -98,12 +101,10 @@ class RoleBuilderService
     private function getRoleWithAll(string $roleName): Role
     {
         $role = new Role($roleName);
-        $entities = EntityName::cases();
-        $all = EntityPermission::getAllPermission();
-        foreach ($entities as $entity) {
-            $role->setPermission($entity, $all);
-        }
 
-        return $role;
+        return $role->setPermissions(
+            EntityPermission::getAllPermission(),
+            ...EntityName::cases()
+        );
     }
 }

@@ -28,49 +28,48 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
- * Controller to manage users and administrators rights.
+ * Controller to manage the user and administrator rights.
  */
 #[ForAdmin]
 #[Route(path: '/admin', name: 'admin_')]
 class AdminRightsController extends AbstractController
 {
+    public function __construct(
+        private readonly RoleService $roleService,
+        private readonly RoleBuilderService $roleBuilderService
+    ) {
+    }
+
     /**
      * Edit rights for the administrator role.
      */
     #[ForSuperAdmin]
     #[GetPostRoute(path: '/rights/admin', name: 'rights_admin')]
-    public function rightsAdmin(
-        Request $request,
-        RoleService $roleService,
-        RoleBuilderService $roleBuilderService
-    ): Response {
+    public function rightsAdmin(Request $request): Response
+    {
         $parameters = $this->getApplicationParameters();
         $role = $parameters->getRights()->getAdminRole();
-        $default = $roleBuilderService->getRoleAdmin();
+        $default = $this->roleBuilderService->getRoleAdmin();
 
-        return $this->editRights($request, $parameters, $roleService, $role, $default);
+        return $this->editRights($request, $parameters, $role, $default);
     }
 
     /**
      * Edit rights for the user role.
      */
     #[GetPostRoute(path: '/rights/user', name: 'rights_user')]
-    public function rightsUser(
-        Request $request,
-        RoleService $roleService,
-        RoleBuilderService $roleBuilderService
-    ): Response {
+    public function rightsUser(Request $request): Response
+    {
         $parameters = $this->getApplicationParameters();
         $role = $parameters->getRights()->getUserRole();
-        $default = $roleBuilderService->getRoleUser();
+        $default = $this->roleBuilderService->getRoleUser();
 
-        return $this->editRights($request, $parameters, $roleService, $role, $default);
+        return $this->editRights($request, $parameters, $role, $default);
     }
 
     private function editRights(
         Request $request,
         ApplicationParameters $parameters,
-        RoleService $roleService,
         Role $role,
         Role $default
     ): Response {
@@ -88,7 +87,7 @@ class AdminRightsController extends AbstractController
                     request: $request,
                     message: TranslatableFlashMessage::success(
                         message: 'admin.rights.success',
-                        parameters: ['%name%' => $roleService->translateRole($role)],
+                        parameters: ['%name%' => $this->roleService->translateRole($role)],
                     )
                 );
             }

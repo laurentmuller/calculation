@@ -31,13 +31,9 @@ trait RightsTrait
     #[ORM\Column(options: ['default' => false])]
     private bool $overwrite = false;
 
-    /**
-     * The rights.
-     *
-     * @var ?int[]
-     */
-    #[ORM\Column(type: Types::JSON, nullable: true)]
-    private ?array $rights = null;
+    /** The rights. */
+    #[ORM\Column(type: Types::BIGINT, nullable: true)]
+    private ?int $rights = null;
 
     /**
      * Gets the permission for the given entity name.
@@ -46,9 +42,7 @@ trait RightsTrait
      */
     public function getPermission(EntityName $entity): FlagBag
     {
-        $offset = $entity->offset();
-        $rights = $this->getRights();
-        $value = $rights[$offset];
+        $value = $entity->getOffsetValue($this->rights);
 
         return new FlagBag(EntityPermission::class, $value);
     }
@@ -69,12 +63,10 @@ trait RightsTrait
 
     /**
      * Gets the rights.
-     *
-     * @return int[]
      */
-    public function getRights(): array
+    public function getRights(): ?int
     {
-        return $this->rights ?? $this->getEmptyRights();
+        return $this->rights;
     }
 
     /**
@@ -104,9 +96,8 @@ trait RightsTrait
      */
     public function setPermission(EntityName $entity, FlagBag $permission): static
     {
-        $offset = $entity->offset();
-        $rights = $this->getRights();
-        $rights[$offset] = $permission->getValue();
+        $rights = $this->rights ?? 0;
+        $rights |= $entity->getShiftedValue($permission);
 
         return $this->setRights($rights);
     }
@@ -127,21 +118,11 @@ trait RightsTrait
 
     /**
      * Sets the rights.
-     *
-     * @param int[]|null $rights
      */
-    public function setRights(?array $rights): static
+    public function setRights(?int $rights): static
     {
-        $this->rights = null === $rights || 0 === \array_sum($rights) ? null : $rights;
+        $this->rights = ($rights ?? 0) === 0 ? null : $rights;
 
         return $this;
-    }
-
-    /**
-     * @return int[]
-     */
-    private function getEmptyRights(): array
-    {
-        return \array_fill(0, \count(EntityName::cases()), 0);
     }
 }

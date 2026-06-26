@@ -22,20 +22,15 @@ use App\Service\RoleBuilderService;
  */
 class RightsParameter implements ParameterInterface
 {
-    /** @var int[]|null */
     #[Parameter('admin_rights')]
-    private ?array $adminRights = null;
+    private ?int $adminRights = null;
 
     private ?RoleBuilderService $service = null;
 
-    /** @var int[]|null */
     #[Parameter('user_rights')]
-    private ?array $userRights = null;
+    private ?int $userRights = null;
 
-    /**
-     * @return int[]|null
-     */
-    public function getAdminRights(): ?array
+    public function getAdminRights(): ?int
     {
         return $this->adminRights;
     }
@@ -54,10 +49,7 @@ class RightsParameter implements ParameterInterface
         return 'parameter_rights';
     }
 
-    /**
-     * @return int[]
-     */
-    public function getDefaultAdminRights(): array
+    public function getDefaultAdminRights(): ?int
     {
         return $this->getDefaultAdminRole()
             ->getRights();
@@ -69,10 +61,7 @@ class RightsParameter implements ParameterInterface
             ->getRoleAdmin();
     }
 
-    /**
-     * @return int[]
-     */
-    public function getDefaultUserRights(): array
+    public function getDefaultUserRights(): ?int
     {
         return $this->getDefaultUserRole()
             ->getRights();
@@ -89,10 +78,7 @@ class RightsParameter implements ParameterInterface
         return $this->service ??= new RoleBuilderService();
     }
 
-    /**
-     * @return int[]|null
-     */
-    public function getUserRights(): ?array
+    public function getUserRights(): ?int
     {
         return $this->userRights;
     }
@@ -105,10 +91,7 @@ class RightsParameter implements ParameterInterface
         return $role;
     }
 
-    /**
-     * @param int[]|null $adminRights
-     */
-    public function setAdminRights(?array $adminRights): self
+    public function setAdminRights(?int $adminRights): self
     {
         $this->adminRights = $this->cleanRights($adminRights, $this->getDefaultAdminRights());
 
@@ -120,10 +103,7 @@ class RightsParameter implements ParameterInterface
         return $this->setAdminRights($role->getRights());
     }
 
-    /**
-     * @param int[]|null $userRights
-     */
-    public function setUserRights(?array $userRights): self
+    public function setUserRights(?int $userRights): self
     {
         $this->userRights = $this->cleanRights($userRights, $this->getDefaultUserRights());
 
@@ -135,15 +115,9 @@ class RightsParameter implements ParameterInterface
         return $this->setUserRights($role->getRights());
     }
 
-    /**
-     * @param int[]|null $rights
-     * @param int[]      $default
-     *
-     * @return int[]|null
-     */
-    private function cleanRights(?array $rights, array $default): ?array
+    private function cleanRights(?int $rights, ?int $default): ?int
     {
-        if (null === $rights || [] === $rights || 0 === \array_sum($rights) || $rights === $default) {
+        if (null === $rights || $rights === $default) {
             return null;
         }
 

@@ -13,16 +13,18 @@ declare(strict_types=1);
 
 namespace App\Tests\Form\User;
 
+use App\Enums\EntityName;
+use App\Form\DataTransformer\RightsTransformer;
 use App\Form\Extension\InputGroupTypeExtension;
 use App\Form\Type\PlainType;
 use App\Form\User\RightsType;
 use App\Form\User\RoleRightsType;
 use App\Interfaces\RoleInterface;
+use App\Service\EntityNameService;
 use App\Service\RoleService;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
@@ -55,13 +57,17 @@ final class RoleRightsTypeTest extends TypeTestCase
     #[\Override]
     protected function getPreloadedExtensions(): array
     {
-        $rightsType = new RightsType(false, self::createStub(Security::class));
+        $service = $this->createMock(EntityNameService::class);
+        $service->method('getEntities')
+            ->willReturn(EntityName::sorted());
+        $rightsType = new RightsType($service);
         $roleHierarchy = $this->createMock(RoleHierarchyInterface::class);
         $roleHierarchy->method('getReachableRoleNames')
             ->willReturn([RoleInterface::ROLE_ADMIN]);
         $translator = $this->createMockTranslator();
         $service = new RoleService($roleHierarchy, $translator);
-        $roleRightsType = new RoleRightsType($service);
+        $transformer = self::createStub(RightsTransformer::class);
+        $roleRightsType = new RoleRightsType($service, $transformer);
 
         return [
             $rightsType,

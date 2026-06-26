@@ -161,7 +161,7 @@ class ApplicationParameters extends AbstractParameters
     }
 
     /**
-     * Gets the rights parameter.
+     * Gets the right parameters.
      */
     public function getRights(): RightsParameter
     {

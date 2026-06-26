@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Form\User;
 
 use App\Form\AbstractHelperType;
+use App\Form\DataTransformer\RightsTransformer;
 use App\Form\FormHelper;
 use App\Service\RoleService;
 
@@ -26,13 +27,16 @@ use App\Service\RoleService;
  */
 abstract class AbstractRightsType extends AbstractHelperType
 {
-    public function __construct(protected readonly RoleService $service)
-    {
+    public function __construct(
+        protected readonly RoleService $service,
+        private readonly RightsTransformer $transformer
+    ) {
     }
 
     protected function addRightsType(FormHelper $helper): void
     {
         $helper->field('rights')
+            ->modelTransformer($this->transformer)
             ->add(RightsType::class);
     }
 

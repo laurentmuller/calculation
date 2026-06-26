@@ -76,6 +76,20 @@ final class EntityNameTest extends TestCase
         yield [EntityName::USER, 9];
     }
 
+    public static function getShift(): \Generator
+    {
+        yield [EntityName::CALCULATION, 0];
+        yield [EntityName::CALCULATION_STATE, 6];
+        yield [EntityName::CATEGORY, 12];
+        yield [EntityName::CUSTOMER, 18];
+        yield [EntityName::GLOBAL_MARGIN, 24];
+        yield [EntityName::GROUP, 30];
+        yield [EntityName::LOG, 36];
+        yield [EntityName::PRODUCT, 42];
+        yield [EntityName::TASK, 48];
+        yield [EntityName::USER, 54];
+    }
+
     public static function getTryFromMixed(): \Generator
     {
         yield [null, null];
@@ -168,6 +182,13 @@ final class EntityNameTest extends TestCase
     public function testOffset(EntityName $entityName, int $expected): void
     {
         $actual = $entityName->offset();
+        self::assertSame($expected, $actual);
+    }
+
+    #[DataProvider('getShift')]
+    public function testShift(EntityName $entityName, int $expected): void
+    {
+        $actual = $entityName->shift();
         self::assertSame($expected, $actual);
     }
 

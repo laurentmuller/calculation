@@ -15,10 +15,7 @@ namespace App\Form\User;
 
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
-use App\Interfaces\RoleInterface;
-use Elao\Enum\FlagBag;
-use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use App\Service\EntityNameService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -29,17 +26,14 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class RightsType extends AbstractType
 {
-    public function __construct(
-        #[Autowire('%kernel.debug%')]
-        private readonly bool $debug,
-        private readonly Security $security,
-    ) {
+    public function __construct(private readonly EntityNameService $service)
+    {
     }
 
     #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $entities = $this->getEntityNames();
+        $entities = $this->service->getEntities();
         foreach ($entities as $entity) {
             $this->addEntityPermissionType($builder, $entity);
         }
@@ -50,63 +44,10 @@ class RightsType extends AbstractType
      */
     private function addEntityPermissionType(FormBuilderInterface $builder, EntityName $entity): void
     {
-        $offset = $entity->offset();
         $builder->add(
             $entity->getFormField(),
             EntityPermissionType::class,
-            [
-                'label' => $entity,
-                /* @param int[] $object */
-                'getter' => fn (array $object): FlagBag => $this->getOffsetValue($offset, $object),
-                /*
-                 * @param int[]                     $object
-                 * @param FlagBag<EntityPermission> $value
-                 */
-                'setter' => fn (array &$object, FlagBag $value) => $this->setOffsetValue($offset, $object, $value),
-            ]
+            ['label' => $entity]
         );
-    }
-
-    /**
-     * @return EntityName[]
-     */
-    private function getEntityNames(): array
-    {
-        return \array_filter(EntityName::sorted(), $this->isGranted(...));
-    }
-
-    /**
-     * @param int[] $object
-     *
-     * @return FlagBag<EntityPermission>
-     */
-    private function getOffsetValue(int $offset, array $object): FlagBag
-    {
-        return new FlagBag(EntityPermission::class, $object[$offset]);
-    }
-
-    private function isGranted(EntityName $entityName): bool
-    {
-        return match ($entityName) {
-            EntityName::CALCULATION,
-            EntityName::CALCULATION_STATE,
-            EntityName::CATEGORY,
-            EntityName::GLOBAL_MARGIN,
-            EntityName::GROUP,
-            EntityName::PRODUCT,
-            EntityName::TASK => true,
-            EntityName::CUSTOMER => $this->debug,
-            EntityName::LOG,
-            EntityName::USER => $this->security->isGranted(RoleInterface::ROLE_ADMIN),
-        };
-    }
-
-    /**
-     * @param int[]                     $object
-     * @param FlagBag<EntityPermission> $value
-     */
-    private function setOffsetValue(int $offset, array &$object, FlagBag $value): void
-    {
-        $object[$offset] = $value->getValue();
     }
 }

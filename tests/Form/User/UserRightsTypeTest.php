@@ -14,16 +14,18 @@ declare(strict_types=1);
 namespace App\Tests\Form\User;
 
 use App\Entity\User;
+use App\Enums\EntityName;
+use App\Form\DataTransformer\RightsTransformer;
 use App\Form\Extension\InputGroupTypeExtension;
 use App\Form\Type\PlainType;
 use App\Form\User\RightsType;
 use App\Form\User\UserRightsType;
 use App\Interfaces\RoleInterface;
+use App\Service\EntityNameService;
 use App\Service\RoleService;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
@@ -73,18 +75,26 @@ final class UserRightsTypeTest extends TypeTestCase
     #[\Override]
     protected function getPreloadedExtensions(): array
     {
+        $translator = $this->createMockTranslator();
+
         $roleHierarchy = $this->createMock(RoleHierarchyInterface::class);
         $roleHierarchy->method('getReachableRoleNames')
             ->willReturn([RoleInterface::ROLE_ADMIN]);
-        $translator = $this->createMockTranslator();
-        $service = new RoleService($roleHierarchy, $translator);
-        $userRightsType = new UserRightsType($service);
-        $rightsType = new RightsType(false, self::createStub(Security::class));
+        $roleService = new RoleService($roleHierarchy, $translator);
+
+        $entityNameService = $this->createMock(EntityNameService::class);
+        $entityNameService->method('getEntities')
+            ->willReturn(EntityName::sorted());
+        $transformer = new RightsTransformer($entityNameService);
+
+        $rightsType = new RightsType($entityNameService);
+        $userRightsType = new UserRightsType($roleService, $transformer);
+        $plainType = new PlainType($translator);
 
         return [
             $rightsType,
             $userRightsType,
-            new PlainType($translator),
+            $plainType,
         ];
     }
 

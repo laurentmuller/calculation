@@ -124,10 +124,7 @@ class EntityVoter extends Voter
         return $permission;
     }
 
-    /**
-     * @return int[]
-     */
-    private function getRights(User $user): array
+    private function getRights(User $user): ?int
     {
         if ($user->isOverwrite()) {
             return $user->getRights();
@@ -157,7 +154,7 @@ class EntityVoter extends Voter
     private function isAllowed(User $user, EntityName $entityName, EntityPermission $entityPermission): bool
     {
         $rights = $this->getRights($user);
-        $value = $rights[$entityName->offset()];
+        $value = $entityName->getOffsetValue($rights);
         $mask = $entityPermission->value;
 
         return $this->isBitSet($value, $mask);

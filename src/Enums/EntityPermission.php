@@ -96,7 +96,7 @@ enum EntityPermission: int implements ConstantsInterface, EnumSortableInterface,
     }
 
     /**
-     * Gets a flag bag with no permission.
+     * Gets a flag bag without permission.
      *
      * @return FlagBag<EntityPermission>
      */

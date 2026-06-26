@@ -78,7 +78,7 @@ final class RightsParameterTest extends ParameterTestCase
 
     public function testSetValue(): void
     {
-        $rights = [0, 1];
+        $rights = 1;
         $this->parameter->setAdminRights($rights);
         self::assertSame($rights, $this->parameter->getAdminRights());
         $this->parameter->setUserRights($rights);

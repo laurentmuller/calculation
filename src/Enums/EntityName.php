@@ -21,6 +21,7 @@ use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumInterface;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumTrait;
+use Elao\Enum\FlagBag;
 
 /**
  * The entity name enumeration.
@@ -73,6 +74,10 @@ enum EntityName: string implements ConstantsInterface, EnumSortableInterface, Tr
     #[EnumCase('user', ['offset' => 9])]
     case USER = 'EntityUser';
 
+    /** The entity mask */
+    private const int ENTITY_MASK = 0x3F;
+    /** The entity offset */
+    private const int ENTITY_OFFSET = 6;
     /** The entity prefix. */
     private const string ENTITY_PREFIX = 'Entity';
 
@@ -99,12 +104,33 @@ enum EntityName: string implements ConstantsInterface, EnumSortableInterface, Tr
         return \substr($this->value, \strlen(self::ENTITY_PREFIX));
     }
 
+    public function getOffsetValue(?int $rights): int
+    {
+        return (($rights ?? 0) >> $this->shift()) & self::ENTITY_MASK;
+    }
+
+    /**
+     * @param FlagBag<EntityPermission> $permission
+     */
+    public function getShiftedValue(FlagBag $permission): int
+    {
+        return $permission->getValue() << $this->shift();
+    }
+
     /**
      * Gets the offset.
      */
     public function offset(): int
     {
         return $this->getExtraInt('offset');
+    }
+
+    /**
+     * Gets the bit shift.
+     */
+    public function shift(): int
+    {
+        return $this->offset() * self::ENTITY_OFFSET;
     }
 
     /**

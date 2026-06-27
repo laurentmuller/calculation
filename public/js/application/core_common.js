@@ -118,15 +118,15 @@ $(function () {
      */
     function updateButtonTitles() {
         if ($(window).width() >= 768) {
-            $('.btn-form[data-title]').removeAttr('title');
+            $('.btn[data-show-title]').removeAttr('title');
             return;
         }
-        $('.btn-form:not([title]):has(.d-md-inline-block)').each(function () {
+        $('.btn:not([title]):has(.d-md-inline-block)').each(function () {
             const $this = $(this);
             const title = $this.find('.d-md-inline-block').text();
             $this.attr({
                 title: title,
-                'data-title': true
+                'data-show-title': true
             });
         });
     }

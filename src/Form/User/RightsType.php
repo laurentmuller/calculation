@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Form\User;
 
-use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Service\EntityNameService;
 use Symfony\Component\Form\AbstractType;
@@ -35,19 +34,11 @@ class RightsType extends AbstractType
     {
         $entities = $this->service->getEntities();
         foreach ($entities as $entity) {
-            $this->addEntityPermissionType($builder, $entity);
+            $builder->add(
+                $entity->getFormField(),
+                EntityPermissionType::class,
+                ['label' => $entity]
+            );
         }
-    }
-
-    /**
-     * @param FormBuilderInterface<EntityPermission[]|null> $builder
-     */
-    private function addEntityPermissionType(FormBuilderInterface $builder, EntityName $entity): void
-    {
-        $builder->add(
-            $entity->getFormField(),
-            EntityPermissionType::class,
-            ['label' => $entity]
-        );
     }
 }

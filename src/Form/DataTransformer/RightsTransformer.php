@@ -19,7 +19,7 @@ use Elao\Enum\FlagBag;
 use Symfony\Component\Form\DataTransformerInterface;
 
 /**
- * @implements DataTransformerInterface<?int, FlagBag<EntityPermission>[]>
+ * @implements DataTransformerInterface<int, FlagBag<EntityPermission>[]>
  */
 readonly class RightsTransformer implements DataTransformerInterface
 {
@@ -38,7 +38,7 @@ readonly class RightsTransformer implements DataTransformerInterface
         foreach ($entites as $entity) {
             $formField = $entity->getFormField();
             $permission = $value[$formField];
-            $result |= $entity->getShiftedValue($permission);
+            $result |= $entity->getShiftedValue($permission->getValue());
         }
 
         return $result;

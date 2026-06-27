@@ -21,7 +21,6 @@ use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumInterface;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumTrait;
-use Elao\Enum\FlagBag;
 
 /**
  * The entity name enumeration.
@@ -109,12 +108,9 @@ enum EntityName: string implements ConstantsInterface, EnumSortableInterface, Tr
         return (($rights ?? 0) >> $this->shift()) & self::ENTITY_MASK;
     }
 
-    /**
-     * @param FlagBag<EntityPermission> $permission
-     */
-    public function getShiftedValue(FlagBag $permission): int
+    public function getShiftedValue(int $value): int
     {
-        return $permission->getValue() << $this->shift();
+        return $value << $this->shift();
     }
 
     /**

@@ -11,7 +11,7 @@
             <div class="card-header{% block card_header_class %}{% endblock card_header_class %}">
                 {% block card_header %}
                 <h1 class="card-title py-1">
-                    {{- icon(title_icon, title, title_parameters|default({})) -}}
+                    {{- icon(icon: title_icon, text: title, parmeters: title_parameters|default({})) -}}
                 </h1>
                 {% if title_description ?? false %}
                     <small>{{ title_description|trans }}</small>

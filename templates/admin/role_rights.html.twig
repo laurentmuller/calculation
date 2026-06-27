@@ -1,30 +1,10 @@
-{% extends 'cards/card_edit.html.twig' %}
-{% import 'macros/_rights.html.twig' as rights %}
+{% extends 'cards/card_rights.html.twig' %}
 {# parameters #}
 {%- set title = is_admin ? 'index.menu_rights_admin' : 'index.menu_rights_user' -%}
-{%- set title_icon = 'fa-solid fa-unlock' -%}
-{%- set title_description = 'user.rights.description' -%}
-{%- set show_required = false -%}
-{# classes #}
-{% block card_container_class '' %}
-{# header #}
-{% block card_header %}
-<div class="d-flex-wrap-center">
-    <div class="me-auto">{{ parent() }}</div>
-    <div>{{ rights.actions() }}</div>
-</div>
-{%- endblock card_header %}
+{%- set overwrite = true -%}
 {# body #}
 {% block card_body %}
-{{ form_row(form.name) }}
-{{ rights.table(form.rights, default.permissions, entities) }}
-{% endblock card_body %}
-{# javascripts #}
-{% block javascripts %}
-{% if is_js_debug %}
+    {{ form_row(form.name) }}
+    {{ _self.table(form.rights, default.permissions, entities, overwrite) }}
     {{ parent() }}
-    {{ asset_js('js/application/user_rights.js') }}
-{% else %}
-    {{ asset_js('js/compiled/user_rights.js') }}
-{% endif %}
-{%- endblock javascripts %}
+{% endblock card_body %}

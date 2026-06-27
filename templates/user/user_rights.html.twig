@@ -1,42 +1,22 @@
-{% extends 'cards/card_edit.html.twig' %}
-{% import 'macros/_rights.html.twig' as rights %}
+{% extends 'cards/card_rights.html.twig' %}
 {# parameters #}
 {%- set title = 'user.rights.title' -%}
-{%- set title_icon = 'fa-solid fa-unlock' -%}
-{%- set title_description = 'user.rights.description' -%}
 {%- set page_list = 'user_index' -%}
 {%- set overwrite = form.overwrite.vars.checked -%}
-{%- set show_required = false -%}
-{% block card_container_class '' %}
-{# header #}
-{% block card_header %}
-<div class="d-flex-wrap-center">
-    <div class="me-auto">{{ parent() }}</div>
-    <div>{{ rights.actions(overwrite) }}</div>
-</div>
-{%- endblock card_header %}
 {# body #}
 {% block card_body %}
-<div class="row">
-    <div class="col-md-5">
-        {{ form_row(form.username) }}
+    <div class="row">
+        <div class="col-md-5">
+            {{ form_row(form.username) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_row(form.role) }}
+        </div>
+        <div class="col-md-3">
+            {{ form_row(form.enabled) }}
+        </div>
     </div>
-    <div class="col-md-4">
-        {{ form_row(form.role) }}
-    </div>
-    <div class="col-md-3">
-        {{ form_row(form.enabled) }}
-    </div>
-</div>
-{{ rights.table(form.rights, default.permissions, entities, overwrite) }}
-{{ form_row(form.overwrite, {attr: {'data-default': default.overwrite|json_encode}}) }}
-{% endblock card_body %}
-{# javascripts #}
-{% block javascripts %}
-{% if is_js_debug %}
+    {{ _self.table(form.rights, default.permissions, entities, overwrite) }}
+    {{ form_row(form.overwrite, {attr: {'data-default': default.overwrite|json_encode}}) }}
     {{ parent() }}
-    {{ asset_js('js/application/user_rights.js') }}
-{% else %}
-    {{ asset_js('js/compiled/user_rights.js') }}
-{% endif %}
-{%- endblock javascripts %}
+{% endblock card_body %}

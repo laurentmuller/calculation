@@ -1,20 +1,30 @@
-1{# macros #}
+{% extends 'cards/card_edit.html.twig' %}
+{% from 'macros/_icons.html.twig' import icon, button, dropdownSeparator %}
+{# parameters #}
+{%- set title_icon = 'fa-solid fa-unlock' -%}
+{%- set title_description = 'user.rights.description' -%}
+{%- set show_required = false -%}
+{% block card_container_class '' %}
+{# macros #}
 {% macro header(permission, overwrite) %}
     <th>
-        <button type="button" class="btn btn-link btn-col p-0"
-                title="{{ 'user.rights.col_title'|trans }}"{%- if not overwrite -%} disabled{%- endif -%}>
-            {{- permission|trans -}}
-        </button>
+        {{ button(
+            text: permission,
+            class: 'btn btn-link btn-col p-0',
+            attributes: {
+                title: 'user.rights.col_title'|trans,
+                disabled: not overwrite}) }}
     </th>
 {%- endmacro header %}
-
 {% macro row(entries, permission, overwrite) -%}
     <tr class="text-center">
         <td class="text-start">
-            <button type="button" class="btn btn-link btn-row p-0"
-                    title="{{ 'user.rights.row_title'|trans }}"{%- if not overwrite -%} disabled{%- endif -%}>
-                {{- entries.vars.label|trans -}}
-            </button>
+            {{ button(
+                text: entries.vars.label,
+                class: 'btn btn-link btn-row p-0',
+                attributes: {
+                    title: 'user.rights.row_title'|trans,
+                    disabled: not overwrite}) }}
         </td>
         {% for entry in entries %}
             {%- set checked = permission.hasBits(entry.vars.value) -%}
@@ -26,9 +36,7 @@
         {% endfor %}
     </tr>
 {%- endmacro row %}
-
 {% macro table(rights, permissions, entities, overwrite = true) %}
-    {% from 'macros/_icons.html.twig' import icon %}
     <div class="table-responsive mb-3">
         <table class="table table-bordered table-list" id="table-edit">
             <thead>
@@ -62,9 +70,7 @@
         </table>
     </div>
 {% endmacro table %}
-
 {% macro action(id, icon, overwrite) %}
-    {% from 'macros/_icons.html.twig' import button %}
     <li>
         {{ button(
             text: 'user.rights.' ~ id ~ '_title',
@@ -76,23 +82,33 @@
                 disabled: not overwrite}) }}
     </li>
 {% endmacro action %}
-
-{% macro actions(overwrite = true) %}
-    {% from 'macros/_icons.html.twig' import button, dropdownSeparator %}
-    <div class="dropdown">
-        {{ button(
-            text: 'common.actions',
-            class: 'btn btn-sm btn-outline-secondary dropdown-toggle',
-            icon: 'fa-solid fa-bars',
-            attributes: {
-                'data-bs-toggle': 'dropdown',
-                'aria-expanded': false}) }}
-        <ul class="dropdown-menu dropdown-menu-end">
-            {{ _self.action('all', 'fa-fw fa-solid fa-check-circle', overwrite) }}
-            {{ _self.action('none', 'fa-fw fa-solid fa-times-circle', overwrite) }}
-            {{ _self.action('toggle', 'fa-fw fa-solid fa-right-left', overwrite) }}
-            {{ dropdownSeparator() }}
-            {{ _self.action('default', 'fa-fw fa-solid fa-rotate-left', true) }}
-        </ul>
-    </div>
+{% macro actions(overwrite) %}
+    {{ button(
+        text: 'common.actions',
+        class: 'btn btn-outline-secondary dropdown-toggle',
+        icon: 'fa-solid fa-bars',
+        attributes: {
+            'data-bs-toggle': 'dropdown',
+            'aria-expanded': false}) }}
+    <ul class="dropdown-menu dropdown-menu-end">
+        {{ _self.action('all', 'fa-fw fa-solid fa-check-circle', overwrite) }}
+        {{ _self.action('none', 'fa-fw fa-solid fa-times-circle', overwrite) }}
+        {{ _self.action('toggle', 'fa-fw fa-solid fa-right-left', overwrite) }}
+        {{ dropdownSeparator() }}
+        {{ _self.action('default', 'fa-fw fa-solid fa-rotate-left', true) }}
+    </ul>
 {% endmacro actions %}
+{# actions form #}
+{% block actions_form -%}
+    {{ parent() }}
+    {{ _self.actions(overwrite) }}
+{% endblock actions_form %}
+{# javascripts #}
+{% block javascripts %}
+    {% if is_js_debug %}
+        {{ parent() }}
+        {{ asset_js('js/application/user_rights.js') }}
+    {% else %}
+        {{ asset_js('js/compiled/user_rights.js') }}
+    {% endif %}
+{%- endblock javascripts %}

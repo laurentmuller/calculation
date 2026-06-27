@@ -97,7 +97,7 @@ trait RightsTrait
     public function setPermission(EntityName $entity, FlagBag $permission): static
     {
         $rights = $this->rights ?? 0;
-        $rights |= $entity->getShiftedValue($permission);
+        $rights |= $entity->getShiftedValue($permission->getValue());
 
         return $this->setRights($rights);
     }

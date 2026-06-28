@@ -50,22 +50,12 @@
             </tr>
             </thead>
             <tbody>
-            {{ _self.row(rights.Calculation, permissions.Calculation, overwrite) }}
-            {{ _self.row(rights.Product, permissions.Product, overwrite) }}
-            {{ _self.row(rights.Task, permissions.Task, overwrite) }}
-            {{ _self.row(rights.Category, permissions.Category, overwrite) }}
-            {{ _self.row(rights.Group, permissions.Group, overwrite) }}
-            {{ _self.row(rights.CalculationState, permissions.CalculationState, overwrite) }}
-            {{ _self.row(rights.GlobalMargin, permissions.GlobalMargin, overwrite) }}
-            {%- if rights.Customer ?? false -%}
-                {{ _self.row(rights.Customer, permissions.Customer, overwrite) }}
-            {%- endif -%}
-            {%- if rights.User ?? false -%}
-                {{ _self.row(rights.User, permissions.User, overwrite) }}
-            {%- endif -%}
-            {%- if rights.Log ?? false -%}
-                {{ _self.row(rights.Log, permissions.Log, overwrite) }}
-            {%- endif -%}
+            {% for entity_name in enum('App\\Enums\\EntityName')?.sorted %}
+                {% set form_field = entity_name.formField %}
+                {%- if rights[form_field] ?? false -%}
+                    {{ _self.row(rights[form_field], permissions[form_field], overwrite) }}
+                {%- endif -%}
+            {% endfor %}
             </tbody>
         </table>
     </div>

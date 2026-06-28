@@ -52,6 +52,7 @@ readonly class RightsTransformer implements DataTransformerInterface
     #[\Override]
     public function transform(mixed $value): array
     {
+        $value ??= 0;
         $result = [];
         $entites = $this->service->getEntities();
         foreach ($entites as $entity) {

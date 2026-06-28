@@ -42,7 +42,7 @@ trait RightsTrait
      */
     public function getPermission(EntityName $entity): FlagBag
     {
-        $value = $entity->getOffsetValue($this->rights);
+        $value = $entity->getOffsetValue($this->getRights());
 
         return new FlagBag(EntityPermission::class, $value);
     }
@@ -64,9 +64,9 @@ trait RightsTrait
     /**
      * Gets the rights.
      */
-    public function getRights(): ?int
+    public function getRights(): int
     {
-        return $this->rights;
+        return $this->rights ?? 0;
     }
 
     /**

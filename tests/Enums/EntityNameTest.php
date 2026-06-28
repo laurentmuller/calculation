@@ -36,16 +36,16 @@ final class EntityNameTest extends TestCase
 
     public static function getFormFields(): \Generator
     {
-        yield [EntityName::CALCULATION, 'Calculation'];
-        yield [EntityName::CALCULATION_STATE, 'CalculationState'];
-        yield [EntityName::CATEGORY, 'Category'];
-        yield [EntityName::CUSTOMER, 'Customer'];
-        yield [EntityName::GLOBAL_MARGIN, 'GlobalMargin'];
-        yield [EntityName::GROUP, 'Group'];
-        yield [EntityName::LOG, 'Log'];
-        yield [EntityName::PRODUCT, 'Product'];
-        yield [EntityName::TASK, 'Task'];
-        yield [EntityName::USER, 'User'];
+        yield [EntityName::CALCULATION, 'calculation'];
+        yield [EntityName::CALCULATION_STATE, 'calculationState'];
+        yield [EntityName::CATEGORY, 'category'];
+        yield [EntityName::CUSTOMER, 'customer'];
+        yield [EntityName::GLOBAL_MARGIN, 'globalMargin'];
+        yield [EntityName::GROUP, 'group'];
+        yield [EntityName::LOG, 'log'];
+        yield [EntityName::PRODUCT, 'product'];
+        yield [EntityName::TASK, 'task'];
+        yield [EntityName::USER, 'user'];
     }
 
     public static function getLabel(): \Generator

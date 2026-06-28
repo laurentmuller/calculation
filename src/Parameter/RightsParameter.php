@@ -38,7 +38,9 @@ class RightsParameter implements ParameterInterface
     public function getAdminRole(): Role
     {
         $role = $this->getService()->getRoleAdmin();
-        $role->setRights($this->adminRights ?? $role->getRights());
+        if (null !== $this->adminRights) {
+            $role->setRights($this->adminRights);
+        }
 
         return $role;
     }
@@ -49,7 +51,7 @@ class RightsParameter implements ParameterInterface
         return 'parameter_rights';
     }
 
-    public function getDefaultAdminRights(): ?int
+    public function getDefaultAdminRights(): int
     {
         return $this->getDefaultAdminRole()
             ->getRights();
@@ -61,7 +63,7 @@ class RightsParameter implements ParameterInterface
             ->getRoleAdmin();
     }
 
-    public function getDefaultUserRights(): ?int
+    public function getDefaultUserRights(): int
     {
         return $this->getDefaultUserRole()
             ->getRights();
@@ -86,7 +88,9 @@ class RightsParameter implements ParameterInterface
     public function getUserRole(): Role
     {
         $role = $this->getService()->getRoleUser();
-        $role->setRights($this->userRights ?? $role->getRights());
+        if (null !== $this->userRights) {
+            $role->setRights($this->userRights);
+        }
 
         return $role;
     }
@@ -98,11 +102,6 @@ class RightsParameter implements ParameterInterface
         return $this;
     }
 
-    public function setAdminRole(Role $role): self
-    {
-        return $this->setAdminRights($role->getRights());
-    }
-
     public function setUserRights(?int $userRights): self
     {
         $this->userRights = $this->cleanRights($userRights, $this->getDefaultUserRights());
@@ -110,12 +109,7 @@ class RightsParameter implements ParameterInterface
         return $this;
     }
 
-    public function setUserRole(Role $role): self
-    {
-        return $this->setUserRights($role->getRights());
-    }
-
-    private function cleanRights(?int $rights, ?int $default): ?int
+    private function cleanRights(?int $rights, int $default): ?int
     {
         if (null === $rights || $rights === $default) {
             return null;

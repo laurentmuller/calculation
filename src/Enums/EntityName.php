@@ -100,12 +100,12 @@ enum EntityName: string implements ConstantsInterface, EnumSortableInterface, Tr
      */
     public function getFormField(): string
     {
-        return \substr($this->value, \strlen(self::ENTITY_PREFIX));
+        return \lcfirst(\substr($this->value, \strlen(self::ENTITY_PREFIX)));
     }
 
-    public function getOffsetValue(?int $rights): int
+    public function getOffsetValue(int $rights): int
     {
-        return (($rights ?? 0) >> $this->shift()) & self::ENTITY_MASK;
+        return ($rights >> $this->shift()) & self::ENTITY_MASK;
     }
 
     public function getShiftedValue(int $value): int

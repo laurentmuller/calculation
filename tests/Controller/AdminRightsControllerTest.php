@@ -54,7 +54,7 @@ final class AdminRightsControllerTest extends ControllerTestCase
         $values[0] = $values[1] = $values[5] = true;
         $this->checkForm(
             uri: 'admin/rights/user',
-            data: ['role_rights[rights][GlobalMargin]' => $values]
+            data: ['role_rights[rights][globalMargin]' => $values]
         );
     }
 
@@ -63,7 +63,7 @@ final class AdminRightsControllerTest extends ControllerTestCase
         $values = $this->getPermissionValues();
         $this->checkForm(
             uri: 'admin/rights/user',
-            data: ['role_rights[rights][GlobalMargin]' => $values]
+            data: ['role_rights[rights][globalMargin]' => $values]
         );
     }
 

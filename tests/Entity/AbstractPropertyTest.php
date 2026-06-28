@@ -26,20 +26,6 @@ final class AbstractPropertyTest extends TestCase
     use DateAssertTrait;
     use IdTrait;
 
-    public function testArray(): void
-    {
-        $entity = $this->getEntity();
-        self::assertNull($entity->getArray());
-        $entity->setArray([1, 'string', true]);
-        $actual = $entity->getArray();
-        self::assertIsArray($actual);
-        self::assertCount(3, $actual);
-        self::assertSame([1, 'string', true], $actual);
-
-        $entity->setValue('{invalidJson');
-        self::assertNull($entity->getArray());
-    }
-
     public function testBoolean(): void
     {
         $entity = $this->getEntity();
@@ -54,7 +40,6 @@ final class AbstractPropertyTest extends TestCase
         self::assertNull($entity->getId());
         self::assertSame('0', $entity->getDisplay());
         self::assertSame('', $entity->getName());
-        self::assertNull($entity->getArray());
         self::assertFalse($entity->getBoolean());
         self::assertNull($entity->getDatePoint());
         self::assertSame(0, $entity->getInteger());
@@ -120,10 +105,6 @@ final class AbstractPropertyTest extends TestCase
     public function testValue(): void
     {
         $entity = $this->getEntity();
-
-        $array = [1, 'string', true];
-        $entity->setValue($array);
-        self::assertSame($array, $entity->getArray());
 
         $permission = EntityPermission::ADD;
         $entity->setValue($permission);

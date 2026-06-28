@@ -355,7 +355,6 @@ abstract class AbstractParameters
         }
 
         return match ($name) {
-            'array' => PropertyType::ARRAY,
             'bool' => PropertyType::BOOL,
             'float' => PropertyType::FLOAT,
             'int' => PropertyType::INTEGER,
@@ -373,7 +372,6 @@ abstract class AbstractParameters
     private function getPropertyValue(MetaData $metaData, AbstractProperty $property): mixed
     {
         return match ($metaData->type) {
-            PropertyType::ARRAY => $property->getArray(),
             PropertyType::BOOL => $property->getBoolean(),
             PropertyType::FLOAT => $property->getFloat(),
             PropertyType::INTEGER => $property->getInteger(),

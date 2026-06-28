@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Interfaces\EntityInterface;
-use App\Utils\StringUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -46,21 +45,6 @@ abstract class AbstractProperty extends AbstractEntity
         #[ORM\Column(length: 50)]
         protected ?string $name = null
     ) {
-    }
-
-    /**
-     * Gets this property value as an array. Internally, the array is decoded from a JSON string.
-     */
-    public function getArray(): ?array
-    {
-        if (StringUtils::isString($this->value)) {
-            try {
-                return StringUtils::decodeJson($this->value);
-            } catch (\InvalidArgumentException) {
-            }
-        }
-
-        return null;
     }
 
     /**
@@ -151,14 +135,6 @@ abstract class AbstractProperty extends AbstractEntity
     }
 
     /**
-     * Sets the property value as an array. Internally, the array is encoded to a JSON string.
-     */
-    public function setArray(?array $value): static
-    {
-        return $this->setString(null === $value || [] === $value ? null : StringUtils::encodeJson($value));
-    }
-
-    /**
      * Sets the property value as a backed enum.
      */
     public function setBackedEnum(\BackedEnum $value): static
@@ -225,9 +201,6 @@ abstract class AbstractProperty extends AbstractEntity
      */
     public function setValue(mixed $value): static
     {
-        if (\is_array($value)) {
-            return $this->setArray($value);
-        }
         if ($value instanceof \BackedEnum) {
             return $this->setBackedEnum($value);
         }

@@ -18,7 +18,7 @@ use Symfony\Component\Clock\DatePoint;
 /**
  * Attribute to define a parameter name and an optional default value.
  *
- * @phpstan-type TValue = scalar|array|\BackedEnum|DatePoint|null
+ * @phpstan-type TValue = scalar|\BackedEnum|DatePoint|null
  */
 #[\Attribute(\Attribute::TARGET_PROPERTY)]
 class Parameter

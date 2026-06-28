@@ -67,8 +67,10 @@ final class RightsParameterTest extends ParameterTestCase
         $rights = 1;
         $this->parameter->setAdminRights($rights);
         self::assertSame($rights, $this->parameter->getAdminRights());
+        self::assertSame($rights, $this->parameter->getAdminRole()->getRights());
         $this->parameter->setUserRights($rights);
         self::assertSame($rights, $this->parameter->getUserRights());
+        self::assertSame($rights, $this->parameter->getUserRole()->getRights());
     }
 
     #[\Override]

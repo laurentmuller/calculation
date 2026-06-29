@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
+use App\Interfaces\DefaultEnumInterface;
 use App\Traits\EnumExtrasTrait;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
@@ -21,28 +22,29 @@ use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumTrait;
 
 /**
  * Flash bag type enumeration.
+ *
+ * @implements DefaultEnumInterface<FlashType>
  */
 #[ReadableEnum(prefix: 'flash_bag.', useValueAsDefault: true)]
-enum FlashType: string implements TranslatableEnumInterface
+enum FlashType: string implements DefaultEnumInterface, TranslatableEnumInterface
 {
     use EnumExtrasTrait;
     use TranslatableEnumTrait;
 
-    /** Danger flash bag. */
     #[EnumCase(extras: ['icon' => 'fa-solid fa-lg fa-exclamation-triangle'])]
     case DANGER = 'danger';
 
-    /** Information flash bag. */
     #[EnumCase(extras: ['icon' => 'fa-solid fa-lg fa-info-circle'])]
     case INFO = 'info';
 
-    /** Success flash bag. */
     #[EnumCase(extras: ['icon' => 'fa-solid fa-lg fa-check-circle'])]
     case SUCCESS = 'success';
 
-    /** Warning flash-bag. */
     #[EnumCase(extras: ['icon' => 'fa-solid fa-lg fa-exclamation-circle'])]
     case WARNING = 'warning';
+
+    /** The default enumeration. */
+    public const self DEFAULT = self::SUCCESS;
 
     /**
      * Gets the icon color.
@@ -57,6 +59,7 @@ enum FlashType: string implements TranslatableEnumInterface
      */
     public function getIcon(): string
     {
-        return $this->getExtraString('icon');
+        return (string) $this->getExtra('icon');
+        // $this->getExtraString('icon');
     }
 }

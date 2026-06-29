@@ -13,32 +13,28 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
+use App\Interfaces\DefaultEnumInterface;
 use App\Interfaces\EnumSortableInterface;
-use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumInterface;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumTrait;
-use fpdf\Interfaces\PdfEnumDefaultInterface;
-use fpdf\Traits\PdfEnumDefaultTrait;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * The notification email importance enumeration.
  *
- * @implements PdfEnumDefaultInterface<Importance>
+ * @implements DefaultEnumInterface<Importance>
  * @implements EnumSortableInterface<Importance>
  */
 #[ReadableEnum(prefix: 'importance.', useValueAsDefault: true)]
-enum Importance: string implements EnumSortableInterface, PdfEnumDefaultInterface, TranslatableEnumInterface
+enum Importance: string implements DefaultEnumInterface, EnumSortableInterface, TranslatableEnumInterface
 {
-    use PdfEnumDefaultTrait;
     use TranslatableEnumTrait;
 
     /** High importance. */
     case HIGH = 'high';
 
     /** Low importance (default value). */
-    #[EnumCase(extras: [PdfEnumDefaultInterface::NAME => true])]
     case LOW = 'low';
 
     /** Medium importance. */
@@ -46,6 +42,9 @@ enum Importance: string implements EnumSortableInterface, PdfEnumDefaultInterfac
 
     /** Urgente importance. */
     case URGENT = 'urgent';
+
+    /** The default enumeration. */
+    public const self DEFAULT = self::LOW;
 
     /**
      * @return Importance[]

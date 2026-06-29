@@ -58,7 +58,7 @@ final class MailerServiceTest extends TestCase
             'from@example.com',
             $toUser,
             'message',
-            Importance::LOW,
+            Importance::DEFAULT,
             [$this->createAttachement()]
         );
     }

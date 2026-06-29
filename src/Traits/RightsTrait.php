@@ -19,6 +19,7 @@ use App\Interfaces\RoleInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Elao\Enum\FlagBag;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Trait to set or get access rights.
@@ -32,6 +33,7 @@ trait RightsTrait
     private bool $overwrite = false;
 
     /** The rights. */
+    #[Assert\PositiveOrZero]
     #[ORM\Column(type: Types::BIGINT, nullable: true)]
     private ?int $rights = null;
 
@@ -63,9 +65,12 @@ trait RightsTrait
 
     /**
      * Gets the rights.
+     *
+     * @return non-negative-int
      */
     public function getRights(): int
     {
+        /** @phpstan-var non-negative-int */
         return $this->rights ?? 0;
     }
 
@@ -99,6 +104,7 @@ trait RightsTrait
         $rights = $this->rights ?? 0;
         $rights |= $entity->getShiftedValue($permission->getValue());
 
+        /** @phpstan-var non-negative-int $rights */
         return $this->setRights($rights);
     }
 
@@ -118,6 +124,8 @@ trait RightsTrait
 
     /**
      * Sets the rights.
+     *
+     * @param non-negative-int|null $rights
      */
     public function setRights(?int $rights): static
     {

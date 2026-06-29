@@ -13,24 +13,21 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
+use App\Interfaces\DefaultEnumInterface;
 use App\Interfaces\EnumSortableInterface;
-use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumInterface;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumTrait;
-use fpdf\Interfaces\PdfEnumDefaultInterface;
-use fpdf\Traits\PdfEnumDefaultTrait;
 
 /**
  * The message position for flashbag.
  *
- * @implements PdfEnumDefaultInterface<MessagePosition>
+ * @implements DefaultEnumInterface<MessagePosition>
  * @implements EnumSortableInterface<MessagePosition>
  */
 #[ReadableEnum(prefix: 'message_position.', useValueAsDefault: true)]
-enum MessagePosition: string implements EnumSortableInterface, PdfEnumDefaultInterface, TranslatableEnumInterface
+enum MessagePosition: string implements DefaultEnumInterface, EnumSortableInterface, TranslatableEnumInterface
 {
-    use PdfEnumDefaultTrait;
     use TranslatableEnumTrait;
 
     /** Bottom center position. */
@@ -40,7 +37,6 @@ enum MessagePosition: string implements EnumSortableInterface, PdfEnumDefaultInt
     case BOTTOM_LEFT = 'bottom-left';
 
     /** Bottom right position. */
-    #[EnumCase(extras: [PdfEnumDefaultInterface::NAME => true])]
     case BOTTOM_RIGHT = 'bottom-right';
 
     /** Center position. */
@@ -60,6 +56,9 @@ enum MessagePosition: string implements EnumSortableInterface, PdfEnumDefaultInt
 
     /** Top right position. */
     case TOP_RIGHT = 'top-right';
+
+    /** The default enumeration. */
+    public const self DEFAULT = self::BOTTOM_RIGHT;
 
     /**
      * Gets the rotation angle of the icon.

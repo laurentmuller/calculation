@@ -13,24 +13,22 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
+use App\Interfaces\DefaultEnumInterface;
 use App\Interfaces\EnumSortableInterface;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumInterface;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumTrait;
-use fpdf\Interfaces\PdfEnumDefaultInterface;
-use fpdf\Traits\PdfEnumDefaultTrait;
 
 /**
  * The password strength level.
  *
- * @implements PdfEnumDefaultInterface<StrengthLevel>
+ * @implements DefaultEnumInterface<StrengthLevel>
  * @implements EnumSortableInterface<StrengthLevel>
  */
 #[ReadableEnum(prefix: 'strength_level.')]
-enum StrengthLevel: int implements EnumSortableInterface, PdfEnumDefaultInterface, TranslatableEnumInterface
+enum StrengthLevel: int implements DefaultEnumInterface, EnumSortableInterface, TranslatableEnumInterface
 {
-    use PdfEnumDefaultTrait;
     use TranslatableEnumTrait;
 
     /** Medium level. */
@@ -38,7 +36,7 @@ enum StrengthLevel: int implements EnumSortableInterface, PdfEnumDefaultInterfac
     case MEDIUM = 2;
 
     /** No validation level (default value). */
-    #[EnumCase('none', [PdfEnumDefaultInterface::NAME => true])]
+    #[EnumCase('none')]
     case NONE = -1;
 
     /** Strong level. */
@@ -56,6 +54,9 @@ enum StrengthLevel: int implements EnumSortableInterface, PdfEnumDefaultInterfac
     /** Weak level. */
     #[EnumCase('weak')]
     case WEAK = 1;
+
+    /** The default enumeration. */
+    public const self DEFAULT = self::NONE;
 
     /**
      * Returns if this value is smaller than the given level.

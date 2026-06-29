@@ -62,7 +62,7 @@ class DataQuery implements SortModeInterface
     public string $sort = '';
 
     /** The view. */
-    public TableView $view = TableView::TABLE;
+    public TableView $view = TableView::DEFAULT;
 
     /**
      * Add a parameter to this list of parameters.

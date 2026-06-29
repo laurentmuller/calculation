@@ -182,9 +182,7 @@ final class ImageExtensionTest extends TestCase
 
     public function testDefault(): void
     {
-        $expected = ImageExtension::PNG;
-        $actual = ImageExtension::getDefault();
-        self::assertSame($expected, $actual);
+        self::assertSame(ImageExtension::PNG, ImageExtension::DEFAULT);
     }
 
     #[DataProvider('getFilters')]
@@ -232,7 +230,7 @@ final class ImageExtensionTest extends TestCase
 
         try {
             $service = ImageService::fromTrueColor(50, 50);
-            $extension = ImageExtension::PNG;
+            $extension = ImageExtension::DEFAULT;
             $result = $extension->saveImage($service, $file);
             self::assertTrue($result);
         } finally {

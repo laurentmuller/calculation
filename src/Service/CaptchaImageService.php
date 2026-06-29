@@ -268,7 +268,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
     private function encodeImage(ImageService $image): string
     {
         \ob_start();
-        ImageExtension::PNG->saveImage($image);
+        ImageExtension::DEFAULT->saveImage($image);
         $buffer = (string) \ob_get_contents();
         \ob_end_clean();
 

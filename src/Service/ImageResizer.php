@@ -65,7 +65,7 @@ class ImageResizer
         try {
             $target ??= $source;
             $targetSize = $this->getTargetSize($source);
-            $options = ['format' => ImageExtension::PNG->value];
+            $options = ['format' => ImageExtension::DEFAULT->value];
             $imagine = new Imagine();
             $imagine->open($source)
                 ->resize($targetSize)

@@ -237,6 +237,6 @@ final class UserChangePasswordTypeTest extends EntityTypeTestCase
 
     private function isStrengthConstraint(): bool
     {
-        return StrengthLevel::NONE !== $this->score;
+        return StrengthLevel::DEFAULT !== $this->score;
     }
 }

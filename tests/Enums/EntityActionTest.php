@@ -45,7 +45,7 @@ final class EntityActionTest extends TestCase
 
     public function testDefault(): void
     {
-        self::assertSame(EntityAction::EDIT, EntityAction::getDefault());
+        self::assertSame(EntityAction::EDIT, EntityAction::DEFAULT);
     }
 
     #[DataProvider('getLabel')]

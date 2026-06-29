@@ -13,16 +13,14 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
+use App\Interfaces\DefaultEnumInterface;
 use App\Service\ImageService;
-use Elao\Enum\Attribute\EnumCase;
-use fpdf\Interfaces\PdfEnumDefaultInterface;
-use fpdf\Traits\PdfEnumDefaultTrait;
 use Symfony\Component\Filesystem\Path;
 
 /**
  * Image file extension numeration.
  *
- * @implements PdfEnumDefaultInterface<ImageExtension>
+ * @implements DefaultEnumInterface<ImageExtension>
  *
  * @phpstan-type SaveOptionsType = array{
  *     compressed?: bool,
@@ -35,10 +33,8 @@ use Symfony\Component\Filesystem\Path;
  *     foreground_color?: null,
  *     quality?: int}
  */
-enum ImageExtension: string implements PdfEnumDefaultInterface
+enum ImageExtension: string implements DefaultEnumInterface
 {
-    use PdfEnumDefaultTrait;
-
     /** The Device-Independent Bitmap (DIB) graphic extension. */
     case BMP = 'bmp';
 
@@ -52,7 +48,6 @@ enum ImageExtension: string implements PdfEnumDefaultInterface
     case JPG = 'jpg';
 
     /** The Portable Network Graphics (PNG) extension (default value). */
-    #[EnumCase(extras: [PdfEnumDefaultInterface::NAME => true])]
     case PNG = 'png';
 
     /** The Wireless Application Protocol Bitmap Format. */
@@ -66,6 +61,9 @@ enum ImageExtension: string implements PdfEnumDefaultInterface
 
     /** The X11 pixmap extension (XPM). */
     case XPM = 'xpm';
+
+    /** The default enumeration. */
+    public const self DEFAULT = self::PNG;
 
     /**
      * Changes the extension of a file path.

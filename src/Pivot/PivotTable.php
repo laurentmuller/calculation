@@ -58,7 +58,7 @@ class PivotTable extends AbstractPivotAggregator
     /** The total title. */
     private ?string $totalTitle = null;
 
-    public function __construct(PivotOperation $operation, private ?string $title = null)
+    public function __construct(PivotOperation $operation = PivotOperation::DEFAULT, private ?string $title = null)
     {
         parent::__construct($operation->createAggregator());
         $this->rootColumn = new PivotNode($operation->createAggregator());

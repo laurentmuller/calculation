@@ -129,7 +129,7 @@ class OpenWeatherService extends AbstractHttpClientService
     public function all(
         int $id,
         int $count = self::DEFAULT_COUNT,
-        OpenWeatherUnits $units = OpenWeatherUnits::METRIC
+        OpenWeatherUnits $units = OpenWeatherUnits::DEFAULT
     ): array {
         $key = \sprintf('all-%d-%d-%s', $id, $count, $units->value);
 
@@ -144,7 +144,7 @@ class OpenWeatherService extends AbstractHttpClientService
      *
      * @return array|false the current conditions if success; false on error
      */
-    public function current(int $id, OpenWeatherUnits $units = OpenWeatherUnits::METRIC): array|false
+    public function current(int $id, OpenWeatherUnits $units = OpenWeatherUnits::DEFAULT): array|false
     {
         $key = \sprintf('current-%d-%s', $id, $units->value);
 
@@ -163,7 +163,7 @@ class OpenWeatherService extends AbstractHttpClientService
     public function daily(
         int $id,
         int $count = self::DEFAULT_COUNT,
-        OpenWeatherUnits $units = OpenWeatherUnits::METRIC
+        OpenWeatherUnits $units = OpenWeatherUnits::DEFAULT
     ): array|false {
         $key = \sprintf('daily-%d-%d-%s', $id, $count, $units->value);
 
@@ -182,7 +182,7 @@ class OpenWeatherService extends AbstractHttpClientService
     public function forecast(
         int $id,
         int $count = self::DEFAULT_COUNT,
-        OpenWeatherUnits $units = OpenWeatherUnits::METRIC
+        OpenWeatherUnits $units = OpenWeatherUnits::DEFAULT
     ): array|false {
         $key = \sprintf('forecast-%d-%d-%s', $id, $count, $units->value);
 
@@ -207,7 +207,7 @@ class OpenWeatherService extends AbstractHttpClientService
      *
      * @throws \InvalidArgumentException if the number of cities is greater than 20
      */
-    public function group(array $cityIds, OpenWeatherUnits $units = OpenWeatherUnits::METRIC): array|false
+    public function group(array $cityIds, OpenWeatherUnits $units = OpenWeatherUnits::DEFAULT): array|false
     {
         $count = \count($cityIds);
         if ($count > self::MAX_GROUP) {
@@ -234,7 +234,7 @@ class OpenWeatherService extends AbstractHttpClientService
     public function oneCall(
         float $latitude,
         float $longitude,
-        OpenWeatherUnits $units = OpenWeatherUnits::METRIC,
+        OpenWeatherUnits $units = OpenWeatherUnits::DEFAULT,
         string ...$exclude
     ): array|false {
         return $this->getCacheValue(
@@ -276,7 +276,7 @@ class OpenWeatherService extends AbstractHttpClientService
     private function doGetAll(
         int $id,
         int $count = self::DEFAULT_COUNT,
-        OpenWeatherUnits $units = OpenWeatherUnits::METRIC
+        OpenWeatherUnits $units = OpenWeatherUnits::DEFAULT
     ): array {
         $responses = [
             $this->getRequestCurrent($id, $units),
@@ -300,7 +300,7 @@ class OpenWeatherService extends AbstractHttpClientService
         return $results;
     }
 
-    private function doGetCurrent(int $id, OpenWeatherUnits $units = OpenWeatherUnits::METRIC): array|false
+    private function doGetCurrent(int $id, OpenWeatherUnits $units = OpenWeatherUnits::DEFAULT): array|false
     {
         $response = $this->getRequestCurrent($id, $units);
 
@@ -310,7 +310,7 @@ class OpenWeatherService extends AbstractHttpClientService
     private function doGetDaily(
         int $id,
         int $count = self::DEFAULT_COUNT,
-        OpenWeatherUnits $units = OpenWeatherUnits::METRIC
+        OpenWeatherUnits $units = OpenWeatherUnits::DEFAULT
     ): array|false {
         $response = $this->getRequestDaily($id, $count, $units);
 
@@ -320,7 +320,7 @@ class OpenWeatherService extends AbstractHttpClientService
     private function doGetForecast(
         int $id,
         int $count = self::DEFAULT_COUNT,
-        OpenWeatherUnits $units = OpenWeatherUnits::METRIC
+        OpenWeatherUnits $units = OpenWeatherUnits::DEFAULT
     ): array|false {
         $response = $this->getRequestForecast($id, $count, $units);
 
@@ -363,7 +363,7 @@ class OpenWeatherService extends AbstractHttpClientService
     private function doGetOneCall(
         float $latitude,
         float $longitude,
-        OpenWeatherUnits $units = OpenWeatherUnits::METRIC,
+        OpenWeatherUnits $units = OpenWeatherUnits::DEFAULT,
         string ...$exclude
     ): array|false {
         $response = $this->getRequestOneCall($latitude, $longitude, $units, ...$exclude);
@@ -396,7 +396,7 @@ class OpenWeatherService extends AbstractHttpClientService
 
     private function getRequestCurrent(
         int $id,
-        OpenWeatherUnits $units = OpenWeatherUnits::METRIC
+        OpenWeatherUnits $units = OpenWeatherUnits::DEFAULT
     ): ResponseInterface {
         return $this->getClient()->request(Request::METHOD_GET, self::URI_CURRENT, [
             self::USER_DATA => 'current',
@@ -410,7 +410,7 @@ class OpenWeatherService extends AbstractHttpClientService
     private function getRequestDaily(
         int $id,
         int $count = self::DEFAULT_COUNT,
-        OpenWeatherUnits $units = OpenWeatherUnits::METRIC
+        OpenWeatherUnits $units = OpenWeatherUnits::DEFAULT
     ): ResponseInterface {
         return $this->getClient()->request(Request::METHOD_GET, self::URI_DAILY, [
             self::USER_DATA => 'daily',
@@ -425,7 +425,7 @@ class OpenWeatherService extends AbstractHttpClientService
     private function getRequestForecast(
         int $id,
         int $count = self::DEFAULT_COUNT,
-        OpenWeatherUnits $units = OpenWeatherUnits::METRIC
+        OpenWeatherUnits $units = OpenWeatherUnits::DEFAULT
     ): ResponseInterface {
         return $this->getClient()->request(Request::METHOD_GET, self::URI_FORECAST, [
             self::USER_DATA => 'forecast',
@@ -440,7 +440,7 @@ class OpenWeatherService extends AbstractHttpClientService
     private function getRequestOneCall(
         float $latitude,
         float $longitude,
-        OpenWeatherUnits $units = OpenWeatherUnits::METRIC,
+        OpenWeatherUnits $units = OpenWeatherUnits::DEFAULT,
         string ...$exclude
     ): ResponseInterface {
         return $this->getClient()->request(Request::METHOD_GET, self::URI_ONECALL, [

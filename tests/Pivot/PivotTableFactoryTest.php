@@ -120,7 +120,7 @@ final class PivotTableFactoryTest extends TestCase
         $data = PivotFieldFactory::default('amount', 'Amount');
         $dataset = $this->createDataset();
 
-        return PivotTableFactory::instance($dataset, PivotOperation::SUM, 'Title')
+        return PivotTableFactory::instance(dataset: $dataset, title: 'Title')
             ->setColumnFields($columns)
             ->setRowFields($rows)
             ->setDataField($data);

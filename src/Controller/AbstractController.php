@@ -188,7 +188,7 @@ abstract class AbstractController extends BaseController implements DocumentHelp
         TranslatableFlashMessage|string|null $message = null
     ): RedirectResponse {
         if (\is_string($message)) {
-            $this->addFlashMessage(FlashType::SUCCESS, $this->trans($message));
+            $this->addFlashMessage(FlashType::DEFAULT, $this->trans($message));
         } elseif ($message instanceof TranslatableFlashMessage) {
             $this->addFlashMessage($message->getType(), $this->trans($message));
         }

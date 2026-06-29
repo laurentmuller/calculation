@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Pivot;
 
+use App\Interfaces\DefaultEnumInterface;
 use App\Interfaces\EnumSortableInterface;
 use App\Pivot\Aggregator\AggregatorInterface;
 use App\Pivot\Aggregator\AverageAggregator;
@@ -23,19 +24,16 @@ use App\Pivot\Aggregator\SumAggregator;
 use Elao\Enum\Attribute\ReadableEnum;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumInterface;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumTrait;
-use fpdf\Interfaces\PdfEnumDefaultInterface;
-use fpdf\Traits\PdfEnumDefaultTrait;
 
 /**
  * The pivot operation (function) enumeration.
  *
- * @implements PdfEnumDefaultInterface<PivotOperation>
+ * @implements DefaultEnumInterface<PivotOperation>
  * @implements EnumSortableInterface<PivotOperation>
  */
 #[ReadableEnum(prefix: 'pivot.operation.', useValueAsDefault: true)]
-enum PivotOperation: string implements EnumSortableInterface, PdfEnumDefaultInterface, TranslatableEnumInterface
+enum PivotOperation: string implements DefaultEnumInterface, EnumSortableInterface, TranslatableEnumInterface
 {
-    use PdfEnumDefaultTrait;
     use TranslatableEnumTrait;
 
     /** The average operation. */
@@ -48,6 +46,9 @@ enum PivotOperation: string implements EnumSortableInterface, PdfEnumDefaultInte
     case MIN = 'min';
     /** The sum operation. */
     case SUM = 'sum';
+
+    /** The default enumeration. */
+    public const self DEFAULT = self::SUM;
 
     /**
      * Creates a new aggregator instance.
@@ -71,12 +72,6 @@ enum PivotOperation: string implements EnumSortableInterface, PdfEnumDefaultInte
             self::MIN => MinAggregator::class,
             self::SUM => SumAggregator::class,
         };
-    }
-
-    #[\Override]
-    public static function getDefault(): PivotOperation
-    {
-        return self::SUM;
     }
 
     /**

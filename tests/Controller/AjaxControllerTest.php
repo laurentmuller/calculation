@@ -120,7 +120,7 @@ final class AjaxControllerTest extends ControllerTestCase
     {
         $parameters = [
             'password' => 0,
-            'strength' => StrengthLevel::NONE->value,
+            'strength' => StrengthLevel::DEFAULT->value,
             'email' => null,
             'user' => null,
         ];

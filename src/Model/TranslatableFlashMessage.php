@@ -25,7 +25,7 @@ class TranslatableFlashMessage extends TranslatableMessage
         string $message,
         array $parameters = [],
         ?string $domain = null,
-        private readonly FlashType $type = FlashType::SUCCESS,
+        private readonly FlashType $type = FlashType::DEFAULT,
     ) {
         parent::__construct($message, $parameters, $domain);
     }

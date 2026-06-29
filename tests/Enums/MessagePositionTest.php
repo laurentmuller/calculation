@@ -90,7 +90,7 @@ final class MessagePositionTest extends TestCase
 
     public function testDefault(): void
     {
-        self::assertSame(MessagePosition::BOTTOM_RIGHT, MessagePosition::getDefault());
+        self::assertSame(MessagePosition::BOTTOM_RIGHT, MessagePosition::DEFAULT);
     }
 
     #[DataProvider('getIcon')]

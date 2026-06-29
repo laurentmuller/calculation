@@ -24,6 +24,12 @@ final class TranslatableFlashMessageTest extends TestCase
         self::assertSameFlashType(TranslatableFlashMessage::danger('message'), FlashType::DANGER);
     }
 
+    public function testDefault(): void
+    {
+        $message = new TranslatableFlashMessage('message');
+        self::assertSameFlashType($message, FlashType::SUCCESS);
+    }
+
     public function testInfo(): void
     {
         self::assertSameFlashType(TranslatableFlashMessage::info('message'), FlashType::INFO);

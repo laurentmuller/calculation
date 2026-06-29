@@ -15,6 +15,7 @@ namespace App\Tests\Traits;
 
 use App\Enums\Theme;
 use App\Traits\CookieTrait;
+use fpdf\Enums\PdfPageMode;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,10 +40,10 @@ final class CookieTraitTest extends TestCase
     public function testGetCookieEnum(): void
     {
         $request = $this->createRequest();
-        self::assertSame(Theme::AUTO, $this->getCookieEnum($request, 'key', Theme::AUTO));
+        self::assertSame(Theme::DEFAULT, $this->getCookieEnum($request, 'key', Theme::DEFAULT));
 
         $request = $this->createRequest(['KEY' => Theme::DARK]);
-        $actual = $this->getCookieEnum($request, 'key', Theme::AUTO);
+        $actual = $this->getCookieEnum($request, 'key', Theme::DEFAULT);
         self::assertSame(Theme::DARK, $actual); // @phpstan-ignore staticMethod.impossibleType
     }
 
@@ -95,7 +96,11 @@ final class CookieTraitTest extends TestCase
         self::assertSame('', $response->getContent());
 
         $response = $this->createResponse();
-        $this->updateCookie($response, 'KEY', Theme::getDefault());
+        $this->updateCookie($response, 'KEY', Theme::DEFAULT);
+        self::assertSame('', $response->getContent());
+
+        $response = $this->createResponse();
+        $this->updateCookie($response, 'KEY', PdfPageMode::getDefault());
         self::assertSame('', $response->getContent());
     }
 

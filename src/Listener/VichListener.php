@@ -58,8 +58,8 @@ class VichListener
         $this->resizer->resize($file->getRealPath());
 
         // rename extension if not PNG
-        if (ImageExtension::PNG->value !== $this->getFileExtension($file)) {
-            $newName = ImageExtension::PNG->changeExtension($name);
+        if (ImageExtension::DEFAULT->value !== $this->getFileExtension($file)) {
+            $newName = ImageExtension::DEFAULT->changeExtension($name);
             $mapping->setFileName($user, $newName);
         }
     }
@@ -71,6 +71,6 @@ class VichListener
     {
         $extension = $this->getExtension($file);
 
-        return StringUtils::isString($extension) ? \strtolower($extension) : ImageExtension::PNG->value;
+        return StringUtils::isString($extension) ? \strtolower($extension) : ImageExtension::DEFAULT->value;
     }
 }

@@ -24,9 +24,9 @@ class Role implements \Stringable, RoleInterface
     use RoleTrait;
 
     /**
-     * @param string  $role   the role
-     * @param ?string $name   the optional name
-     * @param ?int    $rights the optional rights
+     * @param string                $role   the role
+     * @param ?string               $name   the optional name
+     * @param non-negative-int|null $rights the optional rights
      *
      * @phpstan-param RoleInterface::ROLE_* $role
      */

@@ -101,7 +101,7 @@ final class StrengthValidatorTest extends ConstraintValidatorTestCase
     #[DataProvider('getStrengths')]
     public function testStrength(string $value, int $strength, bool $violation): void
     {
-        $level = StrengthLevel::tryFrom($strength) ?? StrengthLevel::NONE;
+        $level = StrengthLevel::tryFrom($strength) ?? StrengthLevel::DEFAULT;
         $constraint = new Strength($level);
         $this->validator->validate($value, $constraint);
 

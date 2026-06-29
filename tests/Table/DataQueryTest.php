@@ -39,7 +39,7 @@ final class DataQueryTest extends TestCase
         $actual = new DataQuery();
         self::assertFalse($actual->callback);
         self::assertSame(0, $actual->id);
-        self::assertSame(TableView::TABLE, $actual->view);
+        self::assertSame(TableView::DEFAULT, $actual->view);
         self::assertSame(0, $actual->offset);
         self::assertSame(0, $actual->limit);
         self::assertSame('', $actual->search);
@@ -76,7 +76,7 @@ final class DataQueryTest extends TestCase
         self::assertSame('', $actual[TableInterface::PARAM_SORT]);
         self::assertSame(SortModeInterface::SORT_ASC, $actual[TableInterface::PARAM_ORDER]);
         self::assertSame(0, $actual[TableInterface::PARAM_OFFSET]);
-        self::assertSame(TableView::TABLE->value, $actual[TableInterface::PARAM_VIEW]);
+        self::assertSame(TableView::DEFAULT->value, $actual[TableInterface::PARAM_VIEW]);
         self::assertSame(0, $actual[TableInterface::PARAM_LIMIT]);
     }
 }

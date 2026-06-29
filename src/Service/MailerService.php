@@ -72,7 +72,7 @@ readonly class MailerService
         string|Address|User $from,
         string|Address|User $to,
         string $message,
-        Importance $importance = Importance::LOW,
+        Importance $importance = Importance::DEFAULT,
         array $attachments = []
     ): void {
         $notification = $this->createNotification($importance, $message)

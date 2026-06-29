@@ -242,7 +242,7 @@ final class TestControllerTest extends ControllerTestCase
     {
         $data = [
             'form[email]' => 'bibi@bibi.nu',
-            'form[importance]' => Importance::LOW->value,
+            'form[importance]' => Importance::DEFAULT->value,
             'form[message]' => 'Fake message to be send.',
         ];
         $this->checkForm(

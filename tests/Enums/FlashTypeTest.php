@@ -66,6 +66,11 @@ final class FlashTypeTest extends TestCase
         self::assertCount(4, FlashType::cases());
     }
 
+    public function testGetDefault(): void
+    {
+        self::assertSame(FlashType::SUCCESS, FlashType::DEFAULT);
+    }
+
     #[DataProvider('getIcons')]
     public function testIcon(FlashType $type, string $expected): void
     {

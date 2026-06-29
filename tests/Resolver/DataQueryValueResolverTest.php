@@ -52,7 +52,7 @@ final class DataQueryValueResolverTest extends TestCase
         self::assertInstanceOf(DataQuery::class, $query);
         self::assertFalse($query->callback);
         self::assertSame(0, $query->id);
-        self::assertSame(TableView::TABLE, $query->view);
+        self::assertSame(TableView::DEFAULT, $query->view);
         self::assertSame(0, $query->offset);
         self::assertSame(20, $query->limit);
 
@@ -133,7 +133,7 @@ final class DataQueryValueResolverTest extends TestCase
             TableInterface::PARAM_ORDER => 'asc',
             TableInterface::PARAM_OFFSET => 10,
             TableInterface::PARAM_LIMIT => 50,
-            TableInterface::PARAM_VIEW => TableView::TABLE->value,
+            TableInterface::PARAM_VIEW => TableView::DEFAULT->value,
         ];
 
         $resolver = $this->createResolver();
@@ -152,7 +152,7 @@ final class DataQueryValueResolverTest extends TestCase
         self::assertSame('asc', $query->order);
         self::assertSame(10, $query->offset);
         self::assertSame(50, $query->limit);
-        self::assertSame(TableView::TABLE, $query->view);
+        self::assertSame(TableView::DEFAULT, $query->view);
     }
 
     public function testWithDefaultValue(): void

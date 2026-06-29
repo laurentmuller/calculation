@@ -17,7 +17,6 @@ use App\Pivot\Aggregator\SumAggregator;
 use App\Pivot\Field\PivotField;
 use App\Pivot\PivotCell;
 use App\Pivot\PivotNode;
-use App\Pivot\PivotOperation;
 use App\Pivot\PivotTable;
 use PHPUnit\Framework\TestCase;
 
@@ -144,6 +143,6 @@ final class PivotTableTest extends TestCase
 
     private function createPivotTable(): PivotTable
     {
-        return new PivotTable(PivotOperation::SUM);
+        return new PivotTable();
     }
 }

@@ -237,7 +237,7 @@ final class FileUtilsTest extends TestCase
         $actual = FileUtils::rename($file, $file);
         self::assertFalse($actual);
 
-        $target = ImageExtension::PNG->changeExtension($file);
+        $target = ImageExtension::DEFAULT->changeExtension($file);
         $actual = FileUtils::rename($file, $target);
         FileUtils::remove($target);
         self::assertTrue($actual);

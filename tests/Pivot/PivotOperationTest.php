@@ -59,7 +59,7 @@ final class PivotOperationTest extends TestCase
 
     public function testGetDefault(): void
     {
-        self::assertSame(PivotOperation::SUM, PivotOperation::getDefault());
+        self::assertSame(PivotOperation::SUM, PivotOperation::DEFAULT);
     }
 
     #[DataProvider('getIsInts')]

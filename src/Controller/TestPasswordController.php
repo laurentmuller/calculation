@@ -63,7 +63,7 @@ class TestPasswordController extends AbstractController
                 $password->setOption($option, (bool) ($data[$option] ?? false));
             }
             $level = (int) $data['level'];
-            $strength->minimum = StrengthLevel::tryFrom($level) ?? StrengthLevel::NONE;
+            $strength->minimum = StrengthLevel::tryFrom($level) ?? StrengthLevel::DEFAULT;
         };
         $data = [
             'user_name' => $user->getDisplay(),

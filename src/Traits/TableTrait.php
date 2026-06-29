@@ -61,10 +61,10 @@ trait TableTrait
             $prefix = $query->prefix;
             $results = $table->processDataQuery($query);
             $response = $query->callback ? $this->json($results) : $this->render($template, (array) $results);
-            $this->saveTableCookie($response, $results, TableInterface::PARAM_LIMIT, TableView::TABLE->getPageSize(), $prefix)
+            $this->saveTableCookie($response, $results, TableInterface::PARAM_LIMIT, TableView::DEFAULT->getPageSize(), $prefix)
                 ->saveTableCookie($response, $results, TableInterface::PARAM_ORDER, $query->order, $prefix)
                 ->saveTableCookie($response, $results, TableInterface::PARAM_SORT, $query->sort, $prefix)
-                ->saveTableCookie($response, $results, TableInterface::PARAM_VIEW, TableView::getDefault());
+                ->saveTableCookie($response, $results, TableInterface::PARAM_VIEW, TableView::DEFAULT);
 
             return $response;
         } catch (\Throwable $e) {
@@ -117,7 +117,7 @@ trait TableTrait
     private function saveTableView(TableView|string $view): void
     {
         if (\is_string($view)) {
-            $view = TableView::tryFrom($view) ?? TableView::getDefault();
+            $view = TableView::tryFrom($view) ?? TableView::DEFAULT;
         }
         $userParameters = $this->getUserParameters();
         $display = $userParameters->getDisplay();

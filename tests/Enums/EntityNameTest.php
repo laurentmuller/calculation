@@ -48,6 +48,20 @@ final class EntityNameTest extends TestCase
         yield [EntityName::USER, 'user'];
     }
 
+    public static function getIndex(): \Generator
+    {
+        yield [EntityName::CALCULATION, 0];
+        yield [EntityName::CALCULATION_STATE, 1];
+        yield [EntityName::CATEGORY, 2];
+        yield [EntityName::CUSTOMER, 3];
+        yield [EntityName::GLOBAL_MARGIN, 4];
+        yield [EntityName::GROUP, 5];
+        yield [EntityName::LOG, 6];
+        yield [EntityName::PRODUCT, 7];
+        yield [EntityName::TASK, 8];
+        yield [EntityName::USER, 9];
+    }
+
     public static function getLabel(): \Generator
     {
         yield ['calculation.name', EntityName::CALCULATION];
@@ -60,20 +74,6 @@ final class EntityNameTest extends TestCase
         yield ['product.name', EntityName::PRODUCT];
         yield ['task.name', EntityName::TASK];
         yield ['user.name', EntityName::USER];
-    }
-
-    public static function getOffset(): \Generator
-    {
-        yield [EntityName::CALCULATION, 0];
-        yield [EntityName::CALCULATION_STATE, 1];
-        yield [EntityName::CATEGORY, 2];
-        yield [EntityName::CUSTOMER, 3];
-        yield [EntityName::GLOBAL_MARGIN, 4];
-        yield [EntityName::GROUP, 5];
-        yield [EntityName::LOG, 6];
-        yield [EntityName::PRODUCT, 7];
-        yield [EntityName::TASK, 8];
-        yield [EntityName::USER, 9];
     }
 
     public static function getShift(): \Generator
@@ -171,17 +171,17 @@ final class EntityNameTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    #[DataProvider('getIndex')]
+    public function testIndex(EntityName $entityName, int $expected): void
+    {
+        $actual = $entityName->index();
+        self::assertSame($expected, $actual);
+    }
+
     #[DataProvider('getLabel')]
     public function testLabel(string $expected, EntityName $entity): void
     {
         $actual = $entity->getReadable();
-        self::assertSame($expected, $actual);
-    }
-
-    #[DataProvider('getOffset')]
-    public function testOffset(EntityName $entityName, int $expected): void
-    {
-        $actual = $entityName->offset();
         self::assertSame($expected, $actual);
     }
 

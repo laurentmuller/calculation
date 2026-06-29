@@ -39,7 +39,7 @@ class Strength extends Constraint
      */
     #[HasNamedArguments]
     public function __construct(
-        public StrengthLevel $minimum = StrengthLevel::NONE,
+        public StrengthLevel $minimum = StrengthLevel::DEFAULT,
         public ?string $userNamePath = null,
         public ?string $emailPath = null,
         ?array $options = null,

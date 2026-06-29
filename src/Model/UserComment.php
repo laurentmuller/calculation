@@ -41,7 +41,7 @@ class UserComment
      * The importance.
      */
     #[Assert\NotNull]
-    private Importance $importance;
+    private Importance $importance = Importance::DEFAULT;
 
     /** The message. */
     #[Assert\NotNull]
@@ -54,11 +54,6 @@ class UserComment
     /** The address to. */
     #[Assert\NotNull]
     private ?Address $to = null;
-
-    public function __construct()
-    {
-        $this->importance = Importance::getDefault();
-    }
 
     /**
      * Gets the file attachments.

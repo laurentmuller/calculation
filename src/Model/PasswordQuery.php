@@ -23,7 +23,7 @@ class PasswordQuery
     public function __construct(
         #[\SensitiveParameter]
         public string $password = '',
-        public StrengthLevel $strength = StrengthLevel::NONE,
+        public StrengthLevel $strength = StrengthLevel::DEFAULT,
         public ?string $user = null,
         public ?string $email = null
     ) {

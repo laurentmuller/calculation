@@ -15,7 +15,6 @@ namespace App\Form\User;
 
 use App\Entity\User;
 use App\Form\FormHelper;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * User rights type.
@@ -24,12 +23,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class UserRightsType extends AbstractRightsType
 {
-    #[\Override]
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefault('data_class', User::class);
-    }
-
     #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
@@ -49,10 +42,9 @@ class UserRightsType extends AbstractRightsType
         $this->addRightsType($helper);
     }
 
-    private function translateEnabled(string $value): string
+    #[\Override]
+    protected function getDataClass(): string
     {
-        $enabled = \filter_var($value, \FILTER_VALIDATE_BOOLEAN);
-
-        return $this->service->translateEnabled($enabled);
+        return User::class;
     }
 }

@@ -255,7 +255,7 @@ final class FileServiceTest extends TestCase
         $actual = $service->rename($file, $file);
         self::assertFalse($actual);
 
-        $target = ImageExtension::PNG->changeExtension($file);
+        $target = ImageExtension::DEFAULT->changeExtension($file);
         $actual = $service->rename($file, $target);
         $service->remove($target);
         self::assertTrue($actual);

@@ -37,7 +37,7 @@ final class TableViewTest extends TestCase
 
     public function testDefault(): void
     {
-        self::assertSame(TableView::TABLE, TableView::getDefault());
+        self::assertSame(TableView::TABLE, TableView::DEFAULT);
     }
 
     public function testLabel(): void

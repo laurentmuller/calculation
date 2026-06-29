@@ -27,7 +27,7 @@ final class UserCommentTest extends TestCase
         $comment = new UserComment();
         self::assertSame([], $comment->getAttachments());
         self::assertNull($comment->getFrom());
-        self::assertSame(Importance::getDefault(), $comment->getImportance());
+        self::assertSame(Importance::DEFAULT, $comment->getImportance());
         self::assertNull($comment->getMessage());
         self::assertNull($comment->getSubject());
         self::assertNull($comment->getTo());
@@ -56,7 +56,7 @@ final class UserCommentTest extends TestCase
         $comment->setSubject('subject');
         self::assertSame('subject', $comment->getSubject());
 
-        $expected = Importance::getDefault();
+        $expected = Importance::DEFAULT;
         self::assertSame($expected, $comment->getImportance());
         $expected = Importance::URGENT;
         $comment->setImportance($expected);

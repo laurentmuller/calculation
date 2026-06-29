@@ -119,7 +119,7 @@ class AjaxController extends AbstractController
     public function saveTable(Request $request): JsonResponse
     {
         $response = $this->json(true);
-        $view = $this->getRequestEnum($request, TableInterface::PARAM_VIEW, TableView::TABLE);
+        $view = $this->getRequestEnum($request, TableInterface::PARAM_VIEW, TableView::DEFAULT);
         $this->updateCookie($response, TableInterface::PARAM_VIEW, $view);
 
         $userParameters = $this->getUserParameters();

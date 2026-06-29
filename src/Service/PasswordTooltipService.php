@@ -37,7 +37,7 @@ readonly class PasswordTooltipService
         $results = [];
         $security = $this->parameters->getSecurity();
         $level = $security->getLevel();
-        if (StrengthLevel::NONE !== $level) {
+        if (StrengthLevel::DEFAULT !== $level) {
             $prefix = $this->trans('strengthLevel');
             $suffix = $level->trans($this->translator);
             $results[] = \sprintf('%s : %s', $prefix, $suffix);

@@ -78,9 +78,7 @@ final class ThemeTest extends TestCase
 
     public function testDefault(): void
     {
-        $expected = Theme::AUTO;
-        $actual = Theme::getDefault();
-        self::assertSame($expected, $actual);
+        self::assertSame(Theme::AUTO, Theme::DEFAULT);
     }
 
     #[DataProvider('getHelps')]

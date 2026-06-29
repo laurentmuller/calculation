@@ -39,8 +39,8 @@ class SecurityParameter implements ParameterInterface
     #[Parameter('security_letter', false)]
     private bool $letter = false;
 
-    #[Parameter('security_level', StrengthLevel::NONE)]
-    private StrengthLevel $level = StrengthLevel::NONE;
+    #[Parameter('security_level', StrengthLevel::DEFAULT)]
+    private StrengthLevel $level = StrengthLevel::DEFAULT;
 
     #[Parameter('security_number', false)]
     private bool $number = false;
@@ -132,7 +132,7 @@ class SecurityParameter implements ParameterInterface
 
     public function isStrengthConstraint(): bool
     {
-        return StrengthLevel::NONE !== $this->level;
+        return StrengthLevel::DEFAULT !== $this->level;
     }
 
     public function setCaptcha(bool $captcha): self

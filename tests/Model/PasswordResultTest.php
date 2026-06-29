@@ -36,7 +36,7 @@ final class PasswordResultTest extends TestCase
     {
         $result = $this->createResult(-1);
         $actual = $result->getStrengthLevel();
-        self::assertSame(StrengthLevel::NONE, $actual);
+        self::assertSame(StrengthLevel::DEFAULT, $actual);
 
         $result = $this->createResult(-2);
         $actual = $result->getStrengthLevel();

@@ -449,7 +449,7 @@ class OpenWeatherController extends AbstractController
 
     private function getRequestUnits(Request $request): OpenWeatherUnits
     {
-        return $this->getRequestEnum($request, OpenWeatherService::PARAM_UNITS, OpenWeatherUnits::getDefault());
+        return $this->getRequestEnum($request, OpenWeatherService::PARAM_UNITS, OpenWeatherUnits::DEFAULT);
     }
 
     /**

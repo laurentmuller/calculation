@@ -42,7 +42,7 @@ class ThemeService
     #[AsTwigFunction(name: 'theme')]
     public function getTheme(Request $request): Theme
     {
-        return $this->getCookieEnum($request, self::KEY_THEME, Theme::getDefault());
+        return $this->getCookieEnum($request, self::KEY_THEME, Theme::DEFAULT);
     }
 
     /**

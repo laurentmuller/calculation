@@ -13,26 +13,24 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
+use App\Interfaces\DefaultEnumInterface;
 use App\Interfaces\EnumSortableInterface;
 use App\Traits\EnumExtrasTrait;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumInterface;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumTrait;
-use fpdf\Interfaces\PdfEnumDefaultInterface;
-use fpdf\Traits\PdfEnumDefaultTrait;
 
 /**
  * OpenWeatherMap units enumeration.
  *
- * @implements PdfEnumDefaultInterface<OpenWeatherUnits>
+ * @implements DefaultEnumInterface<OpenWeatherUnits>
  * @implements EnumSortableInterface<OpenWeatherUnits>
  */
 #[ReadableEnum(prefix: 'openweather.current.', suffix: '.text', useValueAsDefault: true)]
-enum OpenWeatherUnits: string implements EnumSortableInterface, PdfEnumDefaultInterface, TranslatableEnumInterface
+enum OpenWeatherUnits: string implements DefaultEnumInterface, EnumSortableInterface, TranslatableEnumInterface
 {
     use EnumExtrasTrait;
-    use PdfEnumDefaultTrait;
     use TranslatableEnumTrait;
 
     /** Imperial unit. */
@@ -40,8 +38,11 @@ enum OpenWeatherUnits: string implements EnumSortableInterface, PdfEnumDefaultIn
     case IMPERIAL = 'imperial';
 
     /** Metric unit. */
-    #[EnumCase(extras: ['degree' => '°C', 'speed' => 'm/s', PdfEnumDefaultInterface::NAME => true])]
+    #[EnumCase(extras: ['degree' => '°C', 'speed' => 'm/s'])]
     case METRIC = 'metric';
+
+    /** The default enumeration. */
+    public const self DEFAULT = self::METRIC;
 
     /**
      * Gets these attributes.

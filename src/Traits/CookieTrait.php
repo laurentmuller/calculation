@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use App\Interfaces\DefaultEnumInterface;
 use App\Utils\DateUtils;
 use fpdf\Interfaces\PdfEnumDefaultInterface;
 use Symfony\Component\Clock\DatePoint;
@@ -96,6 +97,10 @@ trait CookieTrait
         string $prefix = '',
         bool $httpOnly = true
     ): void {
+        /** @phpstan-ignore classConstant.notFound */
+        if ($value instanceof DefaultEnumInterface && $value === $value::DEFAULT) {
+            $value = null;
+        }
         if ($value instanceof PdfEnumDefaultInterface && $value->isDefault()) {
             $value = null;
         }

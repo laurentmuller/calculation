@@ -15,7 +15,6 @@ namespace App\Enums;
 
 use App\Interfaces\ConstantsInterface;
 use App\Interfaces\EnumSortableInterface;
-use App\Traits\EnumExtrasTrait;
 use App\Utils\StringUtils;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
@@ -30,47 +29,46 @@ use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumTrait;
 #[ReadableEnum(suffix: '.name')]
 enum EntityName: string implements ConstantsInterface, EnumSortableInterface, TranslatableEnumInterface
 {
-    use EnumExtrasTrait;
     use TranslatableEnumTrait;
 
     /** The calculation rights. */
-    #[EnumCase('calculation', ['offset' => 0])]
+    #[EnumCase('calculation')]
     case CALCULATION = 'EntityCalculation';
 
     /** The calculation state rights. */
-    #[EnumCase('calculationstate', ['offset' => 1])]
+    #[EnumCase('calculationstate')]
     case CALCULATION_STATE = 'EntityCalculationState';
 
     /** The category rights. */
-    #[EnumCase('category', ['offset' => 2])]
+    #[EnumCase('category')]
     case CATEGORY = 'EntityCategory';
 
     /** The customer rights. */
-    #[EnumCase('customer', ['offset' => 3])]
+    #[EnumCase('customer')]
     case CUSTOMER = 'EntityCustomer';
 
     /** The global margin rights. */
-    #[EnumCase('globalmargin', ['offset' => 4])]
+    #[EnumCase('globalmargin')]
     case GLOBAL_MARGIN = 'EntityGlobalMargin';
 
     /** The group rights. */
-    #[EnumCase('group', ['offset' => 5])]
+    #[EnumCase('group')]
     case GROUP = 'EntityGroup';
 
     /** The log rights. */
-    #[EnumCase('log', ['offset' => 6])]
+    #[EnumCase('log')]
     case LOG = 'EntityLog';
 
     /** The product rights. */
-    #[EnumCase('product', ['offset' => 7])]
+    #[EnumCase('product')]
     case PRODUCT = 'EntityProduct';
 
     /** The task rights. */
-    #[EnumCase('task', ['offset' => 8])]
+    #[EnumCase('task')]
     case TASK = 'EntityTask';
 
     /** The user rights. */
-    #[EnumCase('user', ['offset' => 9])]
+    #[EnumCase('user')]
     case USER = 'EntityUser';
 
     /** The entity mask */
@@ -113,12 +111,9 @@ enum EntityName: string implements ConstantsInterface, EnumSortableInterface, Tr
         return $value << $this->shift();
     }
 
-    /**
-     * Gets the offset.
-     */
-    public function offset(): int
+    public function index(): int
     {
-        return $this->getExtraInt('offset');
+        return (int) \array_search($this, self::cases(), true);
     }
 
     /**
@@ -126,7 +121,7 @@ enum EntityName: string implements ConstantsInterface, EnumSortableInterface, Tr
      */
     public function shift(): int
     {
-        return $this->offset() * self::ENTITY_OFFSET;
+        return $this->index() * self::ENTITY_OFFSET;
     }
 
     /**

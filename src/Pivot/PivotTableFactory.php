@@ -156,10 +156,10 @@ class PivotTableFactory
      */
     public static function instance(
         array $dataset,
-        ?PivotOperation $operation = null,
+        PivotOperation $operation = PivotOperation::DEFAULT,
         ?string $title = null
     ): self {
-        return new self($dataset, $operation ?? PivotOperation::getDefault(), $title);
+        return new self($dataset, $operation, $title);
     }
 
     /**

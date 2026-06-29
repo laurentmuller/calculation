@@ -73,7 +73,7 @@ final class StrengthLevelTest extends TestCase
 
     public function testDefault(): void
     {
-        self::assertSame(StrengthLevel::NONE, StrengthLevel::getDefault());
+        self::assertSame(StrengthLevel::NONE, StrengthLevel::DEFAULT);
     }
 
     #[DataProvider('getLabels')]

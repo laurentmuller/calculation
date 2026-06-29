@@ -45,8 +45,8 @@ final class DisplayParameterTest extends ParameterTestCase
 
     public function testDefaultValue(): void
     {
-        self::assertSame(TableView::TABLE, $this->parameter->getDisplayMode());
-        self::assertSame(EntityAction::EDIT, $this->parameter->getEditAction());
+        self::assertSame(TableView::DEFAULT, $this->parameter->getDisplayMode());
+        self::assertSame(EntityAction::DEFAULT, $this->parameter->getEditAction());
 
         self::assertSame('parameter_display', $this->parameter::getCacheKey());
     }

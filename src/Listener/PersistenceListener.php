@@ -237,7 +237,7 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
         array $entities,
         string $suffix,
         string $default,
-        FlashType $type = FlashType::SUCCESS
+        FlashType $type = FlashType::DEFAULT
     ): void {
         if ([] === $entities) {
             return;
@@ -254,7 +254,7 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
         EntityInterface $entity,
         string $suffix,
         string $default,
-        FlashType $type = FlashType::SUCCESS
+        FlashType $type = FlashType::DEFAULT
     ): void {
         $id = '' === $suffix ? $default : $this->getId($entity, $suffix, $default);
         $message = $this->trans($id, ['%name%' => $entity->getDisplay()]);

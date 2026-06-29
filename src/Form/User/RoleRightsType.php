@@ -29,4 +29,10 @@ class RoleRightsType extends AbstractRightsType
         $this->addRoleType($helper, 'name');
         $this->addRightsType($helper);
     }
+
+    #[\Override]
+    protected function getDataClass(): string
+    {
+        return Role::class;
+    }
 }

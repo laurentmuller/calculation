@@ -53,7 +53,7 @@ final class MessageParameterTest extends ParameterTestCase
         self::assertFalse($this->parameter->isSubTitle());
         self::assertSame(1, $this->parameter->getProgress());
         self::assertSame(4000, $this->parameter->getTimeout());
-        self::assertSame(MessagePosition::getDefault(), $this->parameter->getPosition());
+        self::assertSame(MessagePosition::DEFAULT, $this->parameter->getPosition());
 
         self::assertSame('parameter_message', $this->parameter::getCacheKey());
     }

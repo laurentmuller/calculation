@@ -223,7 +223,7 @@ class PivotController extends AbstractController
 
     private function validateOperation(?PivotOperation $operation): PivotOperation
     {
-        $operation ??= $this->getSessionEnum('pivot.operation', PivotOperation::getDefault());
+        $operation ??= $this->getSessionEnum('pivot.operation', PivotOperation::DEFAULT);
         $this->setSessionValue('pivot.operation', $operation);
 
         return $operation;

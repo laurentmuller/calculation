@@ -91,7 +91,7 @@ final class OpenWeatherUnitsTest extends TestCase
     public function testDefault(): void
     {
         $expected = OpenWeatherUnits::METRIC;
-        $actual = OpenWeatherUnits::getDefault();
+        $actual = OpenWeatherUnits::DEFAULT;
         self::assertSame($expected, $actual);
     }
 

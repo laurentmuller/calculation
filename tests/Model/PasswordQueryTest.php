@@ -23,7 +23,7 @@ final class PasswordQueryTest extends TestCase
     {
         $query = new PasswordQuery();
         self::assertSame('', $query->password);
-        self::assertSame(StrengthLevel::NONE, $query->strength);
+        self::assertSame(StrengthLevel::DEFAULT, $query->strength);
         self::assertNull($query->email);
         self::assertNull($query->user);
 

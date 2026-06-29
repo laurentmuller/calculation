@@ -32,7 +32,7 @@ final class ThemeServiceTest extends TestCase
 
     public static function getThemes(): \Generator
     {
-        yield [self::createRequest(), Theme::AUTO];
+        yield [self::createRequest(), Theme::DEFAULT];
         yield [self::createRequest('auto'), Theme::AUTO];
         yield [self::createRequest('dark'), Theme::DARK];
         yield [self::createRequest('light'), Theme::LIGHT];

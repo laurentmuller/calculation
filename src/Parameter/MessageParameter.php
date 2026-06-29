@@ -28,8 +28,8 @@ class MessageParameter implements ParameterInterface
     #[Parameter('message_icon', true)]
     private bool $icon = true;
 
-    #[Parameter('message_position', MessagePosition::BOTTOM_RIGHT)]
-    private MessagePosition $position = MessagePosition::BOTTOM_RIGHT;
+    #[Parameter('message_position', MessagePosition::DEFAULT)]
+    private MessagePosition $position = MessagePosition::DEFAULT;
 
     #[Assert\DivisibleBy(1)]
     #[Assert\Range(min: 0, max: 5)]

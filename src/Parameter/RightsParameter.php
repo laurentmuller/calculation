@@ -22,11 +22,13 @@ use App\Service\RoleBuilderService;
  */
 class RightsParameter implements ParameterInterface
 {
+    /** @var non-negative-int|null */
     #[Parameter('admin_rights')]
     private ?int $adminRights = null;
 
     private ?RoleBuilderService $service = null;
 
+    /** @var non-negative-int|null */
     #[Parameter('user_rights')]
     private ?int $userRights = null;
 
@@ -51,6 +53,9 @@ class RightsParameter implements ParameterInterface
         return 'parameter_rights';
     }
 
+    /**
+     * @return non-negative-int
+     */
     public function getDefaultAdminRights(): int
     {
         return $this->getDefaultAdminRole()
@@ -63,6 +68,9 @@ class RightsParameter implements ParameterInterface
             ->getRoleAdmin();
     }
 
+    /**
+     * @return non-negative-int
+     */
     public function getDefaultUserRights(): int
     {
         return $this->getDefaultUserRole()
@@ -95,6 +103,9 @@ class RightsParameter implements ParameterInterface
         return $role;
     }
 
+    /**
+     * @param non-negative-int|null $adminRights
+     */
     public function setAdminRights(?int $adminRights): self
     {
         $this->adminRights = $this->cleanRights($adminRights, $this->getDefaultAdminRights());
@@ -102,6 +113,9 @@ class RightsParameter implements ParameterInterface
         return $this;
     }
 
+    /**
+     * @param non-negative-int|null $userRights
+     */
     public function setUserRights(?int $userRights): self
     {
         $this->userRights = $this->cleanRights($userRights, $this->getDefaultUserRights());
@@ -109,6 +123,11 @@ class RightsParameter implements ParameterInterface
         return $this;
     }
 
+    /**
+     * @param non-negative-int|null $rights
+     *
+     * @return non-negative-int|null
+     */
     private function cleanRights(?int $rights, int $default): ?int
     {
         if (null === $rights || $rights === $default) {

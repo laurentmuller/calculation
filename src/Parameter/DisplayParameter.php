@@ -22,11 +22,11 @@ use App\Enums\TableView;
  */
 class DisplayParameter implements ParameterInterface
 {
-    #[Parameter('display_mode', TableView::TABLE)]
-    private TableView $displayMode = TableView::TABLE;
+    #[Parameter('display_mode', TableView::DEFAULT)]
+    private TableView $displayMode = TableView::DEFAULT;
 
-    #[Parameter('edit_action', EntityAction::EDIT)]
-    private EntityAction $editAction = EntityAction::EDIT;
+    #[Parameter('edit_action', EntityAction::DEFAULT)]
+    private EntityAction $editAction = EntityAction::DEFAULT;
 
     #[\Override]
     public static function getCacheKey(): string

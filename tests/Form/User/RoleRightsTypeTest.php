@@ -20,6 +20,7 @@ use App\Form\Type\PlainType;
 use App\Form\User\RightsType;
 use App\Form\User\RoleRightsType;
 use App\Interfaces\RoleInterface;
+use App\Model\Role;
 use App\Service\EntityNameService;
 use App\Service\RoleService;
 use App\Tests\Form\PreloadedExtensionsTrait;
@@ -36,22 +37,12 @@ final class RoleRightsTypeTest extends TypeTestCase
 
     public function testSubmitRoleAdmin(): void
     {
-        $data = [
-            'role' => RoleInterface::ROLE_ADMIN,
-        ];
-        $form = $this->factory->create(RoleRightsType::class);
-        $form->submit($data);
-        self::assertTrue($form->isSynchronized());
+        $this->submitRole(RoleInterface::ROLE_ADMIN);
     }
 
     public function testSubmitRoleUser(): void
     {
-        $data = [
-            'role' => RoleInterface::ROLE_USER,
-        ];
-        $form = $this->factory->create(RoleRightsType::class);
-        $form->submit($data);
-        self::assertTrue($form->isSynchronized());
+        $this->submitRole(RoleInterface::ROLE_USER);
     }
 
     #[\Override]
@@ -83,5 +74,17 @@ final class RoleRightsTypeTest extends TypeTestCase
     protected function getTypeExtensions(): array
     {
         return [new InputGroupTypeExtension()];
+    }
+
+    /**
+     * @phpstan-param RoleInterface::ROLE_* $role
+     */
+    private function submitRole(string $role): void
+    {
+        $role = new Role($role);
+        $data = ['role' => $role->getRole()];
+        $form = $this->factory->create(RoleRightsType::class, $role);
+        $form->submit($data);
+        self::assertTrue($form->isSynchronized());
     }
 }

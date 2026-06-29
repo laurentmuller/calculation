@@ -17,6 +17,7 @@ use App\Form\AbstractHelperType;
 use App\Form\DataTransformer\RightsTransformer;
 use App\Form\FormHelper;
 use App\Service\RoleService;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Abstract class to edit permissions rights.
@@ -28,9 +29,15 @@ use App\Service\RoleService;
 abstract class AbstractRightsType extends AbstractHelperType
 {
     public function __construct(
-        protected readonly RoleService $service,
+        private readonly RoleService $service,
         private readonly RightsTransformer $transformer
     ) {
+    }
+
+    #[\Override]
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefault('data_class', $this->getDataClass());
     }
 
     protected function addRightsType(FormHelper $helper): void
@@ -51,9 +58,21 @@ abstract class AbstractRightsType extends AbstractHelperType
             ->addPlainType();
     }
 
+    /**
+     * @return class-string<TModel>
+     */
+    abstract protected function getDataClass(): string;
+
     #[\Override]
     protected function getLabelPrefix(): string
     {
         return 'user.fields.';
+    }
+
+    protected function translateEnabled(string $value): string
+    {
+        $enabled = \filter_var($value, \FILTER_VALIDATE_BOOLEAN);
+
+        return $this->service->translateEnabled($enabled);
     }
 }

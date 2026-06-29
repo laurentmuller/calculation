@@ -44,7 +44,7 @@ class PasswordService
     {
         $result = $this->getPasswordStrength($query);
 
-        return $result->getStrengthLevel() ?? StrengthLevel::NONE;
+        return $result->getStrengthLevel() ?? StrengthLevel::DEFAULT;
     }
 
     #[\Override]
@@ -124,7 +124,7 @@ class PasswordService
         if (null === StringUtils::trim($query->password)) {
             return $this->getFalseResult($this->trans('password.empty', domain: 'validators'));
         }
-        if (StrengthLevel::NONE === $query->strength) {
+        if (StrengthLevel::DEFAULT === $query->strength) {
             return $this->getFalseResult($this->trans('password.strength_disabled', domain: 'validators'));
         }
 

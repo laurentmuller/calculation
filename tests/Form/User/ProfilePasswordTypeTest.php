@@ -38,7 +38,7 @@ final class ProfilePasswordTypeTest extends EntityTypeTestCase
     #[\Override]
     protected function setUp(): void
     {
-        $contraint = new Strength(StrengthLevel::NONE);
+        $contraint = new Strength(StrengthLevel::DEFAULT);
         $security = $this->createMock(SecurityParameter::class);
         $security->method('getStrengthConstraint')
             ->willReturn($contraint);

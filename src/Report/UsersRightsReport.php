@@ -255,7 +255,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     {
         $this->addBookmark($this->trans('user.roles.name'), true);
         if ($this->superAdmin) {
-            $this->outputRole($table, $this->roleBuilderService->getRoleSuperAdmin());
+            $this->outputRole($table, $this->roleBuilderService->getSuperAdminRole());
         }
         $rights = $this->parameters->getRights();
         $this->outputRole($table, $rights->getAdminRole());

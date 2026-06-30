@@ -25,35 +25,17 @@ use App\Model\Role;
 class RoleBuilderService
 {
     /**
-     * Gets a role with default access rights for the given user.
+     * Gets the admin role ('ROLE_ADMIN').
      */
-    public function getRole(User $user): Role
-    {
-        if (!$user->isEnabled()) {
-            return $this->getRoleDisabled();
-        }
-        if ($user->isSuperAdmin()) {
-            return $this->getRoleSuperAdmin();
-        }
-        if ($user->isAdmin()) {
-            return $this->getRoleAdmin();
-        }
-
-        return $this->getRoleUser();
-    }
-
-    /**
-     * Gets the admin role ('ROLE_ADMIN') with default access rights.
-     */
-    public function getRoleAdmin(): Role
+    public function getAdminRole(): Role
     {
         return $this->getRoleWithAll(RoleInterface::ROLE_ADMIN);
     }
 
     /**
-     * Gets the disabled role with default access right.
+     * Gets the disabled role.
      */
-    public function getRoleDisabled(): Role
+    public function getDisabledRole(): Role
     {
         $role = new Role(RoleInterface::ROLE_USER);
         $role->setOverwrite(true);
@@ -62,17 +44,35 @@ class RoleBuilderService
     }
 
     /**
-     * Gets the super admin role ('ROLE_SUPER_ADMIN') with default access rights.
+     * Gets a role for the given user.
      */
-    public function getRoleSuperAdmin(): Role
+    public function getRole(User $user): Role
+    {
+        if (!$user->isEnabled()) {
+            return $this->getDisabledRole();
+        }
+        if ($user->isSuperAdmin()) {
+            return $this->getSuperAdminRole();
+        }
+        if ($user->isAdmin()) {
+            return $this->getAdminRole();
+        }
+
+        return $this->getUserRole();
+    }
+
+    /**
+     * Gets the super admin role ('ROLE_SUPER_ADMIN').
+     */
+    public function getSuperAdminRole(): Role
     {
         return $this->getRoleWithAll(RoleInterface::ROLE_SUPER_ADMIN);
     }
 
     /**
-     * Gets the user role ('ROLE_USER') with the default access rights.
+     * Gets the user role ('ROLE_USER').
      */
-    public function getRoleUser(): Role
+    public function getUserRole(): Role
     {
         $role = new Role(RoleInterface::ROLE_USER);
         $role->setPermission(EntityName::CALCULATION, EntityPermission::getAllPermission());

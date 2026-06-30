@@ -50,8 +50,8 @@ abstract class AuthenticateWebTestCase extends WebTestCase
         $this->client = static::createClient();
         // get rights
         $builder = new RoleBuilderService();
-        $userRight = $builder->getRoleUser()->getRights();
-        $adminRight = $builder->getRoleAdmin()->getRights();
+        $userRight = $builder->getUserRole()->getRights();
+        $adminRight = $builder->getAdminRole()->getRights();
         $parameters = $this->getService(ApplicationParameters::class);
         $parameters->getRights()
             ->setAdminRights($adminRight)

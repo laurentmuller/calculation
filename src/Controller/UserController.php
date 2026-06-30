@@ -24,7 +24,6 @@ use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
 use App\Attribute\ShowEntityRoute;
 use App\Entity\User;
-use App\Enums\EntityPermission;
 use App\Form\User\ResetAllPasswordType;
 use App\Form\User\UserChangePasswordType;
 use App\Form\User\UserCommentType;
@@ -318,10 +317,10 @@ class UserController extends AbstractEntityController
             );
         }
 
-        $default = $this->getDefaultRole($builder, $item);
+        $defaultRole = $this->getDefaultRole($builder, $item);
         $form = $this->createForm(UserRightsType::class, $item);
         if ($this->handleRequestForm($request, $form)) {
-            if ($item->getRights() === $default->getRights()) {
+            if ($item->getRights() === $defaultRole->getRights()) {
                 $item->setRights(null);
                 if ($item->isEnabled()) {
                     $item->setOverwrite(false);
@@ -334,8 +333,9 @@ class UserController extends AbstractEntityController
 
         return $this->render('user/user_rights.html.twig', [
             'form' => $form,
-            'default' => $default,
-            'headers' => EntityPermission::sorted(),
+            'permissions' => $defaultRole->getPermissions(),
+            'default_overwrite' => $defaultRole->isOverwrite(),
+            'overwrite' => $item->isOverwrite(),
         ]);
     }
 

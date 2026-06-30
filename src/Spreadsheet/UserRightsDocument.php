@@ -145,7 +145,7 @@ class UserRightsDocument extends AbstractArrayDocument
     private function outputRoles(WorksheetDocument $sheet, int &$row): void
     {
         if ($this->superAdmin) {
-            $this->outputRole($sheet, $this->roleBuilderService->getRoleSuperAdmin(), $row);
+            $this->outputRole($sheet, $this->roleBuilderService->getSuperAdminRole(), $row);
         }
         $rights = $this->parameters->getRights();
         $this->outputRole($sheet, $rights->getAdminRole(), $row);

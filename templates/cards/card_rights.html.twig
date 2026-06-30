@@ -6,10 +6,10 @@
 {%- set show_required = false -%}
 {% block card_container_class '' %}
 {# macros #}
-{% macro header(entity, overwrite) %}
+{% macro header(text, overwrite) %}
     <th>
         {{ button(
-            text: entity,
+            text: text,
             class: 'btn btn-link btn-col p-0',
             attributes: {
                 title: 'user.rights.col_title'|trans,
@@ -39,7 +39,7 @@
         {% endfor %}
     </tr>
 {%- endmacro row %}
-{% macro table(rights, permissions, headers, overwrite) %}
+{% macro table(rights, permissions, overwrite) %}
     <div class="table-responsive mb-3">
         <table class="table table-bordered table-list" id="table-edit">
             <thead>
@@ -47,8 +47,8 @@
                 <th class="text-start text-nowrap fw-normal">
                     {{- icon('fa-solid fa-arrow-down', 'user.rights.table_title') }}{{ icon('fa-solid fa-arrow-right ms-1') -}}
                 </th>
-                {% for header in headers %}
-                    {{ _self.header(header, overwrite) }}
+                {% for permission in enum('App\\Enums\\EntityPermission')?.sorted %}
+                    {{ _self.header(permission, overwrite) }}
                 {% endfor %}
             </tr>
             </thead>

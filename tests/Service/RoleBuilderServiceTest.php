@@ -65,25 +65,25 @@ final class RoleBuilderServiceTest extends FlagBagTestCase
 
     public function testRoleAdmin(): void
     {
-        $role = $this->service->getRoleAdmin();
+        $role = $this->service->getAdminRole();
         self::assertRoleAdmin($role);
     }
 
     public function testRoleDisabled(): void
     {
-        $role = $this->service->getRoleDisabled();
+        $role = $this->service->getDisabledRole();
         self::assertRoleDisabled($role);
     }
 
     public function testRoleSuperAdmin(): void
     {
-        $role = $this->service->getRoleSuperAdmin();
+        $role = $this->service->getSuperAdminRole();
         self::assertRoleSuperAdmin($role);
     }
 
     public function testRoleUser(): void
     {
-        $role = $this->service->getRoleUser();
+        $role = $this->service->getUserRole();
         self::assertRoleUser($role);
     }
 

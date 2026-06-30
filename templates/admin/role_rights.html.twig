@@ -1,10 +1,9 @@
 {% extends 'cards/card_rights.html.twig' %}
 {# parameters #}
 {%- set title = form.vars.value.admin ? 'index.menu_rights_admin' : 'index.menu_rights_user' -%}
-{%- set overwrite = true -%}
 {# body #}
 {% block card_body %}
     {{ form_row(form.name) }}
-    {{ _self.table(form.rights, default.permissions, headers, overwrite) }}
+    {{ _self.table(form.rights, permissions, overwrite) }}
     {{ parent() }}
 {% endblock card_body %}

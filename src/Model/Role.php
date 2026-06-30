@@ -15,11 +15,13 @@ namespace App\Model;
 
 use App\Interfaces\RoleInterface;
 use App\Traits\RoleTrait;
+use Symfony\Contracts\Translation\TranslatableInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Implementation of the role interface with access rights.
  */
-class Role implements \Stringable, RoleInterface
+class Role implements \Stringable, RoleInterface, TranslatableInterface
 {
     use RoleTrait;
 
@@ -58,5 +60,13 @@ class Role implements \Stringable, RoleInterface
         $this->name = $name;
 
         return $this;
+    }
+
+    #[\Override]
+    public function trans(TranslatorInterface $translator, ?string $locale = null): string
+    {
+        $id = \strtolower(\str_ireplace('role_', 'user.roles.', $this->getRole()));
+
+        return $translator->trans(id: $id, locale: $locale);
     }
 }

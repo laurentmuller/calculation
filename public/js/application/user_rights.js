@@ -18,7 +18,7 @@
     };
 
     /**
-     * Returns a value indicating if this has changed (not has the default value).
+     * Returns a value indicating if this has changed.
      * @returns {boolean}
      */
     $.fn.isValueChanged = function () {
@@ -65,9 +65,9 @@ function isDefaultValues() {
             return false;
         }
     });
-    const $overwrite = $('#user_rights_overwrite');
-    if (!changed && $overwrite.length) {
-        changed = $overwrite.isValueChanged();
+    if (!changed) {
+        const $overwrite = $('#user_rights_overwrite');
+        changed = $overwrite.length && $overwrite.isValueChanged();
     }
     return changed;
 }
@@ -78,6 +78,7 @@ function isDefaultValues() {
 function updateDefaultAction() {
     'use strict';
     $('#default').toggleDisabled(!isDefaultValues());
+    $('#table-edit :checkbox:first').trigger('change');
 }
 
 /**

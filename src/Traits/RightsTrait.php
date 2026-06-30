@@ -32,10 +32,14 @@ trait RightsTrait
     #[ORM\Column(options: ['default' => false])]
     private bool $overwrite = false;
 
-    /** The rights. */
+    /**
+     * The rights.
+     *
+     * @var non-negative-int|null
+     */
     #[Assert\PositiveOrZero]
     #[ORM\Column(type: Types::BIGINT, nullable: true)]
-    private ?int $rights = null;
+    private ?int $rights = null; // @phpstan-ignore doctrine.columnType
 
     /**
      * Gets the permission for the given entity name.
@@ -70,7 +74,6 @@ trait RightsTrait
      */
     public function getRights(): int
     {
-        /** @phpstan-var non-negative-int */
         return $this->rights ?? 0;
     }
 

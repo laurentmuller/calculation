@@ -28,18 +28,16 @@ class UserRightsType extends AbstractRightsType
     {
         $helper->field('username')
             ->prependIcon('fa-regular fa-user')
-            ->label('user.fields.username_full')
             ->addPlainType();
         $helper->field('enabled')
             ->updateOptions([
                 'prepend_icon' => 'fa-solid fa-user-check',
                 'value_transformer' => $this->translateEnabled(...),
-            ])
-            ->addPlainType();
+            ])->addPlainType();
         $helper->field('overwrite')
             ->addCheckboxType();
-        $this->addRoleType($helper);
-        $this->addRightsType($helper);
+        $this->addRoleType($helper, 'role');
+        parent::addFormFields($helper);
     }
 
     #[\Override]

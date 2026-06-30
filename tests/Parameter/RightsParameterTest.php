@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Parameter;
 
+use App\Interfaces\RoleInterface;
+use App\Model\Role;
 use App\Parameter\RightsParameter;
 use App\Service\RoleBuilderService;
 
@@ -41,12 +43,12 @@ final class RightsParameterTest extends ParameterTestCase
         self::assertNull($this->parameter->getUserRights());
 
         $service = new RoleBuilderService();
-        $default = $service->getRoleAdmin()
+        $default = $service->getAdminRole()
             ->getRights();
         $this->parameter->setAdminRights($default);
         self::assertNull($this->parameter->getAdminRights());
 
-        $default = $service->getRoleUser()
+        $default = $service->getUserRole()
             ->getRights();
         $this->parameter->setUserRights($default);
         self::assertNull($this->parameter->getUserRights());
@@ -64,6 +66,34 @@ final class RightsParameterTest extends ParameterTestCase
     {
         $role = $this->parameter->getUserRole();
         self::assertSame('ROLE_USER', $role->getName());
+    }
+
+    public function testSetRightsFromRoleAdmin(): void
+    {
+        $rights = 1;
+        $role = new Role(RoleInterface::ROLE_ADMIN);
+        $role->setRights($rights);
+        $this->parameter->setRightsFromRole($role);
+        self::assertNull($this->parameter->getUserRights());
+        self::assertSame($rights, $this->parameter->getAdminRights());
+    }
+
+    public function testSetRightsFromRoleInvalid(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid role: "ROLE_SUPER_ADMIN".');
+        $role = new Role(RoleInterface::ROLE_SUPER_ADMIN);
+        $this->parameter->setRightsFromRole($role);
+    }
+
+    public function testSetRightsFromRoleUser(): void
+    {
+        $rights = 1;
+        $role = new Role(RoleInterface::ROLE_USER);
+        $role->setRights($rights);
+        $this->parameter->setRightsFromRole($role);
+        self::assertSame($rights, $this->parameter->getUserRights());
+        self::assertNull($this->parameter->getAdminRights());
     }
 
     public function testSetValue(): void

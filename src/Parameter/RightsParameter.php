@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Parameter;
 
 use App\Attribute\Parameter;
+use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Service\RoleBuilderService;
 
@@ -39,7 +40,7 @@ class RightsParameter implements ParameterInterface
 
     public function getAdminRole(): Role
     {
-        $role = $this->getService()->getRoleAdmin();
+        $role = $this->getService()->getAdminRole();
         if (null !== $this->adminRights) {
             $role->setRights($this->adminRights);
         }
@@ -60,7 +61,7 @@ class RightsParameter implements ParameterInterface
 
     public function getUserRole(): Role
     {
-        $role = $this->getService()->getRoleUser();
+        $role = $this->getService()->getUserRole();
         if (null !== $this->userRights) {
             $role->setRights($this->userRights);
         }
@@ -76,6 +77,23 @@ class RightsParameter implements ParameterInterface
         $this->adminRights = $this->cleanRights($adminRights, $this->getDefaultAdminRights());
 
         return $this;
+    }
+
+    /**
+     * Sets rights from the given role.
+     *
+     * @throws \InvalidArgumentException if the role is invalid
+     */
+    public function setRightsFromRole(Role $role): self
+    {
+        if ($role->hasRole(RoleInterface::ROLE_ADMIN)) {
+            return $this->setAdminRights($role->getRights());
+        }
+        if ($role->hasRole(RoleInterface::ROLE_USER)) {
+            return $this->setUserRights($role->getRights());
+        }
+
+        throw new \InvalidArgumentException(\sprintf('Invalid role: "%s".', $role));
     }
 
     /**
@@ -108,7 +126,7 @@ class RightsParameter implements ParameterInterface
     private function getDefaultAdminRights(): int
     {
         return $this->getService()
-            ->getRoleAdmin()
+            ->getAdminRole()
             ->getRights();
     }
 
@@ -118,7 +136,7 @@ class RightsParameter implements ParameterInterface
     private function getDefaultUserRights(): int
     {
         return $this->getService()
-            ->getRoleUser()
+            ->getUserRole()
             ->getRights();
     }
 

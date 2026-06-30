@@ -41,14 +41,15 @@ abstract class AbstractRightsType extends AbstractHelperType
         $resolver->setDefault('data_class', $this->getDataClass());
     }
 
-    protected function addRightsType(FormHelper $helper): void
+    #[\Override]
+    protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('rights')
             ->modelTransformer($this->transformer)
             ->add(RightsType::class);
     }
 
-    protected function addRoleType(FormHelper $helper, string $field = 'role'): void
+    protected function addRoleType(FormHelper $helper, string $field): void
     {
         $helper->field($field)
             ->label('user.fields.role')

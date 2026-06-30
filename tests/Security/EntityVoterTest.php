@@ -44,8 +44,8 @@ final class EntityVoterTest extends TestCase
     protected function setUp(): void
     {
         $this->builder = new RoleBuilderService();
-        $adminRole = $this->builder->getRoleAdmin();
-        $userRole = $this->builder->getRoleUser();
+        $adminRole = $this->builder->getAdminRole();
+        $userRole = $this->builder->getUserRole();
         $rights = $this->createMock(RightsParameter::class);
         $rights->method('getAdminRole')
             ->willReturn($adminRole);
@@ -86,7 +86,7 @@ final class EntityVoterTest extends TestCase
 
     public function testAdmin(): void
     {
-        $role = $this->builder->getRoleAdmin();
+        $role = $this->builder->getAdminRole();
         $user = $this->getAdminUser($role);
         $subject = User::class;
         $attribute = EntityPermission::ADD;
@@ -96,7 +96,7 @@ final class EntityVoterTest extends TestCase
 
     public function testAdminOverwrite(): void
     {
-        $role = $this->builder->getRoleAdmin();
+        $role = $this->builder->getAdminRole();
         $user = $this->getAdminUser($role)
             ->setOverwrite(true);
         $subject = User::class;
@@ -159,7 +159,7 @@ final class EntityVoterTest extends TestCase
 
     public function testUser(): void
     {
-        $role = $this->builder->getRoleUser();
+        $role = $this->builder->getUserRole();
         $user = $this->getDefaultUser($role);
 
         $subject = Calculation::class;
@@ -187,7 +187,7 @@ final class EntityVoterTest extends TestCase
             }
         };
 
-        $role = $this->builder->getRoleUser();
+        $role = $this->builder->getUserRole();
         $user = $this->getDefaultUser($role);
         $token = $this->getUserToken($user);
 

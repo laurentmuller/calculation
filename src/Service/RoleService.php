@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Interfaces\RoleInterface;
+use App\Model\Role;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Attribute\AsTwigFilter;
@@ -114,6 +115,9 @@ readonly class RoleService
     #[AsTwigFilter('role_name')]
     public function translateRole(RoleInterface|string $role): string
     {
+        if ($role instanceof Role) {
+            return $role->trans($this->translator);
+        }
         if ($role instanceof RoleInterface) {
             $role = $role->getRole();
         }

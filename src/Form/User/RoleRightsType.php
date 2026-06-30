@@ -27,7 +27,7 @@ class RoleRightsType extends AbstractRightsType
     protected function addFormFields(FormHelper $helper): void
     {
         $this->addRoleType($helper, 'name');
-        $this->addRightsType($helper);
+        parent::addFormFields($helper);
     }
 
     #[\Override]

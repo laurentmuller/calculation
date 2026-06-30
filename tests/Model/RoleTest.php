@@ -15,10 +15,13 @@ namespace App\Tests\Model;
 
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
+use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\TestCase;
 
 final class RoleTest extends TestCase
 {
+    use TranslatorMockTrait;
+
     public function testGetName(): void
     {
         $role = new Role(RoleInterface::ROLE_USER);
@@ -100,5 +103,13 @@ final class RoleTest extends TestCase
     {
         $role = new Role(RoleInterface::ROLE_USER);
         self::assertSame(RoleInterface::ROLE_USER, (string) $role);
+    }
+
+    public function testTranslate(): void
+    {
+        $translator = $this->createMockTranslator();
+        $role = new Role(RoleInterface::ROLE_USER);
+        $actual = $role->trans($translator);
+        self::assertSame('user.roles.user', $actual);
     }
 }

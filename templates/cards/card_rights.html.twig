@@ -6,10 +6,10 @@
 {%- set show_required = false -%}
 {% block card_container_class '' %}
 {# macros #}
-{% macro header(permission, overwrite) %}
+{% macro header(entity, overwrite) %}
     <th>
         {{ button(
-            text: permission,
+            text: entity,
             class: 'btn btn-link btn-col p-0',
             attributes: {
                 title: 'user.rights.col_title'|trans,
@@ -28,7 +28,10 @@
         </td>
         {% for entry in entries %}
             {%- set checked = permission.hasBits(entry.vars.value) -%}
-            {%- set attr = {'data-default': checked|json_encode, class: 'form-check-no-label'} -%}
+            {%- set attr = {
+                class: 'form-check-no-label',
+                title: 'user.rights.cell_title'|trans,
+                'data-default': checked|json_encode} -%}
             {%- if not overwrite -%}
                 {%- set attr = attr|merge({disabled: 'disabled', checked: checked}) -%}
             {%- endif -%}
@@ -36,7 +39,7 @@
         {% endfor %}
     </tr>
 {%- endmacro row %}
-{% macro table(rights, permissions, entities, overwrite = true) %}
+{% macro table(rights, permissions, headers, overwrite) %}
     <div class="table-responsive mb-3">
         <table class="table table-bordered table-list" id="table-edit">
             <thead>
@@ -44,8 +47,8 @@
                 <th class="text-start text-nowrap fw-normal">
                     {{- icon('fa-solid fa-arrow-down', 'user.rights.table_title') }}{{ icon('fa-solid fa-arrow-right ms-1') -}}
                 </th>
-                {% for entity in entities %}
-                    {{ _self.header(entity, overwrite) }}
+                {% for header in headers %}
+                    {{ _self.header(header, overwrite) }}
                 {% endfor %}
             </tr>
             </thead>

@@ -84,7 +84,7 @@ class ApplicationParameters extends AbstractParameters
     }
 
     /**
-     * Gets the dates parameter.
+     * Gets dates parameter.
      */
     public function getDates(): DatesParameter
     {
@@ -161,7 +161,7 @@ class ApplicationParameters extends AbstractParameters
     }
 
     /**
-     * Gets the right parameters.
+     * Gets rights parameters.
      */
     public function getRights(): RightsParameter
     {

@@ -16,13 +16,14 @@ namespace App\Form\User;
 use App\Form\AbstractHelperType;
 use App\Form\DataTransformer\RightsTransformer;
 use App\Form\FormHelper;
+use App\Interfaces\RoleInterface;
 use App\Service\RoleService;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Abstract class to edit permissions rights.
  *
- * @template TModel
+ * @template TModel of RoleInterface
  *
  * @extends AbstractHelperType<TModel>
  */

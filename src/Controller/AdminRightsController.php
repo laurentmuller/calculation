@@ -75,13 +75,12 @@ class AdminRightsController extends AbstractController
     ): Response {
         $form = $this->createForm(RoleRightsType::class, $role);
         if ($this->handleRequestForm($request, $form)) {
-            $rights = $role->getRights();
+            $rights = $parameters->getRights();
             if ($role->isAdmin()) {
-                $parameters->getRights()->setAdminRights($rights);
+                $rights->setAdminRights($role->getRights());
             } else {
-                $parameters->getRights()->setUserRights($rights);
+                $rights->setUserRights($role->getRights());
             }
-
             if ($parameters->save()) {
                 return $this->redirectToHomePage(
                     request: $request,
@@ -97,9 +96,8 @@ class AdminRightsController extends AbstractController
 
         return $this->render('admin/role_rights.html.twig', [
             'form' => $form,
-            'is_admin' => $role->isAdmin(),
             'default' => $default,
-            'entities' => EntityPermission::sorted(),
+            'headers' => EntityPermission::sorted(),
         ]);
     }
 }

@@ -53,41 +53,6 @@ class RightsParameter implements ParameterInterface
         return 'parameter_rights';
     }
 
-    /**
-     * @return non-negative-int
-     */
-    public function getDefaultAdminRights(): int
-    {
-        return $this->getDefaultAdminRole()
-            ->getRights();
-    }
-
-    public function getDefaultAdminRole(): Role
-    {
-        return $this->getService()
-            ->getRoleAdmin();
-    }
-
-    /**
-     * @return non-negative-int
-     */
-    public function getDefaultUserRights(): int
-    {
-        return $this->getDefaultUserRole()
-            ->getRights();
-    }
-
-    public function getDefaultUserRole(): Role
-    {
-        return $this->getService()
-            ->getRoleUser();
-    }
-
-    public function getService(): RoleBuilderService
-    {
-        return $this->service ??= new RoleBuilderService();
-    }
-
     public function getUserRights(): ?int
     {
         return $this->userRights;
@@ -135,5 +100,30 @@ class RightsParameter implements ParameterInterface
         }
 
         return $rights;
+    }
+
+    /**
+     * @return non-negative-int
+     */
+    private function getDefaultAdminRights(): int
+    {
+        return $this->getService()
+            ->getRoleAdmin()
+            ->getRights();
+    }
+
+    /**
+     * @return non-negative-int
+     */
+    private function getDefaultUserRights(): int
+    {
+        return $this->getService()
+            ->getRoleUser()
+            ->getRights();
+    }
+
+    private function getService(): RoleBuilderService
+    {
+        return $this->service ??= new RoleBuilderService();
     }
 }

@@ -1450,6 +1450,7 @@ user:
         default_title: Rétablir les valeurs par défaut
         col_title: Activer ou désactiver tous les droits d'accès pour cette action
         row_title: Activer ou désactiver tous les droits d'accès pour cet objet
+        cell_title: Activer ou désactiver le droit d'accès pour pour objet et cette action
         connected: Impossible de modifier les droits d'accès de l'utilisateur actuellement connecté !
         success: Les droits d'accès de l'utilisateur <b>%name%</b> ont été mis à jour avec succès.
     roles:

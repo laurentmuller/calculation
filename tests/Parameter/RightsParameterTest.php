@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Parameter;
 
 use App\Parameter\RightsParameter;
+use App\Service\RoleBuilderService;
 
 /**
  * @extends ParameterTestCase<RightsParameter>
@@ -39,11 +40,14 @@ final class RightsParameterTest extends ParameterTestCase
         self::assertNull($this->parameter->getAdminRights());
         self::assertNull($this->parameter->getUserRights());
 
-        $default = $this->parameter->getDefaultAdminRights();
+        $service = new RoleBuilderService();
+        $default = $service->getRoleAdmin()
+            ->getRights();
         $this->parameter->setAdminRights($default);
         self::assertNull($this->parameter->getAdminRights());
 
-        $default = $this->parameter->getDefaultUserRights();
+        $default = $service->getRoleUser()
+            ->getRights();
         $this->parameter->setUserRights($default);
         self::assertNull($this->parameter->getUserRights());
 

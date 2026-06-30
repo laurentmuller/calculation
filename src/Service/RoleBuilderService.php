@@ -51,7 +51,7 @@ class RoleBuilderService
     }
 
     /**
-     * Gets the disabled role with the no access right.
+     * Gets the disabled role with default access right.
      */
     public function getRoleDisabled(): Role
     {

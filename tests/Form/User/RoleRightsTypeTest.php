@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Form\User;
 
 use App\Enums\EntityName;
-use App\Form\DataTransformer\RightsTransformer;
 use App\Form\Extension\InputGroupTypeExtension;
 use App\Form\Type\PlainType;
 use App\Form\User\RightsType;
@@ -57,8 +56,7 @@ final class RoleRightsTypeTest extends TypeTestCase
             ->willReturn([RoleInterface::ROLE_ADMIN]);
         $translator = $this->createMockTranslator();
         $service = new RoleService($roleHierarchy, $translator);
-        $transformer = self::createStub(RightsTransformer::class);
-        $roleRightsType = new RoleRightsType($service, $transformer);
+        $roleRightsType = new RoleRightsType($service);
 
         return [
             $rightsType,
@@ -86,5 +84,6 @@ final class RoleRightsTypeTest extends TypeTestCase
         $form = $this->factory->create(RoleRightsType::class, $role);
         $form->submit($data);
         self::assertTrue($form->isSynchronized());
+        self::assertTrue($form->isValid());
     }
 }

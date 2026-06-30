@@ -15,7 +15,6 @@ namespace App\Tests\Form\User;
 
 use App\Entity\User;
 use App\Enums\EntityName;
-use App\Form\DataTransformer\RightsTransformer;
 use App\Form\Extension\InputGroupTypeExtension;
 use App\Form\Type\PlainType;
 use App\Form\User\RightsType;
@@ -85,10 +84,9 @@ final class UserRightsTypeTest extends TypeTestCase
         $entityNameService = $this->createMock(EntityNameService::class);
         $entityNameService->method('getEntities')
             ->willReturn(EntityName::sorted());
-        $transformer = new RightsTransformer($entityNameService);
 
         $rightsType = new RightsType($entityNameService);
-        $userRightsType = new UserRightsType($roleService, $transformer);
+        $userRightsType = new UserRightsType($roleService);
         $plainType = new PlainType($translator);
 
         return [

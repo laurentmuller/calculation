@@ -14,14 +14,13 @@ declare(strict_types=1);
 namespace App\Form\User;
 
 use App\Form\AbstractHelperType;
-use App\Form\DataTransformer\RightsTransformer;
 use App\Form\FormHelper;
 use App\Interfaces\RoleInterface;
 use App\Service\RoleService;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Abstract class to edit permissions rights.
+ * Abstract class to edit role rights.
  *
  * @template TModel of RoleInterface
  *
@@ -29,10 +28,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 abstract class AbstractRightsType extends AbstractHelperType
 {
-    public function __construct(
-        private readonly RoleService $service,
-        private readonly RightsTransformer $transformer
-    ) {
+    public function __construct(private readonly RoleService $service)
+    {
     }
 
     #[\Override]
@@ -45,7 +42,6 @@ abstract class AbstractRightsType extends AbstractHelperType
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('rights')
-            ->modelTransformer($this->transformer)
             ->add(RightsType::class);
     }
 

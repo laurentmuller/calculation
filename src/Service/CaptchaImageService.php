@@ -269,7 +269,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
     {
         \ob_start();
         ImageExtension::DEFAULT->saveImage($image);
-        $buffer = (string) \ob_get_contents();
+        $buffer = \ob_get_contents();
         \ob_end_clean();
 
         return self::IMAGE_PREFIX . \base64_encode($buffer);

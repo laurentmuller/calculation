@@ -131,7 +131,7 @@ class PhpInfoService
     {
         \ob_start();
         \phpinfo();
-        $content = (string) \ob_get_contents();
+        $content = \ob_get_contents();
         \ob_end_clean();
 
         return $this->updateContent($content);

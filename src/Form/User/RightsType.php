@@ -55,7 +55,7 @@ class RightsType extends AbstractType implements DataMapperInterface
     }
 
     /**
-     * @param \Traversable<string, FormInterface<mixed>> $forms
+     * @param \Traversable<FormInterface<mixed>> $forms
      */
     #[\Override]
     public function mapDataToForms(mixed $viewData, \Traversable $forms): void

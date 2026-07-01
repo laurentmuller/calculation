@@ -220,7 +220,7 @@ trait PdfMemoryImageTrait
         $data = \ob_get_clean();
         \imagedestroy($image);
 
-        if (!$result || !\is_string($data) || '' === $data) {
+        if (!$result || '' === $data) {
             throw PdfException::instance('Unable to convert the GD image to portable network graphics format.');
         }
 

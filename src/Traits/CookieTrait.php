@@ -38,11 +38,11 @@ trait CookieTrait
     /**
      * Returns the cookie value converted to an enum.
      *
-     * @template EnumType of \BackedEnum
+     * @template T of \BackedEnum
      *
-     * @param EnumType $default
+     * @param T $default
      *
-     * @return EnumType
+     * @return T
      */
     protected function getCookieEnum(
         Request $request,
@@ -97,8 +97,7 @@ trait CookieTrait
         string $prefix = '',
         bool $httpOnly = true
     ): void {
-        /** @phpstan-ignore classConstant.notFound */
-        if ($value instanceof DefaultEnumInterface && $value === $value::DEFAULT) {
+        if ($value instanceof DefaultEnumInterface && $this->isDefaultEnumValue($value)) {
             $value = null;
         }
         if ($value instanceof PdfEnumDefaultInterface && $value->isDefault()) {
@@ -157,6 +156,16 @@ trait CookieTrait
     private function getCookieName(string $key, string $prefix = ''): string
     {
         return \strtoupper('' === $prefix ? $key : $prefix . '_' . $key);
+    }
+
+    /**
+     * @template T of \UnitEnum&DefaultEnumInterface
+     *
+     * @phpstan-param T $value
+     */
+    private function isDefaultEnumValue(DefaultEnumInterface $value): bool
+    {
+        return (new \ReflectionClass($value))->getConstant('DEFAULT') === $value;
     }
 
     /**

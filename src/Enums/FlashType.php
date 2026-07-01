@@ -59,7 +59,6 @@ enum FlashType: string implements DefaultEnumInterface, TranslatableEnumInterfac
      */
     public function getIcon(): string
     {
-        return (string) $this->getExtra('icon');
-        // $this->getExtraString('icon');
+        return $this->getExtraString('icon');
     }
 }

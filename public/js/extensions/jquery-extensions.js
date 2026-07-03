@@ -108,6 +108,17 @@
              */
             hideTooltips: function () {
                 $('.show[data-bs-toggle="tooltip"]').removeClass('show');
+            },
+
+            /**
+             * Return if the screen size is greater than or equal to 768 pixels.
+             *
+             * This function is used to determine if the focus must set within small screens.
+             *
+             * @return {boolean} true if greater or equal.
+             */
+            isMediumScreen: function () {
+                return window.innerWidth >= 768 && window.innerHeight >= 768;
             }
         });
 

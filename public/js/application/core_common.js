@@ -117,7 +117,7 @@ $(function () {
      * Update the button titles.
      */
     function updateButtonTitles() {
-        if ($(window).width() >= 768) {
+        if ($.isMediumScreen()) {
             $('.btn[data-show-title]').removeAttr('title');
             return;
         }

@@ -169,7 +169,7 @@
                     });
 
                     // focus only for medium screen
-                    if (options.focus && window.innerWidth > 768 && window.innerHeight > 768) {
+                    if (options.focus && $.isMediumScreen()) {
                         $this.focusSimpleEditor();
                     }
                 });

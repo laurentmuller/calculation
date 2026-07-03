@@ -223,7 +223,31 @@ final class ImageExtensionTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    public function testSaveImageService(): void
+    public function testOutputImage(): void
+    {
+        $source = \realpath(__DIR__ . '/../files/images/example.png');
+        self::assertIsString($source);
+        self::assertFileExists($source);
+
+        $target = FileUtils::tempFile();
+        self::assertIsString($target);
+
+        $image = \imagecreatefrompng($source);
+        self::assertInstanceOf(\GdImage::class, $image);
+        \imagepng($image, $target);
+
+        try {
+            $extension = ImageExtension::PNG;
+            $actual = $extension->outputImage($image);
+            $expected = \file_get_contents($target);
+            self::assertSame($expected, $actual);
+        } finally {
+            FileUtils::remove($target);
+            \imagedestroy($image);
+        }
+    }
+
+    public function testSaveImage(): void
     {
         $file = FileUtils::tempFile();
         self::assertIsString($file);

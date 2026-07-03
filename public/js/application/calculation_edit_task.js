@@ -245,14 +245,16 @@ class EditTaskDialog extends EditDialog {
      * @private
      */
     _onDialogVisible() {
-        if (this.$editingRow) {
-            if (this.$quantity.isEmptyValue()) {
-                this.$quantity.selectFocus();
+        if ($.isMediumScreen()) {
+            if (this.$editingRow) {
+                if (this.$quantity.isEmptyValue()) {
+                    this.$quantity.selectFocus();
+                } else {
+                    this.$task.trigger('focus');
+                }
             } else {
                 this.$task.trigger('focus');
             }
-        } else {
-            this.$task.trigger('focus');
         }
         return super._onDialogVisible();
     }

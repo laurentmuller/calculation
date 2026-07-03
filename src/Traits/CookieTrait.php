@@ -88,7 +88,7 @@ trait CookieTrait
     /**
      * Add or remove a cookie depending on the value.
      *
-     * If the value is null, empty ('') or is the default enumeration, the cookie is removed.
+     * If the value is null, is an empty string, or is the default enumeration, the cookie is removed.
      */
     protected function updateCookie(
         Response $response,
@@ -97,7 +97,7 @@ trait CookieTrait
         string $prefix = '',
         bool $httpOnly = true
     ): void {
-        if ($value instanceof DefaultEnumInterface && $this->isDefaultEnumValue($value)) {
+        if ($value instanceof DefaultEnumInterface && $value === $value::DEFAULT) {
             $value = null;
         }
         if ($value instanceof PdfEnumDefaultInterface && $value->isDefault()) {
@@ -129,12 +129,8 @@ trait CookieTrait
     /**
      * Clears a cookie in the browser.
      */
-    private function clearCookie(
-        Response $response,
-        string $key,
-        string $prefix,
-        bool $httpOnly
-    ): void {
+    private function clearCookie(Response $response, string $key, string $prefix, bool $httpOnly): void
+    {
         $response->headers->clearCookie(
             name: $this->getCookieName($key, $prefix),
             path: $this->getCookiePath(),
@@ -143,11 +139,11 @@ trait CookieTrait
     }
 
     /**
-     * Gets the cookie expiration date. The default value is now plus 1 year.
+     * Gets the cookie expiration date. The value is now plus 1 year.
      */
     private function getCookieExpire(): DatePoint
     {
-        return DateUtils::modify(DateUtils::createDatePoint(), '+1 year');
+        return DateUtils::createDatePoint('+1 year');
     }
 
     /**
@@ -156,16 +152,6 @@ trait CookieTrait
     private function getCookieName(string $key, string $prefix = ''): string
     {
         return \strtoupper('' === $prefix ? $key : $prefix . '_' . $key);
-    }
-
-    /**
-     * @template T of \UnitEnum&DefaultEnumInterface
-     *
-     * @phpstan-param T $value
-     */
-    private function isDefaultEnumValue(DefaultEnumInterface $value): bool
-    {
-        return (new \ReflectionClass($value))->getConstant('DEFAULT') === $value;
     }
 
     /**
@@ -183,7 +169,6 @@ trait CookieTrait
         } elseif (\is_bool($value)) {
             $value = \json_encode($value);
         }
-
         $cookie = Cookie::create(
             name: $this->getCookieName($key, $prefix),
             value: (string) $value,

@@ -155,6 +155,29 @@ enum ImageExtension: string implements DefaultEnumInterface
     }
 
     /**
+     * Output an image to the output buffer and return the contents.
+     *
+     * @param \GdImage|ImageService   $image   a GdImage object, returned by one of the image creation functions or an
+     *                                         image service to get GdImage for this function returns
+     * @param array<string, int|bool> $options additional options to use
+     *
+     * @phpstan-param SaveOptionsType $options
+     *
+     * @return string the image data
+     *
+     * @throws \InvalidArgumentException if one of the given options is invalid
+     */
+    public function outputImage(\GdImage|ImageService $image, array $options = []): string
+    {
+        \ob_start();
+        $this->saveImage($image, null, $options);
+        $buffer = (string) \ob_get_contents();
+        \ob_end_clean();
+
+        return $buffer;
+    }
+
+    /**
      * Output an image to either the browser or a file.
      *
      * @param \GdImage|ImageService   $image   a GdImage object, returned by one of the image creation functions or an

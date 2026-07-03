@@ -20,4 +20,10 @@ namespace App\Interfaces;
  */
 interface DefaultEnumInterface
 {
+    /**
+     * The default enumeration.
+     *
+     * Must be overridden by the implementing class.
+     */
+    public const mixed DEFAULT = null;
 }

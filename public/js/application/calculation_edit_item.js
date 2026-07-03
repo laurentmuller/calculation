@@ -194,18 +194,20 @@ class EditItemDialog extends EditDialog {
      * @private
      */
     _onDialogVisible() {
-        if (this.$price.attr('readonly')) {
-            this.$cancelButton.trigger('focus');
-        } else if (this.copy) {
-            this.$description.selectFocus();
-        } else if (this.$editingRow) {
-            if (this.$price.isEmptyValue()) {
-                this.$price.selectFocus();
+        if ($.isMediumScreen()) {
+            if (this.$price.attr('readonly')) {
+                this.$cancelButton.trigger('focus');
+            } else if (this.copy) {
+                this.$description.selectFocus();
+            } else if (this.$editingRow) {
+                if (this.$price.isEmptyValue()) {
+                    this.$price.selectFocus();
+                } else {
+                    this.$quantity.selectFocus();
+                }
             } else {
-                this.$quantity.selectFocus();
+                this.$search.selectFocus();
             }
-        } else {
-            this.$search.selectFocus();
         }
         return super._onDialogVisible();
     }
@@ -272,10 +274,12 @@ class EditItemDialog extends EditDialog {
                 that.$form.validateForm();
 
                 // select
-                if (item.price) {
-                    that.$quantity.selectFocus();
-                } else {
-                    that.$price.selectFocus();
+                if ($.isMediumScreen()) {
+                    if (item.price) {
+                        that.$quantity.selectFocus();
+                    } else {
+                        that.$price.selectFocus();
+                    }
                 }
             }
         });

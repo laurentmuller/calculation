@@ -16,7 +16,6 @@ namespace App\Tests\Twig;
 use App\Tests\TranslatorMockTrait;
 use App\Twig\FormatExtension;
 use App\Utils\FormatUtils;
-use Twig\Error\Error;
 use Twig\Extension\AttributeExtension;
 
 /**
@@ -42,20 +41,26 @@ final class FormatExtensionTest extends RuntimeTestCase
     }
 
     /**
-     * @throws Error
+     * @param string                $file
+     * @param string                $message
+     * @param string                $condition
+     * @param array<string, string> $templateSources
+     * @param false|string          $exception
+     * @param array<int, string[]>  $outputs
+     * @param string                $deprecation
      */
     #[\Override]
     protected function doIntegrationTest(
-        string $file,
-        string $message,
-        string $condition,
-        array $templates,
-        false|string $exception,
-        array $outputs,
-        string $deprecation
+        $file,
+        $message,
+        $condition,
+        $templateSources,
+        $exception,
+        $outputs,
+        $deprecation = ''
     ): void {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
-        parent::doIntegrationTest($file, $message, $condition, $templates, $exception, $outputs, $deprecation);
+        parent::doIntegrationTest($file, $message, $condition, $templateSources, $exception, $outputs, $deprecation);
     }
 
     #[\Override]
@@ -65,7 +70,7 @@ final class FormatExtensionTest extends RuntimeTestCase
     }
 
     #[\Override]
-    protected function getFixturesDir(): string
+    protected static function getFixturesDirectory(): string
     {
         return __DIR__ . '/Fixtures/FormatExtension';
     }

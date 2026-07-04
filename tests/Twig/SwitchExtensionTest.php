@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Twig;
 
 use App\Twig\SwitchExtension;
+use Twig\Test\IntegrationTestCase;
 
 final class SwitchExtensionTest extends IntegrationTestCase
 {
@@ -24,7 +25,7 @@ final class SwitchExtensionTest extends IntegrationTestCase
     }
 
     #[\Override]
-    protected function getFixturesDir(): string
+    protected static function getFixturesDirectory(): string
     {
         return __DIR__ . '/Fixtures/SwitchExtension';
     }

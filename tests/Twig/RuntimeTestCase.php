@@ -15,6 +15,7 @@ namespace App\Tests\Twig;
 
 use Twig\Extension\AttributeExtension;
 use Twig\RuntimeLoader\RuntimeLoaderInterface;
+use Twig\Test\IntegrationTestCase;
 
 /**
  * Extends the integration test case with a service.

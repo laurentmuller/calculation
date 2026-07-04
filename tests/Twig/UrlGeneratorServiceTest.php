@@ -32,7 +32,7 @@ final class UrlGeneratorServiceTest extends RuntimeTestCase
     }
 
     #[\Override]
-    protected function getFixturesDir(): string
+    protected static function getFixturesDirectory(): string
     {
         return __DIR__ . '/Fixtures/UrlGeneratorService';
     }

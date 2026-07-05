@@ -110,7 +110,7 @@ class Month extends AbstractCalendarItem implements \Stringable
 
             $weekLast = $week->getLastDate();
 
-            return !($firstDate > $weekLast && $lastDate > $weekLast);
+            return $firstDate <= $weekLast || $lastDate <= $weekLast;
         });
     }
 

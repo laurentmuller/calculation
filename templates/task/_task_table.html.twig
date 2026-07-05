@@ -13,7 +13,7 @@
             <label class="form-check-label" for="item_{{ task_item_id }}">{{ item.name }}</label>
         </div>
     </div>
-    <div class="col-sm-3">
+    <div class="col-sm-3 mb-2 mb-sm-0">
         {{ _self.plain_text_input('task_value_' ~ task_item_id, 'task_value') }}
     </div>
     <div class="col-sm-3">
@@ -25,8 +25,8 @@
     {# header row #}
     <div class="row mb-2">
         <div class="col-sm-6"><span class="required">{{ 'task.fields.items'|trans }}</span></div>
-        <div class="col-sm-3">{{ 'task_compute.fields.price'|trans }}</div>
-        <div class="col-sm-3">{{ 'task_compute.fields.total'|trans }}</div>
+        <div class="col-sm-3 d-none d-md-block d-lg-none">{{ 'task_compute.fields.price'|trans }}</div>
+        <div class="col-sm-3 d-none d-md-block d-lg-none">{{ 'task_compute.fields.total'|trans }}</div>
     </div>
     {# items #}
     {% for task in tasks %}
@@ -43,7 +43,7 @@
         <div class="col-sm-6">
             <span class="task-items-empty text-danger small d-none">{{ 'task_compute.error.items'|trans }}</span>
         </div>
-        <div class="col-sm-3 text-end">
+        <div class="col-sm-3 mb-2 mb-sm-0 text-sm-end">
             {{- 'task_compute.fields.overall_total'|trans -}}
         </div>
         <div class="col-sm-3">

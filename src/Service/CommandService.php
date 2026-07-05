@@ -429,7 +429,7 @@ class CommandService implements \Countable
             return false;
         }
 
-        return !($argument['is_array'] && \is_array($argument['default']));
+        return !$argument['is_array'] || !\is_array($argument['default']);
     }
 
     /**
@@ -445,7 +445,7 @@ class CommandService implements \Countable
             return false;
         }
 
-        return !($option['is_multiple'] && \is_array($option['default']));
+        return !$option['is_multiple'] || !\is_array($option['default']);
     }
 
     private function parseShortcut(string $name, string $shortcut): string

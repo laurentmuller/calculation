@@ -35,13 +35,13 @@
     'data-hide-menu': 'index.menu_hide'|trans,
 } %}
 <body {{ html_attr(body_attrs) }}>
-{# vertical navigation #}
-{% if navigation_show and sidebar_show %}
-    {{ include('navigation/vertical/navigation.html.twig') }}
-{% endif %}
-{# horizontal navigation #}
-{% if navigation_show and not sidebar_show %}
-    {{ include('navigation/horizontal/navigation.html.twig') }}
+{#  navigation #}
+{% if navigation_show %}
+    {% if sidebar_show %}
+        {{ include('navigation/vertical/navigation.html.twig') }}
+    {% else %}
+        {{ include('navigation/horizontal/navigation.html.twig') }}
+    {% endif %}
 {% endif %}
 {# main content #}
 <div class="page-content">

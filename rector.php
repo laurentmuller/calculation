@@ -82,12 +82,6 @@ $sets = [
     TwigSetList::TWIG_UNDERSCORE_TO_NAMESPACE,
 ];
 
-$rules = [
-    // static closure and arrow functions
-    StaticClosureRector::class,
-    StaticArrowFunctionRector::class,
-];
-
 return RectorConfig::configure()
     ->withCache(__DIR__ . '/var/cache/rector')
     ->withRootFiles()
@@ -95,7 +89,6 @@ return RectorConfig::configure()
     ->withPaths($paths)
     ->withSkip($skip)
     ->withSets($sets)
-    ->withRules($rules)
     ->withComposerBased(
         twig: true,
         doctrine: true,

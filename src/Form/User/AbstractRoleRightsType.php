@@ -26,7 +26,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @extends AbstractHelperType<TModel>
  */
-abstract class AbstractRightsType extends AbstractHelperType
+abstract class AbstractRoleRightsType extends AbstractHelperType
 {
     public function __construct(private readonly RoleService $service)
     {

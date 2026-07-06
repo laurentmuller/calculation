@@ -19,9 +19,9 @@ use App\Form\FormHelper;
 /**
  * User rights type.
  *
- * @extends AbstractRightsType<User>
+ * @extends AbstractRoleRightsType<User>
  */
-class UserRightsType extends AbstractRightsType
+class UserRightsType extends AbstractRoleRightsType
 {
     #[\Override]
     protected function addFormFields(FormHelper $helper): void

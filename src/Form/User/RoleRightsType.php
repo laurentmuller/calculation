@@ -19,9 +19,9 @@ use App\Model\Role;
 /**
  * Role rights type.
  *
- * @extends AbstractRightsType<Role>
+ * @extends AbstractRoleRightsType<Role>
  */
-class RoleRightsType extends AbstractRightsType
+class RoleRightsType extends AbstractRoleRightsType
 {
     #[\Override]
     protected function addFormFields(FormHelper $helper): void

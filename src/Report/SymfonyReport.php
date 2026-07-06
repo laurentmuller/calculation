@@ -17,7 +17,6 @@ use App\Interfaces\DocumentHelperInterface;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Events\PdfCellTextEvent;
 use App\Pdf\Html\HtmlBootstrapColor;
-use App\Pdf\Html\HtmlGrayedColor;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTable;
@@ -27,6 +26,9 @@ use App\Service\KernelInfoService;
 use App\Service\PackageInfoService;
 use App\Service\RouteInfoService;
 use App\Service\SymfonyInfoService;
+use fpdf\Color\PdfRgbColor;
+use fpdf\Enums\PdfRectangleStyle;
+use fpdf\Traits\PdfRoundedRectangleTrait;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -39,6 +41,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class SymfonyReport extends AbstractReport implements PdfDrawCellTextInterface
 {
+    use PdfRoundedRectangleTrait;
+
     private ?PdfStyle $style = null;
 
     public function __construct(
@@ -60,23 +64,31 @@ class SymfonyReport extends AbstractReport implements PdfDrawCellTextInterface
             return false;
         }
 
+        /** @var SymfonyReport $parent */
         $parent = $event->getDocument();
-        $values = \explode('|', $event->text);
-        $lastValue = \end($values);
-        foreach ($values as $value) {
-            $color = match ($value) {
-                Request::METHOD_GET => HtmlBootstrapColor::SUCCESS,
-                Request::METHOD_POST => HtmlBootstrapColor::SECONDARY,
-                Request::METHOD_DELETE => HtmlBootstrapColor::DANGER,
-                default => HtmlGrayedColor::Gray500,
-            };
-            $color->applyTextColor($parent);
-            $parent->cell(width: $parent->getStringWidth($value), text: $value);
-            $parent->setTextColor(PdfTextColor::black());
-            if ($value !== $lastValue) {
-                $parent->cell(width: $parent->getStringWidth(', '), text: ', ');
-            }
+        $parent->setFont(fontSizeInPoint: 6.0);
+        $cellMargin = $parent->getCellMargin();
+
+        $rect = $event->bounds;
+        $rect->x += $cellMargin;
+        $rect->inflateY(-$cellMargin / 1.5);
+        $methods = \explode('|', $event->text);
+        foreach ($methods as $method) {
+            $rect->width = $parent->getStringWidth($method) + 2.0 * $cellMargin;
+            $this->updateMethodColors($parent, $method);
+            $parent->roundedRectangle(
+                rect: $rect,
+                radius: $cellMargin,
+                style: $this->getMethodStyle($method)
+            );
+            $parent->text(
+                $rect->x + $cellMargin,
+                $rect->y + $rect->height - 1.0,
+                $method
+            );
+            $rect->x += $rect->width + $cellMargin;
         }
+        PdfStyle::default()->apply($parent);
 
         return true;
     }
@@ -110,6 +122,16 @@ class SymfonyReport extends AbstractReport implements PdfDrawCellTextInterface
             ->addColumns(...$columns)
             ->setGroupKey($title)
             ->outputHeaders();
+    }
+
+    private function getMethodStyle(string $method): PdfRectangleStyle
+    {
+        return match ($method) {
+            Request::METHOD_GET,
+            Request::METHOD_POST,
+            Request::METHOD_DELETE => PdfRectangleStyle::FILL,
+            default => PdfRectangleStyle::BOTH,
+        };
     }
 
     private function getStyle(bool $enabled): ?PdfStyle
@@ -276,5 +298,24 @@ class SymfonyReport extends AbstractReport implements PdfDrawCellTextInterface
             ->endRow();
 
         return $this;
+    }
+
+    private function updateMethodColors(self $document, string $method): void
+    {
+        $fillColor = match ($method) {
+            Request::METHOD_GET => HtmlBootstrapColor::SUCCESS,
+            Request::METHOD_POST => HtmlBootstrapColor::SECONDARY,
+            Request::METHOD_DELETE => HtmlBootstrapColor::DANGER,
+            default => HtmlBootstrapColor::LIGHT,
+        };
+        $fillColor->applyFillColor($document);
+
+        $textColor = match ($method) {
+            Request::METHOD_GET,
+            Request::METHOD_POST,
+            Request::METHOD_DELETE => PdfRgbColor::white(),
+            default => PdfRgbColor::black(),
+        };
+        $document->setTextColor($textColor);
     }
 }

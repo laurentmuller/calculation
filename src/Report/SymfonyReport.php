@@ -43,6 +43,8 @@ class SymfonyReport extends AbstractReport implements PdfDrawCellTextInterface
 {
     use PdfRoundedRectangleTrait;
 
+    private const string METHOD_SEPARATOR = '|';
+
     private ?PdfStyle $style = null;
 
     public function __construct(
@@ -72,7 +74,7 @@ class SymfonyReport extends AbstractReport implements PdfDrawCellTextInterface
         $rect = $event->bounds;
         $rect->x += $cellMargin;
         $rect->inflateY(-$cellMargin / 1.5);
-        $methods = \explode('|', $event->text);
+        $methods = \explode(self::METHOD_SEPARATOR, $event->text);
         foreach ($methods as $method) {
             $rect->width = $parent->getStringWidth($method) + 2.0 * $cellMargin;
             $this->updateMethodColors($parent, $method);
@@ -86,9 +88,8 @@ class SymfonyReport extends AbstractReport implements PdfDrawCellTextInterface
                 $rect->y + $rect->height - 1.0,
                 $method
             );
-            $rect->x += $rect->width + $cellMargin;
+            $rect->x += $rect->width + $cellMargin / 2.0;
         }
-        PdfStyle::default()->apply($parent);
 
         return true;
     }
@@ -267,7 +268,7 @@ class SymfonyReport extends AbstractReport implements PdfDrawCellTextInterface
             $title,
             PdfColumn::left('Name', 40),
             PdfColumn::left('Path', 50),
-            PdfColumn::left('Method', 25, true)
+            PdfColumn::left('Method', 22, true)
         );
 
         $table->setTextListener($this);
@@ -275,7 +276,7 @@ class SymfonyReport extends AbstractReport implements PdfDrawCellTextInterface
             $table->addRow(
                 $route['name'],
                 $route['path'],
-                \implode('|', $route['methods'])
+                \implode(self::METHOD_SEPARATOR, $route['methods'])
             );
         }
         $table->setTextListener(null);

@@ -1825,16 +1825,16 @@
         },
         {
             "name": "laurentmuller/fpdf2",
-            "version": "4.3.7",
+            "version": "4.3.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/fpdf2.git",
-                "reference": "ac233b60491367a255454bff15f5c0f6f8e8ab4a"
+                "reference": "b3f0ef76d5ffe16c135d877f41ec9a78d0339c27"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/ac233b60491367a255454bff15f5c0f6f8e8ab4a",
-                "reference": "ac233b60491367a255454bff15f5c0f6f8e8ab4a",
+                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/b3f0ef76d5ffe16c135d877f41ec9a78d0339c27",
+                "reference": "b3f0ef76d5ffe16c135d877f41ec9a78d0339c27",
                 "shasum": ""
             },
             "require": {
@@ -1886,7 +1886,7 @@
                 "issues": "https://github.com/laurentmuller/fpdf2/issues",
                 "source": "https://github.com/laurentmuller/fpdf2"
             },
-            "time": "2026-07-06T09:15:20+00:00"
+            "time": "2026-07-08T06:23:35+00:00"
         },
         {
             "name": "laurentmuller/highcharts-bundle",
@@ -3028,16 +3028,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "2.3.2",
+            "version": "2.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "a004701b11273a26cd7955a61d67a7f1e525a45a"
+                "reference": "fb19eedd2bb67ff8cf7a5502ad329e701d6398a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/a004701b11273a26cd7955a61d67a7f1e525a45a",
-                "reference": "a004701b11273a26cd7955a61d67a7f1e525a45a",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/fb19eedd2bb67ff8cf7a5502ad329e701d6398a3",
+                "reference": "fb19eedd2bb67ff8cf7a5502ad329e701d6398a3",
                 "shasum": ""
             },
             "require": {
@@ -3069,9 +3069,9 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/2.3.2"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/2.3.3"
             },
-            "time": "2026-01-25T14:56:51+00:00"
+            "time": "2026-07-08T07:01:06+00:00"
         },
         {
             "name": "psr/cache",

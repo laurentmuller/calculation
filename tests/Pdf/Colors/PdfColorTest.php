@@ -22,16 +22,6 @@ use PHPUnit\Framework\TestCase;
 
 final class PdfColorTest extends TestCase
 {
-    public function testApply(): void
-    {
-        $doc = new PdfDocument();
-        PdfDrawColor::default()->apply($doc);
-        PdfFillColor::default()->apply($doc);
-        PdfTextColor::default()->apply($doc);
-        $doc->close();
-        self::assertSame(1, $doc->getPage());
-    }
-
     public function testCellBorder(): void
     {
         $color = PdfDrawColor::cellBorder();
@@ -57,6 +47,16 @@ final class PdfColorTest extends TestCase
         self::assertTrue($fill->isFillColor());
         $fill = new PdfFillColor(255, 255, 255);
         self::assertFalse($fill->isFillColor());
+    }
+
+    public function testUpdateDocument(): void
+    {
+        $doc = new PdfDocument();
+        PdfDrawColor::default()->updateDocument($doc);
+        PdfFillColor::default()->updateDocument($doc);
+        PdfTextColor::default()->updateDocument($doc);
+        $doc->close();
+        self::assertSame(1, $doc->getPage());
     }
 
     private function assertEqualColor(PdfRgbColor $color1, PdfRgbColor $color2): void

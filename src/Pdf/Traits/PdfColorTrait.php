@@ -28,17 +28,17 @@ trait PdfColorTrait
 {
     public function applyDrawColor(PdfDocument $doc): void
     {
-        $this->getDrawColor()->apply($doc);
+        $this->getDrawColor()->updateDocument($doc);
     }
 
     public function applyFillColor(PdfDocument $doc): void
     {
-        $this->getFillColor()->apply($doc);
+        $this->getFillColor()->updateDocument($doc);
     }
 
     public function applyTextColor(PdfDocument $doc): void
     {
-        $this->getTextColor()->apply($doc);
+        $this->getTextColor()->updateDocument($doc);
     }
 
     public function asRGB(): array

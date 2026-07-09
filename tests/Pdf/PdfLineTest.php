@@ -19,14 +19,6 @@ use PHPUnit\Framework\TestCase;
 
 final class PdfLineTest extends TestCase
 {
-    public function testApply(): void
-    {
-        $doc = new PdfDocument();
-        $actual = new PdfLine(3.0);
-        $actual->apply($doc);
-        self::assertSame(3.0, $doc->getLineWidth());
-    }
-
     public function testConstructor(): void
     {
         $actual = new PdfLine();
@@ -54,5 +46,13 @@ final class PdfLineTest extends TestCase
         self::assertSame(0.2, $actual->getWidth());
         $actual->setWidth(3.0);
         self::assertSame(3.0, $actual->getWidth());
+    }
+
+    public function testUpdateDocument(): void
+    {
+        $doc = new PdfDocument();
+        $actual = new PdfLine(3.0);
+        $actual->updateDocument($doc);
+        self::assertSame(3.0, $doc->getLineWidth());
     }
 }

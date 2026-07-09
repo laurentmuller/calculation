@@ -146,7 +146,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
             }
             $cols = 3 === $index ? 2 : 1;
             $alignment = 3 === $index ? PdfTextAlignment::CENTER : $column->getAlignment();
-            $cells[] = new PdfCell(
+            $cells[] = PdfCell::instance(
                 $column->getText(),
                 $cols,
                 $event->headerStyle,
@@ -197,7 +197,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
 
         /** @var PdfFillColor $color */
         $color = PdfFillColor::create($colorName->value);
-        $color->apply($parent);
+        $color->updateDocument($parent);
 
         $parent->rect(
             $bounds->x + $offset,
@@ -268,7 +268,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
             $color = HtmlBootstrapColor::SECONDARY;
         }
 
-        $this->getArrowColor($color)->apply($this);
+        $this->getArrowColor($color)->updateDocument($this);
         $oldFont = $this->getCurrentFont();
         $this->setFont(PdfFontName::ZAPFDINGBATS);
         $width = $this->getStringWidth($chr);
@@ -278,7 +278,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         } else {
             $this->cell(width: $width, text: $chr);
         }
-        $oldFont->apply($this);
+        $oldFont->updateDocument($this);
 
         return false;
     }

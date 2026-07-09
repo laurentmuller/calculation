@@ -45,9 +45,6 @@ class PdfTable
     /** The draw cell background listener. */
     private ?PdfDrawCellBackgroundInterface $backgroundListener = null;
 
-    /** The default cell border. */
-    private PdfBorder $border;
-
     /** The draw cell border listener. */
     private ?PdfDrawCellBorderInterface $borderListener = null;
 
@@ -92,7 +89,6 @@ class PdfTable
      */
     public function __construct(private readonly PdfDocument $parent, private readonly bool $fullWidth = true)
     {
-        $this->border = PdfBorder::all();
     }
 
     /**
@@ -114,7 +110,7 @@ class PdfTable
         ?PdfTextAlignment $alignment = null,
         string|int|null $link = null
     ): static {
-        return $this->addCell(new PdfCell($text, $cols, $style, $alignment, $link));
+        return $this->addCell(PdfCell::instance($text, $cols, $style, $alignment, $link));
     }
 
     /**
@@ -309,16 +305,6 @@ class PdfTable
     }
 
     /**
-     * Gets the default cell border.
-     *
-     * By default, all borders are drawn.
-     */
-    public function getBorder(): PdfBorder
-    {
-        return $this->border;
-    }
-
-    /**
      * Gets the default cell style.
      *
      * @return PdfStyle the cell style, if set, the default style otherwise
@@ -457,16 +443,6 @@ class PdfTable
     public function setBackgroundListener(?PdfDrawCellBackgroundInterface $backgroundListener): static
     {
         $this->backgroundListener = $backgroundListener;
-
-        return $this;
-    }
-
-    /**
-     * Sets the default cell border.
-     */
-    public function setBorder(PdfBorder $border): static
-    {
-        $this->border = $border;
 
         return $this;
     }
@@ -729,17 +705,16 @@ class PdfTable
         $bounds = new PdfRectangle($position->x, $position->y, $width, $height);
 
         // background
-        $style->apply($parent);
+        $style->updateDocument($parent);
         $this->drawCellBackground($parent, $index, $bounds, $style);
 
         // border
-        $style->apply($parent);
+        $style->updateDocument($parent);
         $parent->setPosition($position);
-        $border = $style->getBorder() ?? $this->border;
-        $this->drawCellBorder($parent, $index, $bounds, $border);
+        $this->drawCellBorder($parent, $index, $bounds, $style->getBorder());
 
         // image and/or text
-        $style->apply($parent);
+        $style->updateDocument($parent);
         $parent->setPosition($position);
         $margin = $parent->getCellMargin();
         $textBounds = clone $bounds;
@@ -760,12 +735,11 @@ class PdfTable
         }
 
         if ($cell->hasLink()) {
-            /** @var string|int $link */
             $link = $cell->getLink();
             $linkBounds = (clone $textBounds)->inflate(-$margin);
-            $linesCount = \max(1, $parent->getLinesCount($text, $linkBounds->width));
+            $linesCount = (float) \max(1, $parent->getLinesCount($text, $linkBounds->width));
             $linkBounds->width = \min($linkBounds->width, $parent->getStringWidth($text));
-            $linkBounds->height = \min($linkBounds->height, (float) $linesCount * $lineHeight - 2.0 * $margin);
+            $linkBounds->height = \min($linkBounds->height, $linesCount * $lineHeight - 2.0 * $margin);
             $parent->link($linkBounds->x, $linkBounds->y, $linkBounds->width, $linkBounds->height, $link);
         }
 
@@ -914,7 +888,7 @@ class PdfTable
             $width -= $parent->pixels2UserUnit($size->width);
         }
 
-        $style->apply($parent);
+        $style->updateDocument($parent);
         $width = \max(0, $width - $style->getIndent());
         $lines = (float) $parent->getLinesCount($text, $width);
         $height = PdfDocument::LINE_HEIGHT;

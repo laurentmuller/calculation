@@ -35,7 +35,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     public const string BULLET = '·';
 
     /** The border style. */
-    private ?PdfBorder $border;
+    private PdfBorder $border;
 
     /** The draw color. */
     private PdfDrawColor $drawColor;
@@ -70,20 +70,10 @@ class PdfStyle implements PdfDocumentUpdaterInterface
         // deep clone
         $this->font = clone $this->font;
         $this->line = clone $this->line;
-        $this->border = $this->border instanceof PdfBorder ? clone $this->border : null;
+        $this->border = clone $this->border;
         $this->textColor = clone $this->textColor;
         $this->drawColor = clone $this->drawColor;
         $this->fillColor = clone $this->fillColor;
-    }
-
-    #[\Override]
-    public function apply(PdfDocument $doc): void
-    {
-        $this->font->apply($doc);
-        $this->line->apply($doc);
-        $this->drawColor->apply($doc);
-        $this->fillColor->apply($doc);
-        $this->textColor->apply($doc);
     }
 
     /**
@@ -142,7 +132,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * Gets the border style.
      */
-    public function getBorder(): ?PdfBorder
+    public function getBorder(): PdfBorder
     {
         return $this->border;
     }
@@ -376,7 +366,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * Sets the border style.
      */
-    public function setBorder(?PdfBorder $border): static
+    public function setBorder(PdfBorder $border): static
     {
         $this->border = $border;
 
@@ -525,5 +515,15 @@ class PdfStyle implements PdfDocumentUpdaterInterface
         $this->textColor = $textColor;
 
         return $this;
+    }
+
+    #[\Override]
+    public function updateDocument(PdfDocument $doc): void
+    {
+        $this->font->updateDocument($doc);
+        $this->line->updateDocument($doc);
+        $this->drawColor->updateDocument($doc);
+        $this->fillColor->updateDocument($doc);
+        $this->textColor->updateDocument($doc);
     }
 }

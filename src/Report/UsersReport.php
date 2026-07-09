@@ -115,7 +115,7 @@ class UsersReport extends AbstractArrayReport
             icon: 'fa-solid fa-user-slash',
             color: $color,
             size: self::IMAGE_SIZE
-        ) ?? new PdfCell();
+        ) ?? PdfCell::instance();
 
         return $this->defaultCell;
     }
@@ -143,7 +143,7 @@ class UsersReport extends AbstractArrayReport
 
         $icon = $this->roleService->getRoleIcon($role);
         $text = $this->roleService->translateRole($role);
-        $cell = $this->fontService->getCell(icon: $icon, text: $text) ?? new PdfCell($text);
+        $cell = $this->fontService->getCell(icon: $icon, text: $text) ?? PdfCell::instance($text);
 
         return $this->roleCells[$role] = $cell;
     }

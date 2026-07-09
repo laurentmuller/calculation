@@ -69,7 +69,7 @@ abstract class AbstractPdfImageCell extends PdfCell implements PdfCellOutputInte
         PdfMove $move = PdfMove::RIGHT
     ): void {
         // style
-        $this->getStyle()?->apply($parent);
+        $this->getStyle()?->updateDocument($parent);
 
         // convert size
         $size = $this->getSize();

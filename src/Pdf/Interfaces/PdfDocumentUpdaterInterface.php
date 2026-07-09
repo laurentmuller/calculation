@@ -16,12 +16,12 @@ namespace App\Pdf\Interfaces;
 use fpdf\PdfDocument;
 
 /**
- * Class implementing this interface applies properties to a PdfDocument.
+ * Class implementing this interface update a PdfDocument.
  */
 interface PdfDocumentUpdaterInterface
 {
     /**
-     * Apply changes to the given document.
+     * Update the given document.
      */
-    public function apply(PdfDocument $doc): void;
+    public function updateDocument(PdfDocument $doc): void;
 }

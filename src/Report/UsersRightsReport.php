@@ -148,7 +148,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         $bounds->indent($cell->computeWidth($this) - $this->cellMargin);
 
         // description
-        $cell = new PdfCell(
+        $cell = PdfCell::instance(
             text: '(' . $this->getUserDescription($user) . ')',
             style: $this->italicStyle
         );
@@ -209,7 +209,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
             style: $style
         );
 
-        return $cell ?? new PdfCell(text: $text, cols: $cols, style: $style);
+        return $cell ?? PdfCell::instance(text: $text, cols: $cols, style: $style);
     }
 
     private function getUserDescription(User $user): string

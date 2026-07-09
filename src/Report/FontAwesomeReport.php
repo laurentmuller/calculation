@@ -125,7 +125,7 @@ class FontAwesomeReport extends AbstractReport
     {
         $text = \ucfirst(\basename($directory));
         $this->useCellMargin(function () use ($text): void {
-            PdfStyle::getBoldCellStyle()->apply($this);
+            PdfStyle::getBoldCellStyle()->updateDocument($this);
             $this->cell(text: $text, move: PdfMove::NEW_LINE);
             $this->resetStyle();
         });

@@ -106,7 +106,7 @@ class ReportFooter
         $parent = $this->parent;
         $parent->setY(-self::FOOTER_OFFSET);
         $width = $parent->getPrintableWidth() / 3.0;
-        PdfStyle::default()->setFontSize(6.0)->apply($parent);
+        PdfStyle::default()->setFontSize(6.0)->updateDocument($parent);
         $this->outputPages($width)
             ->outputContent($width)
             ->outputDate($width);

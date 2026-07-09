@@ -69,7 +69,7 @@ abstract class AbstractHtmlChunk
      */
     public function applyStyle(HtmlReport $report): static
     {
-        $this->style?->apply($report);
+        $this->style?->updateDocument($report);
 
         return $this;
     }

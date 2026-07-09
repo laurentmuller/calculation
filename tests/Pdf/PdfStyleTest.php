@@ -27,15 +27,6 @@ use PHPUnit\Framework\TestCase;
 
 final class PdfStyleTest extends TestCase
 {
-    public function testApply(): void
-    {
-        $actual = new PdfStyle();
-        $document = new PdfDocument();
-        $document->addPage();
-        $actual->apply($document);
-        self::assertSame(1, $document->getPage());
-    }
-
     public function testBlackHeaderStyle(): void
     {
         $font = PdfFont::default()->bold();
@@ -189,5 +180,14 @@ final class PdfStyleTest extends TestCase
         $font = PdfFont::default()->setStyle(PdfFontStyle::BOLD);
         $actual->setFontStyle(PdfFontStyle::BOLD);
         self::assertEqualsCanonicalizing($font, $actual->getFont());
+    }
+
+    public function testUpdateDocument(): void
+    {
+        $actual = new PdfStyle();
+        $document = new PdfDocument();
+        $document->addPage();
+        $actual->updateDocument($document);
+        self::assertSame(1, $document->getPage());
     }
 }

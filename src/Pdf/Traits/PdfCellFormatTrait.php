@@ -33,8 +33,7 @@ trait PdfCellFormatTrait
      * @param float|int|string|null $number the number to format
      * @param positive-int          $cols   the number of columns to span
      * @param ?PdfStyle             $style  the cell style to use or null to use the default cell style
-     * @param string|int|null       $link   the optional cell link.
-     *                                      A URL or identifier returned by the <code>addLink()</code> function.
+     * @param string|int|null       $link   the optional cell link
      *
      * @throws PdfException if no current row is started
      */
@@ -46,7 +45,7 @@ trait PdfCellFormatTrait
         string|int|null $link = null
     ): static {
         return $this->addCell(
-            new PdfCell(FormatUtils::formatAmount($number), $cols, $style, $alignment, $link)
+            PdfCell::instance(FormatUtils::formatAmount($number), $cols, $style, $alignment, $link)
         );
     }
 
@@ -56,8 +55,7 @@ trait PdfCellFormatTrait
      * @param \Countable|array|int|float|string|null $number the number to format
      * @param positive-int                           $cols   the number of columns to span
      * @param ?PdfStyle                              $style  the cell style to use or null to use the default cell style
-     * @param string|int|null                        $link   the optional cell link. A URL or identifier returned by
-     *                                                       the <code>addLink()</code> function.
+     * @param string|int|null                        $link   the optional cell link
      *
      * @throws PdfException if no current row is started
      */
@@ -69,7 +67,7 @@ trait PdfCellFormatTrait
         string|int|null $link = null
     ): static {
         return $this->addCell(
-            new PdfCell(FormatUtils::formatInt($number), $cols, $style, $alignment, $link)
+            PdfCell::instance(FormatUtils::formatInt($number), $cols, $style, $alignment, $link)
         );
     }
 
@@ -79,8 +77,7 @@ trait PdfCellFormatTrait
      * @param float|int|string|null $number the number to format
      * @param positive-int          $cols   the number of columns to span
      * @param ?PdfStyle             $style  the cell style to use or null to use the default cell style
-     * @param string|int|null       $link   the optional cell link.
-     *                                      A URL or identifier returned by the <code>addLink()</code> function.
+     * @param string|int|null       $link   the optional cell link
      *
      * @throws PdfException if no current row is started
      */
@@ -92,7 +89,7 @@ trait PdfCellFormatTrait
         string|int|null $link = null
     ): static {
         return $this->addCell(
-            new PdfCell(FormatUtils::formatPercent($number), $cols, $style, $alignment, $link)
+            PdfCell::instance(FormatUtils::formatPercent($number), $cols, $style, $alignment, $link)
         );
     }
 }

@@ -144,7 +144,7 @@ trait PdfChartLegendTrait
         $y ??= $this->getY();
         $x ??= $this->getLeftMargin() + ($this->getPrintableWidth() - $totalWidth) / 2.0;
 
-        PdfDrawColor::cellBorder()->apply($this);
+        PdfDrawColor::cellBorder()->updateDocument($this);
         foreach ($legends as $index => $legend) {
             $this->outputLegend($style, $x, $y, $legend);
             $x += $widths[$index] + self::SEP_WIDTH;
@@ -180,7 +180,7 @@ trait PdfChartLegendTrait
         $x ??= $position->x;
         $y ??= $position->y;
 
-        PdfDrawColor::cellBorder()->apply($this);
+        PdfDrawColor::cellBorder()->updateDocument($this);
         foreach ($legends as $legend) {
             $this->outputLegend($style, $x, $y, $legend);
             $y += self::LINE_HEIGHT;
@@ -205,7 +205,7 @@ trait PdfChartLegendTrait
             PdfPointStyle::CROSS_ROTATION => PdfDrawColor::instance($color->red, $color->green, $color->blue),
             default => PdfFillColor::instance($color->red, $color->green, $color->blue),
         };
-        $color->apply($this);
+        $color->updateDocument($this);
     }
 
     /**

@@ -188,7 +188,7 @@ class CalculationReport extends AbstractReport
     {
         PdfStyle::getHeaderStyle()
             ->setTextColor(PdfTextColor::red())
-            ->apply($this);
+            ->updateDocument($this);
         $this->cell(
             height: self::LINE_HEIGHT * 1.25,
             text: $this->trans('calculation.edit.empty'),
@@ -223,7 +223,7 @@ class CalculationReport extends AbstractReport
     {
         PdfStyle::getNoBorderStyle()
             ->setFontSize(6)
-            ->apply($this);
+            ->updateDocument($this);
         $this->useCellMargin(function () use ($calculation): void {
             $translator = $this->getTranslator();
             $width = $this->getPrintableWidth() / 2.0;

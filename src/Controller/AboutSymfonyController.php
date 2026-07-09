@@ -17,7 +17,6 @@ use App\Attribute\ExcelRoute;
 use App\Attribute\ForAdmin;
 use App\Attribute\GetRoute;
 use App\Attribute\PdfRoute;
-use App\Enums\Environment;
 use App\Report\SymfonyReport;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
@@ -31,11 +30,9 @@ use App\Traits\ArrayTrait;
 use App\Traits\RenderPdfDocumentTrait;
 use App\Traits\RenderSpreadsheetDocumentTrait;
 use App\Utils\FileUtils;
-use App\Utils\StringUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
-use Twig\Extra\Markdown\MarkdownInterface;
 
 /**
  * Controller to output symfony information.
@@ -49,6 +46,19 @@ class AboutSymfonyController extends AbstractController
     use ArrayTrait;
     use RenderPdfDocumentTrait;
     use RenderSpreadsheetDocumentTrait;
+
+    private const array LICENSE_REPLACEMENT = [
+        '<h1>' => '<h6>',
+        '<h2>' => '<h6>',
+        '<h3>' => '<h6>',
+        '<h4>' => '<h6>',
+        '<h5>' => '<h6>',
+        '</h1>' => '</h6>',
+        '</h2>' => '</h6>',
+        '</h3>' => '</h6>',
+        '</h4>' => '</h6>',
+        '</h5>' => '</h6>',
+    ];
 
     #[GetRoute(path: '/content', name: 'content')]
     public function content(
@@ -77,7 +87,6 @@ class AboutSymfonyController extends AbstractController
         #[MapQueryParameter]
         string $name,
         PackageInfoService $service,
-        MarkdownInterface $markdown,
     ): JsonResponse {
         if (!$service->hasPackage($name)) {
             return $this->jsonFalse(['message' => $this->trans('about.package.not_found')]);
@@ -86,7 +95,8 @@ class AboutSymfonyController extends AbstractController
         if ([] === $package['production'] && [] === $package['development']) {
             return $this->jsonFalse(['message' => $this->trans('about.package.not_found')]);
         }
-        $content = $this->getMarkdownDependency($markdown, $package);
+
+        $content = $this->renderView('about/symfony_dependency.html.twig', ['package' => $package]);
 
         return $this->jsonTrue(['content' => $content]);
     }
@@ -119,7 +129,6 @@ class AboutSymfonyController extends AbstractController
         #[MapQueryParameter]
         string $name,
         PackageInfoService $service,
-        MarkdownInterface $markdown,
     ): JsonResponse {
         if (!$service->hasPackage($name)) {
             return $this->jsonFalse(['message' => $this->trans('about.licence.not_found')]);
@@ -128,7 +137,12 @@ class AboutSymfonyController extends AbstractController
         if (null === $package['licenseFile']) {
             return $this->jsonFalse(['message' => $this->trans('about.licence.not_found')]);
         }
-        $content = $this->getMarkdownLicense($markdown, $package);
+        $license = FileUtils::readFile($package['licenseFile']);
+        $content = $this->renderView('about/symfony_license.html.twig', [
+            'package' => $package,
+            'license' => $license,
+            'replacement' => self::LICENSE_REPLACEMENT,
+        ]);
 
         return $this->jsonTrue(['content' => $content]);
     }
@@ -151,62 +165,5 @@ class AboutSymfonyController extends AbstractController
         );
 
         return $this->renderPdfDocument($doc);
-    }
-
-    /**
-     * @phpstan-param PackageType $package
-     */
-    private function getMarkdownDependency(MarkdownInterface $markdown, array $package): string
-    {
-        $content = $this->implodeHeader($package)
-            . $this->implodeValues(Environment::PRODUCTION, $package['production'])
-            . $this->implodeValues(Environment::DEVELOPMENT, $package['development']);
-
-        return $markdown->convert($content);
-    }
-
-    /**
-     * @phpstan-param PackageType $package
-     */
-    private function getMarkdownLicense(MarkdownInterface $markdown, array $package): string
-    {
-        $file = (string) $package['licenseFile'];
-        $license = (string) FileUtils::readFile($file);
-        $license = StringUtils::pregReplace('/#{1,4} /', '##### ', $license);
-        $content = $this->implodeHeader($package) . $license;
-        $content = $markdown->convert($content);
-
-        return \strip_tags($content, '<p><h1><h2><h3><h4><h5><h6><em><strong><code><hr>');
-    }
-
-    /**
-     * @phpstan-param PackageType $package
-     */
-    private function implodeHeader(array $package): string
-    {
-        return \sprintf(
-            "##### %s\n\nVersion : %s\n***\nType : %s - Date : %s\n***\n",
-            $package['name'],
-            $package['version'],
-            \implode(', ', $package['licenseType']),
-            $package['time']
-        );
-    }
-
-    /**
-     * @phpstan-param array<string, string> $values
-     */
-    private function implodeValues(Environment $environment, array $values): string
-    {
-        if ([] === $values) {
-            return '';
-        }
-        $values = $this->mapKeyAndValue(
-            $values,
-            static fn (string $key, string $version): string => \sprintf('- %s : `%s`', $key, $version)
-        );
-        $title = $environment->trans($this->getTranslator());
-
-        return \sprintf("\n\n%s\n\n%s", $title, \implode("\n", $values));
     }
 }

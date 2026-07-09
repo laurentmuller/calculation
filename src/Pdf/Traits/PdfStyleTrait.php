@@ -32,7 +32,7 @@ trait PdfStyleTrait
     public function applyFont(PdfFont $font): PdfFont
     {
         $oldFont = $this->getCurrentFont();
-        $font->apply($this);
+        $font->updateDocument($this);
 
         return $oldFont;
     }
@@ -52,7 +52,7 @@ trait PdfStyleTrait
      */
     public function resetStyle(): static
     {
-        PdfStyle::default()->apply($this);
+        PdfStyle::default()->updateDocument($this);
 
         return $this;
     }

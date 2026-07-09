@@ -1,0 +1,19 @@
+<h5>{{ package.name }}</h5>
+<p class="mb-0">Version : {{ package.version }}</p>
+<hr>
+{% if package.production|length %}
+    <p>{{ enum('App\\Enums\\Environment')?.PRODUCTION|trans }}</p>
+    <ul>
+        {% for key, value in package.production %}
+            <li>{{ key }} : <code>{{ value }}</code></li>
+        {% endfor %}
+    </ul>
+{% endif %}
+{% if package.development|length %}
+    <p>{{ enum('App\\Enums\\Environment')?.DEVELOPMENT|trans }}</p>
+    <ul>
+        {% for key, value in package.development %}
+            <li>{{ key }} : <code>{{ value }}</code></li>
+        {% endfor %}
+    </ul>
+{% endif %}

@@ -75,7 +75,7 @@ final class PdfFontAwesomeCellTest extends TestCase
     private function getDocument(): FixturePdfImageDocument
     {
         $doc = new FixturePdfImageDocument();
-        PdfStyle::default()->apply($doc);
+        PdfStyle::default()->updateDocument($doc);
 
         return $doc->addPage();
     }

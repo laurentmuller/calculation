@@ -79,7 +79,7 @@ class LogsReport extends AbstractReport
     {
         $text = $this->trans($id);
         $this->addBookmark(text: $text, isUTF8: true, currentY: $currentY);
-        PdfStyle::default()->setFontBold()->apply($this);
+        PdfStyle::default()->setFontBold()->updateDocument($this);
         $this->useCellMargin(fn (): static => $this->cell(text: $text, move: PdfMove::NEW_LINE));
         $this->resetStyle();
     }
@@ -150,7 +150,7 @@ class LogsReport extends AbstractReport
             alignment: $alignment
         );
 
-        return $cell ?? new PdfCell(text: $text, alignment: $alignment);
+        return $cell ?? PdfCell::instance(text: $text, alignment: $alignment);
     }
 
     /**
@@ -179,7 +179,7 @@ class LogsReport extends AbstractReport
         $textCells = [];
         $valueCells = [];
         $sepCol = PdfColumn::center(width: 2, fixed: true);
-        $emptyCell = new PdfCell(style: PdfStyle::getNoBorderStyle());
+        $emptyCell = PdfCell::instance(style: PdfStyle::getNoBorderStyle());
 
         // levels
         $this->updateCardsEntries($this->logFile->getLevels(), $columns, $textCells, $valueCells);
@@ -195,8 +195,8 @@ class LogsReport extends AbstractReport
 
         // total
         $columns[] = PdfColumn::center(width: 30);
-        $textCells[] = new PdfCell($this->trans('report.total'));
-        $valueCells[] = new PdfCell(FormatUtils::formatInt($this->logFile->count()));
+        $textCells[] = PdfCell::instance($this->trans('report.total'));
+        $valueCells[] = PdfCell::instance(FormatUtils::formatInt($this->logFile->count()));
 
         $this->addBookmarkAndTitle('calculation.edit.panel_resume', false);
         PdfTable::instance($this)
@@ -212,7 +212,7 @@ class LogsReport extends AbstractReport
     {
         PdfStyle::getHeaderStyle()
             ->setTextColor(PdfTextColor::red())
-            ->apply($this);
+            ->updateDocument($this);
         $this->cell(
             height: self::LINE_HEIGHT * 1.25,
             text: $this->trans('log.list.empty'),
@@ -261,7 +261,7 @@ class LogsReport extends AbstractReport
             $columns[] = PdfColumn::center($key, 30);
             $text = StringUtils::capitalize($key);
             $textCells[] = $this->getImageIcon($value, $text);
-            $valueCells[] = new PdfCell(FormatUtils::formatInt($value));
+            $valueCells[] = PdfCell::instance(FormatUtils::formatInt($value));
         }
     }
 }

@@ -22,12 +22,6 @@ use fpdf\PdfDocument;
  */
 readonly class PdfDrawColor extends PdfRgbColor implements PdfDocumentUpdaterInterface
 {
-    #[\Override]
-    public function apply(PdfDocument $doc): void
-    {
-        $doc->setDrawColor($this);
-    }
-
     /**
      * Gets the cell border color.
      *
@@ -44,5 +38,11 @@ readonly class PdfDrawColor extends PdfRgbColor implements PdfDocumentUpdaterInt
     public static function default(): static
     {
         return static::black();
+    }
+
+    #[\Override]
+    public function updateDocument(PdfDocument $doc): void
+    {
+        $doc->setDrawColor($this);
     }
 }

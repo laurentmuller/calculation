@@ -84,7 +84,7 @@ abstract class AbstractReader implements \IteratorAggregate
     /**
      * Skip the given number of lines.
      *
-     * @param int<1, max> $lines the lines to skip
+     * @param positive-int $lines the lines to skip
      *
      * @return int<0, max> the skipped lines
      */

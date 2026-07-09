@@ -15,6 +15,9 @@ namespace App\Tests\Pdf;
 
 use App\Pdf\PdfCell;
 use App\Pdf\PdfStyle;
+use fpdf\Enums\PdfFontName;
+use fpdf\PdfDocument;
+use fpdf\PdfRectangle;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -34,7 +37,7 @@ final class PdfCellTest extends TestCase
     public function testClone(): void
     {
         $style = PdfStyle::getCellStyle();
-        $cell = new PdfCell(style: $style);
+        $cell = PdfCell::instance(style: $style);
         self::assertSame($style, $cell->getStyle());
 
         $clone = clone $cell;
@@ -43,7 +46,7 @@ final class PdfCellTest extends TestCase
 
     public function testConstructor(): void
     {
-        $cell = new PdfCell();
+        $cell = PdfCell::instance();
         self::assertNull($cell->getText());
         self::assertSame(1, $cell->getCols());
         self::assertNull($cell->getStyle());
@@ -55,7 +58,18 @@ final class PdfCellTest extends TestCase
     #[DataProvider('getHasLinks')]
     public function testHasLink(string|int|null $link, bool $expected): void
     {
-        $cell = new PdfCell(link: $link);
+        $cell = PdfCell::instance(link: $link);
         self::assertSame($expected, $cell->hasLink());
+    }
+
+    public function testOutput(): void
+    {
+        $document = new PdfDocument();
+        $document->setFont(PdfFontName::ARIAL);
+        $document->addPage();
+        $bounds = PdfRectangle::instance(10, 10, 100, 20);
+        $cell = PdfCell::instance();
+        $cell->output($document, $bounds);
+        self::assertSame(1, $document->getPage());
     }
 }

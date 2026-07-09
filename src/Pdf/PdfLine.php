@@ -31,12 +31,6 @@ class PdfLine implements PdfDocumentUpdaterInterface
     {
     }
 
-    #[\Override]
-    public function apply(PdfDocument $doc): void
-    {
-        $doc->setLineWidth($this->width);
-    }
-
     /**
      * Creates a new instance.
      *
@@ -73,5 +67,11 @@ class PdfLine implements PdfDocumentUpdaterInterface
         $this->width = $width;
 
         return $this;
+    }
+
+    #[\Override]
+    public function updateDocument(PdfDocument $doc): void
+    {
+        $doc->setLineWidth($this->width);
     }
 }

@@ -62,7 +62,7 @@ class CommandsReport extends AbstractArrayReport
         PdfStyle::default()
             ->setFontName(PdfFontName::COURIER)
             ->setFontSize($size)
-            ->apply($this);
+            ->updateDocument($this);
     }
 
     private function getDescriptionHelp(string $description, string $arguments): string
@@ -190,7 +190,7 @@ class CommandsReport extends AbstractArrayReport
 
     private function renderHeader(string $id): void
     {
-        PdfStyle::getHeaderStyle()->apply($this);
+        PdfStyle::getHeaderStyle()->updateDocument($this);
         $this->cell(text: $this->trans($id), move: PdfMove::NEW_LINE);
         $this->resetStyle();
     }
@@ -261,7 +261,7 @@ class CommandsReport extends AbstractArrayReport
             }
             // current chunk
             $this->applyFixedStyle(10.0);
-            HtmlBootstrapColor::parseTextColor($match[1][0])?->apply($this);
+            HtmlBootstrapColor::parseTextColor($match[1][0])?->updateDocument($this);
             $this->outputHelp($match[2][0]);
             $this->resetStyle();
             // move

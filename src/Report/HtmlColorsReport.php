@@ -85,19 +85,18 @@ class HtmlColorsReport extends AbstractReport
             ->outputHeaders()
             ->setGroupKey($title);
 
-        $colorStyle = PdfStyle::getCellStyle();
-        $colorCell = new PdfCell(style: $colorStyle);
-
+        $style = PdfStyle::getCellStyle();
+        $cell = PdfCell::instance(style: $style);
         foreach ($colors as $color) {
             $rgb = $color->asRGB();
-            $colorStyle->setFillColor($color->getFillColor());
+            $style->setFillColor($color->getFillColor());
             $table->addRow(
                 $color->name,
                 $color->value,
                 (string) $rgb[0],
                 (string) $rgb[1],
                 (string) $rgb[2],
-                $colorCell,
+                $cell,
             );
         }
 

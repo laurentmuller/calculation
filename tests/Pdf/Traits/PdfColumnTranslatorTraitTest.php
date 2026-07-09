@@ -29,7 +29,7 @@ final class PdfColumnTranslatorTraitTest extends TestCase
             public function render(): bool
             {
                 $this->addPage();
-                PdfStyle::default()->apply($this);
+                PdfStyle::default()->updateDocument($this);
                 $table = PdfTable::instance($this)
                     ->addColumns(
                         $this->leftColumn('left', 20, true),

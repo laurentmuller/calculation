@@ -47,7 +47,7 @@ final class PdfTableTest extends TestCase
         $this->expectException(PdfException::class);
         $this->expectExceptionMessage('No row started.');
         $this->createTable()
-            ->addCell(new PdfCell());
+            ->addCell(PdfCell::instance());
     }
 
     public function testAddCellsNoRowStarted(): void
@@ -55,7 +55,7 @@ final class PdfTableTest extends TestCase
         $this->expectException(PdfException::class);
         $this->expectExceptionMessage('No row started.');
         $this->createTable()
-            ->addValues(new PdfCell());
+            ->addValues(PdfCell::instance());
     }
 
     public function testAddColumns(): void
@@ -174,10 +174,10 @@ final class PdfTableTest extends TestCase
             );
 
         $table->getParent()->addPage();
-        $cell1 = new PdfCell(style: PdfStyle::getCellStyle()->setBorder(PdfBorder::all()));
-        $cell2 = new PdfCell(style: PdfStyle::getCellStyle()->setBorder(PdfBorder::none()));
-        $cell3 = new PdfCell(style: PdfStyle::getCellStyle()->setBorder(PdfBorder::leftRight()));
-        $cell4 = new PdfCell(style: PdfStyle::getCellStyle()->setBorder(PdfBorder::topBottom()));
+        $cell1 = PdfCell::instance(style: PdfStyle::getCellStyle()->setBorder(PdfBorder::all()));
+        $cell2 = PdfCell::instance(style: PdfStyle::getCellStyle()->setBorder(PdfBorder::none()));
+        $cell3 = PdfCell::instance(style: PdfStyle::getCellStyle()->setBorder(PdfBorder::leftRight()));
+        $cell4 = PdfCell::instance(style: PdfStyle::getCellStyle()->setBorder(PdfBorder::topBottom()));
         $table->startRow()
             ->addValues($cell1, $cell2, $cell3, $cell4)
             ->endRow();
@@ -202,7 +202,7 @@ final class PdfTableTest extends TestCase
         $table = $this->createTable()
             ->addColumn(new PdfColumn());
         $table->getParent()->addPage();
-        $cell = new PdfImageCell($path);
+        $cell = PdfCell::instance($path);
         $table->startRow()
             ->addCell($cell)
             ->endRow();
@@ -214,7 +214,7 @@ final class PdfTableTest extends TestCase
         $table = $this->createTable()
             ->addColumn(new PdfColumn());
         $table->getParent()->addPage();
-        $cell = new PdfCell(link: 'https://example.com');
+        $cell = PdfCell::instance(link: 'https://example.com');
         $table->startRow()
             ->addCell($cell)
             ->endRow();
@@ -255,7 +255,7 @@ final class PdfTableTest extends TestCase
         $this->createTable()
             ->addColumn(PdfColumn::left(width: 25.0))
             ->startRow()
-            ->addCell(new PdfCell(cols: 2))
+            ->addCell(PdfCell::instance(cols: 2))
             ->endRow();
     }
 
@@ -265,13 +265,6 @@ final class PdfTableTest extends TestCase
         $this->expectExceptionMessage('No cell defined.');
         $this->createTable()
             ->endRow();
-    }
-
-    public function testGetBorder(): void
-    {
-        $table = $this->createTable();
-        $actual = $table->getBorder();
-        self::assertTrue($actual->isAll());
     }
 
     public function testGetColumns(): void
@@ -398,14 +391,6 @@ final class PdfTableTest extends TestCase
         $this->expectExceptionMessage('No column defined.');
         $this->createTable()
             ->outputHeaders();
-    }
-
-    public function testSetBorder(): void
-    {
-        $table = $this->createTable();
-        $expected = PdfBorder::leftRight();
-        $table->setBorder($expected);
-        self::assertSame($expected, $table->getBorder());
     }
 
     public function testSetCellStyle(): void

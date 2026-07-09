@@ -41,12 +41,6 @@ class PdfGroup implements PdfDocumentUpdaterInterface
         $this->style = $style ?? PdfStyle::getCellStyle()->setFontBold();
     }
 
-    #[\Override]
-    public function apply(PdfDocument $doc): void
-    {
-        $this->style->apply($doc);
-    }
-
     /**
      * Gets the group alignment.
      */
@@ -97,9 +91,7 @@ class PdfGroup implements PdfDocumentUpdaterInterface
      */
     public function output(PdfGroupTable $parent): void
     {
-        $oldBorder = $parent->getBorder();
         $parent->singleLine($this->getName(), $this->getStyle(), $this->getAlignment());
-        $parent->setBorder($oldBorder);
     }
 
     /**
@@ -130,5 +122,11 @@ class PdfGroup implements PdfDocumentUpdaterInterface
         $this->style = $style;
 
         return $this;
+    }
+
+    #[\Override]
+    public function updateDocument(PdfDocument $doc): void
+    {
+        $this->style->updateDocument($doc);
     }
 }

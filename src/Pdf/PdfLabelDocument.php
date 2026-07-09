@@ -190,7 +190,7 @@ class PdfLabelDocument extends PdfDocument
      */
     private function outputLabelBorder(): void
     {
-        PdfDrawColor::cellBorder()->apply($this);
+        PdfDrawColor::cellBorder()->updateDocument($this);
         $x = $this->label->offsetX($this->currentCol);
         $y = $this->label->offsetY($this->currentRow);
         $this->dashedRect($x, $y, $this->label->width, $this->label->height, 1.0);
@@ -202,7 +202,7 @@ class PdfLabelDocument extends PdfDocument
     private function outputLabelItem(float $x, float $y, PdfLabelItem $item): float
     {
         $this->setXY($x, $y);
-        $item->style?->apply($this);
+        $item->style?->updateDocument($this);
         $height = $this->lineHeight;
         $width = $this->label->width - self::PADDING;
         $this->cell($width, $height, $item->text ?? '');

@@ -92,7 +92,7 @@ final class PdfGroupTableTest extends TestCase
         self::assertSame($group, $table->getGroup());
 
         $group = new PdfGroup('key');
-        $group->apply($table->getParent());
+        $group->updateDocument($table->getParent());
         $table->setGroup($group);
         self::assertSame($group, $table->getGroup());
     }

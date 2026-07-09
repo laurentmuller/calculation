@@ -127,7 +127,7 @@ class SchemaReport extends AbstractReport
             ->setFontName(PdfFontName::ZAPFDINGBATS)
             ->setTextColor(PdfTextColor::darkGreen());
 
-        return $this->booleanCell = new PdfCell(text: '3', style: $style);
+        return $this->booleanCell = PdfCell::instance(text: '3', style: $style);
     }
 
     private function getCellImage(string $id, string $icon): PdfCell
@@ -138,7 +138,7 @@ class SchemaReport extends AbstractReport
             return new PdfFontAwesomeCell($image, $text);
         }
 
-        return new PdfCell($text);
+        return PdfCell::instance($text);
     }
 
     private function getManyToOneCell(): PdfCell
@@ -302,7 +302,7 @@ class SchemaReport extends AbstractReport
      */
     private function outputTitle(string $text, int $level = 0): static
     {
-        PdfStyle::default()->setFontBold()->apply($this);
+        PdfStyle::default()->setFontBold()->updateDocument($this);
 
         return $this->addBookmark(text: $text, level: $level, currentY: false)
             ->useCellMargin(fn (): static => $this->cell(text: $text, move: PdfMove::NEW_LINE))

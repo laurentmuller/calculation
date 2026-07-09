@@ -39,12 +39,6 @@ class PdfFont implements PdfDocumentUpdaterInterface
     ) {
     }
 
-    #[\Override]
-    public function apply(PdfDocument $doc): void
-    {
-        $doc->setFont($this->name, $this->style, $this->size);
-    }
-
     /**
      * Sets or add the bold font style.
      *
@@ -171,6 +165,12 @@ class PdfFont implements PdfDocumentUpdaterInterface
     public function underline(bool $add = false): self
     {
         return $this->updateStyle(PdfFontStyle::UNDERLINE, $add);
+    }
+
+    #[\Override]
+    public function updateDocument(PdfDocument $doc): void
+    {
+        $doc->setFont($this->name, $this->style, $this->size);
     }
 
     private function updateStyle(PdfFontStyle $style, bool $add): self

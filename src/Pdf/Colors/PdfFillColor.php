@@ -22,12 +22,6 @@ use fpdf\PdfDocument;
  */
 readonly class PdfFillColor extends PdfRgbColor implements PdfDocumentUpdaterInterface
 {
-    #[\Override]
-    public function apply(PdfDocument $doc): void
-    {
-        $doc->setFillColor($this);
-    }
-
     /**
      * Gets the default fill color (white).
      */
@@ -56,5 +50,11 @@ readonly class PdfFillColor extends PdfRgbColor implements PdfDocumentUpdaterInt
     public function isFillColor(): bool
     {
         return !$this->equals(static::white());
+    }
+
+    #[\Override]
+    public function updateDocument(PdfDocument $doc): void
+    {
+        $doc->setFillColor($this);
     }
 }

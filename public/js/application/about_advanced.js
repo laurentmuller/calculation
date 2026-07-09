@@ -15,6 +15,7 @@
             const $row = $(this).getParentRow();
             const $elements = $row.find('.dropdown-menu').children();
             return new MenuBuilder({
+                classSelector: 'btn-default',
                 elements: $elements
             }).getItems();
         }

@@ -48,6 +48,6 @@ trait PdfCellTranslatorTrait
         ?PdfTextAlignment $alignment = null,
         string|int|null $link = null
     ): static {
-        return $this->addCell(new PdfCell($this->trans($id), $cols, $style, $alignment, $link));
+        return $this->addCell(PdfCell::instance($this->trans($id), $cols, $style, $alignment, $link));
     }
 }

@@ -1,0 +1,6 @@
+<h5>{{ package.name }}</h5>
+<p class="mb-0">Version : {{ package.version }}</p>
+<hr>
+<p class="mb-0">Type : {{ package.licenseType|join(', ') }} - Date : {{ package.time }}</p>
+<hr>
+{{ license|markdown_to_html|replace(replacement)|raw }}

@@ -89,7 +89,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
             switch ($index) {
                 case 0:
                 case 3:
-                    $cells[] = new PdfCell(
+                    $cells[] = PdfCell::instance(
                         $column->getText(),
                         1,
                         $style,
@@ -99,7 +99,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
                 case 1:
                 case 4:
                 case 6:
-                    $cells[] = new PdfCell(
+                    $cells[] = PdfCell::instance(
                         $column->getText(),
                         2,
                         $style,
@@ -129,7 +129,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
         if (!$color instanceof PdfFillColor) {
             return false;
         }
-        $color->apply($this);
+        $color->updateDocument($this);
 
         return true;
     }
@@ -190,7 +190,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
             $style->setTextColor(PdfTextColor::red());
         }
 
-        return new PdfCell($text, style: $style);
+        return PdfCell::instance($text, style: $style);
     }
 
     private function getURL(int $id): string

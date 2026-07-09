@@ -73,7 +73,7 @@ trait PdfPieChartTrait
         }
 
         $startAngle = 0.0;
-        PdfDrawColor::cellBorder()->apply($this);
+        PdfDrawColor::cellBorder()->updateDocument($this);
         foreach ($rows as $row) {
             $this->pieApplyFillColor($row);
             $endAngle = $startAngle + $this->safeDivide(360.0 * $row['value'], $total);
@@ -92,6 +92,6 @@ trait PdfPieChartTrait
         if (\is_string($color)) {
             $color = PdfFillColor::create($color) ?? PdfFillColor::darkGray();
         }
-        $color->apply($this);
+        $color->updateDocument($this);
     }
 }

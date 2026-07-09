@@ -210,7 +210,7 @@ class MemoryImageReport extends AbstractReport
 
     private function renderCellTitle(string $title): void
     {
-        PdfStyle::getBoldCellStyle()->apply($this);
+        PdfStyle::getBoldCellStyle()->updateDocument($this);
         $this->cell(text: $title, border: PdfBorder::all(), move: PdfMove::NEW_LINE);
         $this->resetStyle();
     }
@@ -274,7 +274,7 @@ class MemoryImageReport extends AbstractReport
         /** @phpstan-var PsrLevel::* $name */
         foreach ($files as $name => $image) {
             if ($color) {
-                $this->getLevelColor($name)?->apply($this);
+                $this->getLevelColor($name)?->updateDocument($this);
             }
             $bounds = new PdfRectangle(
                 $this->getLeftMargin(),

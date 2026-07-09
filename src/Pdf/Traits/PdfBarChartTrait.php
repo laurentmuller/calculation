@@ -98,7 +98,7 @@ trait PdfBarChartTrait
         }
 
         // init
-        PdfStyle::getCellStyle()->apply($this);
+        PdfStyle::getCellStyle()->updateDocument($this);
         $margin = $this->getCellMargin();
         $this->setCellMargin(0.0);
 
@@ -248,7 +248,7 @@ trait PdfBarChartTrait
     {
         foreach ($data as $row) {
             foreach ($row['values'] as $value) {
-                $value['color']->apply($this);
+                $value['color']->updateDocument($this);
                 $this->rect(
                     $row['x'],
                     $value['y'],

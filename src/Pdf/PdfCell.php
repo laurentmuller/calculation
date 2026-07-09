@@ -26,7 +26,7 @@ class PdfCell
 {
     /**
      * @param ?string           $text      the cell text
-     * @param positive-int      $cols      the cell columns span
+     * @param positive-int      $cols      the number of columns to span
      * @param ?PdfStyle         $style     the cell style
      * @param ?PdfTextAlignment $alignment the cell alignment
      * @param string|int|null   $link      the optional cell link.
@@ -43,9 +43,8 @@ class PdfCell
 
     public function __clone()
     {
-        if ($this->style instanceof PdfStyle) {
-            $this->style = clone $this->style;
-        }
+        // deep clone
+        $this->style = $this->style instanceof PdfStyle ? clone $this->style : null;
     }
 
     /**
@@ -57,7 +56,7 @@ class PdfCell
     {
         $width = 2.0 * $parent->getCellMargin();
         if (StringUtils::isString($this->text)) {
-            $this->getStyle()?->apply($parent);
+            $this->getStyle()?->updateDocument($parent);
             $width += $parent->getStringWidth($this->text);
         }
 
@@ -109,11 +108,37 @@ class PdfCell
     /**
      * Return a value indicating if this link is valid.
      *
-     * @phpstan-assert-if-true (non-empty-string|positive-int) $this->link
+     * @phpstan-assert-if-true (non-empty-string|positive-int) $this->getLink()
      */
     public function hasLink(): bool
     {
         return PdfDocument::isLink($this->link);
+    }
+
+    /**
+     * Create a new instance.
+     *
+     * @param ?string           $text      the cell text
+     * @param positive-int      $cols      the number of columns to span
+     * @param ?PdfStyle         $style     the cell style
+     * @param ?PdfTextAlignment $alignment the cell alignment
+     * @param string|int|null   $link      the optional cell link.
+     *                                     A URL or identifier returned by the <code>addLink()</code> function.
+     */
+    public static function instance(
+        ?string $text = null,
+        int $cols = 1,
+        ?PdfStyle $style = null,
+        ?PdfTextAlignment $alignment = null,
+        string|int|null $link = null
+    ): self {
+        return new self(
+            text: $text,
+            cols: $cols,
+            style: $style,
+            alignment: $alignment,
+            link: $link
+        );
     }
 
     /**
@@ -132,7 +157,7 @@ class PdfCell
         ?PdfTextAlignment $alignment = null,
         PdfMove $move = PdfMove::RIGHT
     ): void {
-        $this->style?->apply($parent);
+        $this->style?->updateDocument($parent);
         $parent->setXY($bounds->x, $bounds->y);
         $alignment ??= $this->alignment ?? PdfTextAlignment::LEFT;
         $parent->cell(

@@ -121,7 +121,7 @@ class ReportHeader
                 ->setFontSize(self::DEFAULT_FONT_SIZE)
                 ->setFontBold();
         }
-        $this->nameStyle->apply($this->parent);
+        $this->nameStyle->updateDocument($this->parent);
     }
 
     private function applySmallStyle(): void
@@ -130,7 +130,7 @@ class ReportHeader
             $this->smallStyle = PdfStyle::default()
                 ->setFontSize(self::DEFAULT_FONT_SIZE);
         }
-        $this->smallStyle->apply($this->parent);
+        $this->smallStyle->updateDocument($this->parent);
     }
 
     private function applyTitleStyle(): void
@@ -140,7 +140,7 @@ class ReportHeader
                 ->setFontSize(self::TITLE_FONT_SIZE)
                 ->setFontBold();
         }
-        $this->titleStyle->apply($this->parent);
+        $this->titleStyle->updateDocument($this->parent);
     }
 
     private function isPrintAddress(): bool

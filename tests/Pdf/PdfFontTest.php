@@ -21,14 +21,6 @@ use PHPUnit\Framework\TestCase;
 
 final class PdfFontTest extends TestCase
 {
-    public function testApply(): void
-    {
-        $document = new PdfDocument();
-        $actual = new PdfFont();
-        $actual->apply($document);
-        self::assertSame(0, $document->getPage());
-    }
-
     public function testBold(): void
     {
         $actual = new PdfFont(style: PdfFontStyle::ITALIC);
@@ -122,5 +114,13 @@ final class PdfFontTest extends TestCase
         $actual = new PdfFont(style: PdfFontStyle::BOLD);
         $actual->underline(true);
         self::assertSame(PdfFontStyle::BOLD_UNDERLINE, $actual->getStyle());
+    }
+
+    public function testUpdateDocument(): void
+    {
+        $document = new PdfDocument();
+        $actual = new PdfFont();
+        $actual->updateDocument($document);
+        self::assertSame(0, $document->getPage());
     }
 }

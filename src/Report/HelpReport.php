@@ -586,9 +586,9 @@ class HelpReport extends AbstractReport
 
     private function outputLine(): void
     {
-        PdfDrawColor::cellBorder()->apply($this);
+        PdfDrawColor::cellBorder()->updateDocument($this);
         $this->horizontalLine();
-        $this->defaultStyle->apply($this);
+        $this->defaultStyle->updateDocument($this);
     }
 
     private function outputMainMenus(): void
@@ -660,8 +660,8 @@ class HelpReport extends AbstractReport
 
     private function outputTitle(string $title, float $size = 10): void
     {
-        $this->headerStyle->setFontSize($size)->apply($this);
+        $this->headerStyle->setFontSize($size)->updateDocument($this);
         $this->outputText($title, false);
-        $this->defaultStyle->apply($this);
+        $this->defaultStyle->updateDocument($this);
     }
 }

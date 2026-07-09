@@ -47,6 +47,7 @@ final class AboutSymfonyControllerTest extends ControllerTestCase
         $names = [
             'symfony/finder',
             'symfony/asset',
+            'symfony/license',
             'symfony/fake',
         ];
         foreach ($queries as $query) {
@@ -82,9 +83,22 @@ final class AboutSymfonyControllerTest extends ControllerTestCase
             'production' => [],
             'development' => [],
         ];
+        $licensePackage = [
+            'name' => 'symfony/license',
+            'version' => '1.8.2',
+            'description' => 'Fake Asset description.',
+            'homepage' => 'https://symfony.com/',
+            'licenseFile' => __DIR__ . '/fake',
+            'licenseType' => ['MIT'],
+            'time' => '02.01.2025',
+            'debug' => true,
+            'production' => [],
+            'development' => [],
+        ];
         $packages = [
             'symfony/finder' => $finderPackage,
             'symfony/asset' => $assetPackage,
+            'symfony/license' => $licensePackage,
         ];
 
         $service = $this->createMock(PackageInfoService::class);

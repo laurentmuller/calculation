@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Twig;
 
 use App\Service\NonceService;
-use App\Twig\FunctionExtension;
+use App\Twig\ExtendedAssetExtension;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Symfony\Bridge\Twig\Extension\WebLinkExtension;
 use Symfony\Component\Asset\Packages;
@@ -23,14 +23,14 @@ use Vich\UploaderBundle\Storage\StorageInterface;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 /**
- * @extends RuntimeTestCase<FunctionExtension>
+ * @extends RuntimeTestCase<ExtendedAssetExtension>
  */
-final class FunctionExtensionTest extends RuntimeTestCase
+final class ExtendedAssetExtensionTest extends RuntimeTestCase
 {
     #[\Override]
-    protected function createService(): FunctionExtension
+    protected function createService(): ExtendedAssetExtension
     {
-        return new FunctionExtension(
+        return new ExtendedAssetExtension(
             $this->getPublicDir(),
             $this->createAssetExtension(),
             $this->createWebLinkExtension(),
@@ -42,7 +42,7 @@ final class FunctionExtensionTest extends RuntimeTestCase
     #[\Override]
     protected static function getFixturesDirectory(): string
     {
-        return __DIR__ . '/Fixtures/FunctionExtension';
+        return __DIR__ . '/Fixtures/ExtendedAssetExtension';
     }
 
     private function createAssetExtension(): AssetExtension

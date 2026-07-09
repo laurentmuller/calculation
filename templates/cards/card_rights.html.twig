@@ -47,13 +47,13 @@
                 <th class="text-start text-nowrap fw-normal">
                     {{- icon('fa-solid fa-arrow-down', 'user.rights.table_title') }}{{ icon('fa-solid fa-arrow-right ms-1') -}}
                 </th>
-                {% for permission in enum('App\\Enums\\EntityPermission')?.sorted %}
+                {% for permission in enum_sorted('App\\Enums\\EntityPermission') %}
                     {{ _self.header(permission, overwrite) }}
                 {% endfor %}
             </tr>
             </thead>
             <tbody>
-            {% for entity_name in enum('App\\Enums\\EntityName')?.sorted %}
+            {% for entity_name in enum_sorted('App\\Enums\\EntityName') %}
                 {% set form_field = entity_name.formField %}
                 {%- if rights[form_field] ?? false -%}
                     {{ _self.row(rights[form_field], permissions[form_field], overwrite) }}

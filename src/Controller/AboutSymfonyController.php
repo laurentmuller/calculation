@@ -95,7 +95,6 @@ class AboutSymfonyController extends AbstractController
         if ([] === $package['production'] && [] === $package['development']) {
             return $this->jsonFalse(['message' => $this->trans('about.package.not_found')]);
         }
-
         $content = $this->renderView('about/symfony_dependency.html.twig', ['package' => $package]);
 
         return $this->jsonTrue(['content' => $content]);
@@ -138,6 +137,9 @@ class AboutSymfonyController extends AbstractController
             return $this->jsonFalse(['message' => $this->trans('about.licence.not_found')]);
         }
         $license = FileUtils::readFile($package['licenseFile']);
+        if (null === $license) {
+            return $this->jsonFalse(['message' => $this->trans('about.licence.not_found')]);
+        }
         $content = $this->renderView('about/symfony_license.html.twig', [
             'package' => $package,
             'license' => $license,

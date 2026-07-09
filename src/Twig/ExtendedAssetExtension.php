@@ -30,7 +30,7 @@ use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 /**
  * Twig extension for assets.
  */
-final readonly class FunctionExtension
+final readonly class ExtendedAssetExtension
 {
     use ImageSizeTrait;
 

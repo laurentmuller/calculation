@@ -277,6 +277,7 @@ $(function () {
             if (oldTheme === newTheme) {
                 return;
             }
+            this._setCookieValue(newTheme);
             const $link = $(this._getInputCheckedSelector());
             if ($link.length) {
                 const message = $link.data(this.options.success);
@@ -394,7 +395,6 @@ $(function () {
             if (this._getTheme() === theme) {
                 return;
             }
-            this._setCookieValue(theme);
             const callback = () => document.documentElement.setAttribute(THEME_ATTRIBUTE, theme);
             if (this._supportTransition()) {
                 document.startViewTransition(callback);
@@ -432,12 +432,16 @@ $(function () {
 
         /**
          * Sets the cookie theme value.
-         * @param {string} value - the theme to set.
+         * @param {string} theme - the theme to set.
          * @private
          */
-        _setCookieValue(value) {
+        _setCookieValue(theme) {
             const path = document.body.dataset.cookiePath || '/';
-            window.Cookie.setValue(COOKIE_KEY, value, path);
+            if (theme === THEME_AUTO) {
+                window.Cookie.clearValue(COOKIE_KEY, path);
+            } else {
+                window.Cookie.setValue(COOKIE_KEY, theme, path);
+            }
         }
 
         _getInputSelector() {

@@ -28,8 +28,18 @@
             if (window.location.protocol === 'https:') {
                 cookie += 'secure';
             }
-            /* stylelint-disable-next-line */
             document.cookie = cookie;
+        },
+
+        /**
+         * Clears a cookie value.
+         *
+         * @param {string} key - the cookie key.
+         * @param {string} path - the cookie path.
+         * @param {string} samesite - the same site behavior ('strict', 'lax' or 'none').
+         */
+        clearValue: function (key, path = '/', samesite = 'lax') {
+            window.Cookie.setValue(key, '', path, new Date(0), samesite);
         },
 
         /**
@@ -63,9 +73,8 @@
          * @return {number} the cookie value, if found; the default value otherwise.
          */
         getInteger: function (key, defaultValue = 0) {
-            const value = defaultValue.toString(10);
-            const str = this.getValue(key, value);
-            const number = Number.parseInt(str, 10);
+            const value = this.getValue(key, defaultValue.toString(10));
+            const number = Number.parseInt(value, 10);
             return Number.isNaN(number) ? defaultValue : number;
         },
 
@@ -78,15 +87,14 @@
          * @return {boolean} the cookie value, if found; the default value otherwise.
          */
         getBoolean: function (key, defaultValue = false) {
-            const value = JSON.stringify(defaultValue);
-            const str = this.getValue(key, value).toLowerCase();
-            if (str === 'true') {
+            const value = this.getValue(key, JSON.stringify(defaultValue)).toLowerCase();
+            if (value === 'true') {
                 return true;
-            } else if (str === 'false') {
-                return false;
-            } else {
-                return defaultValue;
             }
+            if (value === 'false') {
+                return false;
+            }
+            return defaultValue;
         }
     };
 })();

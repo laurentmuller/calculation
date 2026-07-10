@@ -1,5 +1,11 @@
-<h5>{{ package.name }}</h5>
-<p class="mb-0">Version : {{ package.version }}</p>
+<div class="row justify-content-between">
+    <div class="col-md-8 h5">{{ package.name }}</div>
+    <div class="col-md-4 text-md-end">Version : {{ package.version }}</div>
+</div>
+<div class="row justify-content-between">
+    <div class="col-md-8">License : {{ package.licenseType|join(', ') }}</div>
+    <div class="col-md-4 text-md-end">Date : {{ package.time }}</div>
+</div>
 <hr>
 {% if package.production|length %}
     <p>{{ enum('App\\Enums\\Environment')?.PRODUCTION|trans }}</p>

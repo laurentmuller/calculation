@@ -163,7 +163,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
     /**
      * Gets the number of records for the given table name.
      *
-     * @return non-negative-int
+     * @phpstan-return non-negative-int
      */
     public function getRecordsCount(string $table): int
     {

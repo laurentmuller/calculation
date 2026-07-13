@@ -121,7 +121,7 @@ class RightsParameter implements ParameterInterface
     }
 
     /**
-     * @return non-negative-int
+     * @phpstan-return non-negative-int
      */
     private function getDefaultAdminRights(): int
     {
@@ -131,7 +131,7 @@ class RightsParameter implements ParameterInterface
     }
 
     /**
-     * @return non-negative-int
+     * @phpstan-return non-negative-int
      */
     private function getDefaultUserRights(): int
     {

@@ -70,7 +70,7 @@ trait RightsTrait
     /**
      * Gets the rights.
      *
-     * @return non-negative-int
+     * @phpstan-return non-negative-int
      */
     public function getRights(): int
     {

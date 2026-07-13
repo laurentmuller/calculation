@@ -34,7 +34,7 @@ abstract class AbstractHtmlChunk
     /**
      * The bookmark level.
      *
-     * @var non-negative-int
+     * @phpstan-var non-negative-int
      */
     private int $bookmarkLevel = 0;
 
@@ -85,7 +85,7 @@ abstract class AbstractHtmlChunk
     /**
      * Return the bookmark level.
      *
-     * @return non-negative-int
+     * @phpstan-return non-negative-int
      */
     public function getBookmarkLevel(): int
     {
@@ -337,7 +337,7 @@ abstract class AbstractHtmlChunk
 
         // level
         if (StringUtils::pregMatch('/bookmark-(\d+)/', $class, $matches)) {
-            /** @var non-negative-int $level */
+            /** @phpstan-var non-negative-int $level */
             $level = (int) $matches[1];
             $this->bookmarkLevel = $level;
             $this->bookmark = true;

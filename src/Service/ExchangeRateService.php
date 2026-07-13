@@ -275,7 +275,7 @@ class ExchangeRateService extends AbstractHttpClientService
     }
 
     /**
-     * @return array<string, ExchangeRateType>
+     * @phpstan-return array<string, ExchangeRateType>
      *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
@@ -370,7 +370,7 @@ class ExchangeRateService extends AbstractHttpClientService
      *
      * @param string $code the currency code
      *
-     * @return ExchangeRateType
+     * @phpstan-return ExchangeRateType
      */
     private function mapCode(string $code): array
     {
@@ -386,7 +386,7 @@ class ExchangeRateService extends AbstractHttpClientService
     /**
      * @param string[] $codes
      *
-     * @return array<string, ExchangeRateType>
+     * @phpstan-return array<string, ExchangeRateType>
      */
     private function mapCodes(array $codes): array
     {

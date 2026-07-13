@@ -73,7 +73,7 @@ readonly class PackageInfoService implements \Countable
     /**
      * Gets the debug packages.
      *
-     * @return array<string, PackageType>
+     * @phpstan-return array<string, PackageType>
      */
     public function getDebugPackages(): array
     {
@@ -103,7 +103,7 @@ readonly class PackageInfoService implements \Countable
     /**
      * Gets the runtime packages.
      *
-     * @return array<string, PackageType>
+     * @phpstan-return array<string, PackageType>
      */
     public function getRuntimePackages(): array
     {
@@ -217,9 +217,9 @@ readonly class PackageInfoService implements \Countable
     }
 
     /**
-     * @param PackageSourceType $package
+     * @phpstan-param PackageSourceType $package
      *
-     * @return PackageType
+     * @phpstan-return PackageType
      */
     private function parsePackage(string $name, bool $debug, array $package): array
     {

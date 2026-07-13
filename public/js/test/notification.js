@@ -1,4 +1,4 @@
-/* globals Toaster */
+/* globals Toaster, THEME */
 
 /**
  * Display a notification.
@@ -38,14 +38,22 @@ function random() {
     $(button).trigger('click');
 }
 
+/**
+ * Gets a value indicating if start view transition is supported.
+ * @return {boolean} true if supported.
+ */
 function supportTransition() {
     'use strict';
     return document.startViewTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
+/**
+ * Gets the preferred theme.
+ * @return {string} the preferred theme.
+ */
 function getPreferredTheme() {
     'use strict';
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? THEME_CONSTANTS.DARK : THEME_CONSTANTS.LIGHT;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? THEME.DARK : THEME.LIGHT;
 }
 
 /**
@@ -55,29 +63,28 @@ function initThemeInput() {
     'use strict';
     $('input[name=radio-theme]').on('change', function () {
         const path = document.body.dataset.cookiePath || '/';
-        const oldTheme = window.Cookie.getValue(THEME_CONSTANTS.KEY, THEME_CONSTANTS.AUTO);
+        const oldTheme = window.Cookie.getValue(THEME.KEY, THEME.AUTO);
         const $selection = $('input[name=radio-theme]:checked');
         let theme = $selection.val();
-        if (theme === THEME_CONSTANTS.AUTO) {
+        if (theme === THEME.AUTO) {
             theme = getPreferredTheme();
-            window.Cookie.clearValue(THEME_CONSTANTS.KEY, path);
+            window.Cookie.clearValue(THEME.KEY, path);
         } else {
-            window.Cookie.setValue(THEME_CONSTANTS.KEY, theme, path);
+            window.Cookie.setValue(THEME.KEY, theme, path);
         }
-        if (oldTheme === theme) {
-            return;
+        if (oldTheme !== theme) {
+            const callback = () => {
+                document.documentElement.setAttribute(THEME.ATTRIBUTE, theme);
+            };
+            if (supportTransition()) {
+                document.startViewTransition(callback);
+            } else {
+                callback();
+            }
         }
-        const callback = function () {
-            document.documentElement.setAttribute(THEME_CONSTANTS.ATTRIBUTE, theme);
-            const title = $('button.rounded-end-pill').data('title');
-            const message = $selection.data('success');
-            Toaster.success(message, title);
-        };
-        if (supportTransition()) {
-            document.startViewTransition(callback);
-        } else {
-            callback();
-        }
+        const title = $('button.rounded-end-pill').data('title');
+        const message = $selection.data('success');
+        Toaster.success(message, title);
     });
 }
 
@@ -86,7 +93,7 @@ function initThemeInput() {
  */
 function initThemeChanged() {
     'use strict';
-    $('body').on('theme-changed', '.theme-switcher', function (e, theme) {
+    $('body').on(THEME.EVENT, '.theme-switcher', function (e, theme) {
         $('input[name=radio-theme]').each(function () {
             const $this = $(this);
             $this.setChecked($this.val() === theme);

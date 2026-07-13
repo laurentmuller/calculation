@@ -1,16 +1,23 @@
 /* globals Toaster, bootstrap */
 
 /**
- * Themes constants.
+ * Theme constants.
  *
- * @type {Readonly<{KEY: string, AUTO: string, LIGHT: string, DARK: string, ATTRIBUTE: string}>}
+ * @type {Readonly<{KEY: string, AUTO: string, LIGHT: string, DARK: string, ATTRIBUTE: string, EVENT: string}>}
  */
-const THEME_CONSTANTS = Object.freeze({
+const THEME = Object.freeze({
+    /** The cookie key name. */
     KEY: 'THEME',
+    /** The auto theme. */
     AUTO: 'auto',
+    /** The light theme. */
     LIGHT: 'light',
+    /** The dark theme. */
     DARK: 'dark',
-    ATTRIBUTE: 'data-bs-theme'
+    /** The theme attribute. */
+    ATTRIBUTE: 'data-bs-theme',
+    /** The event name when the theme change. */
+    EVENT: 'theme-changed'
 });
 
 /**
@@ -18,36 +25,6 @@ const THEME_CONSTANTS = Object.freeze({
  */
 $(function () {
     'use strict';
-
-    /**
-     * The cookie entry name.
-     * @type {string}
-     */
-    const COOKIE_KEY = 'THEME';
-
-    /**
-     * The auto theme.
-     * @type {string}
-     */
-    const THEME_AUTO = 'auto';
-
-    /**
-     * The light theme.
-     * @type {string}
-     */
-    const THEME_LIGHT = 'light';
-
-    /**
-     * The dark theme.
-     * @type {string}
-     */
-    const THEME_DARK = 'dark';
-
-    /**
-     * The theme attribute.
-     * @type {string}
-     */
-    const THEME_ATTRIBUTE = 'data-bs-theme';
 
     // ------------------------------------
     // Theme public class definition
@@ -69,8 +46,9 @@ $(function () {
          * Remove handlers and data.
          */
         destroy() {
-            this.$element.off('click', this.clickProxy);
+            //
             this.$element.removeData(ThemeListener.NAME);
+            this.$element.off('click', this.clickProxy);
             window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', this.changeProxy);
             const modal = bootstrap.Modal.getInstance(this._getDialogId());
             if (modal) {
@@ -126,7 +104,7 @@ $(function () {
          */
         _change() {
             const theme = this._getCookieValue();
-            if (theme !== THEME_LIGHT || theme !== THEME_DARK) {
+            if (theme !== THEME.LIGHT || theme !== THEME.DARK) {
                 this._setTheme(this._getPreferredTheme());
             }
         }
@@ -256,7 +234,7 @@ $(function () {
             if (!$settings.length) {
                 return;
             }
-            if (value === THEME_AUTO) {
+            if (value === THEME.AUTO) {
                 $settings.removeAttr('disabled');
             } else {
                 $settings.attr('disabled', 'disabled');
@@ -265,11 +243,10 @@ $(function () {
 
         /**
          * Handle the setting button click event.
-         * @param {Event} e
          * @private
          */
-        _onSettingsClick(e) {
-            e.preventDefault();
+        _onSettingsClick() {
+            this._onDialogAccept();
             window.open('ms-settings:colors', '_self');
         }
 
@@ -285,7 +262,7 @@ $(function () {
 
             this._setFocus();
             const oldTheme = $dialog.data('old-theme');
-            const newTheme = $dialog.data('new-theme') || this._getTheme();
+            const newTheme = $dialog.data('new-theme') || this._getDocumentTheme();
             this._setTheme(newTheme);
             if (oldTheme === newTheme) {
                 return;
@@ -358,7 +335,7 @@ $(function () {
                 $settings.remove();
                 return;
             }
-            $settings.on('click', (e) => this._onSettingsClick(e));
+            $settings.on('click', () => this._onSettingsClick());
         }
 
 
@@ -368,7 +345,7 @@ $(function () {
          * @private
          */
         _getMediaTheme() {
-            return window.matchMedia('(prefers-color-scheme: dark)').matches ? THEME_DARK : THEME_LIGHT;
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? THEME.DARK : THEME.LIGHT;
         }
 
         /**
@@ -389,7 +366,7 @@ $(function () {
          */
         _getPreferredTheme() {
             const theme = this._getCookieValue();
-            if (theme && theme !== THEME_AUTO) {
+            if (theme && theme !== THEME.AUTO) {
                 return theme;
             }
             return this._getMediaTheme();
@@ -401,13 +378,13 @@ $(function () {
          * @private
          */
         _setTheme(theme) {
-            if (!theme || theme === THEME_AUTO) {
+            if (!theme || theme === THEME.AUTO) {
                 theme = this._getMediaTheme();
             }
-            if (this._getTheme() === theme) {
+            if (this._getDocumentTheme() === theme) {
                 return;
             }
-            const callback = () => document.documentElement.setAttribute(THEME_ATTRIBUTE, theme);
+            const callback = () => document.documentElement.setAttribute(THEME.ATTRIBUTE, theme);
             if (this._supportTransition()) {
                 document.startViewTransition(callback);
             } else {
@@ -429,8 +406,8 @@ $(function () {
          * @return {string} the selected theme.
          * @private
          */
-        _getTheme() {
-            return document.documentElement.getAttribute(THEME_ATTRIBUTE) || THEME_AUTO;
+        _getDocumentTheme() {
+            return document.documentElement.getAttribute(THEME.ATTRIBUTE) || THEME.AUTO;
         }
 
         /**
@@ -439,7 +416,7 @@ $(function () {
          * @private
          */
         _getCookieValue() {
-            return window.Cookie.getValue(COOKIE_KEY, THEME_AUTO);
+            return window.Cookie.getValue(THEME.KEY, THEME.AUTO);
         }
 
         /**
@@ -449,12 +426,12 @@ $(function () {
          */
         _setCookieValue(theme) {
             const path = document.body.dataset.cookiePath || '/';
-            if (theme === THEME_AUTO) {
-                window.Cookie.clearValue(COOKIE_KEY, path);
+            if (theme === THEME.AUTO) {
+                window.Cookie.clearValue(THEME.KEY, path);
             } else {
-                window.Cookie.setValue(COOKIE_KEY, theme, path);
+                window.Cookie.setValue(THEME.KEY, theme, path);
             }
-            this.$element.trigger('theme-changed', theme);
+            this.$element.trigger(THEME.EVENT, theme);
         }
 
         _getInputSelector() {
@@ -468,7 +445,7 @@ $(function () {
 
         _getTitleSelector() {
             const options = this.options;
-            return `${options.dialogId} ${options.title}`;
+            return `${options.dialogId} ${options.titleId}`;
         }
     };
 
@@ -485,7 +462,7 @@ $(function () {
         /** the radio inputs selector */
         input: '.form-check-input',
         /** the title message selector in the modal dialog */
-        title: '.modal-title',
+        titleId: '.modal-title',
         /** the success data message selector in the dialog */
         success: 'success',
         /** the OK button selector in the modal dialog */

@@ -1,21 +1,26 @@
 {% extends 'cards/card_base.html.twig' %}
-{% from 'macros/_icons.html.twig' import homepage, icon %}
+{% from 'macros/_icons.html.twig' import homepage, icon, button %}
 {# macros #}
-{% macro button(type) -%}
-    {%- set text = ('background.' ~ type)|trans -%}
-    {% set attrs = {
-        class: ['btn', 'btn-notify', 'btn-' ~ type, 'flex-fill'],
-        'data-type': type,
-        'data-bs-html': true,
-        'data-bs-trigger': 'hover',
-        'data-bs-toggle': 'popover',
-        'data-bs-placement': 'right',
-        'data-bs-custom-class': 'popover-' ~ type,
-        'data-bs-title': 'test.notification'|trans,
-        'data-bs-content': 'Affiche une notification de type <b>' ~ text ~ '</b> avec des données aléatoires.',
-    } %}
-    <button {{ html_attr(attrs) }}>{{- text -}}</button>
-{%- endmacro button %}
+{% macro button_notify(type, icon) -%}
+    {% set text = 'background.' ~ type %}
+    <div class="col">
+        {{ button(
+            text: text,
+            class: ['btn', 'btn-notify', 'btn-' ~ type, 'w-100'],
+            icon: icon,
+            inline: false,
+            attributes: {
+                'data-type': type,
+                'data-bs-html': true,
+                'data-bs-trigger': 'hover',
+                'data-bs-toggle': 'popover',
+                'data-bs-placement': 'top',
+                'data-bs-custom-class': 'popover-' ~ type,
+                'data-bs-title': '<i class="me-1 ' ~ icon ~ '"></i>' ~ 'test.notification'|trans,
+                'data-bs-content': 'Affiche une notification de type <b>' ~ text|trans ~ '</b> avec des données aléatoires.',
+            }) }}
+    </div>
+{%- endmacro button_notify %}
 
 {% macro position(position, selection) -%}
     {%- set value = position.value -%}
@@ -43,59 +48,60 @@
 {# parameters #}
 {%- set title = 'test.notification' -%}
 {%- set title_icon = 'fa-regular fa-bell' -%}
-{%- set timeout = user_parameters.message.timeout -%}
-{%- set position = user_parameters.message.position %}
-{%- set progress = user_parameters.message.progress %}
 {# body #}
 {% block card_body %}
-    <span class="form-label horizontal-line">Type de message</span>
-    <div class="d-flex flex-wrap justify-content-center gap-2">
-        {{ _self.button('success') }}
-        {{ _self.button('warning') }}
-        {{ _self.button('danger') }}
-        {{ _self.button('info') }}
-        {{ _self.button('primary') }}
-        {{ _self.button('secondary') }}
-        {{ _self.button('dark') }}
+    <span class="form-label horizontal-line mb-3 ">Type de message</span>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-1">
+        {{ _self.button_notify('success', 'fa-solid fa-check-circle') }}
+        {{ _self.button_notify('warning', 'fa-solid fa-exclamation-circle') }}
+        {{ _self.button_notify('danger', 'fa-solid fa-exclamation-triangle') }}
+        {{ _self.button_notify('info', 'fa-solid fa-info-circle') }}
+        {{ _self.button_notify('primary', 'fa-regular fa-bell') }}
+        {{ _self.button_notify('secondary', 'fa-regular fa-bell') }}
+        {{ _self.button_notify('dark', 'fa-regular fa-bell') }}
     </div>
-    <hr>
+    <span class="form-label horizontal-line mt-3">Paramètres</span>
     <div class="row">
         <div class="col-md-6 col-lg-3 mb-3">
+            {%- set selection = user_parameters.message.position %}
             <label class="form-label" for="position">{{ 'parameters.fields.message_position'|trans }}</label>
             <select id="position" name="position" class="form-select" data-failure="{{ 'parameters.failure'|trans }}"
-                    data-default="{{ position.value }}" data-position="{{ position.value }}"
+                    data-default="{{ selection.value }}" data-position="{{ selection.value }}"
                     data-random="{{ url('ajax_random_text') }}">
                 {% for current in positions %}
-                    {{ _self.position(current, position) }}
+                    {{ _self.position(current, selection) }}
                 {% endfor %}
             </select>
         </div>
         <div class="col-md-6 col-lg-3 mb-3">
+            {%- set selection = user_parameters.message.timeout -%}
             <label class="form-label" for="timeout">{{ 'parameters.fields.message_timeout'|trans }}</label>
-            <select id="timeout" name="timeout" data-default="{{ timeout }}" class="form-select">
+            <select id="timeout" name="timeout" data-default="{{ selection }}" class="form-select">
                 {% for seconds in 1..5 %}
-                    {{ _self.timeout(seconds, timeout) }}
+                    {{ _self.timeout(seconds, selection) }}
                 {% endfor %}
             </select>
         </div>
         <div class="col-md-6 col-lg-3 mb-3">
+            {%- set selection = user_parameters.message.progress %}
             <label class="form-label" for="progress">{{ 'parameters.fields.message_progress'|trans }}</label>
-            <select id="progress" name="progress" data-default="{{ progress }}" class="form-select">
+            <select id="progress" name="progress" data-default="{{ selection }}" class="form-select">
                 {% for i in 0..5 %}
-                    {{ _self.progress(i, progress) }}
+                    {{ _self.progress(i, selection) }}
                 {% endfor %}
             </select>
         </div>
         <div class="col-md-6 col-lg-3 mb-3">
+            {%- set selection = 150 -%}
             <label class="form-label" for="maxNbChars">Nombre de caractères</label>
-            <select id="maxNbChars" name="maxNbChars" data-default="{{ 150 }}" class="form-select">
+            <select id="maxNbChars" name="maxNbChars" data-default="{{ selection }}" class="form-select">
                 {% for i in range(50, 500, 50) %}
-                    <option value="{{ i }}"{% if i == 150 %} selected{% endif %}>{{ i }}</option>
+                    <option value="{{ i }}"{% if i == selection %} selected{% endif %}>{{ i }}</option>
                 {% endfor %}
             </select>
         </div>
     </div>
-    <span class="form-label horizontal-line">{{ 'parameters.group_options'|trans }}</span>
+    <span class="form-label horizontal-line mb-3">{{ 'parameters.group_options'|trans }}</span>
     <div class="d-flex-wrap-center">
         {{ _self.checkbox('title', 'parameters.fields.message_title', user_parameters.message.title) }}
         {{ _self.checkbox('icon', 'parameters.fields.message_icon', user_parameters.message.icon) }}
@@ -115,7 +121,7 @@
         {% for theme in themes() %}
             {% set attrs = {
                 type: 'radio',
-                class: ['btn-check'],
+                class: 'btn-check',
                 name: 'radio-theme',
                 id: 'radio-theme-' ~ theme.value,
                 value: theme.value,
@@ -133,17 +139,16 @@
                 <i class="{{ theme.icon }}"></i>
             </label>
         {% endfor %}
-        {% set attrs = {
-            type: 'button',
-            role: 'button',
+        {{ button(
+            text: null,
             class: ['btn', 'btn-outline-secondary', 'rounded-end-pill', 'theme-switcher', 'ps-1'],
-            title: 'theme.help'|trans,
-            'data-url': path('theme_dialog'),
-            'data-title': 'theme.title'|trans,
-        } %}
-        <button {{ html_attr(attrs) }}>
-            <i class="fa-solid fa-image"></i>
-        </button>
+            icon: 'fa-solid fa-image',
+            attributes: {
+                title: 'theme.help'|trans,
+                'data-url': path('theme_dialog'),
+                'data-title': 'theme.title'|trans,
+            },
+        ) }}
     </div>
 {% endblock card_footer %}
 {# javascripts #}

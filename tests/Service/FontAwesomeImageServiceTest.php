@@ -21,12 +21,6 @@ use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 final class FontAwesomeImageServiceTest extends TestCase
 {
-    public static function assertSameImageSize(int $expectedWidth, int $expectedHeight, ImageSize $actual): void
-    {
-        self::assertSame($expectedWidth, $actual->width);
-        self::assertSame($expectedHeight, $actual->height);
-    }
-
     public function testDirectory(): void
     {
         $expected = __DIR__;
@@ -84,6 +78,12 @@ final class FontAwesomeImageServiceTest extends TestCase
     public function testValidFileWithoutExtension(): void
     {
         $this->checkImageIsValid(__DIR__ . '/../files/images', '448x512');
+    }
+
+    protected static function assertSameImageSize(int $expectedWidth, int $expectedHeight, ImageSize $actual): void
+    {
+        self::assertSame($expectedWidth, $actual->width);
+        self::assertSame($expectedHeight, $actual->height);
     }
 
     private function checkImageIsInvalid(string $directory, string $relativePath, bool $realPath = true): void

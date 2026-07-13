@@ -19,12 +19,6 @@ use PHPUnit\Framework\TestCase;
 
 final class FontAwesomeImageTest extends TestCase
 {
-    public static function assertSameImageSize(int $expectedWidth, int $expectedHeight, ImageSize $actual): void
-    {
-        self::assertSame($expectedWidth, $actual->width);
-        self::assertSame($expectedHeight, $actual->height);
-    }
-
     public function testConstructor(): void
     {
         $content = 'My Content';
@@ -58,6 +52,12 @@ final class FontAwesomeImageTest extends TestCase
         $image = $this->createImage(width: 40, height: 40);
         $actual = $image->resize(50);
         self::assertSameImageSize(50, 50, $actual);
+    }
+
+    protected static function assertSameImageSize(int $expectedWidth, int $expectedHeight, ImageSize $actual): void
+    {
+        self::assertSame($expectedWidth, $actual->width);
+        self::assertSame($expectedHeight, $actual->height);
     }
 
     private function createImage(

@@ -25,7 +25,7 @@ trait PrivateInstanceTrait
     /**
      * @param class-string $class
      */
-    public static function assertPrivateInstance(string $class): void
+    protected static function assertPrivateInstance(string $class): void
     {
         try {
             $reflectionClass = new \ReflectionClass($class);

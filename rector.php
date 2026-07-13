@@ -21,7 +21,6 @@ use Rector\DeadCode\Rector\ClassMethod\RemoveParentDelegatingConstructorRector;
 use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
-use Rector\PHPUnit\CodeQuality\Rector\Class_\SingleMockPropertyTypeRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\NoSetupWithParentCallOverrideRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\SetList;
@@ -37,8 +36,6 @@ $paths = [
 $skip = [
     // allow self::functions for PHP unit
     PreferPHPUnitThisCallRector::class,
-    // allow both object and mock classes
-    SingleMockPropertyTypeRector::class,
     // not convert class-string to class
     StringClassNameToClassConstantRector::class => [
         __DIR__ . '/tests/Traits/CheckSubClassTraitTest.php',
@@ -72,9 +69,12 @@ $sets = [
     // Doctrine
     DoctrineSetList::DOCTRINE_CODE_QUALITY,
     DoctrineSetList::TYPED_COLLECTIONS,
+    DoctrineSetList::TYPED_COLLECTIONS_DOCBLOCKS,
     // PHP-Unit
     PHPUnitSetList::PHPUNIT_120,
     PHPUnitSetList::PHPUNIT_CODE_QUALITY,
+    PHPUnitSetList::PHPUNIT_MOCK_TO_STUB,
+    PHPUnitSetList::PHPUNIT_NARROW_ASSERTS,
     // twig
     TwigSetList::TWIG_24,
     TwigSetList::TWIG_UNDERSCORE_TO_NAMESPACE,

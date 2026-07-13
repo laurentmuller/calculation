@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
  */
 trait DateAssertTrait
 {
-    public static function assertDateEquals(\DateTimeInterface $expected, mixed $actual): void
+    protected static function assertDateEquals(\DateTimeInterface $expected, mixed $actual): void
     {
         if ($actual instanceof \DateTimeInterface) {
             $actual = $actual->format('Y-m-d');
@@ -38,7 +38,7 @@ trait DateAssertTrait
         self::assertSame($expected->format('Y-m-d H:i:s'), $actual);
     }
 
-    public static function assertTimeEquals(\DateTimeInterface $expected, mixed $actual): void
+    protected static function assertTimeEquals(\DateTimeInterface $expected, mixed $actual): void
     {
         if ($actual instanceof \DateTimeInterface) {
             $actual = $actual->format('H:i:s');
@@ -46,7 +46,7 @@ trait DateAssertTrait
         self::assertSame($expected->format('H:i:s'), $actual);
     }
 
-    public static function assertTimestampEquals(\DateTimeInterface $expected, mixed $actual, string $message = ''): void
+    protected static function assertTimestampEquals(\DateTimeInterface $expected, mixed $actual, string $message = ''): void
     {
         if ($actual instanceof \DateTimeInterface) {
             $actual = $actual->getTimestamp();

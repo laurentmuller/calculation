@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class FlagBagTestCase extends TestCase
 {
-    public static function assertSameFlagBag(mixed $expected, mixed $actual): void
+    protected static function assertSameFlagBag(mixed $expected, mixed $actual): void
     {
         self::assertInstanceOf(FlagBag::class, $expected);
         self::assertInstanceOf(FlagBag::class, $actual);

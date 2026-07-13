@@ -110,6 +110,41 @@
     <button type="button" class="btn btn-form btn-default btn-outline-success">
         {{- icon('fa-solid fa-rotate-left', 'parameters.default') -}}
     </button>
+    <div class="btn-group btn-group-sm px-3 py-1" role="group" aria-label="{{ 'theme.help'|trans }}">
+        {% set current = theme(app.request) %}
+        {% for theme in themes() %}
+            {% set attrs = {
+                type: 'radio',
+                class: ['btn-check'],
+                name: 'radio-theme',
+                id: 'radio-theme-' ~ theme.value,
+                value: theme.value,
+                checked: theme == current,
+                autocomplete: 'off',
+                'data-success': theme.success|trans,
+            } %}
+            <input {{ html_attr(attrs) }}>
+            {% set attrs = {
+                title: theme|trans,
+                for: 'radio-theme-' ~ theme.value,
+                class: ['btn', 'btn-outline-secondary', loop.first ? 'rounded-start-pill'],
+            } %}
+            <label {{ html_attr(attrs) }}>
+                <i class="{{ theme.icon }}"></i>
+            </label>
+        {% endfor %}
+        {% set attrs = {
+            type: 'button',
+            role: 'button',
+            class: ['btn', 'btn-outline-secondary', 'rounded-end-pill', 'theme-switcher', 'ps-1'],
+            title: 'theme.help'|trans,
+            'data-url': path('theme_dialog'),
+            'data-title': 'theme.title'|trans,
+        } %}
+        <button {{ html_attr(attrs) }}>
+            <i class="fa-solid fa-image"></i>
+        </button>
+    </div>
 {% endblock card_footer %}
 {# javascripts #}
 {% block javascripts %}

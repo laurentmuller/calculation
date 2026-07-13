@@ -38,6 +38,62 @@ function random() {
     $(button).trigger('click');
 }
 
+function supportTransition() {
+    'use strict';
+    return document.startViewTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+function getPreferredTheme() {
+    'use strict';
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? THEME_CONSTANTS.DARK : THEME_CONSTANTS.LIGHT;
+}
+
+/**
+ * Handle theme input change.
+ */
+function initThemeInput() {
+    'use strict';
+    $('input[name=radio-theme]').on('change', function () {
+        const path = document.body.dataset.cookiePath || '/';
+        const oldTheme = window.Cookie.getValue(THEME_CONSTANTS.KEY, THEME_CONSTANTS.AUTO);
+        const $selection = $('input[name=radio-theme]:checked');
+        let theme = $selection.val();
+        if (theme === THEME_CONSTANTS.AUTO) {
+            theme = getPreferredTheme();
+            window.Cookie.clearValue(THEME_CONSTANTS.KEY, path);
+        } else {
+            window.Cookie.setValue(THEME_CONSTANTS.KEY, theme, path);
+        }
+        if (oldTheme === theme) {
+            return;
+        }
+        const callback = function () {
+            document.documentElement.setAttribute(THEME_CONSTANTS.ATTRIBUTE, theme);
+            const title = $('button.rounded-end-pill').data('title');
+            const message = $selection.data('success');
+            Toaster.success(message, title);
+        };
+        if (supportTransition()) {
+            document.startViewTransition(callback);
+        } else {
+            callback();
+        }
+    });
+}
+
+/**
+ * Handle theme changed event.
+ */
+function initThemeChanged() {
+    'use strict';
+    $('body').on('theme-changed', '.theme-switcher', function (e, theme) {
+        $('input[name=radio-theme]').each(function () {
+            const $this = $(this);
+            $this.setChecked($this.val() === theme);
+        });
+    });
+}
+
 /**
  * Document ready function
  */
@@ -95,7 +151,7 @@ $(function () {
         }
     });
 
-    // display a notification when a value change
+    // display a notification when a value changes
     $('#position, #timeout, #progress, #maxNbChars, .form-check-input-option').on('input', function () {
         random();
         const $this = $(this);
@@ -109,4 +165,8 @@ $(function () {
 
     // first notification
     random();
+
+    // theme
+    initThemeInput();
+    initThemeChanged();
 });

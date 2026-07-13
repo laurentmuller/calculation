@@ -1,6 +1,19 @@
 /* globals Toaster, bootstrap */
 
 /**
+ * Themes constants.
+ *
+ * @type {Readonly<{KEY: string, AUTO: string, LIGHT: string, DARK: string, ATTRIBUTE: string}>}
+ */
+const THEME_CONSTANTS = Object.freeze({
+    KEY: 'THEME',
+    AUTO: 'auto',
+    LIGHT: 'light',
+    DARK: 'dark',
+    ATTRIBUTE: 'data-bs-theme'
+});
+
+/**
  * Plugin to handle theme.
  */
 $(function () {
@@ -314,7 +327,6 @@ $(function () {
             }
             const options = this.options;
             $dialog.data('new-theme', $input.val());
-
             const icon = $input.data(options.icon);
             if (icon) {
                 $(options.switcherIcon).attr('class', icon);
@@ -442,6 +454,7 @@ $(function () {
             } else {
                 window.Cookie.setValue(COOKIE_KEY, theme, path);
             }
+            this.$element.trigger('theme-changed', theme);
         }
 
         _getInputSelector() {

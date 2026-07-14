@@ -213,7 +213,7 @@ final class ProductUpdateServiceTest extends TestCase
         self::assertSame(1, $this->session->get('product.update.category'));
     }
 
-    private function assertProduct(mixed $product, ?float $newPrice = null): void
+    protected static function assertProduct(mixed $product, ?float $newPrice = null): void
     {
         self::assertIsArray($product);
         self::assertArrayHasKey('description', $product);

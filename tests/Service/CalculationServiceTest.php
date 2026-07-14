@@ -178,7 +178,7 @@ final class CalculationServiceTest extends KernelServiceTestCase
         $this->assertValidConstant($constants, 'ROW_OVERALL_TOTAL', -7);
     }
 
-    private function assertValidConstant(array $constants, string $name, int $expected): void
+    protected function assertValidConstant(array $constants, string $name, int $expected): void
     {
         self::assertArrayHasKey($name, $constants);
         self::assertSame($expected, $constants[$name]);

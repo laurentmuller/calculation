@@ -66,7 +66,7 @@ final class TimestampableListenerTest extends TestCase
 
         $listener = $this->createListener(false);
         $listener->onFlush($event);
-        $this->assertEntityUpdated($task, 'common.entity_empty_user');
+        self::assertEntityUpdated($task, 'common.entity_empty_user');
     }
 
     public function testNoEntity(): void
@@ -95,7 +95,7 @@ final class TimestampableListenerTest extends TestCase
 
         $listener = $this->createListener();
         $listener->onFlush($event);
-        $this->assertEntityUpdated($task);
+        self::assertEntityUpdated($task);
     }
 
     public function testUpdateWithChild(): void
@@ -107,10 +107,10 @@ final class TimestampableListenerTest extends TestCase
 
         $listener = $this->createListener();
         $listener->onFlush($event);
-        $this->assertEntityUpdated($task);
+        self::assertEntityUpdated($task);
     }
 
-    private function assertEntityUpdated(
+    protected static function assertEntityUpdated(
         TimestampableInterface $entity,
         string $userName = self::USER_NAME
     ): void {

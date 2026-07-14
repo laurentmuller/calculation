@@ -201,7 +201,7 @@ final class EntityVoterTest extends TestCase
     /**
      * @param VoterInterface::ACCESS_* $expected
      */
-    private function assertVote(
+    protected function assertVote(
         User $user,
         EntityName|string $subject,
         EntityPermission|string $attribute,

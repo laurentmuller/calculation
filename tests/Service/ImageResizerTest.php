@@ -36,7 +36,7 @@ final class ImageResizerTest extends TestCase
         $service = $this->createService();
         $actual = $service->resize($source, $target);
         self::assertTrue($actual);
-        $this->assertImageValid($target, 192);
+        self::assertImageValid($target, 192);
     }
 
     public function testResizeHeightGreaterWidth(): void
@@ -46,7 +46,7 @@ final class ImageResizerTest extends TestCase
         $service = $this->createService();
         $actual = $service->resize($source, $target);
         self::assertTrue($actual);
-        $this->assertImageValid($target, 162, 192);
+        self::assertImageValid($target, 162, 192);
     }
 
     public function testResizeInvalidFile(): void
@@ -63,10 +63,10 @@ final class ImageResizerTest extends TestCase
         $service = $this->createService();
         $actual = $service->resize($source, $target);
         self::assertTrue($actual);
-        $this->assertImageValid($target, 192, 108);
+        self::assertImageValid($target, 192, 108);
     }
 
-    private function assertImageValid(string $target, int $width, ?int $height = null): void
+    protected static function assertImageValid(string $target, int $width, ?int $height = null): void
     {
         $image = \imagecreatefrompng($target);
         self::assertInstanceOf(\GdImage::class, $image);

@@ -30,7 +30,7 @@ final class LogFilterServiceTest extends TestCase
             ->setCreatedAt(new DatePoint('2024-02-02'))
             ->setChannel('channel2');
         $filter = LogFilterService::instance(channel: 'channel1');
-        $this->assertSameLogs($filter, [$log1, $log2], $log1);
+        self::assertSameLogs($filter, [$log1, $log2], $log1);
     }
 
     public function testByLevel(): void
@@ -42,7 +42,7 @@ final class LogFilterServiceTest extends TestCase
             ->setCreatedAt(new DatePoint('2024-02-02'))
             ->setLevel(PsrLevel::INFO);
         $filter = LogFilterService::instance(level: PsrLevel::ALERT);
-        $this->assertSameLogs($filter, [$log1, $log2], $log1);
+        self::assertSameLogs($filter, [$log1, $log2], $log1);
     }
 
     public function testByNone(): void
@@ -54,7 +54,7 @@ final class LogFilterServiceTest extends TestCase
             ->setCreatedAt(new DatePoint('2024-02-02'))
             ->setMessage('message');
         $filter = LogFilterService::instance();
-        $this->assertSameLogs($filter, [$log1, $log2], $log1, $log2);
+        self::assertSameLogs($filter, [$log1, $log2], $log1, $log2);
     }
 
     public function testByUser(): void
@@ -66,7 +66,7 @@ final class LogFilterServiceTest extends TestCase
             ->setCreatedAt(new DatePoint('2024-02-02'))
             ->setUser('user2');
         $filter = LogFilterService::instance(value: 'user1');
-        $this->assertSameLogs($filter, [$log1, $log2], $log1);
+        self::assertSameLogs($filter, [$log1, $log2], $log1);
     }
 
     public function testByValue(): void
@@ -78,7 +78,7 @@ final class LogFilterServiceTest extends TestCase
             ->setCreatedAt(new DatePoint('2024-02-02'))
             ->setMessage('message2');
         $filter = LogFilterService::instance(value: 'message1');
-        $this->assertSameLogs($filter, [$log1, $log2], $log1);
+        self::assertSameLogs($filter, [$log1, $log2], $log1);
     }
 
     public function testIsFilter(): void
@@ -96,7 +96,7 @@ final class LogFilterServiceTest extends TestCase
     /**
      * @param Log[] $logs
      */
-    private function assertSameLogs(LogFilterService $filter, array $logs, Log ...$expected): void
+    protected static function assertSameLogs(LogFilterService $filter, array $logs, Log ...$expected): void
     {
         $actual = $filter->filter($logs);
         self::assertSame($expected, $actual);

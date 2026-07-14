@@ -44,14 +44,14 @@ final class FakerServiceTest extends TestCase
         $service = new FakerService($manager);
         $generator = $service->getGenerator();
 
-        $this->assertProviderExist($generator, CustomPerson::class);
-        $this->assertProviderExist($generator, CustomCompany::class);
-        $this->assertProviderExist($generator, CustomAddress::class);
-        $this->assertProviderExist($generator, CustomPhoneNumber::class);
-        $this->assertProviderExist($generator, UserProvider::class);
-        $this->assertProviderExist($generator, ProductProvider::class);
-        $this->assertProviderExist($generator, CategoryProvider::class);
-        $this->assertProviderExist($generator, CalculationStateProvider::class);
+        self::assertProviderExist($generator, CustomPerson::class);
+        self::assertProviderExist($generator, CustomCompany::class);
+        self::assertProviderExist($generator, CustomAddress::class);
+        self::assertProviderExist($generator, CustomPhoneNumber::class);
+        self::assertProviderExist($generator, UserProvider::class);
+        self::assertProviderExist($generator, ProductProvider::class);
+        self::assertProviderExist($generator, CategoryProvider::class);
+        self::assertProviderExist($generator, CalculationStateProvider::class);
     }
 
     /**
@@ -59,7 +59,7 @@ final class FakerServiceTest extends TestCase
      *
      * @param class-string<TProvider> $class
      */
-    private function assertProviderExist(Generator $generator, string $class): void
+    protected static function assertProviderExist(Generator $generator, string $class): void
     {
         $provider = $generator->getProvider($class);
         self::assertNotNull($provider);

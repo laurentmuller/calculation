@@ -71,28 +71,28 @@ final class ConstantExtensionTest extends TestCase
     #[DataProvider('getAuthenticatedVoterConstants')]
     public function testAuthenticatedVoterConstants(string $key, string $expected): void
     {
-        $this->assertIsSameConstant($key, $expected);
+        self::assertIsSameConstant($key, $expected);
     }
 
     #[DataProvider('getCalculationServiceConstants')]
     public function testCalculationServiceConstants(string $key, int $expected): void
     {
-        $this->assertIsSameConstant($key, $expected);
+        self::assertIsSameConstant($key, $expected);
     }
 
     #[DataProvider('getEntityVoterConstants')]
     public function testEntityVoterConstants(string $key, string $expected): void
     {
-        $this->assertIsSameConstant($key, $expected);
+        self::assertIsSameConstant($key, $expected);
     }
 
     #[DataProvider('getRoleConstants')]
     public function testRoleConstants(string $key, string $expected): void
     {
-        $this->assertIsSameConstant($key, $expected);
+        self::assertIsSameConstant($key, $expected);
     }
 
-    private function assertIsSameConstant(string $key, string|int $expected): void
+    protected static function assertIsSameConstant(string $key, string|int $expected): void
     {
         $extension = new ConstantExtension(new NullAdapter());
         $globals = $extension->getGlobals();

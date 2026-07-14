@@ -276,7 +276,7 @@ final class ExchangeRateServiceTest extends TestCase
         self::assertSame(600, $actual);
     }
 
-    private function assertError(ExchangeRateService $service, string $message = self::ERROR_MESSAGE): void
+    protected function assertError(ExchangeRateService $service, string $message = self::ERROR_MESSAGE): void
     {
         $actual = $service->getLastError();
         self::assertInstanceOf(HttpClientError::class, $actual);

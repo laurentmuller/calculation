@@ -148,7 +148,7 @@ final class AjaxControllerTest extends ControllerTestCase
             xmlHttpRequest: true,
             parameters: $parameters
         );
-        $this->assertContentException($content);
+        self::assertContentException($content);
     }
 
     public function testSaveSessionSuccess(): void
@@ -165,7 +165,7 @@ final class AjaxControllerTest extends ControllerTestCase
             xmlHttpRequest: true,
             parameters: $parameters
         );
-        $this->assertContentValid($content);
+        self::assertContentValid($content);
     }
 
     public function testSaveTable(): void
@@ -181,22 +181,10 @@ final class AjaxControllerTest extends ControllerTestCase
             xmlHttpRequest: true,
             parameters: $parameters
         );
-        $this->assertContentValid($content);
+        self::assertContentValid($content);
     }
 
-    #[\Override]
-    protected function deleteEntities(): void
-    {
-        $this->deleteTaskItem();
-    }
-
-    #[\Override]
-    protected function mustDeleteEntities(): bool
-    {
-        return true;
-    }
-
-    private function assertContentException(string|false $content): void
+    protected static function assertContentException(string|false $content): void
     {
         self::assertIsString($content);
         $actual = \json_decode(json: $content, associative: true);
@@ -213,12 +201,24 @@ final class AjaxControllerTest extends ControllerTestCase
         self::assertIsArray($actual['exception']);
     }
 
-    private function assertContentValid(string|false $content): void
+    protected static function assertContentValid(string|false $content): void
     {
         self::assertIsString($content);
         $actual = \json_decode(json: $content, associative: true);
         self::assertIsBool($actual);
         self::assertTrue($actual);
+    }
+
+    #[\Override]
+    protected function deleteEntities(): void
+    {
+        $this->deleteTaskItem();
+    }
+
+    #[\Override]
+    protected function mustDeleteEntities(): bool
+    {
+        return true;
     }
 
     private function checkTaskRequest(array $parameters, int $expected): void

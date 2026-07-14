@@ -30,7 +30,7 @@ trait DateAssertTrait
         self::assertSame($expected->format('Y-m-d'), $actual);
     }
 
-    public static function assertDateTimeEquals(\DateTimeInterface $expected, mixed $actual): void
+    protected static function assertDateTimeEquals(\DateTimeInterface $expected, mixed $actual): void
     {
         if ($actual instanceof \DateTimeInterface) {
             $actual = $actual->format('Y-m-d H:i:s');

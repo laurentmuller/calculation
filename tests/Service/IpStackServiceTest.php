@@ -40,7 +40,7 @@ final class IpStackServiceTest extends TestCase
         $service->setClient($client);
         $actual = $service->getIpInfo();
         self::assertEmpty($actual);
-        $this->assertError($service);
+        self::assertError($service);
     }
 
     public function testGetIpInfoSuccess(): void
@@ -100,7 +100,7 @@ final class IpStackServiceTest extends TestCase
         self::assertSame(3600, $actual);
     }
 
-    private function assertError(IpStackService $service, string $message = self::ERROR_MESSAGE): void
+    protected static function assertError(IpStackService $service, string $message = self::ERROR_MESSAGE): void
     {
         $actual = $service->getLastError();
         self::assertInstanceOf(HttpClientError::class, $actual);

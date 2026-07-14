@@ -70,19 +70,19 @@ final class HtmlWordParserTest extends TestCase
     #[DataProvider('getClassToStyles')]
     public function testClassToStyle(string $class, string $expected): void
     {
-        $this->assertParserContainsClass($expected, $class);
+        self::assertParserContainsClass($expected, $class);
     }
 
     #[DataProvider('getBorders')]
     public function testParseBorder(string $class, string $expected): void
     {
-        $this->assertParserContainsClass($expected, $class);
+        self::assertParserContainsClass($expected, $class);
     }
 
     public function testParseClassEmpty(): void
     {
         $content = '<h4 class="">Header Content</h4>';
-        $this->assertParserContainsString('h4', $content);
+        self::assertParserContainsString('h4', $content);
     }
 
     public function testParseEmpty(): void
@@ -95,22 +95,22 @@ final class HtmlWordParserTest extends TestCase
     #[DataProvider('getMargins')]
     public function testParseMargins(string $class, string $expected): void
     {
-        $this->assertParserContainsClass($expected, $class);
+        self::assertParserContainsClass($expected, $class);
     }
 
     public function testParseMultiClassEmpty(): void
     {
         $content = '<h4 class="  ">Header Content</h4>';
-        $this->assertParserContainsString('h4', $content);
+        self::assertParserContainsString('h4', $content);
     }
 
-    private function assertParserContainsClass(string $expected, string $class): void
+    protected static function assertParserContainsClass(string $expected, string $class): void
     {
         $content = \sprintf('<h4 class="%s">Header Content</h4>', $class);
-        $this->assertParserContainsString($expected, $content);
+        self::assertParserContainsString($expected, $content);
     }
 
-    private function assertParserContainsString(string $expected, string $content): void
+    protected static function assertParserContainsString(string $expected, string $content): void
     {
         $parser = new HtmlWordParser();
         $actual = $parser->parse($content);

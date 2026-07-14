@@ -834,6 +834,53 @@ final class FormHelperTest extends TypeTestCase
         self::assertContains($transformer, $transformers);
     }
 
+    /**
+     * @param FormConfigInterface<mixed> $configuration
+     */
+    protected static function assertSameAttribute(FormConfigInterface $configuration, string $name, mixed $expected): void
+    {
+        $actual = $configuration->getOption('attr');
+        self::assertIsArray($actual);
+        if (null === $expected) {
+            self::assertArrayNotHasKey($name, $actual);
+        } else {
+            self::assertArrayHasKey($name, $actual);
+            self::assertSame($expected, $actual[$name]);
+        }
+    }
+
+    /**
+     * @param FormInterface<mixed> $form
+     */
+    protected static function assertSameCount(FormInterface $form, int $expected = 1): void
+    {
+        self::assertCount($expected, $form);
+    }
+
+    /**
+     * @param FormConfigInterface<mixed> $configuration
+     */
+    protected static function assertSameOption(FormConfigInterface $configuration, string $name, mixed $expected): void
+    {
+        if (null === $expected) {
+            self::assertFalse($configuration->hasOption($name));
+        } else {
+            self::assertTrue($configuration->hasOption($name));
+            self::assertSame($expected, $configuration->getOption($name));
+        }
+    }
+
+    /**
+     * @param FormConfigInterface<mixed> $configuration
+     * @param class-string               $expected
+     */
+    protected static function assertSameType(FormConfigInterface $configuration, string $expected): void
+    {
+        $actual = $configuration->getType()
+            ->getInnerType()::class;
+        self::assertSame($expected, $actual);
+    }
+
     #[\Override]
     protected function getExtensions(): array
     {
@@ -874,53 +921,6 @@ final class FormHelperTest extends TypeTestCase
         ];
     }
 
-    /**
-     * @param FormConfigInterface<mixed> $configuration
-     */
-    private function assertSameAttribute(FormConfigInterface $configuration, string $name, mixed $expected): void
-    {
-        $actual = $configuration->getOption('attr');
-        self::assertIsArray($actual);
-        if (null === $expected) {
-            self::assertArrayNotHasKey($name, $actual);
-        } else {
-            self::assertArrayHasKey($name, $actual);
-            self::assertSame($expected, $actual[$name]);
-        }
-    }
-
-    /**
-     * @param FormInterface<mixed> $form
-     */
-    private function assertSameCount(FormInterface $form, int $expected = 1): void
-    {
-        self::assertCount($expected, $form);
-    }
-
-    /**
-     * @param FormConfigInterface<mixed> $configuration
-     */
-    private function assertSameOption(FormConfigInterface $configuration, string $name, mixed $expected): void
-    {
-        if (null === $expected) {
-            self::assertFalse($configuration->hasOption($name));
-        } else {
-            self::assertTrue($configuration->hasOption($name));
-            self::assertSame($expected, $configuration->getOption($name));
-        }
-    }
-
-    /**
-     * @param FormConfigInterface<mixed> $configuration
-     * @param class-string               $expected
-     */
-    private function assertSameType(FormConfigInterface $configuration, string $expected): void
-    {
-        $actual = $configuration->getType()
-            ->getInnerType()::class;
-        self::assertSame($expected, $actual);
-    }
-
     private function createFormHelper(?string $labelPrefix = null): FormHelper
     {
         $builder = $this->factory->createBuilder();
@@ -943,13 +943,13 @@ final class FormHelperTest extends TypeTestCase
     ): void {
         $field = $form->get($fieldName);
         $configuration = $field->getConfig();
-        $this->assertSameCount($form, $count);
-        $this->assertSameType($configuration, $class);
+        self::assertSameCount($form, $count);
+        self::assertSameType($configuration, $class);
         foreach ($options as $name => $value) {
-            $this->assertSameOption($configuration, $name, $value);
+            self::assertSameOption($configuration, $name, $value);
         }
         foreach ($attributes as $name => $value) {
-            $this->assertSameAttribute($configuration, $name, $value);
+            self::assertSameAttribute($configuration, $name, $value);
         }
     }
 }

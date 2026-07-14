@@ -27,8 +27,26 @@ final class CustomColorTypeTest extends TypeTestCase
     {
         $view = $this->factory->create(CustomColorType::class)
             ->createView();
-        $this->assertSameColors($view->vars);
-        $this->assertSameClass($view->vars['attr']);
+        self::assertSameColors($view->vars);
+        self::assertSameClass($view->vars['attr']);
+    }
+
+    protected static function assertSameClass(array $attr): void
+    {
+        self::assertArrayHasKey('class', $attr);
+        self::assertSame('color-picker', $attr['class']);
+    }
+
+    protected static function assertSameColors(array $vars): void
+    {
+        self::assertArrayHasKey('colors', $vars);
+        $colors = $vars['colors'];
+        self::assertIsArray($colors);
+        self::assertCount(2, $colors);
+        self::assertArrayHasKey('Black', $colors);
+        self::assertSame('#000000', $colors['Black']);
+        self::assertArrayHasKey('White', $colors);
+        self::assertSame('#FFFFFF', $colors['White']);
     }
 
     #[\Override]
@@ -39,23 +57,5 @@ final class CustomColorTypeTest extends TypeTestCase
         return [
             new CustomColorType($colorsPath),
         ];
-    }
-
-    private function assertSameClass(array $attr): void
-    {
-        self::assertArrayHasKey('class', $attr);
-        self::assertSame('color-picker', $attr['class']);
-    }
-
-    private function assertSameColors(array $vars): void
-    {
-        self::assertArrayHasKey('colors', $vars);
-        $colors = $vars['colors'];
-        self::assertIsArray($colors);
-        self::assertCount(2, $colors);
-        self::assertArrayHasKey('Black', $colors);
-        self::assertSame('#000000', $colors['Black']);
-        self::assertArrayHasKey('White', $colors);
-        self::assertSame('#FFFFFF', $colors['White']);
     }
 }

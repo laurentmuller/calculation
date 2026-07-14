@@ -19,7 +19,6 @@ use App\Form\Extension\InputGroupTypeExtension;
 use App\Form\Extension\UrlTypeExtension;
 use App\Form\Extension\VichImageTypeExtension;
 use App\Interfaces\EntityInterface;
-use App\Tests\DateAssertTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -33,7 +32,6 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 #[AllowMockObjectsWithoutExpectations]
 abstract class EntityTypeTestCase extends TypeTestCase
 {
-    use DateAssertTrait;
     use PreloadedExtensionsTrait;
 
     /**
@@ -42,6 +40,15 @@ abstract class EntityTypeTestCase extends TypeTestCase
     public function testSubmitValidData(): void
     {
         $this->submitValidData();
+    }
+
+    protected static function assertValid(mixed $expected, mixed $actual): void
+    {
+        if ($expected instanceof \DateTimeInterface && $actual instanceof \DateTimeInterface) {
+            self::assertSame($expected->format('Y-m-d'), $actual->format('Y-m-d'));
+        } else {
+            self::assertEqualsCanonicalizing($expected, $actual);
+        }
     }
 
     /**
@@ -134,22 +141,13 @@ abstract class EntityTypeTestCase extends TypeTestCase
         foreach ($keys as $field) {
             $expected = $accessor->getValue($entity, $field);
             $actual = $accessor->getValue($model, $field);
-            $this->validate($expected, $actual);
+            self::assertValid($expected, $actual);
         }
 
         // check view
         $children = $form->createView()->children;
         foreach ($keys as $key) {
             self::assertArrayHasKey($key, $children);
-        }
-    }
-
-    protected function validate(mixed $expected, mixed $actual): void
-    {
-        if ($expected instanceof \DateTimeInterface && $actual instanceof \DateTimeInterface) {
-            self::assertDateEquals($expected, $actual);
-        } else {
-            self::assertEqualsCanonicalizing($expected, $actual);
         }
     }
 }

@@ -46,20 +46,20 @@ final class PdfChartColorsTest extends TestCase
     public function testNext(PdfChartColors $colors, int $red, int $green, int $blue): void
     {
         $actual = $colors->next();
-        $this->assertSameColor($actual, $red, $green, $blue);
+        self::assertSameColor($actual, $red, $green, $blue);
     }
 
     public function testReset(): void
     {
         $colors = new PdfChartColors();
         $actual = $colors->next();
-        $this->assertSameColor($actual, 54, 162, 235);
+        self::assertSameColor($actual, 54, 162, 235);
         $colors->reset();
         $actual = $colors->next();
-        $this->assertSameColor($actual, 54, 162, 235);
+        self::assertSameColor($actual, 54, 162, 235);
     }
 
-    private function assertSameColor(PdfRgbColor $actual, int $red, int $green, int $blue): void
+    protected static function assertSameColor(PdfRgbColor $actual, int $red, int $green, int $blue): void
     {
         self::assertSame($red, $actual->red);
         self::assertSame($green, $actual->green);

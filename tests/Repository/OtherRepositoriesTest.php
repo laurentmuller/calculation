@@ -64,7 +64,7 @@ final class OtherRepositoriesTest extends KernelServiceTestCase
      *
      * @param class-string<AbstractRepository<TEntity>> $class
      */
-    private function assertFindAllIsEmpty(string $class): void
+    protected function assertFindAllIsEmpty(string $class): void
     {
         $repository = $this->getService($class);
         $actual = $repository->findAll();

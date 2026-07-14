@@ -113,7 +113,7 @@ final class HtmlTagTest extends TestCase
             ->setFontSize(2.5 * 9.0);
         $actual = HtmlTag::getStyle('h1');
         self::assertNotNull($actual);
-        $this->assertSameStyle($style, $actual);
+        self::assertSameStyle($style, $actual);
     }
 
     #[DataProvider('getMatches')]
@@ -126,10 +126,10 @@ final class HtmlTagTest extends TestCase
     #[DataProvider('getStyles')]
     public function testStyle(HtmlTag $tag, ?HtmlStyle $expected): void
     {
-        $this->assertSameStyle($expected, $tag);
+        self::assertSameStyle($expected, $tag);
     }
 
-    private function assertSameStyle(?HtmlStyle $expected, HtmlTag|HtmlStyle $tagOrStyle): void
+    protected static function assertSameStyle(?HtmlStyle $expected, HtmlTag|HtmlStyle $tagOrStyle): void
     {
         $actual = $tagOrStyle instanceof HtmlStyle ? $tagOrStyle : $tagOrStyle->style();
         if (!$expected instanceof HtmlStyle) {

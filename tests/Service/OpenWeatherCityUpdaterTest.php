@@ -54,8 +54,8 @@ final class OpenWeatherCityUpdaterTest extends TestCase
             $file = new UploadedFile($targetFile, \basename($targetFile), test: true);
             $service = $this->createService();
             $actual = @$service->import($file);
-            $this->assertHasKeys($actual);
-            $this->assertInvalid($actual, 'swisspost.error.open_archive');
+            self::assertHasKeys($actual);
+            self::assertInvalid($actual, 'swisspost.error.open_archive');
         } finally {
             FileUtils::remove($targetFile);
         }
@@ -69,8 +69,8 @@ final class OpenWeatherCityUpdaterTest extends TestCase
             $file = new UploadedFile($targetFile, \basename($targetFile), test: true);
             $service = $this->createService();
             $actual = $service->import($file);
-            $this->assertHasKeys($actual);
-            $this->assertInvalid($actual, 'openweather.error.empty_city');
+            self::assertHasKeys($actual);
+            self::assertInvalid($actual, 'openweather.error.empty_city');
         } finally {
             FileUtils::remove($this->getDatabaseName());
             FileUtils::remove($targetFile);
@@ -85,8 +85,8 @@ final class OpenWeatherCityUpdaterTest extends TestCase
             $file = new UploadedFile($targetFile, \basename($targetFile), test: true);
             $service = $this->createService();
             $actual = $service->import($file);
-            $this->assertHasKeys($actual);
-            $this->assertInvalid($actual, 'swisspost.error.open_archive');
+            self::assertHasKeys($actual);
+            self::assertInvalid($actual, 'swisspost.error.open_archive');
         } finally {
             FileUtils::remove($targetFile);
         }
@@ -99,8 +99,8 @@ final class OpenWeatherCityUpdaterTest extends TestCase
         $file = new UploadedFile($path, $originalName, error: \UPLOAD_ERR_NO_FILE);
         $service = $this->createService();
         $actual = $service->import($file);
-        $this->assertHasKeys($actual);
-        $this->assertInvalid($actual, 'swisspost.error.open_archive');
+        self::assertHasKeys($actual);
+        self::assertInvalid($actual, 'swisspost.error.open_archive');
     }
 
     public function testImportFileNotGz(): void
@@ -111,8 +111,8 @@ final class OpenWeatherCityUpdaterTest extends TestCase
             $file = new UploadedFile($targetFile, \basename($targetFile), test: true);
             $service = $this->createService();
             $actual = @$service->import($file);
-            $this->assertHasKeys($actual);
-            $this->assertInvalid($actual, 'swisspost.error.open_archive');
+            self::assertHasKeys($actual);
+            self::assertInvalid($actual, 'swisspost.error.open_archive');
         } finally {
             FileUtils::remove($targetFile);
         }
@@ -126,7 +126,7 @@ final class OpenWeatherCityUpdaterTest extends TestCase
             $file = new UploadedFile($targetFile, \basename($targetFile), test: true);
             $service = $this->createService();
             $actual = $service->import($file);
-            $this->assertHasKeys($actual);
+            self::assertHasKeys($actual);
             self::assertTrue($actual['result']);
             self::assertSame(10, $actual['valid']);
             self::assertSame(0, $actual['error']);
@@ -137,7 +137,7 @@ final class OpenWeatherCityUpdaterTest extends TestCase
         }
     }
 
-    private function assertHasKeys(array $actual): void
+    protected static function assertHasKeys(array $actual): void
     {
         self::assertArrayHasKey('result', $actual);
         self::assertArrayHasKey('valid', $actual);
@@ -145,7 +145,7 @@ final class OpenWeatherCityUpdaterTest extends TestCase
         self::assertArrayHasKey('message', $actual);
     }
 
-    private function assertInvalid(array $actual, string $message): void
+    protected static function assertInvalid(array $actual, string $message): void
     {
         self::assertFalse($actual['result']);
         self::assertSame(0, $actual['valid']);

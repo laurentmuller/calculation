@@ -8,7 +8,7 @@
 </div>
 <hr>
 {% if package.production|length %}
-    <p>{{ enum('App\\Enums\\Environment')?.PRODUCTION|trans }}</p>
+    <p>{{ 'environment.prod'|trans }}</p>
     <ul>
         {% for key, value in package.production %}
             <li>{{ key }} : <code>{{ value }}</code></li>
@@ -16,7 +16,7 @@
     </ul>
 {% endif %}
 {% if package.development|length %}
-    <p>{{ enum('App\\Enums\\Environment')?.DEVELOPMENT|trans }}</p>
+    <p>{{ 'environment.dev'|trans }}</p>
     <ul>
         {% for key, value in package.development %}
             <li>{{ key }} : <code>{{ value }}</code></li>

@@ -27,6 +27,8 @@ class EnumExtension
      *
      * @param class-string $enum the enumeration class name
      *
+     * @return EnumSortableInterface[]
+     *
      * @throws RuntimeError if the given class name is not an enum or is not a sortable enum
      */
     #[AsTwigFunction(name: 'enum_sorted')]

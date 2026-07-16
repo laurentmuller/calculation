@@ -42,7 +42,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  *      name: string,
  *      version: string,
  *      description?: string,
- *      license?: string|string[]|null,
+ *      license?: string[]|null,
  *      homepage?: string,
  *      source?: array{url: string|null},
  *      time: string,
@@ -211,7 +211,7 @@ readonly class PackageInfoService implements \Countable
      */
     private function parseLicenseType(array $package): array
     {
-        $license = (array) ($package['license'] ?? []);
+        $license = $package['license'] ?? [];
 
         return [] === $license ? ['Unknown'] : $license;
     }

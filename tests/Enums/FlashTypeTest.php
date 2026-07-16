@@ -85,6 +85,18 @@ final class FlashTypeTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    public function testSorted(): void
+    {
+        $expected = [
+            FlashType::INFO,
+            FlashType::SUCCESS,
+            FlashType::WARNING,
+            FlashType::DANGER,
+        ];
+        $actual = FlashType::sorted();
+        self::assertSame($expected, $actual);
+    }
+
     #[DataProvider('getLabels')]
     public function testTranslate(FlashType $type, string $expected): void
     {

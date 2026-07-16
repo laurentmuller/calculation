@@ -19,7 +19,6 @@ use App\Attribute\GetRoute;
 use App\Entity\CalculationState;
 use App\Entity\Category;
 use App\Entity\Product;
-use App\Enums\MessagePosition;
 use App\Form\Type\ReCaptchaType;
 use App\Repository\GroupRepository;
 use App\Service\RecaptchaResponseService;
@@ -57,7 +56,7 @@ class TestController extends AbstractController
     #[GetRoute(path: '/notifications', name: 'notifications')]
     public function notifications(): Response
     {
-        return $this->render('test/notification.html.twig', ['positions' => MessagePosition::sorted()]);
+        return $this->render('test/notification.html.twig');
     }
 
     /**

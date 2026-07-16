@@ -31,6 +31,16 @@ abstract class AbstractHtmlListChunk extends HtmlParentChunk
     abstract public function getLastBulletText(): string;
 
     #[\Override]
+    public function getLeftMargin(): float
+    {
+        if ($this->getParent()?->is(HtmlTag::BODY) ?? false) {
+            return parent::getLeftMargin() + 2.0;
+        }
+
+        return parent::getLeftMargin();
+    }
+
+    #[\Override]
     protected function isValidChild(AbstractHtmlChunk $child): bool
     {
         return parent::isValidChild($child) && $child instanceof HtmlLiChunk;

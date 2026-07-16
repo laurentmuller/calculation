@@ -1,22 +1,22 @@
 // state
-$enable-rounded:          false;
+$enable-rounded: false;
 $enable-validation-icons: false;
 $enable-negative-margins: true;
 // variables
-$accordion-padding-x:     1rem;
-$accordion-icon-width:    1rem;
-$link-decoration:         none;
-$tooltip-opacity:         1.0;
+$accordion-padding-x: 1rem;
+$accordion-icon-width: 1rem;
+$link-decoration: none;
+$tooltip-opacity: 1.0;
 // colors
-$info:                    #9ec5fe;
-$code-color:              #dc3545;
+$info: #9ec5fe;
+$code-color: #dc3545;
 // accordion
-$accordion-icon-color-dark:         #dee2e6;
-$accordion-icon-active-color-dark:  #dee2e6;
-$accordion-icon-active-color:       #212529;
+$accordion-icon-color-dark: #dee2e6;
+$accordion-icon-active-color-dark: #dee2e6;
+$accordion-icon-active-color: #212529;
 
 // badge
-$badge-font-weight:       400;
+$badge-font-weight: 400;
 
 @import "../node_modules/bootstrap/scss/bootstrap";
 
@@ -156,3 +156,15 @@ html[data-bs-theme=dark] {
     width: initial;
     flex-grow: 1;
 }
+
+///* set the same colors as light mode for alerts */
+//html[data-bs-theme=dark] {
+//    @each $state in map-keys($theme-colors) {
+//        .alert-#{$state} {
+//            --#{$prefix}alert-color: var(--#{$prefix}#{$state}-bg-subtle);
+//            --#{$prefix}alert-bg: var(--#{$prefix}#{$state}-text-emphasis);
+//            --#{$prefix}alert-border-color: var(--#{$prefix}#{$state}-text-emphasis);
+//            --#{$prefix}alert-link-color: var(--#{$prefix}#{$state}-border-subtle);
+//        }
+//    }
+//}

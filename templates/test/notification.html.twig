@@ -1,8 +1,10 @@
 {% extends 'cards/card_base.html.twig' %}
-{% from 'macros/_icons.html.twig' import homepage, icon, button %}
+{% from 'macros/_icons.html.twig' import button, homepage %}
 {# macros #}
 {% macro button_notify(type, icon) -%}
     {% set text = 'background.' ~ type %}
+    {% set title = '<i class="me-1 ' ~ icon ~ '"></i>' ~ 'test.notification'|trans %}
+    {% set content = 'Affiche une notification de type <b>' ~ text|trans ~ '</b> avec des données aléatoires.' %}
     <div class="col">
         {{ button(
             text: text,
@@ -12,36 +14,47 @@
             attributes: {
                 'data-type': type,
                 'data-bs-html': true,
+                'data-bs-title': title,
                 'data-bs-trigger': 'hover',
                 'data-bs-toggle': 'popover',
                 'data-bs-placement': 'top',
+                'data-bs-content': content,
                 'data-bs-custom-class': 'popover-' ~ type,
-                'data-bs-title': '<i class="me-1 ' ~ icon ~ '"></i>' ~ 'test.notification'|trans,
-                'data-bs-content': 'Affiche une notification de type <b>' ~ text|trans ~ '</b> avec des données aléatoires.',
             }) }}
     </div>
 {%- endmacro button_notify %}
 
 {% macro position(position, selection) -%}
-    {%- set value = position.value -%}
-    <option value="{{ value }}"{% if position == selection %} selected{% endif %}>{{ position|trans }}</option>
+    {% set attrs = {
+        value: position.value,
+        selected: position == selection} %}
+    <option {{ html_attr(attrs) }}>{{ position|trans }}</option>
 {%- endmacro position %}
 
 {% macro timeout(seconds, selection) -%}
-    {%- set milliseconds = seconds * 1000 -%}
-    {%- set text = 'counters.seconds'|trans({'%count%': seconds}) -%}
-    <option value="{{ milliseconds }}"{% if milliseconds == selection %} selected{% endif %}>{{ text }}</option>
+    {% set attrs = {
+        value: seconds * 1000,
+        selected: seconds * 1000 == selection} %}
+    <option {{ html_attr(attrs) }}>{{ 'counters.seconds'|trans({'%count%': seconds}) }}</option>
 {%- endmacro timeout %}
 
 {% macro progress(pixels, selection) -%}
-    {%- set text = 'counters.pixels'|trans({'%count%': pixels}) -%}
-    <option value="{{ pixels }}"{% if pixels == selection %} selected{% endif %}>{{ text }}</option>
+    {% set attrs = {
+        value: pixels,
+        selected: pixels == selection} %}
+    <option {{ html_attr(attrs) }}>{{ 'counters.pixels'|trans({'%count%': pixels}) }}</option>
 {%- endmacro progress %}
 
 {% macro checkbox(id, text, checked = true) -%}
     <div class="form-check form-check-inline form-switch form-check-option">
-        <input type="checkbox" class="form-check-input form-check-input-option" name="{{ id }}" id="{{ id }}"
-               data-default="{{ checked|json_encode }}"{% if checked %} checked{% endif %}>
+        {% set attrs = {
+            type: 'checkbox',
+            class: 'form-check-input form-check-input-option',
+            id: id,
+            name: id,
+            checked: checked,
+            'data-default': checked|json_encode} %}
+        <input {{ html_attr(attrs) }}>
         <label class="form-check-label" for="{{ id }}">{{ text|trans }}</label>
     </div>
 {%- endmacro checkbox %}
@@ -64,12 +77,18 @@
     <div class="row">
         <div class="col-md-6 col-lg-3 mb-3">
             {%- set selection = user_parameters.message.position %}
+            {%- set positions = enum_sorted('App\\Enums\\MessagePosition') -%}
+            {%- set attrs = {
+                id: 'position',
+                name: 'position',
+                class: 'form-select',
+                'data-default': selection.value,
+                'data-random': url('ajax_random_text'),
+                'data-failure': 'parameters.failure'|trans} -%}
             <label class="form-label" for="position">{{ 'parameters.fields.message_position'|trans }}</label>
-            <select id="position" name="position" class="form-select" data-failure="{{ 'parameters.failure'|trans }}"
-                    data-default="{{ selection.value }}" data-position="{{ selection.value }}"
-                    data-random="{{ url('ajax_random_text') }}">
-                {% for current in positions %}
-                    {{ _self.position(current, selection) }}
+            <select {{ html_attr(attrs) }}>
+                {% for position in positions %}
+                    {{ _self.position(position, selection) }}
                 {% endfor %}
             </select>
         </div>
@@ -113,9 +132,11 @@
 {# footer #}
 {% block card_footer %}
     {{ homepage() }}
-    <button type="button" class="btn btn-form btn-default btn-outline-success">
-        {{- icon('fa-solid fa-rotate-left', 'parameters.default') -}}
-    </button>
+    {{ button(
+        text: 'parameters.default',
+        class: 'btn btn-form btn-default btn-outline-success',
+        icon: 'fa-solid fa-rotate-left',
+        inline: false) }}
     <div class="btn-group btn-group-sm px-3 py-1" role="group" aria-label="{{ 'theme.help'|trans }}">
         {% set current = theme(app.request) %}
         {% for theme in themes() %}

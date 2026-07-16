@@ -132,7 +132,8 @@ $(function () {
         notify(type, title, options);
 
         // update class
-        $('.form-check-option').attr('class', 'form-check form-check-inline form-switch form-check-option form-' + type);
+        const attribute = 'form-check form-check-inline form-switch form-check-option form-' + type;
+        $('.form-check-option').attr('class', attribute);
     });
 
     // set default values

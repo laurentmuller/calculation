@@ -34,7 +34,7 @@ final class HtmlUlChunkTest extends TestCase
     {
         $chunk = new HtmlUlChunk();
         $actual = $chunk->getLastBulletText();
-        self::assertSame(\chr(149), $actual);
+        self::assertSame('•', $actual);
     }
 
     public function testBulletText(): void
@@ -42,6 +42,6 @@ final class HtmlUlChunkTest extends TestCase
         $ulChunk = new HtmlUlChunk();
         $liChunk = new HtmlLiChunk();
         $actual = $ulChunk->getBulletText($liChunk);
-        self::assertSame(\chr(149), $actual);
+        self::assertSame('•', $actual);
     }
 }

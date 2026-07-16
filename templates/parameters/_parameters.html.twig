@@ -11,21 +11,19 @@
         {{- block('choice_widget') -}}
         {{- button(
             text: null,
-            class: 'btn btn-notify btn-outline-secondary d-print-none',
+            class: 'btn btn-notify btn-outline-secondary d-print-none px-2',
             icon: 'fa-regular fa-bell',
             inline: false,
-            attributes: {title: 'parameters.action_test'|trans})
-        -}}
+            attributes: {title: 'parameters.action_test'|trans}) -}}
         {{- button(
             text: null,
             class: 'btn btn-outline-secondary dropdown-toggle dropdown-toggle-split',
             attributes: {
                 title: 'parameters.action_test'|trans,
                 'data-bs-toggle': 'dropdown',
-                'aria-expanded': false})
-        -}}
+                'aria-expanded': false}) -}}
         <ul class="dropdown-menu dropdown-menu-end">
-            {% for type in enum_cases('App\\Enums\\FlashType') %}
+            {% for type in enum_sorted('App\\Enums\\FlashType') %}
                 <li>
                     <button class="dropdown-item dropdown-notify" type="button" data-value="{{ type.value }}">
                         <i class="me-1 {{ type.icon }} {{ type.color }}"></i>{{- type|trans -}}
@@ -75,13 +73,11 @@
             {{- dropdownItemButton(
                 text: 'parameters.default_visible',
                 icon: 'fa-solid fa-reply',
-                class: 'btn-item-visible')
-            -}}
+                class: 'btn-item-visible') -}}
             {{- dropdownItemButton(
                 text: 'parameters.default_all',
                 icon: 'fa-solid fa-reply-all',
-                class: 'btn-item-all')
-            -}}
+                class: 'btn-item-all') -}}
         </ul>
     </div>
 {%- endblock actions_form %}

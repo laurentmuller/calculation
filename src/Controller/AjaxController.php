@@ -90,9 +90,7 @@ class AjaxController extends AbstractController
         $content = $service->getGenerator()
             ->realText($maxNbChars);
 
-        return $this->jsonTrue([
-            'content' => $content,
-        ]);
+        return $this->jsonTrue(['content' => $content]);
     }
 
     /**

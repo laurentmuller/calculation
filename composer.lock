@@ -1825,16 +1825,16 @@
         },
         {
             "name": "laurentmuller/fpdf2",
-            "version": "4.3.11",
+            "version": "4.3.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/fpdf2.git",
-                "reference": "6c8192e2aebcf54ea79bb06ce70d452171865bce"
+                "reference": "0a411dfcabcd204bf8c3009121d9bdcc9a011f2d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/6c8192e2aebcf54ea79bb06ce70d452171865bce",
-                "reference": "6c8192e2aebcf54ea79bb06ce70d452171865bce",
+                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/0a411dfcabcd204bf8c3009121d9bdcc9a011f2d",
+                "reference": "0a411dfcabcd204bf8c3009121d9bdcc9a011f2d",
                 "shasum": ""
             },
             "require": {
@@ -1886,7 +1886,7 @@
                 "issues": "https://github.com/laurentmuller/fpdf2/issues",
                 "source": "https://github.com/laurentmuller/fpdf2"
             },
-            "time": "2026-07-13T13:53:25+00:00"
+            "time": "2026-07-16T08:14:22+00:00"
         },
         {
             "name": "laurentmuller/highcharts-bundle",
@@ -9071,16 +9071,16 @@
         },
         {
             "name": "fortawesome/font-awesome",
-            "version": "7.3.0",
+            "version": "7.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FortAwesome/Font-Awesome.git",
-                "reference": "70fb2dd154b617f62fc4ae5b0b7e2943bfd2aa96"
+                "reference": "14c65a3747d0f3b751f15831fc719236aea8729d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FortAwesome/Font-Awesome/zipball/70fb2dd154b617f62fc4ae5b0b7e2943bfd2aa96",
-                "reference": "70fb2dd154b617f62fc4ae5b0b7e2943bfd2aa96",
+                "url": "https://api.github.com/repos/FortAwesome/Font-Awesome/zipball/14c65a3747d0f3b751f15831fc719236aea8729d",
+                "reference": "14c65a3747d0f3b751f15831fc719236aea8729d",
                 "shasum": ""
             },
             "type": "library",
@@ -9112,7 +9112,7 @@
                 "issues": "https://github.com/FortAwesome/Font-Awesome/issues",
                 "source": "https://github.com/FortAwesome/Font-Awesome"
             },
-            "time": "2026-06-25T22:03:17+00:00"
+            "time": "2026-07-15T18:09:30+00:00"
         },
         {
             "name": "masterminds/html5",

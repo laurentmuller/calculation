@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Enums;
 
 use App\Interfaces\DefaultEnumInterface;
+use App\Interfaces\EnumSortableInterface;
 use App\Traits\EnumExtrasTrait;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
@@ -24,9 +25,10 @@ use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumTrait;
  * Flash bag type enumeration.
  *
  * @implements DefaultEnumInterface<FlashType>
+ * @implements EnumSortableInterface<FlashType>
  */
 #[ReadableEnum(prefix: 'flash_bag.', useValueAsDefault: true)]
-enum FlashType: string implements DefaultEnumInterface, TranslatableEnumInterface
+enum FlashType: string implements DefaultEnumInterface, EnumSortableInterface, TranslatableEnumInterface
 {
     use EnumExtrasTrait;
     use TranslatableEnumTrait;
@@ -60,5 +62,16 @@ enum FlashType: string implements DefaultEnumInterface, TranslatableEnumInterfac
     public function getIcon(): string
     {
         return $this->getExtraString('icon');
+    }
+
+    #[\Override]
+    public static function sorted(): array
+    {
+        return [
+            self::INFO,
+            self::SUCCESS,
+            self::WARNING,
+            self::DANGER,
+        ];
     }
 }

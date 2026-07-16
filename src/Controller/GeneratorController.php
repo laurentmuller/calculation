@@ -178,7 +178,7 @@ class GeneratorController extends AbstractController
     {
         return [
             'entity' => $this->getSessionString(self::KEY_ENTITY),
-            'count' => $this->getSessionInt(self::KEY_COUNT, 1),
+            'count' => $this->getSessionInt(self::KEY_COUNT, 10),
             'simulate' => $this->isSessionBool(self::KEY_SIMULATE, true),
         ];
     }

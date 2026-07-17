@@ -124,9 +124,6 @@ enum EntityName: string implements ConstantsInterface, EnumSortableInterface, Tr
         return $this->index() * self::ENTITY_OFFSET;
     }
 
-    /**
-     * @return EntityName[]
-     */
     #[\Override]
     public static function sorted(): array
     {

@@ -78,9 +78,6 @@ enum OpenWeatherUnits: string implements DefaultEnumInterface, EnumSortableInter
         return $this->getExtraString('speed');
     }
 
-    /**
-     * @return OpenWeatherUnits[]
-     */
     #[\Override]
     public static function sorted(): array
     {

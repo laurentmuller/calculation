@@ -1,5 +1,5 @@
 {% extends 'cards/card_show.html.twig' %}
-{% from 'macros/_properties.html.twig' import property %}
+{% from 'macros/_properties.html.twig' import property, link %}
 {% from 'macros/_timestampable.html.twig' import timestampable_properties %}
 {# parameters #}
 {%- set title = 'calculationstate.show.title' -%}
@@ -10,15 +10,23 @@
 {%- set cancel_path = cancel_url(app.request, item, 'calculationstate_index') -%}
 {# properties #}
 {% block property_body %}
-{{ property('calculationstate.fields.code', item.code) }}
-{{ property('calculationstate.fields.description', item.description) }}
-{{ property('calculationstate.fields.editable', item.editable|boolean) }}
-{{ property('calculationstate.fields.calculations', 'counters.calculations'|trans({count: item.countCalculations})) }}
-<tr>
-    <td class="w-25">{{ 'calculationstate.fields.color'|trans }}</td>
-    <td class="w-75"><span class="state-color state-background-{{ item.id }}"></span></td>
-</tr>
-{{ timestampable_properties(item) }}
+    {{ property('calculationstate.fields.code', item.code) }}
+    {{ property('calculationstate.fields.description', item.description) }}
+    {{ property('calculationstate.fields.editable', item.editable|boolean) }}
+    {% if item.countCalculations and is_granted(PERMISSION_LIST, ENTITY_CALCULATION) %}
+        {{ link(
+            href: path('calculation_index', {stateId: item.id}),
+            text: 'counters.calculations'|trans({count: item.countCalculations}),
+            name: 'calculationstate.fields.calculations',
+            title: 'calculationstate.list.calculation_title') }}
+    {% else %}
+        {{ property('calculationstate.fields.calculations', 'counters.calculations'|trans({count: item.countCalculations})) }}
+    {% endif %}
+    <tr>
+        <td class="w-25">{{ 'calculationstate.fields.color'|trans }}</td>
+        <td class="w-75"><span class="state-color state-background-{{ item.id }}"></span></td>
+    </tr>
+    {{ timestampable_properties(item) }}
 {% endblock property_body %}
 {# stylesheets #}
 {% block stylesheets -%}

@@ -1,5 +1,5 @@
 {% extends 'cards/card_show.html.twig' %}
-{% from 'macros/_properties.html.twig' import property %}
+{% from 'macros/_properties.html.twig' import property, link %}
 {% from 'macros/_timestampable.html.twig' import timestampable_properties %}
 {# parameters #}
 {%- set title = 'group.show.title' -%}
@@ -11,40 +11,64 @@
 {%- set cancel_path = cancel_url(app.request, item, 'group_index') -%}
 {# properties #}
 {% block property_body %}
-{{ property('group.fields.code', item.code) }}
-{{ property('group.fields.description', item.description) }}
-{{- property('group.fields.margins', 'counters.margins'|trans({count: item.countMargins})) }}
-{{- property('group.fields.categories', 'counters.categories'|trans({count: item.countCategories})) }}
-{{ property('category.fields.products', 'counters.products'|trans({count: item.countProducts})) }}
-{{ property('category.fields.tasks', 'counters.tasks'|trans({count: item.countTasks})) }}
-{{ timestampable_properties(item) }}
+    {{ property('group.fields.code', item.code) }}
+    {{ property('group.fields.description', item.description) }}
+    {{- property('group.fields.margins', 'counters.margins'|trans({count: item.countMargins})) }}
+    {% if item.countCategories and is_granted(PERMISSION_LIST, ENTITY_CATEGORY) %}
+        {{ link(
+            href: path('category_index', {groupId: item.id}),
+            text: 'counters.categories'|trans({count: item.countCategories}),
+            name: 'group.fields.categories',
+            title: 'group.list.category_title') }}
+    {% else %}
+        {{ property('group.fields.categories', 'counters.categories'|trans({count: item.countCategories})) }}
+    {% endif %}
+    {% if item.countProducts and is_granted(PERMISSION_LIST, ENTITY_PRODUCT) %}
+        {{ link(
+            href: path('product_index', {groupId: item.id}),
+            text: 'counters.products'|trans({count: item.countProducts}),
+            name: 'category.fields.products',
+            title: 'group.list.product_title') }}
+    {% else %}
+        {{ property('category.fields.products', 'counters.products'|trans({count: item.countProducts})) }}
+    {% endif %}
+    {% if item.countTasks and is_granted(PERMISSION_LIST, ENTITY_TASK) %}
+        {{ link(
+            href: path('task_index', {groupId: item.id}),
+            text: 'counters.tasks'|trans({count: item.countTasks}),
+            name: 'category.fields.tasks',
+            title: 'group.list.task_title') }}
+    {% else %}
+        {{ property('category.fields.tasks', 'counters.tasks'|trans({count: item.countTasks})) }}
+    {% endif %}
+    {{ timestampable_properties(item) }}
 {% endblock property_body %}
 {# body #}
 {% block card_body %}
-{{ parent() }}
-{%- if has_margins -%}
-    <div class="ms-1 my-1">{{ 'group.fields.margins'|trans }}</div>
-    <div class="{{ block('table_responsive_class') }}">
-        <table class="table table-sm table-hover table-list">
-            <thead>
-            <tr>
-                <th class="fw-normal text-end w-25">{{ 'globalmargin.fields.minimum'|trans }}</th>
-                <th class="fw-normal text-end w-25">{{ 'globalmargin.fields.maximum'|trans }}</th>
-                <th class="fw-normal text-end w-25">{{ 'globalmargin.fields.delta'|trans }}</th>
-                <th class="fw-normal text-end w-25">{{ 'globalmargin.fields.margin'|trans }}</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for margin in item.margins -%}
+    {{ parent() }}
+    {%- if has_margins -%}
+        <div class="ms-1 my-1">{{ 'group.fields.margins'|trans }}</div>
+        <div class="{{ block('table_responsive_class') }}">
+            <table class="table table-sm table-hover table-list">
+                <thead>
                 <tr>
-                    <td class="text-end w-25">{{ margin.minimum|amount }}</td>
-                    <td class="text-end w-25">{{ margin.maximum|amount }}</td>
-                    <td class="text-end w-25">{{ margin.delta|amount }}</td>
-                    <td class="text-end w-25">{{ margin.margin|percent }}</td>
+                    <th class="fw-normal text-end w-25">{{ 'globalmargin.fields.minimum'|trans }}</th>
+                    <th class="fw-normal text-end w-25">{{ 'globalmargin.fields.maximum'|trans }}</th>
+                    <th class="fw-normal text-end w-25">{{ 'globalmargin.fields.delta'|trans }}</th>
+                    <th class="fw-normal text-end w-25">{{ 'globalmargin.fields.margin'|trans }}</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-{%- endif -%}
+                </thead>
+                <tbody>
+                {% for margin in item.margins -%}
+                    <tr>
+                        <td class="text-end w-25">{{ margin.minimum|amount }}</td>
+                        <td class="text-end w-25">{{ margin.maximum|amount }}</td>
+                        <td class="text-end w-25">{{ margin.delta|amount }}</td>
+                        <td class="text-end w-25">{{ margin.margin|percent }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {%- endif -%}
 {% endblock card_body %}

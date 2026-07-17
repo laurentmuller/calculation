@@ -558,7 +558,7 @@ group:
         pdf_title: Télécharger la liste des groupes
         category_title: Afficher les catégories pour ce groupe
         product_title: Afficher les articles pour ce groupe
-        task_title: Afficher les tâches de pour groupe
+        task_title: Afficher les tâches pour ce groupe
     name: Groupe
     show:
         title: Propriétés du groupe

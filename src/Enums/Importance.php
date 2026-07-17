@@ -46,9 +46,6 @@ enum Importance: string implements DefaultEnumInterface, EnumSortableInterface, 
     /** The default enumeration. */
     public const self DEFAULT = self::LOW;
 
-    /**
-     * @return Importance[]
-     */
     #[\Override]
     public static function sorted(): array
     {

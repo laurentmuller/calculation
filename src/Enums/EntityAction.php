@@ -42,9 +42,6 @@ enum EntityAction: string implements DefaultEnumInterface, EnumSortableInterface
     /** The default enumeration. */
     public const self DEFAULT = self::EDIT;
 
-    /**
-     * @return EntityAction[]
-     */
     #[\Override]
     public static function sorted(): array
     {

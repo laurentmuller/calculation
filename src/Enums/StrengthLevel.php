@@ -80,9 +80,6 @@ enum StrengthLevel: int implements DefaultEnumInterface, EnumSortableInterface, 
         return \max(0, ($this->value + 1) * 20);
     }
 
-    /**
-     * @return StrengthLevel[]
-     */
     #[\Override]
     public static function sorted(): array
     {

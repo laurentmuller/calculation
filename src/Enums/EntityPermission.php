@@ -105,9 +105,6 @@ enum EntityPermission: int implements ConstantsInterface, EnumSortableInterface,
         return new FlagBag(EntityPermission::class);
     }
 
-    /**
-     * @return EntityPermission[]
-     */
     #[\Override]
     public static function sorted(): array
     {

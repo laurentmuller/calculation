@@ -95,9 +95,6 @@ enum Theme: string implements DefaultEnumInterface, EnumSortableInterface, Trans
         return $this->sprintf('images/themes/theme_%s.png');
     }
 
-    /**
-     * @return Theme[]
-     */
     #[\Override]
     public static function sorted(): array
     {

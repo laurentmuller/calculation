@@ -52,9 +52,6 @@ enum TableView: string implements DefaultEnumInterface, EnumSortableInterface, T
         return $this->getExtraInt('page-size');
     }
 
-    /**
-     * @return TableView[]
-     */
     #[\Override]
     public static function sorted(): array
     {

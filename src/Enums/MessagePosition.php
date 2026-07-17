@@ -91,9 +91,6 @@ enum MessagePosition: string implements DefaultEnumInterface, EnumSortableInterf
         };
     }
 
-    /**
-     * @return MessagePosition[]
-     */
     #[\Override]
     public static function sorted(): array
     {

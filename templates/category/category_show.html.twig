@@ -1,5 +1,5 @@
 {% extends 'cards/card_show.html.twig' %}
-{% from 'macros/_properties.html.twig' import property %}
+{% from 'macros/_properties.html.twig' import property, link %}
 {% from 'macros/_timestampable.html.twig' import timestampable_properties %}
 {# parameters #}
 {%- set title = 'category.show.title' -%}
@@ -10,9 +10,25 @@
 {%- set cancel_path = cancel_url(app.request, item, 'category_index') -%}
 {# properties #}
 {% block property_body %}
-{{ property('category.fields.code', item.code) }}
-{{ property('category.fields.description', item.description) }}
-{{ property('category.fields.products', 'counters.products'|trans({count: item.countProducts})) }}
-{{ property('category.fields.tasks', 'counters.tasks'|trans({count: item.countTasks})) }}
-{{ timestampable_properties(item) }}
+    {{ property('category.fields.code', item.code) }}
+    {{ property('category.fields.description', item.description) }}
+    {% if item.countProducts and is_granted(PERMISSION_LIST, ENTITY_PRODUCT) %}
+        {{ link(
+            href: path('product_index', {categoryId: item.id}),
+            text: 'counters.products'|trans({count: item.countProducts}),
+            name: 'category.fields.products',
+            title: 'category.list.product_title') }}
+    {% else %}
+        {{ property('category.fields.products', 'counters.products'|trans({count: item.countProducts})) }}
+    {% endif %}
+    {% if item.countTasks and is_granted(PERMISSION_LIST, ENTITY_TASK) %}
+        {{ link(
+            href: path('task_index', {categoryId: item.id}),
+            text: 'counters.tasks'|trans({count: item.countTasks}),
+            name: 'category.fields.tasks',
+            title: 'category.list.task_title') }}
+    {% else %}
+        {{ property('category.fields.tasks', 'counters.tasks'|trans({count: item.countTasks})) }}
+    {% endif %}
+    {{ timestampable_properties(item) }}
 {% endblock property_body %}

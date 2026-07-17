@@ -27,10 +27,10 @@
 {%- endif -%}
 {% endmacro email %}
 {# create a property row with a link value #}
-{% macro link(href, text, class, name = false, colspan = 2) %}
+{% macro link(href, text, class, name = false, colspan = 2, title = null) %}
 {%- set text = text|default(href) -%}
 {%- if href -%}
-    {%- set href = '<a href="{0}">{1}</a>'|replace({'{0}': href, '{1}': text}) -%}
+    {% set href %}<a {{ html_attr({href: href, title: title ? title|trans}) }}>{{ text }}</a>{% endset %}
 {%- endif -%}
 {%- if name -%}
     {{- _self.property(name, href, class) -}}
@@ -42,7 +42,12 @@
 {% macro externalLink(href, text, class, name = false, colspan = 2) %}
 {%- set text = text|default(href) -%}
 {%- if href -%}
-    {%- set href = '<a href="{0}" target="_blank" rel="noopener noreferrer">{1}</a>'|replace({'{0}': href, '{1}': text}) -%}
+    {% set attrs = {
+        href: href,
+        target: '_blank',
+        rel: 'noopener noreferrer',
+    } %}
+    {% set href %}<a {{ html_attr(attrs) }}>{{ text }}</a>{% endset %}
 {%- endif -%}
 {%- if name -%}
     {{- _self.property(name, href, class) -}}

@@ -25,9 +25,11 @@ class EnumExtension
     /**
      * Gets sorted enumerations.
      *
-     * @param class-string $enum the enumeration class name
+     * @template T of \UnitEnum&EnumSortableInterface
      *
-     * @return EnumSortableInterface[]
+     * @param class-string<T> $enum the enumeration class name
+     *
+     * @return EnumSortableInterface<T>[]
      *
      * @throws RuntimeError if the given class name is not an enum or is not a sortable enum
      */
@@ -37,6 +39,7 @@ class EnumExtension
         if (!\enum_exists($enum)) {
             throw new RuntimeError(\sprintf('"%s" is not an enum.', $enum));
         }
+        // @phpstan-ignore function.alreadyNarrowedType
         if (!\is_subclass_of($enum, EnumSortableInterface::class)) {
             throw new RuntimeError(\sprintf('"%s" is not a sortable enum.', $enum));
         }

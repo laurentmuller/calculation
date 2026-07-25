@@ -33,15 +33,15 @@ class ProductTable extends AbstractCategoryItemTable
         ProductRepository $repository,
         CategoryRepository $categoryRepository,
         GroupRepository $groupRepository,
-        private readonly IndexService $indexService
+        IndexService $indexService
     ) {
-        parent::__construct($repository, $categoryRepository, $groupRepository);
+        parent::__construct($repository, $categoryRepository, $groupRepository, $indexService);
     }
 
     #[\Override]
     protected function count(): int
     {
-        return $this->indexService->getCatalog()['product'];
+        return $this->indexService->getEntitiesCount('product');
     }
 
     #[\Override]

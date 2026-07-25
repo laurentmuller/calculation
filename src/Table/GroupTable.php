@@ -110,7 +110,7 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
     #[\Override]
     protected function count(): int
     {
-        return $this->indexService->getCatalog()['group'];
+        return $this->indexService->getEntitiesCount('group');
     }
 
     #[\Override]

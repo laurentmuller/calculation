@@ -116,6 +116,7 @@ final class CalculationBelowTableTest extends EntityTableTestCase
             $repository,
             self::createStub(CalculationStateRepository::class),
             self::createStub(Environment::class),
+            $this->createMockIndexService(),
             $parameters
         );
     }

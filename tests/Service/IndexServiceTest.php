@@ -63,6 +63,7 @@ final class IndexServiceTest extends TestCase
         $actual = $service->getCatalog();
         self::assertCount(\count($keys), $actual);
         foreach ($keys as $key) {
+            self::assertSame(0, $service->getEntitiesCount($key));
             self::assertArrayHasKey($key, $actual);
             self::assertSame(0, $actual[$key]);
         }

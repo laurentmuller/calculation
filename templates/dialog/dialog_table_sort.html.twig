@@ -3,7 +3,11 @@
     <div class="modal-dialog">
         {% set column = columns|filter(c => c.default)|first %}
         <div class="modal-content">
-            {{- modal_title(id: 'modal-sort-title', title_icon: 'fa-solid fa-sort-amount-down-alt', title_text: 'list.sort_title', data_target: 'modal-sort') -}}
+            {{- modal_title(
+                id: 'modal-sort-title',
+                title_icon: 'fa-solid fa-sort-amount-down-alt',
+                title_text: 'list.sort_title',
+                data_target: 'modal-sort') -}}
             <div class="modal-body px-4">
                 <div class="mb-3">
                     <label class="form-label required" for="sort-name">{{ 'list.sort_column'|trans }}</label>

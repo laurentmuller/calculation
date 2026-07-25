@@ -112,7 +112,7 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
     #[\Override]
     protected function count(): int
     {
-        return $this->indexService->getCatalog()['category'];
+        return $this->indexService->getEntitiesCount('category');
     }
 
     #[\Override]

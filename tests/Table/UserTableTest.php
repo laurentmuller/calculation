@@ -162,7 +162,8 @@ final class UserTableTest extends EntityTableTestCase
             self::createStub(RoleService::class),
             $this->createMockTranslator(),
             self::createStub(Environment::class),
-            $this->createMockSecurity()
+            $this->createMockSecurity(),
+            $this->createMockIndexService()
         );
     }
 
@@ -201,7 +202,8 @@ final class UserTableTest extends EntityTableTestCase
             $roleService ?? self::createStub(RoleService::class),
             $this->createMockTranslator(),
             $twig ?? self::createStub(Environment::class),
-            self::createStub(Security::class)
+            self::createStub(Security::class),
+            $this->createMockIndexService(),
         );
     }
 }

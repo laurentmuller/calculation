@@ -17,6 +17,7 @@ use App\Entity\User;
 use App\Interfaces\RoleInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\UserRepository;
+use App\Service\IndexService;
 use App\Service\RoleService;
 use App\Utils\FormatUtils;
 use Doctrine\ORM\QueryBuilder;
@@ -39,7 +40,8 @@ class UserTable extends AbstractEntityTable
         private readonly RoleService $roleService,
         private readonly TranslatorInterface $translator,
         private readonly Environment $twig,
-        private readonly Security $security
+        private readonly Security $security,
+        private readonly IndexService $indexService
     ) {
         parent::__construct($repository);
     }
@@ -82,6 +84,12 @@ class UserTable extends AbstractEntityTable
     public function formatRole(?string $role): string
     {
         return $this->roleService->getRoleIconAndName($role ?? RoleInterface::ROLE_USER);
+    }
+
+    #[\Override]
+    protected function count(): int
+    {
+        return $this->indexService->getEntitiesCount('user');
     }
 
     #[\Override]

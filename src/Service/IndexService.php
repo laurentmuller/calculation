@@ -22,6 +22,7 @@ use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\Task;
 use App\Entity\User;
+use App\Interfaces\EntityInterface;
 use App\Model\MonthChartData;
 use App\Model\StateChartData;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
@@ -40,7 +41,8 @@ use Symfony\Contracts\Cache\TagAwareCacheInterface;
 #[AsDoctrineListener(Events::onFlush)]
 class IndexService
 {
-    private const array CATALOG = [
+    /** @var array<string, class-string<EntityInterface>> */
+    public const array CATALOG = [
         'user' => User::class,
         'task' => Task::class,
         'group' => Group::class,
@@ -71,14 +73,25 @@ class IndexService
     /**
      * Gets the number of entities.
      *
-     * @return array<string, int>
+     * @return array<key-of<self::CATALOG>, int>
      */
     public function getCatalog(): array
     {
+        /** @phpstan-var array<key-of<self::CATALOG>, int> */
         return $this->cache->get(
             'index.catalog',
             fn (ItemInterface $item): array => $this->loadCatalog($item)
         );
+    }
+
+    /**
+     * Gets the number of entities for the given key.
+     *
+     * @phpstan-param key-of<self::CATALOG> $key the entity key
+     */
+    public function getEntitiesCount(string $key): int
+    {
+        return $this->getCatalog()[$key];
     }
 
     /**
@@ -127,7 +140,7 @@ class IndexService
     }
 
     /**
-     * @param class-string $className
+     * @param class-string<EntityInterface> $className
      */
     private function countEntities(string $className): int
     {
@@ -144,7 +157,7 @@ class IndexService
     }
 
     /**
-     * @return array<string, int>
+     * @return array<key-of<self::CATALOG>, int>
      *
      * @throws CacheException
      */

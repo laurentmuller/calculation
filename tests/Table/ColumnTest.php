@@ -178,11 +178,13 @@ final class ColumnTest extends TestCase
 
     private function createTable(): GlobalMarginTable
     {
+        $catalog = \array_combine(
+            \array_keys(IndexService::CATALOG),
+            \array_fill(0, \count(IndexService::CATALOG), 1)
+        );
         $service = $this->createMock(IndexService::class);
         $service->method('getCatalog')
-            ->willReturn([
-                'globalMargin' => 1,
-            ]);
+            ->willReturn($catalog);
 
         return new GlobalMarginTable(
             self::createStub(GlobalMarginRepository::class),

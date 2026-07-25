@@ -19,6 +19,7 @@ use App\Entity\Group;
 use App\Repository\AbstractCategoryItemRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
+use App\Service\IndexService;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 
@@ -43,7 +44,8 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
     public function __construct(
         AbstractCategoryItemRepository $repository,
         protected readonly CategoryRepository $categoryRepository,
-        protected readonly GroupRepository $groupRepository
+        protected readonly GroupRepository $groupRepository,
+        protected readonly IndexService $indexService
     ) {
         parent::__construct($repository);
     }

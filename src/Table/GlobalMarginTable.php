@@ -35,7 +35,7 @@ class GlobalMarginTable extends AbstractEntityTable
     #[\Override]
     protected function count(): int
     {
-        return $this->indexService->getCatalog()['globalMargin'];
+        return $this->indexService->getEntitiesCount('globalMargin');
     }
 
     #[\Override]

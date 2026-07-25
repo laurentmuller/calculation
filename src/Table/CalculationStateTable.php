@@ -78,7 +78,7 @@ class CalculationStateTable extends AbstractEntityTable implements ServiceSubscr
     #[\Override]
     protected function count(): int
     {
-        return $this->indexService->getCatalog()['calculationState'];
+        return $this->indexService->getEntitiesCount('calculationState');
     }
 
     #[\Override]

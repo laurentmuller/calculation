@@ -55,16 +55,13 @@ abstract class EntityTableTestCase extends TestCase
 
     protected function createMockIndexService(int $count = 1): MockObject&IndexService
     {
+        $catalog = \array_combine(
+            \array_keys(IndexService::CATALOG),
+            \array_fill(0, \count(IndexService::CATALOG), $count)
+        );
         $service = $this->createMock(IndexService::class);
         $service->method('getCatalog')
-            ->willReturn([
-                'task' => $count,
-                'group' => $count,
-                'product' => $count,
-                'category' => $count,
-                'globalMargin' => $count,
-                'calculationState' => $count,
-            ]);
+            ->willReturn($catalog);
 
         return $service;
     }

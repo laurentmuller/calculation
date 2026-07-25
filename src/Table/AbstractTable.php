@@ -85,6 +85,8 @@ abstract class AbstractTable implements SortModeInterface
 
     /**
      * Gets the entity class name or null if not applicable.
+     *
+     * @return class-string|null
      */
     public function getEntityClassName(): ?string
     {

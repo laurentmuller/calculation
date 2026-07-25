@@ -54,6 +54,7 @@ final class CalculationTableTest extends EntityTableTestCase
             self::createStub(CalculationRepository::class),
             self::createStub(CalculationStateRepository::class),
             $twig,
+            $this->createMockIndexService()
         );
 
         $expected = 'macros/_cell_calculation_margin.html.twig';
@@ -169,12 +170,11 @@ final class CalculationTableTest extends EntityTableTestCase
     #[\Override]
     protected function createTable(AbstractRepository $repository): CalculationTable
     {
-        $stateRepository = $this->createMockCalculationStateRepository();
-
         return new CalculationTable(
             $repository,
-            $stateRepository,
-            self::createStub(Environment::class)
+            $this->createMockCalculationStateRepository(),
+            self::createStub(Environment::class),
+            $this->createMockIndexService()
         );
     }
 

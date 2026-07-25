@@ -18,6 +18,7 @@ use App\Entity\CalculationState;
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
+use App\Service\IndexService;
 use App\Traits\MathTrait;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
@@ -42,7 +43,8 @@ class CalculationTable extends AbstractEntityTable
     public function __construct(
         CalculationRepository $repository,
         protected readonly CalculationStateRepository $stateRepository,
-        protected readonly Environment $twig
+        protected readonly Environment $twig,
+        private readonly IndexService $indexService
     ) {
         parent::__construct($repository);
     }
@@ -88,6 +90,12 @@ class CalculationTable extends AbstractEntityTable
         }
 
         return $result;
+    }
+
+    #[\Override]
+    protected function count(): int
+    {
+        return $this->indexService->getEntitiesCount('calculation');
     }
 
     #[\Override]

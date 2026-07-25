@@ -17,6 +17,7 @@ use App\Parameter\ApplicationParameters;
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
+use App\Service\IndexService;
 use Doctrine\ORM\QueryBuilder;
 use Twig\Environment;
 
@@ -29,9 +30,10 @@ class CalculationBelowTable extends CalculationTable implements \Countable
         CalculationRepository $repository,
         CalculationStateRepository $stateRepository,
         Environment $twig,
+        IndexService $indexService,
         private readonly ApplicationParameters $parameters
     ) {
-        parent::__construct($repository, $stateRepository, $twig);
+        parent::__construct($repository, $stateRepository, $twig, $indexService);
     }
 
     /**

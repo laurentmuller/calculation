@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Attribute;
 
-use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 
 /**

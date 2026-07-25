@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace App\Attribute;
 
-use Symfony\Component\Routing\Attribute\Route;
-
 /**
  * Shortcut route attribute to add an entity.
  */

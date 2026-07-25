@@ -195,5 +195,5 @@
             "@app-twig-space",
             "@app-test"
         ]
-        }
+    }
 }

@@ -16,7 +16,7 @@ namespace App\Pdf\Html;
 use App\Utils\StringUtils;
 
 /**
- * Html attribute enumeration.
+ * HTML attribute enumeration.
  */
 enum HtmlAttribute: string
 {

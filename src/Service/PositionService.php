@@ -122,7 +122,7 @@ class PositionService
     }
 
     /**
-     * Gets the Google Map URL for the given latitude and longitude.
+     * Gets the Google Maps URL for the given latitude and longitude.
      *
      * @throws \InvalidArgumentException if the latitude is not between -90 to +90 (inclusive) or
      *                                   if the longitude is not between -180 to +180 (inclusive)

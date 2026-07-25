@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Enums\ImageExtension;
-use Symfony\Component\Filesystem\Path;
 
 /**
  * Service to manipulate an image.

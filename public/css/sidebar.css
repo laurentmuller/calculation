@@ -32,7 +32,6 @@ body:not(.sidebar-show) .navbar-vertical {
     transition: margin-top var(--sidebar-delay) ease-in-out;
 }
 
-
 body.sidebar-show .navbar-horizontal {
     margin-top: calc(var(--horizontal-navigation-height) * -1);
 }
@@ -67,7 +66,11 @@ body.sidebar-show .navbar-horizontal {
 
 /* toggle menu with drop-down arrow on the right */
 .navbar-vertical .nav-link-toggle {
-    text-align: left;
+    display: flex;
+    align-items: first baseline;
+    inline-size: 100%;
+    white-space: normal;
+    text-align: start;
     width: 100%;
 }
 
@@ -121,9 +124,13 @@ html[data-bs-theme=dark] .navbar-vertical::-webkit-scrollbar-thumb {
 }
 
 .navbar-vertical ul:not(.dropdown-menu-default) .dropdown-item {
+    display: flex;
+    align-items: first baseline;
+    inline-size: 100%;
     color: var(--bs-navbar-color);
     white-space: normal;
-    padding: var(--bs-nav-link-padding-y);
+    padding: var(--bs-navbar-toggler-padding-y) 0;
+    text-align: start;
     width: 100%;
 }
 

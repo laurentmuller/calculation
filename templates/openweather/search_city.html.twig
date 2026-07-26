@@ -32,7 +32,13 @@
             {%- set current = city.current -%}
             <tr>
                 <td class="text-unit">
-                    <img src="{{ current.weather.icon_small }}" class="ow-image ow-image-search" alt="{{ 'openweather.fields.current'|trans }}" title="{{ current.weather.description }}">
+                    <img {{ html_attr({
+                        src: current.weather.icon_small,
+                        class: 'ow-image ow-image-search',
+                        alt: 'openweather.fields.current'|trans,
+                        title: current.weather.description,
+                        loading: 'lazy',
+                        decoding: 'async'}) }}>
                 </td>
                 <td class="w-75">
                     <a href="{{ path('openweather_current', {id: city.id, units: units, count: count}) }}"><b>{{ city.name }}</b></a><br>

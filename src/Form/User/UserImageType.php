@@ -32,9 +32,6 @@ class UserImageType extends AbstractType
             'download_uri' => false,
             'translation_domain' => 'messages',
             'delete_label' => 'user.edit.delete_image',
-            'attr' => [
-                'accept' => 'image/gif,image/jpeg,image/png,image/bmp',
-            ],
         ]);
     }
 

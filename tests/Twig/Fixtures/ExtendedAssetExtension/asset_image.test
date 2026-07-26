@@ -5,4 +5,4 @@
 --DATA--
 return []
 --EXPECT--
-<image src="url" height="170" width="192">
+<image src="url" height="170" width="192" loading="lazy" decoding="async">

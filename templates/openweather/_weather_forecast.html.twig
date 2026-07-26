@@ -12,7 +12,13 @@
                     {{- data.dt_time_locale -}}
                 </td>
                 <td class="ow-icon">
-                    <img src="{{ data.weather.icon_small }}" class="ow-image" alt="{{ 'openweather.fields.forecast_weather'|trans }}" title="{{ data.weather.description }}">
+                    <img {{ html_attr({
+                        src: data.weather.icon_small,
+                        class: 'ow-image',
+                        alt: 'openweather.fields.forecast_weather'|trans,
+                        title: data.weather.description,
+                        loading: 'lazy',
+                        decoding: 'async'}) }}>
                 </td>
                 <td class="ow-temperature">
                     <p class="ow-temperature-pills ow-temperature-forecast mt-1 mb-0" title="{{ 'openweather.fields.temp'|trans }}">{{ tools.value_temp(data.main.temp, units_temp) }}</p>

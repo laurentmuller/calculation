@@ -116,19 +116,22 @@
         {%- set thumbnail_src = thumbnail_src|default(false) -%}
         {%- set thumbnail_alt = (thumbnail_alt|default('filetype.image'))|trans -%}
         {%- if thumbnail_src -%}{%- set attr = attr|default({})|merge({'data-src': thumbnail_src}) -%}{%- endif -%}
-        <div class="image-input {{ thumbnail_src ? 'image-input-exist' : 'image-input-new' }}">
+        <div class="image-input {{ thumbnail_src ? 'image-input-exist' : 'image-input-new' }}" data-error="{{ 'filetype.invalid'|trans }}">
             <div class="image-input-preview img-thumbnail" data-default="{{ empty_image }}" title="{{ thumbnail_alt }}">
                 {% if thumbnail_src or empty_image -%}
-                    <img src="{{ thumbnail_src|default(empty_image) }}" alt="{{ thumbnail_alt }}">
+                    <img src="{{ thumbnail_src|default(empty_image) }}" alt="{{ thumbnail_alt }}" loading="lazy" decoding="async">
                 {% endif %}
             </div>
             <div class="d-flex-wrap">
-                <button type="button"
-                        class="btn image-input-browse btn-sm btn-outline-secondary flex-fill">{{ 'common.button_browse'|trans }}</button>
-                <button type="button"
-                        class="btn image-input-edit btn-sm btn-outline-secondary flex-fill">{{ 'common.button_edit'|trans }}</button>
-                <button type="button"
-                        class="btn image-input-delete btn-sm btn-outline-danger flex-fill">{{ 'common.button_delete'|trans }}</button>
+                <button type="button" class="btn image-input-browse btn-sm btn-outline-secondary flex-fill">
+                    {{- 'common.button_browse'|trans -}}
+                </button>
+                <button type="button" class="btn image-input-edit btn-sm btn-outline-secondary flex-fill">
+                    {{- 'common.button_edit'|trans -}}
+                </button>
+                <button type="button" class="btn image-input-delete btn-sm btn-outline-danger flex-fill">
+                    {{- 'common.button_delete'|trans -}}
+                </button>
             </div>
             {{- block('form_widget_simple') -}}
         </div>
@@ -166,8 +169,16 @@
     {%- set attr = attr|merge({class: (attr.class|default ~ ' text-lowercase')|trim}) -%}
     <div class="input-group">
         <span class="input-group-text py-0 px-1 bg-white">
-            <img id="{{ id }}_image" class="captcha-image" alt="{{ image_title }}" title="{{ image_title }}"
-                 src="{{ image }}" width="150" height="30">
+            <img {{ html_attr({
+                id: id ~ '_image',
+                class: 'captcha-image',
+                alt: image_title,
+                title: image_title,
+                src: image,
+                width: 150,
+                height: 30,
+                loading: 'lazy',
+                decoding: 'async'}) }}>
         </span>
         {{- block('form_widget_simple') -}}
         {% if refresh|default(false) %}

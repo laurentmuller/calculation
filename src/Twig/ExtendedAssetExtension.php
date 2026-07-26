@@ -103,6 +103,8 @@ final readonly class ExtendedAssetExtension
             'src' => $this->getAssetUrl($path),
             'height' => $size->height,
             'width' => $size->width,
+            'loading' => 'lazy',
+            'decoding' => 'async',
         ], $parameters);
 
         return $this->reduceParams($parameters, '<image ');

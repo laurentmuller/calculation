@@ -778,7 +778,6 @@ final class FormHelperTest extends TypeTestCase
                 'translation_domain' => 'messages',
                 'delete_label' => 'user.edit.delete_image',
             ],
-            attributes: ['accept' => 'image/gif,image/jpeg,image/png,image/bmp']
         );
     }
 

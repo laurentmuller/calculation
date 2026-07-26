@@ -482,6 +482,7 @@ filetype:
     multiple: '{0} fichiers'
     placeholder: Aucun fichier choisi
     sizes: Bytes,Kb,Mb,Gb,Tb
+    invalid: Le type du fichier "{0}" n'est pas une image.
 flash_bag:
     danger: Erreur
     info: Information

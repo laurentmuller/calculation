@@ -17,7 +17,13 @@
                     <br><span class="small text-body-secondary">{{ data.dt_date }}</span>
                 </td>
                 <td class="ow-icon">
-                    <img src="{{ data.weather.icon_small }}" class="ow-image" alt="{{ 'openweather.fields.daily_weather'|trans }}" title="{{ data.weather.description }}">
+                    <img {{ html_attr({
+                        src: data.weather.icon_small,
+                        class: 'ow-image',
+                        alt: 'openweather.fields.daily_weather'|trans,
+                        title: data.weather.description,
+                        loading: 'lazy',
+                        decoding: 'async'}) }}>
                 </td>
                 <td class="ow-temperature">
                     <p class="ow-temperature-pills ow-temperature-night my-1" title="{{ 'openweather.fields.temp_night'|trans }}">{{ tools.value_temp(data.temp.night, units_temp) }}</p>

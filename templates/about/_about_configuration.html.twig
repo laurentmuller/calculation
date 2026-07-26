@@ -12,7 +12,14 @@
         <tr class="h">
             <td colspan="2">
                 <div class="d-inline-flex align-items-end">
-                    <img alt="{{ 'application.name'|trans }}" width="64" height="64" class="rounded-1 me-2" src="{{ asset_icon(72) }}">
+                    <img {{ html_attr({
+                        alt: 'application.name'|trans,
+                        class: 'rounded-1 me-2',
+                        src: asset_icon(72),
+                        width: 64,
+                        height: 64,
+                        loading: 'lazy',
+                        decoding: 'async'}) }}>
                     <h1>{{ 'about.version'|trans({'%version%': app_version}) }}</h1>
                 </div>
             </td>

@@ -198,6 +198,8 @@ $(function () {
             if (createIfMissing) {
                 $image = $('<img />', {
                     alt: this.$preview.attr('title') || '',
+                    loading: 'lazy',
+                    decoding: 'async'
                 });
                 return $image.appendTo(this.$preview);
             }
@@ -214,6 +216,9 @@ $(function () {
             const accept = this.$element.attr('accept');
             if (!accept) {
                 return true;
+            }
+            if (accept === 'image/*') {
+                return file.type.match(/^image\//i) !== null;
             }
             const allowed = accept.split(',');
             return allowed.includes(file.type);
@@ -242,6 +247,25 @@ $(function () {
         }
 
         /**
+         * Show invalid file type message.
+         * @param {File} [file] the invalid file
+         * @private
+         */
+        _showInvalidFile(file) {
+            if (!file) {
+                return;
+            }
+            /** @type string */
+            let message = this.$parent.data('error');
+            if (!message) {
+                return;
+            }
+            message = message.replace('{0}', file.name);
+            const title = $('.card-title').text();
+            Toaster.warning(message, title);
+        }
+
+        /**
          * Sets the displayed image from the given list of files.
          * @param {DragEvent} e the source event.
          * @param {FileList} files the list of files.
@@ -267,6 +291,7 @@ $(function () {
                     return true;
                 }
             }
+            this._showInvalidFile(files.item(0))
             if (deleteOnError) {
                 this._delete(e);
             }

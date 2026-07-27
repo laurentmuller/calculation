@@ -64,10 +64,9 @@ class HtmlWordParser
 
         // replace classes by styles
         return (string) \preg_replace_callback(
-            self::CLASS_PATTERN,
-            fn (array $matches): string => \sprintf('style="%s"', $this->mapClassName($matches[2])),
-            $content,
-            \PREG_OFFSET_CAPTURE
+            pattern: self::CLASS_PATTERN,
+            callback: fn (array $matches): string => \sprintf('style="%s"', $this->mapClassName($matches[2])),
+            subject: $content
         );
     }
 

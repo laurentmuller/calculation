@@ -43,7 +43,7 @@ abstract class AbstractHtmlChunk
      *
      * @var string[]
      */
-    private array $classes = [];
+    private array $classes;
 
     /** The style. */
     private ?HtmlStyle $style = null;

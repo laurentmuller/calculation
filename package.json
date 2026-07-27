@@ -1,6 +1,6 @@
 {
     "name": "calculation",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "description": "Extends Bootstrap without rounded, themed popovers, tooltips and form-check.",
     "license": "MIT",
     "author": "bibi@bibi.nu",
@@ -25,7 +25,7 @@
     },
     "devDependencies": {
         "copy-files-from-to": "^4.0",
-        "npm-run-all": "^4.0",
+        "npm-run-all2": "^9.0",
         "stylelint": "^17.0",
         "stylelint-config-standard": "^40.0"
     },
@@ -37,7 +37,7 @@
         "clean": "del-cli public/build -f",
         "generate": "sass scss:public/build/bootstrap -q --no-source-map",
         "copy": "copy-files-from-to --config package-copy.json",
-        "build": "npm-run-all clean generate copy"
+        "build": "run-s clean generate copy"
     },
     "jshintConfig": {
         "esversion": 9,

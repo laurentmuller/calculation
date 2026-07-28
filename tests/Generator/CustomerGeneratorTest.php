@@ -44,8 +44,8 @@ final class CustomerGeneratorTest extends GeneratorTestCase
     public function testType(): void
     {
         $generator = $this->createGenerator();
-        $actual = $generator->generate(10, true);
-        self::assertValidateResponse($actual, true, 10);
+        $actual = $generator->generate(30, true);
+        self::assertValidateResponse($actual, true, 30);
     }
 
     #[\Override]

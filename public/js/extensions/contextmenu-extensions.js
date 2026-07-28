@@ -184,21 +184,6 @@ const MenuBuilder = class { /* exported MenuBuilder */
 (function ($) {
     'use strict';
 
-    // noinspection JSUnusedGlobalSymbols
-    $.extend({
-        /**
-         * Returns if the given data is a function.
-         *
-         * Note. Must be removed when the context-menu plugin is updated to jQuery v4.0.
-         *
-         * @param {any} data - The data to evaluate.
-         * @return {boolean} true if a function.
-         */
-        isFunction: function (data) {
-            return typeof data === 'function';
-        }
-    });
-
     $.fn.extend({
         /**
          * Returns if this element is selectable.

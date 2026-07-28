@@ -304,9 +304,18 @@ abstract class AbstractHtmlChunk
         if ($border instanceof PdfBorder && !$border->isNone()) {
             $required = $report->getStringWidth($text) + 2.0 * $report->getCellMargin();
             if ($required > $report->getRemainingWidth()) {
-                $report->multiCell(height: $height, text: $text, border: $border);
+                $report->multiCell(
+                    height: $height,
+                    text: $text,
+                    border: $border
+                );
             } else {
-                $report->cell($required, $height, $text, $border);
+                $report->cell(
+                    width: $required,
+                    height: $height,
+                    text: $text,
+                    border: $border
+                );
             }
         } else {
             $report->write($text, $height);

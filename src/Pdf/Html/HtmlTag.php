@@ -83,7 +83,7 @@ enum HtmlTag: string
     case ITALIC = 'i';
 
     /** The keyboard input element. */
-    #[EnumCase(extras: ['font-name' => PdfFontName::COURIER])]
+    #[EnumCase(extras: ['font-name' => PdfFontName::COURIER, 'font-bold' => true, 'font-size' => 1.1, 'text-color' => '#6C757D'])]
     case KEYBOARD = 'kbd';
 
     /** The line-break tag name. */
@@ -109,6 +109,7 @@ enum HtmlTag: string
     /** The paragraph tag name. */
     #[EnumCase(extras: ['bottom-margin' => 2.0])]
     case PARAGRAPH = 'p';
+
     /** The sample output element. */
     #[EnumCase(extras: ['font-name' => PdfFontName::COURIER])]
     case SAMPLE = 'samp';
@@ -125,9 +126,7 @@ enum HtmlTag: string
     #[EnumCase(extras: ['style' => false])]
     case TEXT = '#text';
 
-    /*
-     * The underline element.
-     */
+    /* The underline element. */
     #[EnumCase(extras: ['font-underline' => true])]
     case UNDERLINE = 'u';
 
@@ -194,9 +193,7 @@ enum HtmlTag: string
 
     public function getTextColor(): ?PdfTextColor
     {
-        $textColor = $this->getExtraString('text-color');
-
-        return '' !== $textColor ? PdfTextColor::create($textColor) : null;
+        return PdfTextColor::create($this->getExtraString('text-color'));
     }
 
     /**
@@ -221,9 +218,9 @@ enum HtmlTag: string
             ->setLeftMargin($this->getLeftMargin())
             ->setFont($this->getFont());
 
-        $color = $this->getTextColor();
-        if ($color instanceof PdfTextColor) {
-            $style->setTextColor($color);
+        $textColor = $this->getTextColor();
+        if ($textColor instanceof PdfTextColor) {
+            $style->setTextColor($textColor);
         }
 
         return $style;

@@ -107,16 +107,20 @@ readonly class HtmlParser
         $className = HtmlAttribute::CLASS_NAME->getValue($node);
         if ($node instanceof \DOMElement) {
             $name = \strtolower($node->nodeName);
-            $parent = $this->parseNodeElement($name, $parent, $className, $node);
+            $parent = $this->parseNodeElement($parent, $node, $name, $className);
         } elseif ($node instanceof \DOMText) {
-            $this->parseNodeText($parent, $className, $node);
+            $this->parseNodeText($parent, $node, $className);
         }
         $this->parseNodes($parent, $node);
     }
 
-    private function parseNodeElement(string $name, HtmlParentChunk $parent, ?string $className, \DOMElement $node): HtmlParentChunk
-    {
-        if (HtmlTag::PAGE_BREAK->match((string) $className)) {
+    private function parseNodeElement(
+        HtmlParentChunk $parent,
+        \DOMElement $node,
+        string $name,
+        ?string $className
+    ): HtmlParentChunk {
+        if (\is_string($className) && HtmlTag::PAGE_BREAK->match($className)) {
             return $this->createPageBreakChunk($parent);
         }
 
@@ -139,20 +143,20 @@ readonly class HtmlParser
         }
     }
 
-    private function parseNodeText(HtmlParentChunk $parent, ?string $className, \DOMText $node): void
+    private function parseNodeText(HtmlParentChunk $parent, \DOMText $node, ?string $className): void
     {
-        $text = $node->wholeText;
-        if ('' === \trim($text) && $parent->isEmpty()) {
-            return;
-        }
-        new HtmlTextChunk($parent, $className, $text);
+        new HtmlTextChunk($parent, $className, $node->wholeText);
     }
 
     private function trimHtml(): ?string
     {
         $content = StringUtils::pregReplaceAll([
-            '/\r\n|\n|\r/m' => '',
+            // remove new lines
+            '/\r|\n/m' => '',
+            // remove consecutive spaces
             '/\s{2,}/m' => ' ',
+            // remove spaces before paragraph
+            '/ (<p)/mi' => '$1',
         ], $this->html);
         $content = StringUtils::trim($content);
 

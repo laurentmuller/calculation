@@ -290,9 +290,7 @@ final class StringUtils
      * @param string|string[]       $subject the string or array being searched and replaced on
      *                                       Defaults to -1 (no limit)
      *
-     * @return string|string[] returns a string or an array with the replaced values
-     *
-     * @phpstan-return ($subject is string ? string : string[])
+     * @return ($subject is string ? string : string[]) returns a string or an array with the replaced values
      */
     public static function pregReplaceAll(array $values, string|array $subject, int $limit = -1): string|array
     {
@@ -306,9 +304,7 @@ final class StringUtils
      * @param array<string, string> $values  an array where key is the search term, and value is the replacement term
      * @param string|string[]       $subject the string or array being searched and replaced on
      *
-     * @return string|string[] returns a string or an array with the replaced values
-     *
-     * @phpstan-return ($subject is string ? string : string[])
+     * @return ($subject is string ? string : string[]) returns a string or an array with the replaced values
      */
     public static function replace(array $values, string|array $subject): string|array
     {

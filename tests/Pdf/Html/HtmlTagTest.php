@@ -46,11 +46,17 @@ final class HtmlTagTest extends TestCase
         yield [HtmlTag::EMPHASIS, $style];
 
         yield [HtmlTag::PARAGRAPH, HtmlStyle::default()->setBottomMargin(2.0)];
-        yield [HtmlTag::LIST_ORDERED, HtmlStyle::default()->setBottomMargin(1.0)->setLeftMargin(2.0)];
-        yield [HtmlTag::LIST_UNORDERED, HtmlStyle::default()->setBottomMargin(1.0)->setLeftMargin(2.0)];
+
+        $style = HtmlStyle::default()->setBottomMargin(1.0)->setLeftMargin(2.0);
+        yield [HtmlTag::LIST_ORDERED, $style];
+        yield [HtmlTag::LIST_UNORDERED, $style];
 
         $style = HtmlStyle::default()->setFontName(PdfFontName::COURIER);
         yield [HtmlTag::SAMPLE, $style];
+
+        $color = new PdfTextColor(108, 117, 125);
+        $style = HtmlStyle::default()->setFontName(PdfFontName::COURIER)->setFontBold()->setFontSize(1.1 * 9.0)
+            ->setTextColor($color);
         yield [HtmlTag::KEYBOARD, $style];
 
         yield [HtmlTag::UNDERLINE, HtmlStyle::default()->setFontUnderline()];

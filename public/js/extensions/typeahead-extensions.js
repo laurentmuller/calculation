@@ -7,6 +7,14 @@
      * -------------- Typeahead Extensions --------------
      */
     $(function () {
+
+        /**
+         * @typedef {Object} TypeaheadOptions
+         * @property {string} url - The search URL.
+         * @property {string} error - The error message.
+         * @property {Object.<string, any>} [extra] extras - Any options to override.
+         */
+
         /**
          * -------------- Functions extensions --------------
          */
@@ -14,7 +22,7 @@
             /**
              * Initialize a type ahead search.
              *
-             * @param {Object} [options] - the options to override.
+             * @param {TypeaheadOptions} options - the options to override.
              * @return {Typeahead} The type ahead instance.
              */
             initTypeahead: function (options) {
@@ -25,11 +33,11 @@
                         url: options.url
                     },
                     onSelect: function () {
-                        $element.select();
+                        $element.trigger('select');
                     },
                     onError: function () {
-                        const message = options.error;
-                        const title = $('#edit-form').data('title');
+                        const title = $('#edit-form').data('title') || $('.card-title').text();
+                        const message = options.error || 'Une erreur inconnue s\'est produite !';
                         Toaster.danger(message, title);
                     }
                 };

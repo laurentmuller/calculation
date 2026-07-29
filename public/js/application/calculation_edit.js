@@ -159,7 +159,7 @@
         },
 
         /**
-         * Update the positions, the buttons, the total and initialize the drag-drop.
+         * Update the positions, the buttons, the total and initialize the drag-and-drop.
          *
          * @return {Application} This instance for chaining.
          */

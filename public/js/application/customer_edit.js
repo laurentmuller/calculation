@@ -1,16 +1,23 @@
+
+/**
+ * @typedef {Object} ItemType
+ * @property {string} street
+ * @property {string} city
+ * @property {string} zip
+ */
+
 /**
  * ready function
  */
 $(function () {
     'use strict';
-
     // get controls
     const $form = $('#edit-form');
     const $title = $('#customer_title');
     const $address = $('#customer_address');
     const $zip = $('#customer_zipCode');
     const $city = $('#customer_city');
-    const addressUrl = $form.data('search-address');
+    const addressUrl = String($form.data('search-address'));
 
     // default typeahead options
     const defaultOptions = {
@@ -19,75 +26,89 @@ $(function () {
         ajax: {
             triggerLength: 2
         },
-        error: $form.data('error')
+        error: String($form.data('error'))
     };
 
     // title typeahead
-    $title.initTypeahead($.extend({}, defaultOptions, {
+    /** @type {Object} */
+    const titleOptions = $.extend({}, defaultOptions, {
+        url: String($form.data('search-title')),
         valueField: false,
         displayField: 'name',
         ajax: {
-            url: $form.data('search-title'),
             triggerLength: 1
         },
         onSelect: function () {
             $title.trigger('select');
         }
-    }));
+    });
+    $title.initTypeahead(titleOptions);
 
     // address typeahead
-    $address.initTypeahead($.extend({}, defaultOptions, {
+    /** @type {Object} */
+    const addressOptions = $.extend({}, defaultOptions, {
+        url: addressUrl,
         valueField: 'street',
         ajax: {
-            url: addressUrl,
+            /** @param {string} query */
             preDispatch: function (query) {
                 return {
                     street: query
                 };
             }
         },
+        /** @param {ItemType} item */
         onSelect: function (item) {
             $zip.val(item.zip);
             $city.val(item.city);
             $address.val($address.val() + ' ');
         },
-    }));
+    })
+    $address.initTypeahead(addressOptions);
 
     // zip typeahead
-    $zip.initTypeahead($.extend({}, defaultOptions, {
+    /** @type {Object} */
+    const zipOptions = $.extend({}, defaultOptions, {
+        url: addressUrl,
         valueField: 'zip',
         ajax: {
-            url: addressUrl,
+            /** @param {string} query */
             preDispatch: function (query) {
                 return {
                     zip: query
                 };
             }
         },
+        /** @param {ItemType} item */
         onSelect: function (item) {
             $city.val(item.city);
             $zip.trigger('select');
         },
-    }));
+    })
+    $zip.initTypeahead(zipOptions);
 
     // city typeahead
-    $city.initTypeahead($.extend({}, defaultOptions, {
+    /** @type {Object} */
+    const cityOptions = $.extend({}, defaultOptions, {
         valueField: 'city',
         ajax: {
             url: addressUrl,
+            /** @param {string} query */
             preDispatch: function (query) {
                 return {
                     city: query
                 };
             }
         },
+        /** @param {ItemType} item */
         onSelect: function (item) {
             $zip.val(item.zip);
             $city.trigger('select');
         },
-    }));
+    });
+    $city.initTypeahead(cityOptions);
 
-    // validator options
+    // initialize validator
     const options = {
         rules: {
             'customer[firstName]': {
@@ -110,7 +131,5 @@ $(function () {
             }
         }
     };
-
-    // initialize
     $form.initValidator(options);
 });

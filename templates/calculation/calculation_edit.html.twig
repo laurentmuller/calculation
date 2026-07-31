@@ -73,9 +73,12 @@
     </div>
     {{ form_end(form) }}
 {%- endblock body %}
+{# preload #}
+{% block preload %}
+    {{ preload_css('css/calculation.css') }}
+{% endblock preload %}
 {# stylesheets #}
 {% block stylesheets -%}
-    {{ preload_css('css/calculation.css') }}
     {{ asset_css('css/calculation.css') }}
 {% endblock stylesheets %}
 {# javascripts #}

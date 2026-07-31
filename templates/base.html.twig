@@ -13,9 +13,11 @@
     {{ include('meta_links.html.twig') }}
     {{ include('icon_links.html.twig') }}
     <title>{{ title_text }}</title>
-    {# stylesheets #}
+    {# preload stylesheets #}
     {{ preload_css('build/bootstrap/bootstrap.css') }}
     {{ preload_css('build/font-awesome/css/all.css') }}
+    {% block preload %}{% endblock preload %}
+    {# stylesheets #}
     {{ asset_css('build/bootstrap/bootstrap.css') }}
     {{ asset_css('build/font-awesome/css/all.css') }}
     {% block stylesheets %}

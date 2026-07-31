@@ -36,9 +36,12 @@
 {% block footer -%}
     {%- if navigation_show -%}{{- parent() -}}{%- endif -%}
 {%- endblock footer %}
+{# preload #}
+{% block preload %}
+    {{ preload_css(navigation_show ? 'css/calculation.css' : 'css/center.css') }}
+{% endblock preload %}
 {# stylesheets #}
 {% block stylesheets -%}
-    {{ preload_css(navigation_show ? 'css/calculation.css' : 'css/center.css') }}
     {{ asset_css(navigation_show ? 'css/calculation.css' : 'css/center.css') }}
     <style nonce="{{ csp_nonce() }}">
         {{- css_border() }}

@@ -52,7 +52,9 @@ class FontAwesomeCommand
         #[Argument('The absolute path to the target directory where to copy SVG files; null to use the default directory.', )]
         ?string $target = null,
         #[Option(description: 'Run the command without making changes (simulate copying SVG files).', name: 'dry-run', shortcut: 'd')]
-        bool $dryRun = false
+        bool $dryRun = false,
+        #[Option(description: 'Update the target image size.', name: 'resize', shortcut: 'r')]
+        bool $resize = false
     ): int {
         $source ??= Path::join($this->projectDir, self::DEFAULT_SOURCE);
         $relativeSource = \basename($source);
@@ -88,7 +90,9 @@ class FontAwesomeCommand
                     if ('' === $svgContent) {
                         continue;
                     }
-                    $svgContent = $this->replaceViewBox($svgContent);
+                    if ($resize) {
+                        $svgContent = $this->replaceViewBox($svgContent);
+                    }
                     $svgFileName = $this->getSvgFileName($style, $key);
                     $svgTargetFile = Path::join($tempDir, $svgFileName);
                     if (!FileUtils::dumpFile($svgTargetFile, $svgContent)) {

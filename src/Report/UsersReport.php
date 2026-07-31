@@ -15,8 +15,8 @@ namespace App\Report;
 
 use App\Entity\User;
 use App\Interfaces\DocumentHelperInterface;
-use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfTextColor;
+use App\Pdf\Html\HtmlColorName;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfImageCell;
 use App\Pdf\PdfStyle;
@@ -34,7 +34,7 @@ use Vich\UploaderBundle\Storage\StorageInterface;
  */
 class UsersReport extends AbstractArrayReport
 {
-    private const int IMAGE_SIZE = 48;
+    private const int IMAGE_SIZE = 24;
 
     private ?PdfCell $defaultCell = null;
     private ?PdfStyle $disabledStyle = null;
@@ -107,15 +107,12 @@ class UsersReport extends AbstractArrayReport
 
     private function getDefaultImageCell(): PdfCell
     {
-        if ($this->defaultCell instanceof PdfCell) {
-            return $this->defaultCell;
+        if (!$this->defaultCell instanceof PdfCell) {
+            $this->defaultCell = $this->fontService->getCell(
+                icon: 'fa-regular fa-circle-xmark',
+                color: HtmlColorName::LIGHT_GREY->value,
+            ) ?? PdfCell::instance();
         }
-        $color = PdfDrawColor::cellBorder()->asHex('#');
-        $this->defaultCell = $this->fontService->getCell(
-            icon: 'fa-solid fa-user-slash',
-            color: $color,
-            size: self::IMAGE_SIZE
-        ) ?? PdfCell::instance();
 
         return $this->defaultCell;
     }
@@ -129,9 +126,8 @@ class UsersReport extends AbstractArrayReport
         if (null === $path || !\file_exists($path)) {
             return $this->getDefaultImageCell();
         }
-        $cell = new PdfImageCell($path);
 
-        return $cell->resize(self::IMAGE_SIZE);
+        return (new PdfImageCell($path))->resize(self::IMAGE_SIZE);
     }
 
     private function getRoleCell(User $user): PdfCell

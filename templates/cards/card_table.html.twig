@@ -332,9 +332,12 @@
     </div>
 </template>
 {%- endblock card_body -%}
+{# preload #}
+{% block preload %}
+    {{ preload_css('css/table.css') }}
+{% endblock preload %}
 {# stylesheets #}
 {% block stylesheets -%}
-    {{ preload_css('css/table.css') }}
     {{ asset_css('css/table.css') }}
 {%- endblock stylesheets -%}
 {# javascripts #}

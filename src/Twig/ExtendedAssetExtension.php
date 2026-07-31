@@ -58,9 +58,9 @@ final readonly class ExtendedAssetExtension
     public function assetCss(string $path, array $parameters = []): string
     {
         $parameters = \array_merge([
+            'rel' => 'stylesheet',
             'href' => $this->getAssetUrl($path),
             'nonce' => $this->getNonce(),
-            'rel' => 'stylesheet',
         ], $parameters);
 
         return $this->reduceParams($parameters, '<link ');
@@ -169,10 +169,10 @@ final readonly class ExtendedAssetExtension
         $url = $this->getAssetUrl($path);
         $href = $this->webLinkExtension->preload($url, ['as' => 'style']);
         $parameters = \array_merge([
-            'nonce' => $this->getNonce(),
             'rel' => 'preload',
             'href' => $href,
             'as' => 'style',
+            'nonce' => $this->getNonce(),
         ], $parameters);
 
         return $this->reduceParams($parameters, '<link ');

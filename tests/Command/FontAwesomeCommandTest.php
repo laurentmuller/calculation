@@ -23,6 +23,7 @@ final class FontAwesomeCommandTest extends CommandTestCase
             'source' => $this->getSource('fontawesome_valid.json'),
             'target' => $this->createTempDirectory(),
             '--dry-run' => true,
+            '--resize' => true,
         ];
         $output = $this->execute($input);
         self::assertOutputContainsString(

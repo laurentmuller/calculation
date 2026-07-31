@@ -5,4 +5,4 @@
 --DATA--
 return []
 --EXPECT--
-<link href="url" nonce="nonce" rel="preload" as="style">
+<link nonce="nonce" rel="preload" href="url" as="style">

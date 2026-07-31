@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace App\Faker;
 
+use Faker\Provider\fr_CH\Person;
+
 /**
  * Faker provider to generate custom person.
  *
  * @property \Faker\UniqueGenerator $unique
  */
-class CustomPerson extends \Faker\Provider\fr_CH\Person
+class CustomPerson extends Person
 {
     /** @phpstan-var mixed */
     protected static $titleFemale = [

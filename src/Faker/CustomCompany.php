@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace App\Faker;
 
+use Faker\Provider\fr_CH\Company;
+
 /**
  * Faker provider to generate company names.
  *
  * @property \Faker\UniqueGenerator $unique
  */
-class CustomCompany extends \Faker\Provider\fr_CH\Company
+class CustomCompany extends Company
 {
     protected static $formats = [
         '{{lastName}} {{companySuffix}}',

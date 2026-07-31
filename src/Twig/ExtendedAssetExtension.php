@@ -169,12 +169,13 @@ final readonly class ExtendedAssetExtension
         $url = $this->getAssetUrl($path);
         $href = $this->webLinkExtension->preload($url, ['as' => 'style']);
         $parameters = \array_merge([
+            'nonce' => $this->getNonce(),
             'rel' => 'preload',
             'href' => $href,
             'as' => 'style',
         ], $parameters);
 
-        return $this->assetCss($path, $parameters);
+        return $this->reduceParams($parameters, '<link ');
     }
 
     /**

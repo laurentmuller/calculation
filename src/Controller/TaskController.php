@@ -81,7 +81,7 @@ class TaskController extends AbstractEntityController
     public function compute(Request $request, TaskService $service, ?Task $task = null): Response
     {
         [$tasks, $task] = $this->getTasks($service, $task);
-        if (null === $task) {
+        if (!$task instanceof Task) {
             return $this->redirectToDefaultRoute(
                 request: $request,
                 message: TranslatableFlashMessage::warning('task.list.empty')

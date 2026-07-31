@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace App\Faker;
 
+use Faker\Provider\fr_CH\Address;
+
 /**
  * Custom address.
  *
  * @property \Faker\UniqueGenerator $unique
  */
-class CustomAddress extends \Faker\Provider\fr_CH\Address
+class CustomAddress extends Address
 {
     /** @phpstan-var mixed */
     protected static $postcode = [

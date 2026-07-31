@@ -35,7 +35,7 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
         $table = $event->table;
         /** @var Task $task */
         $task = $event->getGroupKey();
-        $category = $this->joinTexts($task->getGroupCode(), $task->getCategoryCode());
+        $category = $this->implode($task->getGroupCode(), $task->getCategoryCode());
         $table->startRow()
             ->add($task->getName(), style: $event->group->getStyle())
             ->add($category)
@@ -109,12 +109,13 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
      */
     private function createTable(): ReportGroupTable
     {
-        $name = $this->joinTexts($this->trans('task.name'), $this->trans('task.fields.item'));
+        $name = $this->implode($this->trans('task.name'), $this->trans('task.fields.item'));
+        $category = $this->implode($this->trans('task.fields.group'), $this->trans('task.fields.category'));
 
         return ReportGroupTable::fromReport($this)
             ->addColumns(
                 PdfColumn::left($name, 40),
-                $this->leftColumn('task.fields.category', 50, true),
+                $this->leftColumn($category, 50, true),
                 $this->leftColumn('task.fields.unit', 15, true),
                 $this->rightColumn('taskitemmargin.fields.minimum', 20, true),
                 $this->rightColumn('taskitemmargin.fields.maximum', 20, true),
@@ -123,8 +124,8 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
             ->setGroupListener($this);
     }
 
-    private function joinTexts(string $first, string $second): string
+    private function implode(string $first, string $second): string
     {
-        return \sprintf('%s / %s', $first, $second);
+        return \implode(' - ', [$first, $second]);
     }
 }

@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace App\Faker;
 
+use Faker\Provider\fr_CH\PhoneNumber;
+
 /**
  * Faker provider to generate custom phone numbers.
  *
  * @property \Faker\UniqueGenerator $unique
  */
-class CustomPhoneNumber extends \Faker\Provider\fr_CH\PhoneNumber
+class CustomPhoneNumber extends PhoneNumber
 {
     /** @phpstan-var mixed */
     protected static $formats = ['0## ### ## ##'];

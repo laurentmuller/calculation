@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use App\Enums\FontAwesomePath;
+use App\Model\FontAwesomeIcon;
 use Doctrine\ORM\Mapping as ORM;
 use Psr\Log\LogLevel as PsrLevel;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -63,18 +65,27 @@ trait LogLevelTrait
     }
 
     /**
+     * Get the level FontAwesome icon.
+     */
+    public function getLevelFontAwesomeIcon(): FontAwesomeIcon
+    {
+        return match ($this->level) {
+            PsrLevel::ALERT,
+            PsrLevel::CRITICAL,
+            PsrLevel::EMERGENCY,
+            PsrLevel::ERROR => new FontAwesomeIcon(FontAwesomePath::SOLID, 'circle-exclamation'),
+            PsrLevel::WARNING => new FontAwesomeIcon(FontAwesomePath::SOLID, 'triangle-exclamation'),
+            default => new FontAwesomeIcon(FontAwesomePath::SOLID, 'circle-info'),
+        };
+    }
+
+    /**
      * Get the level icon class.
      */
     public function getLevelIcon(): string
     {
-        return 'fa-fw fa-solid fa-' . match ($this->level) {
-            PsrLevel::ALERT,
-            PsrLevel::CRITICAL,
-            PsrLevel::EMERGENCY,
-            PsrLevel::ERROR => 'circle-exclamation',
-            PsrLevel::WARNING => 'triangle-exclamation',
-            default => 'circle-info',
-        };
+        return $this->getLevelFontAwesomeIcon()
+            ->asHtml('fa-fw');
     }
 
     /**

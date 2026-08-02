@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace App\Report;
 
+use App\Enums\FontAwesomePath;
 use App\Interfaces\DocumentHelperInterface;
+use App\Model\FontAwesomeIcon;
 use App\Model\FontAwesomeImage;
 use App\Model\LogChannel;
 use App\Model\LogLevel;
@@ -135,17 +137,9 @@ class MemoryImageReport extends AbstractReport
         $this->resetAlpha();
     }
 
-    private function getFontAwesomeImage(string $icon, ?string $color = null): ?FontAwesomeImage
+    private function getFontAwesomeImage(FontAwesomeIcon $icon, ?string $color = null): ?FontAwesomeImage
     {
-        if (!$this->service instanceof FontAwesomeService) {
-            return null;
-        }
-        $relativePath = $this->service->getPath($icon);
-        if (!\is_string($relativePath)) {
-            return null;
-        }
-
-        return $this->service->getImage($relativePath, $color);
+        return $this->service?->getFontAwesomeImage($icon, $color);
     }
 
     /**
@@ -179,9 +173,10 @@ class MemoryImageReport extends AbstractReport
         $files = [];
         foreach ($channels as $channel) {
             $logChannel = new LogChannel($channel);
-            $image = $this->getFontAwesomeImage($logChannel->getChannelIcon());
-            if ($image instanceof FontAwesomeImage) {
-                $files[$channel] = $image;
+            $logIcon = $logChannel->getChannelFontAwesomeIcon();
+            $logImage = $this->getFontAwesomeImage($logIcon);
+            if ($logImage instanceof FontAwesomeImage) {
+                $files[$channel] = $logImage;
             }
         }
 
@@ -197,12 +192,12 @@ class MemoryImageReport extends AbstractReport
         $levels = Level::cases();
         foreach ($levels as $level) {
             $logLevel = new LogLevel($level->toPsrLogLevel());
-            $color = HtmlBootstrapColor::parseTextColor($logLevel->getLevelColor())?->asHex('#');
-            $image = $this->getFontAwesomeImage($logLevel->getLevelIcon(), $color);
-            if (!$image instanceof FontAwesomeImage) {
-                continue;
+            $logIcon = $logLevel->getLevelFontAwesomeIcon();
+            $logColor = HtmlBootstrapColor::parseTextColor($logLevel->getLevelColor())?->asHex('#');
+            $logImage = $this->getFontAwesomeImage($logIcon, $logColor);
+            if ($logImage instanceof FontAwesomeImage) {
+                $files[$logLevel->getLevel()] = $logImage;
             }
-            $files[$logLevel->getLevel()] = $image;
         }
 
         return $files;
@@ -219,7 +214,7 @@ class MemoryImageReport extends AbstractReport
     {
         $this->renderCellTitle('Digits');
         foreach (\range(0, 9) as $index) {
-            $icon = \sprintf('fa-solid fa-%d', $index);
+            $icon = new FontAwesomeIcon(FontAwesomePath::SOLID, (string) $index);
             $image = $this->getFontAwesomeImage($icon);
             if (!$image instanceof FontAwesomeImage) {
                 continue;
@@ -231,7 +226,7 @@ class MemoryImageReport extends AbstractReport
                 $this->getPrintableWidth(),
                 self::LINE_HEIGHT,
             );
-            $cell = new PdfFontAwesomeCell($image, $icon);
+            $cell = new PdfFontAwesomeCell($image, $icon->getKey());
             $cell->output($this, $bounds, PdfTextAlignment::LEFT, PdfMove::NEW_LINE);
         }
     }

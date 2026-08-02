@@ -82,7 +82,7 @@ final class SchemaReportTest extends TestCase
         ]);
         $imageService = $this->createImageService();
         $imageService->expects(self::exactly(2))
-            ->method('getImage')
+            ->method('getFontAwesomeImage')
             ->willReturnOnConsecutiveCalls(
                 $this->createFontAwesomeImage(),
                 null

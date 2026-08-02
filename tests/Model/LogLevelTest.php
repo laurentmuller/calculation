@@ -46,14 +46,14 @@ final class LogLevelTest extends TestCase
 
     public static function getLevelIcons(): \Generator
     {
-        yield [PsrLevel::EMERGENCY, 'fa-fw fa-solid fa-circle-exclamation'];
-        yield [PsrLevel::ALERT, 'fa-fw fa-solid fa-circle-exclamation'];
-        yield [PsrLevel::CRITICAL, 'fa-fw fa-solid fa-circle-exclamation'];
-        yield [PsrLevel::ERROR, 'fa-fw fa-solid fa-circle-exclamation'];
-        yield [PsrLevel::WARNING, 'fa-fw fa-solid fa-triangle-exclamation'];
-        yield [PsrLevel::NOTICE, 'fa-fw fa-solid fa-circle-info'];
-        yield [PsrLevel::INFO, 'fa-fw fa-solid fa-circle-info'];
-        yield [PsrLevel::DEBUG, 'fa-fw fa-solid fa-circle-info'];
+        yield [PsrLevel::EMERGENCY, 'fa-solid fa-circle-exclamation fa-fw'];
+        yield [PsrLevel::ALERT, 'fa-solid fa-circle-exclamation fa-fw'];
+        yield [PsrLevel::CRITICAL, 'fa-solid fa-circle-exclamation fa-fw'];
+        yield [PsrLevel::ERROR, 'fa-solid fa-circle-exclamation fa-fw'];
+        yield [PsrLevel::WARNING, 'fa-solid fa-triangle-exclamation fa-fw'];
+        yield [PsrLevel::NOTICE, 'fa-solid fa-circle-info fa-fw'];
+        yield [PsrLevel::INFO, 'fa-solid fa-circle-info fa-fw'];
+        yield [PsrLevel::DEBUG, 'fa-solid fa-circle-info fa-fw'];
     }
 
     public function testIncrement(): void

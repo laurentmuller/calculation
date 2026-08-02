@@ -14,7 +14,9 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Entity\User;
+use App\Enums\FontAwesomePath;
 use App\Interfaces\DocumentHelperInterface;
+use App\Model\FontAwesomeIcon;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Html\HtmlColorName;
 use App\Pdf\PdfCell;
@@ -50,7 +52,7 @@ class UsersReport extends AbstractArrayReport
         array $entities,
         private readonly StorageInterface $storage,
         private readonly RoleService $roleService,
-        private readonly FontAwesomeService $fontService,
+        private readonly FontAwesomeService $fontAwesomeService,
     ) {
         parent::__construct($helper, $entities);
         $this->setTranslatedTitle('user.list.title');
@@ -108,9 +110,11 @@ class UsersReport extends AbstractArrayReport
     private function getDefaultImageCell(): PdfCell
     {
         if (!$this->defaultCell instanceof PdfCell) {
-            $this->defaultCell = $this->fontService->getCell(
-                icon: 'fa-regular fa-circle-xmark',
-                color: HtmlColorName::LIGHT_GREY->value,
+            $icon = new FontAwesomeIcon(FontAwesomePath::REGULAR, 'circle-xmark');
+            $color = HtmlColorName::LIGHT_GREY->value;
+            $this->defaultCell = $this->fontAwesomeService->getFontAwesomeCell(
+                icon: $icon,
+                color: $color,
             ) ?? PdfCell::instance();
         }
 
@@ -137,9 +141,12 @@ class UsersReport extends AbstractArrayReport
             return $this->roleCells[$role];
         }
 
-        $icon = $this->roleService->getRoleIcon($role);
         $text = $this->roleService->translateRole($role);
-        $cell = $this->fontService->getCell(icon: $icon, text: $text) ?? PdfCell::instance($text);
+        $icon = $this->roleService->getRoleFontAwesomeIcon($role);
+        $cell = $this->fontAwesomeService->getFontAwesomeCell(
+            icon: $icon,
+            text: $text
+        ) ?? PdfCell::instance($text);
 
         return $this->roleCells[$role] = $cell;
     }

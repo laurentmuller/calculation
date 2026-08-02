@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Constants\CacheAttributes;
+use App\Model\FontAwesomeIcon;
 use App\Model\FontAwesomeImage;
 use App\Model\ImageSize;
 use App\Traits\CacheKeyTrait;
@@ -26,7 +27,7 @@ use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 
 /**
- * Service to get Font Awesome images.
+ * Service to convert SVG Font Awesome icons to images.
  */
 class FontAwesomeImageService
 {
@@ -56,11 +57,31 @@ class FontAwesomeImageService
     }
 
     /**
-     * Gets the directory where SVG files are stored.
+     * Gets a Font Awesome image.
+     *
+     * @param FontAwesomeIcon $icon  the icon to get image for
+     * @param ?string         $color the foreground color to apply or <code>null</code> for black color
+     *
+     * @return ?FontAwesomeImage the image, if found, <code>null</code> otherwise
      */
-    public function getDirectory(): string
+    public function getFontAwesomeImage(FontAwesomeIcon $icon, ?string $color = null): ?FontAwesomeImage
     {
-        return $this->directory;
+        if (!$this->isAvailable()) {
+            return null;
+        }
+
+        $path = $icon->getAbsolutePath();
+        if (!\is_file($path)) {
+            return null;
+        }
+
+        $color ??= self::BLACK_COLOR;
+        $key = $this->cleanKey(\sprintf('%s_%s', $icon->getKey(), $color));
+
+        return $this->cache->get(
+            $key,
+            fn (ItemInterface $item, bool &$save): ?FontAwesomeImage => $this->loadImage($path, $color, $save)
+        );
     }
 
     /**

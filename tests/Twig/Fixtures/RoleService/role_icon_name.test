@@ -11,6 +11,6 @@ return [
     'user' => 'ROLE_USER'
 ]
 --EXPECT--
-<i class="me-1 fa-solid fa-user-gear"></i>user.roles.super_admin
-<i class="me-1 fa-solid fa-user-shield"></i>user.roles.admin
-<i class="me-1 fa-solid fa-user"></i>user.roles.user
+<i class="fa-solid fa-user-gear me-1"></i>user.roles.super_admin
+<i class="fa-solid fa-user-shield me-1"></i>user.roles.admin
+<i class="fa-solid fa-user me-1"></i>user.roles.user

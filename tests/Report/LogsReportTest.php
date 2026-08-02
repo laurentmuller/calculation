@@ -56,11 +56,13 @@ final class LogsReportTest extends TestCase
         $logLevel2 = new LogLevel($log2->getLevel());
         $logChannel2 = new LogChannel($log2->getChannel());
 
+        $log3 = Log::instance(3);
+
         $logFile = $this->createMock(LogFile::class);
         $logFile->method('isEmpty')
             ->willReturn(false);
         $logFile->method('getLogs')
-            ->willReturn([$log1, $log2]);
+            ->willReturn([$log1, $log2, $log3]);
         $logFile->method('getLevels')
             ->willReturn([
                 'info' => $logLevel1,
@@ -73,7 +75,7 @@ final class LogsReportTest extends TestCase
             ]);
         $image = $this->getImage();
         $service = $this->createMock(FontAwesomeService::class);
-        $service->method('getImage')
+        $service->method('getFontAwesomeImage')
             ->willReturn($image);
 
         $report = new LogsReport(

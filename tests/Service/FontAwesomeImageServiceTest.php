@@ -21,14 +21,6 @@ use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 final class FontAwesomeImageServiceTest extends TestCase
 {
-    public function testDirectory(): void
-    {
-        $expected = __DIR__;
-        $service = $this->createService($expected);
-        $actual = $service->getDirectory();
-        self::assertSame($expected, $actual);
-    }
-
     public function testInvalidDirectory(): void
     {
         $this->checkImageIsInvalid('fake', 'fake', false);
@@ -111,10 +103,7 @@ final class FontAwesomeImageServiceTest extends TestCase
 
     private function createService(string $directory): FontAwesomeImageService
     {
-        return new FontAwesomeImageService(
-            $directory,
-            new ArrayAdapter()
-        );
+        return new FontAwesomeImageService($directory, new ArrayAdapter());
     }
 
     private function validateDirectory(string $directory): string

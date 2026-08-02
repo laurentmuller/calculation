@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace App\Report;
 
+use App\Enums\FontAwesomePath;
 use App\Interfaces\DocumentHelperInterface;
+use App\Model\FontAwesomeIcon;
 use App\Model\FontAwesomeImage;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfCell;
@@ -133,7 +135,8 @@ class SchemaReport extends AbstractReport
     private function getCellImage(string $id, string $icon): PdfCell
     {
         $text = $this->trans('schema.table.' . $id);
-        $image = $this->imageService->getImage('solid/' . $icon);
+        $fontAwesomeIcon = new FontAwesomeIcon(FontAwesomePath::SOLID, $icon);
+        $image = $this->imageService->getFontAwesomeImage($fontAwesomeIcon);
         if ($image instanceof FontAwesomeImage) {
             return new PdfFontAwesomeCell($image, $text);
         }

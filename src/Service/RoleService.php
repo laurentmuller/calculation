@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Enums\FontAwesomePath;
 use App\Interfaces\RoleInterface;
+use App\Model\FontAwesomeIcon;
 use App\Model\Role;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -43,22 +45,28 @@ readonly class RoleService
         return [] === $roles ? $roles : $this->service->getReachableRoleNames($roles);
     }
 
-    /**
-     * Gets the role's icon.
-     *
-     * @phpstan-param RoleInterface|RoleInterface::ROLE_* $role
-     */
-    public function getRoleIcon(RoleInterface|string $role): string
+    public function getRoleFontAwesomeIcon(RoleInterface|string $role): FontAwesomeIcon
     {
         if ($role instanceof RoleInterface) {
             $role = $role->getRole();
         }
 
         return match ($role) {
-            RoleInterface::ROLE_SUPER_ADMIN => 'fa-solid fa-user-gear',
-            RoleInterface::ROLE_ADMIN => 'fa-solid fa-user-shield',
-            default => 'fa-solid fa-user',
+            RoleInterface::ROLE_SUPER_ADMIN => new FontAwesomeIcon(FontAwesomePath::SOLID, 'user-gear'),
+            RoleInterface::ROLE_ADMIN => new FontAwesomeIcon(FontAwesomePath::SOLID, 'user-shield'),
+            default => new FontAwesomeIcon(FontAwesomePath::SOLID, 'user'),
         };
+    }
+
+    /**
+     * Gets the role's icon.
+     *
+     * @phpstan-param RoleInterface|RoleInterface::ROLE_* $role
+     */
+    public function getRoleIcon(RoleInterface|string $role, string $extra = ''): string
+    {
+        return $this->getRoleFontAwesomeIcon($role)
+            ->asHtml($extra);
     }
 
     /**
@@ -69,7 +77,7 @@ readonly class RoleService
     #[AsTwigFilter('role_icon_name')]
     public function getRoleIconAndName(RoleInterface|string $role): string
     {
-        return \sprintf('<i class="me-1 %s"></i>%s', $this->getRoleIcon($role), $this->translateRole($role));
+        return \sprintf('<i class="%s"></i>%s', $this->getRoleIcon($role, 'me-1'), $this->translateRole($role));
     }
 
     /**

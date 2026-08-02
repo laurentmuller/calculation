@@ -119,7 +119,7 @@ final class RoleServiceTest extends TestCase
         $service = $this->createService();
         $role = new Role(RoleInterface::ROLE_USER);
         $actual = $service->getRoleIconAndName($role);
-        $expected = '<i class="me-1 fa-solid fa-user"></i>user.roles.user';
+        $expected = '<i class="fa-solid fa-user me-1"></i>user.roles.user';
         self::assertSame($expected, $actual);
     }
 

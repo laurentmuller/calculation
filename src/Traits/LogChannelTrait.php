@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use App\Enums\FontAwesomePath;
+use App\Model\FontAwesomeIcon;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -40,22 +42,31 @@ trait LogChannelTrait
     }
 
     /**
+     * Get the channel FontAwesome icon.
+     */
+    public function getChannelFontAwesomeIcon(): FontAwesomeIcon
+    {
+        return match ($this->channel) {
+            'application' => new FontAwesomeIcon(FontAwesomePath::SOLID, 'laptop-code'),
+            'cache' => new FontAwesomeIcon(FontAwesomePath::SOLID, 'hard-drive'),
+            'console' => new FontAwesomeIcon(FontAwesomePath::SOLID, 'keyboard'),
+            'doctrine' => new FontAwesomeIcon(FontAwesomePath::SOLID, 'database'),
+            'mailer' => new FontAwesomeIcon(FontAwesomePath::SOLID, 'envelope'),
+            'php' => new FontAwesomeIcon(FontAwesomePath::SOLID, 'code'),
+            'request' => new FontAwesomeIcon(FontAwesomePath::SOLID, 'upload'),
+            'security' => new FontAwesomeIcon(FontAwesomePath::SOLID, 'key'),
+            'deprecation' => new FontAwesomeIcon(FontAwesomePath::SOLID, 'bug'),
+            default => new FontAwesomeIcon(FontAwesomePath::SOLID, 'file'),
+        };
+    }
+
+    /**
      * Get the channel icon class.
      */
     public function getChannelIcon(): string
     {
-        return 'fa-fw fa-solid fa-' . match ($this->channel) {
-            'application' => 'laptop-code',
-            'cache' => 'hard-drive',
-            'console' => 'keyboard',
-            'doctrine' => 'database',
-            'mailer' => 'envelope',
-            'php' => 'code',
-            'request' => 'upload',
-            'security' => 'key',
-            'deprecation' => 'bug',
-            default => 'file',
-        };
+        return $this->getChannelFontAwesomeIcon()
+            ->asHtml('fa-fw');
     }
 
     /**

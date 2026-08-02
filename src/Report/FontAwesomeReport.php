@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace App\Report;
 
+use App\Enums\FontAwesomePath;
 use App\Interfaces\DocumentHelperInterface;
-use App\Model\FontAwesomeImage;
+use App\Model\FontAwesomeIcon;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfFontAwesomeCell;
 use App\Pdf\PdfStyle;
@@ -23,7 +24,6 @@ use App\Pdf\Traits\PdfMemoryImageTrait;
 use App\Service\FontAwesomeImageService;
 use fpdf\Enums\PdfMove;
 use fpdf\PdfException;
-use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -43,10 +43,9 @@ class FontAwesomeReport extends AbstractReport
     public function render(): bool
     {
         $this->addPage();
-        $directories = $this->getDirectories();
-        foreach ($directories as $directory) {
-            $this->renderTitle($directory);
-            $this->renderImages($directory);
+        foreach (FontAwesomePath::cases() as $path) {
+            $this->renderTitle($path);
+            $this->renderImages($path);
         }
 
         return true;
@@ -77,42 +76,28 @@ class FontAwesomeReport extends AbstractReport
         return $table;
     }
 
-    /**
-     * @return list<string>
-     */
-    private function getDirectories(): array
+    private function renderImage(PdfTable $table, int $index, FontAwesomeIcon $icon): void
     {
-        $pattern = $this->service->getDirectory() . '/*';
-
-        /** @phpstan-var list<string> */
-        return \glob($pattern, \GLOB_ONLYDIR);
-    }
-
-    private function renderImage(PdfTable $table, int $index, string $directory, string $name): void
-    {
-        $relativePath = Path::join($directory, $name);
-        $image = $this->service->getImage($relativePath);
-        if (!$image instanceof FontAwesomeImage) {
-            throw PdfException::format('Unable to get image: "%s".', $relativePath);
-        }
+        $image = $this->service->getFontAwesomeImage($icon) ?? throw PdfException::format('Unable to get image: "%s".', $icon->getKey());
         if (0 === $index % self::COLUMNS) {
             $table->startRow();
         }
-        $table->addCell(new PdfFontAwesomeCell($image, ': ' . $name));
+        $table->addCell(new PdfFontAwesomeCell($image, ': ' . $icon->icon));
         if (0 === ++$index % self::COLUMNS) {
             $table->endRow();
         }
     }
 
-    private function renderImages(string $path): void
+    private function renderImages(FontAwesomePath $path): void
     {
         $index = 0;
-        $directory = \basename($path);
+        $directory = $path->getPath();
         $table = $this->createTable();
-        $iterator = $this->createIterator($path);
+        $iterator = $this->createIterator($directory);
         foreach ($iterator as $file) {
             $name = $file->getFilenameWithoutExtension();
-            $this->renderImage($table, $index, $directory, $name);
+            $icon = new FontAwesomeIcon($path, $name);
+            $this->renderImage($table, $index, $icon);
             ++$index;
         }
         if ($table->isRowStarted()) {
@@ -121,9 +106,9 @@ class FontAwesomeReport extends AbstractReport
         $this->lineBreak(self::LINE_HEIGHT);
     }
 
-    private function renderTitle(string $directory): void
+    private function renderTitle(FontAwesomePath $path): void
     {
-        $text = \ucfirst(\basename($directory));
+        $text = \ucfirst($path->value);
         $this->useCellMargin(function () use ($text): void {
             PdfStyle::getBoldCellStyle()->updateDocument($this);
             $this->cell(text: $text, move: PdfMove::NEW_LINE);

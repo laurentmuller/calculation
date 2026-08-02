@@ -30,15 +30,15 @@ final class LogTest extends TestCase
 
     public static function getChannelIcons(): \Generator
     {
-        yield ['application', 'fa-fw fa-solid fa-laptop-code'];
-        yield ['cache', 'fa-fw fa-solid fa-hard-drive'];
-        yield ['console', 'fa-fw fa-solid fa-keyboard'];
-        yield ['doctrine', 'fa-fw fa-solid fa-database'];
-        yield ['mailer', 'fa-fw fa-solid fa-envelope'];
-        yield ['php', 'fa-fw fa-solid fa-code'];
-        yield ['request', 'fa-fw fa-solid fa-upload'];
-        yield ['security', 'fa-fw fa-solid fa-key'];
-        yield ['deprecation', 'fa-fw fa-solid fa-bug'];
+        yield ['application', 'fa-solid fa-laptop-code fa-fw'];
+        yield ['cache', 'fa-solid fa-hard-drive fa-fw'];
+        yield ['console', 'fa-solid fa-keyboard fa-fw'];
+        yield ['doctrine', 'fa-solid fa-database fa-fw'];
+        yield ['mailer', 'fa-solid fa-envelope fa-fw'];
+        yield ['php', 'fa-solid fa-code fa-fw'];
+        yield ['request', 'fa-solid fa-upload fa-fw'];
+        yield ['security', 'fa-solid fa-key fa-fw'];
+        yield ['deprecation', 'fa-solid fa-bug fa-fw'];
     }
 
     public static function getLevelColors(): \Generator
@@ -55,14 +55,14 @@ final class LogTest extends TestCase
 
     public static function getLevelIcons(): \Generator
     {
-        yield [PsrLevel::EMERGENCY, 'fa-fw fa-solid fa-circle-exclamation'];
-        yield [PsrLevel::ALERT, 'fa-fw fa-solid fa-circle-exclamation'];
-        yield [PsrLevel::CRITICAL, 'fa-fw fa-solid fa-circle-exclamation'];
-        yield [PsrLevel::ERROR, 'fa-fw fa-solid fa-circle-exclamation'];
-        yield [PsrLevel::WARNING, 'fa-fw fa-solid fa-triangle-exclamation'];
-        yield [PsrLevel::NOTICE, 'fa-fw fa-solid fa-circle-info'];
-        yield [PsrLevel::INFO, 'fa-fw fa-solid fa-circle-info'];
-        yield [PsrLevel::DEBUG, 'fa-fw fa-solid fa-circle-info'];
+        yield [PsrLevel::EMERGENCY, 'fa-solid fa-circle-exclamation fa-fw'];
+        yield [PsrLevel::ALERT, 'fa-solid fa-circle-exclamation fa-fw'];
+        yield [PsrLevel::CRITICAL, 'fa-solid fa-circle-exclamation fa-fw'];
+        yield [PsrLevel::ERROR, 'fa-solid fa-circle-exclamation fa-fw'];
+        yield [PsrLevel::WARNING, 'fa-solid fa-triangle-exclamation fa-fw'];
+        yield [PsrLevel::NOTICE, 'fa-solid fa-circle-info fa-fw'];
+        yield [PsrLevel::INFO, 'fa-solid fa-circle-info fa-fw'];
+        yield [PsrLevel::DEBUG, 'fa-solid fa-circle-info fa-fw'];
     }
 
     public function testChannel(): void

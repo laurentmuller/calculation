@@ -15,6 +15,7 @@ namespace App\Report;
 
 use App\Entity\Log;
 use App\Interfaces\DocumentHelperInterface;
+use App\Model\FontAwesomeIcon;
 use App\Model\LogChannel;
 use App\Model\LogFile;
 use App\Model\LogLevel;
@@ -104,46 +105,46 @@ class LogsReport extends AbstractReport
             ->outputHeaders();
     }
 
-    private function getCell(string $text, string $icon, ?string $color = null): PdfFontAwesomeCell|string
+    private function getCell(string $text, FontAwesomeIcon $icon, ?string $color = null): PdfFontAwesomeCell|string
     {
-        $key = \sprintf('%s_%s_%s', $text, $icon, $color ?? '');
+        $key = \sprintf('%s_%s_%s', $text, $icon->getKey(), $color ?? '');
         if (isset($this->cells[$key])) {
             return $this->cells[$key];
         }
-        $cell = $this->service->getCell(icon: $icon, color: $color, text: $text) ?? $text;
+        $cell = $this->service->getFontAwesomeCell(icon: $icon, color: $color, text: $text) ?? $text;
 
         return $this->cells[$key] = $cell;
     }
 
     private function getCellChannel(Log $log): PdfFontAwesomeCell|string
     {
-        $text = $log->getChannelTitle();
-        $icon = $log->getChannelIcon();
-
-        return $this->getCell($text, $icon);
+        return $this->getCell(
+            $log->getChannelTitle(),
+            $log->getChannelFontAwesomeIcon()
+        );
     }
 
     private function getCellLevel(Log $log): PdfFontAwesomeCell|string
     {
-        $text = $log->getLevelTitle();
-        $icon = $log->getLevelIcon();
-        $color = $this->getLevelColor($log->getLevel());
-
-        return $this->getCell($text, $icon, $color);
+        return $this->getCell(
+            $log->getLevelTitle(),
+            $log->getLevelFontAwesomeIcon(),
+            $this->getLevelColor($log->getLevel())
+        );
     }
 
     private function getImageIcon(LogLevel|LogChannel $value, string $text): PdfCell
     {
         $color = null;
         if ($value instanceof LogLevel) {
-            $icon = $value->getLevelIcon();
+            $icon = $value->getLevelFontAwesomeIcon();
             $color = $this->getLevelColor($value->getLevel());
         } else {
-            $icon = $value->getChannelIcon();
+            $icon = $value->getChannelFontAwesomeIcon();
         }
 
         $alignment = PdfTextAlignment::CENTER;
-        $cell = $this->service->getCell(
+        $cell = $this->service->getFontAwesomeCell(
             icon: $icon,
             color: $color,
             text: $text,

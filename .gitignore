@@ -12,8 +12,8 @@ symfony.lock
 ###< vendor tools ###
 
 ###> resources ###
-/public/build/*
-/public/images/users/*
+/public/build/
+/public/images/users/
 /public/vendor/
 /resources/fontawesome/
 ###< resources ###

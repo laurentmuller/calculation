@@ -31,7 +31,7 @@ readonly class FontAwesomeService
     /**
      * Gets a Font Awesome cell for the given icon class.
      *
-     * @param FontAwesomeIcon   $icon      the icon class to convert
+     * @param FontAwesomeIcon   $icon      the icon to get image for
      * @param ?string           $color     the foreground color to apply or <code>null</code> for black color
      * @param int               $size      the image size
      * @param ?string           $text      the cell text

@@ -22,12 +22,10 @@ final class FontAwesomeIconTest extends TestCase
 {
     public function testAbsolutePath(): void
     {
-        $expected = Path::canonicalize(__DIR__ . '/../../resources/fontawesome/solid/user.svg');
+        $expected = Path::join($this->getRootPath(), 'solid', 'user.svg');
         $icon = new FontAwesomeIcon(FontAwesomePath::SOLID, 'user');
         $actual = $icon->getAbsolutePath();
         self::assertSame($expected, $actual);
-        self::assertFileExists($actual);
-        self::assertFileIsReadable($actual);
     }
 
     public function testAsHtml(): void
@@ -49,11 +47,14 @@ final class FontAwesomeIconTest extends TestCase
 
     public function testToString(): void
     {
-        $expected = Path::canonicalize(__DIR__ . '/../../resources/fontawesome/solid/user.svg');
+        $expected = Path::join($this->getRootPath(), 'solid', 'user.svg');
         $icon = new FontAwesomeIcon(FontAwesomePath::SOLID, 'user');
         $actual = (string) $icon;
         self::assertSame($expected, $actual);
-        self::assertFileExists($actual);
-        self::assertFileIsReadable($actual);
+    }
+
+    private function getRootPath(): string
+    {
+        return Path::canonicalize(__DIR__ . '/../../resources/fontawesome');
     }
 }

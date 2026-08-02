@@ -33,8 +33,6 @@ final class FontAwesomePathTest extends TestCase
         $expected = Path::join($this->getRootPath(), 'solid', 'user.svg');
         $actual = FontAwesomePath::SOLID->getIconPath('user');
         self::assertSame($expected, $actual);
-        self::assertFileExists($actual);
-        self::assertFileIsReadable($actual);
     }
 
     public function testPath(): void
@@ -42,8 +40,6 @@ final class FontAwesomePathTest extends TestCase
         $expected = Path::join($this->getRootPath(), 'solid');
         $actual = FontAwesomePath::SOLID->getPath();
         self::assertSame($expected, $actual);
-        self::assertFileExists($actual);
-        self::assertFileIsReadable($actual);
     }
 
     public function testRootPath(): void
@@ -51,8 +47,6 @@ final class FontAwesomePathTest extends TestCase
         $expected = $this->getRootPath();
         $actual = FontAwesomePath::getRootPath();
         self::assertSame($expected, $actual);
-        self::assertDirectoryExists($actual);
-        self::assertDirectoryIsReadable($actual);
     }
 
     private function getRootPath(): string

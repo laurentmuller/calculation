@@ -58,10 +58,7 @@ final class FontAwesomeReportTest extends TestCase
 
     private function createService(?FontAwesomeImage $image): MockObject&FontAwesomeImageService
     {
-        $svgDirectory = $this->getSvgDirectory();
         $service = $this->createMock(FontAwesomeImageService::class);
-        $service->method('getDirectory')
-            ->willReturn($svgDirectory);
         $service->method('getFontAwesomeImage')
             ->willReturn($image);
 

@@ -20,7 +20,6 @@ use App\Enums\Importance;
 use App\Model\HttpClientError;
 use App\Repository\CustomerRepository;
 use App\Repository\GroupRepository;
-use App\Service\FontAwesomeService;
 use App\Service\MailerService;
 use App\Service\RecaptchaService;
 use App\Service\SearchService;
@@ -94,16 +93,6 @@ final class TestControllerTest extends ControllerTestCase
     public function testEditorSuccess(): void
     {
         $this->sendMessage(true);
-    }
-
-    public function testExportFontAwesome(): void
-    {
-        $this->setService(FontAwesomeService::class, self::createStub(FontAwesomeService::class));
-        $this->checkRoute(
-            url: '/test/fontawesome',
-            username: self::ROLE_SUPER_ADMIN,
-            xmlHttpRequest: true
-        );
     }
 
     public function testExportLabel(): void

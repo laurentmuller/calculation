@@ -15,6 +15,7 @@ namespace App\Traits;
 
 use App\Enums\FontAwesomePath;
 use App\Model\FontAwesomeIcon;
+use App\Pdf\Html\HtmlBootstrapColor;
 use Doctrine\ORM\Mapping as ORM;
 use Psr\Log\LogLevel as PsrLevel;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -46,6 +47,22 @@ trait LogLevelTrait
     public function getLevel(): string
     {
         return $this->level;
+    }
+
+    /**
+     * Get the level boostrap color.
+     */
+    public function getLevelBootstrapColor(): HtmlBootstrapColor
+    {
+        return match ($this->level) {
+            PsrLevel::ALERT,
+            PsrLevel::CRITICAL,
+            PsrLevel::EMERGENCY,
+            PsrLevel::ERROR => HtmlBootstrapColor::DANGER,
+            PsrLevel::WARNING => HtmlBootstrapColor::WARNING,
+            PsrLevel::DEBUG => HtmlBootstrapColor::SECONDARY,
+            default => HtmlBootstrapColor::INFO,
+        };
     }
 
     /**

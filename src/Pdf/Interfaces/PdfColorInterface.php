@@ -45,6 +45,15 @@ interface PdfColorInterface
     public function applyTextColor(PdfDocument $doc): void;
 
     /**
+     * Gets the hexadecimal representation of these values.
+     *
+     * @param string $prefix the optional prefix to prepend
+     *
+     * @return string the hexadecimal value as six lower case characters (like <code>'ff8040'</code>)
+     */
+    public function asHex(string $prefix = ''): string;
+
+    /**
      * Gets this value converted to RGB.
      *
      * @return array{0: int<0, 255>, 1: int<0, 255>, 2: int<0, 255>}

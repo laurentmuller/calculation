@@ -16,8 +16,9 @@ namespace App\Tests\Report;
 use App\Interfaces\DocumentHelperInterface;
 use App\Model\FontAwesomeImage;
 use App\Model\ImageSize;
+use App\Pdf\PdfFontAwesomeCell;
 use App\Report\MemoryImageReport;
-use App\Service\FontAwesomeService;
+use App\Service\FontAwesomeCellService;
 use fpdf\PdfException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Path;
@@ -97,10 +98,10 @@ final class MemoryImageReportTest extends TestCase
 
     public function testRenderService(): void
     {
-        $image = $this->getImage();
-        $service = $this->createMock(FontAwesomeService::class);
-        $service->method('getFontAwesomeImage')
-            ->willReturn($image);
+        $cell = new PdfFontAwesomeCell($this->getImage());
+        $service = $this->createMock(FontAwesomeCellService::class);
+        $service->method('getCell')
+            ->willReturn($cell);
         $report = new MemoryImageReport(
             helper: self::createStub(DocumentHelperInterface::class),
             service: $service
@@ -113,7 +114,7 @@ final class MemoryImageReportTest extends TestCase
     {
         $report = new MemoryImageReport(
             helper: self::createStub(DocumentHelperInterface::class),
-            service: self::createStub(FontAwesomeService::class)
+            service: self::createStub(FontAwesomeCellService::class)
         );
         $actual = $report->render();
         self::assertTrue($actual);
@@ -121,10 +122,10 @@ final class MemoryImageReportTest extends TestCase
 
     public function testRenderServiceWithoutPath(): void
     {
-        $image = $this->getImage();
-        $service = $this->createMock(FontAwesomeService::class);
-        $service->method('getFontAwesomeImage')
-            ->willReturn($image);
+        $cell = new PdfFontAwesomeCell($this->getImage());
+        $service = $this->createMock(FontAwesomeCellService::class);
+        $service->method('getCell')
+            ->willReturn($cell);
         $report = new MemoryImageReport(
             helper: self::createStub(DocumentHelperInterface::class),
             service: $service

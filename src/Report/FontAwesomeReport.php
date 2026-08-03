@@ -78,7 +78,7 @@ class FontAwesomeReport extends AbstractReport
 
     private function renderImage(PdfTable $table, int $index, FontAwesomeIcon $icon): void
     {
-        $image = $this->service->getFontAwesomeImage($icon) ?? throw PdfException::format('Unable to get image: "%s".', $icon->getKey());
+        $image = $this->service->getImage($icon) ?? throw PdfException::format('Unable to get image: "%s".', $icon->getKey());
         if (0 === $index % self::COLUMNS) {
             $table->startRow();
         }

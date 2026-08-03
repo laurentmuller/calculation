@@ -125,6 +125,15 @@ final class HtmlBootstrapColorTest extends TestCase
         self::assertSame(0, $document->getPage());
     }
 
+    public function testAsHex(): void
+    {
+        $color = HtmlBootstrapColor::DANGER;
+        $actual = $color->asHex();
+        self::assertSame('dc3545', $actual);
+        $actual = $color->asHex('#');
+        self::assertSame('#dc3545', $actual);
+    }
+
     public function testAsRGB(): void
     {
         $expected = [0xDC, 0x35, 0x45];

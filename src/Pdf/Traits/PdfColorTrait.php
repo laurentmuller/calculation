@@ -41,6 +41,11 @@ trait PdfColorTrait
         $this->getTextColor()->updateDocument($doc);
     }
 
+    public function asHex(string $prefix = ''): string
+    {
+        return $this->getTextColor()->asHex($prefix);
+    }
+
     public function asRGB(): array
     {
         return [

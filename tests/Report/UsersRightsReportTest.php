@@ -19,7 +19,7 @@ use App\Interfaces\RoleInterface;
 use App\Parameter\ApplicationParameters;
 use App\Parameter\RightsParameter;
 use App\Report\UsersRightsReport;
-use App\Service\FontAwesomeService;
+use App\Service\FontAwesomeCellService;
 use App\Service\RoleBuilderService;
 use App\Service\RoleService;
 use PHPUnit\Framework\TestCase;
@@ -45,7 +45,7 @@ final class UsersRightsReportTest extends TestCase
             $parameters,
             self::createStub(RoleService::class),
             new RoleBuilderService(),
-            self::createStub(FontAwesomeService::class)
+            self::createStub(FontAwesomeCellService::class)
         );
         $actual = $report->render();
         self::assertTrue($actual);
@@ -59,7 +59,7 @@ final class UsersRightsReportTest extends TestCase
             self::createStub(ApplicationParameters::class),
             self::createStub(RoleService::class),
             self::createStub(RoleBuilderService::class),
-            self::createStub(FontAwesomeService::class)
+            self::createStub(FontAwesomeCellService::class)
         );
         $actual = $report->render();
         self::assertFalse($actual);

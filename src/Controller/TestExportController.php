@@ -29,8 +29,8 @@ use App\Report\MemoryImageReport;
 use App\Repository\CustomerRepository;
 use App\Response\PdfResponse;
 use App\Response\WordResponse;
+use App\Service\FontAwesomeCellService;
 use App\Service\FontAwesomeImageService;
-use App\Service\FontAwesomeService;
 use App\Service\PdfLabelService;
 use App\Traits\RenderPdfDocumentTrait;
 use App\Traits\RenderWordDocumentTrait;
@@ -116,7 +116,7 @@ class TestExportController extends AbstractController
         string $iconFile,
         #[Autowire('%kernel.project_dir%/public/images/screenshots/home_light.png')]
         string $screenshotFile,
-        FontAwesomeService $service
+        FontAwesomeCellService $service
     ): PdfResponse {
         $report = new MemoryImageReport(
             helper: $this,

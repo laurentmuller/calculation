@@ -14,12 +14,25 @@ declare(strict_types=1);
 namespace App\Tests\Model;
 
 use App\Model\LogLevel;
+use App\Pdf\Html\HtmlBootstrapColor;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel as PsrLevel;
 
 final class LogLevelTest extends TestCase
 {
+    public static function getLevelBootstrapColors(): \Generator
+    {
+        yield [PsrLevel::EMERGENCY, HtmlBootstrapColor::DANGER];
+        yield [PsrLevel::ALERT,  HtmlBootstrapColor::DANGER];
+        yield [PsrLevel::CRITICAL,  HtmlBootstrapColor::DANGER];
+        yield [PsrLevel::ERROR,  HtmlBootstrapColor::DANGER];
+        yield [PsrLevel::WARNING,  HtmlBootstrapColor::WARNING];
+        yield [PsrLevel::NOTICE,  HtmlBootstrapColor::INFO];
+        yield [PsrLevel::INFO,   HtmlBootstrapColor::INFO];
+        yield [PsrLevel::DEBUG,   HtmlBootstrapColor::SECONDARY];
+    }
+
     public static function getLevelBorders(): \Generator
     {
         yield [PsrLevel::EMERGENCY, 'text-border-danger'];
@@ -74,6 +87,17 @@ final class LogLevelTest extends TestCase
         self::assertSame($expected, (string) $logLevel);
         self::assertSame('Warning', $logLevel->getLevelTitle());
         self::assertCount(0, $logLevel);
+    }
+
+    /**
+     * @phpstan-param PsrLevel::* $level
+     */
+    #[DataProvider('getLevelBootstrapColors')]
+    public function testLevelBootstrapColor(string $level, HtmlBootstrapColor $expected): void
+    {
+        $logLevel = LogLevel::instance($level);
+        $actual = $logLevel->getLevelBootstrapColor();
+        self::assertSame($expected, $actual);
     }
 
     /**

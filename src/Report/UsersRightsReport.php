@@ -26,7 +26,7 @@ use App\Pdf\PdfCell;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
-use App\Service\FontAwesomeService;
+use App\Service\FontAwesomeCellService;
 use App\Service\RoleBuilderService;
 use App\Service\RoleService;
 use App\Traits\ArrayTrait;
@@ -55,7 +55,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         private readonly ApplicationParameters $parameters,
         private readonly RoleService $roleService,
         private readonly RoleBuilderService $roleBuilderService,
-        private readonly FontAwesomeService $fontAwesomeService
+        private readonly FontAwesomeCellService $fontAwesomeService
     ) {
         parent::__construct($helper, $entities);
         $this->setTranslatedTitle(id: 'user.rights.title', isUTF8: true)
@@ -202,7 +202,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     ): PdfCell {
         $icon = $this->roleService->getRoleFontAwesomeIcon($entity);
         $text = $this->getEntityText($entity);
-        $cell = $this->fontAwesomeService->getFontAwesomeCell(
+        $cell = $this->fontAwesomeService->getCell(
             icon: $icon,
             text: $text,
             cols: $cols,

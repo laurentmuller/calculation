@@ -20,8 +20,9 @@ use App\Model\ImageSize;
 use App\Model\LogChannel;
 use App\Model\LogFile;
 use App\Model\LogLevel;
+use App\Pdf\PdfFontAwesomeCell;
 use App\Report\LogsReport;
-use App\Service\FontAwesomeService;
+use App\Service\FontAwesomeCellService;
 use App\Utils\DateUtils;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel as PsrLevel;
@@ -37,7 +38,7 @@ final class LogsReportTest extends TestCase
             self::createStub(DocumentHelperInterface::class),
             $logFile,
             __DIR__,
-            self::createStub(FontAwesomeService::class)
+            self::createStub(FontAwesomeCellService::class)
         );
         $actual = $report->render();
         self::assertTrue($actual);
@@ -73,11 +74,10 @@ final class LogsReportTest extends TestCase
                 $log1->getChannel() => $logChannel1,
                 $log2->getChannel() => $logChannel2,
             ]);
-        $image = $this->getImage();
-        $service = $this->createMock(FontAwesomeService::class);
-        $service->method('getFontAwesomeImage')
-            ->willReturn($image);
-
+        $cell = new PdfFontAwesomeCell($this->getImage());
+        $service = $this->createMock(FontAwesomeCellService::class);
+        $service->method('getCell')
+            ->willReturn($cell);
         $report = new LogsReport(
             self::createStub(DocumentHelperInterface::class),
             $logFile,

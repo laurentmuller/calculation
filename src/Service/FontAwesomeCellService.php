@@ -22,7 +22,7 @@ use fpdf\Enums\PdfTextAlignment;
 /**
  * Service to get Font Awesome cell.
  */
-readonly class FontAwesomeService
+readonly class FontAwesomeCellService
 {
     public function __construct(private FontAwesomeImageService $imageService)
     {
@@ -42,7 +42,7 @@ readonly class FontAwesomeService
      *
      * @return ?PdfFontAwesomeCell the cell, if icon found, <code>null</code> otherwise
      */
-    public function getFontAwesomeCell(
+    public function getCell(
         FontAwesomeIcon $icon,
         ?string $color = null,
         int $size = 11,
@@ -52,7 +52,7 @@ readonly class FontAwesomeService
         ?PdfTextAlignment $alignment = null,
         string|int|null $link = null
     ): ?PdfFontAwesomeCell {
-        $image = $this->getFontAwesomeImage($icon, $color);
+        $image = $this->imageService->getImage($icon, $color);
         if (!$image instanceof FontAwesomeImage) {
             return null;
         }
@@ -66,18 +66,5 @@ readonly class FontAwesomeService
             alignment: $alignment,
             link: $link
         );
-    }
-
-    /**
-     * Gets a Font Awesome image.
-     *
-     * @param FontAwesomeIcon $icon  the icon to get image for
-     * @param ?string         $color the foreground color to apply or <code>null</code> for black color
-     *
-     * @return ?FontAwesomeImage the image, if found, <code>null</code> otherwise
-     */
-    public function getFontAwesomeImage(FontAwesomeIcon $icon, ?string $color = null): ?FontAwesomeImage
-    {
-        return $this->imageService->getFontAwesomeImage($icon, $color);
     }
 }

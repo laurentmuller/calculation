@@ -17,7 +17,7 @@ use App\Entity\User;
 use App\Interfaces\DocumentHelperInterface;
 use App\Interfaces\RoleInterface;
 use App\Report\UsersReport;
-use App\Service\FontAwesomeService;
+use App\Service\FontAwesomeCellService;
 use App\Service\RoleService;
 use PHPUnit\Framework\TestCase;
 use Vich\UploaderBundle\Storage\StorageInterface;
@@ -79,7 +79,7 @@ final class UsersReportTest extends TestCase
             [$user1, $user2],
             self::createStub(StorageInterface::class),
             self::createStub(RoleService::class),
-            self::createStub(FontAwesomeService::class)
+            self::createStub(FontAwesomeCellService::class)
         );
     }
 }

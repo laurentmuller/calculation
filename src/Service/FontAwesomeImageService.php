@@ -18,11 +18,8 @@ use App\Model\FontAwesomeIcon;
 use App\Model\FontAwesomeImage;
 use App\Model\ImageSize;
 use App\Traits\CacheKeyTrait;
-use App\Utils\FileUtils;
 use App\Utils\StringUtils;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
-use Symfony\Component\Filesystem\Path;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 
@@ -49,8 +46,6 @@ class FontAwesomeImageService
     private bool $imagickException = false;
 
     public function __construct(
-        #[Autowire('%kernel.project_dir%/resources/fontawesome')]
-        private readonly string $directory,
         #[Target(CacheAttributes::CACHE_FONT_AWESOME)]
         private readonly CacheInterface $cache
     ) {
@@ -64,7 +59,7 @@ class FontAwesomeImageService
      *
      * @return ?FontAwesomeImage the image, if found, <code>null</code> otherwise
      */
-    public function getFontAwesomeImage(FontAwesomeIcon $icon, ?string $color = null): ?FontAwesomeImage
+    public function getImage(FontAwesomeIcon $icon, ?string $color = null): ?FontAwesomeImage
     {
         if (!$this->isAvailable()) {
             return null;
@@ -85,36 +80,6 @@ class FontAwesomeImageService
     }
 
     /**
-     * Gets a Font Awesome image.
-     *
-     * @param string  $relativePath the relative file path to the SVG directory.
-     *                              The SVG file extension (.svg) is added if not present.
-     * @param ?string $color        the foreground color to apply or <code>null</code> for black color
-     *
-     * @return ?FontAwesomeImage the image, if found, <code>null</code> otherwise
-     */
-    public function getImage(string $relativePath, ?string $color = null): ?FontAwesomeImage
-    {
-        if (!$this->isAvailable()) {
-            return null;
-        }
-
-        $relativePath = $this->normalizePath($relativePath);
-        $path = Path::join($this->directory, $relativePath);
-        if (!\is_file($path)) {
-            return null;
-        }
-
-        $color ??= self::BLACK_COLOR;
-        $key = $this->cleanKey(\sprintf('%s_%s', $relativePath, $color));
-
-        return $this->cache->get(
-            $key,
-            fn (ItemInterface $item, bool &$save): ?FontAwesomeImage => $this->loadImage($path, $color, $save)
-        );
-    }
-
-    /**
      * Gets a value indicating if images can be loaded.
      *
      * To allow loading images, the SVG directory must exist; the SVG format must be supported by the Imagick
@@ -122,7 +87,7 @@ class FontAwesomeImageService
      */
     public function isAvailable(): bool
     {
-        return $this->isDirectory() && $this->isSvgSupported() && !$this->isImagickException();
+        return $this->isSvgSupported() && !$this->isImagickException();
     }
 
     /**
@@ -178,11 +143,6 @@ class FontAwesomeImageService
             ->resize(self::TARGET_SIZE);
     }
 
-    private function isDirectory(): bool
-    {
-        return $this->cache->get('svg_directory', fn (): bool => \is_dir($this->directory));
-    }
-
     private function loadImage(string $path, string $color, bool &$save): ?FontAwesomeImage
     {
         try {
@@ -200,15 +160,6 @@ class FontAwesomeImageService
 
             return null;
         }
-    }
-
-    private function normalizePath(string $path): string
-    {
-        if (!\str_ends_with($path, self::SVG_EXTENSION)) {
-            $path .= self::SVG_EXTENSION;
-        }
-
-        return FileUtils::normalize($path);
     }
 
     private function updateContent(string $content, string $color): string

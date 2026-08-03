@@ -20,15 +20,13 @@ use App\Model\LogChannel;
 use App\Model\LogFile;
 use App\Model\LogLevel;
 use App\Pdf\Colors\PdfTextColor;
-use App\Pdf\Html\HtmlBootstrapColor;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfFontAwesomeCell;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Pdf\Traits\PdfMemoryImageTrait;
-use App\Service\FontAwesomeImageService;
-use App\Service\FontAwesomeService;
+use App\Service\FontAwesomeCellService;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
 use fpdf\Enums\PdfMove;
@@ -57,7 +55,7 @@ class LogsReport extends AbstractReport
         DocumentHelperInterface $helper,
         private readonly LogFile $logFile,
         string $relativePath,
-        private readonly FontAwesomeService $service
+        private readonly FontAwesomeCellService $service
     ) {
         parent::__construct($helper, PdfOrientation::LANDSCAPE);
         $this->setTranslatedTitle('log.title')
@@ -111,7 +109,7 @@ class LogsReport extends AbstractReport
         if (isset($this->cells[$key])) {
             return $this->cells[$key];
         }
-        $cell = $this->service->getFontAwesomeCell(icon: $icon, color: $color, text: $text) ?? $text;
+        $cell = $this->service->getCell(icon: $icon, color: $color, text: $text) ?? $text;
 
         return $this->cells[$key] = $cell;
     }
@@ -144,7 +142,7 @@ class LogsReport extends AbstractReport
         }
 
         $alignment = PdfTextAlignment::CENTER;
-        $cell = $this->service->getFontAwesomeCell(
+        $cell = $this->service->getCell(
             icon: $icon,
             color: $color,
             text: $text,
@@ -162,9 +160,9 @@ class LogsReport extends AbstractReport
         if (\array_key_exists($level, $this->colors)) {
             return $this->colors[$level];
         }
-
-        $levelColor = LogLevel::instance($level)->getLevelColor();
-        $color = HtmlBootstrapColor::parseTextColor($levelColor)?->asHex('#') ?? FontAwesomeImageService::BLACK_COLOR;
+        $color = LogLevel::instance($level)
+            ->getLevelBootstrapColor()
+            ->asHex('#');
 
         return $this->colors[$level] = $color;
     }

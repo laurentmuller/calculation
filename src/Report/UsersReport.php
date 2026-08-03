@@ -23,7 +23,7 @@ use App\Pdf\PdfCell;
 use App\Pdf\PdfImageCell;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
-use App\Service\FontAwesomeService;
+use App\Service\FontAwesomeCellService;
 use App\Service\RoleService;
 use App\Utils\FormatUtils;
 use Symfony\Component\Clock\DatePoint;
@@ -52,7 +52,7 @@ class UsersReport extends AbstractArrayReport
         array $entities,
         private readonly StorageInterface $storage,
         private readonly RoleService $roleService,
-        private readonly FontAwesomeService $fontAwesomeService,
+        private readonly FontAwesomeCellService $fontAwesomeService,
     ) {
         parent::__construct($helper, $entities);
         $this->setTranslatedTitle('user.list.title');
@@ -112,7 +112,7 @@ class UsersReport extends AbstractArrayReport
         if (!$this->defaultCell instanceof PdfCell) {
             $icon = new FontAwesomeIcon(FontAwesomePath::REGULAR, 'circle-xmark');
             $color = HtmlColorName::LIGHT_GREY->value;
-            $this->defaultCell = $this->fontAwesomeService->getFontAwesomeCell(
+            $this->defaultCell = $this->fontAwesomeService->getCell(
                 icon: $icon,
                 color: $color,
             ) ?? PdfCell::instance();
@@ -143,7 +143,7 @@ class UsersReport extends AbstractArrayReport
 
         $text = $this->roleService->translateRole($role);
         $icon = $this->roleService->getRoleFontAwesomeIcon($role);
-        $cell = $this->fontAwesomeService->getFontAwesomeCell(
+        $cell = $this->fontAwesomeService->getCell(
             icon: $icon,
             text: $text
         ) ?? PdfCell::instance($text);

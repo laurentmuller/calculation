@@ -136,7 +136,7 @@ class SchemaReport extends AbstractReport
     {
         $text = $this->trans('schema.table.' . $id);
         $fontAwesomeIcon = new FontAwesomeIcon(FontAwesomePath::SOLID, $icon);
-        $image = $this->imageService->getFontAwesomeImage($fontAwesomeIcon);
+        $image = $this->imageService->getImage($fontAwesomeIcon);
         if ($image instanceof FontAwesomeImage) {
             return new PdfFontAwesomeCell($image, $text);
         }

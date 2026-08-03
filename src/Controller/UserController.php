@@ -41,7 +41,7 @@ use App\Resolver\DataQueryValueResolver;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Service\ApplicationService;
-use App\Service\FontAwesomeService;
+use App\Service\FontAwesomeCellService;
 use App\Service\MailerService;
 use App\Service\PasswordTooltipService;
 use App\Service\ResetPasswordService;
@@ -208,7 +208,7 @@ class UserController extends AbstractEntityController
     public function pdf(
         StorageInterface $storage,
         RoleService $roleService,
-        FontAwesomeService $fontService,
+        FontAwesomeCellService $fontService,
     ): PdfResponse {
         $entities = $this->getEntitiesByUserName();
         $report = new UsersReport($this, $entities, $storage, $roleService, $fontService);
@@ -365,7 +365,7 @@ class UserController extends AbstractEntityController
     public function rightsPdf(
         RoleService $roleService,
         RoleBuilderService $roleBuilderService,
-        FontAwesomeService $fontAwesomeService
+        FontAwesomeCellService $fontAwesomeService
     ): PdfResponse {
         $entities = $this->getEntitiesByUserName();
         $parameters = $this->getApplicationParameters();

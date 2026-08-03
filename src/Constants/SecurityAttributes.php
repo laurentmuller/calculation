@@ -39,9 +39,6 @@ final class SecurityAttributes
     /** The logout route name. */
     public const string LOGOUT_ROUTE = 'app_logout';
 
-    /** The logout success route name. */
-    public const string LOGOUT_SUCCESS_ROUTE = 'app_logout_success';
-
     /** The logout token name. */
     public const string LOGOUT_TOKEN = 'logout_token';
 

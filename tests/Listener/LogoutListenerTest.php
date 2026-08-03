@@ -14,15 +14,15 @@ declare(strict_types=1);
 namespace App\Tests\Listener;
 
 use App\Entity\User;
-use App\Listener\LoginListener;
-use App\Repository\UserRepository;
+use App\Listener\LogoutListener;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Http\Event\LogoutEvent;
 
-final class LoginListenerTest extends TestCase
+final class LogoutListenerTest extends TestCase
 {
     use TranslatorMockTrait;
 
@@ -31,24 +31,27 @@ final class LoginListenerTest extends TestCase
         $user = $this->createUser();
         $event = $this->createEvent($user);
         $listener = $this->createListener();
-        $listener->onLoginSuccess($event);
-        self::assertNotNull($user->getLastLogin());
+        $listener->onLogout($event);
     }
 
-    private function createEvent(User $user): LoginSuccessEvent
+    private function createEvent(User $user): LogoutEvent
     {
-        $event = $this->createMock(LoginSuccessEvent::class);
-        $event->expects(self::once())
+        $token = $this->createMock(TokenInterface::class);
+        $token->expects(self::once())
             ->method('getUser')
             ->willReturn($user);
+
+        $event = $this->createMock(LogoutEvent::class);
+        $event->expects(self::once())
+            ->method('getToken')
+            ->willReturn($token);
 
         return $event;
     }
 
-    private function createListener(): LoginListener
+    private function createListener(): LogoutListener
     {
-        $repository = self::createStub(UserRepository::class);
-        $listener = new LoginListener($repository);
+        $listener = new LogoutListener();
         $listener->setTranslator($this->createMockTranslator());
         $listener->setRequestStack($this->createRequestStack());
 

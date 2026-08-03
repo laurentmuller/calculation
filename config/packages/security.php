@@ -82,7 +82,6 @@ return App::config([
                 ],
                 'logout' => [
                     'path' => SecurityAttributes::LOGOUT_ROUTE,
-                    'target' => SecurityAttributes::LOGOUT_SUCCESS_ROUTE,
                     'csrf_parameter' => SecurityAttributes::LOGOUT_TOKEN,
                     'enable_csrf' => true,
                 ],

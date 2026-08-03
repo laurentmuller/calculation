@@ -22,35 +22,31 @@ use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
-/**
- * Listener for the user interactive login event.
- */
 class LoginListener implements ServiceSubscriberInterface
 {
     use ServiceMethodsSubscriberTrait;
     use TranslatorFlashMessageAwareTrait;
 
-    public function __construct(
-        private readonly UserRepository $repository,
-    ) {
+    public function __construct(private readonly UserRepository $repository)
+    {
     }
 
     #[AsEventListener]
     public function onLoginSuccess(LoginSuccessEvent $event): void
     {
-        /** @var User $user */
         $user = $event->getUser();
-        $this->updateUser($user);
-        $this->notify($user);
+        if ($user instanceof User) {
+            $this->updateUser($user);
+            $this->notify($user);
+        }
     }
 
     private function notify(User $user): void
     {
-        $params = [
+        $this->successTrans('security.login.success', [
             '%user_name%' => $user->getUserIdentifier(),
             '%app_name%' => ApplicationService::APP_FULL_NAME,
-        ];
-        $this->successTrans('security.login.success', $params);
+        ]);
     }
 
     private function updateUser(User $user): void

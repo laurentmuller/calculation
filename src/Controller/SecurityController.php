@@ -20,8 +20,6 @@ use App\Attribute\GetRoute;
 use App\Constants\SecurityAttributes;
 use App\Entity\User;
 use App\Form\User\UserLoginType;
-use App\Service\ApplicationService;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -54,14 +52,5 @@ class SecurityController extends AbstractController
     public function logout(): never
     {
         throw new \LogicException('This method should never be reached.');
-    }
-
-    #[ForPublicAccess]
-    #[GetRoute(path: '/logout/success', name: SecurityAttributes::LOGOUT_SUCCESS_ROUTE)]
-    public function logoutSuccess(): RedirectResponse
-    {
-        $this->successTrans('security.logout.success', ['%app_name%' => ApplicationService::APP_FULL_NAME]);
-
-        return $this->redirectToRoute(SecurityAttributes::LOGIN_ROUTE);
     }
 }

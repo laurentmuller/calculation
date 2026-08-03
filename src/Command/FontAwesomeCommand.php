@@ -40,7 +40,7 @@ class FontAwesomeCommand
     private const string VIEW_BOX_REPLACE = 'viewBox="0 0 640 640"';
 
     public function __construct(
-        #[Autowire('%kernel.project_dir%')]
+        #[Autowire(param: 'kernel.project_dir')]
         private readonly string $projectDir
     ) {
     }

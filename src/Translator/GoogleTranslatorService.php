@@ -43,7 +43,7 @@ class GoogleTranslatorService extends AbstractTranslatorService
      */
     public function __construct(
         #[\SensitiveParameter]
-        #[Autowire('%google_translator_key%')]
+        #[Autowire(param: 'google_translator_key')]
         string $key,
         CacheInterface $cache,
         LoggerInterface $logger

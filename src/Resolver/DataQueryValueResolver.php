@@ -41,7 +41,7 @@ final readonly class DataQueryValueResolver extends AbstractValueResolver implem
     use CookieTrait;
 
     public function __construct(
-        #[Autowire('%cookie_path%')]
+        #[Autowire(param: 'cookie_path')]
         private string $cookiePath,
         ValidatorInterface $validator
     ) {

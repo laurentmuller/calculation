@@ -67,7 +67,7 @@ class ResponseListener
     public function __construct(
         #[Autowire('%kernel.project_dir%/resources/data/csp.%kernel.environment%.json')]
         private readonly string $file,
-        #[Autowire('%kernel.debug%')]
+        #[Autowire(param: 'kernel.debug')]
         private readonly bool $debug,
         #[Target(CacheAttributes::CACHE_RESPONSE)]
         private readonly CacheInterface $cache,

@@ -51,9 +51,9 @@ class AssetVersionService extends StaticVersionStrategy implements DisableListen
     private readonly string $imagesVersion;
 
     public function __construct(
-        #[Autowire('%kernel.project_dir%')]
+        #[Autowire(param: 'kernel.project_dir')]
         string $projectDir,
-        #[Autowire('%app_env%')]
+        #[Autowire(param: 'app_env')]
         Environment $environment,
         #[Target(CacheAttributes::CACHE_ASSET)]
         private readonly CacheInterface $cache,

@@ -53,7 +53,7 @@ class IpStackService extends AbstractHttpClientService
      */
     public function __construct(
         #[\SensitiveParameter]
-        #[Autowire('%ip_stack_key%')]
+        #[Autowire(param: 'ip_stack_key')]
         string $key,
         CacheInterface $cache,
         LoggerInterface $logger,

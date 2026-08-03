@@ -62,7 +62,7 @@ class AkismetService extends AbstractHttpClientService
      */
     public function __construct(
         #[\SensitiveParameter]
-        #[Autowire('%akismet_key%')]
+        #[Autowire(param: 'akismet_key')]
         string $key,
         CacheInterface $cache,
         LoggerInterface $logger,

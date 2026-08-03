@@ -30,7 +30,7 @@ readonly class AES256EncryptorService
      */
     public function __construct(
         #[\SensitiveParameter]
-        #[Autowire('%app_secret%')]
+        #[Autowire(param: 'app_secret')]
         string $key
     ) {
         $methods = \openssl_get_cipher_methods();

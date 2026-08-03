@@ -84,7 +84,7 @@ class ExchangeRateService extends AbstractHttpClientService
      */
     public function __construct(
         #[\SensitiveParameter]
-        #[Autowire('%exchange_rate_key%')]
+        #[Autowire(param: 'exchange_rate_key')]
         string $key,
         CacheInterface $cache,
         LoggerInterface $logger,

@@ -35,7 +35,7 @@ class TwigSpaceCommand
     private const string REPLACEMENT = '$1 $3';
 
     public function __construct(
-        #[Autowire('%kernel.project_dir%')]
+        #[Autowire(param: 'kernel.project_dir')]
         private readonly string $projectDir
     ) {
     }

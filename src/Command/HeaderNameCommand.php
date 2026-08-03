@@ -39,7 +39,7 @@ class HeaderNameCommand
     private readonly string $projectDir;
 
     public function __construct(
-        #[Autowire('%kernel.project_dir%')]
+        #[Autowire(param: 'kernel.project_dir')]
         string $projectDir
     ) {
         $this->projectDir = FileUtils::normalize($projectDir);

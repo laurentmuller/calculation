@@ -34,7 +34,7 @@ class LogFinderService
     ];
 
     public function __construct(
-        #[Autowire('%kernel.logs_dir%')]
+        #[Autowire(param: 'kernel.logs_dir')]
         private readonly string $path
     ) {
     }

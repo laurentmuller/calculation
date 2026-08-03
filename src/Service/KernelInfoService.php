@@ -33,9 +33,9 @@ readonly class KernelInfoService
 
     public function __construct(
         private KernelInterface $kernel,
-        #[Autowire('%app_env%')]
+        #[Autowire(param: 'app_env')]
         private Environment $kernelEnvironment,
-        #[Autowire('%app_mode%')]
+        #[Autowire(param: 'app_mode')]
         private Environment $applicationEnvironment,
     ) {
         $this->projectDir = FileUtils::normalize($kernel->getProjectDir());

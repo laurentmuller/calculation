@@ -40,7 +40,7 @@ readonly class BundleInfoService
         private KernelInterface $kernel,
         #[Target(CacheAttributes::CACHE_SYMFONY)]
         private CacheInterface $cache,
-        #[Autowire('%kernel.project_dir%')]
+        #[Autowire(param: 'kernel.project_dir')]
         private string $projectDir,
     ) {
     }

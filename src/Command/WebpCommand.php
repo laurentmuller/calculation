@@ -39,7 +39,7 @@ class WebpCommand
     use WatchTrait;
 
     public function __construct(
-        #[Autowire('%kernel.project_dir%')]
+        #[Autowire(param: 'kernel.project_dir')]
         private readonly string $projectDir
     ) {
     }

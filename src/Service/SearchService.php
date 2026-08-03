@@ -104,7 +104,7 @@ class SearchService implements ServiceSubscriberInterface
 
     public function __construct(
         private readonly EntityManagerInterface $manager,
-        #[Autowire('%kernel.debug%')]
+        #[Autowire(param: 'kernel.debug')]
         private readonly bool $debug,
         #[Target(CacheAttributes::CACHE_SEARCH)]
         private readonly CacheInterface $cache,

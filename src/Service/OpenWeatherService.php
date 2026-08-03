@@ -107,7 +107,7 @@ class OpenWeatherService extends AbstractHttpClientService
      */
     public function __construct(
         #[\SensitiveParameter]
-        #[Autowire('%open_weather_key%')]
+        #[Autowire(param: 'open_weather_key')]
         string $key,
         CacheInterface $cache,
         LoggerInterface $logger,

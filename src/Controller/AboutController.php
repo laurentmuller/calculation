@@ -55,9 +55,9 @@ class AboutController extends AbstractController
     ];
 
     public function __construct(
-        #[Autowire('%kernel.project_dir%')]
+        #[Autowire(param: 'kernel.project_dir')]
         private readonly string $projectDir,
-        #[Autowire('%app_env%')]
+        #[Autowire(param: 'app_env')]
         private readonly Environment $environment,
         private readonly MarkdownService $service,
         #[Target(CacheAttributes::CACHE_SYMFONY)]

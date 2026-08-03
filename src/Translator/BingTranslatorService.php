@@ -50,7 +50,7 @@ class BingTranslatorService extends AbstractTranslatorService
      */
     public function __construct(
         #[\SensitiveParameter]
-        #[Autowire('%bing_translator_key%')]
+        #[Autowire(param: 'bing_translator_key')]
         string $key,
         CacheInterface $cache,
         LoggerInterface $logger

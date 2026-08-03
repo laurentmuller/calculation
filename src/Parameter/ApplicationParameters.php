@@ -56,7 +56,7 @@ class ApplicationParameters extends AbstractParameters
         #[Target(CacheAttributes::CACHE_PARAMETERS)]
         TagAwareCacheInterface $cache,
         EntityManagerInterface $manager,
-        #[Autowire('%kernel.debug%')]
+        #[Autowire(param: 'kernel.debug')]
         private readonly bool $debug,
     ) {
         parent::__construct($cache, $manager);

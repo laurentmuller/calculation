@@ -30,13 +30,14 @@ class FontAwesomeImageService
 {
     use CacheKeyTrait;
 
-    /** The default black color. */
+    /** The default foreground color. */
     public const string BLACK_COLOR = 'black';
 
     /** The SVG file extension (including the dot character). */
     public const string SVG_EXTENSION = '.svg';
 
     private const string IMAGE_FORMAT = 'png24';
+    private const int RESOLUTION = 96;
     private const string SVG_PREFIX = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>';
     private const int TARGET_SIZE = 64;
     private const string TRANSPARENT_COLOR = 'white';
@@ -61,7 +62,7 @@ class FontAwesomeImageService
      */
     public function getImage(FontAwesomeIcon $icon, ?string $color = null): ?FontAwesomeImage
     {
-        if (!$this->isAvailable()) {
+        if ($this->imagickException) {
             return null;
         }
 
@@ -79,47 +80,22 @@ class FontAwesomeImageService
         );
     }
 
-    /**
-     * Gets a value indicating if images can be loaded.
-     *
-     * To allow loading images, the SVG directory must exist; the SVG format must be supported by the Imagick
-     * library, and no Imagick exception has yet been raised.
-     */
-    public function isAvailable(): bool
-    {
-        return $this->isSvgSupported() && !$this->isImagickException();
-    }
-
-    /**
-     * Returns a value indicating if an imagick exception has been raised.
-     */
-    public function isImagickException(): bool
-    {
-        return $this->imagickException;
-    }
-
-    /**
-     * Gets a value indicating if the Imagick library supports the SVG format.
-     */
-    public function isSvgSupported(): bool
-    {
-        return $this->cache->get('svg_supported', static fn (): bool => 0 !== \count(\Imagick::queryFormats('SVG')));
-    }
-
     private function convert(string $content): FontAwesomeImage
     {
         $imagick = $this->getImagick();
 
         try {
+            $imagick->setResolution(self::RESOLUTION, self::RESOLUTION);
             $imagick->readImageBlob($content);
-            $imageSize = $this->getTargetSize($content);
-            $imagick->resizeImage($imageSize->width, $imageSize->height, \Imagick::FILTER_LANCZOS, 1);
+
+            $size = $this->getTargetSize($content);
+            $imagick->resizeImage($size->width, $size->height, \Imagick::FILTER_LANCZOS, 1);
+
             $imagick->transparentPaintImage(self::TRANSPARENT_COLOR, 0.0, (float) \Imagick::getQuantum(), false);
             $imagick->setImageFormat(self::IMAGE_FORMAT);
             $imageBlob = $imagick->getImageBlob();
-            $resolution = (int) $imagick->getImageResolution()['x'];
 
-            return new FontAwesomeImage($imageBlob, $imageSize, $resolution);
+            return new FontAwesomeImage($imageBlob, $size, self::RESOLUTION);
         } finally {
             $imagick->clear();
         }
@@ -154,9 +130,7 @@ class FontAwesomeImageService
 
             return $image;
         } catch (\Exception $e) {
-            if (!$this->imagickException) {
-                $this->imagickException = $e instanceof \ImagickException;
-            }
+            $this->imagickException = $this->imagickException || $e instanceof \ImagickException;
 
             return null;
         }

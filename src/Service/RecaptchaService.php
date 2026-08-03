@@ -36,7 +36,7 @@ class RecaptchaService
 
     public function __construct(
         #[\SensitiveParameter]
-        #[Autowire('%google_recaptcha_site_key%')]
+        #[Autowire(param: 'google_recaptcha_site_key')]
         private readonly string $siteKey,
         private readonly ReCaptcha $reCaptcha,
         private readonly TranslatorInterface $translator,

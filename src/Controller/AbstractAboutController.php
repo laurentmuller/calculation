@@ -43,7 +43,7 @@ abstract class AbstractAboutController extends AbstractController
     use RenderWordDocumentTrait;
 
     public function __construct(
-        #[Autowire('%kernel.project_dir%')]
+        #[Autowire(param: 'kernel.project_dir')]
         private readonly string $projectDir,
         private readonly MarkdownService $service,
         private readonly CacheInterface $cache

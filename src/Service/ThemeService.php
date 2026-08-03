@@ -31,7 +31,7 @@ class ThemeService
     private const string KEY_THEME = 'THEME';
 
     public function __construct(
-        #[Autowire('%cookie_path%')]
+        #[Autowire(param: 'cookie_path')]
         private readonly string $cookiePath
     ) {
     }

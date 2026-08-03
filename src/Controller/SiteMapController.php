@@ -26,6 +26,9 @@ use Symfony\Component\Routing\RouterInterface;
 #[ForUser]
 class SiteMapController extends AbstractController
 {
+    /** The logout route name. */
+    public const string LOGOUT_ROUTE = 'app_logout';
+
     private readonly array $content;
 
     public function __construct(
@@ -75,7 +78,7 @@ class SiteMapController extends AbstractController
         $results = [];
         /** @var string|array $value */
         foreach ($values as $key => $value) {
-            if ('route' === $key && \is_string($value)) {
+            if ('route' === $key && \is_string($value) && self::LOGOUT_ROUTE !== $value) {
                 $results[] = $value;
             } elseif (\is_array($value)) {
                 $results = \array_merge($results, $this->loadRoutes($value));

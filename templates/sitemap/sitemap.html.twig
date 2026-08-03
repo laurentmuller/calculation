@@ -28,7 +28,7 @@
 {# output entry content #}
 {% macro entry_content(entry, route) %}
 {% set icon = entry.icon is defined ? entry.icon ~ ' fa-fw' : false %}
-{% if route == 'app_logout' %}
+{% if route === constant('App\\Controller\\SiteMapController::LOGOUT_ROUTE') %}
     <a href="{{ logout_path() }}">{{ icon(icon: icon, text: entry.text) }}</a>
 {% elseif route and entry.external|default(false) %}
     {{ linkExternal(

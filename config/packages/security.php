@@ -81,7 +81,6 @@ return App::config([
                     'parameter' => SwitchUserListener::SWITCH_USER_PARAMETER,
                 ],
                 'logout' => [
-                    'path' => SecurityAttributes::LOGOUT_ROUTE,
                     'csrf_parameter' => SecurityAttributes::LOGOUT_TOKEN,
                     'enable_csrf' => true,
                 ],

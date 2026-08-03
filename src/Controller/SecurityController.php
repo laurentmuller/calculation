@@ -14,9 +14,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Attribute\ForPublicAccess;
-use App\Attribute\ForUser;
 use App\Attribute\GetPostRoute;
-use App\Attribute\GetRoute;
 use App\Constants\SecurityAttributes;
 use App\Entity\User;
 use App\Form\User\UserLoginType;
@@ -45,12 +43,5 @@ class SecurityController extends AbstractController
             'error' => $utils->getLastAuthenticationError(),
             'form' => $form,
         ]);
-    }
-
-    #[ForUser]
-    #[GetRoute(path: '/logout', name: SecurityAttributes::LOGOUT_ROUTE)]
-    public function logout(): never
-    {
-        throw new \LogicException('This method should never be reached.');
     }
 }

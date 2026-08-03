@@ -19,6 +19,10 @@ return Routes::config([
     'controllers' => [
         'resource' => 'routing.controllers',
     ],
+    '_security_logout' => [
+        'resource' => 'security.route_loader.logout',
+        'type' => 'service',
+    ],
     'when@dev' => [
         ' _error' => [
             'resource' => '@FrameworkBundle/Resources/config/routing/errors.php',

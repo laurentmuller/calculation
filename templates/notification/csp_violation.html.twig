@@ -10,7 +10,7 @@
     <container>
         <table id="csp">
             {% for key, value in context %}
-                {% if 'original-policy' == key %}
+                {% if 'original-policy' === key %}
                     <tr>
                         <td colspan="2"><u>{{ key }}</u></td>
                     </tr>

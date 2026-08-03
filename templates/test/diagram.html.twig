@@ -20,7 +20,7 @@
         <div class="input-group input-group-sm">
             <select class="form-select form-select-sm w-auto" id="diagrams" name="diagrams" title="{{ 'diagram.list'|trans }}">
                 {% for current in diagrams %}
-                    <option value="{{ current.name }}"{% if current == diagram %} selected{% endif %}>
+                    <option value="{{ current.name }}"{% if current === diagram %} selected{% endif %}>
                         {{- current.title -}}
                     </option>
                 {% endfor %}

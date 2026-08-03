@@ -27,21 +27,21 @@
 {% macro position(position, selection) -%}
     {% set attrs = {
         value: position.value,
-        selected: position == selection} %}
+        selected: position === selection} %}
     <option {{ html_attr(attrs) }}>{{ position|trans }}</option>
 {%- endmacro position %}
 
 {% macro timeout(seconds, selection) -%}
     {% set attrs = {
         value: seconds * 1000,
-        selected: seconds * 1000 == selection} %}
+        selected: seconds * 1000 === selection} %}
     <option {{ html_attr(attrs) }}>{{ 'counters.seconds'|trans({'%count%': seconds}) }}</option>
 {%- endmacro timeout %}
 
 {% macro progress(pixels, selection) -%}
     {% set attrs = {
         value: pixels,
-        selected: pixels == selection} %}
+        selected: pixels === selection} %}
     <option {{ html_attr(attrs) }}>{{ 'counters.pixels'|trans({'%count%': pixels}) }}</option>
 {%- endmacro progress %}
 
@@ -115,7 +115,7 @@
             <label class="form-label" for="maxNbChars">Nombre de caractères</label>
             <select id="maxNbChars" name="maxNbChars" data-default="{{ selection }}" class="form-select">
                 {% for i in range(50, 500, 50) %}
-                    <option value="{{ i }}"{% if i == selection %} selected{% endif %}>{{ i }}</option>
+                    <option value="{{ i }}"{% if i === selection %} selected{% endif %}>{{ i }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -146,7 +146,7 @@
                 name: 'radio-theme',
                 id: 'radio-theme-' ~ theme.value,
                 value: theme.value,
-                checked: theme == current,
+                checked: theme === current,
                 autocomplete: 'off',
                 'data-success': theme.success|trans,
             } %}

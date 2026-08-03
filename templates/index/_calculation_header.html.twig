@@ -3,14 +3,14 @@
 {# macros #}
 {% macro button_view(icon, view, selection, value) %}
 <li>
-    <button type="button" class="dropdown-item dropdown-item-view{% if view == selection %} dropdown-item-checked-right{% endif %}" data-value="{{ value|json_encode }}">
+    <button type="button" class="dropdown-item dropdown-item-view{% if selection %} dropdown-item-checked-right{% endif %}" data-value="{{ value|json_encode }}">
         {{- icon(icon ~ ' fa-fw', 'table_view.' ~ view) -}}
     </button>
 </li>
 {%- endmacro button_view %}
 {% macro button_counter(value, selection) %}
 <li>
-    <button class="dropdown-item dropdown-item-counter{% if value == selection %} dropdown-item-checked-right{% endif %}" data-value="{{ value }}" >
+    <button class="dropdown-item dropdown-item-counter{% if value === selection %} dropdown-item-checked-right{% endif %}" data-value="{{ value }}" >
         {{- 'counters.calculations'|trans({count: value}) -}}
     </button>
 </li>

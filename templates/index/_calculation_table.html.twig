@@ -6,7 +6,7 @@
             {%- set is_editable = calculation.stateEditable -%}
             {%- set params = route_params(app.request, id)|merge({caller: caller}) -%}
             {% set class_name = 'row-item' %}
-            {% if id == selection %}
+            {% if id === selection %}
                 {% set class_name = class_name ~ ' table-primary' %}
             {% endif %}
             {% if not is_editable %}

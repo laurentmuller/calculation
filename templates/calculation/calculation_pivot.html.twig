@@ -228,13 +228,13 @@
             <thead>
             {%- for i in 1..max_col_level -%}
                 <tr>
-                    {%- if i == 1 -%}
+                    {%- if i === 1 -%}
                         <td class="text-nowrap not-hover p-0"{{ _self.rowspan(max_col_level) }}{{ _self.colspan(max_row_level) }}>
                             {{- _self.outputTitle(table, max_col_level) -}}
                         </td>
                     {%- endif -%}
                     {{ _self.outputHeaders(table.rootColumn.nodesAtLevel(i), separator) }}
-                    {%- if i == 1 -%}
+                    {%- if i === 1 -%}
                         <td{{ _self.rowspan(max_col_level) }} class="text-currency text-bg-success not-hover align-bottom">
                             {{- total_title -}}
                         </td>

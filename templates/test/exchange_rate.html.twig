@@ -4,12 +4,12 @@
 {% macro fillCodes(codes, selection = '') %}
     {% for key, code in codes -%}
         <option value="{{ key }}" data-name="{{ code.symbol }}"
-                data-digits="{{ code.fractionDigits }}"{% if key == selection %} selected{% endif %}>{{ code.name ~ ' - ' ~ code.symbol }}</option>
+                data-digits="{{ code.fractionDigits }}"{% if key === selection %} selected{% endif %}>{{ code.name ~ ' - ' ~ code.symbol }}</option>
     {% endfor -%}
 {% endmacro fillCodes %}
 {% macro fillEntries(codes, selection = '') %}
     {% for key, code in codes -%}
-        <button class="dropdown-item{% if key == selection %} active{% endif %}" type="button" data-value="{{ key }}"
+        <button class="dropdown-item{% if key === selection %} active{% endif %}" type="button" data-value="{{ key }}"
                 data-name="{{ code.symbol }}"
                 data-digits="{{ code.fractionDigits }}">{{ code.name ~ ' - ' ~ code.symbol }}</button>
     {% endfor -%}

@@ -4,7 +4,7 @@
 {# macros #}
 {% macro addInterval(value, count, message, selection) -%}
     {%- set text = message|trans({count: count}) -%}
-    <option value="{{ value }}"{% if value == selection %} selected{% endif %}>{{ text }}</option>
+    <option value="{{ value }}"{% if value === selection %} selected{% endif %}>{{ text }}</option>
 {%- endmacro addInterval %}
 {% macro addButton(class, disabled, path, title, icon, date = null) -%}
     <button type="button" class="btn btn-secondary {{ class }}"{% if disabled %} disabled{% endif %} data-url="{{ url(path) }}" title="{{ title|trans }}"{% if date %} data-date="{{ date }}"{% endif %}>
@@ -16,8 +16,8 @@
 {%- set title_icon = 'fa-solid fa-stream' -%}
 {%- set min_date_locale = min_date|locale_date('none', 'yyyy-MM-dd') -%}
 {%- set max_date_locale = max_date|locale_date('none', 'yyyy-MM-dd') -%}
-{%- set is_first = from == min_date -%}
-{%- set is_last = to == max_date -%}
+{%- set is_first = from === min_date -%}
+{%- set is_last = to === max_date -%}
 {# body #}
 {% block body -%}
 <div>

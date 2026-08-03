@@ -35,7 +35,7 @@
                     </div>
                 </div>
                 {% if column %}
-                    {% set key = column.order == 'asc' ? 'list.sort_ascending_title' : 'list.sort_descending_title' %}
+                    {% set key = column.order === 'asc' ? 'list.sort_ascending_title' : 'list.sort_descending_title' %}
                     <div class="small text-body-tertiary mt-2">{{ key|trans({'%name%': column.title}) }}</div>
                 {% endif %}
             </div>

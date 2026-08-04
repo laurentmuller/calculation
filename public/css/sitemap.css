@@ -1,8 +1,8 @@
 @import 'style.css';
 
 :root {
-    --sitemap-line-width: 1px;
-    --sitemap-border-width: 2px;
+    --sitemap-line-width: 2px;
+    --sitemap-border-width: 0;
 }
 
 /* reset styles */
@@ -29,24 +29,23 @@
 /* entry */
 .sitemap li a,
 .sitemap li span {
-    color: white;
+    color: var(--bs-white);
     display: block;
     text-decoration: none;
-    border: var(--sitemap-border-width) solid var(--bs-border-color-translucent);
 }
 
 /* top level */
 .primary-nav {
     clear: both;
     width: 100%;
-    margin-top: 3em;
+    margin-top: 3rem;
 }
 
 .primary-nav .home {
     position: absolute;
-    margin-top: -3em;
+    margin-top: -3rem;
     margin-bottom: 0;
-    min-width: 11.5em;
+    min-width: 11.5rem;
     width: 100%;
 }
 
@@ -63,8 +62,8 @@
 
 .primary-nav li {
     flex: 1;
-    flex-basis: 11.5em;
-    padding-right: 1.25em;
+    flex-basis: 11.5rem;
+    padding-right: 1.25rem;
     position: relative;
 }
 
@@ -73,87 +72,92 @@
 }
 
 .primary-nav > ul > li {
-    margin-top: 3em;
+    margin-top: 3rem;
 }
 
 .primary-nav li a,
 .primary-nav li span {
+    display: flex;
+    align-items: first baseline;
+    text-align: start;
+    width: 100%;
     margin: 0;
-    padding: .875em .9375em .9375em;
-    background-color: #0090ff;
+    padding: .875em .9375em .9375rem;
+    background-color: var(--bs-primary);
+    border: var(--sitemap-border-width) solid var(--bs-primary-border-subtle);
 }
 
 .primary-nav li a:hover {
-    background-color: #0070f9;
+    background-color: var(--bs-primary-text-emphasis);
 }
 
 /* second level */
-
 .primary-nav ul ul {
     display: block;
 }
 
 .primary-nav ul ul li {
-    padding-top: .6875em;
+    padding-top: .6875rem;
     padding-right: 0;
 }
 
 .primary-nav ul ul li a {
-    background-color: #28bf5e;
+    background-color: var(--bs-success);
+    border: var(--sitemap-border-width) solid var(--bs-success-border-subtle);
 }
 
 .primary-nav ul ul li a:hover {
-    background-color: #09a63e;
+    background-color: var(--bs-success-text-emphasis);
 }
 
 .primary-nav ul ul li:first-child {
-    padding-top: 2em;
+    padding-top: 2rem;
 }
 
 /* third level */
-
 .primary-nav ul ul ul {
-    margin-top: .6em;
-    padding-top: .6em;
+    margin-top: .6rem;
+    padding-top: .6rem;
 }
 
 .primary-nav ul ul ul li {
-    padding-top: .3125em;
-    padding-bottom: .3125em;
+    padding-top: .3125rem;
+    padding-bottom: .3125rem;
 }
 
 .primary-nav ul ul ul li a {
-    background-color: #ff9d00;
-    padding: .75em;
+    padding: .75rem;
     width: 90%;
     margin-right: 0;
     margin-left: auto;
+    background-color: var(--bs-warning);
+    border: var(--sitemap-border-width) solid var(--bs-warning-border-subtle);
 }
 
 .primary-nav ul ul ul li a:hover {
-    background-color: #ff831b;
+    background-color: var(--bs-warning-text-emphasis);
 }
 
 .primary-nav ul ul ul li:first-child {
-    padding-top: 1em;
+    padding-top: 1rem;
 }
 
 /* fourth level */
-
 .primary-nav ul ul ul ul {
     margin-top: 0;
-    padding-top: .3125em;
-    padding-bottom: .3125em;
+    padding-top: .3125rem;
+    padding-bottom: .3125rem;
 }
 
 .primary-nav ul ul ul ul li a {
-    background-color: #de003a;
-    padding: .75em;
+    padding: .75rem;
     width: 80%;
+    background-color: var(--bs-danger);
+    border: var(--sitemap-border-width) solid var(--bs-danger-border-subtle);
 }
 
 .primary-nav ul ul ul ul li a:hover {
-    background-color: #c20035;
+    background-color: var(--bs-danger-text-emphasis);
 }
 
 .primary-nav ul ul ul ul li a:link::after,
@@ -169,15 +173,14 @@
     content: '';
     display: block;
     position: absolute;
-    border-width: 0;
-    border-color: var(--bs-dark-border-subtle);
-    border-style: solid;
     z-index: -1;
+    border: 0 solid var(--bs-border-color);
+
 }
 
 .primary-nav > ul > li::before {
-    height: 1.375em;
-    top: -1.375em;
+    height: 1.375rem;
+    top: -1.375rem;
     right: calc(50% + .625em);
     width: 100%;
     border-top-width: var(--sitemap-line-width);
@@ -186,13 +189,13 @@
 
 .primary-nav > ul > li:first-child + li::before {
     border-top-width: 0;
-    height: 5em;
-    top: -5em;
+    height: 5rem;
+    top: -5rem;
 }
 
 .primary-nav ul ul li::after {
     width: 50%;
-    height: .6875em;
+    height: .6875rem;
     top: 0;
     right: var(--sitemap-line-width);
     border-left-width: var(--sitemap-line-width);
@@ -200,8 +203,8 @@
 
 .primary-nav ul ul li:first-child::before {
     width: 50%;
-    height: 1.3125em;
-    top: .6875em;
+    height: 1.3125rem;
+    top: .6875rem;
     right: var(--sitemap-line-width);
     border-left-width: var(--sitemap-line-width);
 }
@@ -220,14 +223,14 @@
 }
 
 .primary-nav ul ul ul li:first-child::before {
-    height: 2.125em;
+    height: 2.125rem;
     top: calc(var(--sitemap-line-width) * -1);
     border-top-width: var(--sitemap-line-width);
 }
 
 .primary-nav ul ul ul::before {
     width: 50%;
-    height: 1.25em;
+    height: 1.25rem;
     top: -11px;
     right: var(--sitemap-line-width);
     border-left-width: var(--sitemap-line-width);
@@ -245,7 +248,7 @@
 .primary-nav ul ul ul ul::before {
     width: var(--sitemap-line-width);
     height: calc(100% + 2.5em);
-    top: -2.5em;
+    top: -2.5rem;
     left: 0;
     border-left-width: var(--sitemap-line-width);
 }
@@ -254,14 +257,14 @@
 .utility-nav {
     float: right;
     margin-top: 0;
-    margin-bottom: -.25em;
+    margin-bottom: -.25rem;
     max-width: 48%;
     list-style-type: none;
 }
 
 .utility-nav li {
-    padding-right: .625em;
-    padding-bottom: .625em;
+    padding-right: .625rem;
+    padding-bottom: .625rem;
     display: inline-block;
 }
 
@@ -271,18 +274,19 @@
 
 .utility-nav li a,
 .utility-nav li span {
-    padding: .75em .875em;
-    background-color: #ff9d00;
+    padding: .75em .875rem;
+    background-color: var(--bs-secondary);
+    border: var(--sitemap-border-width) solid var(--bs-secondary-border-subtle);
 }
 
 .utility-nav li a:hover {
-    background-color: #ff831b;
+    background-color: var(--bs-secondary-text-emphasis);
 }
 
 .utility-nav li a:link::after,
 .utility-nav li a:visited::after {
     color: rgb(255 255 255 / 75%);
-    margin-top: .25em;
+    margin-top: .25rem;
 }
 
 /* responsive styles */
@@ -299,7 +303,7 @@
     .primary-nav .home {
         width: 100%;
         position: relative;
-        margin-bottom: -1em;
+        margin-bottom: -1rem;
         margin-top: 0;
     }
 
@@ -308,7 +312,7 @@
         display: block;
         width: 100%;
         text-align: right;
-        margin-bottom: 2.5em;
+        margin-bottom: 2.5rem;
         max-width: 100%;
     }
 }

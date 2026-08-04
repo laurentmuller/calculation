@@ -7,19 +7,19 @@
 {% block card_container_class ' col-md-8 offset-md-2 col-xl-6 offset-xl-3' %}
 {# header #}
 {% block card_header -%}
-{{ parent() }}
-{%- if error|default(false) -%}
-<p class="small text-danger mb-0">
-    {{- error.messageKey|trans(error.messageData, 'security') -}}
-</p>
-{%- endif -%}
+    {{ parent() }}
+    {%- if error|default(false) -%}
+        <p class="small text-danger mb-0">
+            {{- error.messageKey|trans(error.messageData, 'security') -}}
+        </p>
+    {%- endif -%}
 {%- endblock card_header %}
 {# footer #}
 {% block card_footer -%}
-{{ parent() }}
-{{ footer_center() }}
+    {{ parent() }}
+    {{ footer_center() }}
 {% endblock card_footer %}
 {# stylesheets #}
 {% block stylesheets -%}
-{{- asset_css('css/center.css') }}
+    {{- asset_css('css/center.css') }}
 {% endblock stylesheets %}

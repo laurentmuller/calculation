@@ -4,17 +4,17 @@
             "permission": "export",
             "external": true,
             "text": "common.button_pdf",
-            "icon": "fa-solid fa-file-pdf"
+            "icon": "fa-regular fa-file-pdf"
         },
         "excel": {
             "permission": "export",
             "external": true,
             "text": "common.button_export",
-            "icon": "fa-solid fa-file-excel"
+            "icon": "fa-regular fa-file-excel"
         },
         "add": {
             "permission": "add",
-            "icon": "fa-solid fa-file"
+            "icon": "fa-regular fa-file"
         }
     },
     "primary": [

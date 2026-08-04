@@ -2,47 +2,47 @@
 {% from 'macros/_icons.html.twig' import icon, link, linkExternal %}
 {# output entry #}
 {% macro entry(entry, actions, entity = null, role = 'ROLE_USER') %}
-{% set role = entry.role is defined ? ('role_' ~ entry.role)|upper : role %}
-{% set route = entry.route|default(false) %}
-{% set entity = entry.entity|default(entity) %}
-{% set permission = entry.permission|default(false) %}
-{% set display = is_granted(role) %}
-{% if permission and entity %}
-    {% set display = display and is_granted(permission, entity) %}
-{% endif %}
-{% if display %}
-    {% set action = actions[entry.action|default()]|default({}) %}
-    {% set entry = entry|merge(action) %}
-    <li{% if entry.class|default(false) %} class="{{ entry.class }}"{% endif %}>
-        {{ _self.entry_content(entry, route) }}
-        {% if entry.entries|default({})|length %}
-            <ul>
-                {% for child in entry.entries %}
-                    {{ _self.entry(child, actions, entity, role) }}
-                {% endfor %}
-            </ul>
-        {% endif %}
-    </li>
-{% endif %}
+    {% set role = entry.role is defined ? ('role_' ~ entry.role)|upper : role %}
+    {% set route = entry.route|default(false) %}
+    {% set entity = entry.entity|default(entity) %}
+    {% set permission = entry.permission|default(false) %}
+    {% set display = is_granted(role) %}
+    {% if permission and entity %}
+        {% set display = display and is_granted(permission, entity) %}
+    {% endif %}
+    {% if display %}
+        {% set action = actions[entry.action|default()]|default({}) %}
+        {% set entry = entry|merge(action) %}
+        <li{% if entry.class|default(false) %} class="{{ entry.class }}"{% endif %}>
+            {{ _self.entry_content(entry, route) }}
+            {% if entry.entries|default({})|length %}
+                <ul>
+                    {% for child in entry.entries %}
+                        {{ _self.entry(child, actions, entity, role) }}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </li>
+    {% endif %}
 {%- endmacro entry %}
 {# output entry content #}
 {% macro entry_content(entry, route) %}
-{% set icon = entry.icon is defined ? entry.icon ~ ' fa-fw' : false %}
-{% if route === constant('App\\Controller\\SiteMapController::LOGOUT_ROUTE') %}
-    <a href="{{ logout_path() }}">{{ icon(icon: icon, text: entry.text) }}</a>
-{% elseif route and entry.external|default(false) %}
-    {{ linkExternal(
-        href: path(route),
-        text: entry.text,
-        icon: icon) }}
-{% elseif route %}
-    {{ link(
-        href: path(route, {caller: path('site_map')}),
-        text: entry.text,
-        icon: icon) }}
-{% else %}
-    <span>{{ icon(icon: icon, text: entry.text) }}</span>
-{% endif %}
+    {% set icon = entry.icon is defined ? entry.icon ~ ' fa-fw' : false %}
+    {% if route === constant('App\\Controller\\SiteMapController::LOGOUT_ROUTE') %}
+        <a href="{{ logout_path() }}">{{ icon(icon: icon, text: entry.text) }}</a>
+    {% elseif route and entry.external|default(false) %}
+        {{ linkExternal(
+            href: path(route),
+            text: entry.text,
+            icon: icon) }}
+    {% elseif route %}
+        {{ link(
+            href: path(route, {caller: path('site_map')}),
+            text: entry.text,
+            icon: icon) }}
+    {% else %}
+        <span>{{ icon(icon: icon, text: entry.text) }}</span>
+    {% endif %}
 {%- endmacro entry_content %}
 {# parameters #}
 {%- set title = 'index.menu_site_map' -%}
@@ -54,28 +54,28 @@
 {% block container_class 'container-fluid' %}
 {# body #}
 {% block body -%}
-<div class="sitemap">
-{% if utility|length %}
-    <nav class="utility-nav">
-        <ul>
-        {% for entry in utility %}
-            {{ _self.entry(entry, actions) }}
-        {% endfor %}
-        </ul>
-    </nav>
-{% endif %}
-{% if primary|length %}
-    <nav class="primary-nav">
-        <ul>
-        {% for entry in primary %}
-            {{ _self.entry(entry, actions) }}
-        {% endfor %}
-        </ul>
-    </nav>
-{% endif %}
-</div>
+    <div class="sitemap">
+        {% if utility|length %}
+            <nav class="utility-nav">
+                <ul>
+                    {% for entry in utility %}
+                        {{ _self.entry(entry, actions) }}
+                    {% endfor %}
+                </ul>
+            </nav>
+        {% endif %}
+        {% if primary|length %}
+            <nav class="primary-nav">
+                <ul>
+                    {% for entry in primary %}
+                        {{ _self.entry(entry, actions) }}
+                    {% endfor %}
+                </ul>
+            </nav>
+        {% endif %}
+    </div>
 {%- endblock body %}
 {# stylesheets #}
 {% block stylesheets %}
-{{ asset_css('css/sitemap.css') }}
+    {{ asset_css('css/sitemap.css') }}
 {% endblock stylesheets %}

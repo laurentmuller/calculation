@@ -18,6 +18,7 @@ use App\Attribute\GetRoute;
 use App\Utils\FileUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -44,8 +45,11 @@ class SiteMapController extends AbstractController
     {
         $missingRoutes = $this->getMissingRoutes();
         if ([] !== $missingRoutes) {
-            $message = \sprintf('Unable to generate URL for the named route: "%s".', \implode('", "', $missingRoutes));
-            throw $this->createNotFoundException($message);
+            $message = \sprintf(
+                'Unable to generate URL for the named route(s): "%s".',
+                \implode('", "', $missingRoutes)
+            );
+            throw new UnprocessableEntityHttpException($message);
         }
 
         return $this->render('sitemap/sitemap.html.twig', ['content' => $this->content]);
@@ -54,18 +58,7 @@ class SiteMapController extends AbstractController
     /**
      * @return string[]
      */
-    private function getMissingRoutes(): array
-    {
-        $existing = $this->getRouteNames();
-        $routes = $this->loadRoutes($this->content);
-
-        return \array_diff($routes, $existing);
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getRouteNames(): array
+    private function getExistingRoutes(): array
     {
         return \array_keys($this->router->getRouteCollection()->all());
     }
@@ -73,15 +66,25 @@ class SiteMapController extends AbstractController
     /**
      * @return string[]
      */
-    private function loadRoutes(array $values): array
+    private function getMissingRoutes(): array
+    {
+        $existingRoutes = $this->getExistingRoutes();
+        $requiredRoutes = $this->getRequiredRoutes($this->content);
+
+        return \array_diff($requiredRoutes, $existingRoutes);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getRequiredRoutes(array $values): array
     {
         $results = [];
-        /** @var string|array $value */
         foreach ($values as $key => $value) {
             if ('route' === $key && \is_string($value) && self::LOGOUT_ROUTE !== $value) {
                 $results[] = $value;
             } elseif (\is_array($value)) {
-                $results = \array_merge($results, $this->loadRoutes($value));
+                $results = \array_merge($results, $this->getRequiredRoutes($value));
             }
         }
 

@@ -283,11 +283,13 @@
     background-color: var(--bs-secondary-text-emphasis);
 }
 
+/*
 .utility-nav li a:link::after,
 .utility-nav li a:visited::after {
     color: rgb(255 255 255 / 75%);
     margin-top: .25rem;
 }
+*/
 
 /* responsive styles */
 @media screen and (width <= 30em) {

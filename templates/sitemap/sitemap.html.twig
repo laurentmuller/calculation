@@ -11,7 +11,8 @@
         {% set display = display and is_granted(permission, entity) %}
     {% endif %}
     {% if display %}
-        {% set action = actions[entry.action|default()]|default({}) %}
+        {% set key = entry.action|default %}
+        {% set action = actions[key]|default({}) %}
         {% set entry = entry|merge(action) %}
         <li{% if entry.class|default(false) %} class="{{ entry.class }}"{% endif %}>
             {{ _self.entry_content(entry, route) }}
@@ -27,17 +28,17 @@
 {%- endmacro entry %}
 {# output entry content #}
 {% macro entry_content(entry, route) %}
-    {% set icon = entry.icon is defined ? entry.icon ~ ' fa-fw' : false %}
+    {% set icon = entry.icon ?? false %}
     {% if route === constant('App\\Controller\\SiteMapController::LOGOUT_ROUTE') %}
         <a href="{{ logout_path() }}">{{ icon(icon: icon, text: entry.text) }}</a>
     {% elseif route and entry.external|default(false) %}
         {{ linkExternal(
-            href: path(route),
+            href: path(route, {}, false),
             text: entry.text,
             icon: icon) }}
     {% elseif route %}
         {{ link(
-            href: path(route, {caller: path('site_map')}),
+            href: path(route, {caller: path('site_map')}, false),
             text: entry.text,
             icon: icon) }}
     {% else %}

@@ -55,7 +55,7 @@
                     "entity": "Product",
                     "permission": "list",
                     "text": "product.list.title",
-                    "icon": "fa-solid fa-file-alt",
+                    "icon": "fa-regular fa-file-alt",
                     "entries": [
                         {
                             "route": "product_add",
@@ -99,7 +99,7 @@
                     "entity": "Category",
                     "permission": "list",
                     "text": "category.list.title",
-                    "icon": "fa-solid fa-folder",
+                    "icon": "fa-regular fa-folder",
                     "entries": [
                         {
                             "route": "category_add",
@@ -121,7 +121,7 @@
                     "entity": "Group",
                     "permission": "list",
                     "text": "group.list.title",
-                    "icon": "fa-solid fa-code-branch",
+                    "icon": "fa-regular fa-folder-closed",
                     "entries": [
                         {
                             "route": "group_add",
@@ -143,7 +143,7 @@
                     "entity": "CalculationState",
                     "permission": "list",
                     "text": "calculationstate.list.title",
-                    "icon": "fa-solid fa-flag",
+                    "icon": "fa-regular fa-flag",
                     "entries": [
                         {
                             "route": "calculationstate_add",
@@ -199,7 +199,7 @@
                 {
                     "route": "chart_state_index",
                     "text": "index.menu_graphics_state",
-                    "icon": "fa-solid fa-flag"
+                    "icon": "fa-regular fa-flag"
                 }
             ]
         },
@@ -254,7 +254,7 @@
                 {
                     "route": "admin_archive",
                     "text": "archive.title",
-                    "icon": "fa-regular fa-calendar-xmark"
+                    "icon": "fa-regular fa-floppy-disk"
                 },
                 {
                     "route": "user_index",
@@ -287,7 +287,7 @@
                 {
                     "route": "admin_clear",
                     "text": "clear_cache.title",
-                    "icon": "fa-solid fa-times"
+                    "icon": "fa-solid fa-eraser"
                 }
             ]
         },

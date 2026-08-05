@@ -2,7 +2,6 @@
 {% from 'macros/_icons.html.twig' import icon, button, dropdownItemButton %}
 {% form_theme form with _self %}
 {# parameters #}
-{%- set cancel_path = path('homepage') -%}
 {%- set form_attr = form_attr|default({})|merge({'data-random': url('ajax_random_text'), 'data-failure': 'parameters.failure'|trans}) -%}
 {% block card_body_class ' p-0' %}
 {# custom progress widget #}

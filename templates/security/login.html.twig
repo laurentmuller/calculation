@@ -2,16 +2,17 @@
 {% from 'macros/_icons.html.twig' import link %}
 {# parameters #}
 {%- set title = 'security.login.title' -%}
-{%- set title_description = 'security.login.description' -%}
 {%- set title_icon = 'fa-solid fa-sign-in-alt' -%}
+{%- set title_description = 'security.login.description' -%}
 {%- set submit_text = 'security.login.submit' -%}
 {%- set submit_title = 'security.login.title' -%}
 {%- set cancel_path = false -%}
-{# footer #}
+{%- set login_token = constant('App\\Constants\\SecurityAttributes::LOGIN_TOKEN') -%}
+{%- set authenticate_token = constant('App\\Constants\\SecurityAttributes::AUTHENTICATE_TOKEN') -%}
+{# card body #}
 {% block card_body -%}
     {{ parent() }}
-    <input type="hidden" name="{{ constant('App\\Constants\\SecurityAttributes::LOGIN_TOKEN') }}"
-           value="{{ csrf_token(constant('App\\Constants\\SecurityAttributes::AUTHENTICATE_TOKEN')) }}">
+    <input type="hidden" name="{{ login_token }}" value="{{ csrf_token(authenticate_token) }}">
 {% endblock card_body %}
 {# actions #}
 {% block actions_form %}

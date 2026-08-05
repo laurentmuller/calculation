@@ -414,7 +414,7 @@
         /**
          * Append the header subtitle.
 
-         * @param {jQuery|any} $parent - the parent to append header subtitle to.
+         * @param {jQuery|any} $parent - the parent to append the header subtitle to.
          * @param {Object} options - The toast options.
          * @private
          */
@@ -430,7 +430,7 @@
         /**
          * Append the header close button.
          *
-         * @param {jQuery|any} $parent - the parent to append close button to.
+         * @param {jQuery|any} $parent - the parent to append the close button to.
          * @param {Object} options - The toast options.
          * @private
          */
@@ -457,7 +457,7 @@
         /**
          * Append the header title.
          *
-         * @param {jQuery|any} $parent - the parent to append header title to.
+         * @param {jQuery|any} $parent - the parent to append the header title to.
          * @param {Object} options - The toast options.
          * @private
          */
@@ -515,7 +515,7 @@
         /**
          * Append the bottom progress bar.
          *
-         * @param {jQuery|any} $parent - the parent to append progress bar to.
+         * @param {jQuery|any} $parent - the parent to append the progress bar to.
          * @param {Object} options - The toast options.
          * @private
          */
@@ -526,9 +526,9 @@
             const $bar = $('<div/>', {
                 class: `progress-bar overflow-hidden bg-${options.type}`,
                 role: 'progressbar',
-                'aria-valuenow': '0',
                 'aria-valuemin': '0',
-                'aria-valuemax': '100'
+                'aria-valuemax': '100',
+                'aria-valuenow': '100'
             });
             const $progress = $('<div/>', {
                 class: 'progress bg-transparent rounded-0',
@@ -543,18 +543,22 @@
         /**
          * Show the toast.
          *
-         * @param {jQuery|any} $toast - The toast to show.
+         * @param {jQuery<HTMLDivElement>} $toast - The toast to show.
          * @param {Object} options - The toast options.
          * @return {Toaster} This instance.
          * @private
          */
         _showToast: function ($toast, options) {
-            const that = this;
             if (options.progress && options.timeout > 200) {
                 const $progress = $toast.find('.progress-bar');
                 if ($progress.length) {
                     $toast.on('shown.bs.toast', function () {
-                        $progress.css('animation-duration', `${options.timeout}ms`);
+                        setTimeout(() => {
+                            $progress.css({
+                                transitionDuration: `${options.timeout}ms`,
+                                width: '100%'
+                            });
+                        }, 10);
                     });
                 }
             }
@@ -568,7 +572,7 @@
                 }
             }).toast('show');
 
-            return that;
+            return this;
         },
 
         /**

@@ -101,17 +101,7 @@ html[data-bs-theme=dark] .toast-plugin .progress-bar.bg-dark {
 }
 
 .toast-plugin .progress-bar {
-    animation-name: toast-plugin-progress;
-}
-
-@keyframes toast-plugin-progress {
-    0% {
-        width: 0
-    }
-
-    100% {
-        width: 100%
-    }
+    width: 0;
 }
 
 /* margins */

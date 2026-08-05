@@ -100,7 +100,7 @@
         <ul>
             {% for link in links %}
                 {% set type = link.type|default %}
-                {% if type === 'dialog' %}
+                {% if type == 'dialog' %}
                     {%- set dialog = service.findDialog(link.id) -%}
                     {% if dialog %}
                         {%- set href = path('help_dialog', {id: dialog.id}) -%}
@@ -108,7 +108,7 @@
                             <a href="{{ href }}">{{- _self.output_icon('fa-regular fa-file-code', dialog.name) -}}</a>
                         </li>
                     {% endif %}
-                {% elseif type === 'entity' %}
+                {% elseif type == 'entity' %}
                     {%- set entity = service.findEntity(link.id) -%}
                     {% if entity %}
                         {%- set href = path('help_entity', {id: entity.id}) -%}

@@ -133,7 +133,7 @@
 
 {%- macro output_month(month, selection) %}
     {% set attrs = {
-        class: ['dropdown-item', month === selection ? 'dropdown-item-checked-right'],
+        class: ['dropdown-item', month == selection ? 'dropdown-item-checked-right'],
         href: path('calculation_pivot_index', {months: month}),
     } %}
     <li><a {{ html_attr(attrs) }}>{{ 'counters.months'|trans({count: month}) }}</a></li>
@@ -141,7 +141,7 @@
 
 {%- macro output_operation(operation, selection) %}
     {% set attrs = {
-        class: ['dropdown-item', operation === selection ? 'dropdown-item-checked-right'],
+        class: ['dropdown-item', operation == selection ? 'dropdown-item-checked-right'],
         href: path('calculation_pivot_index', {operation: operation.value}),
     } %}
     <li><a {{ html_attr(attrs) }}>{{ operation|trans }}</a></li>
@@ -228,13 +228,13 @@
             <thead>
             {%- for i in 1..max_col_level -%}
                 <tr>
-                    {%- if i === 1 -%}
+                    {%- if i == 1 -%}
                         <td class="text-nowrap not-hover p-0"{{ _self.rowspan(max_col_level) }}{{ _self.colspan(max_row_level) }}>
                             {{- _self.outputTitle(table, max_col_level) -}}
                         </td>
                     {%- endif -%}
                     {{ _self.outputHeaders(table.rootColumn.nodesAtLevel(i), separator) }}
-                    {%- if i === 1 -%}
+                    {%- if i == 1 -%}
                         <td{{ _self.rowspan(max_col_level) }} class="text-currency text-bg-success not-hover align-bottom">
                             {{- total_title -}}
                         </td>

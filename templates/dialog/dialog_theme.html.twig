@@ -42,7 +42,7 @@
             <div class="modal-body mx-3">
                 <span class="form-label mb-3">{{ 'theme.help'|trans }}</span>
                 {% for theme in themes() %}
-                    {{ _self.output_theme(theme: theme, checked: theme === selection) }}
+                    {{ _self.output_theme(theme: theme, checked: theme == selection) }}
                 {% endfor %}
             </div>
             <div class="modal-footer">

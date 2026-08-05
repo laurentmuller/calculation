@@ -30,7 +30,7 @@
         type: 'button',
         role: 'button',
         'data-value': value,
-        class: ['dropdown-item dropdown-' ~ suffix, value === selection ? 'active']})
+        class: ['dropdown-item dropdown-' ~ suffix, value == selection ? 'active']})
     %}
     <li>
         <button {{ html_attr(attributes) }}>
@@ -107,7 +107,7 @@
 {# output a drop-down view item #}
 {% macro button_view(icon, view, selection) %}
 <li>
-    <button type="button" class="dropdown-item dropdown-menu-view{% if view === selection %} dropdown-item-checked-right{% endif %}" data-value="{{ view }}">
+    <button type="button" class="dropdown-item dropdown-menu-view{% if view == selection %} dropdown-item-checked-right{% endif %}" data-value="{{ view }}">
         {{- icon(icon ~ ' fa-fw', 'table_view.' ~ view) -}}
     </button>
 </li>
@@ -278,7 +278,7 @@
     </thead>
     <tbody{% if row_link|default(true) %} data-link="row" class="rowlink" data-target="a.btn-default"{% endif %}>
         {% for row in rows %}
-        <tr{% if row.id === id %} class="{{ row_selector }}"{%- set row_selector = '' -%}{% endif %}>
+        <tr{% if row.id == id %} class="{{ row_selector }}"{%- set row_selector = '' -%}{% endif %}>
             {% for column in columns %}
             <td>{{ row[column.alias]|raw }}</td>
             {% endfor %}

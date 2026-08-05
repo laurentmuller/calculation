@@ -9,7 +9,7 @@
             {% for data in daily.list %}
             <tr>
                 <td class="ow-date">
-                    {%- if loop.index === 1 -%}
+                    {%- if loop.index == 1 -%}
                         {{- 'openweather.current.today'|trans -}}
                     {%- else -%}
                         {{- data.dt|locale_date('none', 'eeee') }}

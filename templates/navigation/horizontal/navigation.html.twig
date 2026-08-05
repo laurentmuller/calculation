@@ -53,7 +53,7 @@
                 {% endif %}
             </ul>
             <ul class="navbar-nav">
-                {% if is_granted_data and app.current_route !== 'search' -%}
+                {% if is_granted_data and app.current_route != 'search' -%}
                     {{ include('navigation/horizontal/navigation_search.html.twig') }}
                 {% endif %}
                 {% if is_granted(IS_AUTHENTICATED_REMEMBERED) -%}

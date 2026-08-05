@@ -25,7 +25,7 @@
     <tbody>
     {% for margin in child.margins %}
         <tr>
-            <td>{{ loop.index === 1 ? child.name : '&nbsp;'|raw }}</td>
+            <td>{{ loop.index == 1 ? child.name : '&nbsp;'|raw }}</td>
             <td class="text-currency">{{ margin.minimum|amount }}</td>
             <td class="text-currency">{{ margin.maximum|amount }}</td>
             <td class="text-currency">{{ margin.value|amount }}</td>

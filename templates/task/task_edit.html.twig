@@ -55,7 +55,7 @@
                 </div>
             </div>
             <hr class="my-0">
-            <table class="table table-borderless table-sm table-edit{% if count === 0 %} d-none{% endif %}" data-prototype="{{ outputMarginRow(item.margins.vars.prototype)|e('html_attr') }}">
+            <table class="table table-borderless table-sm table-edit{% if count == 0 %} d-none{% endif %}" data-prototype="{{ outputMarginRow(item.margins.vars.prototype)|e('html_attr') }}">
                 <thead>
                     <tr>
                         <th class="vertical-middle text-end fw-normal required">{{ 'taskitemmargin.fields.minimum'|trans }}</th>
@@ -119,7 +119,7 @@
 </div>
 <div class="items list-group" id="items" data-item-index="{{ item_index }}" data-margin-index="{{ margin_index }}" data-prototype="{{ _self.outputTaskItem(form.items.vars.prototype, true)|e('html_attr') }}">
     {% for item in form.items -%}
-        {{ _self.outputTaskItem(item, loop.index === 1) }}
+        {{ _self.outputTaskItem(item, loop.index == 1) }}
     {% endfor -%}
 </div>
 <small class="text-body-secondary empty-items{% if form.vars.value.count > 0 %} d-none{% endif %}">{{- 'task.edit.empty_items'|trans -}}</small>

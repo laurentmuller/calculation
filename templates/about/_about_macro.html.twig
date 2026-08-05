@@ -49,7 +49,7 @@
 {%- endmacro rowInfoLink %}
 
 {% macro rowInfoBoolean(name, value, enabled) -%}
-    {%- if value === true or value === false -%}
+    {%- if value == true or value == false -%}
         {%- set enabled = value -%}
         {%- set value = value|boolean -%}
     {%- endif -%}

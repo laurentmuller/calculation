@@ -12,7 +12,7 @@
 {% macro cell_value(value, previous, user_percent = false) -%}
     {% if not previous %}
         {% set icon = false %}
-    {% elseif previous === value %}
+    {% elseif previous == value %}
         {% set icon = 'right' %}
         {% set color = 'text-secondary' %}
     {% elseif previous < value %}
@@ -51,7 +51,7 @@
             -}}
             <ul class="dropdown-menu dropdown-menu-end">
                 {% for value in allowedMonths %}
-                    {{ _self.month(value, value === months) }}
+                    {{ _self.month(value, value == months) }}
                 {% endfor %}
             </ul>
         {% endif %}

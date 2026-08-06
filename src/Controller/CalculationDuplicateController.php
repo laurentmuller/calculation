@@ -96,9 +96,7 @@ class CalculationDuplicateController extends AbstractController
     private function getEmptyResponse(CalculationRepository $repository): ?RedirectResponse
     {
         if (0 === $repository->countItemsDuplicate()) {
-            return $this->redirectToHomePage(
-                message: TranslatableFlashMessage::warning('duplicate.empty')
-            );
+            return $this->redirectToHomePage(TranslatableFlashMessage::warning('duplicate.empty'));
         }
 
         return null;

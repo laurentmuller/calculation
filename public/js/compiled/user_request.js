@@ -12,4 +12,5 @@
  * Specific Files
  */
 <!--#include file="../application/user_recaptcha.js" -->
+<!--#include file="../application/button_themes.js" -->
 <!--#include file="../application/user_request.js" -->

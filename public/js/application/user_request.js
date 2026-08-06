@@ -8,13 +8,13 @@ $(function () {
     const $captcha = $('#captcha').initCaptcha();
 
     // initialize validator
-    const $form = $("#edit-form");
+    const $form = $('#edit-form');
     const url = $form.data('check-user');
     const options = {
         showModification: false,
         rules: {
             'user': {
-                    remote: {
+                remote: {
                     url: url,
                     data: {
                         user: function () {
@@ -36,4 +36,7 @@ $(function () {
         }
     };
     $form.initValidator(options);
+
+    // theme
+    initThemeButtons();
 });

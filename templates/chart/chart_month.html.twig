@@ -32,31 +32,30 @@
 {%- set title_icon = 'fa-regular fa-calendar-alt' -%}
 {%- set pdf_route = 'chart_month_pdf' -%}
 {%- set pdf_params = {count: months} -%}
+{% block card_header_class ' d-flex-wrap-center' %}
 {# class #}
 {% block card_container_class '' -%}
 {% block chart_class ' month' -%}
-{# card_header #}
-{% block card_header %}
-    <div class="d-flex-wrap-center justify-content-between">
-        {{ parent() }}
-        {% if allowedMonths|length %}
-            {{- button(
-                text: 'chart.month.fields.period',
-                class: ['btn', 'btn-sm', 'btn-outline-secondary', 'dropdown-toggle'],
-                icon: 'fa-regular fa-calendar-days',
-                attributes: {
-                    'data-bs-toggle': 'dropdown',
-                    'aria-expanded': false,
-                })
-            -}}
-            <ul class="dropdown-menu dropdown-menu-end">
-                {% for value in allowedMonths %}
-                    {{ _self.month(value, value == months) }}
-                {% endfor %}
-            </ul>
-        {% endif %}
-    </div>
-{%- endblock card_header %}
+{# card_title #}
+{% block card_title %}
+    {{ parent() }}
+    {% if allowedMonths|length %}
+        {{- button(
+            text: 'chart.month.fields.period',
+            class: ['btn', 'btn-sm', 'btn-outline-secondary', 'dropdown-toggle'],
+            icon: 'fa-regular fa-calendar-days',
+            attributes: {
+                'data-bs-toggle': 'dropdown',
+                'aria-expanded': false,
+            })
+        -}}
+        <ul class="dropdown-menu dropdown-menu-end">
+            {% for value in allowedMonths %}
+                {{ _self.month(value, value == months) }}
+            {% endfor %}
+        </ul>
+    {% endif %}
+{%- endblock card_title %}
 {# header_row #}
 {% block header_row %}
     <th class="text-nowrap">{{ 'chart.month.fields.month'|trans }}</th>

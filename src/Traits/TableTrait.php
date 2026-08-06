@@ -52,9 +52,7 @@ trait TableTrait
         // check empty
         $message = $table->getEmptyMessage();
         if (null !== $message) {
-            return $this->redirectToHomePage(
-                message: TranslatableFlashMessage::info($message)
-            );
+            return $this->redirectToHomePage(TranslatableFlashMessage::info($message));
         }
 
         try {

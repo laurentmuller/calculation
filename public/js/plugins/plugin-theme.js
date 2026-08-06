@@ -38,7 +38,7 @@ $(function () {
          */
         constructor(element, options) {
             this.$element = $(element);
-            this.options = $.extend(true, {}, ThemeListener.DEFAULTS, $(element).data(), options);
+            this.options = $.extend(true, {}, ThemeListener.DEFAULTS, this.$element.data(), options);
             this._init();
         }
 
@@ -46,7 +46,6 @@ $(function () {
          * Remove handlers and data.
          */
         destroy() {
-            //
             this.$element.removeData(ThemeListener.NAME);
             this.$element.off('click', this.clickProxy);
             window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', this.changeProxy);

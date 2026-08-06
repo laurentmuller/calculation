@@ -15,10 +15,12 @@ namespace App\Tests\Fixture;
 
 use App\Controller\AbstractController;
 use App\Form\FormHelper;
+use App\Model\TranslatableFlashMessage;
 use App\Traits\RenderPdfDocumentTrait;
 use App\Traits\RenderSpreadsheetDocumentTrait;
 use App\Traits\RenderWordDocumentTrait;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Controller for tests with public methods.
@@ -56,5 +58,11 @@ class FixtureController extends AbstractController
     public function getCookiePath(): string
     {
         return parent::getCookiePath();
+    }
+
+    #[\Override]
+    public function redirectToHomePage(TranslatableFlashMessage|string|null $message = null): RedirectResponse
+    {
+        return parent::redirectToHomePage();
     }
 }

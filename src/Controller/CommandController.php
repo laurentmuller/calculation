@@ -154,9 +154,7 @@ class CommandController extends AbstractController
     ): Response {
         $count = $service->count();
         if (0 === $count) {
-            return $this->redirectToHomePage(
-                message: TranslatableFlashMessage::warning('command.list.empty')
-            );
+            return $this->redirectToHomePage(TranslatableFlashMessage::warning('command.list.empty'));
         }
 
         $session = $request->getSession();
@@ -183,7 +181,7 @@ class CommandController extends AbstractController
     public function pdf(CommandService $service): Response
     {
         if (0 === $service->count()) {
-            return $this->redirectToHomePage(message: 'command.list.empty');
+            return $this->redirectToHomePage('command.list.empty');
         }
 
         $root = $this->trans('command.list.available');

@@ -37,16 +37,10 @@ class CalculationArchiveController extends AbstractController
     public function invoke(Request $request, CalculationArchiveService $service): Response
     {
         if (!$service->isEditableStates()) {
-            return $this->redirectToHomePage(
-                request: $request,
-                message: TranslatableFlashMessage::warning('archive.editable_empty')
-            );
+            return $this->redirectToHomePage(TranslatableFlashMessage::warning('archive.editable_empty'));
         }
         if (!$service->isNotEditableStates()) {
-            return $this->redirectToHomePage(
-                request: $request,
-                message: TranslatableFlashMessage::warning('archive.not_editable_empty')
-            );
+            return $this->redirectToHomePage(TranslatableFlashMessage::warning('archive.not_editable_empty'));
         }
 
         $query = $service->createQuery();

@@ -58,10 +58,7 @@ class CommentController extends AbstractController
             try {
                 $service->sendComment($comment);
 
-                return $this->redirectToHomePage(
-                    request: $request,
-                    message: 'user.comment.success'
-                );
+                return $this->redirectToHomePage('user.comment.success');
             } catch (TransportExceptionInterface $e) {
                 return $this->renderFormException('user.comment.error', $e, $logger);
             }

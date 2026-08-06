@@ -87,7 +87,7 @@ class TestEditorController extends AbstractController
                     $data['attachments']
                 );
 
-                return $this->redirectToHomePage(message: 'user.comment.success');
+                return $this->redirectToHomePage('user.comment.success');
             } catch (TransportExceptionInterface $e) {
                 return $this->renderFormException('user.comment.error', $e, $logger);
             }

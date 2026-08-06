@@ -80,7 +80,7 @@ class LogController extends AbstractController
                     throw new \RuntimeException(\sprintf('Failed to delete the log file "%s".', $file));
                 }
 
-                return $this->redirectToHomePage(message: 'log.delete.success');
+                return $this->redirectToHomePage('log.delete.success');
             } catch (\Exception $e) {
                 return $this->renderFormException('log.delete.error', $e, $logger);
             } finally {
@@ -190,9 +190,7 @@ class LogController extends AbstractController
 
     private function getEmptyResponse(): RedirectResponse
     {
-        return $this->redirectToHomePage(
-            message: TranslatableFlashMessage::info('log.list.empty')
-        );
+        return $this->redirectToHomePage(TranslatableFlashMessage::info('log.list.empty'));
     }
 
     private function getLogFile(): ?LogFile

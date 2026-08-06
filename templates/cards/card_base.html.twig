@@ -10,12 +10,14 @@
             {# card header #}
             <div class="card-header{% block card_header_class %}{% endblock card_header_class %}">
                 {% block card_header %}
-                <h1 class="card-title py-1">
-                    {{- icon(icon: title_icon, text: title, parameters: title_parameters) -}}
-                </h1>
-                {% if title_description ?? false %}
-                    <small>{{ title_description|trans }}</small>
-                {% endif %}
+                    {% block card_title %}
+                        <h1 class="card-title py-1 me-auto">
+                            {{- icon(icon: title_icon, text: title, parameters: title_parameters) -}}
+                        </h1>
+                    {% endblock card_title %}
+                    {% if title_description ?? false %}
+                        <small>{{ title_description|trans }}</small>
+                    {% endif %}
                 {%- endblock card_header %}
             </div>
             {# card body #}

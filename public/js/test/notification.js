@@ -1,4 +1,4 @@
-/* globals Toaster, THEME */
+/* globals Toaster */
 
 /**
  * Display a notification.
@@ -36,69 +36,6 @@ function random() {
     'use strict';
     const button = $('.btn-notify').toArray().randomElement();
     $(button).trigger('click');
-}
-
-/**
- * Gets a value indicating if start view transition is supported.
- * @return {boolean} true if supported.
- */
-function supportTransition() {
-    'use strict';
-    return document.startViewTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
-
-/**
- * Gets the preferred theme.
- * @return {string} the preferred theme.
- */
-function getPreferredTheme() {
-    'use strict';
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? THEME.DARK : THEME.LIGHT;
-}
-
-/**
- * Handle theme input change.
- */
-function initThemeInput() {
-    'use strict';
-    $('input[name=radio-theme]').on('change', function () {
-        const path = document.body.dataset.cookiePath || '/';
-        const oldTheme = window.Cookie.getValue(THEME.KEY, THEME.AUTO);
-        const $selection = $('input[name=radio-theme]:checked');
-        let theme = $selection.val();
-        if (theme === THEME.AUTO) {
-            theme = getPreferredTheme();
-            window.Cookie.clearValue(THEME.KEY, path);
-        } else {
-            window.Cookie.setValue(THEME.KEY, theme, path);
-        }
-        if (oldTheme !== theme) {
-            const callback = () => {
-                document.documentElement.setAttribute(THEME.ATTRIBUTE, theme);
-            };
-            if (supportTransition()) {
-                document.startViewTransition(callback);
-            } else {
-                callback();
-            }
-        }
-        const title = $('button.rounded-end-pill').data('title');
-        const message = $selection.data('success');
-        Toaster.success(message, title);
-    });
-}
-
-/**
- * Handle theme changed event.
- */
-function initThemeChanged() {
-    'use strict';
-    $('body').on(THEME.EVENT, '.theme-switcher', function (e, theme) {
-        $('input[name=radio-theme]').each(function () {
-            const $this = $(this);
-            $this.setChecked($this.val() === theme);
-        });
-    });
 }
 
 /**
@@ -175,6 +112,5 @@ $(function () {
     random();
 
     // theme
-    initThemeInput();
-    initThemeChanged();
+    initThemeButtons();
 });

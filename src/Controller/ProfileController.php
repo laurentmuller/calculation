@@ -90,7 +90,7 @@ class ProfileController extends AbstractController
             $this->manager->flush();
 
             return $this->redirectToHomePage(
-                message: TranslatableFlashMessage::success(
+                TranslatableFlashMessage::success(
                     message: $message,
                     parameters: ['%username%' => $user],
                 )

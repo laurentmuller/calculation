@@ -51,7 +51,7 @@ trait EditParametersTrait
             if (!$parameters->save()) {
                 return $this->redirectToHomePage();
             }
-            $response = $this->redirectToHomePage(message: $message);
+            $response = $this->redirectToHomePage($message);
             $view = $parameters->getDisplay()->getDisplayMode();
             $this->updateCookie($response, TableInterface::PARAM_VIEW, $view);
 

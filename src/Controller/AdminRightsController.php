@@ -75,15 +75,14 @@ class AdminRightsController extends AbstractController
                 ->setRightsFromRole($role);
             if ($parameters->save()) {
                 return $this->redirectToHomePage(
-                    request: $request,
-                    message: TranslatableFlashMessage::success(
+                    TranslatableFlashMessage::success(
                         message: 'admin.rights.success',
                         parameters: ['%name%' => $role],
                     )
                 );
             }
 
-            return $this->redirectToHomePage(request: $request);
+            return $this->redirectToHomePage();
         }
 
         return $this->render('admin/role_rights.html.twig', [

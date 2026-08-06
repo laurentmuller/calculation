@@ -8,14 +8,9 @@
 {% block card_header_class ' d-flex-wrap-center' %}
 {% block card_body_class ' p-1' %}
 {% block card_footer_class ' d-none' %}
-{# body #}
-{% block body -%}
+{# card_title #}
+{% block card_title -%}
     {{ parent() }}
-    {{ include('dialog/dialog_diagram.html.twig') }}
-{% endblock body %}
-{# header #}
-{% block card_header %}
-    <div class="me-auto">{{ parent() }}</div>
     <div class="d-flex-wrap-center d-print-none">
         <div class="input-group input-group-sm">
             <select class="form-select form-select-sm w-auto" id="diagrams" name="diagrams" title="{{ 'diagram.list'|trans }}">
@@ -73,8 +68,13 @@
             </div>
         </div>
     </div>
-{% endblock card_header %}
+{% endblock card_title %}
 {# body #}
+{% block body -%}
+    {{ parent() }}
+    {{ include('dialog/dialog_diagram.html.twig') }}
+{% endblock body %}
+{# card_body #}
 {% block card_body -%}
     {%- set diagram_attrs = {
         id: 'diagram',

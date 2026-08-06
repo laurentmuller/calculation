@@ -1,0 +1,42 @@
+{# macro to output a drop-down buttons for select a theme #}
+{% macro inline_theme(include_dialog = false) %}
+    {% from 'macros/_icons.html.twig' import icon, button %}
+    {% set current = theme(app.request) %}
+    {% set attrs = {
+        type: 'button',
+        class: 'btn btn-sm btn-outline-secondary btn-theme-dropdown dropdown-toggle rounded-pill',
+        title: 'theme.help'|trans,
+        'data-bs-toggle': 'dropdown',
+        'data-title': 'theme.title'|trans,
+        'aria-expanded': false,
+    } %}
+    <button {{ html_attr(attrs) }}>
+        <i class="{{ current.icon }}"></i>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end">
+        {% for theme in themes() %}
+            {% set attrs = {
+                class: ['dropdown-item', 'dropdown-theme-entry', theme == current ? 'dropdown-item-checked-right'],
+                'data-success': theme.success|trans,
+                'data-value': theme.value,
+                'data-icon': theme.icon,
+            } %}
+            <li>
+                <button {{ html_attr(attrs) }}>{{ icon(theme.icon, theme) }}</button>
+            </li>
+        {% endfor %}
+        {% if include_dialog %}
+            <li><hr class="dropdown-divider"></li>
+            {% set attrs = {
+                class: ['dropdown-item', 'dropdown-theme-dialog', 'theme-switcher'],
+                'data-title': 'theme.title'|trans,
+                'data-url': path('theme_dialog'),
+            } %}
+            <li>
+                <button {{ html_attr(attrs) }}>
+                    {{ icon('fa-solid fa-cogs', 'about.advanced.action') }}
+                </button>
+            </li>
+        {% endif %}
+    </ul>
+{% endmacro inline_theme %}

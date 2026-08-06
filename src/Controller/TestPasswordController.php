@@ -137,7 +137,7 @@ class TestPasswordController extends AbstractController
             }
             $message .= '</ul>';
 
-            return $this->redirectToHomePage(message: $message);
+            return $this->redirectToHomePage($message);
         }
 
         return $this->render('test/password.html.twig', ['form' => $form]);

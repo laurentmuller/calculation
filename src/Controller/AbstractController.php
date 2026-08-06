@@ -181,25 +181,6 @@ abstract class AbstractController extends BaseController implements DocumentHelp
     }
 
     /**
-     * Display a flash message, if defined, and redirect to the home page.
-     */
-    public function redirectToHomePage(
-        ?Request $request = null,
-        TranslatableFlashMessage|string|null $message = null
-    ): RedirectResponse {
-        if (\is_string($message)) {
-            $this->addFlashMessage(FlashType::DEFAULT, $this->trans($message));
-        } elseif ($message instanceof TranslatableFlashMessage) {
-            $this->addFlashMessage($message->getType(), $this->trans($message));
-        }
-        if ($request instanceof Request) {
-            return $this->getUrlGenerator()->redirect($request);
-        }
-
-        return $this->redirectToRoute(static::HOME_PAGE);
-    }
-
-    /**
      * Creates and returns a form helper instance.
      *
      * @param ?string $labelPrefix the label prefix. If the prefix is not null, the label is automatically added
@@ -268,5 +249,26 @@ abstract class AbstractController extends BaseController implements DocumentHelp
         $form->handleRequest($request);
 
         return $form->isSubmitted() && $form->isValid();
+    }
+
+    /**
+     * Display a flash message, if defined, and redirect to the home page.
+     *
+     * This function tries first to get the current request, and if it is not null, redirects using
+     * the URL generator. Otherwise, it redirects to the home page.
+     */
+    protected function redirectToHomePage(TranslatableFlashMessage|string|null $message = null): RedirectResponse
+    {
+        if (\is_string($message)) {
+            $this->addFlashMessage(FlashType::DEFAULT, $this->trans($message));
+        } elseif ($message instanceof TranslatableFlashMessage) {
+            $this->addFlashMessage($message->getType(), $this->trans($message));
+        }
+        $request = $this->getRequestStack()->getCurrentRequest();
+        if ($request instanceof Request) {
+            return $this->getUrlGenerator()->redirect($request);
+        }
+
+        return $this->redirectToRoute(static::HOME_PAGE);
     }
 }

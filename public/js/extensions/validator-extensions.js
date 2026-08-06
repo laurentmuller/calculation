@@ -263,7 +263,7 @@
                 /**
                  * Find elements with the same name attribute.
                  *
-                 * @param {jQuery<Element>} $element the element to search same name for.
+                 * @param {jQuery<Element>} $element the element to search the same name for.
                  * @return {jQuery[]|jQuery<Element>} the elements, if found; the argument element otherwise.
                  */
                 $.validator.prototype.findNamedElements = function ($element) {
@@ -375,7 +375,6 @@
                 const $that = $(this);
                 const toFind = 'input,select,textarea';
                 const selector = ':visible:enabled:not([readonly]):first';
-
                 // find the first invalid field
                 $that.find('.invalid-feedback').each(function () {
                     const $group = $(this).closest('.form-group');
@@ -388,8 +387,7 @@
                     }
                     return !found;
                 });
-
-                // set focus to first editable field
+                // set focus on the first editable field
                 if (!found) {
                     /** @type {jQuery<HTMLInputElement>} */
                     let $input = $that.find(toFind).filter(selector);

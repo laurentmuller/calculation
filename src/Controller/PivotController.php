@@ -126,9 +126,7 @@ class PivotController extends AbstractController
 
     protected function getEmptyResponse(): RedirectResponse
     {
-        return $this->redirectToHomePage(
-            message: TranslatableFlashMessage::info('pivot.empty')
-        );
+        return $this->redirectToHomePage(TranslatableFlashMessage::info('pivot.empty'));
     }
 
     /**

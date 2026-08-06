@@ -1,5 +1,6 @@
 {% extends 'cards/card_edit_center.html.twig' %}
 {% from 'macros/_icons.html.twig' import link %}
+{% from 'macros/_button_themes.html.twig' import inline_theme %}
 {# parameters #}
 {%- set title = 'resetting.request.title' -%}
 {%- set title_description = 'resetting.request.description' -%}
@@ -8,6 +9,12 @@
 {%- set submit_title = 'resetting.request.submit_title' -%}
 {%- set cancel_path = false -%}
 {%- set form_attr = form_attr|default({})|merge({'data-check-user': url('ajax_check_user_both')}) -%}
+{% block card_header_class ' d-flex-wrap-center' %}
+{# card_title #}
+{% block card_title %}
+    {{ parent() }}
+    {{ inline_theme() }}
+{%- endblock card_title %}
 {# actions #}
 {% block actions_form %}
     {{ parent() }}
@@ -25,6 +32,7 @@
         {{ parent() }}
         {{ asset_js('js/extensions/password-extensions.js') }}
         {{ asset_js('js/application/user_recaptcha.js') }}
+        {{ asset_js('js/application/button_themes.js') }}
         {{ asset_js('js/application/user_request.js') }}
     {% else %}
         {{ asset_js('js/compiled/user_request.js') }}

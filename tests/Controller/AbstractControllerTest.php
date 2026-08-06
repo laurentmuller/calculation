@@ -29,7 +29,6 @@ use Faker\Container\ContainerException;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Bundle\FrameworkBundle\Test\TestBrowserToken;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -89,17 +88,7 @@ final class AbstractControllerTest extends KernelTestCase
     public function testRedirectToHomePageWithMessage(): void
     {
         $controller = $this->createController();
-        $response = $controller->redirectToHomePage(
-            message: 'log.list.empty'
-        );
-        self::assertTrue($response->isRedirect());
-    }
-
-    public function testRedirectToHomePageWithRequest(): void
-    {
-        $request = new Request();
-        $controller = $this->createController();
-        $response = $controller->redirectToHomePage(request: $request);
+        $response = $controller->redirectToHomePage('log.list.empty');
         self::assertTrue($response->isRedirect());
     }
 
@@ -107,7 +96,7 @@ final class AbstractControllerTest extends KernelTestCase
     {
         $controller = $this->createController();
         $response = $controller->redirectToHomePage(
-            message: TranslatableFlashMessage::success(
+            TranslatableFlashMessage::success(
                 message: 'log.list.empty',
                 parameters: ['key' => 'value'],
             )

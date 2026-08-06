@@ -45,7 +45,9 @@
             <span> / </span>
             {{ _self.system('imperial', units_system, route, id, count) }}
             <span class="small">&nbsp;</span>
-            <a href="{{ path('openweather_search') }}" title="{{ 'openweather.search.title'|trans }}">{{ 'common.button_search'|trans }}</a>
+            <a href="{{ path('openweather_search') }}" title="{{ 'openweather.search.title'|trans }}">
+                {{- 'common.button_search'|trans -}}
+            </a>
         </div>
     </div>
 {% else %}

@@ -96,9 +96,7 @@ class CalculationEmptyController extends AbstractController
     private function getEmptyResponse(CalculationRepository $repository): ?RedirectResponse
     {
         if (0 === $repository->countItemsEmpty()) {
-            return $this->redirectToHomePage(
-                message: TranslatableFlashMessage::warning('empty.empty')
-            );
+            return $this->redirectToHomePage(TranslatableFlashMessage::warning('empty.empty'));
         }
 
         return null;

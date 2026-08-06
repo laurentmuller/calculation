@@ -46,16 +46,10 @@ class AdminCacheController extends AbstractController
         if ($this->handleRequestForm($request, $form)) {
             try {
                 if ($service->clear()) {
-                    return $this->redirectToHomePage(
-                        request: $request,
-                        message: 'clear_cache.success'
-                    );
+                    return $this->redirectToHomePage('clear_cache.success');
                 }
 
-                return $this->redirectToHomePage(
-                    request: $request,
-                    message: TranslatableFlashMessage::danger('clear_cache.failure')
-                );
+                return $this->redirectToHomePage(TranslatableFlashMessage::danger('clear_cache.failure'));
             } catch (\Exception $e) {
                 return $this->renderFormException('clear_cache.failure', $e, $logger);
             }
@@ -68,10 +62,7 @@ class AdminCacheController extends AbstractController
         }
 
         if ([] === $pools) {
-            return $this->redirectToHomePage(
-                request: $request,
-                message: TranslatableFlashMessage::info('clear_cache.empty')
-            );
+            return $this->redirectToHomePage(TranslatableFlashMessage::info('clear_cache.empty'));
         }
 
         return $this->render('admin/clear_cache.html.twig', [

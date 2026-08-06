@@ -94,15 +94,15 @@
      'data-maximum_overlap': 'margin.maximum_overlap'|trans([], 'validators'),
      'data-minimum_discontinued': 'margin.minimum_discontinued'|trans([], 'validators'),
      'data-maximum_discontinued': 'margin.maximum_discontinued'|trans([], 'validators')}) -%}
-{# header #}
-{% block card_header %}
-<div class="row">
-    <div class="col-auto me-auto">{{ parent() }}</div>
-    <div class="col-auto d-print-none">
-        <button type="button" class="btn btn-link btn-add-item p-0" role="button">{{ 'task.edit.add_item'|trans }}</button>
-    </div>
-</div>
-{% endblock card_header %}
+{# classes #}
+{% block card_header_class ' d-flex-wrap-center' %}
+{# card_title #}
+{% block card_title -%}
+    {{ parent() }}
+    <button type="button" class="btn btn-link btn-add-item p-0 d-print-none" role="button">
+        {{- 'task.edit.add_item'|trans -}}
+    </button>
+{%- endblock card_title %}
 {# body #}
 {% block card_body %}
 {{ form_row(form.name) }}

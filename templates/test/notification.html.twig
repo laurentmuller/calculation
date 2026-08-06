@@ -1,5 +1,6 @@
 {% extends 'cards/card_base.html.twig' %}
 {% from 'macros/_icons.html.twig' import button, homepage %}
+{% from 'macros/_button_themes.html.twig' import inline_theme %}
 {# macros #}
 {% macro button_notify(type, icon) -%}
     {% set text = 'background.' ~ type %}
@@ -61,6 +62,12 @@
 {# parameters #}
 {%- set title = 'test.notification' -%}
 {%- set title_icon = 'fa-regular fa-bell' -%}
+{% block card_header_class ' d-flex-wrap-center' %}
+{# card_title #}
+{% block card_title -%}
+    {{ parent() }}
+    {{ inline_theme(true) }}
+{%- endblock card_title %}
 {# body #}
 {% block card_body %}
     <span class="form-label horizontal-line mb-3 ">Type de message</span>
@@ -136,44 +143,11 @@
         text: 'parameters.default',
         class: 'btn btn-form btn-default btn-outline-success',
         icon: 'fa-solid fa-rotate-left',
-        inline: false) }}
-    <div class="btn-group btn-group-sm px-3 py-1" role="group" aria-label="{{ 'theme.help'|trans }}">
-        {% set current = theme(app.request) %}
-        {% for theme in themes() %}
-            {% set attrs = {
-                type: 'radio',
-                class: 'btn-check',
-                name: 'radio-theme',
-                id: 'radio-theme-' ~ theme.value,
-                value: theme.value,
-                checked: theme == current,
-                autocomplete: 'off',
-                'data-success': theme.success|trans,
-            } %}
-            <input {{ html_attr(attrs) }}>
-            {% set attrs = {
-                title: theme|trans,
-                for: 'radio-theme-' ~ theme.value,
-                class: ['btn', 'btn-outline-secondary', loop.first ? 'rounded-start-pill'],
-            } %}
-            <label {{ html_attr(attrs) }}>
-                <i class="{{ theme.icon }}"></i>
-            </label>
-        {% endfor %}
-        {{ button(
-            text: null,
-            class: ['btn', 'btn-outline-secondary', 'rounded-end-pill', 'theme-switcher', 'ps-1'],
-            icon: 'fa-solid fa-image',
-            attributes: {
-                title: 'theme.help'|trans,
-                'data-url': path('theme_dialog'),
-                'data-title': 'theme.title'|trans,
-            },
-        ) }}
-    </div>
+        inline: true) }}
 {% endblock card_footer %}
 {# javascripts #}
 {% block javascripts %}
     {{ parent() }}
+    {{ asset_js('js/application/button_themes.js') }}
     {{ asset_js('js/test/notification.js') }}
 {%- endblock javascripts %}

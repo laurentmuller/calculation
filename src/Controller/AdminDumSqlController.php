@@ -37,15 +37,11 @@ class AdminDumSqlController extends AbstractController
     {
         $result = $service->execute('doctrine:schema:update', ['--dump-sql' => true]);
         if (!$result->isSuccess()) {
-            return $this->redirectToHomePage(
-                message: TranslatableFlashMessage::warning('admin.dump_sql.error')
-            );
+            return $this->redirectToHomePage(TranslatableFlashMessage::warning('admin.dump_sql.error'));
         }
 
         if (\str_contains($result->content, '[OK]')) {
-            return $this->redirectToHomePage(
-                message: TranslatableFlashMessage::info('admin.dump_sql.no_change')
-            );
+            return $this->redirectToHomePage(TranslatableFlashMessage::info('admin.dump_sql.no_change'));
         }
 
         return $this->render('admin/dump_sql.html.twig', [

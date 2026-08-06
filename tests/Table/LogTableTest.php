@@ -202,7 +202,7 @@ final class LogTableTest extends TestCase
 
     private function createTableWithData(): LogTable
     {
-        $file = $this->createMock(LogFile::class);
+        $file = self::createStub(LogFile::class);
         $file->method('getFile')
             ->willReturn(__FILE__);
 
@@ -218,11 +218,11 @@ final class LogTableTest extends TestCase
         $file->method('getLevels')
             ->willReturn($this->createLevels());
 
-        $service = $this->createMock(LogService::class);
+        $service = self::createStub(LogService::class);
         $service->method('getLogFile')
             ->willReturn($file);
 
-        $twig = $this->createMock(Environment::class);
+        $twig = self::createStub(Environment::class);
         $twig->method('render')
             ->willReturnArgument(0);
 
@@ -231,7 +231,7 @@ final class LogTableTest extends TestCase
 
     private function createTableWithoutData(): LogTable
     {
-        $file = $this->createMock(LogFile::class);
+        $file = self::createStub(LogFile::class);
         $file->method('getFile')
             ->willReturn(__FILE__);
 
@@ -247,11 +247,11 @@ final class LogTableTest extends TestCase
         $file->method('getLevels')
             ->willReturn([]);
 
-        $service = $this->createMock(LogService::class);
+        $service = self::createStub(LogService::class);
         $service->method('getLogFile')
             ->willReturn($file);
 
-        $twig = $this->createMock(Environment::class);
+        $twig = self::createStub(Environment::class);
         $twig->method('render')
             ->willReturnArgument(0);
 
@@ -260,11 +260,11 @@ final class LogTableTest extends TestCase
 
     private function processEmptyMessage(int $count, mixed $expected): void
     {
-        $file = $this->createMock(LogFile::class);
+        $file = self::createStub(LogFile::class);
         $file->method('count')
             ->willReturn($count);
 
-        $service = $this->createMock(LogService::class);
+        $service = self::createStub(LogService::class);
         $service->method('getLogFile')
             ->willReturn($file);
 

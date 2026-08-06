@@ -154,7 +154,7 @@ final class UserTest extends EntityValidatorTestCase
     public function testImagePath(): void
     {
         $user = new User();
-        $storage = $this->createMock(StorageInterface::class);
+        $storage = self::createStub(StorageInterface::class);
         $storage->method('resolvePath')
             ->willReturn(null);
         self::assertNull($user->getImagePath($storage));
@@ -162,13 +162,13 @@ final class UserTest extends EntityValidatorTestCase
         $user->setImageName('file');
         self::assertNull($user->getImagePath($storage));
 
-        $storage = $this->createMock(StorageInterface::class);
+        $storage = self::createStub(StorageInterface::class);
         $storage->method('resolvePath')
             ->willThrowException(new MappingNotFoundException());
         self::assertNull($user->getImagePath($storage));
 
         $file = __FILE__;
-        $storage = $this->createMock(StorageInterface::class);
+        $storage = self::createStub(StorageInterface::class);
         $storage->method('resolvePath')
             ->willReturn($file);
         self::assertSame($file, $user->getImagePath($storage));

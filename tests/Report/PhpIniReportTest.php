@@ -50,7 +50,7 @@ final class PhpIniReportTest extends TestCase
     private function createReport(array $data): PhpIniReport
     {
         $helper = self::createStub(DocumentHelperInterface::class);
-        $service = self::createMock(PhpInfoService::class);
+        $service = self::createStub(PhpInfoService::class);
         $service->method('getVersion')
             ->willReturn(\PHP_VERSION);
         $service->method('asArray')

@@ -15,7 +15,7 @@ namespace App\Tests\Service;
 
 use App\Model\HttpClientError;
 use App\Service\ExchangeRateService;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
@@ -25,7 +25,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 
 final class ExchangeRateServiceTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     private const int ERROR_CODE = 404;
     private const string ERROR_MESSAGE = 'Error Message';
@@ -290,7 +290,7 @@ final class ExchangeRateServiceTest extends TestCase
             'fake',
             new ArrayAdapter(),
             self::createStub(LoggerInterface::class),
-            $this->createMockTranslator()
+            $this->createStubTranslator()
         );
     }
 

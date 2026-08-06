@@ -31,7 +31,7 @@ final class LogsReportTest extends TestCase
 {
     public function testEmpty(): void
     {
-        $logFile = $this->createMock(LogFile::class);
+        $logFile = self::createStub(LogFile::class);
         $logFile->method('isEmpty')
             ->willReturn(true);
         $report = new LogsReport(
@@ -59,7 +59,7 @@ final class LogsReportTest extends TestCase
 
         $log3 = Log::instance(3);
 
-        $logFile = $this->createMock(LogFile::class);
+        $logFile = self::createStub(LogFile::class);
         $logFile->method('isEmpty')
             ->willReturn(false);
         $logFile->method('getLogs')
@@ -75,7 +75,7 @@ final class LogsReportTest extends TestCase
                 $log2->getChannel() => $logChannel2,
             ]);
         $cell = new PdfFontAwesomeCell($this->getImage());
-        $service = $this->createMock(FontAwesomeCellService::class);
+        $service = self::createStub(FontAwesomeCellService::class);
         $service->method('getCell')
             ->willReturn($cell);
         $report = new LogsReport(

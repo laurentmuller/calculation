@@ -18,8 +18,8 @@ use App\Mime\NotificationEmail;
 use App\Repository\UserRepository;
 use App\Service\EmailVerifier;
 use App\Tests\Entity\IdTrait;
-use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\MockObject;
+use App\Tests\TranslatorStubTrait;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,7 +36,7 @@ use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 final class EmailVerifierTest extends TestCase
 {
     use IdTrait;
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public function testHandleEmail(): void
     {
@@ -44,7 +44,7 @@ final class EmailVerifierTest extends TestCase
             $this->createVerifyEmailHelper(),
             self::createStub(MailerInterface::class),
             self::createStub(UserRepository::class),
-            $this->createMockTranslator()
+            $this->createStubTranslator()
         );
 
         $user = $this->createUser();
@@ -58,7 +58,7 @@ final class EmailVerifierTest extends TestCase
      */
     public function testSendEmail(): void
     {
-        $translator = $this->createMockTranslator();
+        $translator = $this->createStubTranslator();
         $service = new EmailVerifier(
             $this->createMockVerifyEmailHelper(),
             self::createStub(MailerInterface::class),
@@ -72,11 +72,11 @@ final class EmailVerifierTest extends TestCase
         self::assertFalse($user->isVerified());
     }
 
-    private function createMockVerifyEmailHelper(): MockObject&VerifyEmailHelperInterface
+    private function createMockVerifyEmailHelper(): Stub&VerifyEmailHelperInterface
     {
         $date = new DatePoint();
         $component = new VerifyEmailSignatureComponents($date, 'uri', $date->getTimestamp());
-        $helper = $this->createMock(VerifyEmailHelperInterface::class);
+        $helper = self::createStub(VerifyEmailHelperInterface::class);
         $helper->method('generateSignature')
             ->willReturn($component);
 
@@ -94,7 +94,7 @@ final class EmailVerifierTest extends TestCase
 
     private function createVerifyEmailHelper(): VerifyEmailHelper
     {
-        $uriSigner = $this->createMock(UriSigner::class);
+        $uriSigner = self::createStub(UriSigner::class);
         $uriSigner->method('checkRequest')
             ->willReturn(true);
 

@@ -21,7 +21,7 @@ use App\Parameter\ApplicationParameters;
 use App\Parameter\SecurityParameter;
 use App\Service\CaptchaImageService;
 use App\Tests\Form\PreloadedExtensionsTrait;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
@@ -34,7 +34,7 @@ final class UserRegistrationTypeTest extends TypeTestCase
     use PreloadedExtensionsTrait {
         getExtensions as getExtensionsFromTrait;
     }
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
     use ValidatorExtensionTrait;
 
     public function testFormView(): void
@@ -83,13 +83,13 @@ final class UserRegistrationTypeTest extends TypeTestCase
     #[\Override]
     protected function getPreloadedExtensions(): array
     {
-        $service = $this->createMock(CaptchaImageService::class);
+        $service = self::createStub(CaptchaImageService::class);
         $service->method('generateImage')
             ->willReturn('fake_content');
-        $security = $this->createMock(SecurityParameter::class);
+        $security = self::createStub(SecurityParameter::class);
         $security->method('isCaptcha')
             ->willReturn(false);
-        $parameters = $this->createMock(ApplicationParameters::class);
+        $parameters = self::createStub(ApplicationParameters::class);
         $parameters->method('getSecurity')
             ->willReturn($security);
 
@@ -97,7 +97,7 @@ final class UserRegistrationTypeTest extends TypeTestCase
             new UserRegistrationType(
                 $service,
                 $parameters,
-                $this->createMockTranslator()
+                $this->createStubTranslator()
             ),
             new CaptchaImageType(self::createStub(UrlGeneratorInterface::class)),
         ];

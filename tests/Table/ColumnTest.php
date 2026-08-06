@@ -182,7 +182,7 @@ final class ColumnTest extends TestCase
             \array_keys(IndexService::CATALOG),
             \array_fill(0, \count(IndexService::CATALOG), 1)
         );
-        $service = $this->createMock(IndexService::class);
+        $service = self::createStub(IndexService::class);
         $service->method('getCatalog')
             ->willReturn($catalog);
 

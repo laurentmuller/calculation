@@ -17,7 +17,7 @@ use App\Captcha\AlphaCaptchaInterface;
 use App\Captcha\Challenge;
 use App\Form\Type\AlphaCaptchaType;
 use App\Tests\Form\PreloadedExtensionsTrait;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
@@ -31,7 +31,7 @@ use Symfony\Component\Validator\Validation;
 final class AlphaCaptchaTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
     use ValidatorExtensionTrait;
 
     private bool $valid = true;
@@ -62,18 +62,18 @@ final class AlphaCaptchaTypeTest extends TypeTestCase
         $session = new Session(new MockArraySessionStorage());
         $session->set('alpha_captcha_answer', 'fake');
 
-        $requestStack = $this->createMock(RequestStack::class);
+        $requestStack = self::createStub(RequestStack::class);
         $requestStack->method('getSession')
             ->willReturn($session);
 
         $challenge = new Challenge('question', 'nextAnswer');
-        $alphaCaptcha = $this->createMock(AlphaCaptchaInterface::class);
+        $alphaCaptcha = self::createStub(AlphaCaptchaInterface::class);
         $alphaCaptcha->method('getChallenge')
             ->willReturn($challenge);
         $alphaCaptcha->method('checkAnswer')
             ->willReturnCallback(fn (): bool => $this->valid);
 
-        $translator = $this->createMockTranslator();
+        $translator = $this->createStubTranslator();
         $captchaType = new AlphaCaptchaType([$alphaCaptcha], $translator);
         $captchaType->setRequestStack($requestStack);
 

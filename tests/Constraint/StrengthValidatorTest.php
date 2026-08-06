@@ -17,7 +17,7 @@ use App\Constraint\Strength;
 use App\Constraint\StrengthValidator;
 use App\Enums\StrengthLevel;
 use App\Service\PasswordService;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -31,7 +31,7 @@ use ZxcvbnPhp\Zxcvbn;
 #[AllowMockObjectsWithoutExpectations]
 final class StrengthValidatorTest extends ConstraintValidatorTestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     private const string EMPTY_MESSAGE = 'empty';
 
@@ -122,8 +122,8 @@ final class StrengthValidatorTest extends ConstraintValidatorTestCase
     #[\Override]
     protected function createValidator(): StrengthValidator
     {
-        $translator = $this->createMockTranslator(self::EMPTY_MESSAGE);
-        $factory = $this->createMock(ZxcvbnFactoryInterface::class);
+        $translator = $this->createStubTranslator(self::EMPTY_MESSAGE);
+        $factory = self::createStub(ZxcvbnFactoryInterface::class);
         $factory->method('createZxcvbn')
             ->willReturn(new Zxcvbn());
         $service = new PasswordService($factory, $translator);

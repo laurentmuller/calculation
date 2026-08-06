@@ -32,7 +32,7 @@ use App\Service\CalculationService;
 use App\Tests\DatabaseTrait;
 use App\Tests\Entity\IdTrait;
 use App\Tests\KernelServiceTestCase;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ObjectManager;
 
@@ -40,7 +40,7 @@ final class CalculationServiceTest extends KernelServiceTestCase
 {
     use DatabaseTrait;
     use IdTrait;
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     private const float MARGIN_PERCENT = 1.1;
     private const float MARGIN_USER = 0.1;
@@ -186,7 +186,7 @@ final class CalculationServiceTest extends KernelServiceTestCase
 
     private function createApplicationParameters(): ApplicationParameters
     {
-        $parameters = $this->createMock(ApplicationParameters::class);
+        $parameters = self::createStub(ApplicationParameters::class);
         $parameters->method('isMarginBelow')
             ->willReturn(true);
 
@@ -202,7 +202,7 @@ final class CalculationServiceTest extends KernelServiceTestCase
         $groupMarginRepository = $this->createGroupMarginRepository($groupMargin);
         $groupRepository = $this->createGroupRepository($group);
         $parameters = $this->createApplicationParameters();
-        $translator = $this->createMockTranslator();
+        $translator = $this->createStubTranslator();
 
         return new CalculationService(
             $globalMarginRepository,
@@ -215,7 +215,7 @@ final class CalculationServiceTest extends KernelServiceTestCase
 
     private function createGlobalMarginRepository(?float $globalMargin = null): GlobalMarginRepository
     {
-        $repository = $this->createMock(GlobalMarginRepository::class);
+        $repository = self::createStub(GlobalMarginRepository::class);
         $repository->method('getMargin')
             ->willReturn($globalMargin ?? 0.0);
 
@@ -232,7 +232,7 @@ final class CalculationServiceTest extends KernelServiceTestCase
 
     private function createGroupMarginRepository(?float $groupMargin = null): GroupMarginRepository
     {
-        $repository = $this->createMock(GroupMarginRepository::class);
+        $repository = self::createStub(GroupMarginRepository::class);
         $repository->method('getGroupMargin')
             ->willReturn($groupMargin ?? 0.0);
 
@@ -241,7 +241,7 @@ final class CalculationServiceTest extends KernelServiceTestCase
 
     private function createGroupRepository(?Group $group = null): GroupRepository
     {
-        $repository = $this->createMock(GroupRepository::class);
+        $repository = self::createStub(GroupRepository::class);
         $repository->method('findGroupCode')
             ->willReturn($group?->getCode());
 

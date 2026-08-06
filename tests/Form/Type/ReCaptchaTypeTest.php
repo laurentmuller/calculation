@@ -17,7 +17,7 @@ use App\Form\Type\ReCaptchaType;
 use App\Service\RecaptchaService;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use ReCaptcha\Response;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,8 +29,8 @@ final class ReCaptchaTypeTest extends TypeTestCase
     use PreloadedExtensionsTrait;
 
     private Request $request;
-    private MockObject&RequestStack $requestStack;
-    private MockObject&RecaptchaService $service;
+    private Stub&RequestStack $requestStack;
+    private Stub&RecaptchaService $service;
 
     #[\Override]
     protected function setUp(): void
@@ -126,14 +126,14 @@ final class ReCaptchaTypeTest extends TypeTestCase
         ];
     }
 
-    private function createRequestStack(): MockObject&RequestStack
+    private function createRequestStack(): Stub&RequestStack
     {
-        return $this->createMock(RequestStack::class);
+        return self::createStub(RequestStack::class);
     }
 
-    private function createService(): MockObject&RecaptchaService
+    private function createService(): Stub&RecaptchaService
     {
-        $service = $this->createMock(RecaptchaService::class);
+        $service = self::createStub(RecaptchaService::class);
         $service->method('getExpectedAction')
             ->willReturn('login');
 

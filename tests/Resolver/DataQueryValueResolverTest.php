@@ -23,7 +23,7 @@ use App\Table\CategoryTable;
 use App\Table\DataQuery;
 use App\Table\LogTable;
 use App\Table\SearchTable;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,7 +36,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class DataQueryValueResolverTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public function testDefault(): void
     {
@@ -267,9 +267,9 @@ final class DataQueryValueResolverTest extends TestCase
         return $argument;
     }
 
-    private function createConstraintViolation(): MockObject&ConstraintViolationInterface
+    private function createConstraintViolation(): ConstraintViolationInterface
     {
-        $violation = $this->createMock(ConstraintViolationInterface::class);
+        $violation = self::createStub(ConstraintViolationInterface::class);
         $violation->method('getMessage')
             ->willReturn('message');
         $violation->method('getPropertyPath')

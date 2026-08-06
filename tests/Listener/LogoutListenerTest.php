@@ -15,7 +15,7 @@ namespace App\Tests\Listener;
 
 use App\Entity\User;
 use App\Listener\LogoutListener;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -24,7 +24,7 @@ use Symfony\Component\Security\Http\Event\LogoutEvent;
 
 final class LogoutListenerTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public function testLogin(): void
     {
@@ -52,7 +52,7 @@ final class LogoutListenerTest extends TestCase
     private function createListener(): LogoutListener
     {
         $listener = new LogoutListener();
-        $listener->setTranslator($this->createMockTranslator());
+        $listener->setTranslator($this->createStubTranslator());
         $listener->setRequestStack($this->createRequestStack());
 
         return $listener;
@@ -60,7 +60,7 @@ final class LogoutListenerTest extends TestCase
 
     private function createRequestStack(): RequestStack
     {
-        $session = self::createMock(SessionInterface::class);
+        $session = self::createStub(SessionInterface::class);
         $requestStack = $this->createMock(RequestStack::class);
         $requestStack->expects(self::once())
             ->method('getSession')

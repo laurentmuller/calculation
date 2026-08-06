@@ -49,10 +49,10 @@ final class RouteInfoServiceTest extends TestCase
             'index' => new Route('home'),
             '_profiler' => new Route('_profiler'),
         ];
-        $collection = $this->createMock(RouteCollection::class);
+        $collection = self::createStub(RouteCollection::class);
         $collection->method('all')
             ->willReturn($routes);
-        $router = $this->createMock(RouterInterface::class);
+        $router = self::createStub(RouterInterface::class);
         $router->method('getRouteCollection')
             ->willReturn($collection);
 

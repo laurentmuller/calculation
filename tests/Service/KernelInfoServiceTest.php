@@ -94,7 +94,7 @@ final class KernelInfoServiceTest extends TestCase
         $dir = __DIR__;
         $mode = self::ENVIRONMENT->value;
 
-        $kernel = $this->createMock(KernelInterface::class);
+        $kernel = self::createStub(KernelInterface::class);
         $kernel->method('getEnvironment')
             ->willReturn($mode);
         $kernel->method('getCharset')

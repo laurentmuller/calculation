@@ -153,7 +153,7 @@ final class PdfPieChartTraitTest extends TestCase
         array $rows,
         bool $clockwise = true,
     ): AbstractReport {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $report = new class($controller) extends AbstractReport implements PdfChartInterface {
             use PdfPieChartTrait;
 

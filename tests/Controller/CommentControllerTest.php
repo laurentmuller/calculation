@@ -47,7 +47,7 @@ final class CommentControllerTest extends ControllerTestCase
 
     public function testInvokeWithException(): void
     {
-        $mailer = $this->createMock(MailerInterface::class);
+        $mailer = self::createStub(MailerInterface::class);
         $mailer->method('send')
             ->willThrowException(new TransportException());
         $markdown = self::createStub(MarkdownInterface::class);

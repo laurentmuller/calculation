@@ -51,11 +51,11 @@ final class IndexServiceTest extends TestCase
             'calculationState',
         ];
 
-        $repository = $this->createMock(EntityRepository::class);
+        $repository = self::createStub(EntityRepository::class);
         $repository->method('count')
             ->willReturn(0);
 
-        $manager = $this->createMock(EntityManagerInterface::class);
+        $manager = self::createStub(EntityManagerInterface::class);
         $manager->method('getRepository')
             ->willReturn($repository);
 
@@ -147,7 +147,7 @@ final class IndexServiceTest extends TestCase
         ?EntityManagerInterface $manager = null,
         ?TagAwareAdapter $cache = null
     ): IndexService {
-        $manager ??= $this->createMock(EntityManagerInterface::class);
+        $manager ??= self::createStub(EntityManagerInterface::class);
         $cache ??= new TagAwareAdapter(new ArrayAdapter());
 
         return new IndexService($manager, $cache);

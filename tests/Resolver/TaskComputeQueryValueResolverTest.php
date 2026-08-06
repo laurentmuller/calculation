@@ -103,9 +103,9 @@ final class TaskComputeQueryValueResolverTest extends TestCase
         return $argument;
     }
 
-    private function createConstraintViolation(): MockObject&ConstraintViolationInterface
+    private function createConstraintViolation(): ConstraintViolationInterface
     {
-        $violation = $this->createMock(ConstraintViolationInterface::class);
+        $violation = self::createStub(ConstraintViolationInterface::class);
         $violation->method('getMessage')
             ->willReturn('message');
         $violation->method('getPropertyPath')

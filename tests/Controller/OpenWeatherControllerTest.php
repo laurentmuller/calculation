@@ -91,7 +91,7 @@ final class OpenWeatherControllerTest extends ControllerTestCase
 
     public function testApiSearchEmpty(): void
     {
-        $service = $this->createMock(OpenWeatherSearchService::class);
+        $service = self::createStub(OpenWeatherSearchService::class);
         $service->method('search')
             ->willReturn([]);
         $this->setService(OpenWeatherSearchService::class, $service);
@@ -103,7 +103,7 @@ final class OpenWeatherControllerTest extends ControllerTestCase
 
     public function testApiSearchException(): void
     {
-        $service = $this->createMock(OpenWeatherSearchService::class);
+        $service = self::createStub(OpenWeatherSearchService::class);
         $service->method('search')
             ->willThrowException(new \Exception());
         $this->setService(OpenWeatherSearchService::class, $service);
@@ -116,7 +116,7 @@ final class OpenWeatherControllerTest extends ControllerTestCase
     public function testApiSearchFound(): void
     {
         $city = $this->getCity();
-        $service = $this->createMock(OpenWeatherSearchService::class);
+        $service = self::createStub(OpenWeatherSearchService::class);
         $service->method('search')
             ->willReturn([$city]);
         $this->setService(OpenWeatherSearchService::class, $service);
@@ -131,7 +131,7 @@ final class OpenWeatherControllerTest extends ControllerTestCase
         $data = [
             'current' => [],
         ];
-        $service = $this->createMock(OpenWeatherService::class);
+        $service = self::createStub(OpenWeatherService::class);
         $service->method('all')
             ->willReturn($data);
         $this->setService(OpenWeatherService::class, $service);
@@ -189,12 +189,12 @@ final class OpenWeatherControllerTest extends ControllerTestCase
             'list' => [$current, $current],
         ];
 
-        $searchService = $this->createMock(OpenWeatherSearchService::class);
+        $searchService = self::createStub(OpenWeatherSearchService::class);
         $searchService->method('search')
             ->willReturn($search);
         $this->setService(OpenWeatherSearchService::class, $searchService);
 
-        $service = $this->createMock(OpenWeatherService::class);
+        $service = self::createStub(OpenWeatherService::class);
         $service->method('group')
             ->willReturn($group);
         $this->setService(OpenWeatherService::class, $service);
@@ -217,7 +217,7 @@ final class OpenWeatherControllerTest extends ControllerTestCase
     public function testSearchOne(): void
     {
         $city = $this->getCity();
-        $service = $this->createMock(OpenWeatherSearchService::class);
+        $service = self::createStub(OpenWeatherSearchService::class);
         $service->method('search')
             ->willReturn([$city]);
         $this->setService(OpenWeatherSearchService::class, $service);
@@ -248,7 +248,7 @@ final class OpenWeatherControllerTest extends ControllerTestCase
 
     private function checkRouteException(string $url, string $method): void
     {
-        $service = $this->createMock(OpenWeatherService::class);
+        $service = self::createStub(OpenWeatherService::class);
         $service->method($method)
             ->willThrowException(new \Exception());
         $this->setService(OpenWeatherService::class, $service);
@@ -262,7 +262,7 @@ final class OpenWeatherControllerTest extends ControllerTestCase
     private function checkRouteFalse(string $url, string $method): void
     {
         $error = new HttpClientError(200, 'Fake');
-        $service = $this->createMock(OpenWeatherService::class);
+        $service = self::createStub(OpenWeatherService::class);
         $service->method($method)
             ->willReturn(false);
         $service->method('getLastError')

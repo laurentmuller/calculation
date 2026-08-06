@@ -70,7 +70,7 @@ final class RightsTypeTest extends TypeTestCase
     #[\Override]
     protected function getPreloadedExtensions(): array
     {
-        $service = $this->createMock(EntityNameService::class);
+        $service = self::createStub(EntityNameService::class);
         $service->method('getEntities')
             ->willReturn([self::DEFAULT]);
         $rightsType = new RightsType($service);

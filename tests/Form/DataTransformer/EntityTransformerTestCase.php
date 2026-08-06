@@ -34,7 +34,7 @@ abstract class EntityTransformerTestCase extends TestCase
 
     protected function createRepository(?Group $group = null): GroupRepository
     {
-        $repository = $this->createMock(GroupRepository::class);
+        $repository = self::createStub(GroupRepository::class);
         $repository->method('find')
             ->willReturn($group);
         $repository->method('getClassName')

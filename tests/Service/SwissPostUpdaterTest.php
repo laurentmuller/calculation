@@ -17,9 +17,9 @@ use App\Parameter\ApplicationParameters;
 use App\Parameter\DatesParameter;
 use App\Service\SwissPostService;
 use App\Service\SwissPostUpdater;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use App\Utils\FileUtils;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Clock\DatePoint;
@@ -28,10 +28,10 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 final class SwissPostUpdaterTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
     private string $databaseName;
 
-    private MockObject&ApplicationParameters $parameters;
+    private Stub&ApplicationParameters $parameters;
     private SwissPostUpdater $service;
 
     #[\Override]
@@ -41,7 +41,7 @@ final class SwissPostUpdaterTest extends TestCase
         $this->databaseName = __DIR__ . '/../files/csv/swiss_test_model.sqlite';
         FileUtils::copy($source, $this->databaseName);
 
-        $this->parameters = $this->createMock(ApplicationParameters::class);
+        $this->parameters = self::createStub(ApplicationParameters::class);
         $service = new SwissPostService($this->databaseName);
 
         $this->service = new SwissPostUpdater(
@@ -50,7 +50,7 @@ final class SwissPostUpdaterTest extends TestCase
             $service
         );
         $this->service
-            ->setTranslator($this->createMockTranslator())
+            ->setTranslator($this->createStubTranslator())
             ->setLogger(self::createStub(LoggerInterface::class));
     }
 
@@ -105,7 +105,7 @@ final class SwissPostUpdaterTest extends TestCase
 
     public function testImportInvalidFile(): void
     {
-        $sourceFile = $this->createMock(UploadedFile::class);
+        $sourceFile = self::createStub(UploadedFile::class);
         $sourceFile->method('isValid')
             ->willReturn(false);
         $actual = $this->service->import($sourceFile, false);
@@ -136,11 +136,11 @@ final class SwissPostUpdaterTest extends TestCase
     public function testImportStateNoFound(): void
     {
         $this->databaseName = __DIR__ . '/../files/sqlite/not_exist.sqlite';
-        $this->parameters = $this->createMock(ApplicationParameters::class);
+        $this->parameters = self::createStub(ApplicationParameters::class);
         $factory = self::createStub(FormFactoryInterface::class);
         $service = new SwissPostService($this->databaseName);
         $logger = self::createStub(LoggerInterface::class);
-        $translator = $this->createMockTranslator();
+        $translator = $this->createStubTranslator();
 
         $this->service = new SwissPostUpdater($this->parameters, $factory, $service);
         $this->service->setTranslator($translator)
@@ -154,7 +154,7 @@ final class SwissPostUpdaterTest extends TestCase
     public function testImportSuccess(): void
     {
         $date = new DatePoint('2024-01-17');
-        $dateParameter = $this->createMock(DatesParameter::class);
+        $dateParameter = self::createStub(DatesParameter::class);
         $dateParameter->method('getLastImport')
             ->willReturn($date);
         $this->parameters->method('getDates')
@@ -208,7 +208,7 @@ final class SwissPostUpdaterTest extends TestCase
     public function testImportValidityOlder(): void
     {
         $date = new DatePoint('2024-07-17');
-        $dateParameter = $this->createMock(DatesParameter::class);
+        $dateParameter = self::createStub(DatesParameter::class);
         $dateParameter->method('getLastImport')
             ->willReturn($date);
         $this->parameters->method('getDates')

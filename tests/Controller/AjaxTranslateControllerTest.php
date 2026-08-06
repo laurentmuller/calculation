@@ -16,7 +16,6 @@ namespace App\Tests\Controller;
 use App\Model\HttpClientError;
 use App\Translator\TranslatorFactory;
 use App\Translator\TranslatorServiceInterface;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
 
 final class AjaxTranslateControllerTest extends ControllerTestCase
@@ -31,7 +30,7 @@ final class AjaxTranslateControllerTest extends ControllerTestCase
 
     public function testDetectException(): void
     {
-        $service = $this->createMock(TranslatorServiceInterface::class);
+        $service = self::createStub(TranslatorServiceInterface::class);
         $service->method('detect')
             ->willThrowException(new \Exception('Fake Message'));
         $this->setFactoryService($service);
@@ -45,7 +44,7 @@ final class AjaxTranslateControllerTest extends ControllerTestCase
         $result = [
             'text' => 'hello',
         ];
-        $service = $this->createMock(TranslatorServiceInterface::class);
+        $service = self::createStub(TranslatorServiceInterface::class);
         $service->method('detect')
             ->willReturn($result);
         $this->setFactoryService($service);
@@ -57,7 +56,7 @@ final class AjaxTranslateControllerTest extends ControllerTestCase
     public function testDetectWithError(): void
     {
         $error = new HttpClientError(400000, 'Fake Message');
-        $service = $this->createMock(TranslatorServiceInterface::class);
+        $service = self::createStub(TranslatorServiceInterface::class);
         $service->method('detect')
             ->willReturn(false);
         $service->method('getLastError')
@@ -72,7 +71,7 @@ final class AjaxTranslateControllerTest extends ControllerTestCase
 
     public function testLanguageException(): void
     {
-        $service = $this->createMock(TranslatorServiceInterface::class);
+        $service = self::createStub(TranslatorServiceInterface::class);
         $service->method('getLanguages')
             ->willThrowException(new \Exception('Fake Message'));
         $this->setFactoryService($service);
@@ -82,7 +81,7 @@ final class AjaxTranslateControllerTest extends ControllerTestCase
 
     public function testLanguageFalse(): void
     {
-        $service = $this->createMock(TranslatorServiceInterface::class);
+        $service = self::createStub(TranslatorServiceInterface::class);
         $service->method('getLanguages')
             ->willReturn(false);
         $this->setFactoryService($service);
@@ -95,7 +94,7 @@ final class AjaxTranslateControllerTest extends ControllerTestCase
         $result = [
             'text' => 'hello',
         ];
-        $service = $this->createMock(TranslatorServiceInterface::class);
+        $service = self::createStub(TranslatorServiceInterface::class);
         $service->method('getLanguages')
             ->willReturn($result);
         $this->setFactoryService($service);
@@ -106,7 +105,7 @@ final class AjaxTranslateControllerTest extends ControllerTestCase
     public function testLanguageWithError(): void
     {
         $error = new HttpClientError(100, 'Fake Message');
-        $service = $this->createMock(TranslatorServiceInterface::class);
+        $service = self::createStub(TranslatorServiceInterface::class);
         $service->method('getLanguages')
             ->willReturn(false);
         $service->method('getLastError')
@@ -138,7 +137,7 @@ final class AjaxTranslateControllerTest extends ControllerTestCase
 
     public function testTranslateException(): void
     {
-        $service = $this->createMock(TranslatorServiceInterface::class);
+        $service = self::createStub(TranslatorServiceInterface::class);
         $service->method('translate')
             ->willThrowException(new \Exception('Fake Message'));
         $this->setFactoryService($service);
@@ -178,7 +177,7 @@ final class AjaxTranslateControllerTest extends ControllerTestCase
             'source' => 'source',
             'target' => 'target',
         ];
-        $service = $this->createMock(TranslatorServiceInterface::class);
+        $service = self::createStub(TranslatorServiceInterface::class);
         $service->method('translate')
             ->willReturn($result);
         $this->setFactoryService($service);
@@ -194,7 +193,7 @@ final class AjaxTranslateControllerTest extends ControllerTestCase
     public function testTranslateWithError(): void
     {
         $error = new HttpClientError(100, 'Fake Message');
-        $service = $this->createMock(TranslatorServiceInterface::class);
+        $service = self::createStub(TranslatorServiceInterface::class);
         $service->method('translate')
             ->willReturn(false);
         $service->method('getLastError')
@@ -239,9 +238,9 @@ final class AjaxTranslateControllerTest extends ControllerTestCase
         );
     }
 
-    private function setFactoryService(MockObject&TranslatorServiceInterface $service): void
+    private function setFactoryService(TranslatorServiceInterface $service): void
     {
-        $factory = $this->createMock(TranslatorFactory::class);
+        $factory = self::createStub(TranslatorFactory::class);
         $factory->method('getService')
             ->willReturn($service);
         $this->setService(TranslatorFactory::class, $factory);

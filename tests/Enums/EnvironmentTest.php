@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\Environment;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class EnvironmentTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public static function getIsDevelopment(): \Generator
     {
@@ -95,7 +95,7 @@ final class EnvironmentTest extends TestCase
     #[DataProvider('getLabels')]
     public function testTranslate(Environment $environment, string $expected): void
     {
-        $translator = $this->createMockTranslator();
+        $translator = $this->createStubTranslator();
         $actual = $environment->trans($translator);
         self::assertSame($expected, $actual);
     }

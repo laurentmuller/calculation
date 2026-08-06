@@ -22,9 +22,8 @@ use App\Repository\ProductRepository;
 use App\Service\ProductUpdateService;
 use App\Service\SuspendEventListenerService;
 use App\Tests\Entity\IdTrait;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
@@ -37,7 +36,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 final class ProductUpdateServiceTest extends TestCase
 {
     use IdTrait;
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     private Category $category;
     private Product $product;
@@ -242,11 +241,11 @@ final class ProductUpdateServiceTest extends TestCase
         return $query;
     }
 
-    private function createRequestStack(): MockObject&RequestStack
+    private function createRequestStack(): RequestStack
     {
         $request = new Request();
         $request->setSession($this->session);
-        $requestStack = $this->createMock(RequestStack::class);
+        $requestStack = self::createStub(RequestStack::class);
         $requestStack->method('getCurrentRequest')
             ->willReturn($request);
         $requestStack->method('getSession')
@@ -257,22 +256,22 @@ final class ProductUpdateServiceTest extends TestCase
 
     private function createService(): ProductUpdateService
     {
-        $productRepository = $this->createMock(ProductRepository::class);
+        $productRepository = self::createStub(ProductRepository::class);
         $productRepository->method('findByCategory')
             ->willReturn([$this->product]);
 
         $productRepository->method('findByDescription')
             ->willReturn([$this->product]);
 
-        $categoryRepository = $this->createMock(CategoryRepository::class);
+        $categoryRepository = self::createStub(CategoryRepository::class);
         $categoryRepository->method('find')
             ->willReturn($this->category);
 
-        $security = $this->createMock(Security::class);
+        $security = self::createStub(Security::class);
         $security->method('getUser')
             ->willReturn($this->user);
 
-        $container = $this->createMock(ContainerInterface::class);
+        $container = self::createStub(ContainerInterface::class);
         $container->method('has')
             ->willReturn(false);
 
@@ -283,7 +282,7 @@ final class ProductUpdateServiceTest extends TestCase
             $security,
         );
         $productService->setRequestStack($this->createRequestStack());
-        $productService->setTranslator($this->createMockTranslator());
+        $productService->setTranslator($this->createStubTranslator());
         $productService->setLogger(self::createStub(LoggerInterface::class));
 
         $class = new \ReflectionClass(ProductUpdateService::class);

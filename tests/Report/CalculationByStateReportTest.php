@@ -24,7 +24,7 @@ final class CalculationByStateReportTest extends TestCase
 {
     public function testRender(): void
     {
-        $helper = $this->createMock(DocumentHelperInterface::class);
+        $helper = self::createStub(DocumentHelperInterface::class);
         $helper->method('getMinMargin')
             ->willReturn(1.1);
         $generator = self::createStub(UrlGeneratorInterface::class);

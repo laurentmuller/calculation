@@ -15,12 +15,12 @@ namespace App\Tests\Pivot\Field;
 
 use App\Pivot\Field\PivotField;
 use App\Pivot\Formatter\TranslateFormatter;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
 
 final class PivotFieldTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public function testConstructor(): void
     {
@@ -70,7 +70,7 @@ final class PivotFieldTest extends TestCase
 
     public function testTranslateFormatter(): void
     {
-        $translator = $this->createMockTranslator();
+        $translator = $this->createStubTranslator();
         $formatter = new TranslateFormatter($translator, 'fake', 'fake');
         $field = new PivotField('name', formatter: $formatter);
         $actual = $field->getDisplayValue('value');

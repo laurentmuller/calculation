@@ -16,7 +16,7 @@ namespace App\Tests\Service;
 use App\Enums\StrengthLevel;
 use App\Model\PasswordQuery;
 use App\Service\PasswordService;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use Createnl\ZxcvbnBundle\ZxcvbnFactory;
 use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -25,7 +25,7 @@ use ZxcvbnPhp\Zxcvbn;
 
 final class PasswordServiceTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public static function getScores(): \Generator
     {
@@ -59,7 +59,7 @@ final class PasswordServiceTest extends TestCase
 
     public function testInvalidScore(): void
     {
-        $zxcvbn = $this->createMock(Zxcvbn::class);
+        $zxcvbn = self::createStub(Zxcvbn::class);
         $zxcvbn->method('passwordStrength')
             ->willReturn([
                 'score' => -10,
@@ -68,7 +68,7 @@ final class PasswordServiceTest extends TestCase
                     'suggestions' => [],
                 ],
             ]);
-        $factory = $this->createMock(ZxcvbnFactoryInterface::class);
+        $factory = self::createStub(ZxcvbnFactoryInterface::class);
         $factory->method('createZxcvbn')
             ->willReturn($zxcvbn);
         $service = $this->createService($factory);
@@ -91,7 +91,7 @@ final class PasswordServiceTest extends TestCase
 
     private function createService(?ZxcvbnFactoryInterface $factory = null): PasswordService
     {
-        $translator = $this->createMockTranslator();
+        $translator = $this->createStubTranslator();
         $factory ??= new ZxcvbnFactory([], $translator);
 
         return new PasswordService($factory, $translator);

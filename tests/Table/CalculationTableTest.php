@@ -22,7 +22,7 @@ use App\Table\CalculationTable;
 use App\Table\DataQuery;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use Symfony\Component\Clock\DatePoint;
 use Twig\Environment;
 use Twig\Error\Error;
@@ -47,7 +47,7 @@ final class CalculationTableTest extends EntityTableTestCase
      */
     public function testFormatOverallMargin(): void
     {
-        $twig = $this->createMock(Environment::class);
+        $twig = self::createStub(Environment::class);
         $twig->method('render')
             ->willReturnArgument(0);
         $table = new CalculationTable(
@@ -145,7 +145,7 @@ final class CalculationTableTest extends EntityTableTestCase
     }
 
     #[\Override]
-    protected function createMockQuery(array $entities): MockObject&Query
+    protected function createMockQuery(array $entities): Stub&Query
     {
         $query = parent::createMockQuery($entities);
         $query->method('getOneOrNullResult')
@@ -155,9 +155,9 @@ final class CalculationTableTest extends EntityTableTestCase
     }
 
     #[\Override]
-    protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&CalculationRepository
+    protected function createMockRepository(QueryBuilder $queryBuilder): Stub&CalculationRepository
     {
-        $repository = $this->createMock(CalculationRepository::class);
+        $repository = self::createStub(CalculationRepository::class);
         $repository->method('getTableQueryBuilder')
             ->willReturn($queryBuilder);
 
@@ -178,9 +178,9 @@ final class CalculationTableTest extends EntityTableTestCase
         );
     }
 
-    private function createMockCalculationStateRepository(): MockObject&CalculationStateRepository
+    private function createMockCalculationStateRepository(): CalculationStateRepository
     {
-        $repository = $this->createMock(CalculationStateRepository::class);
+        $repository = self::createStub(CalculationStateRepository::class);
         if (0 === $this->stateId) {
             return $repository;
         }

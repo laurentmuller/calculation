@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\FlashType;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class FlashTypeTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public static function getColors(): \Generator
     {
@@ -100,7 +100,7 @@ final class FlashTypeTest extends TestCase
     #[DataProvider('getLabels')]
     public function testTranslate(FlashType $type, string $expected): void
     {
-        $translator = $this->createMockTranslator();
+        $translator = $this->createStubTranslator();
         $actual = $type->trans($translator);
         self::assertSame($expected, $actual);
     }

@@ -49,7 +49,7 @@ final class CategoryProviderTest extends TestCase
     private function createProvider(?Category $entity = null): CategoryProvider
     {
         $entities = $entity instanceof Category ? [$entity] : [];
-        $repository = $this->createMock(CategoryRepository::class);
+        $repository = self::createStub(CategoryRepository::class);
         $repository->method('findBy')
             ->willReturn($entities);
         $repository->method('findAll')

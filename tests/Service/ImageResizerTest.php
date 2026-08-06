@@ -14,14 +14,14 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\ImageResizer;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use App\Utils\FileUtils;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 final class ImageResizerTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     #[\Override]
     protected function tearDown(): void
@@ -78,7 +78,7 @@ final class ImageResizerTest extends TestCase
     private function createService(): ImageResizer
     {
         return new ImageResizer(
-            $this->createMockTranslator(),
+            $this->createStubTranslator(),
             self::createStub(LoggerInterface::class)
         );
     }

@@ -15,7 +15,6 @@ namespace App\Tests\Controller;
 
 use App\Model\HttpClientError;
 use App\Service\ExchangeRateService;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Response;
 
 final class ExchangeRateControllerTest extends ControllerTestCase
@@ -63,7 +62,7 @@ final class ExchangeRateControllerTest extends ControllerTestCase
                 'roundingIncrement' => 0.01,
             ],
         ];
-        $service = $this->createMock(ExchangeRateService::class);
+        $service = self::createStub(ExchangeRateService::class);
         $service->method('getSupportedCodes')
             ->willReturn($supportedCodes);
         $this->setService(ExchangeRateService::class, $service);
@@ -78,7 +77,7 @@ final class ExchangeRateControllerTest extends ControllerTestCase
     public function testGetLatestSuccess(): void
     {
         $data = ['USD' => 1.0];
-        $service = $this->createMock(ExchangeRateService::class);
+        $service = self::createStub(ExchangeRateService::class);
         $service->method('getLatest')
             ->willReturn($data);
         $this->setService(ExchangeRateService::class, $service);
@@ -105,7 +104,7 @@ final class ExchangeRateControllerTest extends ControllerTestCase
     public function testGetRateNull(): void
     {
         $data = null;
-        $service = $this->createMock(ExchangeRateService::class);
+        $service = self::createStub(ExchangeRateService::class);
         $service->method('getRateAndDates')
             ->willReturn($data);
         $this->setService(ExchangeRateService::class, $service);
@@ -124,7 +123,7 @@ final class ExchangeRateControllerTest extends ControllerTestCase
             'next' => null,
             'update' => null,
         ];
-        $service = $this->createMock(ExchangeRateService::class);
+        $service = self::createStub(ExchangeRateService::class);
         $service->method('getRateAndDates')
             ->willReturn($data);
         $this->setService(ExchangeRateService::class, $service);
@@ -148,10 +147,10 @@ final class ExchangeRateControllerTest extends ControllerTestCase
         );
     }
 
-    private function createMockService(): MockObject&ExchangeRateService
+    private function createMockService(): ExchangeRateService
     {
         $error = new HttpClientError(100, 'Fake Message');
-        $service = $this->createMock(ExchangeRateService::class);
+        $service = self::createStub(ExchangeRateService::class);
         $service->method('hasLastError')
             ->willReturn(true);
         $service->method('getLastError')

@@ -25,10 +25,9 @@ use App\Parameter\SecurityParameter;
 use App\Service\PasswordService;
 use App\Tests\Form\CustomConstraintValidatorFactory;
 use App\Tests\Form\EntityTypeTestCase;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 use Symfony\Component\Validator\Constraints\NotCompromisedPassword;
@@ -43,11 +42,11 @@ use ZxcvbnPhp\Zxcvbn;
 final class UserChangePasswordTypeTest extends EntityTypeTestCase
 {
     use PasswordHasherExtensionTrait;
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
     use ValidatorExtensionTrait;
 
     private bool $compromisedPassword = false;
-    private MockObject&ApplicationParameters $parameters;
+    private ApplicationParameters $parameters;
     private Password $password;
     private StrengthLevel $score;
     private Strength $strength;
@@ -59,10 +58,10 @@ final class UserChangePasswordTypeTest extends EntityTypeTestCase
         $this->password = new Password();
         $this->score = StrengthLevel::VERY_WEAK;
         $this->strength = new Strength(StrengthLevel::WEAK);
-        $this->translator = $this->createMockTranslator();
+        $this->translator = $this->createStubTranslator();
 
         $contraint = new NotCompromisedPassword();
-        $security = $this->createMock(SecurityParameter::class);
+        $security = self::createStub(SecurityParameter::class);
         $security->method('isPasswordConstraint')
             ->willReturnCallback(fn (): bool => $this->isPasswordConstraint());
         $security->method('getPasswordConstraint')
@@ -75,7 +74,7 @@ final class UserChangePasswordTypeTest extends EntityTypeTestCase
             ->willReturnCallback(fn (): bool => $this->compromisedPassword);
         $security->method('getNotCompromisedConstraint')
             ->willReturn($contraint);
-        $this->parameters = $this->createMock(ApplicationParameters::class);
+        $this->parameters = self::createStub(ApplicationParameters::class);
         $this->parameters->method('getSecurity')
             ->willReturn($security);
         parent::setUp();
@@ -217,8 +216,8 @@ final class UserChangePasswordTypeTest extends EntityTypeTestCase
 
     private function getStrengthValidator(): StrengthValidator
     {
-        $translator = $this->createMockTranslator();
-        $factory = $this->createMock(ZxcvbnFactoryInterface::class);
+        $translator = $this->createStubTranslator();
+        $factory = self::createStub(ZxcvbnFactoryInterface::class);
         $factory->method('createZxcvbn')
             ->willReturn(new Zxcvbn());
         $service = new PasswordService($factory, $translator);

@@ -25,7 +25,7 @@ use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
 use App\Tests\Form\CalculationState\CalculationStateTrait;
 use App\Tests\Form\EntityTypeTestCase;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use App\Utils\DateUtils;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -37,7 +37,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 final class CalculationEditStateTypeTest extends EntityTypeTestCase
 {
     use CalculationStateTrait;
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     private bool $marginBelow = false;
 
@@ -71,12 +71,12 @@ final class CalculationEditStateTypeTest extends EntityTypeTestCase
     #[\Override]
     protected function getPreloadedExtensions(): array
     {
-        $translator = $this->createMockTranslator();
+        $translator = $this->createStubTranslator();
 
-        $default = $this->createMock(DefaultParameter::class);
+        $default = self::createStub(DefaultParameter::class);
         $default->method('isMarginBelow')
             ->willReturnCallback(fn (): bool => $this->marginBelow);
-        $parameters = $this->createMock(ApplicationParameters::class);
+        $parameters = self::createStub(ApplicationParameters::class);
         $parameters->method('getDefault')
             ->willReturn($default);
 

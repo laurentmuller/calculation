@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\EntityAction;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class EntityActionTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public static function getLabel(): \Generator
     {
@@ -69,7 +69,7 @@ final class EntityActionTest extends TestCase
     #[DataProvider('getLabel')]
     public function testTranslate(string $expected, EntityAction $action): void
     {
-        $translator = $this->createMockTranslator();
+        $translator = $this->createStubTranslator();
         $actual = $action->trans($translator);
         self::assertSame($expected, $actual);
     }

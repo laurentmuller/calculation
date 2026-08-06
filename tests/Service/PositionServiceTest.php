@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\PositionService;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class PositionServiceTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public static function getDirections(): \Generator
     {
@@ -139,7 +139,7 @@ final class PositionServiceTest extends TestCase
 
     private function createService(): PositionService
     {
-        $translator = $this->createMockTranslator();
+        $translator = $this->createStubTranslator();
 
         return new PositionService($translator);
     }

@@ -32,7 +32,7 @@ final class IpStackControllerTest extends ControllerTestCase
             'ip' => '212.103.73.117',
             'type' => 'ipv4',
         ];
-        $service = $this->createMock(IpStackService::class);
+        $service = self::createStub(IpStackService::class);
         $service->method('getIpInfo')
             ->willReturn($data);
         self::getContainer()->set(IpStackService::class, $service);

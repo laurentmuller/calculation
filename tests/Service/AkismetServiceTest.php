@@ -15,8 +15,8 @@ namespace App\Tests\Service;
 
 use App\Model\HttpClientError;
 use App\Service\AkismetService;
-use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\MockObject;
+use App\Tests\TranslatorStubTrait;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -29,17 +29,17 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 final class AkismetServiceTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     private const int ERROR_CODE = 1000;
     private const string ERROR_MESSAGE = 'Error Message';
 
-    private MockObject&RequestStack $requestStack;
+    private Stub&RequestStack $requestStack;
 
     #[\Override]
     protected function setUp(): void
     {
-        $this->requestStack = $this->createMock(RequestStack::class);
+        $this->requestStack = self::createStub(RequestStack::class);
     }
 
     public function testActivityException(): void
@@ -111,7 +111,7 @@ final class AkismetServiceTest extends TestCase
             self::createStub(LoggerInterface::class),
             self::createStub(Security::class),
             $this->requestStack,
-            $this->createMockTranslator()
+            $this->createStubTranslator()
         );
     }
 
@@ -299,7 +299,7 @@ final class AkismetServiceTest extends TestCase
             self::createStub(LoggerInterface::class),
             self::createStub(Security::class),
             $this->requestStack,
-            $this->createMockTranslator()
+            $this->createStubTranslator()
         );
     }
 

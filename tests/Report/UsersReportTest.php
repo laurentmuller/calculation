@@ -68,7 +68,7 @@ final class UsersReportTest extends TestCase
         $user1 = new User();
         $user1->updateLastLogin();
 
-        $user2 = $this->createMock(User::class);
+        $user2 = self::createStub(User::class);
         $user2->method('getRole')
             ->willReturn(RoleInterface::ROLE_USER);
         $user2->method('getImagePath')

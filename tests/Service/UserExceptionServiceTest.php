@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\UserExceptionService;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
@@ -33,7 +33,7 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\WrongEmailVerifyException;
 
 final class UserExceptionServiceTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     private Request $request;
     private UserExceptionService $service;
@@ -41,7 +41,7 @@ final class UserExceptionServiceTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $translator = $this->createMockTranslator();
+        $translator = $this->createStubTranslator();
         $this->service = new UserExceptionService($translator);
         $storage = new MockArraySessionStorage();
         $session = new Session($storage);

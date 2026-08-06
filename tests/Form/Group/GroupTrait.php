@@ -18,7 +18,7 @@ use App\Repository\GroupRepository;
 use App\Tests\Entity\IdTrait;
 use App\Tests\Form\ManagerRegistryTrait;
 use Doctrine\Persistence\ManagerRegistry;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
@@ -49,7 +49,7 @@ trait GroupTrait
         return new EntityType($this->getGroupRegistry());
     }
 
-    protected function getGroupRegistry(): MockObject&ManagerRegistry
+    protected function getGroupRegistry(): Stub&ManagerRegistry
     {
         return $this->createManagerRegistry(
             Group::class,

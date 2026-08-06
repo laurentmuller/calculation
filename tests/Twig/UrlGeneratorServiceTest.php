@@ -24,7 +24,7 @@ final class UrlGeneratorServiceTest extends RuntimeTestCase
     #[\Override]
     protected function createService(): UrlGeneratorService
     {
-        $generator = $this->createMock(UrlGeneratorInterface::class);
+        $generator = self::createStub(UrlGeneratorInterface::class);
         $generator->method('generate')
             ->willReturnArgument(0);
 

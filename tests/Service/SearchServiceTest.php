@@ -141,11 +141,11 @@ final class SearchServiceTest extends TestCase
                 'fieldName' => 'product.name',
             ];
         }
-        $nativeQuery = $this->createMock(NativeQuery::class);
+        $nativeQuery = self::createStub(NativeQuery::class);
         $nativeQuery->method('getArrayResult')
             ->willReturn($results);
 
-        $manager = $this->createMock(EntityManagerInterface::class);
+        $manager = self::createStub(EntityManagerInterface::class);
         $manager->method('createNativeQuery')
             ->willReturn($nativeQuery);
 
@@ -161,7 +161,7 @@ final class SearchServiceTest extends TestCase
         bool $granted = true,
         bool $entity = false
     ): SearchService {
-        $checker = $this->createMock(AuthorizationCheckerInterface::class);
+        $checker = self::createStub(AuthorizationCheckerInterface::class);
         $checker->method('isGranted')
             ->willReturn($granted);
         $cache = new ArrayAdapter();

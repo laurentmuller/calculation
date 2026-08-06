@@ -23,7 +23,7 @@ use App\Interfaces\RoleInterface;
 use App\Service\EntityNameService;
 use App\Service\RoleService;
 use App\Tests\Form\PreloadedExtensionsTrait;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
@@ -32,7 +32,7 @@ use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 final class UserRightsTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public function testFormView(): void
     {
@@ -74,14 +74,14 @@ final class UserRightsTypeTest extends TypeTestCase
     #[\Override]
     protected function getPreloadedExtensions(): array
     {
-        $translator = $this->createMockTranslator();
+        $translator = $this->createStubTranslator();
 
-        $roleHierarchy = $this->createMock(RoleHierarchyInterface::class);
+        $roleHierarchy = self::createStub(RoleHierarchyInterface::class);
         $roleHierarchy->method('getReachableRoleNames')
             ->willReturn([RoleInterface::ROLE_ADMIN]);
         $roleService = new RoleService($roleHierarchy, $translator);
 
-        $entityNameService = $this->createMock(EntityNameService::class);
+        $entityNameService = self::createStub(EntityNameService::class);
         $entityNameService->method('getEntities')
             ->willReturn(EntityName::sorted());
 

@@ -22,7 +22,7 @@ use App\Tests\Entity\IdTrait;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -53,13 +53,13 @@ abstract class EntityTableTestCase extends TestCase
      */
     abstract protected function createEntities(): array;
 
-    protected function createMockIndexService(int $count = 1): MockObject&IndexService
+    protected function createMockIndexService(int $count = 1): Stub&IndexService
     {
         $catalog = \array_combine(
             \array_keys(IndexService::CATALOG),
             \array_fill(0, \count(IndexService::CATALOG), $count)
         );
-        $service = $this->createMock(IndexService::class);
+        $service = self::createStub(IndexService::class);
         $service->method('getCatalog')
             ->willReturn($catalog);
 
@@ -67,11 +67,11 @@ abstract class EntityTableTestCase extends TestCase
     }
 
     /**
-     * @return MockObject&Query<array-key, mixed>
+     * @return Stub&Query<array-key, mixed>
      */
-    protected function createMockQuery(array $entities): MockObject&Query
+    protected function createMockQuery(array $entities): Stub&Query
     {
-        $query = $this->createMock(Query::class);
+        $query = self::createStub(Query::class);
         $query->method('getResult')
             ->willReturn($entities);
 
@@ -79,11 +79,11 @@ abstract class EntityTableTestCase extends TestCase
     }
 
     /**
-     * @param MockObject&Query<array-key, mixed> $query
+     * @param Stub&Query<array-key, mixed> $query
      */
-    protected function createMockQueryBuilder(MockObject&Query $query): MockObject&QueryBuilder
+    protected function createMockQueryBuilder(Query $query): Stub&QueryBuilder
     {
-        $queryBuilder = $this->createMock(QueryBuilder::class);
+        $queryBuilder = self::createStub(QueryBuilder::class);
         $queryBuilder->method('getQuery')
             ->willReturn($query);
         $queryBuilder->method('getRootAliases')
@@ -95,16 +95,16 @@ abstract class EntityTableTestCase extends TestCase
     }
 
     /**
-     * @return MockObject&TRepository
+     * @return Stub&TRepository
      */
-    abstract protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&AbstractRepository;
+    abstract protected function createMockRepository(QueryBuilder $queryBuilder): Stub&AbstractRepository;
 
     /**
-     * @param MockObject&TRepository $repository
+     * @param TRepository $repository
      *
      * @return TEntityTable
      */
-    abstract protected function createTable(MockObject&AbstractRepository $repository): AbstractEntityTable;
+    abstract protected function createTable(AbstractRepository $repository): AbstractEntityTable;
 
     protected function processDataQuery(DataQuery $dataQuery): void
     {

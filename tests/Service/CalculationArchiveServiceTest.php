@@ -22,10 +22,10 @@ use App\Service\CalculationArchiveService;
 use App\Service\SuspendEventListenerService;
 use App\Tests\DateAssertTrait;
 use App\Tests\Entity\IdTrait;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Clock\DatePoint;
@@ -38,18 +38,18 @@ final class CalculationArchiveServiceTest extends TestCase
 {
     use DateAssertTrait;
     use IdTrait;
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
-    private MockObject&CalculationRepository $calculationRepository;
+    private Stub&CalculationRepository $calculationRepository;
     private Session $session;
-    private MockObject&CalculationStateRepository $stateRepository;
+    private Stub&CalculationStateRepository $stateRepository;
 
     #[\Override]
     protected function setUp(): void
     {
         $this->session = new Session(new MockArraySessionStorage());
-        $this->calculationRepository = $this->createMock(CalculationRepository::class);
-        $this->stateRepository = $this->createMock(CalculationStateRepository::class);
+        $this->calculationRepository = self::createStub(CalculationRepository::class);
+        $this->stateRepository = self::createStub(CalculationStateRepository::class);
     }
 
     public function testCreateQueryEmpty(): void
@@ -274,11 +274,11 @@ final class CalculationArchiveServiceTest extends TestCase
         self::assertCount(1, $actual);
     }
 
-    private function createRequestStack(): MockObject&RequestStack
+    private function createRequestStack(): RequestStack
     {
         $request = new Request();
         $request->setSession($this->session);
-        $requestStack = $this->createMock(RequestStack::class);
+        $requestStack = self::createStub(RequestStack::class);
         $requestStack->method('getCurrentRequest')
             ->willReturn($request);
         $requestStack->method('getSession')
@@ -295,7 +295,7 @@ final class CalculationArchiveServiceTest extends TestCase
             self::createStub(SuspendEventListenerService::class)
         );
         $service->setLogger(self::createStub(LoggerInterface::class))
-            ->setTranslator($this->createMockTranslator())
+            ->setTranslator($this->createStubTranslator())
             ->setRequestStack($this->createRequestStack());
 
         return $service;
@@ -303,11 +303,11 @@ final class CalculationArchiveServiceTest extends TestCase
 
     private function setCalculationDate(?string $value = null): void
     {
-        $query = $this->createMock(Query::class);
+        $query = self::createStub(Query::class);
         $query->method('getSingleScalarResult')
             ->willReturn($value);
 
-        $queryBuilder = $this->createMock(QueryBuilder::class);
+        $queryBuilder = self::createStub(QueryBuilder::class);
         $queryBuilder->method('getQuery')
             ->willReturn($query);
 
@@ -320,11 +320,11 @@ final class CalculationArchiveServiceTest extends TestCase
 
     private function setCalculations(array $calculations = []): void
     {
-        $query = $this->createMock(Query::class);
+        $query = self::createStub(Query::class);
         $query->method('getResult')
             ->willReturn($calculations);
 
-        $queryBuilder = $this->createMock(QueryBuilder::class);
+        $queryBuilder = self::createStub(QueryBuilder::class);
         $queryBuilder->method('getQuery')
             ->willReturn($query);
 
@@ -337,11 +337,11 @@ final class CalculationArchiveServiceTest extends TestCase
 
     private function setCalculationStates(array $calculationStates = []): void
     {
-        $query = $this->createMock(Query::class);
+        $query = self::createStub(Query::class);
         $query->method('getResult')
             ->willReturn($calculationStates);
 
-        $queryBuilder = $this->createMock(QueryBuilder::class);
+        $queryBuilder = self::createStub(QueryBuilder::class);
         $queryBuilder->method('getQuery')
             ->willReturn($query);
 

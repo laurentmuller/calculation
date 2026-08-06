@@ -16,7 +16,6 @@ namespace App\Tests\Service;
 use App\Entity\Calculation;
 use App\Repository\CalculationRepository;
 use App\Service\TimelineService;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
 
@@ -59,10 +58,10 @@ final class TimelineServiceTest extends TestCase
         self::assertSame(0, $actual['count']);
     }
 
-    private function createMockRepository(?Calculation $calculation = null): MockObject&CalculationRepository
+    private function createMockRepository(?Calculation $calculation = null): CalculationRepository
     {
         $date = new DatePoint('today');
-        $repository = $this->createMock(CalculationRepository::class);
+        $repository = self::createStub(CalculationRepository::class);
 
         if ($calculation instanceof Calculation) {
             $repository->method('getByInterval')

@@ -146,16 +146,16 @@ final class DatabaseInfoServiceTest extends TestCase
 
     private function createEntityManager(array $values = []): EntityManagerInterface
     {
-        $connection = $this->createMock(Connection::class);
+        $connection = self::createStub(Connection::class);
         $connection->method('getParams')
             ->willReturn(self::PARAMS);
 
         if ([] !== $values) {
-            $result = $this->createMock(Result::class);
+            $result = self::createStub(Result::class);
             $result->method('fetchAllAssociative')
                 ->willReturn($values);
 
-            $statement = $this->createMock(Statement::class);
+            $statement = self::createStub(Statement::class);
             $statement->method('executeQuery')
                 ->willReturn($result);
 
@@ -163,7 +163,7 @@ final class DatabaseInfoServiceTest extends TestCase
                 ->willReturn($statement);
         }
 
-        $manager = $this->createMock(EntityManagerInterface::class);
+        $manager = self::createStub(EntityManagerInterface::class);
         $manager->method('getConnection')
             ->willReturn($connection);
 
@@ -172,11 +172,11 @@ final class DatabaseInfoServiceTest extends TestCase
 
     private function createEntityManagerWithException(): EntityManagerInterface
     {
-        $connection = $this->createMock(Connection::class);
+        $connection = self::createStub(Connection::class);
         $connection->method('prepare')
             ->willThrowException(new \Exception());
 
-        $manager = $this->createMock(EntityManagerInterface::class);
+        $manager = self::createStub(EntityManagerInterface::class);
         $manager->method('getConnection')
             ->willReturn($connection);
 

@@ -67,7 +67,7 @@ final class CalculationByMonthReportTest extends TestCase
      */
     private function createReport(array $items): CalculationByMonthReport
     {
-        $helper = $this->createMock(DocumentHelperInterface::class);
+        $helper = self::createStub(DocumentHelperInterface::class);
         $helper->method('getMinMargin')
             ->willReturn(1.1);
 

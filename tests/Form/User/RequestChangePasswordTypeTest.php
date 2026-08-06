@@ -64,13 +64,13 @@ final class RequestChangePasswordTypeTest extends TypeTestCase
     #[\Override]
     protected function getPreloadedExtensions(): array
     {
-        $service = $this->createMock(CaptchaImageService::class);
+        $service = self::createStub(CaptchaImageService::class);
         $service->method('generateImage')
             ->willReturn('fake_content');
-        $security = $this->createMock(SecurityParameter::class);
+        $security = self::createStub(SecurityParameter::class);
         $security->method('isCaptcha')
             ->willReturn(true);
-        $parameters = $this->createMock(ApplicationParameters::class);
+        $parameters = self::createStub(ApplicationParameters::class);
         $parameters->method('getSecurity')
             ->willReturn($security);
 

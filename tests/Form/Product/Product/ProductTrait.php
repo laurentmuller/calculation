@@ -18,7 +18,7 @@ use App\Repository\ProductRepository;
 use App\Tests\Entity\IdTrait;
 use App\Tests\Form\ManagerRegistryTrait;
 use Doctrine\Persistence\ManagerRegistry;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 trait ProductTrait
@@ -33,7 +33,7 @@ trait ProductTrait
         return new EntityType($this->getProductRegistry());
     }
 
-    protected function getProductRegistry(): MockObject&ManagerRegistry
+    protected function getProductRegistry(): Stub&ManagerRegistry
     {
         return $this->createManagerRegistry(
             Product::class,

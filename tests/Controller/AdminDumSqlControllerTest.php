@@ -31,7 +31,7 @@ final class AdminDumSqlControllerTest extends ControllerTestCase
     public function testDumSqlFailure(): void
     {
         $result = new CommandResult(Command::FAILURE, 'Fake output');
-        $service = $this->createMock(CommandService::class);
+        $service = self::createStub(CommandService::class);
         $service->method('execute')
             ->willReturn($result);
         $this->setService(CommandService::class, $service);
@@ -46,7 +46,7 @@ final class AdminDumSqlControllerTest extends ControllerTestCase
     public function testDumSqlOK(): void
     {
         $result = new CommandResult(Command::SUCCESS, '[OK]');
-        $service = $this->createMock(CommandService::class);
+        $service = self::createStub(CommandService::class);
         $service->method('execute')
             ->willReturn($result);
         $this->setService(CommandService::class, $service);

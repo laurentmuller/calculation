@@ -15,7 +15,7 @@ namespace App\Tests\Spreadsheet;
 
 use App\Spreadsheet\ColumnFormat;
 use App\Spreadsheet\SpreadsheetDocument;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
 
 final class ColumnFormatTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public static function getAlignments(): \Generator
     {
@@ -46,7 +46,7 @@ final class ColumnFormatTest extends TestCase
 
     public function testApply(): void
     {
-        $doc = new SpreadsheetDocument($this->createMockTranslator());
+        $doc = new SpreadsheetDocument($this->createStubTranslator());
         $sheet = $doc->getSheet(0);
         $sheet->setCellValue('A1', 0.25);
         ColumnFormat::AMOUNT->apply($sheet, 1);

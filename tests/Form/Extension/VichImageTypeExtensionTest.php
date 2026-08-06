@@ -16,7 +16,7 @@ namespace App\Tests\Form\Extension;
 use App\Form\Extension\VichImageTypeExtension;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\Form\User\VichImageTypeTrait;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Vich\UploaderBundle\Form\Type\VichImageType;
@@ -25,7 +25,7 @@ use Vich\UploaderBundle\Form\Type\VichImageType;
 final class VichImageTypeExtensionTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
     use VichImageTypeTrait;
 
     public function testForm(): void

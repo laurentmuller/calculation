@@ -28,7 +28,7 @@ final class UsersRightsReportTest extends TestCase
 {
     public function testRender(): void
     {
-        $parameters = $this->createMock(ApplicationParameters::class);
+        $parameters = self::createStub(ApplicationParameters::class);
         $parameters->method('getRights')
             ->willReturn(new RightsParameter());
 

@@ -20,10 +20,10 @@ use App\Repository\UserRepository;
 use App\Service\RoleService;
 use App\Table\DataQuery;
 use App\Table\UserTable;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use App\Utils\FormatUtils;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
@@ -36,7 +36,7 @@ use Twig\Error\Error;
  */
 final class UserTableTest extends EntityTableTestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     private const int TOKEN_DEFAULT = 0;
     private const int TOKEN_NO_USER = 1;
@@ -66,7 +66,7 @@ final class UserTableTest extends EntityTableTestCase
      */
     public function testFormatImage(): void
     {
-        $twig = $this->createMock(Environment::class);
+        $twig = self::createStub(Environment::class);
         $twig->method('render')
             ->willReturnArgument(0);
         $table = $this->createTableWithMock(twig: $twig);
@@ -91,7 +91,7 @@ final class UserTableTest extends EntityTableTestCase
 
     public function testFormatRole(): void
     {
-        $roleService = $this->createMock(RoleService::class);
+        $roleService = self::createStub(RoleService::class);
         $roleService->method('getRoleIconAndName')
             ->willReturn('role');
         $table = $this->createTableWithMock(roleService: $roleService);
@@ -142,9 +142,9 @@ final class UserTableTest extends EntityTableTestCase
     }
 
     #[\Override]
-    protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&UserRepository
+    protected function createMockRepository(QueryBuilder $queryBuilder): Stub&UserRepository
     {
-        $repository = $this->createMock(UserRepository::class);
+        $repository = self::createStub(UserRepository::class);
         $repository->method('getTableQueryBuilder')
             ->willReturn($queryBuilder);
 
@@ -160,7 +160,7 @@ final class UserTableTest extends EntityTableTestCase
         return new UserTable(
             $repository,
             self::createStub(RoleService::class),
-            $this->createMockTranslator(),
+            $this->createStubTranslator(),
             self::createStub(Environment::class),
             $this->createMockSecurity(),
             $this->createMockIndexService()
@@ -169,7 +169,7 @@ final class UserTableTest extends EntityTableTestCase
 
     private function createMockSecurity(): Security
     {
-        $security = $this->createMock(Security::class);
+        $security = self::createStub(Security::class);
         if (self::TOKEN_DEFAULT === $this->state) {
             return $security;
         }
@@ -179,11 +179,11 @@ final class UserTableTest extends EntityTableTestCase
             $user = new User();
         }
 
-        $originalToken = $this->createMock(TokenInterface::class);
+        $originalToken = self::createStub(TokenInterface::class);
         $originalToken->method('getUser')
             ->willReturn($user);
 
-        $token = $this->createMock(SwitchUserToken::class);
+        $token = self::createStub(SwitchUserToken::class);
         $token->method('getOriginalToken')
             ->willReturn($originalToken);
 
@@ -200,7 +200,7 @@ final class UserTableTest extends EntityTableTestCase
         return new UserTable(
             self::createStub(UserRepository::class),
             $roleService ?? self::createStub(RoleService::class),
-            $this->createMockTranslator(),
+            $this->createStubTranslator(),
             $twig ?? self::createStub(Environment::class),
             self::createStub(Security::class),
             $this->createMockIndexService(),

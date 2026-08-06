@@ -41,7 +41,7 @@ final class RoleChoiceTypeTest extends TypeTestCase
     {
         $user = new User();
         $user->setRole(RoleInterface::ROLE_SUPER_ADMIN);
-        $security = $this->createMock(Security::class);
+        $security = self::createStub(Security::class);
         $security->method('getUser')
             ->willReturn($user);
 

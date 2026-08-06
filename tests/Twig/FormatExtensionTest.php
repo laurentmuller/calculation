@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Twig;
 
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use App\Twig\FormatExtension;
 use App\Utils\FormatUtils;
 use Twig\Extension\AttributeExtension;
@@ -23,7 +23,7 @@ use Twig\Extension\AttributeExtension;
  */
 final class FormatExtensionTest extends RuntimeTestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public function testFormatBoolean(): void
     {
@@ -37,7 +37,7 @@ final class FormatExtensionTest extends RuntimeTestCase
     #[\Override]
     protected function createService(): FormatExtension
     {
-        return new FormatExtension($this->createMockTranslator());
+        return new FormatExtension($this->createStubTranslator());
     }
 
     /**

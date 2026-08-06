@@ -26,7 +26,7 @@ use App\Security\EntityVoter;
 use App\Service\RoleBuilderService;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -37,7 +37,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 final class EntityVoterTest extends TestCase
 {
     private RoleBuilderService $builder;
-    private MockObject&ApplicationParameters $parameters;
+    private Stub&ApplicationParameters $parameters;
     private EntityVoter $voter;
 
     #[\Override]
@@ -46,12 +46,12 @@ final class EntityVoterTest extends TestCase
         $this->builder = new RoleBuilderService();
         $adminRole = $this->builder->getAdminRole();
         $userRole = $this->builder->getUserRole();
-        $rights = $this->createMock(RightsParameter::class);
+        $rights = self::createStub(RightsParameter::class);
         $rights->method('getAdminRole')
             ->willReturn($adminRole);
         $rights->method('getUserRole')
             ->willReturn($userRole);
-        $this->parameters = $this->createMock(ApplicationParameters::class);
+        $this->parameters = self::createStub(ApplicationParameters::class);
         $this->parameters->method('getRights')
             ->willReturn($rights);
 

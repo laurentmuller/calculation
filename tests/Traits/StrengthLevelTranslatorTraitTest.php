@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Traits;
 
 use App\Enums\StrengthLevel;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use App\Traits\StrengthLevelTranslatorTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -23,14 +23,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 final class StrengthLevelTranslatorTraitTest extends TestCase
 {
     use StrengthLevelTranslatorTrait;
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     private TranslatorInterface $translator;
 
     #[\Override]
     protected function setUp(): void
     {
-        $this->translator = $this->createMockTranslator();
+        $this->translator = $this->createStubTranslator();
     }
 
     public static function getTranslateLevels(): \Generator
@@ -64,7 +64,7 @@ final class StrengthLevelTranslatorTraitTest extends TestCase
     public function testTranslateLevel(int $value, string $message): void
     {
         $expected = 'strength_level.' . $message;
-        $this->translator = $this->createMockTranslator($expected);
+        $this->translator = $this->createStubTranslator($expected);
         $level = StrengthLevel::tryFrom($value) ?? StrengthLevel::NONE;
         $actual = $this->translateLevel($level);
         self::assertSame($actual, $expected);

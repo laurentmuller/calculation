@@ -22,7 +22,7 @@ use App\Repository\CalculationStateRepository;
 use App\Table\CalculationBelowTable;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use Symfony\Component\Clock\DatePoint;
 use Twig\Environment;
 
@@ -75,7 +75,7 @@ final class CalculationBelowTableTest extends EntityTableTestCase
     }
 
     #[\Override]
-    protected function createMockQueryBuilder(MockObject&Query $query): MockObject&QueryBuilder
+    protected function createMockQueryBuilder(Query $query): Stub&QueryBuilder
     {
         $queryBuilder = parent::createMockQueryBuilder($query);
         $queryBuilder->method('andWhere')
@@ -87,9 +87,9 @@ final class CalculationBelowTableTest extends EntityTableTestCase
     }
 
     #[\Override]
-    protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&CalculationRepository
+    protected function createMockRepository(QueryBuilder $queryBuilder): Stub&CalculationRepository
     {
-        $repository = $this->createMock(CalculationRepository::class);
+        $repository = self::createStub(CalculationRepository::class);
         $repository->method('getTableQueryBuilder')
             ->willReturn($queryBuilder);
 
@@ -105,10 +105,10 @@ final class CalculationBelowTableTest extends EntityTableTestCase
     #[\Override]
     protected function createTable(AbstractRepository $repository): CalculationBelowTable
     {
-        $default = $this->createMock(DefaultParameter::class);
+        $default = self::createStub(DefaultParameter::class);
         $default->method('getMinMargin')
             ->willReturn(1.1);
-        $parameters = $this->createMock(ApplicationParameters::class);
+        $parameters = self::createStub(ApplicationParameters::class);
         $parameters->method('getDefault')
             ->willReturn($default);
 

@@ -56,7 +56,7 @@ final class UserProviderTest extends TestCase
     private function createProvider(?User $entity = null): UserProvider
     {
         $entities = $entity instanceof User ? [$entity] : [];
-        $repository = $this->createMock(UserRepository::class);
+        $repository = self::createStub(UserRepository::class);
         $repository->method('findBy')
             ->willReturn($entities);
         $repository->method('findAll')

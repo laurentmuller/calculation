@@ -68,13 +68,13 @@ final class FakerServiceTest extends TestCase
 
     private function createEntityManager(): EntityManagerInterface
     {
-        $manager = $this->createMock(EntityManagerInterface::class);
+        $manager = self::createStub(EntityManagerInterface::class);
         $manager->method('getRepository')
-            ->willReturnCallback(fn (string $className): AbstractRepository => match ($className) {
-                User::class => $this->createMock(UserRepository::class),
-                Product::class => $this->createMock(ProductRepository::class),
-                Category::class => $this->createMock(CategoryRepository::class),
-                CalculationState::class => $this->createMock(CalculationStateRepository::class),
+            ->willReturnCallback(static fn (string $className): AbstractRepository => match ($className) {
+                User::class => self::createStub(UserRepository::class),
+                Product::class => self::createStub(ProductRepository::class),
+                Category::class => self::createStub(CategoryRepository::class),
+                CalculationState::class => self::createStub(CalculationStateRepository::class),
                 default => throw new \LogicException('Unexpected repository: ' . $className),
             });
 

@@ -42,7 +42,7 @@ final class CountryFlagTypeTest extends TypeTestCase
     #[\Override]
     protected function getPreloadedExtensions(): array
     {
-        $service = $this->createMock(CountryFlagService::class);
+        $service = self::createStub(CountryFlagService::class);
         $service->method('getChoices')
             ->willReturn(['CH' => 'CH']);
 

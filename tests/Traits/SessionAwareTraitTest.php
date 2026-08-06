@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Traits;
 
 use App\Traits\SessionAwareTrait;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -35,7 +35,7 @@ final class SessionAwareTraitTest extends AwareTraitTestCase
     public function testGetSessionDateAsDate(): void
     {
         $date = new DatePoint();
-        $session = $this->createMock(Session::class);
+        $session = self::createStub(Session::class);
         $session->method('get')
             ->willReturn($date);
         $this->initializeRequestStack($session);
@@ -46,7 +46,7 @@ final class SessionAwareTraitTest extends AwareTraitTestCase
 
     public function testGetSessionDateAsInt(): void
     {
-        $session = $this->createMock(Session::class);
+        $session = self::createStub(Session::class);
         $session->method('get')
             ->willReturn(1);
         $this->initializeRequestStack($session);
@@ -141,9 +141,9 @@ final class SessionAwareTraitTest extends AwareTraitTestCase
         self::assertNull($this->getSessionString('key'));
     }
 
-    private function initializeRequestStack(?Session $session = null): MockObject&RequestStack
+    private function initializeRequestStack(?Session $session = null): Stub&RequestStack
     {
-        $requestStack = $this->createMock(RequestStack::class);
+        $requestStack = self::createStub(RequestStack::class);
         if ($session instanceof Session) {
             $requestStack->method('getSession')
                 ->willReturn($session);

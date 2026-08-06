@@ -47,7 +47,7 @@ final class ExtendedAssetExtensionTest extends RuntimeTestCase
 
     private function createAssetExtension(): AssetExtension
     {
-        $packages = $this->createMock(Packages::class);
+        $packages = self::createStub(Packages::class);
         $packages->method('getUrl')
             ->willReturn('url');
 
@@ -56,7 +56,7 @@ final class ExtendedAssetExtensionTest extends RuntimeTestCase
 
     private function createNonceService(): NonceService
     {
-        $service = $this->createMock(NonceService::class);
+        $service = self::createStub(NonceService::class);
         $service->method('getCspNonce')
             ->willReturn('nonce');
         $service->method('getNonce')
@@ -68,7 +68,7 @@ final class ExtendedAssetExtensionTest extends RuntimeTestCase
     private function createUploaderHelper(): UploaderHelper
     {
         $callback = static fn (mixed $value): mixed => \is_array($value) ? $value[0] : null;
-        $storage = $this->createMock(StorageInterface::class);
+        $storage = self::createStub(StorageInterface::class);
         $storage->method('resolveUri')
             ->willReturnCallback($callback);
 

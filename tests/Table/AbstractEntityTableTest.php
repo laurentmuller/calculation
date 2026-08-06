@@ -24,11 +24,11 @@ final class AbstractEntityTableTest extends TestCase
 {
     public function testHandleQuery(): void
     {
-        $query = $this->createMock(Query::class);
+        $query = self::createStub(Query::class);
         $query->method('getResult')
             ->willReturn([]);
 
-        $builder = $this->createMock(QueryBuilder::class);
+        $builder = self::createStub(QueryBuilder::class);
         $builder->method('getRootAliases')
             ->willReturn(['e']);
         $builder->method('getDQLPart')
@@ -36,7 +36,7 @@ final class AbstractEntityTableTest extends TestCase
         $builder->method('getQuery')
             ->willReturn($query);
 
-        $repository = $this->createMock(AbstractRepository::class);
+        $repository = self::createStub(AbstractRepository::class);
         $repository->method('createDefaultQueryBuilder')
             ->willReturn($builder);
 

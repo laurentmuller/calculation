@@ -65,7 +65,7 @@ final class AbstractChartTest extends TestCase
 
     public function testGetMarginClass(): void
     {
-        $parameters = $this->createMock(ApplicationParameters::class);
+        $parameters = self::createStub(ApplicationParameters::class);
         $parameters->method('isMarginBelow')
             ->willReturn(true, false);
         $chart = $this->createChart(parameters: $parameters);
@@ -82,7 +82,7 @@ final class AbstractChartTest extends TestCase
     public function testGetMinMargin(): void
     {
         $expected = 1.1;
-        $parameters = $this->createMock(ApplicationParameters::class);
+        $parameters = self::createStub(ApplicationParameters::class);
         $parameters->method('getMinMargin')
             ->willReturn($expected);
         $chart = $this->createChart(parameters: $parameters);

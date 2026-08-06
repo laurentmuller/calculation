@@ -129,7 +129,7 @@ final class ProductProviderTest extends TestCase
             Product $product
         ): string => (string) $product->getDescription(), $entities);
 
-        $repository = $this->createMock(ProductRepository::class);
+        $repository = self::createStub(ProductRepository::class);
         $repository->method('findBy')
             ->willReturn($entities);
         $repository->method('findOneBy')

@@ -28,7 +28,7 @@ final class LogsDocumentTest extends TestCase
     public function testEmpty(): void
     {
         $helper = self::createStub(DocumentHelperInterface::class);
-        $logFile = $this->createMock(LogFile::class);
+        $logFile = self::createStub(LogFile::class);
         $logFile->method('isEmpty')
             ->willReturn(true);
 
@@ -67,7 +67,7 @@ final class LogsDocumentTest extends TestCase
             ->setLevel(PsrLevel::DEBUG)
             ->setChannel('doctrine');
 
-        $logFile = $this->createMock(LogFile::class);
+        $logFile = self::createStub(LogFile::class);
         $logFile->method('isEmpty')
             ->willReturn(false);
         $logFile->method('getLogs')

@@ -19,7 +19,7 @@ use App\Repository\GlobalMarginRepository;
 use App\Table\DataQuery;
 use App\Table\GlobalMarginTable;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 
 /**
  * @extends EntityTableTestCase<GlobalMargin, GlobalMarginRepository, GlobalMarginTable>
@@ -56,9 +56,9 @@ final class GlobalMarginTableTest extends EntityTableTestCase
     }
 
     #[\Override]
-    protected function createMockRepository(QueryBuilder $queryBuilder): MockObject&GlobalMarginRepository
+    protected function createMockRepository(QueryBuilder $queryBuilder): Stub&GlobalMarginRepository
     {
-        $repository = $this->createMock(GlobalMarginRepository::class);
+        $repository = self::createStub(GlobalMarginRepository::class);
         $repository->method('createDefaultQueryBuilder')
             ->willReturn($queryBuilder);
 

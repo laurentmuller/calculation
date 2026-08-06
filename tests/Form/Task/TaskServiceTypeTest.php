@@ -16,7 +16,7 @@ namespace App\Tests\Form\Task;
 use App\Form\Task\TaskServiceType;
 use App\Form\Type\PlainType;
 use App\Tests\Form\PreloadedExtensionsTrait;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Test\TypeTestCase;
 
@@ -25,7 +25,7 @@ final class TaskServiceTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;
     use TaskTrait;
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public function testFormView(): void
     {
@@ -80,7 +80,7 @@ final class TaskServiceTypeTest extends TypeTestCase
     {
         return [
             $this->getTaskEntityType(),
-            new PlainType($this->createMockTranslator()),
+            new PlainType($this->createStubTranslator()),
         ];
     }
 }

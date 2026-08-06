@@ -17,14 +17,14 @@ use App\Entity\User;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Service\RoleService;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
 final class RoleServiceTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public static function getRoleIcons(): \Generator
     {
@@ -61,7 +61,7 @@ final class RoleServiceTest extends TestCase
     public function testGetRoleNamesWithHierarchy(): void
     {
         $user = new User();
-        $hierarchy = $this->createMock(RoleHierarchyInterface::class);
+        $hierarchy = self::createStub(RoleHierarchyInterface::class);
         $hierarchy->method('getReachableRoleNames')
             ->willReturn([RoleInterface::ROLE_ADMIN]);
         $service = $this->createService($hierarchy);
@@ -145,8 +145,8 @@ final class RoleServiceTest extends TestCase
 
     private function createService(?RoleHierarchyInterface $hierarchy = null): RoleService
     {
-        $hierarchy ??= $this->createMock(RoleHierarchyInterface::class);
-        $translator = $this->createMockTranslator();
+        $hierarchy ??= self::createStub(RoleHierarchyInterface::class);
+        $translator = $this->createStubTranslator();
 
         return new RoleService($hierarchy, $translator);
     }

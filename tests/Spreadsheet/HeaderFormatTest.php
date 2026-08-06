@@ -16,14 +16,14 @@ namespace App\Tests\Spreadsheet;
 use App\Spreadsheet\HeaderFormat;
 use App\Spreadsheet\SpreadsheetDocument;
 use App\Spreadsheet\WorksheetDocument;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Style;
 use PHPUnit\Framework\TestCase;
 
 final class HeaderFormatTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public function testAmount(): void
     {
@@ -137,7 +137,7 @@ final class HeaderFormatTest extends TestCase
 
     private function getActiveSheet(): WorksheetDocument
     {
-        $doc = new SpreadsheetDocument($this->createMockTranslator());
+        $doc = new SpreadsheetDocument($this->createStubTranslator());
         $sheet = $doc->getActiveSheet();
         $sheet->setCellValue('A1', 'fake');
 

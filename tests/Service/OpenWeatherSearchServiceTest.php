@@ -16,13 +16,13 @@ namespace App\Tests\Service;
 use App\Service\OpenWeatherFormatter;
 use App\Service\OpenWeatherSearchService;
 use App\Service\PositionService;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 final class OpenWeatherSearchServiceTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     private string $databaseName;
     private OpenWeatherSearchService $service;
@@ -31,7 +31,7 @@ final class OpenWeatherSearchServiceTest extends TestCase
     protected function setUp(): void
     {
         $this->databaseName = __DIR__ . '/../files/sqlite/openweather_test.sqlite';
-        $service = new PositionService($this->createMockTranslator());
+        $service = new PositionService($this->createStubTranslator());
         $formatter = new OpenWeatherFormatter($service);
         $cache = new ArrayAdapter();
         $this->service = new OpenWeatherSearchService($this->databaseName, $formatter, $cache);

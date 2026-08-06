@@ -49,7 +49,7 @@ final class EntityNameServiceTest extends TestCase
 
     private function createService(bool $debug, bool $granted): EntityNameService
     {
-        $security = $this->createMock(Security::class);
+        $security = self::createStub(Security::class);
         $security->method('isGranted')
             ->willReturn($granted);
 

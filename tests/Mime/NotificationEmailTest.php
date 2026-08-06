@@ -15,14 +15,14 @@ namespace App\Tests\Mime;
 
 use App\Enums\Importance;
 use App\Mime\NotificationEmail;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Translation\TranslatableMessage;
 
 final class NotificationEmailTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public function testAddBcc(): void
     {
@@ -185,7 +185,7 @@ final class NotificationEmailTest extends TestCase
 
     private function createNotificationEmail(): NotificationEmail
     {
-        return NotificationEmail::instance($this->createMockTranslator());
+        return NotificationEmail::instance($this->createStubTranslator());
     }
 
     private function createUploadedFile(): UploadedFile

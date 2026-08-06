@@ -16,7 +16,7 @@ namespace App\Tests\Service;
 use App\Model\HttpClientError;
 use App\Service\IpStackService;
 use App\Service\PositionService;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class IpStackServiceTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     private const int ERROR_CODE = 404;
     private const string ERROR_MESSAGE = 'Error Message';
@@ -56,7 +56,7 @@ final class IpStackServiceTest extends TestCase
     public function testGetIpInfoWithClientIp(): void
     {
         $response = $this->getValidResponse();
-        $request = $this->createMock(Request::class);
+        $request = self::createStub(Request::class);
         $request->method('getClientIp')
             ->willReturn('62.202.191.50');
 
@@ -110,7 +110,7 @@ final class IpStackServiceTest extends TestCase
 
     private function createService(): IpStackService
     {
-        $translator = $this->createMockTranslator();
+        $translator = $this->createStubTranslator();
         $service = new PositionService($translator);
 
         return new IpStackService(

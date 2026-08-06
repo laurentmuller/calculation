@@ -18,22 +18,22 @@ use App\Pdf\PdfColumn;
 use App\Pdf\PdfTable;
 use App\Pdf\Traits\PdfCellTranslatorTrait;
 use App\Tests\Fixture\FixtureReport;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use fpdf\PdfDocument;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class PdfCellTranslatorTraitTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
-    private MockObject&TranslatorInterface $translator;
+    private Stub&TranslatorInterface $translator;
 
     #[\Override]
     protected function setUp(): void
     {
-        $this->translator = $this->createMockTranslator();
+        $this->translator = $this->createStubTranslator();
     }
 
     public function testRender(): void
@@ -71,7 +71,7 @@ final class PdfCellTranslatorTraitTest extends TestCase
 
     private function createReport(): FixtureReport
     {
-        $controller = $this->createMock(AbstractController::class);
+        $controller = self::createStub(AbstractController::class);
         $controller->method('getTranslator')
             ->willReturn($this->translator);
 

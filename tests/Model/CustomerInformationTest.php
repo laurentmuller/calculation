@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace App\Tests\Model;
 
 use App\Model\CustomerInformation;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
 
 final class CustomerInformationTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public function testDefaultValues(): void
     {

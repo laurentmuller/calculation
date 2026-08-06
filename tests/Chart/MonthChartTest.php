@@ -18,29 +18,29 @@ use App\Model\MonthChartData;
 use App\Model\MonthChartDataItem;
 use App\Parameter\ApplicationParameters;
 use App\Repository\CalculationRepository;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use Doctrine\ORM\EntityManagerInterface;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class MonthChartTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     private UrlGeneratorInterface $generator;
-    private ApplicationParameters $parameters;
-    private MockObject&CalculationRepository $repository;
+    private Stub&ApplicationParameters $parameters;
+    private Stub&CalculationRepository $repository;
     private TranslatorInterface $translator;
 
     #[\Override]
     protected function setUp(): void
     {
         $this->parameters = self::createStub(ApplicationParameters::class);
-        $this->repository = $this->createMock(CalculationRepository::class);
+        $this->repository = self::createStub(CalculationRepository::class);
         $this->generator = self::createStub(UrlGeneratorInterface::class);
-        $this->translator = $this->createMockTranslator();
+        $this->translator = $this->createStubTranslator();
     }
 
     public function testWithElevenMonths(): void

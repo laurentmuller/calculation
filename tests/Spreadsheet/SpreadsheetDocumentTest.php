@@ -16,14 +16,14 @@ namespace App\Tests\Spreadsheet;
 use App\Interfaces\DocumentHelperInterface;
 use App\Spreadsheet\SpreadsheetDocument;
 use App\Spreadsheet\WorksheetDocument;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PHPUnit\Framework\TestCase;
 
 final class SpreadsheetDocumentTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public function testAddExternalSheetException(): void
     {
@@ -87,7 +87,7 @@ final class SpreadsheetDocumentTest extends TestCase
     public function testInitialize(): void
     {
         $expected = 'Active Title';
-        $doc = new class($this->createMockTranslator()) extends SpreadsheetDocument {
+        $doc = new class($this->createStubTranslator()) extends SpreadsheetDocument {
             public function runInitialize(DocumentHelperInterface $helper, string $title, bool $landscape = false): void
             {
                 parent::initialize($helper, $title, $landscape);
@@ -150,7 +150,7 @@ final class SpreadsheetDocumentTest extends TestCase
 
     private function createDocument(): SpreadsheetDocument
     {
-        return new SpreadsheetDocument($this->createMockTranslator());
+        return new SpreadsheetDocument($this->createStubTranslator());
     }
 
     private function createWorksheet(string $title = 'Fake'): WorksheetDocument

@@ -13,18 +13,18 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @phpstan-require-extends TestCase
  */
-trait TranslatorMockTrait
+trait TranslatorStubTrait
 {
-    protected function createMockTranslator(?string $message = null): MockObject&TranslatorInterface
+    protected function createStubTranslator(?string $message = null): Stub&TranslatorInterface
     {
-        $translator = $this->createMock(TranslatorInterface::class);
+        $translator = self::createStub(TranslatorInterface::class);
         if (null !== $message) {
             $translator->method('trans')
                 ->willReturn($message);

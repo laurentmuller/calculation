@@ -17,14 +17,14 @@ use App\Entity\Calculation;
 use App\Repository\CalculationRepository;
 use App\Table\CalculationEmptyTable;
 use App\Table\DataQuery;
-use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\MockObject;
+use App\Tests\TranslatorStubTrait;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
 
 final class CalculationEmptyTableTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public function testDefault(): void
     {
@@ -55,9 +55,9 @@ final class CalculationEmptyTableTest extends TestCase
         self::assertEmpty($results->rows);
     }
 
-    private function createMockRepository(array $entities = []): MockObject&CalculationRepository
+    private function createMockRepository(array $entities = []): Stub&CalculationRepository
     {
-        $repository = $this->createMock(CalculationRepository::class);
+        $repository = self::createStub(CalculationRepository::class);
         $repository->method('getClassName')
             ->willReturn(Calculation::class);
         $repository->method('getItemsEmpty')
@@ -71,7 +71,7 @@ final class CalculationEmptyTableTest extends TestCase
     private function createTable(array $entities = []): CalculationEmptyTable
     {
         $repository = $this->createMockRepository($entities);
-        $translator = $this->createMockTranslator();
+        $translator = $this->createStubTranslator();
 
         return new CalculationEmptyTable($repository, $translator);
     }

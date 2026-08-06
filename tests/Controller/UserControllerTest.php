@@ -252,7 +252,7 @@ final class UserControllerTest extends EntityControllerTestCase
 
     public function testSendPasswordRequestGenerateException(): void
     {
-        $helper = $this->createMock(ResetPasswordHelperInterface::class);
+        $helper = self::createStub(ResetPasswordHelperInterface::class);
         $helper->method('generateResetToken')
             ->willThrowException(new FakeRepositoryException());
 
@@ -279,11 +279,11 @@ final class UserControllerTest extends EntityControllerTestCase
     {
         $date = new DatePoint();
         $token = new ResetPasswordToken('token', $date, $date->getTimestamp());
-        $helper = $this->createMock(ResetPasswordHelperInterface::class);
+        $helper = self::createStub(ResetPasswordHelperInterface::class);
         $helper->method('generateResetToken')
             ->willReturn($token);
 
-        $mailer = $this->createMock(MailerInterface::class);
+        $mailer = self::createStub(MailerInterface::class);
         $mailer->method('send')
             ->willThrowException(new TransportException());
 

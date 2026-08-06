@@ -18,7 +18,7 @@ use App\Form\User\ResetAllPasswordType;
 use App\Repository\UserRepository;
 use App\Tests\Entity\IdTrait;
 use App\Tests\Form\PreloadedExtensionsTrait;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Test\TypeTestCase;
 
@@ -27,7 +27,7 @@ final class ResetAllPasswordTypeTest extends TypeTestCase
 {
     use IdTrait;
     use PreloadedExtensionsTrait;
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     private User $user;
 
@@ -60,10 +60,10 @@ final class ResetAllPasswordTypeTest extends TypeTestCase
     #[\Override]
     protected function getPreloadedExtensions(): array
     {
-        $repository = $this->createMock(UserRepository::class);
+        $repository = self::createStub(UserRepository::class);
         $repository->method('getResettableUsers')
             ->willReturn([$this->user]);
-        $translator = $this->createMockTranslator();
+        $translator = $this->createStubTranslator();
 
         return [
             new ResetAllPasswordType($repository, $translator),

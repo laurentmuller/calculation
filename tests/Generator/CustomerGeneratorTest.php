@@ -54,7 +54,7 @@ final class CustomerGeneratorTest extends GeneratorTestCase
         return new CustomerGenerator(
             service: $this->service,
             manager: $this->manager,
-            translator: $this->createMockTranslator(),
+            translator: $this->createStubTranslator(),
             logger: $this->createMockLogger()
         );
     }

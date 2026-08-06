@@ -100,7 +100,7 @@ final class LogControllerTest extends ControllerTestCase
 
     private function checkEmptyService(string $url): void
     {
-        $service = $this->createMock(LogService::class);
+        $service = self::createStub(LogService::class);
         $service->method('getLogFile')
             ->willReturn(null);
         self::getContainer()->set(LogService::class, $service);

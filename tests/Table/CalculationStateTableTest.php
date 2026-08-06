@@ -18,9 +18,9 @@ use App\Repository\AbstractRepository;
 use App\Repository\CalculationStateRepository;
 use App\Service\IndexService;
 use App\Table\CalculationStateTable;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Twig\Environment;
 use Twig\Error\Error;
@@ -30,14 +30,14 @@ use Twig\Error\Error;
  */
 final class CalculationStateTableTest extends EntityTableTestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     /**
      * @throws Error
      */
     public function testFormatCalculations(): void
     {
-        $twig = $this->createMock(Environment::class);
+        $twig = self::createStub(Environment::class);
         $twig->method('render')
             ->willReturnArgument(0);
         $table = new CalculationStateTable(
@@ -46,7 +46,7 @@ final class CalculationStateTableTest extends EntityTableTestCase
             self::createStub(IndexService::class)
         );
         $table->setChecker(self::createStub(AuthorizationCheckerInterface::class));
-        $table->setTranslator($this->createMockTranslator());
+        $table->setTranslator($this->createStubTranslator());
 
         $expected = 'macros/_cell_table_link.html.twig';
         $actual = $table->formatCalculations(1, ['id' => 1]);
@@ -61,7 +61,7 @@ final class CalculationStateTableTest extends EntityTableTestCase
             self::createStub(IndexService::class)
         );
         $table->setChecker(self::createStub(AuthorizationCheckerInterface::class));
-        $table->setTranslator($this->createMockTranslator());
+        $table->setTranslator($this->createStubTranslator());
 
         $actual = $table->formatEditable(true);
         self::assertSame('common.value_true', $actual);
@@ -94,9 +94,9 @@ final class CalculationStateTableTest extends EntityTableTestCase
     }
 
     #[\Override]
-    protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&CalculationStateRepository
+    protected function createMockRepository(QueryBuilder $queryBuilder): Stub&CalculationStateRepository
     {
-        $repository = $this->createMock(CalculationStateRepository::class);
+        $repository = self::createStub(CalculationStateRepository::class);
         $repository->method('getTableQueryBuilder')
             ->willReturn($queryBuilder);
 
@@ -115,7 +115,7 @@ final class CalculationStateTableTest extends EntityTableTestCase
             $this->createMockIndexService()
         );
         $table->setChecker(self::createStub(AuthorizationCheckerInterface::class))
-            ->setTranslator($this->createMockTranslator());
+            ->setTranslator($this->createStubTranslator());
 
         return $table;
     }

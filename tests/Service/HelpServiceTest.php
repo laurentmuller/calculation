@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\HelpService;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\NullAdapter;
 
 final class HelpServiceTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     private HelpService $service;
 
@@ -179,7 +179,7 @@ final class HelpServiceTest extends TestCase
             $jsonPath,
             $imagePath,
             new NullAdapter(),
-            $this->createMockTranslator()
+            $this->createStubTranslator()
         );
     }
 }

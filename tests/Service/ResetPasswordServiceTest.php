@@ -18,7 +18,7 @@ use App\Repository\UserRepository;
 use App\Service\ResetPasswordService;
 use App\Service\UserExceptionService;
 use App\Tests\Entity\IdTrait;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -40,7 +40,7 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\ExpiredSignatureException;
 final class ResetPasswordServiceTest extends TestCase
 {
     use IdTrait;
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public function testFlush(): void
     {
@@ -107,7 +107,7 @@ final class ResetPasswordServiceTest extends TestCase
 
     public function testSendEmailWithMailerException(): void
     {
-        $mailer = $this->createMock(MailerInterface::class);
+        $mailer = self::createStub(MailerInterface::class);
         $mailer->method('send')
             ->willThrowException(new UnexpectedResponseException());
         $helper = $this->createResetPasswordHelper();
@@ -124,7 +124,7 @@ final class ResetPasswordServiceTest extends TestCase
 
     public function testSendEmailWithTokenException(): void
     {
-        $helper = $this->createMock(ResetPasswordHelperInterface::class);
+        $helper = self::createStub(ResetPasswordHelperInterface::class);
         $helper->method('generateResetToken')
             ->willThrowException(new InvalidResetPasswordTokenException());
         $user = $this->createUser();
@@ -193,7 +193,7 @@ final class ResetPasswordServiceTest extends TestCase
         ?LoggerInterface $logger = null,
     ): ResetPasswordService {
         $repository ??= $this->createRepository($user);
-        $translator = $this->createMockTranslator();
+        $translator = $this->createStubTranslator();
         $service = new UserExceptionService($translator);
         $mailer ??= self::createStub(MailerInterface::class);
         $logger ??= self::createStub(LoggerInterface::class);

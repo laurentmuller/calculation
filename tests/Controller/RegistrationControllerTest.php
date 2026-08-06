@@ -30,7 +30,7 @@ final class RegistrationControllerTest extends ControllerTestCase
         parent::setUp();
         $this->throwOnHandleEmail = false;
         $this->throwOnSendMail = false;
-        $verifier = $this->createMock(EmailVerifier::class);
+        $verifier = self::createStub(EmailVerifier::class);
         $verifier->method('sendEmail')
             ->willReturnCallback(fn (): bool => $this->sendMail());
         $verifier->method('handleEmail')

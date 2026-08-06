@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\Theme;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class ThemeTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public static function getHelps(): \Generator
     {
@@ -131,7 +131,7 @@ final class ThemeTest extends TestCase
     #[DataProvider('getTranslates')]
     public function testTranslate(Theme $theme, string $expected): void
     {
-        $translator = $this->createMockTranslator();
+        $translator = $this->createStubTranslator();
         $actual = $theme->trans($translator);
         self::assertSame($expected, $actual);
     }

@@ -17,7 +17,6 @@ use App\Translator\BingTranslatorService;
 use App\Translator\TranslatorFactory;
 use App\Translator\TranslatorServiceInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
@@ -29,13 +28,13 @@ use Symfony\Contracts\Cache\CacheInterface;
 #[AllowMockObjectsWithoutExpectations]
 final class TranslatorFactoryTest extends TestCase
 {
-    private MockObject&RequestStack $requestStack;
+    private RequestStack $requestStack;
 
     #[\Override]
     protected function setUp(): void
     {
         $session = new Session(new MockArraySessionStorage());
-        $this->requestStack = $this->createMock(RequestStack::class);
+        $this->requestStack = self::createStub(RequestStack::class);
         $this->requestStack->method('getSession')
             ->willReturn($session);
     }

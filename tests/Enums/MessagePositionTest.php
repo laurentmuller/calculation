@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\MessagePosition;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class MessagePositionTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public static function getAngle(): \Generator
     {
@@ -130,7 +130,7 @@ final class MessagePositionTest extends TestCase
     #[DataProvider('getTranslation')]
     public function testTranslate(MessagePosition $position, string $expected): void
     {
-        $translator = $this->createMockTranslator();
+        $translator = $this->createStubTranslator();
         $actual = $position->trans($translator);
         self::assertSame($expected, $actual);
     }

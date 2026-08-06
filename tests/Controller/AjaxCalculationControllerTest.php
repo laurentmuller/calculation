@@ -74,7 +74,7 @@ final class AjaxCalculationControllerTest extends ControllerTestCase
             groups: new ArrayCollection([]),
             adjust: true
         );
-        $service = $this->createMock(CalculationService::class);
+        $service = self::createStub(CalculationService::class);
         $service->method('createParameters')
             ->willReturn($data);
         $this->setService(CalculationService::class, $service);
@@ -95,7 +95,7 @@ final class AjaxCalculationControllerTest extends ControllerTestCase
 
     public function testUpdateWithException(): void
     {
-        $service = $this->createMock(CalculationService::class);
+        $service = self::createStub(CalculationService::class);
         $service->method('createParameters')
             ->willThrowException(new \Exception('Fake Message'));
         $this->setService(CalculationService::class, $service);
@@ -120,7 +120,7 @@ final class AjaxCalculationControllerTest extends ControllerTestCase
             result: false,
         );
 
-        $service = $this->createMock(CalculationService::class);
+        $service = self::createStub(CalculationService::class);
         $service->method('createParameters')
             ->willReturn($data);
         $this->setService(CalculationService::class, $service);

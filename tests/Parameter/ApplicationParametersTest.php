@@ -28,7 +28,7 @@ use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use App\Tests\Entity\IdTrait;
 use Doctrine\ORM\EntityManagerInterface;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\TagAwareAdapter;
@@ -274,20 +274,20 @@ final class ApplicationParametersTest extends TestCase
         ?Category $category = null,
         ?CalculationState $state = null,
         ?Product $product = null
-    ): MockObject&EntityManagerInterface {
-        $propertyRepository = $this->createMock(ApplicationPropertyRepository::class);
+    ): Stub&EntityManagerInterface {
+        $propertyRepository = self::createStub(ApplicationPropertyRepository::class);
         $propertyRepository->method('findAll')
             ->willReturn($properties);
 
-        $categoryRepository = $this->createMock(CategoryRepository::class);
+        $categoryRepository = self::createStub(CategoryRepository::class);
         $categoryRepository->method('find')
             ->willReturn($category);
 
-        $stateRepository = $this->createMock(CalculationStateRepository::class);
+        $stateRepository = self::createStub(CalculationStateRepository::class);
         $stateRepository->method('find')
             ->willReturn($state);
 
-        $productRepository = $this->createMock(ProductRepository::class);
+        $productRepository = self::createStub(ProductRepository::class);
         $productRepository->method('find')
             ->willReturn($product);
 
@@ -298,7 +298,7 @@ final class ApplicationParametersTest extends TestCase
             default => $propertyRepository,
         };
 
-        $manager = $this->createMock(EntityManagerInterface::class);
+        $manager = self::createStub(EntityManagerInterface::class);
         $manager->method('getRepository')
             ->willReturnCallback($callback);
 

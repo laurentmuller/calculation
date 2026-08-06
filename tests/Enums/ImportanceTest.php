@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\Importance;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class ImportanceTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public static function getLabels(): \Generator
     {
@@ -79,7 +79,7 @@ final class ImportanceTest extends TestCase
     #[DataProvider('getLabels')]
     public function testTranslate(string $expected, Importance $importance): void
     {
-        $translator = $this->createMockTranslator();
+        $translator = $this->createStubTranslator();
         $actual = $importance->trans($translator);
         self::assertSame($expected, $actual);
     }
@@ -87,7 +87,7 @@ final class ImportanceTest extends TestCase
     #[DataProvider('getLabelsTitle')]
     public function testTranslateTitle(string $expected, Importance $importance): void
     {
-        $translator = $this->createMockTranslator();
+        $translator = $this->createStubTranslator();
         $actual = $importance->transTitle($translator);
         self::assertSame($expected, $actual);
     }

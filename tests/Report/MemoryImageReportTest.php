@@ -99,7 +99,7 @@ final class MemoryImageReportTest extends TestCase
     public function testRenderService(): void
     {
         $cell = new PdfFontAwesomeCell($this->getImage());
-        $service = $this->createMock(FontAwesomeCellService::class);
+        $service = self::createStub(FontAwesomeCellService::class);
         $service->method('getCell')
             ->willReturn($cell);
         $report = new MemoryImageReport(
@@ -123,7 +123,7 @@ final class MemoryImageReportTest extends TestCase
     public function testRenderServiceWithoutPath(): void
     {
         $cell = new PdfFontAwesomeCell($this->getImage());
-        $service = $this->createMock(FontAwesomeCellService::class);
+        $service = self::createStub(FontAwesomeCellService::class);
         $service->method('getCell')
             ->willReturn($cell);
         $report = new MemoryImageReport(

@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\CaptchaImageService;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -128,11 +127,11 @@ final class CaptchaImageServiceTest extends TestCase
         self::assertTrue($actual);
     }
 
-    private function createRequestStack(): MockObject&RequestStack
+    private function createRequestStack(): RequestStack
     {
         $request = new Request();
         $request->setSession($this->session);
-        $requestStack = $this->createMock(RequestStack::class);
+        $requestStack = self::createStub(RequestStack::class);
         $requestStack->method('getCurrentRequest')
             ->willReturn($request);
         $requestStack->method('getSession')

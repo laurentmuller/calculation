@@ -18,7 +18,7 @@ use App\Repository\AbstractRepository;
 use App\Repository\CustomerRepository;
 use App\Table\CustomerTable;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 
 /**
  * @extends EntityTableTestCase<Customer, CustomerRepository, CustomerTable>
@@ -40,9 +40,9 @@ final class CustomerTableTest extends EntityTableTestCase
     }
 
     #[\Override]
-    protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&CustomerRepository
+    protected function createMockRepository(QueryBuilder $queryBuilder): Stub&CustomerRepository
     {
-        $repository = $this->createMock(CustomerRepository::class);
+        $repository = self::createStub(CustomerRepository::class);
         $repository->method('createDefaultQueryBuilder')
             ->willReturn($queryBuilder);
 

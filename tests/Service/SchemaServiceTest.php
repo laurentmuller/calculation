@@ -38,7 +38,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataFactory;
 use Doctrine\ORM\Mapping\ManyToOneAssociationMapping;
 use Doctrine\ORM\Mapping\OneToManyAssociationMapping;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
@@ -67,7 +67,7 @@ final class SchemaServiceTest extends TestCase
         ];
         $table = $this->createUserTable();
         $schemaManager = $this->createSchemaManager($table);
-        $result = $this->createMock(Result::class);
+        $result = self::createStub(Result::class);
         $result->method('fetchAllAssociative')
             ->willReturn([$row]);
         $connection = $this->createConnection($schemaManager, new MySQLPlatform());
@@ -160,8 +160,8 @@ final class SchemaServiceTest extends TestCase
     private function createConnection(
         ?AbstractSchemaManager $schemaManager = null,
         ?AbstractPlatform $platform = null
-    ): MockObject&Connection {
-        $connection = $this->createMock(Connection::class);
+    ): Stub&Connection {
+        $connection = self::createStub(Connection::class);
         if ($schemaManager instanceof AbstractSchemaManager) {
             $connection->method('createSchemaManager')
                 ->willReturn($schemaManager);
@@ -174,9 +174,9 @@ final class SchemaServiceTest extends TestCase
         return $connection;
     }
 
-    private function createEntityManager(Connection $connection): MockObject&EntityManagerInterface
+    private function createEntityManager(Connection $connection): Stub&EntityManagerInterface
     {
-        $manager = $this->createMock(EntityManagerInterface::class);
+        $manager = self::createStub(EntityManagerInterface::class);
         $manager->method('getConnection')
             ->willReturn($connection);
 
@@ -229,10 +229,10 @@ final class SchemaServiceTest extends TestCase
     /**
      * @param ClassMetadata<object>[]|ClassMetadata<object> $metaDatas
      */
-    private function createMetaDatFactory(array|ClassMetadata $metaDatas): MockObject&ClassMetadataFactory
+    private function createMetaDatFactory(array|ClassMetadata $metaDatas): ClassMetadataFactory
     {
         $metaDatas = \is_array($metaDatas) ? $metaDatas : [$metaDatas];
-        $metadataFactory = $this->createMock(ClassMetadataFactory::class);
+        $metadataFactory = self::createStub(ClassMetadataFactory::class);
         $metadataFactory->method('getAllMetadata')
             ->willReturn($metaDatas);
 
@@ -266,10 +266,10 @@ final class SchemaServiceTest extends TestCase
     /**
      * @param Table[]|Table $tables
      */
-    private function createSchemaManager(array|Table $tables): MockObject&MySQLSchemaManager
+    private function createSchemaManager(array|Table $tables): Stub&MySQLSchemaManager
     {
         $tables = \is_array($tables) ? $tables : [$tables];
-        $schemaManager = $this->createMock(MySQLSchemaManager::class);
+        $schemaManager = self::createStub(MySQLSchemaManager::class);
         $schemaManager->method('introspectTables')
             ->willReturn($tables);
 

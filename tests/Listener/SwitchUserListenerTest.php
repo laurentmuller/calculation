@@ -16,7 +16,7 @@ namespace App\Tests\Listener;
 use App\Constants\SecurityAttributes;
 use App\Entity\User;
 use App\Listener\SwitchUserListener;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,7 +31,7 @@ use Symfony\Component\Security\Http\Firewall\SwitchUserListener as SecuritySwitc
 
 final class SwitchUserListenerTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     private const string EXIT_VALUE = SecuritySwitchUserListener::EXIT_VALUE;
     private const string SWITCH_USER_PARAMETER = SwitchUserListener::SWITCH_USER_PARAMETER;
@@ -78,7 +78,7 @@ final class SwitchUserListenerTest extends TestCase
     private function createListener(): SwitchUserListener
     {
         $listener = new SwitchUserListener();
-        $listener->setTranslator($this->createMockTranslator())
+        $listener->setTranslator($this->createStubTranslator())
             ->setRequestStack($this->createRequestStack());
 
         return $listener;
@@ -88,7 +88,7 @@ final class SwitchUserListenerTest extends TestCase
     {
         /** @var InputBag<string> $query */
         $query = new InputBag([self::SWITCH_USER_PARAMETER => $action]);
-        $request = $this->createMock(Request::class);
+        $request = self::createStub(Request::class);
         $request->query = $query;
 
         return $request;

@@ -20,17 +20,16 @@ use App\Entity\User;
 use App\Interfaces\EntityInterface;
 use App\Interfaces\TimestampableInterface;
 use App\Listener\TimestampableListener;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\UnitOfWork;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
 
 final class TimestampableListenerTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     private const string USER_NAME = 'user_name';
 
@@ -135,7 +134,7 @@ final class TimestampableListenerTest extends TestCase
     private function createListener(bool $createUser = true): TimestampableListener
     {
         $security = $this->createMockSecurity($createUser);
-        $translator = $this->createMockTranslator();
+        $translator = $this->createStubTranslator();
 
         return new TimestampableListener($security, $translator);
     }
@@ -143,24 +142,24 @@ final class TimestampableListenerTest extends TestCase
     /**
      * @param array<string, EntityInterface> $events
      */
-    private function createMockObjectManager(array $events = []): MockObject&EntityManagerInterface
+    private function createMockObjectManager(array $events = []): EntityManagerInterface
     {
-        $unitOfWork = $this->createMock(UnitOfWork::class);
+        $unitOfWork = self::createStub(UnitOfWork::class);
         foreach ($events as $method => $entity) {
             $unitOfWork->method($method)
                 ->willReturn([$entity]);
         }
 
-        $manager = $this->createMock(EntityManagerInterface::class);
+        $manager = self::createStub(EntityManagerInterface::class);
         $manager->method('getUnitOfWork')
             ->willReturn($unitOfWork);
 
         return $manager;
     }
 
-    private function createMockSecurity(bool $createUser = true): MockObject&Security
+    private function createMockSecurity(bool $createUser = true): Security
     {
-        $security = $this->createMock(Security::class);
+        $security = self::createStub(Security::class);
         if ($createUser) {
             $user = new User();
             $user->setUsername(self::USER_NAME);

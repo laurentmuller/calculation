@@ -26,13 +26,13 @@ use App\Entity\User;
 use App\Enums\EntityName;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class EntityNameTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public static function getFormFields(): \Generator
     {
@@ -213,7 +213,7 @@ final class EntityNameTest extends TestCase
     #[DataProvider('getLabel')]
     public function testTranslate(string $expected, EntityName $entity): void
     {
-        $translator = $this->createMockTranslator();
+        $translator = $this->createStubTranslator();
         $actual = $entity->trans($translator);
         self::assertSame($expected, $actual);
     }

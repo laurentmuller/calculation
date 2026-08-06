@@ -17,7 +17,6 @@ use App\Constants\SecurityAttributes;
 use App\Controller\CspReportController;
 use App\Listener\ResponseListener;
 use App\Service\NonceService;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Bundle\SecurityBundle\Security\FirewallConfig;
@@ -166,19 +165,19 @@ final class ResponseListenerTest extends TestCase
         return new ResponseListener($file, $debug, $cache, $generator, $service, $security);
     }
 
-    private function createMockGenerator(): MockObject&UrlGeneratorInterface
+    private function createMockGenerator(): UrlGeneratorInterface
     {
-        $generator = $this->createMock(UrlGeneratorInterface::class);
+        $generator = self::createStub(UrlGeneratorInterface::class);
         $generator->method('generate')
             ->willReturnArgument(0);
 
         return $generator;
     }
 
-    private function createMockSecurity(string $name = SecurityAttributes::MAIN_FIREWALL): MockObject&Security
+    private function createMockSecurity(string $name = SecurityAttributes::MAIN_FIREWALL): Security
     {
         $config = new FirewallConfig($name, '');
-        $security = $this->createMock(Security::class);
+        $security = self::createStub(Security::class);
         $security->method('getFirewallConfig')
             ->willReturn($config);
 

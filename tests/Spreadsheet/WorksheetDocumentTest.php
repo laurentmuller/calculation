@@ -19,7 +19,7 @@ use App\Model\ImageSize;
 use App\Spreadsheet\HeaderFormat;
 use App\Spreadsheet\SpreadsheetDocument;
 use App\Spreadsheet\WorksheetDocument;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Color;
@@ -31,11 +31,11 @@ use Symfony\Component\Clock\DatePoint;
 
 final class WorksheetDocumentTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public function testConstructor(): void
     {
-        $doc = new SpreadsheetDocument($this->createMockTranslator());
+        $doc = new SpreadsheetDocument($this->createStubTranslator());
         $sheet = new WorksheetDocument($doc);
         self::assertSame($doc, $sheet->getParent());
     }
@@ -71,7 +71,7 @@ final class WorksheetDocumentTest extends TestCase
     public function testRebindParentException(): void
     {
         self::expectException(Exception::class);
-        $doc1 = new SpreadsheetDocument($this->createMockTranslator());
+        $doc1 = new SpreadsheetDocument($this->createStubTranslator());
         $doc2 = new Spreadsheet();
         $sheet = $doc1->addSheet(new WorksheetDocument(title: 'Fake'));
         $sheet->rebindParent($doc2);
@@ -80,7 +80,7 @@ final class WorksheetDocumentTest extends TestCase
     public function testSetActiveTitle(): void
     {
         $helper = self::createStub(DocumentHelperInterface::class);
-        $doc = new SpreadsheetDocument($this->createMockTranslator());
+        $doc = new SpreadsheetDocument($this->createStubTranslator());
         $doc->setActiveTitle('My Title', $helper);
         $sheet = $doc->getActiveSheet();
         self::assertSame('My Title', $sheet->getTitle());
@@ -368,7 +368,7 @@ final class WorksheetDocumentTest extends TestCase
 
     private function getActiveSheet(): WorksheetDocument
     {
-        $doc = new SpreadsheetDocument($this->createMockTranslator());
+        $doc = new SpreadsheetDocument($this->createStubTranslator());
 
         return $doc->getActiveSheet();
     }

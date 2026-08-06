@@ -16,15 +16,14 @@ namespace App\Tests\Table;
 use App\Service\SearchService;
 use App\Table\DataQuery;
 use App\Table\SearchTable;
-use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\MockObject;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class SearchTableTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public function testEmptyMessage(): void
     {
@@ -112,12 +111,12 @@ final class SearchTableTest extends TestCase
         self::assertCount(1, $results->rows);
     }
 
-    private function createMockService(): MockObject&SearchService
+    private function createMockService(): SearchService
     {
         $data = $this->createSearchResults();
         $entities = ['key' => 'value'];
 
-        $service = $this->createMock(SearchService::class);
+        $service = self::createStub(SearchService::class);
         $service->method('search')
             ->willReturn($data);
 
@@ -203,7 +202,7 @@ final class SearchTableTest extends TestCase
     {
         $table = new SearchTable($service);
 
-        return $table->setTranslator($this->createMockTranslator())
+        return $table->setTranslator($this->createStubTranslator())
             ->setChecker(self::createStub(AuthorizationCheckerInterface::class));
     }
 }

@@ -15,12 +15,12 @@ namespace App\Tests\Model;
 
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
 
 final class RoleTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public function testGetName(): void
     {
@@ -107,7 +107,7 @@ final class RoleTest extends TestCase
 
     public function testTranslate(): void
     {
-        $translator = $this->createMockTranslator();
+        $translator = $this->createStubTranslator();
         $role = new Role(RoleInterface::ROLE_USER);
         $actual = $role->trans($translator);
         self::assertSame('user.roles.user', $actual);

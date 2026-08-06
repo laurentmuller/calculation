@@ -17,7 +17,7 @@ use App\Entity\Calculation;
 use App\Repository\CalculationRepository;
 use App\Table\CalculationDuplicateTable;
 use App\Table\DataQuery;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
 
@@ -52,9 +52,9 @@ final class CalculationDuplicateTableTest extends TestCase
         self::assertEmpty($results->rows);
     }
 
-    private function createMockRepository(array $entities = []): MockObject&CalculationRepository
+    private function createMockRepository(array $entities = []): Stub&CalculationRepository
     {
-        $repository = $this->createMock(CalculationRepository::class);
+        $repository = self::createStub(CalculationRepository::class);
         $repository->method('getClassName')
             ->willReturn(Calculation::class);
         $repository->method('getItemsDuplicate')

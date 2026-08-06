@@ -25,7 +25,7 @@ trait PasswordHasherExtensionTrait
 {
     protected function getPasswordHasherExtension(): PasswordHasherExtension
     {
-        $passwordHasher = $this->createMock(UserPasswordHasher::class);
+        $passwordHasher = self::createStub(UserPasswordHasher::class);
         $listener = new PasswordHasherListener($passwordHasher);
 
         return new PasswordHasherExtension($listener);

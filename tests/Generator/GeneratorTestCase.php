@@ -17,7 +17,7 @@ use App\Generator\AbstractEntityGenerator;
 use App\Service\FakerService;
 use App\Tests\DatabaseTrait;
 use App\Tests\KernelServiceTestCase;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use App\Utils\StringUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -29,7 +29,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 abstract class GeneratorTestCase extends KernelServiceTestCase
 {
     use DatabaseTrait;
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
     protected EntityManagerInterface $manager;
 
     protected FakerService $service;

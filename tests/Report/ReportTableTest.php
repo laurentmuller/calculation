@@ -17,22 +17,13 @@ use App\Interfaces\DocumentHelperInterface;
 use App\Pdf\PdfColumn;
 use App\Report\Table\ReportTable;
 use App\Tests\Fixture\FixtureReport;
-use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\MockObject;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ReportTableTest extends TestCase
 {
-    use TranslatorMockTrait;
-
-    private MockObject&TranslatorInterface $translator;
-
-    #[\Override]
-    protected function setUp(): void
-    {
-        $this->translator = $this->createMockTranslator();
-    }
+    use TranslatorStubTrait;
 
     public function testAddCellTrans(): void
     {
@@ -65,9 +56,10 @@ final class ReportTableTest extends TestCase
 
     private function createReport(): FixtureReport
     {
-        $helper = $this->createMock(DocumentHelperInterface::class);
+        $translator = $this->createStubTranslator();
+        $helper = self::createStub(DocumentHelperInterface::class);
         $helper->method('getTranslator')
-            ->willReturn($this->translator);
+            ->willReturn($translator);
 
         return new FixtureReport($helper);
     }

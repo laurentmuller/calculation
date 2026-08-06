@@ -310,7 +310,7 @@ final class AbstractControllerTest extends KernelTestCase
 
     private function createMockController(): FixtureController
     {
-        $container = $this->createMock(ContainerInterface::class);
+        $container = self::createStub(ContainerInterface::class);
         $container->method('get')
             ->willThrowException(new ContainerException());
 

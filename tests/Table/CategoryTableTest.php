@@ -21,7 +21,7 @@ use App\Service\IndexService;
 use App\Table\CategoryTable;
 use App\Table\DataQuery;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Twig\Environment;
 use Twig\Error\Error;
@@ -36,7 +36,7 @@ final class CategoryTableTest extends EntityTableTestCase
      */
     public function testFormats(): void
     {
-        $twig = $this->createMock(Environment::class);
+        $twig = self::createStub(Environment::class);
         $twig->method('render')
             ->willReturnArgument(0);
         $table = new CategoryTable(
@@ -96,9 +96,9 @@ final class CategoryTableTest extends EntityTableTestCase
     }
 
     #[\Override]
-    protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&CategoryRepository
+    protected function createMockRepository(QueryBuilder $queryBuilder): Stub&CategoryRepository
     {
-        $repository = $this->createMock(CategoryRepository::class);
+        $repository = self::createStub(CategoryRepository::class);
         $repository->method('getTableQueryBuilder')
             ->willReturn($queryBuilder);
 

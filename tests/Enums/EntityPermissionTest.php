@@ -14,14 +14,14 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\EntityPermission;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use Elao\Enum\FlagBag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class EntityPermissionTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public static function getLabel(): \Generator
     {
@@ -160,7 +160,7 @@ final class EntityPermissionTest extends TestCase
     #[DataProvider('getLabel')]
     public function testTranslate(EntityPermission $permission, string $expected): void
     {
-        $translator = $this->createMockTranslator();
+        $translator = $this->createStubTranslator();
         $actual = $permission->trans($translator);
         self::assertSame($expected, $actual);
     }

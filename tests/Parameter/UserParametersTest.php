@@ -21,7 +21,6 @@ use App\Parameter\UserParameters;
 use App\Repository\ApplicationPropertyRepository;
 use App\Repository\UserPropertyRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
@@ -104,28 +103,28 @@ final class UserParametersTest extends TestCase
     {
         $cache = new TagAwareAdapter(new ArrayAdapter());
         $repository = self::createStub(ApplicationPropertyRepository::class);
-        $manager = $this->createMock(EntityManagerInterface::class);
+        $manager = self::createStub(EntityManagerInterface::class);
         $manager->method('getRepository')
             ->willReturn($repository);
 
         return new ApplicationParameters($cache, $manager, false);
     }
 
-    private function createMockManager(array $properties = []): MockObject&EntityManagerInterface
+    private function createMockManager(array $properties = []): EntityManagerInterface
     {
-        $repository = $this->createMock(UserPropertyRepository::class);
+        $repository = self::createStub(UserPropertyRepository::class);
         $repository->method('findByUser')
             ->willReturn($properties);
-        $manager = $this->createMock(EntityManagerInterface::class);
+        $manager = self::createStub(EntityManagerInterface::class);
         $manager->method('getRepository')
             ->willReturn($repository);
 
         return $manager;
     }
 
-    private function createMockSecurity(?User $user = null): MockObject&Security
+    private function createMockSecurity(?User $user = null): Security
     {
-        $security = $this->createMock(Security::class);
+        $security = self::createStub(Security::class);
         $security->method('getUser')
             ->willReturn($user);
 

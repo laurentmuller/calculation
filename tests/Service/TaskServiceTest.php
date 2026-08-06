@@ -103,7 +103,7 @@ final class TaskServiceTest extends TestCase
     private function createRepository(?Task $task = null): TaskRepository
     {
         $tasks = $task instanceof Task ? [$task] : [];
-        $repository = $this->createMock(TaskRepository::class);
+        $repository = self::createStub(TaskRepository::class);
         $repository->method('getSortedTask')
             ->willReturn($tasks);
 

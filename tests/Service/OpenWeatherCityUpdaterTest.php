@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\OpenWeatherCityUpdater;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use App\Utils\FileUtils;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Path;
@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 final class OpenWeatherCityUpdaterTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     private string $tempPath;
 
@@ -168,7 +168,7 @@ final class OpenWeatherCityUpdaterTest extends TestCase
         return new OpenWeatherCityUpdater(
             $this->getDatabaseName(),
             self::createStub(FormFactoryInterface::class),
-            $this->createMockTranslator()
+            $this->createStubTranslator()
         );
     }
 

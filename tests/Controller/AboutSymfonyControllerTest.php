@@ -101,7 +101,7 @@ final class AboutSymfonyControllerTest extends ControllerTestCase
             'symfony/license' => $licensePackage,
         ];
 
-        $service = $this->createMock(PackageInfoService::class);
+        $service = self::createStub(PackageInfoService::class);
         $service->method('getPackages')
             ->willReturn($packages);
         $service->method('getRuntimePackages')

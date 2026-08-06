@@ -19,9 +19,8 @@ use App\Form\User\RoleChoiceType;
 use App\Form\User\UserType;
 use App\Interfaces\RoleInterface;
 use App\Tests\Form\EntityTypeTestCase;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\SecurityBundle\Security;
 
 /**
@@ -31,7 +30,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 final class UserTypeTest extends EntityTypeTestCase
 {
     use PasswordHasherExtensionTrait;
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
     use VichImageTypeTrait;
 
     #[\Override]
@@ -69,14 +68,14 @@ final class UserTypeTest extends EntityTypeTestCase
     {
         return [
             $this->createVichImageType(),
-            new PlainType($this->createMockTranslator()),
+            new PlainType($this->createStubTranslator()),
             new RoleChoiceType($this->createMockSecurity()),
         ];
     }
 
-    private function createMockSecurity(): MockObject&Security
+    private function createMockSecurity(): Security
     {
-        $security = $this->createMock(Security::class);
+        $security = self::createStub(Security::class);
         $security->method('getUser')
             ->willReturn(null);
 

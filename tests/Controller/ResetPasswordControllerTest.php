@@ -55,7 +55,7 @@ final class ResetPasswordControllerTest extends ControllerTestCase
 
     public function testResetTokenWithException(): void
     {
-        $helper = $this->createMock(ResetPasswordHelperInterface::class);
+        $helper = self::createStub(ResetPasswordHelperInterface::class);
         $helper->method('validateTokenAndFetchUser')
             ->willThrowException(new FakeRepositoryException());
         $this->setService(ResetPasswordHelperInterface::class, $helper);
@@ -73,7 +73,7 @@ final class ResetPasswordControllerTest extends ControllerTestCase
     {
         /** @var User $user */
         $user = $this->loadUser(self::ROLE_SUPER_ADMIN);
-        $helper = $this->createMock(ResetPasswordHelperInterface::class);
+        $helper = self::createStub(ResetPasswordHelperInterface::class);
         $helper->method('validateTokenAndFetchUser')
             ->willReturn($user);
         $this->setService(ResetPasswordHelperInterface::class, $helper);

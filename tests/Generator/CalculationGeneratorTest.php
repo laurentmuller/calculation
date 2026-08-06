@@ -86,7 +86,7 @@ final class CalculationGeneratorTest extends GeneratorTestCase
         return new CalculationGenerator(
             service: $this->service,
             manager: $this->manager,
-            translator: $this->createMockTranslator(),
+            translator: $this->createStubTranslator(),
             logger: $this->createMockLogger(),
             updateService: $this->updateService
         );

@@ -17,24 +17,14 @@ use App\Controller\AbstractController;
 use App\Model\CustomerInformation;
 use App\Pdf\PdfFont;
 use App\Tests\Fixture\FixtureReport;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use fpdf\Enums\PdfDestination;
 use fpdf\Enums\PdfPageSize;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class PdfDocumentTest extends TestCase
 {
-    use TranslatorMockTrait;
-
-    private MockObject&TranslatorInterface $translator;
-
-    #[\Override]
-    protected function setUp(): void
-    {
-        $this->translator = $this->createMockTranslator();
-    }
+    use TranslatorStubTrait;
 
     public function testApplyFont(): void
     {
@@ -114,9 +104,10 @@ final class PdfDocumentTest extends TestCase
 
     private function createReport(): FixtureReport
     {
-        $controller = $this->createMock(AbstractController::class);
+        $translator = $this->createStubTranslator();
+        $controller = self::createStub(AbstractController::class);
         $controller->method('getTranslator')
-            ->willReturn($this->translator);
+            ->willReturn($translator);
 
         return new FixtureReport($controller);
     }

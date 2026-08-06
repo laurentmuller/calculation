@@ -19,12 +19,12 @@ use App\Entity\TaskItem;
 use App\Entity\User;
 use App\Interfaces\EntityInterface;
 use App\Listener\PersistenceListener;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\UnitOfWork;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -32,7 +32,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 final class PersistenceListenerTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     private User $user;
 
@@ -240,7 +240,7 @@ final class PersistenceListenerTest extends TestCase
     {
         $security = $this->createMockSecurity();
         $listener = new PersistenceListener($security);
-        $listener->setTranslator($this->createMockTranslator());
+        $listener->setTranslator($this->createStubTranslator());
         $listener->setRequestStack($this->createRequestStack());
 
         return $listener;
@@ -255,8 +255,8 @@ final class PersistenceListenerTest extends TestCase
         array $events = [],
         array $collections = [],
         array $changeSets = []
-    ): MockObject&EntityManagerInterface {
-        $unitOfWork = $this->createMock(UnitOfWork::class);
+    ): Stub&EntityManagerInterface {
+        $unitOfWork = self::createStub(UnitOfWork::class);
         foreach ($events as $method => $entity) {
             $unitOfWork->method($method)
                 ->willReturn([$entity]);
@@ -272,25 +272,25 @@ final class PersistenceListenerTest extends TestCase
                 ->willReturn([$key => $value]);
         }
 
-        $manager = $this->createMock(EntityManagerInterface::class);
+        $manager = self::createStub(EntityManagerInterface::class);
         $manager->method('getUnitOfWork')
             ->willReturn($unitOfWork);
 
         return $manager;
     }
 
-    private function createMockSecurity(): MockObject&Security
+    private function createMockSecurity(): Security
     {
-        $security = $this->createMock(Security::class);
+        $security = self::createStub(Security::class);
         $security->method('getUser')
             ->willReturn($this->user);
 
         return $security;
     }
 
-    private function createRequestStack(): MockObject&RequestStack
+    private function createRequestStack(): RequestStack
     {
-        $requestStack = $this->createMock(RequestStack::class);
+        $requestStack = self::createStub(RequestStack::class);
         $requestStack->method('getSession')
             ->willReturn(self::createStub(SessionInterface::class));
 

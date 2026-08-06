@@ -83,7 +83,7 @@ final class TestControllerTest extends ControllerTestCase
 
     public function testEditorException(): void
     {
-        $service = $this->createMock(MailerService::class);
+        $service = self::createStub(MailerService::class);
         $service->method('sendNotification')
             ->willThrowException(new UnexpectedResponseException('Fake Message'));
         self::setService(MailerService::class, $service);
@@ -98,11 +98,11 @@ final class TestControllerTest extends ControllerTestCase
     public function testExportLabel(): void
     {
         $customer = $this->createCustomer();
-        $query = $this->createMock(Query::class);
+        $query = self::createStub(Query::class);
         $query->method('getResult')
             ->willReturn([$customer]);
 
-        $builder = $this->createMock(QueryBuilder::class);
+        $builder = self::createStub(QueryBuilder::class);
         $builder->method('orderBy')
             ->willReturnSelf();
         $builder->method('setMaxResults')
@@ -110,7 +110,7 @@ final class TestControllerTest extends ControllerTestCase
         $builder->method('getQuery')
             ->willReturn($query);
 
-        $repository = $this->createMock(CustomerRepository::class);
+        $repository = self::createStub(CustomerRepository::class);
         $repository->method('createDefaultQueryBuilder')
             ->willReturn($builder);
 
@@ -125,7 +125,7 @@ final class TestControllerTest extends ControllerTestCase
     public function testRecaptcha(): void
     {
         $response = new \ReCaptcha\Response(true);
-        $service = $this->createMock(RecaptchaService::class);
+        $service = self::createStub(RecaptchaService::class);
         $service->method('verify')
             ->willReturn($response);
         $this->setService(RecaptchaService::class, $service);
@@ -145,7 +145,7 @@ final class TestControllerTest extends ControllerTestCase
     public function testSearch(): void
     {
         $row = $this->createSearchItem();
-        $service = $this->createMock(SearchService::class);
+        $service = self::createStub(SearchService::class);
         $service->method('count')
             ->willReturn(1);
         $service->method('search')
@@ -161,7 +161,7 @@ final class TestControllerTest extends ControllerTestCase
     public function testTranslateWithError(): void
     {
         $error = new HttpClientError(400000, 'Fake');
-        $service = $this->createMock(TranslatorServiceInterface::class);
+        $service = self::createStub(TranslatorServiceInterface::class);
         $service->method('getName')
             ->willReturn('Bing');
         $service->method('getApiUrl')
@@ -169,7 +169,7 @@ final class TestControllerTest extends ControllerTestCase
         $service->method('getLastError')
             ->willReturn($error);
 
-        $factory = $this->createMock(TranslatorFactory::class);
+        $factory = self::createStub(TranslatorFactory::class);
         $factory->method('getSessionService')
             ->willReturn($service);
         $factory->method('getTranslators')
@@ -191,7 +191,7 @@ final class TestControllerTest extends ControllerTestCase
         $group->setCode('group');
         $group->addCategory($category);
 
-        $repository = $this->createMock(GroupRepository::class);
+        $repository = self::createStub(GroupRepository::class);
         $repository->method('findByCode')
             ->willReturn([$group]);
         $this->setService(GroupRepository::class, $repository);

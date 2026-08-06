@@ -38,7 +38,7 @@ final class AdminCacheControllerTest extends ControllerTestCase
 
     public function testClearCacheFalse(): void
     {
-        $service = $this->createMock(CacheService::class);
+        $service = self::createStub(CacheService::class);
         $service->method('list')
             ->willReturn(['cache' => ['app']]);
         $service->method('clear')
@@ -55,7 +55,7 @@ final class AdminCacheControllerTest extends ControllerTestCase
 
     public function testClearCacheThrowException(): void
     {
-        $service = $this->createMock(CacheService::class);
+        $service = self::createStub(CacheService::class);
         $service->method('list')
             ->willReturn(['cache' => ['app']]);
         $service->method('clear')
@@ -73,7 +73,7 @@ final class AdminCacheControllerTest extends ControllerTestCase
 
     public function testListCacheThrowException(): void
     {
-        $service = $this->createMock(CacheService::class);
+        $service = self::createStub(CacheService::class);
         $service->method('list')
             ->willThrowException(new \Exception('Fake Message'));
         $this->setService(CacheService::class, $service);

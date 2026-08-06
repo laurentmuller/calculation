@@ -19,7 +19,7 @@ use App\Repository\GroupRepository;
 use App\Service\IndexService;
 use App\Table\GroupTable;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Twig\Environment;
 use Twig\Error\Error;
@@ -34,7 +34,7 @@ final class GroupTableTest extends EntityTableTestCase
      */
     public function testFormats(): void
     {
-        $twig = $this->createMock(Environment::class);
+        $twig = self::createStub(Environment::class);
         $twig->method('render')
             ->willReturnArgument(0);
         $table = new GroupTable(
@@ -72,9 +72,9 @@ final class GroupTableTest extends EntityTableTestCase
     }
 
     #[\Override]
-    protected function createMockRepository(QueryBuilder $queryBuilder): MockObject&GroupRepository
+    protected function createMockRepository(QueryBuilder $queryBuilder): Stub&GroupRepository
     {
-        $repository = $this->createMock(GroupRepository::class);
+        $repository = self::createStub(GroupRepository::class);
         $repository->method('getTableQueryBuilder')
             ->willReturn($queryBuilder);
 

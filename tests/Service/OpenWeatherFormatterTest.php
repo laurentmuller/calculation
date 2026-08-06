@@ -15,20 +15,20 @@ namespace App\Tests\Service;
 
 use App\Service\OpenWeatherFormatter;
 use App\Service\PositionService;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use App\Utils\FormatUtils;
 use PHPUnit\Framework\TestCase;
 
 final class OpenWeatherFormatterTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     private OpenWeatherFormatter $formatter;
 
     #[\Override]
     protected function setUp(): void
     {
-        $service = new PositionService($this->createMockTranslator());
+        $service = new PositionService($this->createStubTranslator());
         $this->formatter = new OpenWeatherFormatter($service);
     }
 

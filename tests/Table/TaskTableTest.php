@@ -23,7 +23,7 @@ use App\Repository\TaskRepository;
 use App\Table\DataQuery;
 use App\Table\TaskTable;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 
 /**
  * @extends EntityTableTestCase<Task, TaskRepository, TaskTable>
@@ -92,9 +92,9 @@ final class TaskTableTest extends EntityTableTestCase
     }
 
     #[\Override]
-    protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&TaskRepository
+    protected function createMockRepository(QueryBuilder $queryBuilder): Stub&TaskRepository
     {
-        $repository = $this->createMock(TaskRepository::class);
+        $repository = self::createStub(TaskRepository::class);
         $repository->method('getTableQueryBuilder')
             ->willReturn($queryBuilder);
 
@@ -107,7 +107,7 @@ final class TaskTableTest extends EntityTableTestCase
     #[\Override]
     protected function createTable(AbstractRepository $repository): TaskTable
     {
-        $categoryRepository = $this->createMock(CategoryRepository::class);
+        $categoryRepository = self::createStub(CategoryRepository::class);
         if (0 !== $this->categoryId) {
             $category = new Category();
             $category->setCode('code');
@@ -116,7 +116,7 @@ final class TaskTableTest extends EntityTableTestCase
                 ->willReturn($category);
         }
 
-        $groupRepository = $this->createMock(GroupRepository::class);
+        $groupRepository = self::createStub(GroupRepository::class);
         if (0 !== $this->groupId) {
             $category = new Group();
             $category->setCode('code');

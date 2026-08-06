@@ -23,14 +23,14 @@ use App\Pdf\Html\HtmlTag;
 use App\Pdf\Html\HtmlTextChunk;
 use App\Pdf\Html\HtmlUlChunk;
 use App\Report\HtmlReport;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfBorder;
 use PHPUnit\Framework\TestCase;
 
 final class HtmlReportOutputTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public function testHtmlLiChunkNoParent(): void
     {
@@ -119,8 +119,8 @@ final class HtmlReportOutputTest extends TestCase
 
     private function createReport(): HtmlReport
     {
-        $translator = $this->createMockTranslator();
-        $controller = $this->createMock(AbstractController::class);
+        $translator = $this->createStubTranslator();
+        $controller = self::createStub(AbstractController::class);
         $controller->method('getTranslator')
             ->willReturn($translator);
 

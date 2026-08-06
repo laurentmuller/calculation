@@ -182,9 +182,9 @@ final class SchemaReportTest extends TestCase
         return $this->createMock(FontAwesomeImageService::class);
     }
 
-    private function createSchemaService(array $tables = []): MockObject&SchemaService
+    private function createSchemaService(array $tables = []): SchemaService
     {
-        $schemaService = $this->createMock(SchemaService::class);
+        $schemaService = self::createStub(SchemaService::class);
         $schemaService->method('getTables')
             ->willReturn($tables);
 

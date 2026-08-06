@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Form;
 
+use App\Interfaces\EntityInterface;
+use App\Repository\AbstractRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -26,21 +28,24 @@ use PHPUnit\Framework\TestCase;
  */
 trait ManagerRegistryTrait
 {
-    private (EntityManager&MockObject)|null $entityManager = null;
-    private (ManagerRegistry&MockObject)|null $managerRegistry = null;
-    /** @var array<string, mixed> */
+    private (Stub&EntityManager)|null $entityManager = null;
+    private (Stub&ManagerRegistry)|null $managerRegistry = null;
+    /** @var array<class-string<EntityInterface>, Stub> */
     private array $repositories = [];
 
     /**
-     * @param class-string $entityClass
-     * @param class-string $repositoryClass
+     * @template TEntity of EntityInterface
+     * @template TRepository of AbstractRepository<TEntity>
+     *
+     * @param class-string<TEntity>     $entityClass
+     * @param class-string<TRepository> $repositoryClass
      */
     protected function createManagerRegistry(
         string $entityClass,
         string $repositoryClass,
         string $queryMethod,
         array $results
-    ): MockObject&ManagerRegistry {
+    ): Stub&ManagerRegistry {
         $query = $this->createQuery($results);
         $builder = $this->createQueryBuilder($query);
         $this->repositories[$entityClass] = $this->createRepository($repositoryClass, $queryMethod, $builder);
@@ -49,11 +54,11 @@ trait ManagerRegistryTrait
     }
 
     /**
-     * @return MockObject&Query<array-key, mixed>
+     * @return Stub&Query<array-key, mixed>
      */
-    private function createQuery(array $results): MockObject&Query
+    private function createQuery(array $results): Stub&Query
     {
-        $query = $this->createMock(Query::class);
+        $query = self::createStub(Query::class);
         $query->method('execute')
             ->willReturn($results);
 
@@ -61,12 +66,12 @@ trait ManagerRegistryTrait
     }
 
     /**
-     * @param MockObject&Query<array-key, mixed> $query
+     * @param Stub&Query<array-key, mixed> $query
      */
-    private function createQueryBuilder(MockObject&Query $query): MockObject&QueryBuilder
+    private function createQueryBuilder(Query $query): Stub&QueryBuilder
     {
         $parameters = new ArrayCollection();
-        $builder = $this->createMock(QueryBuilder::class);
+        $builder = self::createStub(QueryBuilder::class);
         $builder->method('getParameters')
             ->willReturn($parameters);
         $builder->method('getQuery')
@@ -76,35 +81,40 @@ trait ManagerRegistryTrait
     }
 
     /**
-     * @param class-string $repositoryClass
+     * @template TEntity of EntityInterface
+     * @template TRepository of AbstractRepository<TEntity>
+     *
+     * @param class-string<TRepository> $repositoryClass
+     *
+     * @return Stub&TRepository
      */
     private function createRepository(
         string $repositoryClass,
         string $queryMethod,
-        MockObject&QueryBuilder $builder
-    ): MockObject {
-        $repository = $this->createMock($repositoryClass);
+        QueryBuilder $builder
+    ): Stub {
+        $repository = self::createStub($repositoryClass);
         $repository->method($queryMethod)
             ->willReturn($builder);
 
         return $repository;
     }
 
-    private function getEntityManager(): MockObject&EntityManager
+    private function getEntityManager(): Stub&EntityManager
     {
         if (null === $this->entityManager) {
-            $this->entityManager = $this->createMock(EntityManager::class);
+            $this->entityManager = self::createStub(EntityManager::class);
             $this->entityManager->method('getRepository')
-                ->willReturnCallback(fn (string $className): mixed => $this->repositories[$className] ?? null);
+                ->willReturnCallback(fn (string $className): ?Stub => $this->repositories[$className] ?? null);
         }
 
         return $this->entityManager;
     }
 
-    private function getManagerRegistry(): MockObject&ManagerRegistry
+    private function getManagerRegistry(): Stub&ManagerRegistry
     {
         if (null === $this->managerRegistry) {
-            $this->managerRegistry = $this->createMock(ManagerRegistry::class);
+            $this->managerRegistry = self::createStub(ManagerRegistry::class);
             $this->managerRegistry->method('getManagerForClass')
                 ->willReturn($this->getEntityManager());
         }

@@ -44,7 +44,7 @@ final class CspReportControllerTest extends ControllerTestCase
     public function testWithTransportException(): void
     {
         $exception = new UnexpectedResponseException('Fake Message');
-        $mailer = $this->createMock(MailerInterface::class);
+        $mailer = self::createStub(MailerInterface::class);
         $mailer->method('send')
             ->willThrowException($exception);
         $this->setService(MailerInterface::class, $mailer);

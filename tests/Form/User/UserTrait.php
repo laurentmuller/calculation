@@ -18,7 +18,7 @@ use App\Repository\UserRepository;
 use App\Tests\Entity\IdTrait;
 use App\Tests\Form\ManagerRegistryTrait;
 use Doctrine\Persistence\ManagerRegistry;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 trait UserTrait
@@ -47,7 +47,7 @@ trait UserTrait
         return new EntityType($this->getUserRegistry());
     }
 
-    protected function getUserRegistry(): MockObject&ManagerRegistry
+    protected function getUserRegistry(): Stub&ManagerRegistry
     {
         return $this->createManagerRegistry(
             User::class,

@@ -29,7 +29,7 @@ use App\Pdf\Html\HtmlAttribute;
 use App\Tests\Fixture\FixtureStringable;
 use App\Tests\Form\User\PasswordHasherExtensionTrait;
 use App\Tests\Form\User\VichImageTypeTrait;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use Elao\Enum\Bridge\Symfony\Form\Type\EnumType as ElaoEnumType;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -61,7 +61,7 @@ final class FormHelperTest extends TypeTestCase
     use PreloadedExtensionsTrait {
         getExtensions as getExtensionsFromTrait;
     }
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
     use ValidatorExtensionTrait;
     use VichImageTypeTrait;
 
@@ -637,7 +637,7 @@ final class FormHelperTest extends TypeTestCase
     public function testSimulateAndConfirmType(): void
     {
         $form = $this->createFormHelper()
-            ->addSimulateAndConfirmType($this->createMockTranslator(), false)
+            ->addSimulateAndConfirmType($this->createStubTranslator(), false)
             ->createForm();
 
         self::assertTrue($form->has('simulate'));
@@ -895,7 +895,7 @@ final class FormHelperTest extends TypeTestCase
         $colorsPath = __DIR__ . '/../files/json/colors.json';
 
         return [
-            new PlainType($this->createMockTranslator()),
+            new PlainType($this->createStubTranslator()),
             new CustomColorType($colorsPath),
             $this->createVichImageType(),
         ];

@@ -18,7 +18,7 @@ use App\Interfaces\EntityInterface;
 use App\Service\UrlGeneratorService;
 use App\Tests\Entity\IdTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -92,9 +92,9 @@ final class UrlGeneratorServiceTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    private function createGenerator(string $expected = ''): MockObject&UrlGeneratorInterface
+    private function createGenerator(string $expected = ''): Stub&UrlGeneratorInterface
     {
-        $generator = $this->createMock(UrlGeneratorInterface::class);
+        $generator = self::createStub(UrlGeneratorInterface::class);
         $generator->method('generate')
             ->willReturn($expected);
 

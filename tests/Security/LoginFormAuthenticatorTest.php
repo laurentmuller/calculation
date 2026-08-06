@@ -53,7 +53,7 @@ final class LoginFormAuthenticatorTest extends TestCase
 
     public function testAuthenticateEmptyPassword(): void
     {
-        $httpUtils = $this->createMock(HttpUtils::class);
+        $httpUtils = self::createStub(HttpUtils::class);
         $httpUtils->method('checkRequestPath')
             ->willReturn(true);
         $authenticator = $this->createAuthenticator(httpUtils: $httpUtils);
@@ -68,7 +68,7 @@ final class LoginFormAuthenticatorTest extends TestCase
 
     public function testAuthenticateEmptyToken(): void
     {
-        $httpUtils = $this->createMock(HttpUtils::class);
+        $httpUtils = self::createStub(HttpUtils::class);
         $httpUtils->method('checkRequestPath')
             ->willReturn(true);
         $authenticator = $this->createAuthenticator(httpUtils: $httpUtils);
@@ -83,7 +83,7 @@ final class LoginFormAuthenticatorTest extends TestCase
 
     public function testAuthenticateEmptyUserName(): void
     {
-        $httpUtils = $this->createMock(HttpUtils::class);
+        $httpUtils = self::createStub(HttpUtils::class);
         $httpUtils->method('checkRequestPath')
             ->willReturn(true);
         $authenticator = $this->createAuthenticator(httpUtils: $httpUtils);
@@ -98,7 +98,7 @@ final class LoginFormAuthenticatorTest extends TestCase
 
     public function testAuthenticateSuccess(): void
     {
-        $httpUtils = $this->createMock(HttpUtils::class);
+        $httpUtils = self::createStub(HttpUtils::class);
         $httpUtils->method('checkRequestPath')
             ->willReturn(true);
         $authenticator = $this->createAuthenticator(httpUtils: $httpUtils);
@@ -130,10 +130,10 @@ final class LoginFormAuthenticatorTest extends TestCase
 
     public function testCaptchaEmpty(): void
     {
-        $security = $this->createMock(SecurityParameter::class);
+        $security = self::createStub(SecurityParameter::class);
         $security->method('isCaptcha')
             ->willReturn(true);
-        $parameters = $this->createMock(ApplicationParameters::class);
+        $parameters = self::createStub(ApplicationParameters::class);
         $parameters->method('getSecurity')
             ->willReturn($security);
 
@@ -150,10 +150,10 @@ final class LoginFormAuthenticatorTest extends TestCase
 
     public function testCaptchaHidden(): void
     {
-        $security = $this->createMock(SecurityParameter::class);
+        $security = self::createStub(SecurityParameter::class);
         $security->method('isCaptcha')
             ->willReturn(false);
-        $parameters = $this->createMock(ApplicationParameters::class);
+        $parameters = self::createStub(ApplicationParameters::class);
         $parameters->method('getSecurity')
             ->willReturn($security);
 
@@ -171,13 +171,13 @@ final class LoginFormAuthenticatorTest extends TestCase
 
     public function testCaptchaInvalid(): void
     {
-        $security = $this->createMock(SecurityParameter::class);
+        $security = self::createStub(SecurityParameter::class);
         $security->method('isCaptcha')
             ->willReturn(true);
-        $parameters = $this->createMock(ApplicationParameters::class);
+        $parameters = self::createStub(ApplicationParameters::class);
         $parameters->method('getSecurity')
             ->willReturn($security);
-        $captchaImageService = $this->createMock(CaptchaImageService::class);
+        $captchaImageService = self::createStub(CaptchaImageService::class);
         $captchaImageService->method('validateToken')
             ->willReturn(false);
 
@@ -197,13 +197,13 @@ final class LoginFormAuthenticatorTest extends TestCase
 
     public function testCaptchaTimeout(): void
     {
-        $security = $this->createMock(SecurityParameter::class);
+        $security = self::createStub(SecurityParameter::class);
         $security->method('isCaptcha')
             ->willReturn(true);
-        $parameters = $this->createMock(ApplicationParameters::class);
+        $parameters = self::createStub(ApplicationParameters::class);
         $parameters->method('getSecurity')
             ->willReturn($security);
-        $captchaImageService = $this->createMock(CaptchaImageService::class);
+        $captchaImageService = self::createStub(CaptchaImageService::class);
         $captchaImageService->method('validateToken')
             ->willReturn(true);
         $captchaImageService->method('validateTimeout')
@@ -226,7 +226,7 @@ final class LoginFormAuthenticatorTest extends TestCase
     public function testGetLoginUrl(): void
     {
         $expected = '/login';
-        $httpUtils = $this->createMock(HttpUtils::class);
+        $httpUtils = self::createStub(HttpUtils::class);
         $httpUtils->method('checkRequestPath')
             ->willReturn(true);
         $httpUtils->method('generateUri')
@@ -241,7 +241,7 @@ final class LoginFormAuthenticatorTest extends TestCase
 
     public function testOnAuthenticationSuccess(): void
     {
-        $httpUtils = $this->createMock(HttpUtils::class);
+        $httpUtils = self::createStub(HttpUtils::class);
         $httpUtils->method('checkRequestPath')
             ->willReturn(true);
         $authenticator = $this->createAuthenticator(httpUtils: $httpUtils);
@@ -255,7 +255,7 @@ final class LoginFormAuthenticatorTest extends TestCase
     #[DataProvider('getSupports')]
     public function testSupports(Request $request, bool $expected): void
     {
-        $httpUtils = $this->createMock(HttpUtils::class);
+        $httpUtils = self::createStub(HttpUtils::class);
         $httpUtils->method('checkRequestPath')
             ->willReturn(true);
         $authenticator = $this->createAuthenticator(httpUtils: $httpUtils);
@@ -270,10 +270,10 @@ final class LoginFormAuthenticatorTest extends TestCase
         ?UserRepository $repository = null,
         ?HttpUtils $httpUtils = null
     ): LoginFormAuthenticator {
-        $parameters ??= $this->createMock(ApplicationParameters::class);
-        $captchaImageService ??= $this->createMock(CaptchaImageService::class);
-        $repository ??= $this->createMock(UserRepository::class);
-        $httpUtils ??= $this->createMock(HttpUtils::class);
+        $parameters ??= self::createStub(ApplicationParameters::class);
+        $captchaImageService ??= self::createStub(CaptchaImageService::class);
+        $repository ??= self::createStub(UserRepository::class);
+        $httpUtils ??= self::createStub(HttpUtils::class);
 
         return new LoginFormAuthenticator(
             $parameters,

@@ -49,7 +49,7 @@ final class CalculationStateProviderTest extends TestCase
     private function createProvider(?CalculationState $entity = null): CalculationStateProvider
     {
         $entities = $entity instanceof CalculationState ? [$entity] : [];
-        $repository = $this->createMock(CalculationStateRepository::class);
+        $repository = self::createStub(CalculationStateRepository::class);
         $repository->method('findBy')
             ->willReturn($entities);
         $repository->method('findAll')

@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\TableView;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class TableViewTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public static function getValues(): \Generator
     {
@@ -64,7 +64,7 @@ final class TableViewTest extends TestCase
 
     public function testTranslate(): void
     {
-        $translator = $this->createMockTranslator();
+        $translator = $this->createStubTranslator();
         self::assertSame('table_view.custom', TableView::CUSTOM->trans($translator));
         self::assertSame('table_view.table', TableView::TABLE->trans($translator));
     }

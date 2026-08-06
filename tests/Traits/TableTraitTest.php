@@ -21,7 +21,7 @@ use App\Parameter\DisplayParameter;
 use App\Parameter\UserParameters;
 use App\Table\AbstractTable;
 use App\Table\DataQuery;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use App\Traits\ExceptionContextTrait;
 use App\Traits\TableTrait;
 use App\Traits\TranslatorTrait;
@@ -39,7 +39,7 @@ final class TableTraitTest extends TestCase
 {
     use ExceptionContextTrait;
     use TableTrait;
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
     use TranslatorTrait;
 
     private bool $denyException;
@@ -51,7 +51,7 @@ final class TableTraitTest extends TestCase
     {
         $this->denyException = false;
         $this->throwException = false;
-        $this->translator = $this->createMockTranslator();
+        $this->translator = $this->createStubTranslator();
     }
 
     public function denyAccessUnlessGranted(mixed $attribute, mixed $subject = null): void
@@ -79,11 +79,11 @@ final class TableTraitTest extends TestCase
             throw new \LogicException();
         }
 
-        $display = $this->createMock(DisplayParameter::class);
+        $display = self::createStub(DisplayParameter::class);
         $display->method('getDisplayMode')
             ->willReturn(TableView::CUSTOM);
 
-        $userParameters = $this->createMock(UserParameters::class);
+        $userParameters = self::createStub(UserParameters::class);
         $userParameters->method('getDisplay')
             ->willReturn($display);
 

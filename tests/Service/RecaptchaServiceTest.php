@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\RecaptchaService;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
 use ReCaptcha\ReCaptcha;
 use ReCaptcha\Response;
@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class RecaptchaServiceTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     private const string SITE_KEY = 'site_key';
 
@@ -86,7 +86,7 @@ final class RecaptchaServiceTest extends TestCase
 
     private function createService(): RecaptchaService
     {
-        $translator = $this->createMockTranslator();
+        $translator = $this->createStubTranslator();
         $reCaptcha = new ReCaptcha('secretKey');
 
         return new RecaptchaService(self::SITE_KEY, $reCaptcha, $translator);

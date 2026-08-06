@@ -15,16 +15,16 @@ namespace App\Tests\Response;
 
 use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\SpreadsheetDocument;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
 
 final class SpreadsheetResponseTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public function testGetFileExtension(): void
     {
-        $translator = $this->createMockTranslator();
+        $translator = $this->createStubTranslator();
         $doc = new SpreadsheetDocument($translator);
         $response = new SpreadsheetResponse($doc);
         self::assertSame('xlsx', $response->getFileExtension());

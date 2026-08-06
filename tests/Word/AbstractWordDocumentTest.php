@@ -15,7 +15,7 @@ namespace App\Tests\Word;
 
 use App\Interfaces\DocumentHelperInterface;
 use App\Model\CustomerInformation;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use App\Word\AbstractWordDocument;
 use App\Word\HtmlDocument;
 use App\Word\WordFooter;
@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
 
 final class AbstractWordDocumentTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     public function testDefault(): void
     {
@@ -120,7 +120,7 @@ final class AbstractWordDocumentTest extends TestCase
     private function createMockHelper(?CustomerInformation $customerInformation = null): DocumentHelperInterface
     {
         $customerInformation ??= $this->createCustomerInformation();
-        $helper = $this->createMock(DocumentHelperInterface::class);
+        $helper = self::createStub(DocumentHelperInterface::class);
         $helper->method('getUserIdentifier')
             ->willReturn('User');
         $helper->method('getCustomer')

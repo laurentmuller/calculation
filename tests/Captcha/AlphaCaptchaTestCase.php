@@ -15,9 +15,8 @@ namespace App\Tests\Captcha;
 
 use App\Captcha\AbstractAlphaCaptcha;
 use App\Service\DictionaryService;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -27,17 +26,17 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[AllowMockObjectsWithoutExpectations]
 abstract class AlphaCaptchaTestCase extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
-    protected MockObject&DictionaryService $service;
-    protected MockObject&TranslatorInterface $translator;
+    protected DictionaryService $service;
+    protected TranslatorInterface $translator;
 
     #[\Override]
     protected function setUp(): void
     {
         $letters = \implode('', \range('A', 'Z'));
-        $this->translator = $this->createMockTranslator();
-        $this->service = $this->createMock(DictionaryService::class);
+        $this->translator = $this->createStubTranslator();
+        $this->service = self::createStub(DictionaryService::class);
         $this->service->method('getRandomWord')
             ->willReturn($letters);
     }

@@ -39,7 +39,7 @@ final class AbstractReportTest extends TestCase
 
     public function testRenderCount(): void
     {
-        $helper = $this->createMock(DocumentHelperInterface::class);
+        $helper = self::createStub(DocumentHelperInterface::class);
         $helper->method('getUserIdentifier')
             ->willReturn('user');
         $report = $this->createReport($helper);
@@ -63,7 +63,7 @@ final class AbstractReportTest extends TestCase
 
     private function createReport(?DocumentHelperInterface $helper = null): AbstractReport
     {
-        $helper ??= $this->createMock(DocumentHelperInterface::class);
+        $helper ??= self::createStub(DocumentHelperInterface::class);
 
         return new class($helper) extends AbstractReport {
             #[\Override]

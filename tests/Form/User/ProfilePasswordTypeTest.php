@@ -21,7 +21,6 @@ use App\Parameter\ApplicationParameters;
 use App\Parameter\SecurityParameter;
 use App\Tests\Form\EntityTypeTestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 
 /**
@@ -33,16 +32,16 @@ final class ProfilePasswordTypeTest extends EntityTypeTestCase
     use PasswordHasherExtensionTrait;
     use ValidatorExtensionTrait;
 
-    private MockObject&ApplicationParameters $parameters;
+    private ApplicationParameters $parameters;
 
     #[\Override]
     protected function setUp(): void
     {
         $contraint = new Strength(StrengthLevel::DEFAULT);
-        $security = $this->createMock(SecurityParameter::class);
+        $security = self::createStub(SecurityParameter::class);
         $security->method('getStrengthConstraint')
             ->willReturn($contraint);
-        $this->parameters = $this->createMock(ApplicationParameters::class);
+        $this->parameters = self::createStub(ApplicationParameters::class);
         $this->parameters->method('getSecurity')
             ->willReturn($security);
         parent::setUp();

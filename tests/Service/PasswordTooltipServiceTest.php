@@ -18,20 +18,19 @@ use App\Enums\StrengthLevel;
 use App\Parameter\ApplicationParameters;
 use App\Parameter\SecurityParameter;
 use App\Service\PasswordTooltipService;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AllowMockObjectsWithoutExpectations]
 final class PasswordTooltipServiceTest extends TestCase
 {
-    use TranslatorMockTrait;
+    use TranslatorStubTrait;
 
     private bool $compromisedPassword = false;
     private StrengthLevel $level;
-    private MockObject&ApplicationParameters $parameters;
+    private ApplicationParameters $parameters;
     private Password $password;
     private TranslatorInterface $translator;
 
@@ -40,9 +39,9 @@ final class PasswordTooltipServiceTest extends TestCase
     {
         $this->password = new Password();
         $this->level = StrengthLevel::NONE;
-        $this->translator = $this->createMockTranslator();
+        $this->translator = $this->createStubTranslator();
 
-        $security = $this->createMock(SecurityParameter::class);
+        $security = self::createStub(SecurityParameter::class);
         $security->method('getLevel')
             ->willReturnCallback(fn (): StrengthLevel => $this->level);
         $security->method('getPasswordConstraint')
@@ -50,7 +49,7 @@ final class PasswordTooltipServiceTest extends TestCase
         $security->method('isCompromised')
             ->willReturnCallback(fn (): bool => $this->compromisedPassword);
 
-        $this->parameters = $this->createMock(ApplicationParameters::class);
+        $this->parameters = self::createStub(ApplicationParameters::class);
         $this->parameters->method('getSecurity')
             ->willReturn($security);
     }

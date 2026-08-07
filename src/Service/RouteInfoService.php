@@ -75,7 +75,7 @@ readonly class RouteInfoService
 
     private function isDebugRoute(string $name): bool
     {
-        return '_' === $name[0];
+        return '_' === $name[0] && !\str_starts_with($name, '_logout_');
     }
 
     /**

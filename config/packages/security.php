@@ -27,7 +27,6 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 $access = [
     AuthenticatedVoter::PUBLIC_ACCESS => [
         '^/login',
-        '^/logout/success',
         '^/captcha',
         '^/about/policy',
         '^/about/licence',

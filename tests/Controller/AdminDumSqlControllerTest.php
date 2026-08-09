@@ -20,6 +20,19 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class AdminDumSqlControllerTest extends ControllerTestCase
 {
+    private string $content = 'Some Change;10';
+    private int $result = Command::SUCCESS;
+
+    #[\Override]
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $service = self::createStub(CommandService::class);
+        $service->method('execute')
+            ->willReturnCallback(fn (): CommandResult => new CommandResult($this->result, $this->content));
+        $this->setService(CommandService::class, $service);
+    }
+
     #[\Override]
     public static function getRoutes(): \Generator
     {
@@ -30,12 +43,8 @@ final class AdminDumSqlControllerTest extends ControllerTestCase
 
     public function testDumSqlFailure(): void
     {
-        $result = new CommandResult(Command::FAILURE, 'Fake output');
-        $service = self::createStub(CommandService::class);
-        $service->method('execute')
-            ->willReturn($result);
-        $this->setService(CommandService::class, $service);
-
+        $this->result = Command::FAILURE;
+        $this->content = 'Fake output';
         $this->checkRoute(
             url: 'admin/dump-sql',
             username: self::ROLE_SUPER_ADMIN,
@@ -45,16 +54,22 @@ final class AdminDumSqlControllerTest extends ControllerTestCase
 
     public function testDumSqlOK(): void
     {
-        $result = new CommandResult(Command::SUCCESS, '[OK]');
-        $service = self::createStub(CommandService::class);
-        $service->method('execute')
-            ->willReturn($result);
-        $this->setService(CommandService::class, $service);
-
+        $this->result = Command::SUCCESS;
+        $this->content = '[OK]';
         $this->checkRoute(
             url: 'admin/dump-sql',
             username: self::ROLE_SUPER_ADMIN,
             expected: Response::HTTP_FOUND
+        );
+    }
+
+    public function testDumSqlWithChange(): void
+    {
+        $this->result = Command::SUCCESS;
+        $this->content = 'Some Change;10';
+        $this->checkRoute(
+            url: 'admin/dump-sql',
+            username: self::ROLE_SUPER_ADMIN,
         );
     }
 }

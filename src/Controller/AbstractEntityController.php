@@ -76,17 +76,14 @@ abstract class AbstractEntityController extends AbstractController
     }
 
     /**
-     * Throws an exception unless the given attribute is granted against
+     * Throws an exception unless the given permissions are granted against
      * the current authentication token and this entity class name.
      *
      * @throws AccessDeniedException
      */
     protected function checkPermission(EntityPermission ...$permissions): void
     {
-        $entity = EntityName::tryFromMixed($this->className);
-        if (!$entity instanceof EntityName) {
-            return;
-        }
+        $entity = EntityName::fromMixed($this->className);
         foreach ($permissions as $permission) {
             $this->denyAccessUnlessGranted($permission, $entity);
         }

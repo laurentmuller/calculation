@@ -171,6 +171,19 @@ final class EntityNameTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    public function testFromMixed(): void
+    {
+        $actual = EntityName::fromMixed(Product::class);
+        self::assertSame(EntityName::PRODUCT, $actual);
+    }
+
+    public function testFromMixedThrowException(): void
+    {
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage('Invalid entity name "fake_entity".');
+        EntityName::fromMixed('fake_entity');
+    }
+
     #[DataProvider('getIndex')]
     public function testIndex(EntityName $entityName, int $expected): void
     {

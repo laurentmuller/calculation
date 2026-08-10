@@ -94,6 +94,16 @@ enum EntityName: string implements ConstantsInterface, EnumSortableInterface, Tr
     }
 
     /**
+     * Gets the entity name from the given subject.
+     *
+     * @throws \InvalidArgumentException if the subject is not a valid entity name
+     */
+    public static function fromMixed(mixed $subject): self
+    {
+        return self::tryFromMixed($subject) ?? throw new \InvalidArgumentException(\sprintf('Invalid entity name "%s".', $subject));
+    }
+
+    /**
      * Gets the form field name.
      */
     public function getFormField(): string

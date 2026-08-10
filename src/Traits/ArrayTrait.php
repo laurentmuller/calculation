@@ -73,7 +73,8 @@ trait ArrayTrait
      *
      * @param int<0, 2> $mode a flag determining what arguments are sent to callback:
      *                        <ul>
-     *                        <li>0 - pass the value as the only argument</li>
+     *                        <li>0 - ARRAY_FILTER_USE_VALUE - pass the value as the only
+     *                        argument</li>
      *                        <li>1 - ARRAY_FILTER_USE_BOTH - pass both value and key as arguments
      *                        to callback instead of the value</li>
      *                        <li>2 - ARRAY_FILTER_USE_KEY - pass key as the only argument to
@@ -131,7 +132,8 @@ trait ArrayTrait
      *                                           entries of array will be removed.
      * @param int<0, 2>                $mode     a flag determining what arguments are sent to callback:
      *                                           <ul>
-     *                                           <li>0 - pass the value as the only argument</li>
+     *                                           <li>0 - ARRAY_FILTER_USE_VALUE - pass the value as the only
+     *                                           argument</li>
      *                                           <li>1 - ARRAY_FILTER_USE_BOTH - pass both value and key as arguments
      *                                           to callback instead of the value</li>
      *                                           <li>2 - ARRAY_FILTER_USE_KEY - pass key as the only argument to
@@ -140,7 +142,7 @@ trait ArrayTrait
      *
      * @return array<TKey, TValue>
      */
-    public function getFiltered(array $values, ?callable $callback = null, int $mode = 0): array
+    public function getFiltered(array $values, ?callable $callback = null, int $mode = ARRAY_FILTER_USE_VALUE): array
     {
         /** @phpstan-var array<TKey, TValue> */
         return \array_filter($values, $callback, $mode);
@@ -157,7 +159,8 @@ trait ArrayTrait
      *                                           of array will be removed.
      * @param int<0, 2>                $mode     a flag determining what arguments are sent to callback:
      *                                           <ul>
-     *                                           <li>0 - pass the value as the only argument</li>
+     *                                           <li>0 - ARRAY_FILTER_USE_VALUE - pass the value as the only
+     *                                           argument</li>
      *                                           <li>1 - ARRAY_FILTER_USE_BOTH - pass both value and key as arguments
      *                                           to callback instead of the value</li>
      *                                           <li>2 - ARRAY_FILTER_USE_KEY - pass key as the only argument to

@@ -47,14 +47,28 @@ final class AdminRightsControllerTest extends ControllerTestCase
     public function testRightUserNoChange(): void
     {
         $service = self::getService(ApplicationParameters::class);
-        $service->getRights()->setUserRights(null);
+        $service->getRights()->setUserRights(16008950369717823);
         $service->save();
 
+        // default
         $values = $this->getPermissionValues();
-        $values[0] = $values[1] = $values[5] = true;
+        $values[0] = true; // list
+        $values[1] = true; // show
+        $values[5] = true; // export
+
         $this->checkForm(
             uri: 'admin/rights/user',
-            data: ['role_rights[rights][globalMargin]' => $values]
+            data: [
+                'role_rights[rights][calculation]' => $this->getPermissionValues(true),
+                'role_rights[rights][product]' => $values,
+                'role_rights[rights][task]' => $values,
+                'role_rights[rights][category]' => $values,
+                'role_rights[rights][group]' => $values,
+                'role_rights[rights][calculationState]' => $values,
+                'role_rights[rights][globalMargin]' => $values,
+                'role_rights[rights][user]' => $this->getPermissionValues(),
+                'role_rights[rights][log]' => $this->getPermissionValues(),
+            ]
         );
     }
 
@@ -67,8 +81,8 @@ final class AdminRightsControllerTest extends ControllerTestCase
         );
     }
 
-    private function getPermissionValues(): array
+    private function getPermissionValues(bool $value = false): array
     {
-        return \array_fill(0, \count(EntityPermission::cases()), false);
+        return \array_fill(0, \count(EntityPermission::cases()), $value);
     }
 }

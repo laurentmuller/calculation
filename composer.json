@@ -68,6 +68,7 @@
         "symfony/mime": "7.4.*",
         "symfony/monolog-bundle": "^4.0",
         "symfony/notifier": "7.4.*",
+        "symfony/polyfill-php86": "^1.0",
         "symfony/property-access": "7.4.*",
         "symfony/rate-limiter": "7.4.*",
         "symfony/runtime": "7.4.*",

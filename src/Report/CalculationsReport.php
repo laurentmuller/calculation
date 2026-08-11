@@ -35,7 +35,7 @@ class CalculationsReport extends AbstractReport
     /** The number of calculations */
     private int $count = 0;
 
-    /** The sum of items calculations. */
+    /** The sum of items. */
     private float $items = 0.0;
 
     /** The minimum margin style. */

@@ -198,10 +198,12 @@ class SymfonyReport extends AbstractReport implements PdfDrawCellTextInterface
                 PdfColumn::left('Value', 85)
             );
         $table->setGroupKey('Kernel')->outputHeaders();
-        $this->outputRow($table, 'Version', $symfony->getVersion());
-        $this->outputRow($table, 'Environment', $this->trans($kernel->getKernelEnvironment()))
+        $this->outputRow($table, 'Version', $symfony->getVersion())
+            ->outputRow($table, 'Type', $kernel->getType())
+            ->outputRow($table, 'Environment', $this->trans($kernel->getKernelEnvironment()))
             ->outputRow($table, 'Running Mode', $this->trans($kernel->getApplicationEnvironment()))
-            ->outputRow($table, 'Version status', $symfony->getMaintenanceStatus())
+            ->outputRow($table, 'Status', $symfony->getMaintenanceStatus())
+            ->outputRow($table, 'Release', $symfony->getReleaseDate())
             ->outputRowEnabled($table, 'Long-Term support', $symfony->isLongTermSupport())
             ->outputRow($table, 'End of maintenance', $symfony->getEndOfMaintenance())
             ->outputRow($table, 'End of product life', $symfony->getEndOfLife());

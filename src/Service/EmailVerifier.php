@@ -25,7 +25,7 @@ use SymfonyCasts\Bundle\VerifyEmail\Model\VerifyEmailSignatureComponents;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
 /**
- * Email verifier used for register new user.
+ * Email verifier used to register a new user.
  */
 readonly class EmailVerifier
 {

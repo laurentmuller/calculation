@@ -67,7 +67,7 @@ class CustomerParameter implements ParameterInterface
     }
 
     /**
-     * Convert these values to a customer information.
+     * Convert these values to the customer information.
      *
      * @param bool $printAddress a value indicating if the address is printed
      */

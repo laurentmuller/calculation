@@ -162,7 +162,6 @@ readonly class SymfonyInfoService
         $xdebugMode = \ini_get('xdebug.mode');
         $disabled = false === $xdebugMode || 'off' === $xdebugMode;
 
-        /** @phpstan-var string $xdebugMode */
         return $disabled ? self::LABEL_DISABLED : \sprintf('%s (%s)', self::LABEL_ENABLED, $xdebugMode);
     }
 

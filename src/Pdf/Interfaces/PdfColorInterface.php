@@ -61,12 +61,12 @@ interface PdfColorInterface
     public function asRGB(): array;
 
     /**
-     * Gets this value as draw color.
+     * Gets this value as a draw color.
      */
     public function getDrawColor(): PdfDrawColor;
 
     /**
-     * Gets this value as fill color.
+     * Gets this value as a fill color.
      */
     public function getFillColor(): PdfFillColor;
 
@@ -76,7 +76,7 @@ interface PdfColorInterface
     public function getPhpOfficeColor(): string;
 
     /**
-     * Gets this value as text color.
+     * Gets this value as a text color.
      */
     public function getTextColor(): PdfTextColor;
 }

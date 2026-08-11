@@ -89,6 +89,13 @@ final class KernelInfoServiceTest extends TestCase
         self::assertFalse($actual);
     }
 
+    public function testType(): void
+    {
+        $service = $this->createService();
+        $actual = $service->getType();
+        self::assertStringContainsString('KernelInterface', $actual);
+    }
+
     private function createService(): KernelInfoService
     {
         $dir = __DIR__;

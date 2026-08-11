@@ -145,9 +145,11 @@ class SymfonyDocument extends AbstractDocument
         ]);
         $this->outputGroup($sheet, $row++, 'Kernel')
             ->outputRow($sheet, $row++, 'Version', $symfony->getVersion())
+            ->outputRow($sheet, $row++, 'Type', $kernel->getType())
             ->outputRow($sheet, $row++, 'Environment', $this->trans($kernel->getKernelEnvironment()))
             ->outputRow($sheet, $row++, 'Running Mode', $this->trans($kernel->getApplicationEnvironment()))
-            ->outputRow($sheet, $row++, 'Version status', $symfony->getMaintenanceStatus())
+            ->outputRow($sheet, $row++, 'Status', $symfony->getMaintenanceStatus())
+            ->outputRow($sheet, $row++, 'Release', $symfony->getReleaseDate())
             ->outputRowEnabled($sheet, $row++, 'Long-Term support', $symfony->isLongTermSupport())
             ->outputRow($sheet, $row++, 'End of maintenance', $symfony->getEndOfMaintenance())
             ->outputRow($sheet, $row++, 'End of product life', $symfony->getEndOfLife());
@@ -157,11 +159,11 @@ class SymfonyDocument extends AbstractDocument
             ->outputRow($sheet, $row++, 'Charset', $kernel->getCharset())
             ->outputRow($sheet, $row++, 'Intl Locale', $symfony->getLocaleName())
             ->outputRow($sheet, $row++, 'Timezone', $symfony->getTimeZone())
-            ->outputRowEnabled($sheet, $row++, 'Xdebug', $symfony->isXdebugEnabled(), $symfony->getXdebugStatus());
+            ->outputRowEnabled($sheet, $row++, 'Debug', $kernel->isDebug());
 
         $this->outputGroup($sheet, $row++, 'Extensions')
             ->outputRowEnabled($sheet, $row++, 'APCu', $symfony->isApcuEnabled(), $symfony->getApcuStatus())
-            ->outputRowEnabled($sheet, $row++, 'Debug', $kernel->isDebug())
+            ->outputRowEnabled($sheet, $row++, 'Xdebug', $symfony->isXdebugEnabled(), $symfony->getXdebugStatus())
             ->outputRowEnabled($sheet, $row++, 'OPCache', $symfony->isOpCacheEnabled(), $symfony->getOpCacheStatus());
 
         $this->outputGroup($sheet, $row++, 'Directories')

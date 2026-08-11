@@ -918,7 +918,6 @@ form:has(.alert-submit) {
 .alert-submit {
     left: 50%;
     transform: translate(-50%, -50%);
-    text-align: center;
     position: absolute;
     z-index: 1000;
 }

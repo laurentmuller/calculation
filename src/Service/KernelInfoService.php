@@ -112,6 +112,14 @@ readonly class KernelInfoService
     }
 
     /**
+     * @return class-string<KernelInterface>
+     */
+    public function getType(): string
+    {
+        return $this->kernel::class;
+    }
+
+    /**
      * Gets if debug mode is enabled.
      */
     public function isDebug(): bool

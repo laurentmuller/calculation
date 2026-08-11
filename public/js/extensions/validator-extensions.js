@@ -450,8 +450,9 @@
             showSubmit: function () {
                 const $this = $(this);
                 const settings = {
+                    role: 'alert',
                     text: $this.data('save') || $this.find('.card-title').text(),
-                    alertClass: 'alert alert-submit border border-secondary-subtle bg-body-secondary',
+                    class: 'alert alert-light alert-submit text-center',
                     css: {},
                 };
 
@@ -464,13 +465,11 @@
                 if (window.innerHeight < $this.height()) {
                     settings.css.top = '25%';
                 } else {
-                    settings.alertClass += ' top-50';
+                    settings.class += ' top-50';
                 }
 
                 // build and show alert
-                const $alert = $('<div />', {
-                    class: settings.alertClass, text: settings.text, css: settings.css, role: 'alert',
-                });
+                const $alert = $('<div />', settings);
                 const $icon = $('<i />', {
                     class: 'fa-solid fa-spinner fa-spin me-2'
                 });

@@ -26,8 +26,8 @@
         </tr>
         {{ rowInfo('application.name'|trans, app_name) }}
         {{ rowInfo('application.version'|trans, app_version) }}
-        {{ rowInfo('application.description'|trans, app_description) }}
         {% if full_info %}
+            {{ rowInfo('application.description'|trans, app_description) }}
             {{ rowInfo('application.environment'|trans, app_env|trans) }}
             {{ rowInfo('application.mode'|trans, app_mode|trans) }}
             {{ rowInfo('application.deploy'|trans, deploy|locale_datetime('long')) }}

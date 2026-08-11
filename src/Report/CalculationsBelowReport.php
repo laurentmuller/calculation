@@ -24,7 +24,7 @@ use fpdf\Enums\PdfOrientation;
 use fpdf\Enums\PdfTextAlignment;
 
 /**
- * Report for the list of calculations with margin below.
+ * Report for the list of calculations with a margin below.
  *
  * @phpstan-import-type ExportType from CalculationRepository
  */
@@ -35,7 +35,7 @@ class CalculationsBelowReport extends AbstractReport
     /** The number of calculations */
     private int $count = 0;
 
-    /** The sum of items calculations. */
+    /** The sum of items. */
     private float $items = 0.0;
 
     /** The sum of overall calculations. */

@@ -93,7 +93,7 @@ class OpenWeatherService extends AbstractHttpClientService
     /** The 16 days / daily forecast URI. */
     private const string URI_DAILY = 'forecast/daily';
 
-    /** The 5 days / 3 hours forecast URI. */
+    /** The 5 days / 3-hours forecast URI. */
     private const string URI_FORECAST = 'forecast';
 
     /** One call condition URI. */
@@ -117,7 +117,7 @@ class OpenWeatherService extends AbstractHttpClientService
     }
 
     /**
-     * Returns the current, the hourly and daily forecasts
+     * Returns the current, the hourly, and the daily forecasts
      * conditions data for a specific location.
      *
      * @param int              $id    the city identifier
@@ -269,7 +269,7 @@ class OpenWeatherService extends AbstractHttpClientService
     }
 
     /**
-     * Returns the current, the hourly and daily forecasts conditions data for a specific location.
+     * Returns the current, the hourly, and the daily forecasts conditions data for a specific location.
      *
      * @return array{current: array|false, forecast: array|false, daily: array|false}
      */
@@ -383,7 +383,8 @@ class OpenWeatherService extends AbstractHttpClientService
         foreach ($data as $key => $value) {
             if ('timezone' === $key) {
                 return (int) $value;
-            } elseif (\is_array($value)) {
+            }
+            if (\is_array($value)) {
                 $timeZone = $this->findTimezoneOffset($value);
                 if (0 !== $timeZone) {
                     return $timeZone;

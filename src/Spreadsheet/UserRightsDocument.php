@@ -82,15 +82,14 @@ class UserRightsDocument extends AbstractArrayDocument
      */
     private function getEntityNames(RoleInterface $role): array
     {
-        $names = $this->removeValue(EntityName::sorted(), EntityName::LOG);
-        if (!$role->isAdmin()) {
-            $names = $this->removeValue($names, EntityName::USER);
-        }
-        if (!$this->parameters->isDebug()) {
-            $names = $this->removeValue($names, EntityName::CUSTOMER);
-        }
-
-        return $names;
+        return $this->getFiltered(EntityName::sorted(), function (EntityName $name) use ($role): bool {
+            return match ($name) {
+                EntityName::LOG => false,
+                EntityName::USER => $role->isAdmin(),
+                EntityName::CUSTOMER => $this->parameters->isDebug(),
+                default => true,
+            };
+        });
     }
 
     /**

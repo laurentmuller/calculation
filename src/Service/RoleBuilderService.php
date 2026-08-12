@@ -75,7 +75,10 @@ class RoleBuilderService
     public function getUserRole(): Role
     {
         $role = new Role(RoleInterface::ROLE_USER);
-        $role->setPermission(EntityName::CALCULATION, EntityPermission::getAllPermission());
+        $role->setPermission(
+            EntityName::CALCULATION,
+            EntityPermission::getAllPermission()
+        );
         $role->setPermissions(
             EntityPermission::getDefaultPermission(),
             EntityName::CALCULATION_STATE,

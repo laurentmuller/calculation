@@ -73,11 +73,6 @@ readonly class RouteInfoService
         return \array_filter($this->getRoutes(), static fn (array $route): bool => $debug === $route['debug']);
     }
 
-    private function isDebugRoute(string $name): bool
-    {
-        return '_' === $name[0] && !\str_starts_with($name, '_logout_');
-    }
-
     /**
      * @phpstan-return array<string, RouteType>
      */
@@ -105,11 +100,15 @@ readonly class RouteInfoService
      */
     private function parseRoute(string $name, Route $route): array
     {
+        $path = $route->getPath();
+        $debug = \str_starts_with($path, '/_');
+        $methods = $this->parseMethod($route);
+
         return [
             'name' => $name,
-            'path' => $route->getPath(),
-            'debug' => $this->isDebugRoute($name),
-            'methods' => $this->parseMethod($route),
+            'path' => $path,
+            'debug' => $debug,
+            'methods' => $methods,
         ];
     }
 }

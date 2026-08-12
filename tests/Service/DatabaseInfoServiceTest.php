@@ -21,8 +21,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-use function PHPUnit\Framework\assertSame;
-
 final class DatabaseInfoServiceTest extends TestCase
 {
     private const array PARAMS = [
@@ -141,7 +139,7 @@ final class DatabaseInfoServiceTest extends TestCase
         $manager = $this->createEntityManagerWithException();
         $service = new DatabaseInfoService($manager);
         $actual = $service->getVersion();
-        self:assertSame('Unknown', $actual);
+        self::assertSame('Unknown', $actual);
     }
 
     private function createEntityManager(array $values = []): EntityManagerInterface

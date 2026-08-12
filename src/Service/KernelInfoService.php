@@ -112,6 +112,8 @@ readonly class KernelInfoService
     }
 
     /**
+     * Gets the kernel type.
+     *
      * @return class-string<KernelInterface>
      */
     public function getType(): string
@@ -120,7 +122,7 @@ readonly class KernelInfoService
     }
 
     /**
-     * Gets if debug mode is enabled.
+     * Gets a value indicating if debug mode is enabled.
      */
     public function isDebug(): bool
     {
@@ -133,17 +135,13 @@ readonly class KernelInfoService
     private function getDirectoryInfo(string $name, string $path): array
     {
         $path = FileUtils::normalize($path);
+        $relative = FileUtils::makePathRelative($path, $this->projectDir);
 
         return [
             'name' => $name,
             'path' => $path,
-            'relative' => $this->makePathRelative($path),
+            'relative' => $relative,
             'size' => FileUtils::formatSize($path),
         ];
-    }
-
-    private function makePathRelative(string $endPath): string
-    {
-        return \rtrim(FileUtils::makePathRelative($endPath, $this->projectDir), '/src');
     }
 }

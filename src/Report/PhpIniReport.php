@@ -15,9 +15,12 @@ namespace App\Report;
 
 use App\Interfaces\DocumentHelperInterface;
 use App\Pdf\Colors\PdfTextColor;
+use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
+use App\Pdf\Traits\PdfBooleanCellTrait;
+use App\Service\FontAwesomeCellService;
 use App\Service\PhpInfoService;
 use App\Traits\ClosureSortTrait;
 
@@ -30,9 +33,15 @@ use App\Traits\ClosureSortTrait;
 class PhpIniReport extends AbstractReport
 {
     use ClosureSortTrait;
+    use PdfBooleanCellTrait;
 
-    public function __construct(DocumentHelperInterface $helper, private readonly PhpInfoService $service)
-    {
+    private ?PdfStyle $noValueStyle = null;
+
+    public function __construct(
+        DocumentHelperInterface $helper,
+        private readonly PhpInfoService $service,
+        private readonly FontAwesomeCellService $cellService
+    ) {
         parent::__construct($helper);
         $this->setTranslatedTitle('about.php.title');
         $file = \php_ini_loaded_file();
@@ -79,26 +88,44 @@ class PhpIniReport extends AbstractReport
             )->outputHeaders();
     }
 
-    private function getCellStyle(string $value): ?PdfStyle
+    private function getNoValueStyle(): PdfStyle
     {
-        $color = null;
-        $noValue = $this->service->isNoValue($value);
-        if ($this->service->isColor($value)) {
+        return $this->noValueStyle ??= PdfStyle::getCellStyle()
+            ->setTextColor(PdfTextColor::darkGray())
+            ->setFontItalic(true);
+    }
+
+    /**
+     * @param positive-int $cols
+     */
+    private function getValueCell(string $value, int $cols = 1): PdfCell
+    {
+        if ($this->service->isColorValue($value)) {
+            /** @var PdfTextColor $color */
             $color = PdfTextColor::create($value);
-        } elseif ($noValue || $this->service->isDisabled($value)) {
-            $color = PdfTextColor::darkGray();
-        }
-        if (!$color instanceof PdfTextColor) {
-            return null;
+            $style = PdfStyle::getCellStyle()
+                ->setTextColor($color);
+
+            return PdfCell::instance(text: $value, cols: $cols, style: $style);
         }
 
-        $style = PdfStyle::getCellStyle()
-            ->setTextColor($color);
-        if ($noValue) {
-            $style->setFontItalic(true);
+        if ($this->service->isNoValue($value)) {
+            return PdfCell::instance(text: $value, cols: $cols, style: $this->getNoValueStyle());
         }
 
-        return $style;
+        if ($this->service->isRedactedValue($value)) {
+            return PdfCell::instance(text: $value, cols: $cols, style: $this->getBooleanStyle(false));
+        }
+
+        if ($this->service->isEnabledValue($value)) {
+            return $this->getBooleanCell(true, $value, $cols);
+        }
+
+        if ($this->service->isDisabledValue($value)) {
+            return $this->getBooleanCell(false, $value, $cols);
+        }
+
+        return PdfCell::instance(text: $value, cols: $cols);
     }
 
     /**
@@ -108,11 +135,11 @@ class PhpIniReport extends AbstractReport
     {
         $local = $this->convert($entryValue['local']);
         $master = $this->convert($entryValue['master']);
-        $table->startRow()
-            ->add($keyValue)
-            ->add($local, style: $this->getCellStyle($local))
-            ->add($master, style: $this->getCellStyle($master))
-            ->endRow();
+        $table->addRow(
+            $keyValue,
+            $this->getValueCell($local),
+            $this->getValueCell($master)
+        );
     }
 
     /**
@@ -139,10 +166,10 @@ class PhpIniReport extends AbstractReport
     private function outputSingleEntry(PdfGroupTable $table, string $keyValue, float|int|string $entryValue): void
     {
         $value = $this->convert($entryValue);
-        $table->startRow()
-            ->add($keyValue)
-            ->add($value, 2, $this->getCellStyle($value))
-            ->endRow();
+        $table->addRow(
+            $keyValue,
+            $this->getValueCell($value, 2)
+        );
     }
 
     /**

@@ -68,9 +68,9 @@ class PhpIniDocument extends AbstractDocument
     {
         $color = null;
         $noValue = $this->service->isNoValue($value);
-        if ($this->service->isColor($value)) {
+        if ($this->service->isColorValue($value)) {
             $color = \substr($value, 1);
-        } elseif ($noValue || $this->service->isDisabled($value)) {
+        } elseif ($noValue || $this->service->isDisabledValue($value)) {
             $color = '7F7F7F';
         }
         if (null === $color) {

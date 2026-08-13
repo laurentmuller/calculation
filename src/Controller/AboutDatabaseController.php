@@ -21,6 +21,7 @@ use App\Report\DatabaseReport;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Service\DatabaseInfoService;
+use App\Service\FontAwesomeCellService;
 use App\Spreadsheet\DatabaseDocument;
 use App\Traits\RenderPdfDocumentTrait;
 use App\Traits\RenderSpreadsheetDocumentTrait;
@@ -52,8 +53,8 @@ class AboutDatabaseController extends AbstractController
     }
 
     #[PdfRoute]
-    public function pdf(DatabaseInfoService $service): PdfResponse
+    public function pdf(DatabaseInfoService $service, FontAwesomeCellService $cellService): PdfResponse
     {
-        return $this->renderPdfDocument(new DatabaseReport($this, $service));
+        return $this->renderPdfDocument(new DatabaseReport($this, $service, $cellService));
     }
 }

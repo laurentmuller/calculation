@@ -16,6 +16,7 @@ namespace App\Tests\Report;
 use App\Interfaces\DocumentHelperInterface;
 use App\Report\DatabaseReport;
 use App\Service\DatabaseInfoService;
+use App\Service\FontAwesomeCellService;
 use PHPUnit\Framework\TestCase;
 
 final class DatabaseReportTest extends TestCase
@@ -62,6 +63,7 @@ final class DatabaseReportTest extends TestCase
     private function createDocument(array $database, array $configuration): DatabaseReport
     {
         $helper = self::createStub(DocumentHelperInterface::class);
+        $cellService = self::createStub(FontAwesomeCellService::class);
         $service = self::createStub(DatabaseInfoService::class);
         $service->method('getDatabase')
             ->willReturn($database);
@@ -72,6 +74,6 @@ final class DatabaseReportTest extends TestCase
         $service->method('isDisabledValue')
             ->willReturnCallback(static fn (string $value): bool => 'off' === $value);
 
-        return new DatabaseReport($helper, $service);
+        return new DatabaseReport($helper, $service, $cellService);
     }
 }

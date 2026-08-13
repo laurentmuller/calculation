@@ -14,22 +14,26 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Interfaces\DocumentHelperInterface;
-use App\Pdf\Colors\PdfTextColor;
+use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
+use App\Pdf\Traits\PdfBooleanCellTrait;
 use App\Service\DatabaseInfoService;
+use App\Service\FontAwesomeCellService;
 
 /**
  * Report containing database configuration.
  */
 class DatabaseReport extends AbstractReport
 {
-    private ?PdfStyle $disableStyle = null;
-    private ?PdfStyle $enableStyle = null;
+    use PdfBooleanCellTrait;
 
-    public function __construct(DocumentHelperInterface $helper, private readonly DatabaseInfoService $service)
-    {
+    public function __construct(
+        DocumentHelperInterface $helper,
+        private readonly DatabaseInfoService $service,
+        protected readonly FontAwesomeCellService $cellService
+    ) {
         parent::__construct($helper);
         $this->setTranslatedTitle('about.database.title');
     }
@@ -56,16 +60,16 @@ class DatabaseReport extends AbstractReport
         return true;
     }
 
-    private function getStyle(string $value): ?PdfStyle
+    private function getValueCell(string $value): PdfCell
     {
         if ($this->service->isEnabledValue($value)) {
-            return $this->enableStyle ??= PdfStyle::getCellStyle()->setTextColor(PdfTextColor::darkGreen());
+            return $this->getBooleanCell(true, $value);
         }
         if ($this->service->isDisabledValue($value)) {
-            return $this->disableStyle ??= PdfStyle::getCellStyle()->setTextColor(PdfTextColor::darkGray());
+            return $this->getBooleanCell(false, $value);
         }
 
-        return null;
+        return PdfCell::instance($value);
     }
 
     /**
@@ -79,10 +83,7 @@ class DatabaseReport extends AbstractReport
 
         $table->singleLine($title, PdfStyle::getHeaderStyle());
         foreach ($values as $key => $value) {
-            $table->startRow()
-                ->add(text: $key)
-                ->add(text: $value, style: $this->getStyle($value))
-                ->endRow();
+            $table->addRow($key, $this->getValueCell($value));
         }
     }
 }

@@ -14,14 +14,15 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Interfaces\DocumentHelperInterface;
-use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Events\PdfCellTextEvent;
 use App\Pdf\Html\HtmlBootstrapColor;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
+use App\Pdf\Traits\PdfBooleanCellTrait;
 use App\Service\BundleInfoService;
+use App\Service\FontAwesomeCellService;
 use App\Service\KernelInfoService;
 use App\Service\PackageInfoService;
 use App\Service\RouteInfoService;
@@ -41,11 +42,10 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class SymfonyReport extends AbstractReport implements PdfDrawCellTextInterface
 {
+    use PdfBooleanCellTrait;
     use PdfRoundedRectangleTrait;
 
     private const string METHOD_SEPARATOR = '|';
-
-    private ?PdfStyle $style = null;
 
     public function __construct(
         DocumentHelperInterface $helper,
@@ -53,7 +53,8 @@ class SymfonyReport extends AbstractReport implements PdfDrawCellTextInterface
         private readonly KernelInfoService $kernelService,
         private readonly RouteInfoService $routeService,
         private readonly PackageInfoService $packageService,
-        private readonly SymfonyInfoService $symfonyService
+        private readonly SymfonyInfoService $symfonyService,
+        protected readonly FontAwesomeCellService $cellService,
     ) {
         parent::__construct($helper);
         $this->setTranslatedTitle('about.symfony.title');
@@ -135,15 +136,6 @@ class SymfonyReport extends AbstractReport implements PdfDrawCellTextInterface
         };
     }
 
-    private function getStyle(bool $enabled): ?PdfStyle
-    {
-        if ($enabled) {
-            return null;
-        }
-
-        return $this->style ??= PdfStyle::getCellStyle()->setTextColor(PdfTextColor::darkGray());
-    }
-
     private function halfLineBreak(): void
     {
         $this->lineBreak(self::LINE_HEIGHT / 2.0);
@@ -214,7 +206,7 @@ class SymfonyReport extends AbstractReport implements PdfDrawCellTextInterface
             ->outputRow($table, 'Charset', $kernel->getCharset())
             ->outputRow($table, 'Intl Locale', $symfony->getLocaleName())
             ->outputRow($table, 'Timezone', $symfony->getTimeZone())
-            ->outputRowEnabled($table, 'Debug', $kernel->isDebug());
+            ->outputRowEnabled($table, 'Debug', $kernel->isDebug(), $kernel->getDebugStatus());
 
         $this->addBookmark('Extensions', false, 1);
         $table->setGroupKey('Extensions');
@@ -293,12 +285,9 @@ class SymfonyReport extends AbstractReport implements PdfDrawCellTextInterface
 
     private function outputRowEnabled(PdfGroupTable $table, string $key, bool $enabled, ?string $text = null): self
     {
-        $style = $this->getStyle($enabled);
-        $text ??= $enabled ? SymfonyInfoService::LABEL_ENABLED : SymfonyInfoService::LABEL_DISABLED;
-        $table->startRow()
-            ->add($key)
-            ->add($text, style: $style)
-            ->endRow();
+        $text ??= $this->trans($enabled ? 'common.value_true' : 'common.value_false');
+        $cell = $this->getBooleanCell($enabled, $text);
+        $table->addRow($key, $cell);
 
         return $this;
     }

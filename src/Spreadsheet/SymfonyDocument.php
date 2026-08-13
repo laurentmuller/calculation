@@ -159,7 +159,7 @@ class SymfonyDocument extends AbstractDocument
             ->outputRow($sheet, $row++, 'Charset', $kernel->getCharset())
             ->outputRow($sheet, $row++, 'Intl Locale', $symfony->getLocaleName())
             ->outputRow($sheet, $row++, 'Timezone', $symfony->getTimeZone())
-            ->outputRowEnabled($sheet, $row++, 'Debug', $kernel->isDebug());
+            ->outputRowEnabled($sheet, $row++, 'Debug', $kernel->isDebug(), $kernel->getDebugStatus());
 
         $this->outputGroup($sheet, $row++, 'Extensions')
             ->outputRowEnabled($sheet, $row++, 'APCu', $symfony->isApcuEnabled(), $symfony->getApcuStatus())
@@ -252,7 +252,7 @@ class SymfonyDocument extends AbstractDocument
 
     private function outputRowEnabled(WorksheetDocument $sheet, int $row, string $key, bool $enabled, ?string $text = null): self
     {
-        $text ??= $enabled ? SymfonyInfoService::LABEL_ENABLED : SymfonyInfoService::LABEL_DISABLED;
+        $text ??= $this->trans($enabled ? 'common.value_true' : 'common.value_false');
 
         return $this->outputRow($sheet, $row, $key, $text);
     }

@@ -21,6 +21,7 @@ use App\Report\SymfonyReport;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Service\BundleInfoService;
+use App\Service\FontAwesomeCellService;
 use App\Service\KernelInfoService;
 use App\Service\PackageInfoService;
 use App\Service\RouteInfoService;
@@ -155,7 +156,8 @@ class AboutSymfonyController extends AbstractController
         KernelInfoService $kernelService,
         PackageInfoService $packageService,
         RouteInfoService $routeService,
-        SymfonyInfoService $symfonyService
+        SymfonyInfoService $symfonyService,
+        FontAwesomeCellService $cellService
     ): PdfResponse {
         $doc = new SymfonyReport(
             $this,
@@ -163,7 +165,8 @@ class AboutSymfonyController extends AbstractController
             $kernelService,
             $routeService,
             $packageService,
-            $symfonyService
+            $symfonyService,
+            $cellService
         );
 
         return $this->renderPdfDocument($doc);

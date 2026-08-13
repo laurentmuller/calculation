@@ -15,6 +15,7 @@ namespace App\Tests\Report;
 
 use App\Interfaces\DocumentHelperInterface;
 use App\Report\PhpIniReport;
+use App\Service\FontAwesomeCellService;
 use App\Service\PhpInfoService;
 use PHPUnit\Framework\TestCase;
 
@@ -50,6 +51,7 @@ final class PhpIniReportTest extends TestCase
     private function createReport(array $data): PhpIniReport
     {
         $helper = self::createStub(DocumentHelperInterface::class);
+        $cellService = self::createStub(FontAwesomeCellService::class);
         $service = self::createStub(PhpInfoService::class);
         $service->method('getVersion')
             ->willReturn(\PHP_VERSION);
@@ -57,9 +59,9 @@ final class PhpIniReportTest extends TestCase
             ->willReturn($data);
         $service->method('isNoValue')
             ->willReturnCallback(static fn (string $value): bool => 'no value' === $value);
-        $service->method('isColor')
+        $service->method('isColorValue')
             ->willReturnCallback(static fn (string $value): bool => \str_starts_with($value, '#'));
 
-        return new PhpIniReport($helper, $service);
+        return new PhpIniReport($helper, $service, $cellService);
     }
 }

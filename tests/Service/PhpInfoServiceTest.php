@@ -86,14 +86,14 @@ final class PhpInfoServiceTest extends TestCase
     #[DataProvider('getColors')]
     public function testIsColor(string $value, bool $expected): void
     {
-        $actual = $this->service->isColor($value);
+        $actual = $this->service->isColorValue($value);
         self::assertSame($expected, $actual);
     }
 
     #[DataProvider('getDisabledValues')]
     public function testIsDisabled(string $value, bool $expected): void
     {
-        $actual = $this->service->isDisabled($value);
+        $actual = $this->service->isDisabledValue($value);
         self::assertSame($expected, $actual);
     }
 

@@ -20,6 +20,7 @@ use App\Attribute\PdfRoute;
 use App\Report\PhpIniReport;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
+use App\Service\FontAwesomeCellService;
 use App\Service\PhpInfoService;
 use App\Spreadsheet\PhpIniDocument;
 use App\Traits\RenderPdfDocumentTrait;
@@ -57,8 +58,8 @@ class AboutPhpController extends AbstractController
     }
 
     #[PdfRoute]
-    public function pdf(PhpInfoService $service): PdfResponse
+    public function pdf(PhpInfoService $service, FontAwesomeCellService $cellService): PdfResponse
     {
-        return $this->renderPdfDocument(new PhpIniReport($this, $service));
+        return $this->renderPdfDocument(new PhpIniReport($this, $service, $cellService));
     }
 }

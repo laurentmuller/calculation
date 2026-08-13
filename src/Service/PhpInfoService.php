@@ -161,20 +161,29 @@ class PhpInfoService
     /**
      * Returns if the given value is a color.
      */
-    public function isColor(string $value): bool
+    public function isColorValue(string $value): bool
     {
         return StringUtils::pregMatch('/#[\da-f]{6}/i', $value);
     }
 
     /**
-     * Returns if the given value is equal to the redacted value or equal to one of this disabled values,
-     * ignoring case consideration.
+     * Returns if the given value is equal to one of these disabled values, ignoring case consideration.
      */
-    public function isDisabled(string $value): bool
+    public function isDisabledValue(string $value): bool
     {
         $value = \strtolower($value);
 
         return self::REDACTED === $value || \in_array($value, self::DISABLED, true);
+    }
+
+    /**
+     * Returns if the given value is equal to one of these enabeld values, ignoring case consideration.
+     */
+    public function isEnabledValue(string $value): bool
+    {
+        $value = \strtolower($value);
+
+        return \in_array($value, self::ENABLED, true);
     }
 
     /**
@@ -183,6 +192,14 @@ class PhpInfoService
     public function isNoValue(string $value): bool
     {
         return StringUtils::equalIgnoreCase('no value', $value);
+    }
+
+    /**
+     * Returns if the given value is equal to the redacted value, ignoring case consideration.
+     */
+    public function isRedactedValue(string $value): bool
+    {
+        return self::REDACTED === \strtolower($value);
     }
 
     private function convert(string $var): string|int|float

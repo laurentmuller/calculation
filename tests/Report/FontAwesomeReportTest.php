@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Report;
 
+use App\Enums\FontAwesomePath;
 use App\Interfaces\DocumentHelperInterface;
 use App\Model\FontAwesomeImage;
 use App\Model\ImageSize;
@@ -22,6 +23,27 @@ use PHPUnit\Framework\TestCase;
 
 final class FontAwesomeReportTest extends TestCase
 {
+    private array $directories = [];
+
+    #[\Override]
+    protected function setUp(): void
+    {
+        foreach (FontAwesomePath::cases() as $fontAwesomePath) {
+            $path = $fontAwesomePath->getPath();
+            if (!\is_dir($path) && \mkdir($path, 0o777, true)) {
+                $this->directories[] = $path;
+            }
+        }
+    }
+
+    #[\Override]
+    protected function tearDown(): void
+    {
+        foreach ($this->directories as $directory) {
+            \rmdir($directory);
+        }
+    }
+
     public function testRender(): void
     {
         $image = $this->createImage();

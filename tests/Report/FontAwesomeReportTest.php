@@ -20,6 +20,7 @@ use App\Model\ImageSize;
 use App\Report\FontAwesomeReport;
 use App\Service\FontAwesomeImageService;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Filesystem\Filesystem;
 
 final class FontAwesomeReportTest extends TestCase
 {
@@ -28,9 +29,14 @@ final class FontAwesomeReportTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
+        $imagePath = __DIR__ . '/../files/images/solid';
+
+        $fs = new Filesystem();
         foreach (FontAwesomePath::cases() as $fontAwesomePath) {
             $path = $fontAwesomePath->getPath();
-            if (!\is_dir($path) && \mkdir($path, 0o777, true)) {
+            if (!$fs->exists($path)) {
+                $fs->mkdir($path);
+                $fs->mirror($imagePath, $path);
                 $this->directories[] = $path;
             }
         }
@@ -39,8 +45,9 @@ final class FontAwesomeReportTest extends TestCase
     #[\Override]
     protected function tearDown(): void
     {
+        $fs = new Filesystem();
         foreach ($this->directories as $directory) {
-            \rmdir($directory);
+            $fs->remove($directory);
         }
     }
 

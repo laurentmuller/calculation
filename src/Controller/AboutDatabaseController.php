@@ -53,8 +53,8 @@ class AboutDatabaseController extends AbstractController
     }
 
     #[PdfRoute]
-    public function pdf(DatabaseInfoService $service, FontAwesomeCellService $cellService): PdfResponse
+    public function pdf(DatabaseInfoService $databaseService, FontAwesomeCellService $cellService): PdfResponse
     {
-        return $this->renderPdfDocument(new DatabaseReport($this, $service, $cellService));
+        return $this->renderPdfDocument(new DatabaseReport($this, $databaseService, $cellService));
     }
 }

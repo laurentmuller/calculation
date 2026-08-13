@@ -33,8 +33,10 @@ final class PhpIniReportTest extends TestCase
         $data = [
             'First Group' => [
                 'single' => 'single',
+                'enabled' => 'enabled',
                 'disabled' => 'disabled',
                 'no value' => 'no value',
+                'redacted' => '********',
                 'entry' => ['local' => 'local', 'master' => 'master'],
                 'color' => ['local' => '#FF8000', 'master' => '#0000BB'],
             ],
@@ -52,16 +54,22 @@ final class PhpIniReportTest extends TestCase
     {
         $helper = self::createStub(DocumentHelperInterface::class);
         $cellService = self::createStub(FontAwesomeCellService::class);
-        $service = self::createStub(PhpInfoService::class);
-        $service->method('getVersion')
+        $infoService = self::createStub(PhpInfoService::class);
+        $infoService->method('getVersion')
             ->willReturn(\PHP_VERSION);
-        $service->method('asArray')
+        $infoService->method('asArray')
             ->willReturn($data);
-        $service->method('isNoValue')
+        $infoService->method('isEnabledValue')
+            ->willReturnCallback(static fn (string $value): bool => 'enabled' === $value);
+        $infoService->method('isDisabledValue')
+            ->willReturnCallback(static fn (string $value): bool => 'disabled' === $value);
+        $infoService->method('isNoValue')
             ->willReturnCallback(static fn (string $value): bool => 'no value' === $value);
-        $service->method('isColorValue')
+        $infoService->method('isRedactedValue')
+            ->willReturnCallback(static fn (string $value): bool => '********' === $value);
+        $infoService->method('isColorValue')
             ->willReturnCallback(static fn (string $value): bool => \str_starts_with($value, '#'));
 
-        return new PhpIniReport($helper, $service, $cellService);
+        return new PhpIniReport($helper, $infoService, $cellService);
     }
 }

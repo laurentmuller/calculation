@@ -39,7 +39,7 @@ class PhpIniReport extends AbstractReport
 
     public function __construct(
         DocumentHelperInterface $helper,
-        private readonly PhpInfoService $service,
+        private readonly PhpInfoService $infoService,
         private readonly FontAwesomeCellService $cellService
     ) {
         parent::__construct($helper);
@@ -55,7 +55,7 @@ class PhpIniReport extends AbstractReport
     {
         $this->addPage();
 
-        $content = $this->service->asArray();
+        $content = $this->infoService->asArray();
         if ([] === $content) {
             $this->cell(text: $this->trans('about.load.error'));
 
@@ -63,7 +63,7 @@ class PhpIniReport extends AbstractReport
         }
 
         $table = $this->createTable();
-        $this->outputSingleEntry($table, 'Version', $this->service->getVersion());
+        $this->outputSingleEntry($table, 'Version', $this->infoService->getVersion());
         foreach ($content as $key => $entries) {
             $this->outputEntries($table, $key, $entries);
         }
@@ -100,7 +100,7 @@ class PhpIniReport extends AbstractReport
      */
     private function getValueCell(string $value, int $cols = 1): PdfCell
     {
-        if ($this->service->isColorValue($value)) {
+        if ($this->infoService->isColorValue($value)) {
             /** @var PdfTextColor $color */
             $color = PdfTextColor::create($value);
             $style = PdfStyle::getCellStyle()
@@ -109,19 +109,19 @@ class PhpIniReport extends AbstractReport
             return PdfCell::instance(text: $value, cols: $cols, style: $style);
         }
 
-        if ($this->service->isNoValue($value)) {
+        if ($this->infoService->isNoValue($value)) {
             return PdfCell::instance(text: $value, cols: $cols, style: $this->getNoValueStyle());
         }
 
-        if ($this->service->isRedactedValue($value)) {
+        if ($this->infoService->isRedactedValue($value)) {
             return PdfCell::instance(text: $value, cols: $cols, style: $this->getBooleanStyle(false));
         }
 
-        if ($this->service->isEnabledValue($value)) {
+        if ($this->infoService->isEnabledValue($value)) {
             return $this->getBooleanCell(true, $value, $cols);
         }
 
-        if ($this->service->isDisabledValue($value)) {
+        if ($this->infoService->isDisabledValue($value)) {
             return $this->getBooleanCell(false, $value, $cols);
         }
 

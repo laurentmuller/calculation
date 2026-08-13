@@ -34,46 +34,46 @@ final class DatabaseReportTest extends TestCase
 
     public function testRenderEmpty(): void
     {
-        $document = $this->createDocument([], []);
+        $document = $this->createReport([], []);
         $actual = $document->render();
         self::assertFalse($actual);
     }
 
     public function testRenderNoConfiguration(): void
     {
-        $document = $this->createDocument(self::DATABASE, []);
+        $document = $this->createReport(self::DATABASE, []);
         $actual = $document->render();
         self::assertTrue($actual);
     }
 
     public function testRenderNoDatabase(): void
     {
-        $document = $this->createDocument([], self::CONFIGURATION);
+        $document = $this->createReport([], self::CONFIGURATION);
         $actual = $document->render();
         self::assertTrue($actual);
     }
 
     public function testRenderSuccess(): void
     {
-        $document = $this->createDocument(self::DATABASE, self::CONFIGURATION);
+        $document = $this->createReport(self::DATABASE, self::CONFIGURATION);
         $actual = $document->render();
         self::assertTrue($actual);
     }
 
-    private function createDocument(array $database, array $configuration): DatabaseReport
+    private function createReport(array $database, array $configuration): DatabaseReport
     {
         $helper = self::createStub(DocumentHelperInterface::class);
         $cellService = self::createStub(FontAwesomeCellService::class);
-        $service = self::createStub(DatabaseInfoService::class);
-        $service->method('getDatabase')
+        $databaseService = self::createStub(DatabaseInfoService::class);
+        $databaseService->method('getDatabase')
             ->willReturn($database);
-        $service->method('getConfiguration')
+        $databaseService->method('getConfiguration')
             ->willReturn($configuration);
-        $service->method('isEnabledValue')
+        $databaseService->method('isEnabledValue')
             ->willReturnCallback(static fn (string $value): bool => 'on' === $value);
-        $service->method('isDisabledValue')
+        $databaseService->method('isDisabledValue')
             ->willReturnCallback(static fn (string $value): bool => 'off' === $value);
 
-        return new DatabaseReport($helper, $service, $cellService);
+        return new DatabaseReport($helper, $databaseService, $cellService);
     }
 }

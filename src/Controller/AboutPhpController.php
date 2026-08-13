@@ -58,8 +58,8 @@ class AboutPhpController extends AbstractController
     }
 
     #[PdfRoute]
-    public function pdf(PhpInfoService $service, FontAwesomeCellService $cellService): PdfResponse
+    public function pdf(PhpInfoService $infoService, FontAwesomeCellService $cellService): PdfResponse
     {
-        return $this->renderPdfDocument(new PhpIniReport($this, $service, $cellService));
+        return $this->renderPdfDocument(new PhpIniReport($this, $infoService, $cellService));
     }
 }

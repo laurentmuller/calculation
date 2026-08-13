@@ -46,10 +46,27 @@ final class PhpInfoServiceTest extends TestCase
         yield ['fake', false];
     }
 
+    public static function getEnabledValues(): \Generator
+    {
+        yield ['active', true];
+        yield ['ON', true];
+        yield ['on', true];
+        yield ['yes', true];
+        yield ['enabled', true];
+        yield ['supported', true];
+        yield ['fake', false];
+    }
+
     public static function getNoValues(): \Generator
     {
         yield ['no value', true];
         yield ['NO VALUE', true];
+        yield ['fake', false];
+    }
+
+    public static function getRedactedValues(): \Generator
+    {
+        yield ['********', true];
         yield ['fake', false];
     }
 
@@ -97,10 +114,24 @@ final class PhpInfoServiceTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    #[DataProvider('getEnabledValues')]
+    public function testIsEnabled(string $value, bool $expected): void
+    {
+        $actual = $this->service->isEnabledValue($value);
+        self::assertSame($expected, $actual);
+    }
+
     #[DataProvider('getNoValues')]
     public function testIsNoValue(string $value, bool $expected): void
     {
         $actual = $this->service->isNoValue($value);
+        self::assertSame($expected, $actual);
+    }
+
+    #[DataProvider('getRedactedValues')]
+    public function testIsRedactedValue(string $value, bool $expected): void
+    {
+        $actual = $this->service->isRedactedValue($value);
         self::assertSame($expected, $actual);
     }
 }

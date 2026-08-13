@@ -171,9 +171,7 @@ class PhpInfoService
      */
     public function isDisabledValue(string $value): bool
     {
-        $value = \strtolower($value);
-
-        return self::REDACTED === $value || \in_array($value, self::DISABLED, true);
+        return \in_array(\strtolower($value), self::DISABLED, true);
     }
 
     /**
@@ -181,9 +179,7 @@ class PhpInfoService
      */
     public function isEnabledValue(string $value): bool
     {
-        $value = \strtolower($value);
-
-        return \in_array($value, self::ENABLED, true);
+        return \in_array(\strtolower($value), self::ENABLED, true);
     }
 
     /**

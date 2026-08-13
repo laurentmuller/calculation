@@ -31,7 +31,7 @@ class DatabaseReport extends AbstractReport
 
     public function __construct(
         DocumentHelperInterface $helper,
-        private readonly DatabaseInfoService $service,
+        private readonly DatabaseInfoService $databaseService,
         protected readonly FontAwesomeCellService $cellService
     ) {
         parent::__construct($helper);
@@ -41,8 +41,8 @@ class DatabaseReport extends AbstractReport
     #[\Override]
     public function render(): bool
     {
-        $database = $this->service->getDatabase();
-        $configuration = $this->service->getConfiguration();
+        $database = $this->databaseService->getDatabase();
+        $configuration = $this->databaseService->getConfiguration();
         if ([] === $database && [] === $configuration) {
             return false;
         }
@@ -62,10 +62,10 @@ class DatabaseReport extends AbstractReport
 
     private function getValueCell(string $value): PdfCell
     {
-        if ($this->service->isEnabledValue($value)) {
+        if ($this->databaseService->isEnabledValue($value)) {
             return $this->getBooleanCell(true, $value);
         }
-        if ($this->service->isDisabledValue($value)) {
+        if ($this->databaseService->isDisabledValue($value)) {
             return $this->getBooleanCell(false, $value);
         }
 

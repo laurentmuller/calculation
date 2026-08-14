@@ -55,6 +55,7 @@
         "phpoffice/phpword": "^1.0",
         "phpstan/phpdoc-parser": "^2.0",
         "robquistnl/simplehtmltotext": "^1.0",
+        "stechstudio/phpinfo": "^1.0",
         "symfony/asset": "7.4.*",
         "symfony/console": "7.4.*",
         "symfony/dotenv": "7.4.*",

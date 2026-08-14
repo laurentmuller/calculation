@@ -14,6 +14,11 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Utils\StringUtils;
+use STS\Phpinfo\Info;
+use STS\Phpinfo\Models\Config;
+use STS\Phpinfo\Models\Group;
+use STS\Phpinfo\Models\Module;
+use STS\Phpinfo\PhpInfo;
 
 /**
  * Utility class to get PHP information.
@@ -21,6 +26,35 @@ use App\Utils\StringUtils;
  * @phpstan-type ValueType = float|int|string
  * @phpstan-type EntryType = array{local: ValueType, master: ValueType}|ValueType
  * @phpstan-type EntriesType = array<string, array<string, EntryType>>
+ * @phpstan-type ValueEntryType = array{
+ *     value: string,
+ *     color: bool,
+ *     no_value: bool,
+ *     redacted: bool,
+ *     enabled: bool,
+ *     disabled: bool
+ * }
+ * @phpstan-type ConfigType = array{
+ *     name: string,
+ *     local: ValueEntryType,
+ *     master: ValueEntryType|null
+ * }
+ * @phpstan-type GroupType = array{
+ *     name: string|null,
+ *     note: string|null,
+ *     headings: string[]|null,
+ *     configs: ConfigType[]
+ * }
+ * @phpstan-type ModuleType = array{
+ *     name: string,
+ *     groups: GroupType[]
+ * }
+ * @phpstan-type PhpInfoType = array{
+ *     version: string,
+ *     hostname: string|null,
+ *     os: string|null,
+ *     modules: ModuleType[]
+ * }
  */
 class PhpInfoService
 {
@@ -151,6 +185,25 @@ class PhpInfoService
     }
 
     /**
+     * @return PhpInfo|PhpInfoType
+     */
+    public function getPhpInfo(): PhpInfo|array
+    {
+        $info = Info::capture();
+        $modules = \array_map(
+            fn (Module $module): array => $this->parseModule($module),
+            $info->modules()->toArray()
+        );
+
+        return [
+            'version' => $info->version(),
+            'hostname' => $info->hostname(),
+            'os' => $info->os(),
+            'modules' => $modules,
+        ];
+    }
+
+    /**
      * Gets the PHP version.
      */
     public function getVersion(): string
@@ -175,7 +228,7 @@ class PhpInfoService
     }
 
     /**
-     * Returns if the given value is equal to one of these enabeld values, ignoring case consideration.
+     * Returns if the given value is equal to one of these enabled values, ignoring case consideration.
      */
     public function isEnabledValue(string $value): bool
     {
@@ -217,6 +270,109 @@ class PhpInfoService
         }
 
         return \str_replace('\\', '/', $var);
+    }
+
+    /**
+     * @return ConfigType
+     */
+    private function parseConfig(Config $config): array
+    {
+        $name = $config->name();
+        $localValue = $config->localValue() ?? 'No value';
+        $masterValue = $config->masterValue() ?? 'No value';
+        $localConfig = $this->parseValue($name, $localValue);
+        $masterConfig = $config->hasMasterValue() ? $this->parseValue($name, $masterValue) : null;
+
+        return [
+            'name' => $name,
+            'local' => $localConfig,
+            'master' => $masterConfig,
+        ];
+    }
+
+    /**
+     * @return GroupType
+     */
+    private function parseGroup(Group $group): array
+    {
+        $configs = \array_map(
+            fn (Config $config): array => $this->parseConfig($config),
+            $group->configs()->toArray()
+        );
+
+        return [
+            'name' => $group->name(),
+            'note' => $this->parseNote($group),
+            'headings' => $this->parseHeadings($group),
+            'configs' => $configs,
+        ];
+    }
+
+    /**
+     * @return string[]|null
+     */
+    private function parseHeadings(Group $group): ?array
+    {
+        if (!$group->hasHeadings()) {
+            return null;
+        }
+
+        return \array_map(static fn (mixed $heading): string => (string) $heading, $group->headings()->toArray());
+    }
+
+    /**
+     * @return ModuleType
+     */
+    private function parseModule(Module $module): array
+    {
+        $groups = \array_map(
+            fn (Group $group): array => $this->parseGroup($group),
+            $module->groups()->toArray()
+        );
+
+        return [
+            'name' => $module->name(),
+            'groups' => $groups,
+        ];
+    }
+
+    private function parseNote(Group $group): ?string
+    {
+        $note = $group->note();
+        if (StringUtils::isString($note)) {
+            return \str_replace(["\r\n", "\r", "\n"], ' ', $note);
+        }
+
+        return null;
+    }
+
+    /**
+     * @return ValueEntryType
+     */
+    private function parseValue(string $name, string $value): array
+    {
+        $keys = ['_KEY', '_USER_NAME', 'APP_SECRET', '_PASSWORD', 'MAILER_DSN', 'DATABASE_URL'];
+        foreach ($keys as $key) {
+            if (\str_contains($name, $key)) {
+                $value = self::REDACTED;
+                break;
+            }
+        }
+        if ('(none)' === $value) {
+            $value = 'None';
+        }
+        if ($this->isEnabledValue($value) || $this->isDisabledValue($value)) {
+            $value = StringUtils::capitalize($value);
+        }
+
+        return [
+            'value' => $value,
+            'color' => $this->isColorValue($value),
+            'no_value' => $this->isNoValue($value),
+            'redacted' => self::REDACTED === $value,
+            'enabled' => $this->isEnabledValue($value),
+            'disabled' => $this->isDisabledValue($value),
+        ];
     }
 
     private function updateContent(string $content): string

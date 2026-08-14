@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9578b887544eacfde7585e72b4d5e98f",
+    "content-hash": "9205565e54d789913a29d8a672f5bb8a",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -3483,6 +3483,62 @@
                 "source": "https://github.com/RobQuistNL/SimpleHtmlToText/tree/v1.1.1"
             },
             "time": "2016-11-24T15:02:44+00:00"
+        },
+        {
+            "name": "stechstudio/phpinfo",
+            "version": "1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stechstudio/phpinfo.git",
+                "reference": "87a913db268b566aec2670a40bf158433688b190"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stechstudio/phpinfo/zipball/87a913db268b566aec2670a40bf158433688b190",
+                "reference": "87a913db268b566aec2670a40bf158433688b190",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "php": "^8.3"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.29",
+                "pestphp/pest": "^4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "helpers.php"
+                ],
+                "psr-4": {
+                    "STS\\Phpinfo\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Joseph Szobody",
+                    "email": "joseph@stechstudio.com"
+                }
+            ],
+            "description": "A beautiful, searchable replacement for phpinfo() with a clean programmatic API",
+            "homepage": "https://prettyphpinfo.com",
+            "keywords": [
+                "configuration",
+                "php-info",
+                "phpinfo",
+                "pretty-phpinfo",
+                "server-info"
+            ],
+            "support": {
+                "issues": "https://github.com/stechstudio/phpinfo/issues",
+                "source": "https://github.com/stechstudio/phpinfo"
+            },
+            "time": "2026-04-06T18:53:01+00:00"
         },
         {
             "name": "symfony/asset",

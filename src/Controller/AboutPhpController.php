@@ -26,6 +26,7 @@ use App\Spreadsheet\PhpIniDocument;
 use App\Traits\RenderPdfDocumentTrait;
 use App\Traits\RenderSpreadsheetDocumentTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
@@ -61,5 +62,11 @@ class AboutPhpController extends AbstractController
     public function pdf(PhpInfoService $infoService, FontAwesomeCellService $cellService): PdfResponse
     {
         return $this->renderPdfDocument(new PhpIniReport($this, $infoService, $cellService));
+    }
+
+    #[GetRoute(path: '/phpinfo', name: 'phpinfo')]
+    public function phpinfo(PhpInfoService $service): Response
+    {
+        return $this->render('about/about_phpinfo.html.twig', ['info' => $service->getPhpInfo()]);
     }
 }

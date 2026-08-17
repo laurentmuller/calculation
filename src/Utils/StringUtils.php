@@ -68,6 +68,19 @@ final class StringUtils
     }
 
     /**
+     * Determine if a string contains a given substring, ignoring case consideration.
+     *
+     * @param string $haystack the string to search in
+     * @param string $needle   the substring to search for
+     *
+     * @return bool true if the string contains the substring; false otherwise
+     */
+    public static function containsIgnoreCase(string $haystack, string $needle): bool
+    {
+        return false !== \stripos($haystack, $needle);
+    }
+
+    /**
      * Takes an encoded JSON string and converts it into a PHP value.
      *
      * @param string $value       the value to decode

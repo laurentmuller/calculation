@@ -23,11 +23,10 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 /**
  * Document containing PHP configuration.
  *
- * @phpstan-import-type ValueEntryType from PhpInfoService
+ * @phpstan-import-type EntryType from PhpInfoService
  * @phpstan-import-type ConfigType from PhpInfoService
  * @phpstan-import-type GroupType from PhpInfoService
  * @phpstan-import-type ModuleType from PhpInfoService
- * @phpstan-import-type PhpInfoType from PhpInfoService
  */
 class PhpIniDocument extends AbstractDocument
 {
@@ -47,7 +46,6 @@ class PhpIniDocument extends AbstractDocument
 
         $info = $this->service->getPhpInfo();
         $row = $this->outputHeaders($sheet);
-        $this->outputVersion($sheet, $row++, $info['version']);
         foreach ($info['modules'] as $module) {
             $row = $this->outputModule($sheet, $row, $module);
         }
@@ -59,7 +57,7 @@ class PhpIniDocument extends AbstractDocument
     }
 
     /**
-     * @phpstan-param ValueEntryType $entry
+     * @phpstan-param EntryType $entry
      */
     private function applyStyle(WorksheetDocument $sheet, int $column, int $row, array $entry): void
     {
@@ -130,9 +128,9 @@ class PhpIniDocument extends AbstractDocument
     private function outputHeaders(WorksheetDocument $sheet): int
     {
         return $sheet->setHeaders([
-            'Directive' => HeaderFormat::left(Alignment::VERTICAL_TOP),
-            'Local Value' => HeaderFormat::left(Alignment::VERTICAL_TOP),
-            'Master Value' => HeaderFormat::left(Alignment::VERTICAL_TOP),
+            PhpInfoService::COLUMN_DIRECTIVE => HeaderFormat::left(Alignment::VERTICAL_TOP),
+            PhpInfoService::COLUMN_LOCAL => HeaderFormat::left(Alignment::VERTICAL_TOP),
+            PhpInfoService::COLUMN_MASTER => HeaderFormat::left(Alignment::VERTICAL_TOP),
         ]);
     }
 
@@ -147,13 +145,6 @@ class PhpIniDocument extends AbstractDocument
         }
 
         return $row;
-    }
-
-    private function outputVersion(WorksheetDocument $sheet, int $row, string $version): void
-    {
-        $sheet->setRowValues($row, ['Version', $version]);
-        $style = $sheet->getStyle('A' . $row);
-        $style->getFont()->setBold(true);
     }
 
     private function updateColumns(WorksheetDocument $sheet): void

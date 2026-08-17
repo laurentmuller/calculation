@@ -29,6 +29,7 @@ trait PdfBooleanCellTrait
     /** @var array <string, PdfCell> */
     private array $booleanCells = [];
     private ?PdfStyle $disabledStyle = null;
+    private ?PdfStyle $enabledStyle = null;
 
     /**
      * Creates a boolean cell.
@@ -61,21 +62,29 @@ trait PdfBooleanCellTrait
 
     /**
      * Gets the style for the given boolean value.
-     *
-     * @return PdfStyle|null the style if the $enabled parameter is <code>false</code>, <code>null</code> otherwise
      */
-    protected function getBooleanStyle(bool $enabled, ?PdfBorder $border = null): ?PdfStyle
+    protected function getBooleanStyle(bool $enabled, ?PdfBorder $border = null): PdfStyle
     {
-        $style = PdfStyle::getCellStyle();
-        if ($border instanceof PdfBorder) {
-            $style->setBorder($border);
-        }
         if ($enabled) {
-            return $style;
+            if (!$this->enabledStyle instanceof PdfStyle) {
+                $this->enabledStyle = clone PdfStyle::getCellStyle();
+                if ($border instanceof PdfBorder) {
+                    $this->enabledStyle->setBorder($border);
+                }
+            }
+
+            return $this->enabledStyle;
         }
 
-        return $this->disabledStyle ??= clone $style
-            ->setTextColor(PdfTextColor::darkGray());
+        if (!$this->disabledStyle instanceof PdfStyle) {
+            $this->disabledStyle = PdfStyle::getCellStyle()
+                ->setTextColor(PdfTextColor::darkGray());
+            if ($border instanceof PdfBorder) {
+                $this->disabledStyle->setBorder($border);
+            }
+        }
+
+        return $this->disabledStyle;
     }
 
     private function getBooleanColor(bool $enabled): string

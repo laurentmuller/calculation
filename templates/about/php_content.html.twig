@@ -31,9 +31,9 @@
                 {% if group.headings %}
                     <thead>
                     <tr>
-                        {% for heading in group.headings %}
-                            <th>{{ heading }}</th>
-                        {% endfor %}
+                        <th class="e">{{ constant('App\\Service\\PhpInfoService::COLUMN_DIRECTIVE') }}</th>
+                        <th class="v">{{ constant('App\\Service\\PhpInfoService::COLUMN_LOCAL') }}</th>
+                        <th class="v">{{ constant('App\\Service\\PhpInfoService::COLUMN_MASTER') }}</th>
                     </tr>
                     </thead>
                 {% endif %}

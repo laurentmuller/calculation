@@ -125,7 +125,7 @@ readonly class LogFilterService
 
     private function acceptValue(?string $value): bool
     {
-        return null !== $value && false !== \stripos($value, $this->searchValue);
+        return null !== $value && StringUtils::containsIgnoreCase($value, $this->searchValue);
     }
 
     private function matchChannel(Log $log): bool

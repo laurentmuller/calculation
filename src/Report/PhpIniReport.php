@@ -30,11 +30,10 @@ use fpdf\PdfBorder;
 /**
  * Report containing PHP configuration.
  *
- * @phpstan-import-type ValueEntryType from PhpInfoService
+ * @phpstan-import-type EntryType from PhpInfoService
  * @phpstan-import-type ConfigType from PhpInfoService
  * @phpstan-import-type GroupType from PhpInfoService
  * @phpstan-import-type ModuleType from PhpInfoService
- * @phpstan-import-type PhpInfoType from PhpInfoService
  */
 class PhpIniReport extends AbstractReport
 {
@@ -69,7 +68,7 @@ class PhpIniReport extends AbstractReport
         return true;
     }
 
-    private function createRowStyle(bool $bold): PdfStyle
+    private function createRowStyle(bool $bold = false): PdfStyle
     {
         $style = PdfStyle::default()
             ->setDrawColor(PdfDrawColor::cellBorder())
@@ -81,19 +80,26 @@ class PhpIniReport extends AbstractReport
         return $style;
     }
 
-    private function createTable(): PdfTable
+    private function createTable(bool $headings): PdfTable
     {
-        return PdfTable::instance($this)
+        $table = PdfTable::instance($this)
             ->setHeaderStyle($this->createRowStyle(true))
             ->addColumns(
-                PdfColumn::left('Directive', 40),
-                PdfColumn::left('Local Value', 30),
-                PdfColumn::left('Master Value', 30)
+                PdfColumn::left(PhpInfoService::COLUMN_DIRECTIVE, 40),
+                PdfColumn::left(PhpInfoService::COLUMN_LOCAL, 30),
+                PdfColumn::left(PhpInfoService::COLUMN_MASTER, 30)
             );
+        if ($headings) {
+            $table->outputHeaders();
+        } else {
+            $table->setRepeatHeader(false);
+        }
+
+        return $table;
     }
 
     /**
-     * @phpstan-param ValueEntryType $entry
+     * @phpstan-param EntryType $entry
      * @phpstan-param positive-int $cols
      */
     private function getConfigCell(array $entry, int $cols = 1): PdfCell
@@ -102,7 +108,7 @@ class PhpIniReport extends AbstractReport
         if ($entry['color']) {
             /** @var PdfTextColor $color */
             $color = PdfTextColor::create($value);
-            $style = $this->createRowStyle(false)
+            $style = $this->createRowStyle()
                 ->setTextColor($color);
 
             return PdfCell::instance(text: $value, cols: $cols, style: $style);
@@ -138,7 +144,7 @@ class PhpIniReport extends AbstractReport
             );
         }
 
-        return PdfCell::instance(text: $value, cols: $cols, style: $this->createRowStyle(false));
+        return PdfCell::instance(text: $value, cols: $cols, style: $this->createRowStyle());
     }
 
     /**
@@ -146,11 +152,11 @@ class PhpIniReport extends AbstractReport
      */
     private function getMinGroupHeight(array $group): float
     {
-        $count = 2;
+        $count = 1;
         if (null !== $group['name']) {
             ++$count;
         }
-        if (null !== $group['headings']) {
+        if ($group['headings']) {
             ++$count;
         }
         if (null !== $group['note']) {
@@ -160,9 +166,19 @@ class PhpIniReport extends AbstractReport
         return (float) $count * self::LINE_HEIGHT;
     }
 
+    /**
+     * @phpstan-param ModuleType $module
+     */
+    private function getMinModuleHeight(array $module): float
+    {
+        $group = \array_first($module['groups']);
+
+        return null === $group ? self::LINE_HEIGHT : self::LINE_HEIGHT + $this->getMinGroupHeight($group);
+    }
+
     private function getNoValueStyle(): PdfStyle
     {
-        return $this->noValueStyle ??= $this->createRowStyle(false)
+        return $this->noValueStyle ??= $this->createRowStyle()
             ->setTextColor(PdfTextColor::darkGray())
             ->setFontItalic(true);
     }
@@ -174,12 +190,12 @@ class PhpIniReport extends AbstractReport
     {
         if (null === $config['master']) {
             $table->addRow(
-                new PdfCell(text: $config['name'], style: $this->createRowStyle(false)),
+                new PdfCell(text: $config['name'], style: $this->createRowStyle()),
                 $this->getConfigCell($config['local'], 2),
             );
         } else {
             $table->addRow(
-                new PdfCell(text: $config['name'], style: $this->createRowStyle(false)),
+                new PdfCell(text: $config['name'], style: $this->createRowStyle()),
                 $this->getConfigCell($config['local']),
                 $this->getConfigCell($config['master']),
             );
@@ -196,22 +212,25 @@ class PhpIniReport extends AbstractReport
             $this->addPage();
         }
         if (null !== $group['name']) {
+            $this->addBookmark(text: $group['name'], level: 1);
             $this->createRowStyle(true)
                 ->updateDocument($this);
             $this->cell(
                 text: $group['name'],
+                border: PdfBorder::bottom(),
                 move: PdfMove::NEW_LINE
             );
             $this->resetStyle();
         }
         if (null !== $group['note']) {
-            $this->multiCell(text: $group['note']);
+            $this->multiCell(
+                text: $group['note'],
+                border: PdfBorder::all()
+            );
+            $this->resetStyle();
         }
 
-        $table = $this->createTable();
-        if (null !== $group['headings']) {
-            $table->outputHeaders();
-        }
+        $table = $this->createTable($group['headings']);
         foreach ($group['configs'] as $config) {
             $this->outputConfig($table, $config);
         }
@@ -223,11 +242,16 @@ class PhpIniReport extends AbstractReport
      */
     private function outputModule(array $module): void
     {
+        $minHeight = $this->getMinModuleHeight($module);
+        if (!$this->isPrintable($minHeight)) {
+            $this->addPage();
+        }
         $this->addBookmark(text: $module['name']);
-        PdfStyle::getBoldCellStyle()
+        $this->createRowStyle(true)
             ->updateDocument($this);
         $this->cell(
             text: $module['name'],
+            border: PdfBorder::bottom(),
             move: PdfMove::NEW_LINE
         );
         $this->resetStyle();

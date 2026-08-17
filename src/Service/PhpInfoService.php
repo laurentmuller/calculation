@@ -21,9 +21,9 @@ use STS\Phpinfo\Models\Module;
 use STS\Phpinfo\PhpInfo;
 
 /**
- * Service get PHP information.
+ * Service to get PHP information.
  *
- * @phpstan-type ValueEntryType = array{
+ * @phpstan-type EntryType = array{
  *     value: string,
  *     color: bool,
  *     no_value: bool,
@@ -33,20 +33,20 @@ use STS\Phpinfo\PhpInfo;
  * }
  * @phpstan-type ConfigType = array{
  *     name: string,
- *     local: ValueEntryType,
- *     master: ValueEntryType|null
+ *     local: EntryType,
+ *     master: EntryType|null
  * }
  * @phpstan-type GroupType = array{
  *     name: string|null,
  *     note: string|null,
- *     headings: string[]|null,
+ *     headings: bool,
  *     configs: ConfigType[]
  * }
  * @phpstan-type ModuleType = array{
  *     name: string,
  *     groups: GroupType[]
  * }
- * @phpstan-type PhpInfoType = array{
+ * @phpstan-type InfoType = array{
  *     version: string,
  *     hostname: string|null,
  *     os: string|null,
@@ -55,12 +55,15 @@ use STS\Phpinfo\PhpInfo;
  */
 class PhpInfoService
 {
-    private const array DISABLED = ['off', 'no', 'disabled', 'not enabled'];
-    private const array ENABLED = ['active', 'on', 'yes', 'enabled', 'supported'];
-    private const string REDACTED = '********';
+    public const string COLUMN_DIRECTIVE = 'Directive';
+    public const string COLUMN_LOCAL = 'Local Value';
+    public const string COLUMN_MASTER = 'Master Value';
+
+    private const array DISABLED = ['false', 'off', 'no', 'disabled', 'not enabled'];
+    private const array ENABLED = ['true', 'on', 'yes', 'enabled', 'supported', 'active'];
 
     /**
-     * @return PhpInfoType
+     * @return InfoType
      */
     public function getPhpInfo(): array
     {
@@ -74,9 +77,17 @@ class PhpInfoService
         ];
     }
 
-    private function isColorValue(string $value): bool
+    private function convertValue(string $value): string
     {
-        return StringUtils::pregMatch('/^#[\\da-f]{6}$/i', $value);
+        if ('(none)' === $value) {
+            return 'None';
+        }
+        if ('UTF-8' === \mb_detect_encoding($value, \mb_detect_order(), true)) {
+            $value = \mb_convert_encoding($value, 'ISO-8859-1', 'UTF-8');
+            $value = \str_replace(['✘ ', '✔ ', '⊕'], '', $value);
+        }
+
+        return $value;
     }
 
     private function isDisabledValue(string $value): bool
@@ -94,16 +105,28 @@ class PhpInfoService
         return StringUtils::equalIgnoreCase('no value', $value);
     }
 
+    private function isRedacted(string $name): bool
+    {
+        $keys = ['_KEY', '_USER_NAME', 'APP_SECRET', '_PASSWORD', 'MAILER_DSN', 'DATABASE_URL'];
+        foreach ($keys as $key) {
+            if (StringUtils::containsIgnoreCase($name, $key)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * @return ConfigType
      */
     private function parseConfig(Config $config): array
     {
         $name = $config->name();
-        $localValue = $config->localValue() ?? 'No value';
-        $masterValue = $config->masterValue() ?? 'No value';
+        $localValue = $this->convertValue($config->localValue() ?? 'No Value');
+        $masterValue = $this->convertValue($config->masterValue() ?? 'No Value');
         $localConfig = $this->parseValue($name, $localValue);
-        $masterConfig = $config->hasMasterValue() ? $this->parseValue($name, $masterValue) : null;
+        $masterConfig = $config->hasMasterValue() && '' !== $masterValue ? $this->parseValue($name, $masterValue) : null;
 
         return [
             'name' => $name,
@@ -112,6 +135,9 @@ class PhpInfoService
         ];
     }
 
+    /**
+     * @return ConfigType[]
+     */
     private function parseConfigs(Group $group): array
     {
         return \array_map(
@@ -127,12 +153,15 @@ class PhpInfoService
     {
         return [
             'name' => $group->name(),
-            'note' => $group->note(),
+            'note' => StringUtils::trim($group->note()),
             'headings' => $this->parseHeadings($group),
             'configs' => $this->parseConfigs($group),
         ];
     }
 
+    /**
+     * @return GroupType[]
+     */
     private function parseGroups(Module $module): array
     {
         return \array_map(
@@ -141,16 +170,51 @@ class PhpInfoService
         );
     }
 
-    /**
-     * @return string[]|null
-     */
-    private function parseHeadings(Group $group): ?array
+    private function parseHeadings(Group $group): bool
     {
-        if (!$group->hasHeadings()) {
-            return null;
+        if ($group->hasHeadings()) {
+            return null !== \array_find(
+                $group->configs()->toArray(),
+                static fn (Config $config): bool => $config->hasMasterValue()
+            );
         }
 
-        return \array_map(static fn (mixed $heading): string => (string) $heading, $group->headings()->toArray());
+        return false;
+    }
+
+    /**
+     * @return ModuleType
+     */
+    private function parseLoadedExtensions(): array
+    {
+        /** @phpstan-var EntryType $local */
+        $local = [
+            'value' => \implode(', ', \get_loaded_extensions()),
+            'color' => false,
+            'no_value' => false,
+            'redacted' => false,
+            'enabled' => false,
+            'disabled' => false,
+        ];
+
+        /** @phpstan-var ConfigType $config */
+        $config = [
+            'name' => 'Loaded Extensions',
+            'local' => $local,
+            'master' => null,
+        ];
+        /** @phpstan-var GroupType $group */
+        $group = [
+            'name' => null,
+            'note' => null,
+            'headings' => false,
+            'configs' => [$config],
+        ];
+
+        return [
+            'name' => 'Configuration',
+            'groups' => [$group],
+        ];
     }
 
     /**
@@ -164,33 +228,38 @@ class PhpInfoService
         ];
     }
 
+    /**
+     * @return ModuleType[]
+     */
     private function parseModules(PhpInfo $info): array
     {
-        return \array_map(
+        $modules = \array_map(
             fn (Module $module): array => $this->parseModule($module),
             $info->modules()->toArray()
         );
+
+        // add the loaded extensions
+        $offset = \max(0, \count($modules) - 2);
+        $module = $this->parseLoadedExtensions();
+        \array_splice($modules, $offset, 0, [$module]);
+
+        return $modules;
     }
 
     /**
-     * @return ValueEntryType
+     * @return EntryType
      */
     private function parseValue(string $name, string $value): array
     {
-        $value = \htmlspecialchars_decode($value);
-
-        $redacted = false;
-        $keys = ['_KEY', '_USER_NAME', 'APP_SECRET', '_PASSWORD', 'MAILER_DSN', 'DATABASE_URL'];
-        foreach ($keys as $key) {
-            if (\str_contains($name, $key)) {
-                $value = self::REDACTED;
-                $redacted = true;
-                break;
-            }
+        $color = false;
+        if (StringUtils::pregMatch('/#[\\da-f]{6}/i', $value, $matches)) {
+            $value = $matches[0];
+            $color = true;
         }
-
-        if ('(none)' === $value) {
-            $value = 'None';
+        $redacted = false;
+        if ($this->isRedacted($name)) {
+            $value = '********';
+            $redacted = true;
         }
         $no_value = false;
         if ($this->isNoValue($value)) {
@@ -210,7 +279,7 @@ class PhpInfoService
 
         return [
             'value' => $value,
-            'color' => $this->isColorValue($value),
+            'color' => $color,
             'no_value' => $no_value,
             'redacted' => $redacted,
             'enabled' => $enabled,

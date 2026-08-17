@@ -41,9 +41,7 @@ class AboutPhpController extends AbstractController
     #[GetRoute(path: '/content', name: 'content')]
     public function content(PhpInfoService $service): JsonResponse
     {
-        $content = $this->renderView('about/php_content.html.twig', [
-            'info' => $service->getPhpInfo(),
-        ]);
+        $content = $this->renderView('about/php_content.html.twig', ['info' => $service->getPhpInfo()]);
 
         return $this->jsonTrue(['content' => $content]);
     }

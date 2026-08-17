@@ -350,7 +350,7 @@ class SearchService implements ServiceSubscriberInterface
         if (StringUtils::isString($entity)) {
             $queries = \array_filter(
                 $queries,
-                static fn (string $key): bool => 0 === \stripos($key, $entity),
+                static fn (string $key): bool => StringUtils::startWith($key, $entity),
                 \ARRAY_FILTER_USE_KEY
             );
         }

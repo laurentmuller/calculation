@@ -40,7 +40,7 @@ final class PhpIniDocumentTest extends TestCase
                         [
                             'name' => 'Group',
                             'note' => 'Notes',
-                            'headings' => ['Directive', 'Local Value', 'Master Value'],
+                            'headings' => true,
                             'configs' => [
                                 [
                                     'name' => 'Config',

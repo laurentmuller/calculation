@@ -41,6 +41,14 @@ final class StringUtilsTest extends TestCase
         yield ['my HOME', 'My home'];
     }
 
+    public static function getContainsIgnoreCase(): \Generator
+    {
+        yield ['prefix_home', 'Home', true];
+        yield ['home_suffix', 'HOME', true];
+        yield ['prefix_home_suffix', 'home', true];
+        yield ['a', 'b', false];
+    }
+
     public static function getDebugType(): \Generator
     {
         yield [null, 'null'];
@@ -152,6 +160,13 @@ final class StringUtilsTest extends TestCase
     public function testCapitalize(string $value, string $expected): void
     {
         $actual = StringUtils::capitalize($value);
+        self::assertSame($expected, $actual);
+    }
+
+    #[DataProvider('getContainsIgnoreCase')]
+    public function testContainsIgnoreCase(string $haystack, string $needle, bool $expected): void
+    {
+        $actual = StringUtils::containsIgnoreCase($haystack, $needle);
         self::assertSame($expected, $actual);
     }
 

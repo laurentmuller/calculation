@@ -19,13 +19,15 @@ use App\Traits\ClosureSortTrait;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
-use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 
 /**
  * Document containing PHP configuration.
  *
- * @phpstan-import-type EntryType from PhpInfoService
- * @phpstan-import-type EntriesType from PhpInfoService
+ * @phpstan-import-type ValueEntryType from PhpInfoService
+ * @phpstan-import-type ConfigType from PhpInfoService
+ * @phpstan-import-type GroupType from PhpInfoService
+ * @phpstan-import-type ModuleType from PhpInfoService
+ * @phpstan-import-type PhpInfoType from PhpInfoService
  */
 class PhpIniDocument extends AbstractDocument
 {
@@ -39,23 +41,15 @@ class PhpIniDocument extends AbstractDocument
     #[\Override]
     public function render(): bool
     {
-        $content = $this->service->asArray();
         $this->start($this->trans('about.php.title'));
         $this->setActiveTitle('Configuration', $this->helper);
         $sheet = $this->getActiveSheet();
 
-        if ([] === $content) {
-            $sheet->setCellContent(1, 1, $this->trans('about.load.error'))
-                ->finish('A1');
-
-            return true;
-        }
-
+        $info = $this->service->getPhpInfo();
         $row = $this->outputHeaders($sheet);
-        foreach ($content as $key => $entries) {
-            $this->outputSingleEntry($sheet, $row++, 'Version', $this->service->getVersion());
-            $row = $this->outputGroup($sheet, $row, $key);
-            $row = $this->outputEntries($sheet, $row, $entries);
+        $this->outputVersion($sheet, $row++, $info['version']);
+        foreach ($info['modules'] as $module) {
+            $row = $this->outputModule($sheet, $row, $module);
         }
         $this->updateColumns($sheet);
         $this->updatePageSetup($sheet);
@@ -64,81 +58,73 @@ class PhpIniDocument extends AbstractDocument
         return true;
     }
 
-    private function applyStyle(WorksheetDocument $sheet, int $column, int $row, string $value): self
+    /**
+     * @phpstan-param ValueEntryType $entry
+     */
+    private function applyStyle(WorksheetDocument $sheet, int $column, int $row, array $entry): void
     {
         $color = null;
-        $noValue = $this->service->isNoValue($value);
-        if ($this->service->isColorValue($value)) {
-            $color = \substr($value, 1);
-        } elseif ($noValue || $this->service->isRedactedValue($value) || $this->service->isDisabledValue($value)) {
+        if ($entry['color']) {
+            $color = \substr($entry['value'], 1);
+        } elseif ($entry['no_value'] || $entry['redacted'] || $entry['disabled']) {
             $color = '7F7F7F';
         }
         if (null === $color) {
-            return $this;
+            return;
         }
-
         $font = $sheet->getCell([$column, $row])
             ->getStyle()->getFont();
         $font->setColor(new Color($color));
-        if ($noValue) {
+        if ($entry['no_value']) {
             $font->setItalic(true);
         }
-
-        return $this;
     }
 
-    private function convert(float|int|string $var): string
+    private function outputBoldEntry(WorksheetDocument $sheet, int $row, string $value): void
     {
-        return \htmlspecialchars_decode((string) $var);
-    }
-
-    /**
-     * @param array{local: float|int|string, master: float|int|string, ...} $entryValue
-     */
-    private function outputArrayEntry(WorksheetDocument $sheet, int $row, string $keyValue, array $entryValue): void
-    {
-        $local = $this->convert($entryValue['local']);
-        $master = $this->convert($entryValue['master']);
-        $sheet->setCellValue([1, $row], $keyValue)
-            ->setCellValue([2, $row], $local)
-            ->setCellValue([3, $row], $master);
-        $this->applyStyle($sheet, 2, $row, $local)
-            ->applyStyle($sheet, 3, $row, $master);
-    }
-
-    /**
-     * @phpstan-param array<string, EntryType> $entries
-     */
-    private function outputEntries(WorksheetDocument $sheet, int $row, array $entries): int
-    {
-        $this->sortEntries($entries);
-        $sheet->getPageSetup()
-            ->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);
-
-        /** @phpstan-var EntryType $entryValue */
-        foreach ($entries as $entryKey => $entryValue) {
-            $keyValue = $this->convert($entryKey);
-            if (\is_array($entryValue)) {
-                $this->outputArrayEntry($sheet, $row, $keyValue, $entryValue);
-            } else {
-                $this->outputSingleEntry($sheet, $row, $keyValue, $entryValue);
-            }
-            ++$row;
-        }
-
-        return $row;
-    }
-
-    private function outputGroup(WorksheetDocument $sheet, int $row, string $group): int
-    {
-        $sheet->setRowValues($row, [$group]);
+        $sheet->setRowValues($row, [$value]);
         $sheet->mergeContent(1, 3, $row);
         $style = $sheet->getStyle('A' . $row);
         $style->getFill()->setFillType(Fill::FILL_SOLID)
             ->getStartColor()->setARGB('F5F5F5');
         $style->getFont()->setBold(true);
+    }
+
+    /**
+     * @phpstan-param ConfigType $config
+     */
+    private function outputConfig(WorksheetDocument $sheet, int $row, array $config): int
+    {
+        $local = $config['local'];
+        $master = $config['master'];
+        $sheet->setRowValues($row, [$config['name'], $local['value'], $master['value'] ?? null]);
+        $this->applyStyle($sheet, 2, $row, $local);
+        if (null !== $master) {
+            $this->applyStyle($sheet, 3, $row, $master);
+        }
 
         return $row + 1;
+    }
+
+    /**
+     * @phpstan-param GroupType $group
+     */
+    private function outputGroup(WorksheetDocument $sheet, int $row, array $group): int
+    {
+        if (null !== $group['name']) {
+            $this->outputBoldEntry($sheet, $row++, $group['name']);
+        }
+        if (null !== $group['note']) {
+            $sheet->setCellValue([1, $row], $group['note']);
+            $sheet->mergeContent(1, 3, $row);
+            ++$row;
+        }
+
+        foreach ($group['configs'] as $config) {
+            $row = $this->outputConfig($sheet, $row, $config);
+        }
+
+        return $row;
     }
 
     private function outputHeaders(WorksheetDocument $sheet): int
@@ -150,28 +136,24 @@ class PhpIniDocument extends AbstractDocument
         ]);
     }
 
-    private function outputSingleEntry(
-        WorksheetDocument $sheet,
-        int $row,
-        string $keyValue,
-        float|int|string $entryValue
-    ): void {
-        $value = $this->convert($entryValue);
-        $sheet->setCellValue([1, $row], $keyValue)
-            ->setCellValue([2, $row], $value);
-        $this->applyStyle($sheet, 2, $row, $value);
+    /**
+     * @phpstan-param ModuleType $module
+     */
+    private function outputModule(WorksheetDocument $sheet, int $row, array $module): int
+    {
+        $this->outputBoldEntry($sheet, $row++, $module['name']);
+        foreach ($module['groups'] as $group) {
+            $row = $this->outputGroup($sheet, $row, $group);
+        }
+
+        return $row;
     }
 
-    /**
-     * @phpstan-param array<string, EntryType> $entries
-     */
-    private function sortEntries(array &$entries): void
+    private function outputVersion(WorksheetDocument $sheet, int $row, string $version): void
     {
-        $this->sortKeysByClosures(
-            $entries,
-            static fn (string $a, string $b): int => \is_array($entries[$a]) <=> \is_array($entries[$b]),
-            static fn (string $a, string $b): int => \strcasecmp($a, $b)
-        );
+        $sheet->setRowValues($row, ['Version', $version]);
+        $style = $sheet->getStyle('A' . $row);
+        $style->getFont()->setBold(true);
     }
 
     private function updateColumns(WorksheetDocument $sheet): void

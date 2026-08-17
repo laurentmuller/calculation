@@ -26,7 +26,6 @@ use App\Spreadsheet\PhpIniDocument;
 use App\Traits\RenderPdfDocumentTrait;
 use App\Traits\RenderSpreadsheetDocumentTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
@@ -42,12 +41,9 @@ class AboutPhpController extends AbstractController
     #[GetRoute(path: '/content', name: 'content')]
     public function content(PhpInfoService $service): JsonResponse
     {
-        $parameters = [
-            'phpInfo' => $service->asHtml(),
-            'version' => $service->getVersion(),
-            'extensions' => \implode(', ', $service->getLoadedExtensions()),
-        ];
-        $content = $this->renderView('about/php_content.html.twig', $parameters);
+        $content = $this->renderView('about/php_content.html.twig', [
+            'info' => $service->getPhpInfo(),
+        ]);
 
         return $this->jsonTrue(['content' => $content]);
     }
@@ -62,11 +58,5 @@ class AboutPhpController extends AbstractController
     public function pdf(PhpInfoService $infoService, FontAwesomeCellService $cellService): PdfResponse
     {
         return $this->renderPdfDocument(new PhpIniReport($this, $infoService, $cellService));
-    }
-
-    #[GetRoute(path: '/phpinfo', name: 'phpinfo')]
-    public function phpinfo(PhpInfoService $service): Response
-    {
-        return $this->render('about/about_phpinfo.html.twig', ['info' => $service->getPhpInfo()]);
     }
 }

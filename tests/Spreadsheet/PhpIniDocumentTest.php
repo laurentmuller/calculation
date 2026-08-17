@@ -20,45 +20,122 @@ use PHPUnit\Framework\TestCase;
 
 final class PhpIniDocumentTest extends TestCase
 {
-    public function testRenderEmpty(): void
+    public function testRender(): void
     {
-        $document = $this->createDocument([]);
+        $document = $this->createDocument();
         $actual = $document->render();
         self::assertTrue($actual);
     }
 
-    public function testRenderSuccess(): void
+    private function createData(): array
     {
-        $data = [
-            'First Group' => [
-                'single' => 'single',
-                'disabled' => 'disabled',
-                'no value' => 'no value',
-                'entry' => ['local' => 'local', 'master' => 'master'],
-                'color' => ['local' => '#FF8000', 'master' => '#0000BB'],
+        return [
+            'version' => \PHP_VERSION,
+            'hostname' => null,
+            'os' => null,
+            'modules' => [
+                [
+                    'name' => 'Module',
+                    'groups' => [
+                        [
+                            'name' => 'Group',
+                            'note' => 'Notes',
+                            'headings' => ['Directive', 'Local Value', 'Master Value'],
+                            'configs' => [
+                                [
+                                    'name' => 'Config',
+                                    'local' => [
+                                        'value' => 'locale',
+                                        'color' => false,
+                                        'no_value' => false,
+                                        'redacted' => false,
+                                        'enabled' => false,
+                                        'disabled' => false,
+                                    ],
+                                    'master' => [
+                                        'value' => 'master',
+                                        'color' => false,
+                                        'no_value' => false,
+                                        'redacted' => false,
+                                        'enabled' => false,
+                                        'disabled' => false,
+                                    ],
+                                ],
+                                [
+                                    'name' => 'Color',
+                                    'local' => [
+                                        'value' => '#FF8000',
+                                        'color' => true,
+                                        'no_value' => false,
+                                        'redacted' => false,
+                                        'enabled' => false,
+                                        'disabled' => false,
+                                    ],
+                                    'master' => null,
+                                ],
+                                [
+                                    'name' => 'No value',
+                                    'local' => [
+                                        'value' => 'No value',
+                                        'color' => false,
+                                        'no_value' => true,
+                                        'redacted' => false,
+                                        'enabled' => false,
+                                        'disabled' => false,
+                                    ],
+                                    'master' => null,
+                                ],
+                                [
+                                    'name' => 'Redacted',
+                                    'local' => [
+                                        'value' => '********',
+                                        'color' => false,
+                                        'no_value' => false,
+                                        'redacted' => true,
+                                        'enabled' => false,
+                                        'disabled' => false,
+                                    ],
+                                    'master' => null,
+                                ],
+                                [
+                                    'name' => 'Enabled',
+                                    'local' => [
+                                        'value' => 'Enabled',
+                                        'color' => false,
+                                        'no_value' => false,
+                                        'redacted' => false,
+                                        'enabled' => true,
+                                        'disabled' => false,
+                                    ],
+                                    'master' => null,
+                                ],
+                                [
+                                    'name' => 'Disabled',
+                                    'local' => [
+                                        'value' => 'Disabled',
+                                        'color' => false,
+                                        'no_value' => false,
+                                        'redacted' => false,
+                                        'enabled' => false,
+                                        'disabled' => true,
+                                    ],
+                                    'master' => null,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
             ],
-            'Second Group' => [
-                'other' => 'other',
-            ],
-            'Empty' => [],
         ];
-        $document = $this->createDocument($data);
-        $actual = $document->render();
-        self::assertTrue($actual);
     }
 
-    private function createDocument(array $data): PhpIniDocument
+    private function createDocument(): PhpIniDocument
     {
+        $phpinfo = $this->createData();
         $helper = self::createStub(DocumentHelperInterface::class);
-        $service = self::createMock(PhpInfoService::class);
-        $service->method('getVersion')
-            ->willReturn(\PHP_VERSION);
-        $service->method('asArray')
-            ->willReturn($data);
-        $service->method('isNoValue')
-            ->willReturnCallback(static fn (string $value): bool => 'no value' === $value);
-        $service->method('isColorValue')
-            ->willReturnCallback(static fn (string $value): bool => \str_starts_with($value, '#'));
+        $service = self::createStub(PhpInfoService::class);
+        $service->method('getPhpInfo')
+            ->willReturn($phpinfo);
 
         return new PhpIniDocument($helper, $service);
     }

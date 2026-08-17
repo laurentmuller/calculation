@@ -19,12 +19,10 @@ use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Html\HtmlBootstrapColor;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfStyle;
-use App\Service\FontAwesomeCellService;
+use fpdf\PdfBorder;
 
 /**
  * Trait to create boolean cells with an icon.
- *
- * @property FontAwesomeCellService $cellService
  */
 trait PdfBooleanCellTrait
 {
@@ -38,17 +36,18 @@ trait PdfBooleanCellTrait
      * @param bool         $enabled the enabled value used for icon and style
      * @param string       $text    the cell text
      * @param positive-int $cols    the number of columns to span
+     * @param ?PdfBorder   $border  the cell border or null to use the default cell border
      */
-    protected function getBooleanCell(bool $enabled, string $text, int $cols = 1): PdfCell
+    protected function getBooleanCell(bool $enabled, string $text, int $cols = 1, ?PdfBorder $border = null): PdfCell
     {
-        $key = \sprintf('%s-%d', $text, (int) $enabled);
+        $key = \sprintf('%s-%d-%d', $text, (int) $enabled, (int) ($border instanceof PdfBorder));
         if (\array_key_exists($key, $this->booleanCells)) {
             return $this->booleanCells[$key];
         }
 
         $icon = $this->getBooleanIcon($enabled);
         $color = $this->getBooleanColor($enabled);
-        $style = $this->getBooleanStyle($enabled);
+        $style = $this->getBooleanStyle($enabled, $border);
         $cell = $this->cellService->getCell(
             icon: $icon,
             color: $color,
@@ -65,13 +64,18 @@ trait PdfBooleanCellTrait
      *
      * @return PdfStyle|null the style if the $enabled parameter is <code>false</code>, <code>null</code> otherwise
      */
-    protected function getBooleanStyle(bool $enabled): ?PdfStyle
+    protected function getBooleanStyle(bool $enabled, ?PdfBorder $border = null): ?PdfStyle
     {
+        $style = PdfStyle::getCellStyle();
+        if ($border instanceof PdfBorder) {
+            $style->setBorder($border);
+        }
         if ($enabled) {
-            return null;
+            return $style;
         }
 
-        return $this->disabledStyle ??= PdfStyle::getCellStyle()->setTextColor(PdfTextColor::darkGray());
+        return $this->disabledStyle ??= clone $style
+            ->setTextColor(PdfTextColor::darkGray());
     }
 
     private function getBooleanColor(bool $enabled): string

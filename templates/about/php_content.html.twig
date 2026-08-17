@@ -1,11 +1,58 @@
 {% import 'about/_about_macro.html.twig' as tools %}
+{# macro #}
+{% macro output_attr(entry, colspan = null) %}
+    {{ html_attr({
+        colspan: colspan,
+        class: [
+            'v',
+            entry.enabled ? 'enabled',
+            entry.disabled ? 'disabled',
+            entry.redacted ? 'text-secondary',
+            entry.no_value ? 'text-secondary fst-italic',
+        ],
+        style: {
+            color: entry.color ? entry.value,
+        },
+    }) }}
+{% endmacro output_attr %}
+{# content #}
 <div class="phpversion">
-    {{ tools.headerLink('php.net', version, 'php') }}
-    {{ phpInfo|raw }}
-    <table id="data-table-extra" class="table table-sm table-hover mb-0">
-        <tbody>
-            {{ tools.headerInfo('Configuration') }}
-            {{ tools.rowInfo('Loaded Extensions', extensions) }}
-        </tbody>
-    </table>
+    {{ tools.headerLink('php.net', info.version, 'php') }}
+    {% for module in info.modules %}
+        <h5 class="my-2">{{ module.name }}</h5>
+        {% for group in module.groups %}
+            {% if group.name %}
+                <h6 class="my-2">{{- group.name }}</h6>
+            {% endif %}
+            {% if group.note %}
+                <div class="p-2 bg-body-tertiary small">{{ group.note|nl2br }}</div>
+            {% endif %}
+            <table class="table table-sm table-hover">
+                {% if group.headings %}
+                    <thead>
+                    <tr>
+                        {% for heading in group.headings %}
+                            <th>{{ heading }}</th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                {% endif %}
+                <tbody>
+                {% for config in group.configs %}
+                    <tr>
+                        <td class="e">{{ config.name }}</td>
+                        <td {{ _self.output_attr(config.local, config.master ? null : 2) }}>
+                            {{- config.local.value|raw -}}
+                        </td>
+                        {% if config.master %}
+                            <td {{ _self.output_attr(config.master) }}>
+                                {{- config.master.value|raw -}}
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
+    {% endfor %}
 </div>

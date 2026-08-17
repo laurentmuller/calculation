@@ -21,54 +21,123 @@ use PHPUnit\Framework\TestCase;
 
 final class PhpIniReportTest extends TestCase
 {
-    public function testRenderEmpty(): void
+    public function testRender(): void
     {
-        $report = $this->createReport([]);
+        $report = $this->createReport();
         $actual = $report->render();
         self::assertTrue($actual);
     }
 
-    public function testRenderSuccess(): void
+    private function createData(): array
     {
-        $data = [
-            'First Group' => [
-                'single' => 'single',
-                'enabled' => 'enabled',
-                'disabled' => 'disabled',
-                'no value' => 'no value',
-                'redacted' => '********',
-                'entry' => ['local' => 'local', 'master' => 'master'],
-                'color' => ['local' => '#FF8000', 'master' => '#0000BB'],
+        return [
+            'version' => \PHP_VERSION,
+            'hostname' => null,
+            'os' => null,
+            'modules' => [
+                [
+                    'name' => 'Module',
+                    'groups' => [
+                        [
+                            'name' => 'Group',
+                            'note' => 'Notes',
+                            'headings' => ['Directive', 'Local Value', 'Master Value'],
+                            'configs' => [
+                                [
+                                    'name' => 'Config',
+                                    'local' => [
+                                        'value' => 'locale',
+                                        'color' => false,
+                                        'no_value' => false,
+                                        'redacted' => false,
+                                        'enabled' => false,
+                                        'disabled' => false,
+                                    ],
+                                    'master' => [
+                                        'value' => 'master',
+                                        'color' => false,
+                                        'no_value' => false,
+                                        'redacted' => false,
+                                        'enabled' => false,
+                                        'disabled' => false,
+                                    ],
+                                ],
+                                [
+                                    'name' => 'Color',
+                                    'local' => [
+                                        'value' => '#FF8000',
+                                        'color' => true,
+                                        'no_value' => false,
+                                        'redacted' => false,
+                                        'enabled' => false,
+                                        'disabled' => false,
+                                    ],
+                                    'master' => null,
+                                ],
+                                [
+                                    'name' => 'No value',
+                                    'local' => [
+                                        'value' => 'No value',
+                                        'color' => false,
+                                        'no_value' => true,
+                                        'redacted' => false,
+                                        'enabled' => false,
+                                        'disabled' => false,
+                                    ],
+                                    'master' => null,
+                                ],
+                                [
+                                    'name' => 'Redacted',
+                                    'local' => [
+                                        'value' => '********',
+                                        'color' => false,
+                                        'no_value' => false,
+                                        'redacted' => true,
+                                        'enabled' => false,
+                                        'disabled' => false,
+                                    ],
+                                    'master' => null,
+                                ],
+                                [
+                                    'name' => 'Enabled',
+                                    'local' => [
+                                        'value' => 'Enabled',
+                                        'color' => false,
+                                        'no_value' => false,
+                                        'redacted' => false,
+                                        'enabled' => true,
+                                        'disabled' => false,
+                                    ],
+                                    'master' => null,
+                                ],
+                                [
+                                    'name' => 'Disabled',
+                                    'local' => [
+                                        'value' => 'Disabled',
+                                        'color' => false,
+                                        'no_value' => false,
+                                        'redacted' => false,
+                                        'enabled' => false,
+                                        'disabled' => true,
+                                    ],
+                                    'master' => null,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
             ],
-            'Second Group' => [
-                'other' => 'other',
-            ],
-            'Empty' => [],
         ];
-        $report = $this->createReport($data);
-        $actual = $report->render();
-        self::assertTrue($actual);
     }
 
-    private function createReport(array $data): PhpIniReport
+    private function createReport(): PhpIniReport
     {
+        $phpinfo = $this->createData();
         $helper = self::createStub(DocumentHelperInterface::class);
         $cellService = self::createStub(FontAwesomeCellService::class);
         $infoService = self::createStub(PhpInfoService::class);
-        $infoService->method('getVersion')
-            ->willReturn(\PHP_VERSION);
-        $infoService->method('asArray')
-            ->willReturn($data);
-        $infoService->method('isEnabledValue')
-            ->willReturnCallback(static fn (string $value): bool => 'enabled' === $value);
-        $infoService->method('isDisabledValue')
-            ->willReturnCallback(static fn (string $value): bool => 'disabled' === $value);
-        $infoService->method('isNoValue')
-            ->willReturnCallback(static fn (string $value): bool => 'no value' === $value);
-        $infoService->method('isRedactedValue')
-            ->willReturnCallback(static fn (string $value): bool => '********' === $value);
-        $infoService->method('isColorValue')
-            ->willReturnCallback(static fn (string $value): bool => \str_starts_with($value, '#'));
+        $infoService->method('getPhpInfo')
+            ->willReturn($phpinfo);
 
         return new PhpIniReport($helper, $infoService, $cellService);
     }

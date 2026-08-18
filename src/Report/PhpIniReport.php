@@ -25,6 +25,7 @@ use App\Service\FontAwesomeCellService;
 use App\Service\PhpInfoService;
 use App\Traits\ClosureSortTrait;
 use fpdf\Enums\PdfMove;
+use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfBorder;
 
 /**
@@ -215,18 +216,12 @@ class PhpIniReport extends AbstractReport
             $this->addBookmark(text: $group['name'], level: 1);
             $this->createRowStyle(true)
                 ->updateDocument($this);
-            $this->cell(
-                text: $group['name'],
-                border: PdfBorder::bottom(),
-                move: PdfMove::NEW_LINE
-            );
+            $this->cell(text: $group['name'], border: PdfBorder::bottom(), move: PdfMove::NEW_LINE);
             $this->resetStyle();
         }
         if (null !== $group['note']) {
-            $this->multiCell(
-                text: $group['note'],
-                border: PdfBorder::all()
-            );
+            $this->setDrawColor(PdfDrawColor::cellBorder());
+            $this->multiCell(text: $group['note'], border: PdfBorder::all(), align: PdfTextAlignment::LEFT);
             $this->resetStyle();
         }
 
@@ -248,12 +243,9 @@ class PhpIniReport extends AbstractReport
         }
         $this->addBookmark(text: $module['name']);
         $this->createRowStyle(true)
+            ->setFontSize(11.0)
             ->updateDocument($this);
-        $this->cell(
-            text: $module['name'],
-            border: PdfBorder::bottom(),
-            move: PdfMove::NEW_LINE
-        );
+        $this->cell(text: $module['name'], border: PdfBorder::bottom(), move: PdfMove::NEW_LINE);
         $this->resetStyle();
 
         foreach ($module['groups'] as $group) {

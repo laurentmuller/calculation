@@ -18,6 +18,13 @@ use App\Service\PhpInfoService;
 use App\Spreadsheet\PhpIniDocument;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @phpstan-import-type EntryType from PhpInfoService
+ * @phpstan-import-type ConfigType from PhpInfoService
+ * @phpstan-import-type GroupType from PhpInfoService
+ * @phpstan-import-type ModuleType from PhpInfoService
+ * @phpstan-import-type InfoType from PhpInfoService
+ */
 final class PhpIniDocumentTest extends TestCase
 {
     public function testRender(): void
@@ -27,6 +34,9 @@ final class PhpIniDocumentTest extends TestCase
         self::assertTrue($actual);
     }
 
+    /**
+     * @return InfoType
+     */
     private function createData(): array
     {
         return [
@@ -40,7 +50,7 @@ final class PhpIniDocumentTest extends TestCase
                         [
                             'name' => 'Group',
                             'note' => 'Notes',
-                            'headings' => true,
+                            'headers' => ['Directive', 'Local', 'Master'],
                             'configs' => [
                                 [
                                     'name' => 'Config',

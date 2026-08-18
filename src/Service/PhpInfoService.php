@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Traits\EnablementValueTrait;
 use App\Utils\StringUtils;
 use STS\Phpinfo\Info;
 use STS\Phpinfo\Models\Config;
@@ -39,7 +40,7 @@ use STS\Phpinfo\PhpInfo;
  * @phpstan-type GroupType = array{
  *     name: string|null,
  *     note: string|null,
- *     headings: bool,
+ *     headers: string[]|null,
  *     configs: ConfigType[]
  * }
  * @phpstan-type ModuleType = array{
@@ -55,12 +56,7 @@ use STS\Phpinfo\PhpInfo;
  */
 class PhpInfoService
 {
-    public const string COLUMN_DIRECTIVE = 'Directive';
-    public const string COLUMN_LOCAL = 'Local Value';
-    public const string COLUMN_MASTER = 'Master Value';
-
-    private const array DISABLED = ['false', 'off', 'no', 'disabled', 'not enabled'];
-    private const array ENABLED = ['true', 'on', 'yes', 'enabled', 'supported', 'active'];
+    use EnablementValueTrait;
 
     /**
      * @return InfoType
@@ -86,18 +82,11 @@ class PhpInfoService
             $value = \mb_convert_encoding($value, 'ISO-8859-1', 'UTF-8');
             $value = \str_replace(['✘ ', '✔ ', '⊕'], '', $value);
         }
+        if (\str_starts_with($value, '(') && \str_ends_with($value, ')')) {
+            return \ucfirst(\trim($value, '()'));
+        }
 
         return $value;
-    }
-
-    private function isDisabledValue(string $value): bool
-    {
-        return \in_array(\strtolower($value), self::DISABLED, true);
-    }
-
-    private function isEnabledValue(string $value): bool
-    {
-        return \in_array(\strtolower($value), self::ENABLED, true);
     }
 
     private function isNoValue(string $value): bool
@@ -154,7 +143,7 @@ class PhpInfoService
         return [
             'name' => $group->name(),
             'note' => StringUtils::trim($group->note()),
-            'headings' => $this->parseHeadings($group),
+            'headers' => $this->parseHeaders($group),
             'configs' => $this->parseConfigs($group),
         ];
     }
@@ -170,16 +159,12 @@ class PhpInfoService
         );
     }
 
-    private function parseHeadings(Group $group): bool
+    /**
+     * @return string[]|null
+     */
+    private function parseHeaders(Group $group): ?array
     {
-        if ($group->hasHeadings()) {
-            return null !== \array_find(
-                $group->configs()->toArray(),
-                static fn (Config $config): bool => $config->hasMasterValue()
-            );
-        }
-
-        return false;
+        return $group->hasHeadings() ? $group->headings()->toArray() : null;
     }
 
     /**
@@ -187,7 +172,6 @@ class PhpInfoService
      */
     private function parseLoadedExtensions(): array
     {
-        /** @phpstan-var EntryType $local */
         $local = [
             'value' => \implode(', ', \get_loaded_extensions()),
             'color' => false,
@@ -197,18 +181,17 @@ class PhpInfoService
             'disabled' => false,
         ];
 
-        /** @phpstan-var ConfigType $config */
         $config = [
             'name' => 'Loaded Extensions',
             'local' => $local,
             'master' => null,
         ];
-        /** @phpstan-var GroupType $group */
         $group = [
             'name' => null,
             'note' => null,
             'headings' => false,
             'configs' => [$config],
+            'headers' => null,
         ];
 
         return [
@@ -238,7 +221,7 @@ class PhpInfoService
             $info->modules()->toArray()
         );
 
-        // add the loaded extensions
+        // add loaded extensions
         $offset = \max(0, \count($modules) - 2);
         $module = $this->parseLoadedExtensions();
         \array_splice($modules, $offset, 0, [$module]);

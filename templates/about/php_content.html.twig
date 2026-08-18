@@ -28,13 +28,13 @@
                 <div class="p-2 bg-body-tertiary small">{{ group.note|nl2br }}</div>
             {% endif %}
             <table class="table table-sm table-hover">
-                {% if group.headings %}
+                {% if group.headers %}
                     <thead>
-                    <tr>
-                        <th class="e">{{ constant('App\\Service\\PhpInfoService::COLUMN_DIRECTIVE') }}</th>
-                        <th class="v">{{ constant('App\\Service\\PhpInfoService::COLUMN_LOCAL') }}</th>
-                        <th class="v">{{ constant('App\\Service\\PhpInfoService::COLUMN_MASTER') }}</th>
-                    </tr>
+                        <tr>
+                            {% for header in group.headers %}
+                                <th class="{{ loop.index0 === 0 ? 'e' : 'v' }}">{{ header }}</th>
+                            {% endfor %}
+                        </tr>
                     </thead>
                 {% endif %}
                 <tbody>
@@ -45,9 +45,7 @@
                             {{- config.local.value|raw -}}
                         </td>
                         {% if config.master %}
-                            <td {{ _self.output_attr(config.master) }}>
-                                {{- config.master.value|raw -}}
-                            </td>
+                            <td {{ _self.output_attr(config.master) }}>{{- config.master.value|raw -}}</td>
                         {% endif %}
                     </tr>
                 {% endfor %}

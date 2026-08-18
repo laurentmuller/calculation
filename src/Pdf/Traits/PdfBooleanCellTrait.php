@@ -39,7 +39,7 @@ trait PdfBooleanCellTrait
      */
     protected function getBooleanCell(bool $enabled, string $text, int $cols = 1, ?PdfBorder $border = null): PdfCell
     {
-        $key = \sprintf('%s-%d-%d-%d', $text, $cols, (int) $enabled, (int) ($border instanceof PdfBorder));
+        $key = $this->getBooleanKey($enabled, $text, $cols, $border);
         if (\array_key_exists($key, $this->booleanCells)) {
             return $this->booleanCells[$key];
         }
@@ -82,5 +82,17 @@ trait PdfBooleanCellTrait
     private function getBooleanIcon(bool $enabled): FontAwesomeIcon
     {
         return new FontAwesomeIcon(FontAwesomePath::SOLID, $enabled ? 'check' : 'xmark');
+    }
+
+    private function getBooleanKey(bool $enabled, string $text, int $cols = 1, ?PdfBorder $border = null): string
+    {
+        $borderKey = $border instanceof PdfBorder
+            ? (int) $border->left << 0
+            | (int) $border->top << 1
+            | (int) $border->right << 2
+            | (int) $border->bottom << 3
+            : 0;
+
+        return \sprintf('%d-%s-%d-%d', (int) $enabled, $text, $cols, $borderKey);
     }
 }

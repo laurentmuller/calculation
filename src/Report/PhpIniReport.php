@@ -23,7 +23,6 @@ use App\Pdf\PdfTable;
 use App\Pdf\Traits\PdfBooleanCellTrait;
 use App\Service\FontAwesomeCellService;
 use App\Service\PhpInfoService;
-use App\Traits\ClosureSortTrait;
 use fpdf\Enums\PdfMove;
 use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfBorder;
@@ -38,8 +37,9 @@ use fpdf\PdfBorder;
  */
 class PhpIniReport extends AbstractReport
 {
-    use ClosureSortTrait;
     use PdfBooleanCellTrait;
+
+    private const array EMPTY_HEADERS = ['', '', ''];
 
     private ?PdfStyle $noValueStyle = null;
 
@@ -81,15 +81,23 @@ class PhpIniReport extends AbstractReport
         return $style;
     }
 
-    private function createTable(bool $headings): PdfTable
+    /**
+     * @param string[]|null $headers
+     */
+    private function createTable(?array $headers): PdfTable
     {
+        $headings = null !== $headers;
+        $headers ??= self::EMPTY_HEADERS;
         $table = PdfTable::instance($this)
-            ->setHeaderStyle($this->createRowStyle(true))
-            ->addColumns(
-                PdfColumn::left(PhpInfoService::COLUMN_DIRECTIVE, 40),
-                PdfColumn::left(PhpInfoService::COLUMN_LOCAL, 30),
-                PdfColumn::left(PhpInfoService::COLUMN_MASTER, 30)
-            );
+            ->setHeaderStyle($this->createRowStyle(true));
+        if (2 === \count($headers)) {
+            $table->addColumn(PdfColumn::left($headers[0], 40));
+            $table->addColumn(PdfColumn::left($headers[1], 60));
+        } else {
+            $table->addColumn(PdfColumn::left($headers[0], 40));
+            $table->addColumn(PdfColumn::left($headers[1], 30));
+            $table->addColumn(PdfColumn::left($headers[2], 30));
+        }
         if ($headings) {
             $table->outputHeaders();
         } else {
@@ -157,7 +165,7 @@ class PhpIniReport extends AbstractReport
         if (null !== $group['name']) {
             ++$count;
         }
-        if ($group['headings']) {
+        if (null !== $group['headers']) {
             ++$count;
         }
         if (null !== $group['note']) {
@@ -189,18 +197,19 @@ class PhpIniReport extends AbstractReport
      */
     private function outputConfig(PdfTable $table, array $config): void
     {
-        if (null === $config['master']) {
-            $table->addRow(
-                new PdfCell(text: $config['name'], style: $this->createRowStyle()),
-                $this->getConfigCell($config['local'], 2),
-            );
-        } else {
-            $table->addRow(
-                new PdfCell(text: $config['name'], style: $this->createRowStyle()),
-                $this->getConfigCell($config['local']),
-                $this->getConfigCell($config['master']),
-            );
+        $cols = 1;
+        $master = $config['master'];
+        if (null === $master && $table->getColumnsCount() > 2) {
+            ++$cols;
         }
+
+        $table->startRow();
+        $table->addCell(new PdfCell(text: $config['name'], style: $this->createRowStyle()));
+        $table->addCell($this->getConfigCell($config['local'], $cols));
+        if (null !== $master) {
+            $table->addCell($this->getConfigCell($master));
+        }
+        $table->completeRow();
     }
 
     /**
@@ -225,7 +234,7 @@ class PhpIniReport extends AbstractReport
             $this->resetStyle();
         }
 
-        $table = $this->createTable($group['headings']);
+        $table = $this->createTable($group['headers']);
         foreach ($group['configs'] as $config) {
             $this->outputConfig($table, $config);
         }

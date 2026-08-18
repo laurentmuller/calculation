@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Traits\EnablementValueTrait;
 use App\Utils\StringUtils;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
@@ -23,6 +24,8 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class DatabaseInfoService
 {
+    use EnablementValueTrait;
+
     private const array DATABASE_PARAMETERS = [
         'dbname' => 'Name',
         'serverVersion' => 'Version',
@@ -31,8 +34,6 @@ class DatabaseInfoService
         'driver' => 'Driver',
         'charset' => 'Charset',
     ];
-    private const array DISABLED_VALUES = ['off', 'no', 'false', 'disabled'];
-    private const array ENABLED_VALUES = ['on', 'yes', 'true', 'enabled'];
 
     /** @var array<string, string> */
     private array $configuration = [];
@@ -94,22 +95,6 @@ class DatabaseInfoService
     public function getVersion(): string
     {
         return $this->version ??= $this->getConfiguration()['version'] ?? 'Unknown';
-    }
-
-    /**
-     * Returns if the given value represents a disabled value.
-     */
-    public function isDisabledValue(string $value): bool
-    {
-        return \in_array(\strtolower($value), self::DISABLED_VALUES, true);
-    }
-
-    /**
-     * Returns if the given value represents an enabled value.
-     */
-    public function isEnabledValue(string $value): bool
-    {
-        return \in_array(\strtolower($value), self::ENABLED_VALUES, true);
     }
 
     private function convertValue(string $value): string

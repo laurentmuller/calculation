@@ -34,7 +34,7 @@ use Symfony\Component\Clock\DatePoint;
 /**
  * Extends the worksheet class with shortcuts to render cells.
  *
- *  Note: All work sheets are instance of {@link SpreadsheetDocument}.
+ *  Note: All work sheets are an instance of {@link SpreadsheetDocument}.
  */
 class WorksheetDocument extends Worksheet
 {
@@ -165,7 +165,7 @@ class WorksheetDocument extends Worksheet
     /**
      * Sets the content of the given cell.
      *
-     * Do nothing if the value to set is null or is an empty string ('').
+     * Do nothing if the value to set is null or is an empty string.
      *
      * @param int   $columnIndex the one-based column index (1 = 'A' - First column)
      * @param int   $rowIndex    the one-based row index (1 = First row)
@@ -221,7 +221,7 @@ class WorksheetDocument extends Worksheet
     /**
      * Sets a hyperlink for the given cell.
      *
-     * Do nothing if the link is an empty string ('').
+     * Do nothing if the link is an empty string.
      *
      * @param int    $columnIndex the one-based column index (1 = 'A' - First column)
      * @param int    $rowIndex    the one-based row index (1 = First row)
@@ -451,7 +451,7 @@ class WorksheetDocument extends Worksheet
     /**
      * Sets the headers with bold style and frozen the given row index.
      *
-     * Do nothing if headers is an empty array.
+     * Do nothing if headers are an empty array.
      *
      * @param array<string,HeaderFormat> $headers     the headers where the key is the column name to translate
      * @param int                        $columnIndex the one-based starting column index (1 = 'A' - First column)

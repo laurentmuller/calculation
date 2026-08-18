@@ -73,6 +73,42 @@ class PhpInfoService
         ];
     }
 
+    /**
+     * @param ModuleType[] $modules
+     */
+    private function addExtensionsModule(array &$modules): void
+    {
+        $local = [
+            'value' => \implode(', ', \get_loaded_extensions()),
+            'color' => false,
+            'no_value' => false,
+            'redacted' => false,
+            'enabled' => false,
+            'disabled' => false,
+        ];
+
+        $config = [
+            'name' => 'Loaded Extensions',
+            'local' => $local,
+            'master' => null,
+        ];
+        $group = [
+            'name' => null,
+            'note' => null,
+            'headings' => false,
+            'configs' => [$config],
+            'headers' => null,
+        ];
+
+        $module = [
+            'name' => 'Configuration',
+            'groups' => [$group],
+        ];
+
+        $offset = \max(0, \count($modules) - 2);
+        \array_splice($modules, $offset, 0, [$module]);
+    }
+
     private function convertValue(string $value): string
     {
         if ('(none)' === $value) {
@@ -96,7 +132,7 @@ class PhpInfoService
 
     private function isRedacted(string $name): bool
     {
-        $keys = ['_KEY', '_USER_NAME', 'APP_SECRET', '_PASSWORD', 'MAILER_DSN', 'DATABASE_URL'];
+        $keys = ['_KEY', '_USER_NAME', 'APP_SECRET', '_PASSWORD', 'MAILER_DSN', 'DATABASE_URL', '_SESSION_ID'];
         foreach ($keys as $key) {
             if (StringUtils::containsIgnoreCase($name, $key)) {
                 return true;
@@ -170,45 +206,17 @@ class PhpInfoService
     /**
      * @return ModuleType
      */
-    private function parseLoadedExtensions(): array
-    {
-        $local = [
-            'value' => \implode(', ', \get_loaded_extensions()),
-            'color' => false,
-            'no_value' => false,
-            'redacted' => false,
-            'enabled' => false,
-            'disabled' => false,
-        ];
-
-        $config = [
-            'name' => 'Loaded Extensions',
-            'local' => $local,
-            'master' => null,
-        ];
-        $group = [
-            'name' => null,
-            'note' => null,
-            'headings' => false,
-            'configs' => [$config],
-            'headers' => null,
-        ];
-
-        return [
-            'name' => 'Configuration',
-            'groups' => [$group],
-        ];
-    }
-
-    /**
-     * @return ModuleType
-     */
     private function parseModule(Module $module): array
     {
-        return [
+        $module = [
             'name' => $module->name(),
             'groups' => $this->parseGroups($module),
         ];
+        if ('PHP Variables' === $module['name']) {
+            return $this->parseVariables($module);
+        }
+
+        return $module;
     }
 
     /**
@@ -222,9 +230,7 @@ class PhpInfoService
         );
 
         // add loaded extensions
-        $offset = \max(0, \count($modules) - 2);
-        $module = $this->parseLoadedExtensions();
-        \array_splice($modules, $offset, 0, [$module]);
+        $this->addExtensionsModule($modules);
 
         return $modules;
     }
@@ -268,5 +274,42 @@ class PhpInfoService
             'enabled' => $enabled,
             'disabled' => $disabled,
         ];
+    }
+
+    /**
+     * @param ModuleType $module
+     *
+     * @return ModuleType
+     */
+    private function parseVariables(array $module): array
+    {
+        if (1 !== \count($module['groups'])) {
+            return $module;
+        }
+
+        $groups = [];
+        $group = $module['groups'][0];
+        $pattern = '/\\$_(.*)\\[\'(.*)\']/';
+
+        foreach ($group['configs'] as $config) {
+            if (!StringUtils::pregMatch($pattern, $config['name'], $matches)) {
+                continue;
+            }
+            $name = $matches[1];
+            $groups[$name] ??= [
+                'name' => $name,
+                'note' => null,
+                'headers' => $group['headers'],
+                'configs' => [],
+            ];
+            $groups[$name]['configs'][] = [
+                'name' => $matches[2],
+                'local' => $config['local'],
+                'master' => $config['master'],
+            ];
+        }
+        $module['groups'] = $groups;
+
+        return $module;
     }
 }

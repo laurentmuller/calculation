@@ -19,10 +19,6 @@ use App\Spreadsheet\PhpIniDocument;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @phpstan-import-type EntryType from PhpInfoService
- * @phpstan-import-type ConfigType from PhpInfoService
- * @phpstan-import-type GroupType from PhpInfoService
- * @phpstan-import-type ModuleType from PhpInfoService
  * @phpstan-import-type InfoType from PhpInfoService
  */
 final class PhpIniDocumentTest extends TestCase
@@ -46,6 +42,7 @@ final class PhpIniDocumentTest extends TestCase
             'modules' => [
                 [
                     'name' => 'Module',
+                    'size' => 8,
                     'groups' => [
                         [
                             'name' => 'No column',
@@ -75,7 +72,7 @@ final class PhpIniDocumentTest extends TestCase
                         ],
                         [
                             'name' => '2 columns',
-                            'note' => 'Notes',
+                            'note' => 'Note',
                             'headers' => ['Directive', 'Local'],
                             'configs' => [
                                 [
@@ -94,7 +91,7 @@ final class PhpIniDocumentTest extends TestCase
                         ],
                         [
                             'name' => '3 columns',
-                            'note' => 'Notes',
+                            'note' => 'Note',
                             'headers' => ['Directive', 'Local', 'Master'],
                             'configs' => [
                                 [

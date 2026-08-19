@@ -134,7 +134,7 @@ final class PositionServiceTest extends TestCase
     {
         $service = $this->createService();
         $actual = $service->getGoogleMapUrl(0.1, 0.1);
-        self::assertStringStartsWith('https://www.google.ch/maps/place/0.1,0.1', $actual);
+        self::assertSame('https://www.google.ch/maps/place/0.1,0.1', $actual);
     }
 
     private function createService(): PositionService

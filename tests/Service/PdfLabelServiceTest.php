@@ -31,6 +31,7 @@ final class PdfLabelServiceTest extends TestCase
     {
         $file = __DIR__ . '/../files/txt/empty.txt';
         self::expectException(PdfException::class);
+        self::expectExceptionMessageMatches('/Unable to deserialize the content of the file ".*empty.txt"./');
         $service = $this->createLabelService($file);
         $service->all();
     }
@@ -46,6 +47,7 @@ final class PdfLabelServiceTest extends TestCase
     {
         $file = __FILE__;
         self::expectException(PdfException::class);
+        self::expectExceptionMessageMatches('/Unable to deserialize the content of the file ".*"./');
         $service = $this->createLabelService($file);
         $service->all();
     }
@@ -54,6 +56,7 @@ final class PdfLabelServiceTest extends TestCase
     {
         $file = __DIR__ . '/fake.txt';
         self::expectException(PdfException::class);
+        self::expectExceptionMessageMatches('/Unable to deserialize the content of the file ".*fake.txt"./');
         $service = $this->createLabelService($file);
         $service->all();
     }
@@ -61,6 +64,7 @@ final class PdfLabelServiceTest extends TestCase
     public function testGetInvalid(): void
     {
         self::expectException(PdfException::class);
+        self::expectExceptionMessage('Unable to find the label "fake".');
         $service = $this->createLabelService();
         $service->get('fake');
     }

@@ -18,39 +18,69 @@
 {# content #}
 <div class="phpversion">
     {{ tools.headerLink('php.net', info.version, 'php') }}
-    {% for module in info.modules %}
-        <h5 class="my-2">{{ module.name }}</h5>
-        {% for group in module.groups %}
-            {% if group.name %}
-                <h6 class="my-2">{{- group.name }}</h6>
-            {% endif %}
-            {% if group.note %}
-                <div class="p-2 bg-body-tertiary small">{{ group.note|nl2br }}</div>
-            {% endif %}
-            <table class="table table-sm table-hover">
-                {% if group.headers %}
-                    <thead>
-                        <tr>
-                            {% for header in group.headers %}
-                                <th class="{{ loop.index0 === 0 ? 'e' : 'v' }}">{{ header }}</th>
-                            {% endfor %}
-                        </tr>
-                    </thead>
-                {% endif %}
-                <tbody>
-                {% for config in group.configs %}
-                    <tr>
-                        <td class="e">{{ config.name }}</td>
-                        <td {{ _self.output_attr(config.local, config.master ? null : 2) }}>
-                            {{- config.local.value|raw -}}
-                        </td>
-                        {% if config.master %}
-                            <td {{ _self.output_attr(config.master) }}>{{- config.master.value|raw -}}</td>
+    <div id="php-accordion">
+        {% for module in info.modules %}
+            {% set index = loop.index0 %}
+            {% set visible = index === 0 %}
+            {% set header_id = 'module-header-' ~ index %}
+            {% set module_id = 'module-content-' ~ index %}
+            {% set attrs = {
+                id: header_id,
+                href: '#' ~ module_id,
+                class: 'd-flex drop-down-icon-right fw-bold text-body py-1 mb-1 border-bottom',
+                title: (visible ? 'common.collapse' : 'common.expand')|trans,
+                'data-bs-toggle': 'collapse',
+                'aria-controls': module_id,
+                'aria-expanded': visible,
+            } %}
+            <div>
+                <a {{ html_attr(attrs) }}>
+                    <span class="flex-fill">{{ module.name }}</span>
+                    {% if module.size %}
+                        <span class="badge rounded-pill text-bg-secondary">{{ module.size }}</span>
+                    {% endif %}
+                </a>
+            </div>
+            {% set attrs = {
+                id: module_id,
+                class: ['collapse', 'ms-2', visible ? 'show'],
+                'data-bs-parent': '#php-accordion',
+                'aria-labelledby': header_id,
+            } %}
+            <div {{ html_attr(attrs) }}>
+                {% for group in module.groups %}
+                    {% if group.name %}
+                        <div class="my-1 fw-bold">{{- group.name }}</div>
+                    {% endif %}
+                    {% if group.note %}
+                        <div class="p-2 bg-body-tertiary small">{{ group.note|nl2br }}</div>
+                    {% endif %}
+                    <table class="table table-sm table-hover">
+                        {% if group.headers %}
+                            <thead>
+                            <tr>
+                                {% for header in group.headers %}
+                                    <th class="{{ loop.index0 === 0 ? 'e' : 'v' }}">{{ header }}</th>
+                                {% endfor %}
+                            </tr>
+                            </thead>
                         {% endif %}
-                    </tr>
+                        <tbody>
+                        {% for config in group.configs %}
+                            <tr>
+                                <td class="e">{{ config.name }}</td>
+                                <td {{ _self.output_attr(config.local, config.master ? null : 2) }}>
+                                    {{- config.local.value|raw -}}
+                                </td>
+                                {% if config.master %}
+                                    <td {{ _self.output_attr(config.master) }}>{{- config.master.value|raw -}}</td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 {% endfor %}
-                </tbody>
-            </table>
+            </div>
         {% endfor %}
-    {% endfor %}
+    </div>
 </div>

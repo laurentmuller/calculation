@@ -32,6 +32,68 @@ final class PdfLabelTest extends TestCase
         );
     }
 
+    public function testFromArray(): void
+    {
+        $source = [
+            'name' => '3422',
+            'cols' => 3,
+            'rows' => 8,
+            'width' => 70,
+            'height' => 35,
+            'marginLeft' => 0,
+            'marginTop' => 8.5,
+            'spaceWidth' => 0,
+            'spaceHeight' => 0,
+            'fontSize' => 9,
+            'unit' => 'mm',
+            'pageSize' => 'A4',
+        ];
+        $label = PdfLabel::fromArray($source);
+        self::assertSame('3422', $label->name);
+    }
+
+    public function testFromArrayInvalidEnum(): void
+    {
+        $source = [
+            'name' => '3422',
+            'cols' => 3,
+            'rows' => 8,
+            'width' => 70,
+            'height' => 35,
+            'marginLeft' => 0,
+            'marginTop' => 8.5,
+            'spaceWidth' => 0,
+            'spaceHeight' => 0,
+            'fontSize' => 9,
+            'unit' => 'fake',
+            'pageSize' => 'A4',
+        ];
+        self::expectException(\ValueError::class);
+        self::expectExceptionMessage('"fake" is not a valid backing value for enum fpdf\Enums\PdfUnit');
+        PdfLabel::fromArray($source);
+    }
+
+    public function testFromArrayInvalidValue(): void
+    {
+        $source = [
+            'name' => '3422',
+            'cols' => 3,
+            'rows' => 8,
+            'width' => 70,
+            'height' => 35,
+            'marginLeft' => 'fake',
+            'marginTop' => 8.5,
+            'spaceWidth' => 0,
+            'spaceHeight' => 0,
+            'fontSize' => 9,
+            'unit' => 'mm',
+            'pageSize' => 'A4',
+        ];
+        self::expectException(\TypeError::class);
+        self::expectExceptionMessageMatches('/\\(\\$marginLeft\\) must be of type float, string given/');
+        PdfLabel::fromArray($source);
+    }
+
     public function testOffsetX(): void
     {
         $label = $this->getLabel('5160');

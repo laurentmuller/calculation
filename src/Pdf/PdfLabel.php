@@ -58,6 +58,29 @@ readonly class PdfLabel implements \Stringable
     }
 
     /**
+     * Creates a new instance from the given array.
+     *
+     * @throws \Error if an input value is invalid
+     */
+    public static function fromArray(array $source): self
+    {
+        return new self(
+            name: $source['name'],
+            cols: $source['cols'],
+            rows: $source['rows'],
+            width: $source['width'],
+            height: $source['height'],
+            marginLeft: $source['marginLeft'],
+            marginTop: $source['marginTop'],
+            spaceWidth: $source['spaceWidth'],
+            spaceHeight: $source['spaceHeight'],
+            fontSize: $source['fontSize'],
+            unit: PdfUnit::from($source['unit']),
+            pageSize: PdfPageSize::from($source['pageSize']),
+        );
+    }
+
+    /**
      * Gets the horizontal offset for the given column.
      */
     public function offsetX(int $column): float

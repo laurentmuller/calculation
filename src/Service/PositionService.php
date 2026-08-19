@@ -23,6 +23,11 @@ class PositionService
 {
     use TranslatorTrait;
 
+    public const float MAX_LATITUDE = 90.0;
+    public const float MAX_LONGITUDE = 180.0;
+    public const float MIN_LATITUDE = -90.0;
+    public const float MIN_LONGITUDE = -180.0;
+
     /** The directions. */
     private const array DIRECTIONS = [
         'N',
@@ -57,9 +62,9 @@ class PositionService
     /**
      * The replacement terms.
      *
-     * @var string[]
+     * @var string[]|null
      */
-    private array $replace = [];
+    private ?array $replace = null;
 
     public function __construct(private readonly TranslatorInterface $translator)
     {
@@ -76,7 +81,7 @@ class PositionService
     }
 
     /**
-     * Format the given latitude to degrees, minutes and seconds.
+     * Format the given latitude to degrees, minutes, and seconds.
      *
      * @throws \InvalidArgumentException if the latitude is not between -90 to +90 (inclusive)
      */
@@ -88,7 +93,7 @@ class PositionService
     }
 
     /**
-     * Format the given longitude to degrees, minutes and seconds.
+     * Format the given longitude to degrees, minutes, and seconds.
      *
      * @throws \InvalidArgumentException if the longitude is not between -180 to +180 (inclusive)
      */
@@ -100,7 +105,7 @@ class PositionService
     }
 
     /**
-     * Format the given latitude and longitude to degrees, minutes and seconds.
+     * Format the given latitude and longitude to degrees, minutes, and seconds.
      *
      * @throws \InvalidArgumentException if the latitude is not between -90 to +90 (inclusive) or
      *                                   if the longitude is not between -180 to +180 (inclusive)
@@ -146,8 +151,8 @@ class PositionService
      */
     private function checkLatitude(float $latitude): void
     {
-        if ($latitude < -90 || $latitude > 90) {
-            throw new \InvalidArgumentException(\sprintf('The latitude is not between -90 to +90 (inclusive). %.5f given.', $latitude));
+        if ($latitude < self::MIN_LATITUDE || $latitude > self::MAX_LATITUDE) {
+            throw new \InvalidArgumentException(\sprintf('The latitude is not between %+d to %+d (inclusive). %.5f given.', self::MIN_LATITUDE, self::MAX_LATITUDE, $latitude));
         }
     }
 
@@ -156,8 +161,8 @@ class PositionService
      */
     private function checkLongitude(float $longitude): void
     {
-        if ($longitude < -180 || $longitude > 180) {
-            throw new \InvalidArgumentException(\sprintf('The longitude is not between -180 to +180 (inclusive). %.5f given.', $longitude));
+        if ($longitude < self::MIN_LONGITUDE || $longitude > self::MAX_LONGITUDE) {
+            throw new \InvalidArgumentException(\sprintf('The longitude is not between %+d to %+d (inclusive). %.5f given.', self::MIN_LONGITUDE, self::MAX_LONGITUDE, $longitude));
         }
     }
 
@@ -179,10 +184,9 @@ class PositionService
      */
     private function getReplace(): array
     {
-        if ([] === $this->replace) {
-            $this->replace = \array_map(fn (string $s): string => $this->trans('openweather.direction.' . $s), self::SEARCH);
-        }
-
-        return $this->replace;
+        return $this->replace ??= \array_map(
+            fn (string $s): string => $this->trans('openweather.direction.' . $s),
+            self::SEARCH
+        );
     }
 }

@@ -56,13 +56,14 @@
          */
         showError: function () {
             const $this = $(this);
-            if ($this.data('error')) {
+            const $alert = $this.find('.alert:first');
+            if (!$alert.length || $this.data('error')) {
                 return;
             }
             $this.data('error', true);
             const content = $('#configuration').data('error');
             const html = `<i class='fas fa-lg fa-exclamation-triangle me-2'></i>${content}`;
-            $this.find('.alert:first').toggleClass('alert-danger py-0 py-3').html(html);
+            $alert.toggleClass('alert-danger py-0 py-3').html(html);
         },
 
         /**
@@ -127,26 +128,19 @@
      * Ready function
      */
     $(function () {
-        const $accordion = $('#aboutAccordion');
         const $configuration = $('#configuration');
         const expandTitle = $configuration.data('expand');
         const collapseTitle = $configuration.data('collapse');
-
-        // .card-body
-        $accordion.on('shown.bs.collapse', function (e) {
+        $('#aboutAccordion').on('shown.bs.collapse', function (e) {
             const $target = $(e.target);
-            const $content = $target.find('.collapse-content');
-            if ($content.length) {
-                $content.loadContent();
-            } else {
-                $target.showError();
-            }
             $target.updateTitle(collapseTitle);
+            const $content = $target.find('.collapse-content');
+            if ($content.length && !$content.data('loaded')) {
+                $content.loadContent();
+            }
         }).on('hidden.bs.collapse', function (e) {
             $(e.target).updateTitle(expandTitle);
-        });
-
-        $accordion.on('hide.bs.modal', '.modal', function () {
+        }).on('hide.bs.modal', '.modal', function () {
             $('.modal .pre-scrollable').scrollTop(0);
         }).on('click', '.modal-data a', function (e) {
             e.preventDefault();

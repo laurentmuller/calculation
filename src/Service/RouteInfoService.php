@@ -81,7 +81,13 @@ readonly class RouteInfoService
         $result = [];
         $routes = $this->router->getRouteCollection()->all();
         foreach ($routes as $name => $route) {
-            $result[$name] = $this->parseRoute($name, $route);
+            $path = $route->getPath();
+            $result[$name] = [
+                'name' => $name,
+                'path' => $path,
+                'debug' => \str_starts_with($path, '/_'),
+                'methods' => $this->parseMethod($route),
+            ];
         }
         \ksort($result);
 
@@ -93,22 +99,5 @@ readonly class RouteInfoService
         $methods = $route->getMethods();
 
         return [] === $methods ? ['ANY'] : $methods;
-    }
-
-    /**
-     * @phpstan-return RouteType
-     */
-    private function parseRoute(string $name, Route $route): array
-    {
-        $path = $route->getPath();
-        $debug = \str_starts_with($path, '/_');
-        $methods = $this->parseMethod($route);
-
-        return [
-            'name' => $name,
-            'path' => $path,
-            'debug' => $debug,
-            'methods' => $methods,
-        ];
     }
 }

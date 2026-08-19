@@ -45,7 +45,8 @@ use STS\Phpinfo\PhpInfo;
  * }
  * @phpstan-type ModuleType = array{
  *     name: string,
- *     groups: GroupType[]
+ *     groups: GroupType[],
+ *     size: int
  * }
  * @phpstan-type InfoType = array{
  *     version: string,
@@ -86,7 +87,6 @@ class PhpInfoService
             'enabled' => false,
             'disabled' => false,
         ];
-
         $config = [
             'name' => 'Loaded Extensions',
             'local' => $local,
@@ -99,10 +99,10 @@ class PhpInfoService
             'configs' => [$config],
             'headers' => null,
         ];
-
         $module = [
             'name' => 'Configuration',
             'groups' => [$group],
+            'size' => 1,
         ];
 
         $offset = \max(0, \count($modules) - 2);
@@ -111,15 +111,13 @@ class PhpInfoService
 
     private function convertValue(string $value): string
     {
-        if ('(none)' === $value) {
+        if ('none' === $value || '(none)' === $value) {
             return 'None';
         }
+
         if ('UTF-8' === \mb_detect_encoding($value, \mb_detect_order(), true)) {
             $value = \mb_convert_encoding($value, 'ISO-8859-1', 'UTF-8');
             $value = \str_replace(['✘ ', '✔ ', '⊕'], '', $value);
-        }
-        if (\str_starts_with($value, '(') && \str_ends_with($value, ')')) {
-            return \ucfirst(\trim($value, '()'));
         }
 
         return $value;
@@ -132,14 +130,10 @@ class PhpInfoService
 
     private function isRedacted(string $name): bool
     {
-        $keys = ['_KEY', '_USER_NAME', 'APP_SECRET', '_PASSWORD', 'MAILER_DSN', 'DATABASE_URL', '_SESSION_ID'];
-        foreach ($keys as $key) {
-            if (StringUtils::containsIgnoreCase($name, $key)) {
-                return true;
-            }
-        }
-
-        return false;
+        return null !== \array_find(
+            ['_KEY', '_USER_NAME', 'APP_SECRET', '_PASSWORD', 'MAILER_DSN', 'DATABASE_URL', '_SESSION_ID'],
+            static fn (string $key): bool => StringUtils::containsIgnoreCase($name, $key)
+        );
     }
 
     /**
@@ -147,17 +141,31 @@ class PhpInfoService
      */
     private function parseConfig(Config $config): array
     {
-        $name = $config->name();
-        $localValue = $this->convertValue($config->localValue() ?? 'No Value');
-        $masterValue = $this->convertValue($config->masterValue() ?? 'No Value');
-        $localConfig = $this->parseValue($name, $localValue);
-        $masterConfig = $config->hasMasterValue() && '' !== $masterValue ? $this->parseValue($name, $masterValue) : null;
-
         return [
-            'name' => $name,
-            'local' => $localConfig,
-            'master' => $masterConfig,
+            'name' => $config->name(),
+            'local' => $this->parseConfigLocal($config),
+            'master' => $this->parseConfigMaster($config),
         ];
+    }
+
+    /**
+     * @return EntryType
+     */
+    private function parseConfigLocal(Config $config): array
+    {
+        return $this->parseValue($config->name(), $config->localValue());
+    }
+
+    /**
+     * @return EntryType|null
+     */
+    private function parseConfigMaster(Config $config): ?array
+    {
+        if ($config->hasMasterValue()) {
+            return $this->parseValue($config->name(), $config->masterValue());
+        }
+
+        return null;
     }
 
     /**
@@ -212,6 +220,12 @@ class PhpInfoService
             'name' => $module->name(),
             'groups' => $this->parseGroups($module),
         ];
+        $module['size'] = \array_reduce(
+            $module['groups'],
+            static fn (int $size, array $group): int => $size + \count($group['configs']),
+            0
+        );
+
         if ('PHP Variables' === $module['name']) {
             return $this->parseVariables($module);
         }
@@ -232,14 +246,17 @@ class PhpInfoService
         // add loaded extensions
         $this->addExtensionsModule($modules);
 
-        return $modules;
+        // remove empty modules
+        return \array_filter($modules, static fn (array $module): bool => 0 !== \count($module['groups']));
     }
 
     /**
      * @return EntryType
      */
-    private function parseValue(string $name, string $value): array
+    private function parseValue(string $name, ?string $value): array
     {
+        $value = $this->convertValue($value ?? 'No Value');
+
         $color = false;
         if (StringUtils::pregMatch('/#[\\da-f]{6}/i', $value, $matches)) {
             $value = $matches[0];
@@ -293,7 +310,7 @@ class PhpInfoService
 
         foreach ($group['configs'] as $config) {
             if (!StringUtils::pregMatch($pattern, $config['name'], $matches)) {
-                continue;
+                return $module;
             }
             $name = $matches[1];
             $groups[$name] ??= [
@@ -308,7 +325,7 @@ class PhpInfoService
                 'master' => $config['master'],
             ];
         }
-        $module['groups'] = $groups;
+        $module['groups'] = \array_values($groups);
 
         return $module;
     }

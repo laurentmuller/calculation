@@ -59,14 +59,13 @@ class RecaptchaResponseService
             return '';
         }
 
-        $html = '<div class="row">';
-        $html .= '<div class="col-4 col-md-3 text-nowrap">' . $key . '</div>';
-        $html .= '<div class="col-8 col-md-9 text-nowrap">&nbsp;:&nbsp;' . $value . '</div>';
-        $html .= '</div>';
-        if ($separator) {
-            $html .= '<hr class="mt-2 mb-1">';
-        }
+        $content = <<<HTML
+            <div class="row">
+                <div class="col-4 col-md-3 text-nowrap">$key</div>
+                <div class="col-8 col-md-9 text-nowrap">&nbsp;:&nbsp;$value</div>
+            </div>
+            HTML;
 
-        return $html;
+        return $separator ? $content . '<hr class="mt-2 mb-1">' : $content;
     }
 }

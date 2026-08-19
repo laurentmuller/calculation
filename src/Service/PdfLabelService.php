@@ -15,8 +15,6 @@ namespace App\Service;
 
 use App\Pdf\PdfLabel;
 use App\Utils\FileUtils;
-use fpdf\Enums\PdfPageSize;
-use fpdf\Enums\PdfUnit;
 use fpdf\PdfException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -74,30 +72,12 @@ readonly class PdfLabelService
     {
         try {
             $content = FileUtils::decodeJson($this->file);
-            $labels = \array_map($this->mapSource(...), $content);
+            $labels = \array_map(PdfLabel::fromArray(...), $content);
             $keys = \array_column($labels, 'name');
 
             return \array_combine($keys, $labels);
-        } catch (\Exception $e) {
+        } catch (\Exception|\ValueError $e) {
             throw PdfException::instance(\sprintf('Unable to deserialize the content of the file "%s".', $this->file), $e);
         }
-    }
-
-    private function mapSource(array $source): PdfLabel
-    {
-        return new PdfLabel(
-            name: $source['name'],
-            cols: $source['cols'],
-            rows: $source['rows'],
-            width: $source['width'],
-            height: $source['height'],
-            marginLeft: $source['marginLeft'],
-            marginTop: $source['marginTop'],
-            spaceWidth: $source['spaceWidth'],
-            spaceHeight: $source['spaceHeight'],
-            fontSize: $source['fontSize'],
-            unit: PdfUnit::from($source['unit']),
-            pageSize: PdfPageSize::from($source['pageSize']),
-        );
     }
 }

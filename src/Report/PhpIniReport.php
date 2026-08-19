@@ -40,8 +40,6 @@ class PhpIniReport extends AbstractReport
 {
     use PdfBooleanCellTrait;
 
-    private const array EMPTY_HEADERS = ['', '', ''];
-
     private ?PdfStyle $noValueStyle = null;
 
     public function __construct(
@@ -88,7 +86,7 @@ class PhpIniReport extends AbstractReport
     private function createTable(?array $headers): PdfTable
     {
         $headings = null !== $headers;
-        $headers ??= self::EMPTY_HEADERS;
+        $headers ??= ['', '', ''];
         $table = PdfTable::instance($this)
             ->setHeaderStyle($this->createRowStyle(true));
         if (2 === \count($headers)) {

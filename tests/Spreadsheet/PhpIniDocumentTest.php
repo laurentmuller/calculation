@@ -48,7 +48,52 @@ final class PhpIniDocumentTest extends TestCase
                     'name' => 'Module',
                     'groups' => [
                         [
-                            'name' => 'Group',
+                            'name' => 'No column',
+                            'note' => null,
+                            'headers' => null,
+                            'configs' => [
+                                [
+                                    'name' => 'Config',
+                                    'local' => [
+                                        'value' => 'locale',
+                                        'color' => false,
+                                        'no_value' => false,
+                                        'redacted' => false,
+                                        'enabled' => false,
+                                        'disabled' => false,
+                                    ],
+                                    'master' => [
+                                        'value' => 'master',
+                                        'color' => false,
+                                        'no_value' => false,
+                                        'redacted' => false,
+                                        'enabled' => false,
+                                        'disabled' => false,
+                                    ],
+                                ],
+                            ],
+                        ],
+                        [
+                            'name' => '2 columns',
+                            'note' => 'Notes',
+                            'headers' => ['Directive', 'Local'],
+                            'configs' => [
+                                [
+                                    'name' => 'Config',
+                                    'local' => [
+                                        'value' => 'locale',
+                                        'color' => false,
+                                        'no_value' => false,
+                                        'redacted' => false,
+                                        'enabled' => false,
+                                        'disabled' => false,
+                                    ],
+                                    'master' => null,
+                                ],
+                            ],
+                        ],
+                        [
+                            'name' => '3 columns',
                             'note' => 'Notes',
                             'headers' => ['Directive', 'Local', 'Master'],
                             'configs' => [

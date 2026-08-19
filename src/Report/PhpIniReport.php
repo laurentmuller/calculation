@@ -16,6 +16,7 @@ namespace App\Report;
 use App\Interfaces\DocumentHelperInterface;
 use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfTextColor;
+use App\Pdf\Html\HtmlColorName;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
@@ -229,8 +230,13 @@ class PhpIniReport extends AbstractReport
             $this->resetStyle();
         }
         if (null !== $group['note']) {
-            $this->setDrawColor(PdfDrawColor::cellBorder());
-            $this->multiCell(text: $group['note'], border: PdfBorder::all(), align: PdfTextAlignment::LEFT);
+            HtmlColorName::WHITE_SMOKE->applyFillColor($this);
+            $this->multiCell(
+                text: $group['note'],
+                border: PdfBorder::all(),
+                align: PdfTextAlignment::LEFT,
+                fill: true
+            );
             $this->resetStyle();
         }
 

@@ -24,9 +24,7 @@ use App\Pdf\PdfStyle;
 use App\Utils\FormatUtils;
 
 /**
- * Report outputting HTML color names.
- *
- * @phpstan-type ColorType = HtmlColorName|HtmlBootstrapColor|HtmlGrayedColor
+ * Report outputting color enumerations.
  */
 class HtmlColorsReport extends AbstractReport
 {
@@ -68,7 +66,7 @@ class HtmlColorsReport extends AbstractReport
     }
 
     /**
-     * @param array<ColorType> $colors
+     * @param array<PdfColorInterface&\BackedEnum> $colors
      */
     private function outputTable(string $title, array $colors, bool $currentY = false): void
     {
@@ -92,7 +90,7 @@ class HtmlColorsReport extends AbstractReport
             $style->setFillColor($color->getFillColor());
             $table->addRow(
                 $color->name,
-                $color->value,
+                (string) $color->value,
                 (string) $rgb[0],
                 (string) $rgb[1],
                 (string) $rgb[2],

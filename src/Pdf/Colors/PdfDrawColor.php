@@ -18,7 +18,7 @@ use fpdf\Color\PdfRgbColor;
 use fpdf\PdfDocument;
 
 /**
- * RGB color used for all drawing operations (lines, rectangles and for cell borders).
+ * RGB color used for all drawing operations (lines, rectangles, and for cell borders).
  */
 readonly class PdfDrawColor extends PdfRgbColor implements PdfDocumentUpdaterInterface
 {

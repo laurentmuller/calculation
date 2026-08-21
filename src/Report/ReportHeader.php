@@ -123,7 +123,7 @@ class ReportHeader
 
     private function getSmallStyle(): PdfStyle
     {
-        return $this->smallStyle ??= $this->smallStyle = PdfStyle::default()
+        return $this->smallStyle ??= PdfStyle::default()
             ->setFontSize(self::DEFAULT_FONT_SIZE);
     }
 

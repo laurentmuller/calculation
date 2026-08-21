@@ -16,6 +16,7 @@ namespace App\Pdf;
 use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
+use App\Pdf\Interfaces\PdfColorInterface;
 use App\Pdf\Interfaces\PdfDocumentUpdaterInterface;
 use fpdf\Enums\PdfFontName;
 use fpdf\Enums\PdfFontStyle;
@@ -60,9 +61,9 @@ class PdfStyle implements PdfDocumentUpdaterInterface
         $this->font = PdfFont::default();
         $this->line = PdfLine::default();
         $this->border = PdfBorder::all();
-        $this->textColor = PdfTextColor::default();
         $this->drawColor = PdfDrawColor::default();
         $this->fillColor = PdfFillColor::default();
+        $this->textColor = PdfTextColor::default();
     }
 
     public function __clone()
@@ -376,9 +377,9 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * Sets the draw color.
      */
-    public function setDrawColor(PdfDrawColor $drawColor): static
+    public function setDrawColor(PdfDrawColor|PdfColorInterface $drawColor): static
     {
-        $this->drawColor = $drawColor;
+        $this->drawColor = $drawColor instanceof PdfColorInterface ? $drawColor->getDrawColor() : $drawColor;
 
         return $this;
     }
@@ -386,9 +387,9 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * Sets the fill color.
      */
-    public function setFillColor(PdfFillColor $fillColor): static
+    public function setFillColor(PdfFillColor|PdfColorInterface $fillColor): static
     {
-        $this->fillColor = $fillColor;
+        $this->fillColor = $fillColor instanceof PdfColorInterface ? $fillColor->getFillColor() : $fillColor;
 
         return $this;
     }
@@ -510,9 +511,9 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * Sets the text color.
      */
-    public function setTextColor(PdfTextColor $textColor): static
+    public function setTextColor(PdfTextColor|PdfColorInterface $textColor): static
     {
-        $this->textColor = $textColor;
+        $this->textColor = $textColor instanceof PdfColorInterface ? $textColor->getTextColor() : $textColor;
 
         return $this;
     }

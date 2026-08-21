@@ -31,7 +31,7 @@ final class IndexServiceTest extends TestCase
 {
     public function testClear(): void
     {
-        $cache = $this->createMock(TagAwareAdapter::class);
+        $cache = self::createMock(TagAwareAdapter::class);
         $cache->expects(self::once())
             ->method('invalidateTags');
         $service = $this->createService(cache: $cache);
@@ -71,12 +71,12 @@ final class IndexServiceTest extends TestCase
 
     public function testGetLastCalculations(): void
     {
-        $repository = $this->createMock(CalculationRepository::class);
+        $repository = self::createMock(CalculationRepository::class);
         $repository->expects(self::once())
             ->method('getLastCalculations')
             ->willReturn([]);
 
-        $manager = $this->createMock(EntityManagerInterface::class);
+        $manager = self::createMock(EntityManagerInterface::class);
         $manager->expects(self::once())
             ->method('getRepository')
             ->willReturn($repository);
@@ -89,17 +89,17 @@ final class IndexServiceTest extends TestCase
     public function testGetMonthChartData(): void
     {
         $monthChartData = new MonthChartData([]);
-        $repository = $this->createMock(CalculationRepository::class);
+        $repository = self::createMock(CalculationRepository::class);
         $repository->expects(self::once())
             ->method('getMonthChartData')
             ->willReturn($monthChartData);
 
-        $manager = $this->createMock(EntityManagerInterface::class);
+        $manager = self::createMock(EntityManagerInterface::class);
         $manager->expects(self::once())
             ->method('getRepository')
             ->willReturn($repository);
 
-        $service = $this->createService($manager);
+        $service = self::createService($manager);
         $actual = $service->getMonthChartData();
         self::assertCount(0, $actual);
     }
@@ -107,12 +107,12 @@ final class IndexServiceTest extends TestCase
     public function testGetStateChartData(): void
     {
         $stateChartData = new StateChartData([]);
-        $repository = $this->createMock(CalculationStateRepository::class);
+        $repository = self::createMock(CalculationStateRepository::class);
         $repository->expects(self::once())
             ->method('getStateChartData')
             ->willReturn($stateChartData);
 
-        $manager = $this->createMock(EntityManagerInterface::class);
+        $manager = self::createMock(EntityManagerInterface::class);
         $manager->expects(self::once())
             ->method('getRepository')
             ->willReturn($repository);
@@ -124,17 +124,17 @@ final class IndexServiceTest extends TestCase
 
     public function testOnFlush(): void
     {
-        $unitOfWork = $this->createMock(UnitOfWork::class);
+        $unitOfWork = self::createMock(UnitOfWork::class);
         $unitOfWork->expects(self::once())
             ->method('getScheduledEntityInsertions')
             ->willReturn([new Group()]);
 
-        $manager = $this->createMock(EntityManagerInterface::class);
+        $manager = self::createMock(EntityManagerInterface::class);
         $manager->expects(self::once())
             ->method('getUnitOfWork')
             ->willReturn($unitOfWork);
 
-        $args = $this->createMock(OnFlushEventArgs::class);
+        $args = self::createMock(OnFlushEventArgs::class);
         $args->expects(self::once())
             ->method('getObjectManager')
             ->willReturn($manager);

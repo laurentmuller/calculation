@@ -105,7 +105,7 @@ final class ResponseListenerTest extends TestCase
     {
         $file = $this->getCspFile();
         $listener = $this->createListener($file);
-        $request = $this->createMock(Request::class);
+        $request = self::createMock(Request::class);
         $request->expects(self::once())
             ->method('isSecure')
             ->willReturn(true);

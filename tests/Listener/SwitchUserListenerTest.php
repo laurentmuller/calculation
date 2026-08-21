@@ -97,7 +97,7 @@ final class SwitchUserListenerTest extends TestCase
     private function createRequestStack(): RequestStack
     {
         $session = self::createStub(SessionInterface::class);
-        $requestStack = $this->createMock(RequestStack::class);
+        $requestStack = self::createMock(RequestStack::class);
         $requestStack->expects(self::once())
             ->method('getSession')
             ->willReturn($session);

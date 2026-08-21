@@ -62,7 +62,7 @@ final class DatabaseDocumentTest extends TestCase
     private function createDocument(array $database, array $configuration): DatabaseDocument
     {
         $helper = self::createStub(DocumentHelperInterface::class);
-        $service = self::createMock(DatabaseInfoService::class);
+        $service = self::createStub(DatabaseInfoService::class);
         $service->method('getDatabase')
             ->willReturn($database);
         $service->method('getConfiguration')

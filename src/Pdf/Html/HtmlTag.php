@@ -149,9 +149,10 @@ enum HtmlTag: string
 
     public function getFont(): PdfFont
     {
-        $font = PdfFont::default()
-            ->setSize($this->getFontSize())
-            ->setName($this->getFontName());
+        $font = PdfFont::create(
+            name: $this->getFontName(),
+            size: $this->getFontSize()
+        );
         if ($this->getExtraBool('font-bold')) {
             $font->bold(true);
         }

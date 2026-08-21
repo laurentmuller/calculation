@@ -106,11 +106,14 @@ class ReportFooter
         $parent = $this->parent;
         $parent->setY(-self::FOOTER_OFFSET);
         $width = $parent->getPrintableWidth() / 3.0;
-        PdfStyle::default()->setFontSize(6.0)->updateDocument($parent);
-        $this->outputPages($width)
-            ->outputContent($width)
-            ->outputDate($width);
-        $parent->resetStyle();
+        $this->parent->useStyle(
+            style: PdfStyle::default()->setFontSize(6.0),
+            callable: function () use ($width): void {
+                $this->outputPages($width)
+                    ->outputContent($width)
+                    ->outputDate($width);
+            }
+        );
     }
 
     private function outputPages(float $width): self

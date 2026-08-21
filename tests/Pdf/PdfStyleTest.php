@@ -16,6 +16,9 @@ namespace App\Tests\Pdf;
 use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
+use App\Pdf\Html\HtmlBootstrapColor;
+use App\Pdf\Html\HtmlColorName;
+use App\Pdf\Html\HtmlGrayedColor;
 use App\Pdf\PdfFont;
 use App\Pdf\PdfLine;
 use App\Pdf\PdfStyle;
@@ -29,83 +32,98 @@ final class PdfStyleTest extends TestCase
 {
     public function testBlackHeaderStyle(): void
     {
-        $font = PdfFont::default()->bold();
         $actual = PdfStyle::getBlackHeaderStyle();
-        self::assertEqualsCanonicalizing($font, $actual->getFont());
-        self::assertEqualsCanonicalizing(PdfLine::default(), $actual->getLine());
-        self::assertEqualsCanonicalizing(PdfBorder::all(), $actual->getBorder());
-        self::assertEqualsCanonicalizing(PdfDrawColor::black(), $actual->getDrawColor());
-        self::assertEqualsCanonicalizing(PdfFillColor::black(), $actual->getFillColor());
-        self::assertEqualsCanonicalizing(PdfTextColor::white(), $actual->getTextColor());
+        self::assertSameStyle(
+            actual: $actual,
+            font: PdfFont::default()->bold(),
+            drawColor: PdfDrawColor::black(),
+            fillColor: PdfFillColor::black(),
+            textColor: PdfTextColor::white(),
+        );
     }
 
     public function testBoldCellStyle(): void
     {
-        $font = PdfFont::default()->bold();
         $actual = PdfStyle::getBoldCellStyle();
-        self::assertEqualsCanonicalizing($font, $actual->getFont());
-        self::assertEqualsCanonicalizing(PdfLine::default(), $actual->getLine());
-        self::assertEqualsCanonicalizing(PdfBorder::all(), $actual->getBorder());
-        self::assertEqualsCanonicalizing(PdfDrawColor::cellBorder(), $actual->getDrawColor());
-        self::assertEqualsCanonicalizing(PdfFillColor::default(), $actual->getFillColor());
-        self::assertEqualsCanonicalizing(PdfTextColor::default(), $actual->getTextColor());
+        self::assertSameStyle(
+            actual: $actual,
+            font: PdfFont::default()->bold(),
+            drawColor: PdfDrawColor::cellBorder()
+        );
     }
 
     public function testBulletStyle(): void
     {
-        $font = PdfFont::default()->setName(PdfFontName::SYMBOL);
         $actual = PdfStyle::getBulletStyle();
-        self::assertEqualsCanonicalizing($font, $actual->getFont());
-        self::assertEqualsCanonicalizing(PdfLine::default(), $actual->getLine());
-        self::assertEqualsCanonicalizing(PdfBorder::all(), $actual->getBorder());
-        self::assertEqualsCanonicalizing(PdfDrawColor::cellBorder(), $actual->getDrawColor());
-        self::assertEqualsCanonicalizing(PdfFillColor::default(), $actual->getFillColor());
-        self::assertEqualsCanonicalizing(PdfTextColor::default(), $actual->getTextColor());
+        self::assertSameStyle(
+            actual: $actual,
+            font: PdfFont::create(PdfFontName::SYMBOL),
+            drawColor: PdfDrawColor::cellBorder(),
+        );
     }
 
     public function testClone(): void
     {
-        $actual = new PdfStyle();
-        $clone = clone $actual;
-        self::assertEqualsCanonicalizing($clone->getFont(), $actual->getFont());
-        self::assertEqualsCanonicalizing($clone->getLine(), $actual->getLine());
-        self::assertEqualsCanonicalizing($clone->getBorder(), $actual->getBorder());
-        self::assertEqualsCanonicalizing($clone->getDrawColor(), $actual->getDrawColor());
-        self::assertEqualsCanonicalizing($clone->getFillColor(), $actual->getFillColor());
+        $source = PdfStyle::default()
+            ->setFont(PdfFont::create(PdfFontName::SYMBOL, 12.0, PdfFontStyle::BOLD_ITALIC_UNDERLINE))
+            ->setLine(PdfLine::create(12.0))
+            ->setBorder(PdfBorder::bottom())
+            ->setDrawColor(PdfDrawColor::darkGray())
+            ->setFillColor(PdfFillColor::black())
+            ->setTextColor(PdfTextColor::red());
+
+        $actual = clone $source;
+
+        self::assertSameStyle(
+            actual: $actual,
+            font: $source->getFont(),
+            line: $source->getLine(),
+            border: $source->getBorder(),
+            drawColor: $source->getDrawColor(),
+            fillColor: $source->getFillColor(),
+            textColor: $source->getTextColor(),
+        );
     }
 
     public function testConstructor(): void
     {
         $actual = new PdfStyle();
-        self::assertEqualsCanonicalizing(PdfFont::default(), $actual->getFont());
-        self::assertEqualsCanonicalizing(PdfLine::default(), $actual->getLine());
-        self::assertEqualsCanonicalizing(PdfBorder::all(), $actual->getBorder());
-        self::assertEqualsCanonicalizing(PdfDrawColor::default(), $actual->getDrawColor());
-        self::assertEqualsCanonicalizing(PdfFillColor::default(), $actual->getFillColor());
-        self::assertEqualsCanonicalizing(PdfTextColor::default(), $actual->getTextColor());
+        self::assertSameStyle($actual);
     }
 
     public function testDefault(): void
     {
         $actual = PdfStyle::default();
-        self::assertEqualsCanonicalizing(PdfFont::default(), $actual->getFont());
-        self::assertEqualsCanonicalizing(PdfLine::default(), $actual->getLine());
-        self::assertEqualsCanonicalizing(PdfBorder::all(), $actual->getBorder());
-        self::assertEqualsCanonicalizing(PdfDrawColor::default(), $actual->getDrawColor());
-        self::assertEqualsCanonicalizing(PdfFillColor::default(), $actual->getFillColor());
-        self::assertEqualsCanonicalizing(PdfTextColor::default(), $actual->getTextColor());
+        self::assertSameStyle($actual);
+    }
+
+    public function testDrawColorWithInterface(): void
+    {
+        $style = PdfStyle::default();
+        $style->setDrawColor(HtmlColorName::ALICE_BLUE);
+        $actual = $style->getDrawColor();
+        $expected = HtmlColorName::ALICE_BLUE->getDrawColor();
+        self::assertTrue($expected->equals($actual));
+    }
+
+    public function testFillColorWithInterface(): void
+    {
+        $style = PdfStyle::default();
+        $style->setFillColor(HtmlBootstrapColor::WARNING);
+        $actual = $style->getFillColor();
+        $expected = HtmlBootstrapColor::WARNING->getFillColor();
+        self::assertTrue($expected->equals($actual));
     }
 
     public function testHeaderStyle(): void
     {
-        $font = PdfFont::default()->bold();
         $actual = PdfStyle::getHeaderStyle();
-        self::assertEqualsCanonicalizing($font, $actual->getFont());
-        self::assertEqualsCanonicalizing(PdfLine::default(), $actual->getLine());
-        self::assertEqualsCanonicalizing(PdfBorder::all(), $actual->getBorder());
-        self::assertEqualsCanonicalizing(PdfDrawColor::cellBorder(), $actual->getDrawColor());
-        self::assertEqualsCanonicalizing(PdfFillColor::header(), $actual->getFillColor());
-        self::assertEqualsCanonicalizing(PdfTextColor::default(), $actual->getTextColor());
+        self::assertSameStyle(
+            actual: $actual,
+            font: PdfFont::create(style: PdfFontStyle::BOLD),
+            drawColor: PdfDrawColor::cellBorder(),
+            fillColor: PdfFillColor::header(),
+        );
     }
 
     public function testIndent(): void
@@ -127,59 +145,63 @@ final class PdfStyleTest extends TestCase
     public function testLinkStyle(): void
     {
         $actual = PdfStyle::getLinkStyle();
-        self::assertEqualsCanonicalizing(PdfFont::default(), $actual->getFont());
-        self::assertEqualsCanonicalizing(PdfLine::default(), $actual->getLine());
-        self::assertEqualsCanonicalizing(PdfBorder::all(), $actual->getBorder());
-        self::assertEqualsCanonicalizing(PdfDrawColor::default(), $actual->getDrawColor());
-        self::assertEqualsCanonicalizing(PdfFillColor::default(), $actual->getFillColor());
-        self::assertEqualsCanonicalizing(PdfTextColor::blue(), $actual->getTextColor());
+        self::assertSameStyle(
+            actual: $actual,
+            textColor: PdfTextColor::blue(),
+        );
     }
 
     public function testNoBorderStyle(): void
     {
         $actual = PdfStyle::getNoBorderStyle();
-        self::assertEqualsCanonicalizing(PdfFont::default(), $actual->getFont());
-        self::assertEqualsCanonicalizing(PdfLine::default(), $actual->getLine());
-        self::assertEqualsCanonicalizing(PdfBorder::none(), $actual->getBorder());
-        self::assertEqualsCanonicalizing(PdfDrawColor::default(), $actual->getDrawColor());
-        self::assertEqualsCanonicalizing(PdfFillColor::default(), $actual->getFillColor());
-        self::assertEqualsCanonicalizing(PdfTextColor::default(), $actual->getTextColor());
+        self::assertSameStyle(
+            actual: $actual,
+            border: PdfBorder::none(),
+        );
     }
 
     public function testReset(): void
     {
-        $actual = PdfStyle::getBlackHeaderStyle();
-        $actual->setIndent(10.0)
+        $actual = PdfStyle::getBlackHeaderStyle()
+            ->setIndent(10.0)
             ->reset();
-        self::assertEqualsCanonicalizing(PdfFont::default(), $actual->getFont());
-        self::assertEqualsCanonicalizing(PdfLine::default(), $actual->getLine());
-        self::assertEqualsCanonicalizing(PdfBorder::all(), $actual->getBorder());
-        self::assertEqualsCanonicalizing(PdfDrawColor::default(), $actual->getDrawColor());
-        self::assertEqualsCanonicalizing(PdfFillColor::default(), $actual->getFillColor());
-        self::assertEqualsCanonicalizing(PdfTextColor::default(), $actual->getTextColor());
+        self::assertSameStyle($actual);
     }
 
     public function testSetFont(): void
     {
         $font = PdfFont::default();
         $actual = PdfStyle::default();
-        self::assertEqualsCanonicalizing($font, $actual->getFont());
+        self::assertTrue($font->equals($actual->getFont()));
 
-        $font = PdfFont::default()->italic();
+        $font->setStyle(PdfFontStyle::ITALIC);
         $actual->setFontItalic();
-        self::assertEqualsCanonicalizing($font, $actual->getFont());
+        self::assertTrue($font->equals($actual->getFont()));
 
-        $font = PdfFont::default();
+        $font->setStyle(PdfFontStyle::REGULAR);
         $actual->setFontRegular();
-        self::assertEqualsCanonicalizing($font, $actual->getFont());
+        self::assertTrue($font->equals($actual->getFont()));
 
-        $font = PdfFont::default()->underline();
+        $font->setSize(12.0);
+        $actual->setFontSize(12.0);
+        self::assertTrue($font->equals($actual->getFont()));
+
+        $font->setStyle(PdfFontStyle::UNDERLINE);
         $actual->setFontUnderline();
-        self::assertEqualsCanonicalizing($font, $actual->getFont());
+        self::assertTrue($font->equals($actual->getFont()));
 
-        $font = PdfFont::default()->setStyle(PdfFontStyle::BOLD);
+        $font->setStyle(PdfFontStyle::BOLD);
         $actual->setFontStyle(PdfFontStyle::BOLD);
-        self::assertEqualsCanonicalizing($font, $actual->getFont());
+        self::assertTrue($font->equals($actual->getFont()));
+    }
+
+    public function testTextColorWithInterface(): void
+    {
+        $style = PdfStyle::default();
+        $style->setTextColor(HtmlGrayedColor::Gray100);
+        $actual = $style->getTextColor();
+        $expected = HtmlGrayedColor::Gray100->getTextColor();
+        self::assertTrue($expected->equals($actual));
     }
 
     public function testUpdateDocument(): void
@@ -189,5 +211,22 @@ final class PdfStyleTest extends TestCase
         $document->addPage();
         $actual->updateDocument($document);
         self::assertSame(1, $document->getPage());
+    }
+
+    protected static function assertSameStyle(
+        PdfStyle $actual,
+        ?PdfFont $font = null,
+        ?PdfLine $line = null,
+        ?PdfBorder $border = null,
+        ?PdfDrawColor $drawColor = null,
+        ?PdfFillColor $fillColor = null,
+        ?PdfTextColor $textColor = null,
+    ): void {
+        self::assertTrue(($font ?? PdfFont::default())->equals($actual->getFont()));
+        self::assertTrue(($line ?? PdfLine::default())->equals($actual->getLine()));
+        self::assertTrue(($border ?? PdfBorder::all())->equals($actual->getBorder()));
+        self::assertTrue(($drawColor ?? PdfDrawColor::default())->equals($actual->getDrawColor()));
+        self::assertTrue(($fillColor ?? PdfFillColor::default())->equals($actual->getFillColor()));
+        self::assertTrue(($textColor ?? PdfTextColor::default())->equals($actual->getTextColor()));
     }
 }

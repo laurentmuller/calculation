@@ -114,33 +114,24 @@ class ReportHeader
         return $this;
     }
 
-    private function applyNameStyle(): void
+    private function getNameStyle(): PdfStyle
     {
-        if (!$this->nameStyle instanceof PdfStyle) {
-            $this->nameStyle = PdfStyle::default()
-                ->setFontSize(self::DEFAULT_FONT_SIZE)
-                ->setFontBold();
-        }
-        $this->nameStyle->updateDocument($this->parent);
+        return $this->nameStyle ??= PdfStyle::default()
+            ->setFontSize(self::DEFAULT_FONT_SIZE)
+            ->setFontBold();
     }
 
-    private function applySmallStyle(): void
+    private function getSmallStyle(): PdfStyle
     {
-        if (!$this->smallStyle instanceof PdfStyle) {
-            $this->smallStyle = PdfStyle::default()
-                ->setFontSize(self::DEFAULT_FONT_SIZE);
-        }
-        $this->smallStyle->updateDocument($this->parent);
+        return $this->smallStyle ??= $this->smallStyle = PdfStyle::default()
+            ->setFontSize(self::DEFAULT_FONT_SIZE);
     }
 
-    private function applyTitleStyle(): void
+    private function getTitleStyle(): PdfStyle
     {
-        if (!$this->titleStyle instanceof PdfStyle) {
-            $this->titleStyle = PdfStyle::default()
-                ->setFontSize(self::TITLE_FONT_SIZE)
-                ->setFontBold();
-        }
-        $this->titleStyle->updateDocument($this->parent);
+        return $this->titleStyle ??= PdfStyle::default()
+            ->setFontSize(self::TITLE_FONT_SIZE)
+            ->setFontBold();
     }
 
     private function isPrintAddress(): bool
@@ -150,35 +141,14 @@ class ReportHeader
 
     private function outputAddress(float $cellWidth): void
     {
-        $this->applySmallStyle();
-        $this->outputCell(
-            $cellWidth,
-            self::SMALL_HEIGHT,
-            $this->customer?->getAddress(),
-            PdfBorder::none(),
-            PdfTextAlignment::RIGHT,
-            PdfMove::NEW_LINE
-        );
-    }
-
-    private function outputCell(
-        float $width,
-        float $height,
-        ?string $text,
-        PdfBorder $border,
-        PdfTextAlignment $align,
-        PdfMove $move = PdfMove::RIGHT,
-        string|int|null $link = null
-    ): void {
-        $text ??= '';
-        $this->parent->cell(
-            width: $width,
-            height: $height,
-            text: $text,
-            border: $border,
-            move: $move,
-            align: $align,
-            link: '' !== $text ? $link : null
+        $this->parent->styledCell(
+            style: $this->getSmallStyle(),
+            width: $cellWidth,
+            height: self::SMALL_HEIGHT,
+            text: $this->customer?->getAddress() ?? '',
+            border: PdfBorder::none(),
+            move: PdfMove::NEW_LINE,
+            align: PdfTextAlignment::RIGHT
         );
     }
 
@@ -188,9 +158,8 @@ class ReportHeader
         if (null === $description) {
             return;
         }
-
-        $this->applySmallStyle();
-        $this->parent->multiCell(
+        $this->parent->styledMultiCell(
+            style: $this->getSmallStyle(),
             height: self::SMALL_HEIGHT,
             text: $description,
             align: PdfTextAlignment::LEFT
@@ -199,13 +168,12 @@ class ReportHeader
 
     private function outputEmail(float $cellWidth): void
     {
-        $this->applySmallStyle();
-        $this->outputCell(
-            $cellWidth,
-            self::SMALL_HEIGHT,
-            $this->customer?->getEmail(),
-            PdfBorder::none(),
-            PdfTextAlignment::LEFT,
+        $this->parent->styledCell(
+            style: $this->getSmallStyle(),
+            width: $cellWidth,
+            height: self::SMALL_HEIGHT,
+            text: $this->customer?->getEmail() ?? '',
+            border: PdfBorder::none(),
         );
     }
 
@@ -228,54 +196,50 @@ class ReportHeader
 
     private function outputName(float $cellWidth, bool $isAddress): void
     {
-        $this->applyNameStyle();
         $border = $isAddress ? PdfBorder::none() : PdfBorder::bottom();
-        $this->outputCell(
-            $cellWidth,
-            self::LINE_HEIGHT,
-            $this->customer?->getName(),
-            $border,
-            PdfTextAlignment::RIGHT,
-            PdfMove::NEW_LINE,
-            $this->customer?->getUrl()
+        $this->parent->styledCell(
+            style: $this->getNameStyle(),
+            width: $cellWidth,
+            text: $this->customer?->getName() ?? '',
+            border: $border,
+            move: PdfMove::NEW_LINE,
+            align: PdfTextAlignment::RIGHT,
+            link: $this->customer?->getUrl()
         );
     }
 
     private function outputPhone(float $cellWidth): void
     {
-        $this->applySmallStyle();
-        $this->outputCell(
-            $cellWidth,
-            self::SMALL_HEIGHT,
-            $this->customer?->getPhone(),
-            PdfBorder::bottom(),
-            PdfTextAlignment::LEFT,
+        $this->parent->styledCell(
+            style: $this->getSmallStyle(),
+            width: $cellWidth,
+            height: self::SMALL_HEIGHT,
+            text: $this->customer?->getPhone() ?? '',
+            border: PdfBorder::bottom(),
         );
     }
 
     private function outputTitle(float $cellWidth, bool $isAddress): void
     {
-        $this->applyTitleStyle();
         $border = $isAddress ? PdfBorder::none() : PdfBorder::bottom();
-        $this->outputCell(
-            $cellWidth,
-            self::LINE_HEIGHT,
-            $this->parent->getProperties()->getTitle(),
-            $border,
-            PdfTextAlignment::LEFT,
+        $this->parent->styledCell(
+            style: $this->getTitleStyle(),
+            width: $cellWidth,
+            text: $this->parent->getProperties()->getTitle(),
+            border: $border
         );
     }
 
     private function outputZipCity(float $cellWidth): void
     {
-        $this->applySmallStyle();
-        $this->outputCell(
-            $cellWidth,
-            self::SMALL_HEIGHT,
-            $this->customer?->getZipCity(),
-            PdfBorder::bottom(),
-            PdfTextAlignment::RIGHT,
-            PdfMove::NEW_LINE
+        $this->parent->styledCell(
+            style: $this->getSmallStyle(),
+            width: $cellWidth,
+            height: self::SMALL_HEIGHT,
+            text: $this->customer?->getZipCity() ?? '',
+            border: PdfBorder::bottom(),
+            move: PdfMove::NEW_LINE,
+            align: PdfTextAlignment::RIGHT
         );
     }
 }

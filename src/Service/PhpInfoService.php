@@ -115,12 +115,9 @@ class PhpInfoService
             return 'None';
         }
 
-        if ('UTF-8' === \mb_detect_encoding($value, \mb_detect_order(), true)) {
-            $value = \mb_convert_encoding($value, 'ISO-8859-1', 'UTF-8');
-            $value = \str_replace(['✘ ', '✔ ', '⊕'], '', $value);
-        }
+        $value = \mb_convert_encoding($value, 'ISO-8859-1', 'UTF-8');
 
-        return $value;
+        return \str_replace(['✘ ', '✔ ', '⊕'], '', $value);
     }
 
     private function isNoValue(string $value): bool

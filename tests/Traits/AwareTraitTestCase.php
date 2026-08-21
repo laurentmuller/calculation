@@ -13,22 +13,22 @@ declare(strict_types=1);
 
 namespace App\Tests\Traits;
 
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 abstract class AwareTraitTestCase extends TestCase implements ServiceSubscriberInterface
 {
-    public MockObject&ContainerInterface $container;
+    public Stub&ContainerInterface $container;
 
     #[\Override]
     protected function setUp(): void
     {
-        $this->container = self::createMock(ContainerInterface::class);
+        $this->container = self::createStub(ContainerInterface::class);
     }
 
-    public function getContainer(): MockObject&ContainerInterface
+    public function getContainer(): Stub&ContainerInterface
     {
         return $this->container;
     }

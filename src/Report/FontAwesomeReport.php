@@ -110,9 +110,11 @@ class FontAwesomeReport extends AbstractReport
     {
         $text = \ucfirst($path->value);
         $this->useCellMargin(function () use ($text): void {
-            PdfStyle::getBoldCellStyle()->updateDocument($this);
-            $this->cell(text: $text, move: PdfMove::NEW_LINE);
-            $this->resetStyle();
+            $this->styledCell(
+                style: PdfStyle::getBoldCellStyle(),
+                text: $text,
+                move: PdfMove::NEW_LINE
+            );
         });
     }
 }

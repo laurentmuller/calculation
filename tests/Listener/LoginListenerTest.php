@@ -37,7 +37,7 @@ final class LoginListenerTest extends TestCase
 
     private function createEvent(User $user): LoginSuccessEvent
     {
-        $event = $this->createMock(LoginSuccessEvent::class);
+        $event = self::createMock(LoginSuccessEvent::class);
         $event->expects(self::once())
             ->method('getUser')
             ->willReturn($user);
@@ -58,7 +58,7 @@ final class LoginListenerTest extends TestCase
     private function createRequestStack(): RequestStack
     {
         $session = self::createStub(SessionInterface::class);
-        $requestStack = $this->createMock(RequestStack::class);
+        $requestStack = self::createMock(RequestStack::class);
         $requestStack->expects(self::once())
             ->method('getSession')
             ->willReturn($session);

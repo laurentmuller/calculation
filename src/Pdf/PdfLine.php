@@ -52,6 +52,16 @@ class PdfLine implements PdfDocumentUpdaterInterface
     }
 
     /**
+     * Returns if the given line is equal to this instance.
+     *
+     * To be equal, widths must be equal
+     */
+    public function equals(self $other): bool
+    {
+        return $this->width === $other->width;
+    }
+
+    /**
      * Gets the width.
      */
     public function getWidth(): float

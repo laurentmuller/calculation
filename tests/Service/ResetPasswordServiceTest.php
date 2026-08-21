@@ -18,8 +18,10 @@ use App\Repository\UserRepository;
 use App\Service\ResetPasswordService;
 use App\Service\UserExceptionService;
 use App\Tests\Entity\IdTrait;
+use App\Tests\MockStubTrait;
 use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -40,12 +42,13 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\ExpiredSignatureException;
 final class ResetPasswordServiceTest extends TestCase
 {
     use IdTrait;
+    use MockStubTrait;
     use TranslatorStubTrait;
 
     public function testFlush(): void
     {
         $helper = $this->createResetPasswordHelper();
-        $repository = $this->createRepository();
+        $repository = $this->createRepository(true);
         $repository->expects(self::once())
             ->method('flush');
         $service = $this->createService(
@@ -95,7 +98,7 @@ final class ResetPasswordServiceTest extends TestCase
     public function testHandleException(): void
     {
         $helper = $this->createResetPasswordHelper();
-        $logger = $this->createMock(LoggerInterface::class);
+        $logger = self::createMock(LoggerInterface::class);
         $logger->expects(self::once())
             ->method('error');
         $service = $this->createService(
@@ -158,9 +161,12 @@ final class ResetPasswordServiceTest extends TestCase
         self::assertFalse($actual);
     }
 
-    private function createRepository(?User $user = null): MockObject&UserRepository
+    /**
+     * @phpstan-return ($mock is true ? MockObject&UserRepository : Stub&UserRepository)
+     */
+    private function createRepository(bool $mock, ?User $user = null): UserRepository
     {
-        $repository = $this->createMock(UserRepository::class);
+        $repository = $this->createMockOrStub(UserRepository::class, $mock);
         $repository->method('findByUsernameOrEmail')
             ->willReturn($user);
 
@@ -192,7 +198,7 @@ final class ResetPasswordServiceTest extends TestCase
         ?MailerInterface $mailer = null,
         ?LoggerInterface $logger = null,
     ): ResetPasswordService {
-        $repository ??= $this->createRepository($user);
+        $repository ??= $this->createRepository(false, $user);
         $translator = $this->createStubTranslator();
         $service = new UserExceptionService($translator);
         $mailer ??= self::createStub(MailerInterface::class);

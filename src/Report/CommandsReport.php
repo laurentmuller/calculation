@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
+use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Html\HtmlBootstrapColor;
 use App\Pdf\PdfStyle;
 use App\Service\CommandService;
@@ -31,7 +32,7 @@ use fpdf\Enums\PdfTextAlignment;
  */
 class CommandsReport extends AbstractArrayReport
 {
-    private const string CLASS_PATTERN = '/<span\s*class="(.*?)"\>([\s\S]*?)<\/span>/im';
+    private const string CLASS_PATTERN = '/<span\s*class="(.*?)">([\s\S]*?)<\/span>/im';
     private const string LINK_PATTERN = '/<a href="(.*)">(.*)<\/a>/m';
 
     #[\Override]
@@ -57,14 +58,6 @@ class CommandsReport extends AbstractArrayReport
         return true;
     }
 
-    private function applyFixedStyle(float $size = 8.5): void
-    {
-        PdfStyle::default()
-            ->setFontName(PdfFontName::COURIER)
-            ->setFontSize($size)
-            ->updateDocument($this);
-    }
-
     private function getDescriptionHelp(string $description, string $arguments): string
     {
         if (!StringUtils::isString($arguments)) {
@@ -74,44 +67,51 @@ class CommandsReport extends AbstractArrayReport
         return \sprintf('%s %s', $description, $arguments);
     }
 
+    private function getFixedStyle(float $size = 8.5): PdfStyle
+    {
+        return PdfStyle::default()
+            ->setFontName(PdfFontName::COURIER)
+            ->setFontSize($size);
+    }
+
     /**
      * @phpstan-param CommandType $command
      */
     private function getMaxWidth(array $command): float
     {
         $width = 0.0;
-        $this->applyFixedStyle();
-        $width = \array_reduce(
-            $command['arguments'],
-            fn (float $carry, array $argument): float => \max($carry, $this->getStringWidth($argument['name'])),
-            $width
+        $this->useStyle(
+            style: $this->getFixedStyle(),
+            callable: function () use (&$width, $command): void {
+                foreach ($command['arguments'] as $argument) {
+                    $width = \max($width, $this->getStringWidth($argument['name']));
+                }
+                foreach ($command['options'] as $option) {
+                    $width = \max($width, $this->getStringWidth($option['shortcutName']));
+                }
+            }
         );
-        $width = \array_reduce(
-            $command['options'],
-            fn (float $carry, array $option): float => \max($carry, $this->getStringWidth($option['shortcutName'])),
-            $width
-        );
-        $this->resetStyle();
 
         return \ceil($width) + 1.0;
     }
 
-    private function indent(): void
+    private function indent(): self
     {
         $this->x += 2.0;
+
+        return $this;
     }
 
-    private function outputHelp(string $text): void
+    private function outputHelp(string $text): self
     {
         $text = \strip_tags($text, '<a>');
         if (!StringUtils::pregMatchAll(self::LINK_PATTERN, $text, $matches, \PREG_SET_ORDER | \PREG_OFFSET_CAPTURE)) {
             $this->write($text);
 
-            return;
+            return $this;
         }
 
         $offset = 0;
-        /** @var array<int, array{0: string, 1: int}> $match */
         foreach ($matches as $match) {
             // previous chunk
             $index = $match[0][1];
@@ -120,9 +120,12 @@ class CommandsReport extends AbstractArrayReport
                 $offset = $index;
             }
             // current chunk (link)
-            HtmlBootstrapColor::PRIMARY->applyTextColor($this);
-            $this->write($match[2][0], link: $match[1][0]);
-            $this->resetStyle();
+            $style = PdfStyle::default()
+                ->setTextColor(HtmlBootstrapColor::PRIMARY);
+            $this->useStyle(
+                style: $style,
+                callable: fn (): static => $this->write($match[2][0], link: $match[1][0])
+            );
             // move
             $offset += \strlen($match[0][0]);
         }
@@ -130,6 +133,8 @@ class CommandsReport extends AbstractArrayReport
         if ($offset < \strlen($text)) {
             $this->write(\substr($text, $offset));
         }
+
+        return $this;
     }
 
     /**
@@ -144,10 +149,10 @@ class CommandsReport extends AbstractArrayReport
         $this->renderHeader('command.list.fields.arguments');
         foreach ($arguments as $argument) {
             $help = $this->getDescriptionHelp($argument['description'], $argument['extra']);
-            $this->indent();
-            $this->renderFixedCell($argument['name'], $width);
-            $this->renderStyledHelp($help);
-            $this->lineBreak(0.0);
+            $this->indent()
+                ->renderFixedCell($argument['name'], $width)
+                ->renderStyledHelp($help)
+                ->lineBreak(0.0);
         }
         $this->lineBreak(1.0);
     }
@@ -174,25 +179,31 @@ class CommandsReport extends AbstractArrayReport
             return;
         }
 
-        $this->renderHeader('command.list.fields.description');
-        $this->indent();
-        $this->multiCell(text: $description, align: PdfTextAlignment::LEFT);
-        $this->lineBreak(1.0);
+        $this->renderHeader('command.list.fields.description')
+            ->indent()
+            ->multiCell(text: $description, align: PdfTextAlignment::LEFT)
+            ->lineBreak(1.0);
     }
 
-    private function renderFixedCell(string $text, float $width): void
+    private function renderFixedCell(string $text, float $width): self
     {
-        $this->applyFixedStyle();
-        HtmlBootstrapColor::SUCCESS->applyTextColor($this);
-        $this->cell($width, text: $text);
-        $this->resetStyle();
+        $style = $this->getFixedStyle()
+            ->setTextColor(HtmlBootstrapColor::SUCCESS);
+
+        return $this->styledCell(
+            style: $style,
+            width: $width,
+            text: $text
+        );
     }
 
-    private function renderHeader(string $id): void
+    private function renderHeader(string $id): self
     {
-        PdfStyle::getHeaderStyle()->updateDocument($this);
-        $this->cell(text: $this->trans($id), move: PdfMove::NEW_LINE);
-        $this->resetStyle();
+        return $this->styledCell(
+            style: PdfStyle::getHeaderStyle(),
+            text: $this->trans($id),
+            move: PdfMove::NEW_LINE
+        );
     }
 
     private function renderHelp(string $help): void
@@ -201,17 +212,17 @@ class CommandsReport extends AbstractArrayReport
             return;
         }
 
-        $this->renderHeader('command.list.fields.help');
-        $this->indent();
-        $this->renderStyledHelp($help);
+        $this->renderHeader('command.list.fields.help')
+            ->indent()
+            ->renderStyledHelp($help);
     }
 
     private function renderName(string $name): void
     {
-        $this->renderHeader('command.list.fields.command');
-        $this->indent();
-        $this->cell(text: $name, move: PdfMove::NEW_LINE);
-        $this->lineBreak(1.0);
+        $this->renderHeader('command.list.fields.command')
+            ->indent()
+            ->cell(text: $name, move: PdfMove::NEW_LINE)
+            ->lineBreak(1.0);
     }
 
     /**
@@ -226,14 +237,14 @@ class CommandsReport extends AbstractArrayReport
         $this->renderHeader('command.list.fields.options');
         foreach ($options as $option) {
             $help = $this->getDescriptionHelp($option['description'], $option['extra']);
-            $this->indent();
-            $this->renderFixedCell($option['shortcutName'], $width);
-            $this->renderStyledHelp($help);
+            $this->indent()
+                ->renderFixedCell($option['shortcutName'], $width)
+                ->renderStyledHelp($help);
         }
         $this->lineBreak(1.0);
     }
 
-    private function renderStyledHelp(string $help): void
+    private function renderStyledHelp(string $help): self
     {
         // margin
         $oldMargin = $this->getLeftMargin();
@@ -242,15 +253,12 @@ class CommandsReport extends AbstractArrayReport
         // find classes
         $help = \str_replace(' target="_blank" rel="noopener noreferrer"', '', $help);
         if (!StringUtils::pregMatchAll(self::CLASS_PATTERN, $help, $matches, \PREG_SET_ORDER | \PREG_OFFSET_CAPTURE)) {
-            $this->outputHelp($help);
-            $this->setLeftMargin($oldMargin);
-            $this->lineBreak();
-
-            return;
+            return $this->outputHelp($help)
+                ->setLeftMargin($oldMargin)
+                ->lineBreak();
         }
 
         $offset = 0;
-        /** @var array<int, array{0: string, 1: int}> $match */
         foreach ($matches as $match) {
             // previous chunk
             $index = $match[0][1];
@@ -260,10 +268,14 @@ class CommandsReport extends AbstractArrayReport
                 $offset = $index;
             }
             // current chunk
-            $this->applyFixedStyle(10.0);
-            HtmlBootstrapColor::parseTextColor($match[1][0])?->updateDocument($this);
-            $this->outputHelp($match[2][0]);
-            $this->resetStyle();
+            $color = HtmlBootstrapColor::parseTextColor($match[1][0])
+                ?? PdfTextColor::default();
+            $style = $this->getFixedStyle(10.0)
+                ->setTextColor($color);
+            $this->useStyle(
+                style: $style,
+                callable: fn (): self => $this->outputHelp($match[2][0])
+            );
             // move
             $offset += \strlen($match[0][0]);
         }
@@ -273,8 +285,8 @@ class CommandsReport extends AbstractArrayReport
         }
 
         // restore
-        $this->setLeftMargin($oldMargin);
-        $this->lineBreak();
+        return $this->setLeftMargin($oldMargin)
+            ->lineBreak();
     }
 
     /**
@@ -286,11 +298,13 @@ class CommandsReport extends AbstractArrayReport
             return;
         }
 
-        $this->renderHeader('command.list.fields.usage');
-        $this->indent();
-        $this->applyFixedStyle(9.5);
-        $this->cell(text: \implode(StringUtils::NEW_LINE, $usage), move: PdfMove::NEW_LINE);
-        $this->resetStyle();
-        $this->lineBreak(1.0);
+        $this->renderHeader('command.list.fields.usage')
+            ->indent()
+            ->styledCell(
+                style: $this->getFixedStyle(9.5),
+                text: \implode(StringUtils::NEW_LINE, $usage),
+                move: PdfMove::NEW_LINE
+            )
+            ->lineBreak(1.0);
     }
 }

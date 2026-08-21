@@ -148,7 +148,6 @@ final class SessionAwareTraitTest extends AwareTraitTestCase
             $requestStack->method('getSession')
                 ->willReturn($session);
         }
-
         $this->setRequestStack($requestStack);
 
         return $requestStack;

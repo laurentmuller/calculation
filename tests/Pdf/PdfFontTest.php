@@ -25,11 +25,17 @@ final class PdfFontTest extends TestCase
     {
         $actual = new PdfFont(style: PdfFontStyle::ITALIC);
         $actual->bold();
-        self::assertSame(PdfFontStyle::BOLD, $actual->getStyle());
+        self::assertSameFont(
+            actual: $actual,
+            style: PdfFontStyle::BOLD
+        );
 
         $actual = new PdfFont(style: PdfFontStyle::ITALIC);
         $actual->bold(true);
-        self::assertSame(PdfFontStyle::BOLD_ITALIC, $actual->getStyle());
+        self::assertSameFont(
+            actual: $actual,
+            style: PdfFontStyle::BOLD_ITALIC
+        );
     }
 
     public function testConstructor(): void
@@ -40,12 +46,35 @@ final class PdfFontTest extends TestCase
         self::assertSame(PdfFontStyle::REGULAR, $actual->getStyle());
     }
 
+    public function testCreate(): void
+    {
+        $actual = PdfFont::create(
+            name: PdfFontName::SYMBOL,
+            size: 12.0,
+            style: PdfFontStyle::BOLD_ITALIC,
+        );
+        self::assertSameFont(
+            actual: $actual,
+            name: PdfFontName::SYMBOL,
+            size: 12.0,
+            style: PdfFontStyle::BOLD_ITALIC
+        );
+    }
+
     public function testDefault(): void
     {
         $actual = PdfFont::default();
-        self::assertSame(PdfFontName::ARIAL, $actual->getName());
-        self::assertSame(9.0, $actual->getSize());
-        self::assertSame(PdfFontStyle::REGULAR, $actual->getStyle());
+        self::assertSameFont($actual);
+    }
+
+    public function testEquals(): void
+    {
+        $expected = PdfFont::default();
+        $actual = new PdfFont();
+        self::assertTrue($expected->equals($actual));
+
+        $actual = PdfFont::create(PdfFontName::SYMBOL);
+        self::assertFalse($expected->equals($actual));
     }
 
     public function testIsDefaultSize(): void
@@ -61,59 +90,98 @@ final class PdfFontTest extends TestCase
     {
         $actual = new PdfFont(style: PdfFontStyle::BOLD);
         $actual->italic();
-        self::assertSame(PdfFontStyle::ITALIC, $actual->getStyle());
+        self::assertSameFont(
+            actual: $actual,
+            style: PdfFontStyle::ITALIC
+        );
 
         $actual = new PdfFont(style: PdfFontStyle::BOLD);
         $actual->italic(true);
-        self::assertSame(PdfFontStyle::BOLD_ITALIC, $actual->getStyle());
+        self::assertSameFont(
+            actual: $actual,
+            style: PdfFontStyle::BOLD_ITALIC
+        );
     }
 
     public function testName(): void
     {
-        $actual = new PdfFont();
-        self::assertSame(PdfFontName::ARIAL, $actual->getName());
-        $actual->setName(PdfFontName::HELVETICA);
-        self::assertSame(PdfFontName::HELVETICA, $actual->getName());
+        $actual = PdfFont::default()
+            ->setName(PdfFontName::HELVETICA);
+        self::assertSameFont(
+            actual: $actual,
+            name: PdfFontName::HELVETICA
+        );
     }
 
     public function testRegular(): void
     {
         $actual = new PdfFont(style: PdfFontStyle::BOLD);
-        self::assertSame(PdfFontStyle::BOLD, $actual->getStyle());
+        self::assertSameFont(
+            actual: $actual,
+            style: PdfFontStyle::BOLD
+        );
         $actual->regular();
-        self::assertSame(PdfFontStyle::REGULAR, $actual->getStyle());
+        self::assertSameFont(
+            actual: $actual,
+            style: PdfFontStyle::REGULAR
+        );
     }
 
     public function testReset(): void
     {
         $actual = new PdfFont(PdfFontName::COURIER, 12.0, PdfFontStyle::BOLD);
-        self::assertSame(PdfFontName::COURIER, $actual->getName());
-        self::assertSame(12.0, $actual->getSize());
-        self::assertSame(PdfFontStyle::BOLD, $actual->getStyle());
+        self::assertSameFont(
+            actual: $actual,
+            name: PdfFontName::COURIER,
+            size: 12.0,
+            style: PdfFontStyle::BOLD
+        );
 
         $actual->reset();
-        self::assertSame(PdfFontName::ARIAL, $actual->getName());
-        self::assertSame(9.0, $actual->getSize());
-        self::assertSame(PdfFontStyle::REGULAR, $actual->getStyle());
+        self::assertSameFont($actual);
+    }
+
+    public function testSetStyle(): void
+    {
+        $actual = PdfFont::default()
+            ->setStyle(PdfFontStyle::BOLD);
+        self::assertSameFont(
+            actual: $actual,
+            style: PdfFontStyle::BOLD
+        );
+
+        $actual->setStyle();
+        self::assertSameFont(
+            actual: $actual,
+            style: PdfFontStyle::REGULAR
+        );
     }
 
     public function testStyle(): void
     {
-        $actual = new PdfFont();
-        self::assertSame(PdfFontStyle::REGULAR, $actual->getStyle());
-        $actual->setStyle(PdfFontStyle::ITALIC);
-        self::assertSame(PdfFontStyle::ITALIC, $actual->getStyle());
+        $actual = PdfFont::default()
+            ->italic();
+        self::assertSameFont(
+            actual: $actual,
+            style: PdfFontStyle::ITALIC
+        );
     }
 
     public function testUnderline(): void
     {
-        $actual = new PdfFont();
-        $actual->underline();
-        self::assertSame(PdfFontStyle::UNDERLINE, $actual->getStyle());
+        $actual = PdfFont::default()
+            ->underline();
+        self::assertSameFont(
+            actual: $actual,
+            style: PdfFontStyle::UNDERLINE
+        );
 
         $actual = new PdfFont(style: PdfFontStyle::BOLD);
         $actual->underline(true);
-        self::assertSame(PdfFontStyle::BOLD_UNDERLINE, $actual->getStyle());
+        self::assertSameFont(
+            actual: $actual,
+            style: PdfFontStyle::BOLD_UNDERLINE
+        );
     }
 
     public function testUpdateDocument(): void
@@ -122,5 +190,16 @@ final class PdfFontTest extends TestCase
         $actual = new PdfFont();
         $actual->updateDocument($document);
         self::assertSame(0, $document->getPage());
+    }
+
+    protected static function assertSameFont(
+        PdfFont $actual,
+        ?PdfFontName $name = PdfFont::DEFAULT_NAME,
+        ?float $size = PdfFont::DEFAULT_SIZE,
+        ?PdfFontStyle $style = PdfFont::DEFAULT_STYLE
+    ): void {
+        self::assertSame($name, $actual->getName());
+        self::assertSame($size, $actual->getSize());
+        self::assertSame($style, $actual->getStyle());
     }
 }

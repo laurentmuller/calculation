@@ -50,11 +50,34 @@ class PdfFont implements PdfDocumentUpdaterInterface
     }
 
     /**
+     * Creates a new instance.
+     */
+    public static function create(
+        PdfFontName $name = self::DEFAULT_NAME,
+        float $size = self::DEFAULT_SIZE,
+        PdfFontStyle $style = self::DEFAULT_STYLE
+    ): self {
+        return new self($name, $size, $style);
+    }
+
+    /**
      * Gets a new instance with default values.
      */
     public static function default(): self
     {
         return new self();
+    }
+
+    /**
+     * Returns if the given font is equal to this instance.
+     *
+     * To be equal, names, sizes, and styles must be equal
+     */
+    public function equals(self $font): bool
+    {
+        return $this->name === $font->name
+            && $this->size === $font->size
+            && $this->style === $font->style;
     }
 
     /**

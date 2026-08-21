@@ -22,10 +22,13 @@ use App\Pdf\Traits\PdfStyleTrait;
 use App\Service\ApplicationService;
 use App\Traits\MathTrait;
 use fpdf\Enums\PdfLayout;
+use fpdf\Enums\PdfMove;
 use fpdf\Enums\PdfOrientation;
 use fpdf\Enums\PdfTextAlignment;
 use fpdf\Enums\PdfZoom;
+use fpdf\PdfBorder;
 use fpdf\PdfDocument;
+use fpdf\PdfException;
 use fpdf\Traits\PdfBookmarkTrait;
 use Symfony\Contracts\Translation\TranslatableInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -165,6 +168,104 @@ abstract class AbstractReport extends PdfDocument
         $this->properties->setTitle($this->trans($id, $parameters), $isUTF8);
 
         return $this;
+    }
+
+    /**
+     * Apply the given style, prints a cell, and reset this current style to the default.
+     *
+     * @param PdfStyle         $style  the style to apply
+     * @param ?float           $width  the cell width. If <code>null</code>, the cell extends up to the right margin.
+     * @param float            $height the cell height
+     * @param string           $text   the cell text
+     * @param ?PdfBorder       $border indicates how borders must be drawn around the cell. If <code>null</code>, or
+     *                                 <code>PdfBorder::none()</code>, no border is drawn.
+     * @param PdfMove          $move   indicates where the current position should go after the call
+     * @param PdfTextAlignment $align  the text alignment
+     * @param bool             $fill   indicates if the cell background must be painted (<code>true</code>) or
+     *                                 transparent (<code>false</code>)
+     * @param string|int|null  $link   a URL or an identifier returned by <code>addLink()</code>
+     *
+     * @throws PdfException if the given text is not empty and no font is set
+     *
+     * @see PdfDocument::cell()
+     */
+    public function styledCell(
+        PdfStyle $style,
+        ?float $width = null,
+        float $height = self::LINE_HEIGHT,
+        string $text = '',
+        ?PdfBorder $border = null,
+        PdfMove $move = PdfMove::RIGHT,
+        PdfTextAlignment $align = PdfTextAlignment::LEFT,
+        bool $fill = false,
+        string|int|null $link = null,
+    ): static {
+        return $this->useStyle(
+            style: $style,
+            callable: fn (): static => $this->cell(
+                width: $width,
+                height: $height,
+                text: $text,
+                border: $border,
+                move: $move,
+                align: $align,
+                fill: $fill,
+                link: $link
+            )
+        );
+    }
+
+    /**
+     * Apply the given style, prints a text with line breaks, and reset this current style to the default.
+     *
+     * @param PdfStyle         $style  the style to apply
+     * @param ?float           $width  the cell width. If <code>null</code>, the cell extends up to the right margin.
+     * @param float            $height the cell height
+     * @param string           $text   the cell text
+     * @param ?PdfBorder       $border indicates how borders must be drawn around the cell. If <code>null</code>, no
+     *                                 border is drawn.
+     * @param PdfTextAlignment $align  the text alignment
+     * @param bool             $fill   indicates if the cell background must be painted (<code>true</code>) or
+     *                                 transparent (<code>false</code>)
+     *
+     * @throws PdfException if the given text is not empty and no font is set
+     *
+     * @see PdfDocument::multiCell()
+     */
+    public function styledMultiCell(
+        PdfStyle $style,
+        ?float $width = null,
+        float $height = self::LINE_HEIGHT,
+        string $text = '',
+        ?PdfBorder $border = null,
+        PdfTextAlignment $align = PdfTextAlignment::JUSTIFIED,
+        bool $fill = false
+    ): static {
+        return $this->useStyle(
+            style: $style,
+            callable: fn (): static => $this->multiCell(
+                width: $width,
+                height: $height,
+                text: $text,
+                border: $border,
+                align: $align,
+                fill: $fill,
+            )
+        );
+    }
+
+    /**
+     * Apply the given style, call the given user function, and reset this current style to the default.
+     *
+     * @param PdfStyle $style    the style to apply
+     * @param callable $callable the function to call
+     */
+    public function useStyle(PdfStyle $style, callable $callable): static
+    {
+        $style->updateDocument($this);
+        $callable();
+
+        return $this->resetStyle();
     }
 
     /**

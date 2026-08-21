@@ -70,7 +70,7 @@ final class MailerServiceTest extends TestCase
 
     private function createMailer(): MailerInterface
     {
-        $mailer = $this->createMock(MailerInterface::class);
+        $mailer = self::createMock(MailerInterface::class);
         $mailer->expects(self::once())
             ->method('send');
 

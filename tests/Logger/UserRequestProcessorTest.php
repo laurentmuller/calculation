@@ -45,7 +45,7 @@ final class UserRequestProcessorTest extends TestCase
 
     private function createProcessor(?User $user = null): UserRequestProcessor
     {
-        $security = $this->createMock(Security::class);
+        $security = self::createMock(Security::class);
         $security->expects(self::once())
             ->method('getUser')
             ->willReturn($user);

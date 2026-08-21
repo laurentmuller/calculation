@@ -259,7 +259,7 @@ final class DataQueryValueResolverTest extends TestCase
 
     private function createArgumentMetadata(string $type = DataQuery::class): MockObject&ArgumentMetadata
     {
-        $argument = $this->createMock(ArgumentMetadata::class);
+        $argument = self::createMock(ArgumentMetadata::class);
         $argument->expects(self::once())
             ->method('getType')
             ->willReturn($type);
@@ -288,13 +288,21 @@ final class DataQueryValueResolverTest extends TestCase
 
     private function createResolver(?ConstraintViolationListInterface $violationList = null): DataQueryValueResolver
     {
-        $validator = $this->createMock(ValidatorInterface::class);
-        if ($violationList instanceof ConstraintViolationListInterface) {
-            $validator->expects(self::once())
-                ->method('validate')
-                ->willReturn($violationList);
-        }
+        $validator = $this->createValidator($violationList);
 
         return new DataQueryValueResolver('/', $validator);
+    }
+
+    private function createValidator(?ConstraintViolationListInterface $violationList): ValidatorInterface
+    {
+        if (!$violationList instanceof ConstraintViolationListInterface) {
+            return self::createStub(ValidatorInterface::class);
+        }
+        $validator = self::createMock(ValidatorInterface::class);
+        $validator->expects(self::once())
+            ->method('validate')
+            ->willReturn($violationList);
+
+        return $validator;
     }
 }

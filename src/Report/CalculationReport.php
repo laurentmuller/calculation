@@ -221,14 +221,13 @@ class CalculationReport extends AbstractReport
 
     private function renderTimestampable(Calculation $calculation): void
     {
-        PdfStyle::getNoBorderStyle()
-            ->setFontSize(6)
-            ->updateDocument($this);
-        $this->useCellMargin(function () use ($calculation): void {
-            $translator = $this->getTranslator();
-            $width = $this->getPrintableWidth() / 2.0;
-            $created = $calculation->getCreatedMessage()->trans($translator);
-            $updated = $calculation->getUpdatedMessage()->trans($translator);
+        $translator = $this->getTranslator();
+        $width = $this->getPrintableWidth() / 2.0;
+        $created = $calculation->getCreatedMessage()->trans($translator);
+        $updated = $calculation->getUpdatedMessage()->trans($translator);
+
+        PdfStyle::getNoBorderStyle()->setFontSize(6)->updateDocument($this);
+        $this->useCellMargin(function () use ($width, $created, $updated): void {
             $this->cell(width: $width, text: $created);
             $this->cell(width: $width, text: $updated, align: PdfTextAlignment::RIGHT);
         });

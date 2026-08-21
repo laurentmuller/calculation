@@ -305,11 +305,14 @@ class SchemaReport extends AbstractReport
      */
     private function outputTitle(string $text, int $level = 0): static
     {
-        PdfStyle::default()->setFontBold()->updateDocument($this);
-
         return $this->addBookmark(text: $text, level: $level, currentY: false)
-            ->useCellMargin(fn (): static => $this->cell(text: $text, move: PdfMove::NEW_LINE))
-            ->lineBreak($this->getCellMargin())
-            ->resetStyle();
+            ->useCellMargin(
+                fn (): static => $this->styledCell(
+                    style: PdfStyle::default()->setFontBold(),
+                    text: $text,
+                    move: PdfMove::NEW_LINE
+                )
+            )
+            ->lineBreak($this->getCellMargin());
     }
 }

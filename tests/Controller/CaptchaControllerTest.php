@@ -15,14 +15,17 @@ namespace App\Tests\Controller;
 
 use App\Controller\CaptchaController;
 use App\Service\CaptchaImageService;
+use App\Tests\MockStubTrait;
 use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 
 final class CaptchaControllerTest extends ControllerTestCase
 {
+    use MockStubTrait;
     use TranslatorStubTrait;
 
     #[\Override]
@@ -45,7 +48,12 @@ final class CaptchaControllerTest extends ControllerTestCase
     public function testInvalidImage(): void
     {
         $controller = $this->getController();
-        $service = $this->createService(null, false, false);
+        $service = $this->createService(
+            mock: false,
+            generateImage: null,
+            validateTimeout: false,
+            validateToken: false
+        );
 
         $response = $controller->image($service);
         $content = (string) $response->getContent();
@@ -57,7 +65,12 @@ final class CaptchaControllerTest extends ControllerTestCase
     public function testInvalidTimeout(): void
     {
         $controller = $this->getController();
-        $service = $this->createService(null, false, false);
+        $service = $this->createService(
+            mock: true,
+            generateImage: null,
+            validateTimeout: false,
+            validateToken: false
+        );
         $service->expects(self::once())
             ->method('validateTimeout')
             ->willReturn(false);
@@ -70,7 +83,12 @@ final class CaptchaControllerTest extends ControllerTestCase
     public function testInvalidToken(): void
     {
         $controller = $this->getController();
-        $service = $this->createService(null, true, false);
+        $service = $this->createService(
+            mock: false,
+            generateImage: null,
+            validateTimeout: true,
+            validateToken: false
+        );
 
         $response = $controller->validate($service);
         $actual = $response->getContent();
@@ -80,19 +98,28 @@ final class CaptchaControllerTest extends ControllerTestCase
     public function testValid(): void
     {
         $controller = $this->getController();
-        $service = $this->createService(null, true, true);
+        $service = $this->createService(
+            mock: false,
+            generateImage: null,
+            validateTimeout: true,
+            validateToken: true
+        );
 
         $response = $controller->validate($service);
         $actual = $response->getContent();
         self::assertSame('true', $actual);
     }
 
+    /**
+     * @phpstan-return ($mock is true ? MockObject&CaptchaImageService : Stub&CaptchaImageService)
+     */
     private function createService(
+        bool $mock,
         ?string $generateImage,
         bool $validateTimeout,
         bool $validateToken
-    ): MockObject&CaptchaImageService {
-        $service = self::createMock(CaptchaImageService::class);
+    ): CaptchaImageService {
+        $service = $this->createMockOrStub(CaptchaImageService::class, $mock);
         $service->method('generateImage')
             ->willReturn($generateImage);
         $service->method('validateTimeout')

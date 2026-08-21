@@ -36,12 +36,12 @@ final class LogoutListenerTest extends TestCase
 
     private function createEvent(User $user): LogoutEvent
     {
-        $token = $this->createMock(TokenInterface::class);
+        $token = self::createMock(TokenInterface::class);
         $token->expects(self::once())
             ->method('getUser')
             ->willReturn($user);
 
-        $event = $this->createMock(LogoutEvent::class);
+        $event = self::createMock(LogoutEvent::class);
         $event->expects(self::once())
             ->method('getToken')
             ->willReturn($token);
@@ -61,7 +61,7 @@ final class LogoutListenerTest extends TestCase
     private function createRequestStack(): RequestStack
     {
         $session = self::createStub(SessionInterface::class);
-        $requestStack = $this->createMock(RequestStack::class);
+        $requestStack = self::createMock(RequestStack::class);
         $requestStack->expects(self::once())
             ->method('getSession')
             ->willReturn($session);

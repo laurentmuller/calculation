@@ -19,11 +19,15 @@ use App\Model\ImageSize;
 use App\Report\SchemaReport;
 use App\Service\FontAwesomeImageService;
 use App\Service\SchemaService;
+use App\Tests\MockStubTrait;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 final class SchemaReportTest extends TestCase
 {
+    use MockStubTrait;
+
     public function testEmpty(): void
     {
         $helper = $this->createHelper();
@@ -80,7 +84,7 @@ final class SchemaReportTest extends TestCase
             'table1' => $table1,
             'table2' => $table2,
         ]);
-        $imageService = $this->createImageService();
+        $imageService = $this->createImageService(true);
         $imageService->expects(self::exactly(2))
             ->method('getImage')
             ->willReturnOnConsecutiveCalls(
@@ -177,9 +181,12 @@ final class SchemaReportTest extends TestCase
         return self::createStub(DocumentHelperInterface::class);
     }
 
-    private function createImageService(): MockObject&FontAwesomeImageService
+    /**
+     * @phpstan-return ($mock is true ? MockObject&FontAwesomeImageService : Stub&FontAwesomeImageService)
+     */
+    private function createImageService(bool $mock = false): FontAwesomeImageService
     {
-        return $this->createMock(FontAwesomeImageService::class);
+        return $this->createMockOrStub(FontAwesomeImageService::class, $mock);
     }
 
     private function createSchemaService(array $tables = []): SchemaService

@@ -78,9 +78,11 @@ class LogsReport extends AbstractReport
     {
         $text = $this->trans($id);
         $this->addBookmark(text: $text, isUTF8: true, currentY: $currentY);
-        PdfStyle::default()->setFontBold()->updateDocument($this);
-        $this->useCellMargin(fn (): static => $this->cell(text: $text, move: PdfMove::NEW_LINE));
-        $this->resetStyle();
+        $this->useCellMargin(fn (): static => $this->styledCell(
+            style: PdfStyle::default()->setFontBold(),
+            text: $text,
+            move: PdfMove::NEW_LINE
+        ));
     }
 
     private function addDateBookmark(int $date): void

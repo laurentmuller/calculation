@@ -66,7 +66,7 @@ final class CacheServiceTest extends TestCase
 
     private function createService(CommandResult $result): CacheService
     {
-        $service = $this->createMock(CommandService::class);
+        $service = self::createMock(CommandService::class);
         $service->expects(self::once())
             ->method('execute')
             ->willReturn($result);

@@ -87,7 +87,7 @@ class HtmlColorsReport extends AbstractReport
         $cell = PdfCell::instance(style: $style);
         foreach ($colors as $color) {
             $rgb = $color->asRGB();
-            $style->setFillColor($color->getFillColor());
+            $style->setFillColor($color);
             $table->addRow(
                 $color->name,
                 (string) $color->value,

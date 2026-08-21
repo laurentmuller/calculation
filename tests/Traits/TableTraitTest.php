@@ -130,7 +130,7 @@ final class TableTraitTest extends TestCase
     public function testDenyAccess(): void
     {
         $this->denyException = true;
-        $table = $this->createMock(AbstractTable::class);
+        $table = self::createMock(AbstractTable::class);
         $table->expects(self::once())
             ->method('getEntityClassName')
             ->willReturn(CalculationState::class);
@@ -149,7 +149,7 @@ final class TableTraitTest extends TestCase
 
     public function testEmptyMessage(): void
     {
-        $table = $this->createMock(AbstractTable::class);
+        $table = self::createMock(AbstractTable::class);
         $table->expects(self::once())
             ->method('getEmptyMessage')
             ->willReturn('Empty Message');

@@ -32,7 +32,7 @@ final class BundleInfoServiceTest extends TestCase
 
     private function createMockBundle(): BundleInterface
     {
-        $bundle = $this->createMock(BundleInterface::class);
+        $bundle = self::createMock(BundleInterface::class);
         $bundle->expects(self::once())
             ->method('getNamespace')
             ->willReturn('App\Tests\Service');
@@ -45,7 +45,7 @@ final class BundleInfoServiceTest extends TestCase
 
     private function createMockKernel(BundleInterface $bundle): KernelInterface
     {
-        $kernel = $this->createMock(KernelInterface::class);
+        $kernel = self::createMock(KernelInterface::class);
         $kernel->expects(self::once())
             ->method('getBundles')
             ->willReturn(['fakeBundle' => $bundle]);

@@ -208,7 +208,7 @@ class PhpIniReport extends AbstractReport
         if (null !== $master) {
             $table->addCell($this->getConfigCell($master));
         }
-        $table->completeRow();
+        $table->endRow();
     }
 
     /**
@@ -222,20 +222,23 @@ class PhpIniReport extends AbstractReport
         }
         if (null !== $group['name']) {
             $this->addBookmark(text: $group['name'], level: 1);
-            $this->createRowStyle(true)
-                ->updateDocument($this);
-            $this->cell(text: $group['name'], border: PdfBorder::bottom(), move: PdfMove::NEW_LINE);
-            $this->resetStyle();
+            $this->styledCell(
+                style: $this->createRowStyle(true),
+                text: $group['name'],
+                border: PdfBorder::bottom(),
+                move: PdfMove::NEW_LINE
+            );
         }
         if (null !== $group['note']) {
-            HtmlColorName::WHITE_SMOKE->applyFillColor($this);
-            $this->multiCell(
+            $style = PdfStyle::default()
+                ->setFillColor(HtmlColorName::WHITE_SMOKE);
+            $this->styledMultiCell(
+                style: $style,
                 text: $group['note'],
                 border: PdfBorder::all(),
                 align: PdfTextAlignment::LEFT,
                 fill: true
             );
-            $this->resetStyle();
         }
 
         $table = $this->createTable($group['headers']);
@@ -255,12 +258,12 @@ class PhpIniReport extends AbstractReport
             $this->addPage();
         }
         $this->addBookmark(text: $module['name']);
-        $this->createRowStyle(true)
-            ->setFontSize(11.0)
-            ->updateDocument($this);
-        $this->cell(text: $module['name'], border: PdfBorder::bottom(), move: PdfMove::NEW_LINE);
-        $this->resetStyle();
-
+        $this->styledCell(
+            style: $this->createRowStyle(true)->setFontSize(11.0),
+            text: $module['name'],
+            border: PdfBorder::bottom(),
+            move: PdfMove::NEW_LINE
+        );
         foreach ($module['groups'] as $group) {
             $this->outputGroup($group);
         }

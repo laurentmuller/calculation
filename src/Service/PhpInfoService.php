@@ -62,9 +62,9 @@ class PhpInfoService
     /**
      * @return InfoType
      */
-    public function getPhpInfo(): array
+    public function getPhpInfo(?PhpInfo $info = null): array
     {
-        $info = Info::capture();
+        $info ??= Info::capture();
 
         return [
             'version' => $info->version(),

@@ -71,7 +71,6 @@ final class PhpInfoServiceTest extends TestCase
             $this->createConfig(name: 'Disabled Value', localValue: 'false'),
             $this->createConfig(name: 'Replace Middle', localValue: 'REMEMBERME=12345;FAKE'),
             $this->createConfig(name: 'Replace End', localValue: 'REMEMBERME=12345'),
-
         ]);
         $headings = $this->createHeadings();
         $group = new Group(

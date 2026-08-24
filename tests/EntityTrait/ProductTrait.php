@@ -28,7 +28,8 @@ trait ProductTrait
     public function getProduct(
         ?Category $category = null,
         float $price = 1.0,
-        string $description = 'Test description'
+        string $description = 'Test description',
+        ?string $supplier = null
     ): Product {
         if ($this->product instanceof Product) {
             return $this->product;
@@ -36,7 +37,8 @@ trait ProductTrait
 
         $this->product = new Product();
         $this->product->setPrice($price)
-            ->setDescription($description);
+            ->setDescription($description)
+            ->setSupplier($supplier);
         $category ??= $this->getCategory();
         $category->addProduct($this->product);
 

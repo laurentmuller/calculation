@@ -30,8 +30,8 @@ use Symfony\Component\Finder\SplFileInfo;
 
 #[AsCommand(
     name: 'app:update-images',
-    description: 'Convert images, from the given directory, to the WebP format.',
-    help: 'The <info>%command.name%</info> command convert images, from the given directory, to the <href=https://en.wikipedia.org/wiki/WebP>WebP</> format.'
+    description: 'Convert images from the given directory to the WebP format.',
+    help: 'The <info>%command.name%</info> command convert images from the given directory, to the <href=https://en.wikipedia.org/wiki/WebP>WebP</> format.'
 )]
 class WebpCommand
 {
@@ -160,16 +160,22 @@ class WebpCommand
 
     private function createFinder(string $path, int $level): Finder
     {
-        $filtered = \array_filter(ImageExtension::cases(), static fn (ImageExtension $e): bool => ImageExtension::WEBP !== $e);
-        $extensions = \array_map(static fn (ImageExtension $e): string => $e->getFilter(), $filtered);
-        $depth = '<= ' . $level;
-
         return Finder::create()
             ->ignoreUnreadableDirs()
             ->in($path)
-            ->depth($depth)
+            ->depth(\sprintf('<=%d', $level))
             ->files()
-            ->name($extensions);
+            ->name($this->getFilterExtensions());
+    }
+
+    private function getFilterExtensions(): array
+    {
+        $filtered = \array_filter(
+            ImageExtension::cases(),
+            static fn (ImageExtension $e): bool => ImageExtension::WEBP !== $e
+        );
+
+        return \array_map(static fn (ImageExtension $e): string => $e->getFilter(), $filtered);
     }
 
     private function getImageExtension(SplFileInfo $file): ?ImageExtension

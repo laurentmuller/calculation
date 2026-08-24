@@ -104,9 +104,9 @@ class UcFirstCommand
         $entry = $this->getEntities()[$class];
         $name = $entry['name'];
         $choices = $entry['fields'];
-        $question = new ChoiceQuestion(\sprintf("Select a field name for the '%s' entity:", $name), $choices, 0);
+        $question = new ChoiceQuestion(\sprintf('Select a field name for the "%s" entity:', $name), $choices, 0);
         $question->setMaxAttempts(1)
-            ->setErrorMessage(\sprintf("No field selected for the '%s' entity.", $name));
+            ->setErrorMessage(\sprintf('No field selected for the "%s" entity.', $name));
 
         /** @var ?string $field */
         $field = $io->askQuestion($question);
@@ -191,6 +191,20 @@ class UcFirstCommand
         return $this->entities;
     }
 
+    private function ioError(SymfonyStyle $io, string $message, string|int ...$parameters): null
+    {
+        $io->error(\count($parameters) > 0 ? \sprintf($message, ...$parameters) : $message);
+
+        return null;
+    }
+
+    private function ioSuccess(SymfonyStyle $io, string $message, string|int ...$parameters): int
+    {
+        $io->success(\sprintf($message, ...$parameters));
+
+        return Command::SUCCESS;
+    }
+
     /**
      * @param class-string $class
      */
@@ -210,33 +224,28 @@ class UcFirstCommand
         }
 
         if (0 === $count) {
-            $io->success(
-                \sprintf(
-                    'No value updated of %d entities. %s.',
-                    $total,
-                    $this->stop()
-                )
-            );
-
-            return Command::SUCCESS;
+            return $this->ioSuccess($io, 'No value updated of %d entities. %s.', $total, $this->stop());
         }
 
-        $message = \sprintf(
+        if ($dryRun) {
+            return $this->ioSuccess(
+                $io,
+                "Updated %d values of %d entities successfully. %s.\nNo change saved to database.",
+                $count,
+                $total,
+                $this->stop()
+            );
+        }
+
+        $this->manager->flush();
+
+        return $this->ioSuccess(
+            $io,
             'Updated %d values of %d entities successfully. %s.',
             $count,
             $total,
             $this->stop()
         );
-        if ($dryRun) {
-            $io->success($message . "\nNo change saved to database.");
-
-            return Command::SUCCESS;
-        }
-
-        $this->manager->flush();
-        $io->success($message);
-
-        return Command::SUCCESS;
     }
 
     /**
@@ -248,9 +257,7 @@ class UcFirstCommand
             $class = $this->askClassName($io);
         }
         if (!StringUtils::isString($class)) {
-            $io->error('No entity selected.');
-
-            return null;
+            return $this->ioError($io, 'No entity selected.');
         }
 
         $entities = $this->getEntities();
@@ -260,9 +267,8 @@ class UcFirstCommand
                 return $key;
             }
         }
-        $io->error(\sprintf("Unable to find the '%s' entity.", $class));
 
-        return null;
+        return $this->ioError($io, 'Unable to find the "%s" entity.', $class);
     }
 
     /**
@@ -274,9 +280,7 @@ class UcFirstCommand
             $field = $this->askFieldName($io, $class);
         }
         if (!StringUtils::isString($field)) {
-            $io->error(\sprintf("No field selected for the entity '%s'.", $class));
-
-            return null;
+            return $this->ioError($io, 'No field selected for the entity "%s".', $class);
         }
         $entity = $this->getEntities()[$class];
         foreach ($entity['fields'] as $value) {
@@ -284,8 +288,7 @@ class UcFirstCommand
                 return $value;
             }
         }
-        $io->error(\sprintf("Unable to find the field '%s' for the entity '%s'.", $field, $class));
 
-        return null;
+        return $this->ioError($io, 'Unable to find the field "%s" for the entity "%s".', $field, $class);
     }
 }

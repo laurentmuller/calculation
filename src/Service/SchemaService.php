@@ -20,6 +20,7 @@ use App\Utils\StringUtils;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Schema\ForeignKeyConstraint;
@@ -77,7 +78,7 @@ class SchemaService
             SELECT
                 TABLE_NAME AS name,
                 TABLE_ROWS AS records,
-                (data_length + index_length) / 1024 AS size
+                (DATA_LENGTH + INDEX_LENGTH) / 1024 AS size
             FROM
                 information_schema.tables
             WHERE
@@ -86,7 +87,7 @@ class SchemaService
 
     private ?Connection $connection = null;
 
-    /** @phpstan-var AbstractSchemaManager<\Doctrine\DBAL\Platforms\AbstractPlatform> */
+    /** @phpstan-var AbstractSchemaManager<AbstractPlatform> */
     private ?AbstractSchemaManager $schemaManager = null;
 
     public function __construct(
@@ -267,7 +268,7 @@ class SchemaService
         $primaryKeys = $this->getPrimaryKeys($table);
 
         return \array_map(function (Column $column) use ($primaryKeys, $indexes, $foreignKeys): array {
-            $name = \strtolower($this->getName($column));
+            $name = $this->mapName($column);
             $primary = \in_array($name, $primaryKeys, true);
             $unique = $this->isIndexUnique($name, $indexes);
             $foreignTable = $this->findForeignTableName($name, $foreignKeys);
@@ -362,7 +363,7 @@ class SchemaService
      */
     private function getMetaDatas(): array
     {
-        return $this->cache->get('metadata', fn (): array => $this->loadMetaDatas($this->manager));
+        return $this->cache->get('metadata', fn (): array => $this->loadMetaDatas());
     }
 
     /**
@@ -384,7 +385,7 @@ class SchemaService
     }
 
     /**
-     * @return AbstractSchemaManager<\Doctrine\DBAL\Platforms\AbstractPlatform>
+     * @return AbstractSchemaManager<AbstractPlatform>
      *
      * @throws Exception
      */
@@ -431,10 +432,7 @@ class SchemaService
     private function isMySQLPlatform(): bool
     {
         try {
-            $platform = $this->getConnection()
-                ->getDatabasePlatform();
-
-            return $platform instanceof AbstractMySQLPlatform;
+            return $this->getConnection()->getDatabasePlatform() instanceof AbstractMySQLPlatform;
         } catch (Exception) {
             return false;
         }
@@ -443,10 +441,10 @@ class SchemaService
     /**
      * @return array<string, ClassMetadata<object>>
      */
-    private function loadMetaDatas(EntityManagerInterface $manager): array
+    private function loadMetaDatas(): array
     {
         $datas = \array_filter(
-            $manager->getMetadataFactory()->getAllMetadata(),
+            $this->manager->getMetadataFactory()->getAllMetadata(),
             static fn (ClassMetadata $data): bool => !$data->isMappedSuperclass && !$data->isEmbeddedClass
         );
 
@@ -483,13 +481,24 @@ class SchemaService
         );
     }
 
-    private function mapName(Name $name): string
+    /**
+     * @template N of Name
+     *
+     * @param NamedObject<N>|Name $name
+     */
+    private function mapName(NamedObject|Name $name): string
     {
+        if ($name instanceof NamedObject) {
+            $name = $name->getObjectName();
+        }
+
         return \strtolower(\trim($name->toString(), '"'));
     }
 
     /**
-     * @param array<Name> $names
+     * @template N of Name
+     *
+     * @param array<NamedObject<N>|Name> $names
      *
      * @return string[]
      */
@@ -501,7 +510,7 @@ class SchemaService
     /**
      * @phpstan-param Table|ClassMetadata<object>|string $name
      */
-    private function mapTableName(Table|Name|ClassMetadata|string $name): string
+    private function mapTableName(Table|ClassMetadata|string $name): string
     {
         if ($name instanceof Table) {
             $name = $this->getName($name);

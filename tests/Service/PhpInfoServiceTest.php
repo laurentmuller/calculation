@@ -23,6 +23,40 @@ use STS\Phpinfo\Support\Items;
 
 final class PhpInfoServiceTest extends TestCase
 {
+    public function testMoveCoreModule(): void
+    {
+        $coreGroup = new Group(
+            configs: new Items(),
+        );
+        $coreGroups = new Items([$coreGroup]);
+        $coreModule = new Module('Core', $coreGroups);
+
+        $generalGroup = new Group(
+            configs: new Items(),
+        );
+        $generalGroups = new Items([$generalGroup]);
+        $generalModule = new Module('General', $generalGroups);
+
+        $info = new PhpInfo(\PHP_VERSION, new Items([$coreModule, $generalModule]));
+        $service = new PhpInfoService();
+        $actual = $service->getPhpInfo($info);
+        self::assertCount(3, $actual['modules']);
+    }
+
+    public function testMoveCoreModuleNoGeneral(): void
+    {
+        $coreGroup = new Group(
+            configs: new Items(),
+        );
+        $coreGroups = new Items([$coreGroup]);
+        $coreModule = new Module('Core', $coreGroups);
+
+        $info = new PhpInfo(\PHP_VERSION, new Items([$coreModule]));
+        $service = new PhpInfoService();
+        $actual = $service->getPhpInfo($info);
+        self::assertCount(2, $actual['modules']);
+    }
+
     public function testPhpInfo(): void
     {
         $configs = new Items([
@@ -35,6 +69,9 @@ final class PhpInfoServiceTest extends TestCase
             $this->createConfig(name: 'No Value', localValue: 'no value'),
             $this->createConfig(name: 'Enabled Value', localValue: 'true'),
             $this->createConfig(name: 'Disabled Value', localValue: 'false'),
+            $this->createConfig(name: 'Replace Middle', localValue: 'REMEMBERME=12345;FAKE'),
+            $this->createConfig(name: 'Replace End', localValue: 'REMEMBERME=12345'),
+
         ]);
         $headings = $this->createHeadings();
         $group = new Group(
@@ -58,8 +95,6 @@ final class PhpInfoServiceTest extends TestCase
         $actual = $service->getPhpInfo($info);
         self::assertSame(\PHP_VERSION, $actual['version']);
         self::assertNotEmpty($actual['modules']);
-        self::assertNull($actual['hostname']);
-        self::assertNull($actual['os']);
     }
 
     public function testVariablesWithNoMatchName(): void

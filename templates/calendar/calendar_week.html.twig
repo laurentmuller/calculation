@@ -7,101 +7,109 @@
 {%- set title_parameters = {'%year%': week.year, '%week%': week.number} -%}
 {# body #}
 {% block body %}
-<div class="row g-0">
-    <div class="col-md-4">
-        <h2 class="mb-0">{{ title|trans(title_parameters) }}</h2>
-        <p class="text-body-secondary mb-1">{{ start_date|locale_date('long') }} - {{ end_date|locale_date('long') }}</p>
-    </div>
-    <div class="col-md-4 text-md-center">
-        <h3>{{ 'counters.calculations'|trans({count: calculations|length}) }}</h3>
-    </div>
-    <div class="col-md-4 text-md-end">
-        <div class="btn-group btn-group-sm" role="group">
-            {# today week #}
-            {% if today %}
-                {% set href = path('calendar_week', {year: today.year, week: today.week}) %}
-                {{ link(
-                    href: href,
-                    class: 'btn btn-primary',
-                    icon: 'fa-solid fa-arrows-alt',
-                    title: 'calendar.week_current',
-                    parameters: {'%year%': today.year, '%week%': today.week}) }}
-            {% endif %}
-            {# previous week #}
-            {% if previous %}
-                {% set href = path('calendar_week', {year: previous.year, week: previous.week}) %}
-                {{ link(
-                    href: href,
-                    class: 'btn btn-primary',
-                    icon: 'fa-solid fa-chevron-left',
-                    title: 'calendar.week_previous',
-                    parameters: {'%year%': previous.year, '%week%': previous.week}) }}
-            {% endif %}
-            {# next week #}
-            {% if next %}
-                {% set href = path('calendar_week', {year: next.year, week: next.week}) %}
-                {{ link(
-                    href: href,
-                    class: 'btn btn-primary',
-                    icon: 'fa-solid fa-chevron-right',
-                    title: 'calendar.week_next',
-                    parameters: {'%year%': next.year, '%week%': next.week}) }}
-            {% endif %}
-            {# current month calendar #}
-            {%- set first_day = week.days|filter(day => (day.inWeek(week) and not day.empty))|first -%}
-            {% if first_day -%}
-                {% set month = calendar.month(first_day.month) %}
-                {% set href = path('calendar_month', {year: month.year, month: month.number}) %}
-                {{ link(
-                    href: href,
-                    class: 'btn btn-primary',
-                    icon: 'fa-solid fa-calendar-week',
-                    title: 'calendar.month_show',
-                    parameters: {'%year%': month.year, '%month%': month.name}) }}
-            {%- endif %}
-            {# current year calendar #}
-            {% if next %}
-                {% set href = path('calendar_year', {year: next.year}) %}
-                {{ link(
-                    href: href,
-                    class: 'btn btn-primary',
-                    icon: 'fa-regular fa-calendar-alt',
-                    title: 'calendar.year_show',
-                    parameters: {'%year%': next.year}) }}
-            {% endif %}
+    <div class="row g-0">
+        <div class="col-md-4">
+            <h2 class="mb-0">{{ title|trans(title_parameters) }}</h2>
+            <p class="text-body-secondary mb-1">{{ start_date|locale_date('long') }}
+                - {{ end_date|locale_date('long') }}</p>
+        </div>
+        <div class="col-md-4 text-md-center">
+            <h3>{{ 'counters.calculations'|trans({count: calculations|length}) }}</h3>
+        </div>
+        <div class="col-md-4 text-md-end">
+            <div class="btn-group btn-group-sm" role="group">
+                {# today week #}
+                {% if today %}
+                    {% set href = path('calendar_week', {year: today.year, week: today.week}) %}
+                    {{ link(
+                        href: href,
+                        class: 'btn btn-primary',
+                        icon: 'fa-solid fa-arrows-alt',
+                        title: 'calendar.week_current',
+                        parameters: {'%year%': today.year, '%week%': today.week}) }}
+                {% endif %}
+                {# previous week #}
+                {% if previous %}
+                    {% set href = path('calendar_week', {year: previous.year, week: previous.week}) %}
+                    {{ link(
+                        href: href,
+                        class: 'btn btn-primary',
+                        icon: 'fa-solid fa-chevron-left',
+                        title: 'calendar.week_previous',
+                        parameters: {'%year%': previous.year, '%week%': previous.week}) }}
+                {% endif %}
+                {# next week #}
+                {% if next %}
+                    {% set href = path('calendar_week', {year: next.year, week: next.week}) %}
+                    {{ link(
+                        href: href,
+                        class: 'btn btn-primary',
+                        icon: 'fa-solid fa-chevron-right',
+                        title: 'calendar.week_next',
+                        parameters: {'%year%': next.year, '%week%': next.week}) }}
+                {% endif %}
+                {# current month calendar #}
+                {%- set first_day = week.days|filter(day => (day.inWeek(week) and not day.empty))|first -%}
+                {% if first_day -%}
+                    {% set month = calendar.month(first_day.month) %}
+                    {% set href = path('calendar_month', {year: month.year, month: month.number}) %}
+                    {{ link(
+                        href: href,
+                        class: 'btn btn-primary',
+                        icon: 'fa-solid fa-calendar-week',
+                        title: 'calendar.month_show',
+                        parameters: {'%year%': month.year, '%month%': month.name}) }}
+                {%- endif %}
+                {# current year calendar #}
+                {% if next %}
+                    {% set href = path('calendar_year', {year: next.year}) %}
+                    {{ link(
+                        href: href,
+                        class: 'btn btn-primary',
+                        icon: 'fa-regular fa-calendar-alt',
+                        title: 'calendar.year_show',
+                        parameters: {'%year%': next.year}) }}
+                {% endif %}
+            </div>
         </div>
     </div>
-</div>
-{% for day in week.days|filter(day => not day.empty and day.inWeek(week)) -%}
-    <table class="table table-sm table-borderless position-relative">
-        <thead>
-        <tr class="text-bg-secondary">
-            <td colspan="5" class="week-head ps-0">
-                <span>{{ day.date|locale_date('long') }}</span><span class="small"> - {{ 'counters.calculations'|trans({count: day.count}) }}</span>
-            </td>
-            <td class="text-end">
-                {% if not day.empty -%}
-                    <span class="me-1">{{ linkCalculations(day.date|locale_date('short'), day.date|locale_date('long'), day.count, 'text-white stretched-link', 'counters.calculations_day') }}</span>
-                {%- endif %}
-            </td>
-        </tr>
-        <tr>
-            <td colspan="6" class="py-0"><hr class="my-0"></td>
-        </tr>
-        </thead>
-        <tbody>
-        {% for calculation in day.calculations -%}
-            {{ dataRow(calculation, 'text-cell') -}}
-        {%- endfor %}
-        </tbody>
-    </table>
-{%- endfor %}
+    {% for day in week.days|filter(day => not day.empty and day.inWeek(week)) -%}
+        <table class="table table-sm table-borderless position-relative">
+            <thead>
+            <tr class="text-bg-secondary">
+                <td colspan="5" class="week-head ps-0">
+                    <span>{{ day.date|locale_date('long') }}</span>
+                    <span class="small"> - {{ 'counters.calculations'|trans({count: day.count}) }}</span>
+                </td>
+                <td class="text-end">
+                    {% if not day.empty -%}
+                        {% set query = day.date|locale_date('short') %}
+                        {% set date = day.date|locale_date('long') %}
+                        <span class="me-1">
+                        {{ linkCalculations(query, date, day.count, 'text-white stretched-link', 'counters.calculations_day') }}
+                    </span>
+                    {%- endif %}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6" class="py-0">
+                    <hr class="my-0">
+                </td>
+            </tr>
+            </thead>
+            <tbody>
+            {% for calculation in day.calculations -%}
+                {{ dataRow(calculation, 'text-cell') -}}
+            {%- endfor %}
+            </tbody>
+        </table>
+    {%- endfor %}
 {% endblock body %}
 {# stylesheets #}
 {% block stylesheets -%}
-{{ parent() }}
-<style nonce="{{ csp_nonce() }}">
-    {{- css_border() }}
-</style>
-{{ asset_css('css/calendar.css') }}
+    {{ parent() }}
+    <style nonce="{{ csp_nonce() }}">
+        {{- css_border() }}
+    </style>
+    {{ asset_css('css/calendar.css') }}
 {% endblock stylesheets %}

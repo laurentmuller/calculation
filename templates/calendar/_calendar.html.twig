@@ -1,66 +1,74 @@
 {# macros for calendar #}
 {% macro linkCalculations(query, date, count, class, title_message = 'counters.calculations_calendar') -%}
-{% from 'macros/_icons.html.twig' import icon %}
-{%- set title = title_message|trans({date: date, count: count}) -%}
-<a class="{{ class }}" href="{{ path('calculation_index', {search: query}) }}" title="{{ title }}">{{ icon(ICON_CALCULATION) }}</a>
+    {% from 'macros/_icons.html.twig' import icon %}
+    {%- set title = title_message|trans({date: date, count: count}) -%}
+    <a class="{{ class }}" href="{{ path('calculation_index', {search: query}) }}" title="{{ title }}">
+        {{- icon(ICON_CALCULATION) -}}
+    </a>
 {%- endmacro linkCalculations %}
 
 {% macro dataContent(calculations) -%}
-<table class="table table-popover table-sm mb-0">
-    <tbody>
-    {% for calculation in calculations -%}
-        {{ _self.dataRow(calculation) }}
-    {%- endfor %}
-    </tbody>
-</table>
+    <table class="table table-popover table-sm mb-0">
+        <tbody>
+        {% for calculation in calculations -%}
+            {{ _self.dataRow(calculation) }}
+        {%- endfor %}
+        </tbody>
+    </table>
 {%- endmacro dataContent %}
 
 {% macro dataRow(calculation, extra_class = '') %}
-{% set extra_class = ('text-nowrap ' ~ (extra_class|default))|trim %}
-{% set margin_class = application_parameters.marginBelow(calculation) ? 'text-percent text-danger' : 'text-percent' %}
-<tr>
-    <td class="text-id text-border state-border-{{ calculation.stateId }}">{{ calculation.id|identifier }}</td>
-    <td class="text-state">{{ calculation.state.code }}</td>
-    <td class="{{ extra_class }}">{{ calculation.customer }}</td>
-    <td class="{{ extra_class }}">{{ calculation.description }}</td>
-    <td class="{{ margin_class }}">{{ calculation.overallMargin|percent }}</td>
-    <td class="text-currency">{{ calculation.overallTotal|amount }}</td>
-</tr>
+    {% set extra_class = ('text-nowrap ' ~ (extra_class|default))|trim %}
+    {% set margin_class = application_parameters.marginBelow(calculation) ? 'text-percent text-danger' : 'text-percent' %}
+    <tr>
+        <td class="text-id text-border state-border-{{ calculation.stateId }}">{{ calculation.id|identifier }}</td>
+        <td class="text-state">{{ calculation.state.code }}</td>
+        <td class="{{ extra_class }}">{{ calculation.customer }}</td>
+        <td class="{{ extra_class }}">{{ calculation.description }}</td>
+        <td class="{{ margin_class }}">{{ calculation.overallMargin|percent }}</td>
+        <td class="text-currency">{{ calculation.overallTotal|amount }}</td>
+    </tr>
 {%- endmacro dataRow %}
 
 {% macro dayCell(month, day, small) %}
-{%- set title = '' -%}
-{%- set text = day.number -%}
-{%- set class = 'text-center align-middle' ~ (small ? ' border' : '') -%}
-{%- set link = false -%}
-{% if day.inMonth(month) -%}
-    {%- set title = day.date|locale_date('long') -%}
-    {%- set calculations = day.calculations -%}
-    {% if calculations %}
-        {%- set link = true -%}
-        {%- set count = calculations|length -%}
-        {%- set class = class ~ (small ? ' small' : '') ~ (day.current ? ' text-bg-primary' : ' text-bg-success') -%}
-        {%- set href = path('calculation_index', {search: day.date|locale_date('short')}) -%}
-        {%- set content = _self.dataContent(calculations) -%}
-    {%- elseif day.current -%}
-        {%- set class = class ~ ' text-bg-primary' -%}
+    {%- set title = '' -%}
+    {%- set text = day.number -%}
+    {%- set class = 'text-center align-middle' ~ (small ? ' border' : '') -%}
+    {%- set link = false -%}
+    {% if day.inMonth(month) -%}
+        {%- set title = day.date|locale_date('long') -%}
+        {%- set calculations = day.calculations -%}
+        {% if calculations %}
+            {%- set link = true -%}
+            {%- set count = calculations|length -%}
+            {%- set class = class ~ (small ? ' small' : '') ~ (day.current ? ' text-bg-primary' : ' text-bg-success') -%}
+            {%- set href = path('calculation_index', {search: day.date|locale_date('short')}) -%}
+            {%- set content = _self.dataContent(calculations) -%}
+        {%- elseif day.current -%}
+            {%- set class = class ~ ' text-bg-primary' -%}
+        {% elseif day.weekEnd %}
+            {%- set class = class ~ ' text-body-secondary' -%}
+        {%- endif %}
     {% elseif day.weekEnd %}
         {%- set class = class ~ ' text-body-secondary' -%}
+        {%- set text = '&nbsp;' -%}
+    {% else %}
+        {%- set text = '&nbsp;' -%}
     {%- endif %}
-{% elseif day.weekEnd %}
-    {%- set class = class ~ ' text-body-secondary' -%}
-    {%- set text = '&nbsp;' -%}
-{% else %}
-    {%- set text = '&nbsp;' -%}
-{%- endif %}
-{% if link %}
-<td class="{{ class }}"{% if title %} title="{{ title }}"{% endif %}>
-    <a href="{{ href }}" class="text-white">
-        <span>{{ text }}</span>
-        <span class="badge text-bg-light" data-bs-toggle="popover" data-content="{{ content|e }}"{% if title %} title="{{ title }}"{% endif %}>{{ count }}</span>
-    </a>
-</td>
-{% else %}
-<td class="{{ class }}"{% if title %} title="{{ title }}"{% endif %}>{{ text|raw }}</td>
-{% endif %}
+    {% if link %}
+        <td class="{{ class }}"{% if title %} title="{{ title }}"{% endif %}>
+            <a href="{{ href }}" class="text-white">
+                <span>{{ text }}</span>
+                <span {{ html_attr({
+                    class: 'badge rounded-pill text-bg-light',
+                    title: title,
+                    'data-bs-toggle': 'popover',
+                }) }} data-content="{{ content|e }}">
+            {{- count|integer -}}
+        </span>
+            </a>
+        </td>
+    {% else %}
+        <td class="{{ class }}"{% if title %} title="{{ title }}"{% endif %}>{{ text|raw }}</td>
+    {% endif %}
 {% endmacro dayCell %}

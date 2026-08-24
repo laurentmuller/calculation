@@ -4,21 +4,21 @@
 {% from 'calendar/_calendar.html.twig' import dayCell, linkCalculations %}
 {# macros #}
 {% macro weekRow(month, week) %}
-{%- set week_title = 'calendar.week_show'|trans({'%week%': week.number, '%year%': week.year}) -%}
-{%- set class = 'text-bg-secondary text-center align-middle week' -%}
-{% if week.current -%}{%- set class = 'text-bg-primary text-center align-middle week' -%}{%- endif %}
-<tr>
-    <td class="{{ class }}" title="{{ week_title }}">
-    {% if week.empty %}
-        {{ week.number }}
-    {% else %}
-        {% set href = path('calendar_week', {year: week.year, week: week.number}) %}
-        <a href="{{ href }}" class="text-white">{{ week.number }}</a>
-    {% endif %}
-    {% for day in week.days -%}
-        {{ dayCell(month, day, false) }}
-    {%- endfor %}
-</tr>
+    {%- set week_title = 'calendar.week_show'|trans({'%week%': week.number, '%year%': week.year}) -%}
+    {%- set class = 'text-bg-secondary text-center align-middle week' -%}
+    {% if week.current -%}{%- set class = 'text-bg-primary text-center align-middle week' -%}{%- endif %}
+    <tr>
+        <td class="{{ class }}" title="{{ week_title }}">
+            {% if week.empty %}
+                {{ week.number }}
+            {% else %}
+                {% set href = path('calendar_week', {year: week.year, week: week.number}) %}
+                <a href="{{ href }}" class="text-white">{{ week.number }}</a>
+            {% endif %}
+            {% for day in week.days -%}
+                {{ dayCell(month, day, false) }}
+            {%- endfor %}
+    </tr>
 {% endmacro weekRow %}
 
 {# parameters #}
@@ -27,80 +27,82 @@
 {%- set month_index = month.number -%}
 
 {% block body %}
-<div class="row g-0">
-    <div class="col-md-4">
-        <h2>{{ title|trans(title_parameters) }}</h2>
-    </div>
-    <div class="col-md-4 text-md-center">
-        <h3>{{ 'counters.calculations'|trans({count: calculations|length}) }}</h3>
-    </div>
-    <div class="col-md-4 align-self-center text-md-end">
-        <div class="btn-group btn-group-sm" role="group">
-            {# today month #}
-            {% if today %}
-                {% set href = path('calendar_month', {year: today.year, month: today.month}) %}
+    <div class="row g-0">
+        <div class="col-md-4">
+            <h2>{{ title|trans(title_parameters) }}</h2>
+        </div>
+        <div class="col-md-4 text-md-center">
+            <h3>{{ 'counters.calculations'|trans({count: calculations|length}) }}</h3>
+        </div>
+        <div class="col-md-4 align-self-center text-md-end">
+            <div class="btn-group btn-group-sm" role="group">
+                {# today month #}
+                {% if today %}
+                    {% set href = path('calendar_month', {year: today.year, month: today.month}) %}
+                    {{ link(
+                        href: href,
+                        class: 'btn btn-primary',
+                        icon: 'fa-solid fa-arrows-alt',
+                        title: 'calendar.month_current',
+                        parameters: {'%year%': today.year, '%month%': calendar.monthNames[today.month]}) }}
+                {% endif %}
+                {# previous month #}
+                {% if previous %}
+                    {% set href = path('calendar_month', {year: previous.year, month: previous.month}) %}
+                    {{ link(
+                        href: href,
+                        class: 'btn btn-primary',
+                        icon: 'fa-solid fa-chevron-left',
+                        title: 'calendar.month_previous',
+                        parameters: {'%year%': previous.year, '%month%': calendar.monthNames[previous.month]}) }}
+                {% endif %}
+                {# next month #}
+                {% if next %}
+                    {% set href = path('calendar_month', {year: next.year, month: next.month}) %}
+                    {{ link(
+                        href: href,
+                        class: 'btn btn-primary',
+                        icon: 'fa-solid fa-chevron-right',
+                        title: 'calendar.month_next',
+                        parameters: {'%year%': next.year, '%month%': calendar.monthNames[next.month]}) }}
+                {% endif %}
+                {# current year calendar #}
+                {% set href = path('calendar_year', {year: calendar.year}) %}
                 {{ link(
                     href: href,
                     class: 'btn btn-primary',
-                    icon: 'fa-solid fa-arrows-alt',
-                    title: 'calendar.month_current',
-                    parameters: {'%year%': today.year, '%month%': calendar.monthNames[today.month]}) }}
-            {% endif %}
-            {# previous month #}
-            {% if previous %}
-                {% set href = path('calendar_month', {year: previous.year, month: previous.month}) %}
-                {{ link(
-                    href: href,
-                    class: 'btn btn-primary',
-                    icon: 'fa-solid fa-chevron-left',
-                    title: 'calendar.month_previous',
-                    parameters: {'%year%': previous.year, '%month%': calendar.monthNames[previous.month]}) }}
-            {% endif %}
-            {# next month #}
-            {% if next %}
-                {% set href = path('calendar_month', {year: next.year, month: next.month}) %}
-                {{ link(
-                    href: href,
-                    class: 'btn btn-primary',
-                    icon: 'fa-solid fa-chevron-right',
-                    title: 'calendar.month_next',
-                    parameters: {'%year%': next.year, '%month%': calendar.monthNames[next.month]}) }}
-            {% endif %}
-            {# current year calendar #}
-            {% set href = path('calendar_year', {year: calendar.year}) %}
-            {{ link(
-                href: href,
-                class: 'btn btn-primary',
-                icon: 'fa-regular fa-calendar-alt',
-                title: 'calendar.year_show',
-                parameters: {'%year%': calendar.year}) }}
-            {# calculations #}
-            {{ linkCalculations('%02d.%d'|format(month.number, month.year), month.name ~ ' ' ~ month.year, calculations|length, 'btn btn-primary') }}
+                    icon: 'fa-regular fa-calendar-alt',
+                    title: 'calendar.year_show',
+                    parameters: {'%year%': calendar.year}) }}
+                {# calculations #}
+                {% set query = '%02d.%d'|format(month.number, month.year) %}
+                {% set date = month.name ~ ' ' ~ month.year %}
+                {{ linkCalculations(query, date, calculations|length, 'btn btn-primary') }}
+            </div>
         </div>
     </div>
-</div>
-<table class="table table-bordered w-100 month">
-    <tr>
-        <th class="border text-bg-secondary text-center week fw-normal">{{ 'calendar.week_short'|trans }}</th>
-        {% for name in calendar.shortWeekNames %}
-            <th class="border text-bg-secondary text-center fw-normal">{{ name }}</th>
-        {% endfor %}
-    </tr>
-    {% for week in month.weeks -%}
-        {{ _self.weekRow(month, week) }}
-    {%- endfor %}
-</table>
+    <table class="table table-bordered w-100 month">
+        <tr>
+            <th class="border text-bg-secondary text-center week fw-normal">{{ 'calendar.week_short'|trans }}</th>
+            {% for name in calendar.shortWeekNames %}
+                <th class="border text-bg-secondary text-center fw-normal">{{ name }}</th>
+            {% endfor %}
+        </tr>
+        {% for week in month.weeks -%}
+            {{ _self.weekRow(month, week) }}
+        {%- endfor %}
+    </table>
 {% endblock body %}
 {# stylesheets #}
 {% block stylesheets -%}
-{{ parent() }}
-<style nonce="{{ csp_nonce() }}">
-    {{- css_border() }}
-</style>
-{{ asset_css('css/calendar.css') }}
+    {{ parent() }}
+    <style nonce="{{ csp_nonce() }}">
+        {{- css_border() }}
+    </style>
+    {{ asset_css('css/calendar.css') }}
 {% endblock stylesheets %}
 {# javascripts #}
 {% block javascripts %}
-{{ parent() }}
-{{ asset_js('js/test/calendar.js') }}
+    {{ parent() }}
+    {{ asset_js('js/test/calendar.js') }}
 {% endblock javascripts %}

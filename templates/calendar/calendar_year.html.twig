@@ -4,48 +4,55 @@
 {% from 'calendar/_calendar.html.twig' import dayCell, linkCalculations %}
 {# macros #}
 {% macro weekRow(month, week) %}
-{%- set class = 'border text-center p-2 week' -%}
-{% if week.current -%}
-    {%- set class = class ~ ' text-bg-primary' -%}
-{%- else -%}
-    {%- set class = class ~ ' text-bg-secondary' -%}
-{%- endif %}
-{%- set week_title = 'calendar.week_show'|trans({'%week%': week.number, '%year%': week.year}) -%}
-<tr>
-    <td class="{{ class }}" title="{{ week_title }}">
-        {% if week.empty %}
-            {{ week.number }}
-        {% else %}
-            {% set href = path('calendar_week', {year: week.year, week: week.number}) %}
-            <a href="{{ href }}" class="text-white">{{ week.number }}</a>
-        {% endif %}
-    </td>
-    {% for day in week.days -%}
-        {{ dayCell(month, day, true) }}
-    {%- endfor %}
-</tr>
+    {%- set class = 'border text-center p-2 week' -%}
+    {% if week.current -%}
+        {%- set class = class ~ ' text-bg-primary' -%}
+    {%- else -%}
+        {%- set class = class ~ ' text-bg-secondary' -%}
+    {%- endif %}
+    {%- set week_title = 'calendar.week_show'|trans({'%week%': week.number, '%year%': week.year}) -%}
+    <tr>
+        <td class="{{ class }}" title="{{ week_title }}">
+            {% if week.empty %}
+                {{ week.number }}
+            {% else %}
+                {% set href = path('calendar_week', {year: week.year, week: week.number}) %}
+                <a href="{{ href }}" class="text-white">{{ week.number }}</a>
+            {% endif %}
+        </td>
+        {% for day in week.days -%}
+            {{ dayCell(month, day, true) }}
+        {%- endfor %}
+    </tr>
 {% endmacro weekRow %}
 
 {% macro monthTable(month) %}
-{%- set class = 'fw-normal ' ~ (month.current ? 'text-bg-primary' : 'text-bg-secondary') -%}
-<div class="col-lg-4 col-md-6 mb-4">
-    <table class="border w-100 calendar">
-        <thead>
+    {%- set class = 'fw-normal ' ~ (month.current ? 'text-bg-primary' : 'text-bg-secondary') -%}
+    <div class="col mb-4">
+        <table class="border w-100 calendar">
+            <thead>
             <tr>
                 {% if month.empty %}
-                <th colspan="8" class="{{ class }} text-center">
-                    <span class="text-white">{{ month.name }}</span>
-                </th>
+                    <th colspan="8" class="{{ class }} text-center">
+                        <span class="text-white">{{ month.name }}</span>
+                    </th>
                 {% else %}
-                <th class="{{ class }} text-center">
-                    <span>&nbsp;</span>
-                </th>
-                <th colspan="6" class="{{ class }} text-center">
-                    <a class="text-white" href="{{ path('calendar_month', {year: month.year, month: month.number}) }}" title="{{ 'calendar.month_show'|trans({'%month%': month.name, '%year%': month.year}) }}">{{ month.Name }}</a>
-                </th>
-                <th class="{{ class }} text-end pe-2">
-                    {{ linkCalculations('%02d.%d'|format(month.number, month.year), month.name ~ ' ' ~ month.year, month.count, 'text-white') }}
-                </th>
+                    <th class="{{ class }} text-center">
+                        <span>&nbsp;</span>
+                    </th>
+                    <th colspan="6" class="{{ class }} text-center">
+                        {% set attrs = {
+                            class: 'text-white',
+                            href: path('calendar_month', {year: month.year, month: month.number}),
+                            title: 'calendar.month_show'|trans({'%month%': month.name, '%year%': month.year}),
+                        } %}
+                        <a {{ html_attr(attrs) }}>{{ month.Name }}</a>
+                    </th>
+                    <th class="{{ class }} text-end pe-2">
+                        {% set query = '%02d.%d'|format(month.number, month.year) %}
+                        {% set date = month.name ~ ' ' ~ month.year %}
+                        {{ linkCalculations(query, date, month.count, 'text-white') }}
+                    </th>
                 {% endif %}
             </tr>
             <tr>
@@ -56,82 +63,82 @@
                     <th class="{{ class }}">{{ name }}</th>
                 {% endfor %}
             </tr>
-        </thead>
-        <tbody>
-        {% for week in month.weeks -%}
-            {{ _self.weekRow(month, week) }}
-        {%- endfor %}
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+            {% for week in month.weeks -%}
+                {{ _self.weekRow(month, week) }}
+            {%- endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endmacro monthTable %}
 {# parameters #}
 {%- set title = 'calendar.year_title' -%}
 {%- set title_parameters = {'%year%': calendar.year} -%}
 {# class #}
-{% block container_class 'container-xl' %}
+{% block container_class 'container-fluid' %}
 {# body #}
 {% block body %}
-<div class="row">
-    <div class="col-md-4">
-        <h2 class="">{{ title|trans(title_parameters) }}</h2>
-    </div>
-    <div class="col-md-4 text-md-center">
-        <h3>{{ 'counters.calculations'|trans({count: calculations|length}) }}</h3>
-    </div>
-    <div class="col-md-4 align-self-center text-md-end">
-        <div class="btn-group btn-group-sm" role="group">
-            {# today year #}
-            {% if today %}
-                {% set href = path('calendar_year', {year: today}) %}
-                {{ link(
-                    href: href,
-                    class: 'btn btn-primary',
-                    icon: 'fa-solid fa-arrows-alt',
-                    title: 'calendar.year_current',
-                    parameters: {'%year%': today}) }}
-            {% endif %}
-            {# previous year #}
-            {% if previous %}
-                {% set href = path('calendar_year', {year: previous}) %}
-                {{ link(
-                    href: href,
-                    class: 'btn btn-primary',
-                    icon: 'fa-solid fa-chevron-left',
-                    title: 'calendar.year_previous',
-                    parameters: {'%year%': previous}) }}
-            {% endif %}
-            {# next year #}
-            {% if next %}
-                {% set href = path('calendar_year', {year: next}) %}
-                {{ link(
-                    href: href,
-                    class: 'btn btn-primary',
-                    icon: 'fa-solid fa-chevron-right',
-                    title: 'calendar.year_next',
-                    parameters: {'%year%': next}) }}
-            {% endif %}
-            {# calculations #}
-            {{ linkCalculations(calendar.year, calendar.year, calculations|length, 'btn btn-primary') }}
+    <div class="row gx-2">
+        <div class="col-md-4">
+            <h2 class="">{{ title|trans(title_parameters) }}</h2>
+        </div>
+        <div class="col-md-4 text-md-center">
+            <h3>{{ 'counters.calculations'|trans({count: calculations|length}) }}</h3>
+        </div>
+        <div class="col-md-4 align-self-center text-md-end">
+            <div class="btn-group btn-group-sm" role="group">
+                {# today year #}
+                {% if today %}
+                    {% set href = path('calendar_year', {year: today}) %}
+                    {{ link(
+                        href: href,
+                        class: 'btn btn-primary',
+                        icon: 'fa-solid fa-arrows-alt',
+                        title: 'calendar.year_current',
+                        parameters: {'%year%': today}) }}
+                {% endif %}
+                {# previous year #}
+                {% if previous %}
+                    {% set href = path('calendar_year', {year: previous}) %}
+                    {{ link(
+                        href: href,
+                        class: 'btn btn-primary',
+                        icon: 'fa-solid fa-chevron-left',
+                        title: 'calendar.year_previous',
+                        parameters: {'%year%': previous}) }}
+                {% endif %}
+                {# next year #}
+                {% if next %}
+                    {% set href = path('calendar_year', {year: next}) %}
+                    {{ link(
+                        href: href,
+                        class: 'btn btn-primary',
+                        icon: 'fa-solid fa-chevron-right',
+                        title: 'calendar.year_next',
+                        parameters: {'%year%': next}) }}
+                {% endif %}
+                {# calculations #}
+                {{ linkCalculations(calendar.year, calendar.year, calculations|length, 'btn btn-primary') }}
+            </div>
         </div>
     </div>
-</div>
-<div class="row popover-w-100">
-{% for month in calendar.months %}
-    {{ _self.monthTable(month) }}
-{% endfor %}
-</div>
+    <div class="row gx-2 row-cols-sm-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-2 row-cols-xl-3 row-cols-xxl-4 popover-w-100">
+        {% for month in calendar.months %}
+            {{ _self.monthTable(month) }}
+        {% endfor %}
+    </div>
 {% endblock body %}
 {# stylesheets #}
 {% block stylesheets -%}
-{{ parent() }}
-<style nonce="{{ csp_nonce() }}">
-    {{- css_border() }}
-</style>
-{{ asset_css('css/calendar.css') }}
+    {{ parent() }}
+    <style nonce="{{ csp_nonce() }}">
+        {{- css_border() }}
+    </style>
+    {{ asset_css('css/calendar.css') }}
 {% endblock stylesheets %}
 {# javascripts #}
 {% block javascripts %}
-{{ parent() }}
-{{ asset_js('js/test/calendar.js') }}
+    {{ parent() }}
+    {{ asset_js('js/test/calendar.js') }}
 {% endblock javascripts %}

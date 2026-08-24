@@ -50,8 +50,6 @@ use STS\Phpinfo\PhpInfo;
  * }
  * @phpstan-type InfoType = array{
  *     version: string,
- *     hostname: string|null,
- *     os: string|null,
  *     modules: ModuleType[]
  * }
  */
@@ -68,8 +66,6 @@ class PhpInfoService
 
         return [
             'version' => $info->version(),
-            'hostname' => $info->hostname(),
-            'os' => $info->os(),
             'modules' => $this->parseModules($info),
         ];
     }
@@ -95,17 +91,16 @@ class PhpInfoService
         $group = [
             'name' => null,
             'note' => null,
-            'headings' => false,
             'configs' => [$config],
             'headers' => null,
         ];
         $module = [
-            'name' => 'Configuration',
+            'name' => 'Extensions',
             'groups' => [$group],
             'size' => 1,
         ];
 
-        $offset = \max(0, \count($modules) - 2);
+        $offset = \max(0, \count($modules) - 3);
         \array_splice($modules, $offset, 0, [$module]);
     }
 
@@ -115,6 +110,19 @@ class PhpInfoService
             return 'None';
         }
 
+        foreach (['REMEMBERME=', 'CALCULATION_SESSION_ID='] as $key) {
+            $pos = \strpos($value, $key);
+            if (false === $pos) {
+                continue;
+            }
+            $length = \strlen($key);
+            $end = \strpos($value, ';', $pos + $length);
+            if (false === $end) {
+                $value = \substr($value, 0, $pos + $length) . '********';
+            } else {
+                $value = \substr($value, 0, $pos + $length) . '********' . \substr($value, $end);
+            }
+        }
         $value = \mb_convert_encoding($value, 'ISO-8859-1', 'UTF-8');
 
         return \str_replace(['✘ ', '✔ ', '⊕'], '', $value);
@@ -128,9 +136,27 @@ class PhpInfoService
     private function isRedacted(string $name): bool
     {
         return null !== \array_find(
-            ['_KEY', '_USER_NAME', 'APP_SECRET', '_PASSWORD', 'MAILER_DSN', 'DATABASE_URL', '_SESSION_ID'],
+            ['_KEY', '_USER_NAME', 'APP_SECRET', '_PASSWORD', 'MAILER_DSN', 'DATABASE_URL', '_SESSION_ID', 'REMEMBERME'],
             static fn (string $key): bool => StringUtils::containsIgnoreCase($name, $key)
         );
+    }
+
+    /**
+     * @param ModuleType[] $modules
+     */
+    private function moveCoreModule(array &$modules): void
+    {
+        $names = \array_column($modules, 'name');
+        $offsetCore = \array_search('Core', $names, true);
+        if (false === $offsetCore) {
+            return;
+        }
+        $offsetGeneral = \array_search('General', $names, true);
+        if (false === $offsetGeneral) {
+            return;
+        }
+        $module = \array_splice($modules, $offsetCore, 1);
+        \array_splice($modules, $offsetGeneral + 1, 0, $module);
     }
 
     /**
@@ -239,6 +265,9 @@ class PhpInfoService
             fn (Module $module): array => $this->parseModule($module),
             $info->modules()->toArray()
         );
+
+        // move Core module after General module
+        $this->moveCoreModule($modules);
 
         // add loaded extensions
         $this->addExtensionsModule($modules);

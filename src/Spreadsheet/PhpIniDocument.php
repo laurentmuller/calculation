@@ -79,21 +79,22 @@ class PhpIniDocument extends AbstractDocument
      */
     private function applyStyle(WorksheetDocument $sheet, int $column, int $row, array $entry): void
     {
-        $color = null;
-        if ($entry['color']) {
-            $color = \substr($entry['value'], 1);
-        } elseif ($entry['no_value'] || $entry['redacted'] || $entry['disabled']) {
-            $color = '7F7F7F';
-        }
+        $type = $entry['type'];
+        $color = match ($type) {
+            PhpInfoService::TYPE_COLOR => \substr($entry['value'], 1),
+            PhpInfoService::TYPE_DISABLED,
+            PhpInfoService::TYPE_NO_VALUE,
+            PhpInfoService::TYPE_NONE_VALUE,
+            PhpInfoService::TYPE_REDACTED => '7F7F7F',
+            default => null
+        };
         if (null === $color) {
             return;
         }
-        $font = $sheet->getCell([$column, $row])
-            ->getStyle()->getFont();
-        $font->setColor(new Color($color));
-        if ($entry['no_value']) {
-            $font->setItalic(true);
-        }
+        $sheet->getCell([$column, $row])
+            ->getStyle()->getFont()
+            ->setColor(new Color($color))
+            ->setItalic(PhpInfoService::TYPE_NO_VALUE === $type);
     }
 
     private function outputBoldEntry(

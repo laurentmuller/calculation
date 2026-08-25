@@ -39,6 +39,7 @@ use fpdf\PdfBorder;
 class PhpIniReport extends AbstractReport
 {
     use PdfBooleanCellTrait;
+    private ?PdfStyle $noneValueStyle = null;
 
     private ?PdfStyle $noteStyle = null;
     private ?PdfStyle $noValueStyle = null;
@@ -107,6 +108,15 @@ class PhpIniReport extends AbstractReport
         return $table;
     }
 
+    private function getColorStyle(string $value): PdfStyle
+    {
+        /** @var PdfTextColor $color */
+        $color = PdfTextColor::create($value);
+
+        return $this->createRowStyle()
+            ->setTextColor($color);
+    }
+
     /**
      * @phpstan-param EntryType $entry
      * @phpstan-param positive-int $cols
@@ -114,46 +124,46 @@ class PhpIniReport extends AbstractReport
     private function getConfigCell(array $entry, int $cols = 1): PdfCell
     {
         $value = $entry['value'];
-        if ($entry['color']) {
-            /** @var PdfTextColor $color */
-            $color = PdfTextColor::create($value);
-            $style = $this->createRowStyle()
-                ->setTextColor($color);
 
-            return PdfCell::instance(text: $value, cols: $cols, style: $style);
-        }
-
-        if ($entry['no_value']) {
-            return PdfCell::instance(text: $value, cols: $cols, style: $this->getNoValueStyle());
-        }
-
-        if ($entry['redacted']) {
-            return PdfCell::instance(
+        return match ($entry['type']) {
+            PhpInfoService::TYPE_COLOR => PdfCell::instance(
+                text: $value,
+                cols: $cols,
+                style: $this->getColorStyle($value)
+            ),
+            PhpInfoService::TYPE_DISABLED => $this->getBooleanCell(
+                enabled: false,
+                text: $value,
+                cols: $cols,
+                border: PdfBorder::bottom()
+            ),
+            PhpInfoService::TYPE_ENABLED => $this->getBooleanCell(
+                enabled: true,
+                text: $value,
+                cols: $cols,
+                border: PdfBorder::bottom()
+            ),
+            PhpInfoService::TYPE_NO_VALUE => PdfCell::instance(
+                text: $value,
+                cols: $cols,
+                style: $this->getNoValueStyle()
+            ),
+            PhpInfoService::TYPE_NONE_VALUE => PdfCell::instance(
+                text: $value,
+                cols: $cols,
+                style: $this->getNoneValueStyle()
+            ),
+            PhpInfoService::TYPE_REDACTED => PdfCell::instance(
                 text: $value,
                 cols: $cols,
                 style: $this->getBooleanStyle(false, PdfBorder::bottom())
-            );
-        }
-
-        if ($entry['enabled']) {
-            return $this->getBooleanCell(
-                true,
-                $value,
-                $cols,
-                PdfBorder::bottom()
-            );
-        }
-
-        if ($entry['disabled']) {
-            return $this->getBooleanCell(
-                false,
-                $value,
-                $cols,
-                PdfBorder::bottom()
-            );
-        }
-
-        return PdfCell::instance(text: $value, cols: $cols, style: $this->createRowStyle());
+            ),
+            default => PdfCell::instance(
+                text: $value,
+                cols: $cols,
+                style: $this->createRowStyle()
+            ),
+        };
     }
 
     /**
@@ -183,6 +193,12 @@ class PhpIniReport extends AbstractReport
         $group = \array_first($module['groups']);
 
         return null === $group ? self::LINE_HEIGHT : self::LINE_HEIGHT + $this->getMinGroupHeight($group);
+    }
+
+    private function getNoneValueStyle(): PdfStyle
+    {
+        return $this->noneValueStyle ??= $this->createRowStyle()
+            ->setTextColor(PdfTextColor::darkGray());
     }
 
     private function getNoteStyle(): PdfStyle

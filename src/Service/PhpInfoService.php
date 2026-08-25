@@ -26,11 +26,7 @@ use STS\Phpinfo\PhpInfo;
  *
  * @phpstan-type EntryType = array{
  *     value: string,
- *     color: bool,
- *     no_value: bool,
- *     redacted: bool,
- *     enabled: bool,
- *     disabled: bool
+ *     type: self::TYPE_*
  * }
  * @phpstan-type ConfigType = array{
  *     name: string,
@@ -57,8 +53,33 @@ class PhpInfoService
 {
     use EnablementValueTrait;
 
+    public const int TYPE_COLOR = 0;
+    public const int TYPE_DISABLED = 1;
+    public const int TYPE_ENABLED = 2;
+    public const int TYPE_NO_VALUE = 3;
+    public const int TYPE_NONE_VALUE = 4;
+    public const int TYPE_REDACTED = 5;
+    public const int TYPE_UNDEFINED = -1;
+
     private const string NO_VALUE = 'No value';
+    private const string NONE_VALUE = 'None';
     private const string REDACTED = '********';
+    private const array  REDACTED_NAMES = [
+        'APP_SECRET',
+        'DATABASE_URL',
+        'MAILER_DSN',
+        'REMEMBERME',
+        '_KEY',
+        '_PASSWORD',
+        '_PROFILE_TOKEN',
+        '_SESSION_ID',
+        '_USER_NAME',
+    ];
+    private const array SEARCH_KEYS = [
+        'CALCULATION_SESSION_ID=',
+        'MAIN_AUTH_PROFILE_TOKEN=',
+        'REMEMBERME=',
+    ];
 
     /**
      * @return InfoType
@@ -73,28 +94,34 @@ class PhpInfoService
         ];
     }
 
-    private function convertValue(string $value): string
+    private function convertValue(?string $value): string
     {
-        if ('none' === $value || '(none)' === $value) {
-            return 'None';
+        if (!StringUtils::isString($value)) {
+            return self::NO_VALUE;
         }
-
-        foreach (['REMEMBERME=', 'CALCULATION_SESSION_ID=', 'main_auth_profile_token='] as $key) {
-            $pos = \stripos($value, $key);
-            if (false === $pos) {
-                continue;
-            }
-            $length = \strlen($key);
-            $end = \stripos($value, ';', $pos + $length);
-            if (false === $end) {
-                $value = \substr($value, 0, $pos + $length) . self::REDACTED;
-            } else {
-                $value = \substr($value, 0, $pos + $length) . self::REDACTED . \substr($value, $end);
-            }
+        if (StringUtils::equalIgnoreCase(\trim($value, '()'), self::NONE_VALUE)) {
+            return self::NONE_VALUE;
         }
+        $value = $this->replaceKeysValue($value);
         $value = \mb_convert_encoding($value, 'ISO-8859-1', 'UTF-8');
 
         return \str_replace(['✘ ', '✔ ', '⊕'], '', $value);
+    }
+
+    /**
+     * @param array<int, ModuleType> $modules
+     */
+    private function findKeyModule(array $modules, string $name): ?int
+    {
+        return \array_find_key(
+            $modules,
+            static fn (array $module): bool => StringUtils::equalIgnoreCase($name, $module['name'])
+        );
+    }
+
+    private function isNoneValue(string $value): bool
+    {
+        return StringUtils::equalIgnoreCase(self::NONE_VALUE, $value);
     }
 
     private function isNoValue(string $value): bool
@@ -105,8 +132,7 @@ class PhpInfoService
     private function isRedacted(string $name): bool
     {
         return \array_any(
-            ['_KEY', '_USER_NAME', 'APP_SECRET', '_PASSWORD', 'MAILER_DSN',
-                'DATABASE_URL', '_SESSION_ID', 'REMEMBERME', '_PROFILE_TOKEN'],
+            self::REDACTED_NAMES,
             static fn (string $key): bool => StringUtils::containsIgnoreCase($name, $key)
         );
     }
@@ -116,13 +142,12 @@ class PhpInfoService
      */
     private function moveCoreModule(array &$modules): void
     {
-        $names = \array_column($modules, 'name');
-        $offsetCore = \array_search('Core', $names, true);
-        if (false === $offsetCore) {
+        $offsetCore = $this->findKeyModule($modules, 'Core');
+        if (null === $offsetCore) {
             return;
         }
-        $offsetGeneral = \array_search('General', $names, true);
-        if (false === $offsetGeneral) {
+        $offsetGeneral = $this->findKeyModule($modules, 'General');
+        if (null === $offsetGeneral) {
             return;
         }
         $module = \array_splice($modules, $offsetCore, 1);
@@ -178,7 +203,7 @@ class PhpInfoService
     private function parseGroup(Group $group): array
     {
         return [
-            'name' => $group->name(),
+            'name' => StringUtils::trim($group->name()),
             'note' => StringUtils::trim($group->note()),
             'headers' => $this->parseHeaders($group),
             'configs' => $this->parseConfigs($group),
@@ -219,7 +244,7 @@ class PhpInfoService
             0
         );
 
-        if ('PHP Variables' === $module['name']) {
+        if (StringUtils::equalIgnoreCase('PHP Variables', $module['name'])) {
             return $this->parseVariables($module);
         }
 
@@ -248,41 +273,36 @@ class PhpInfoService
      */
     private function parseValue(string $name, ?string $value): array
     {
-        $value = $this->convertValue($value ?? self::NO_VALUE);
-
-        $color = false;
+        $type = self::TYPE_UNDEFINED;
+        $value = $this->convertValue($value);
         if (StringUtils::pregMatch('/#[\\da-f]{6}/i', $value, $matches)) {
             $value = $matches[0];
-            $color = true;
+            $type = self::TYPE_COLOR;
         }
-        $redacted = false;
         if ($this->isRedacted($name)) {
             $value = self::REDACTED;
-            $redacted = true;
+            $type = self::TYPE_REDACTED;
         }
-        $no_value = false;
         if ($this->isNoValue($value)) {
             $value = self::NO_VALUE;
-            $no_value = true;
+            $type = self::TYPE_NO_VALUE;
         }
-        $enabled = false;
+        if ($this->isNoneValue($value)) {
+            $value = self::NONE_VALUE;
+            $type = self::TYPE_NONE_VALUE;
+        }
         if ($this->isEnabledValue($value)) {
             $value = StringUtils::capitalize($value);
-            $enabled = true;
+            $type = self::TYPE_ENABLED;
         }
-        $disabled = false;
         if ($this->isDisabledValue($value)) {
             $value = StringUtils::capitalize($value);
-            $disabled = true;
+            $type = self::TYPE_DISABLED;
         }
 
         return [
             'value' => $value,
-            'color' => $color,
-            'no_value' => $no_value,
-            'redacted' => $redacted,
-            'enabled' => $enabled,
-            'disabled' => $disabled,
+            'type' => $type,
         ];
     }
 
@@ -300,7 +320,6 @@ class PhpInfoService
         $groups = [];
         $group = $module['groups'][0];
         $pattern = '/\\$_(.*)\\[\'(.*)\']/';
-
         foreach ($group['configs'] as $config) {
             if (!StringUtils::pregMatch($pattern, $config['name'], $matches)) {
                 return $module;
@@ -321,5 +340,24 @@ class PhpInfoService
         $module['groups'] = \array_values($groups);
 
         return $module;
+    }
+
+    private function replaceKeysValue(string $value): string
+    {
+        foreach (self::SEARCH_KEYS as $key) {
+            $pos = \stripos($value, $key);
+            if (false === $pos) {
+                continue;
+            }
+            $pos += \strlen($key);
+            $end = \stripos($value, ';', $pos);
+            if (false === $end) {
+                $value = \substr($value, 0, $pos) . self::REDACTED;
+            } else {
+                $value = \substr($value, 0, $pos) . self::REDACTED . \substr($value, $end);
+            }
+        }
+
+        return $value;
     }
 }

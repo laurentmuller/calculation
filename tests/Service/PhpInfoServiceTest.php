@@ -60,13 +60,13 @@ final class PhpInfoServiceTest extends TestCase
     public function testPhpInfo(): void
     {
         $configs = new Items([
-            $this->createConfig(name: 'Config1', localValue: 'local1', masterValue: 'master1'),
-            $this->createConfig(name: 'Config2', localValue: 'local2'),
-            $this->createConfig(name: 'None', localValue: 'none'),
+            $this->createConfig(name: 'Default', localValue: 'local1', masterValue: 'master1'),
+            $this->createConfig(name: 'Empty Master', localValue: 'local2', masterValue: ''),
             $this->createConfig(name: 'UTF-8', localValue: '✘'),
             $this->createConfig(name: 'Color', localValue: '#000000'),
             $this->createConfig(name: 'FAKE_USER_NAME', localValue: 'fake'),
             $this->createConfig(name: 'No Value', localValue: 'no value'),
+            $this->createConfig(name: 'None Value', localValue: 'none'),
             $this->createConfig(name: 'Enabled Value', localValue: 'true'),
             $this->createConfig(name: 'Disabled Value', localValue: 'false'),
             $this->createConfig(name: 'Replace Middle', localValue: 'REMEMBERME=12345;FAKE'),

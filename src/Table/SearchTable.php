@@ -145,7 +145,10 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
             $item[SearchService::COLUMN_ACTION] = $item['id'];
             $item[SearchService::COLUMN_ENTITY_NAME] = $this->trans($lowerType . '.name');
             $item[SearchService::COLUMN_FIELD_NAME] = $this->trans($this->getFieldNameId($field, $lowerType));
-            $item[SearchService::COLUMN_CONTENT] = $this->service->formatContent(\sprintf('%s.%s', $type, $field), $item[SearchService::COLUMN_CONTENT]);
+            $item[SearchService::COLUMN_CONTENT] = $this->service->formatContent(
+                \sprintf('%s.%s', $type, $field),
+                $item[SearchService::COLUMN_CONTENT]
+            );
 
             $item[SearchService::COLUMN_GRANTED_SHOW] = $this->isGrantedShow($type);
             $item[SearchService::COLUMN_GRANTED_EDIT] = $this->isGrantedEdit($type);

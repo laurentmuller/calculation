@@ -5,13 +5,14 @@
         colspan: colspan,
         class: [
             'v',
-            entry.enabled ? 'enabled',
-            entry.disabled ? 'disabled',
-            entry.redacted ? 'text-secondary',
-            entry.no_value ? 'text-secondary fst-italic',
+            entry.type === constant('App\\Service\\PhpInfoService::TYPE_DISABLED') ? 'disabled',
+            entry.type === constant('App\\Service\\PhpInfoService::TYPE_ENABLED') ? 'enabled',
+            entry.type === constant('App\\Service\\PhpInfoService::TYPE_NO_VALUE') ? 'text-secondary fst-italic',
+            entry.type === constant('App\\Service\\PhpInfoService::TYPE_NONE_VALUE') ? 'text-secondary',
+            entry.type === constant('App\\Service\\PhpInfoService::TYPE_REDACTED') ? 'text-secondary',
         ],
         style: {
-            color: entry.color ? entry.value,
+            color: entry.type === constant('App\\Service\\PhpInfoService::TYPE_COLOR') ? entry.value,
         },
     }) }}
 {% endmacro output_entry_attr %}

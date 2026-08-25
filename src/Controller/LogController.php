@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Attribute\ExcelRoute;
-use App\Attribute\ForAdmin;
 use App\Attribute\GetPostRoute;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
+use App\Attribute\IsAdmin;
 use App\Attribute\PdfRoute;
 use App\Attribute\ShowEntityRoute;
 use App\Entity\Log;
@@ -45,7 +45,7 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * The log controller.
  */
-#[ForAdmin]
+#[IsAdmin]
 #[Route(path: '/log', name: 'log_')]
 class LogController extends AbstractController
 {

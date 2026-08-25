@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForUser;
 use App\Attribute\IndexRoute;
+use App\Attribute\IsUser;
 use App\Attribute\PdfRoute;
 use App\Chart\MonthChart;
 use App\Entity\Calculation;
@@ -32,7 +32,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * The controller for calculations by month chart.
  */
-#[ForUser]
+#[IsUser]
 #[Route(path: '/chart/month', name: 'chart_month_')]
 class ChartMonthController extends AbstractController
 {

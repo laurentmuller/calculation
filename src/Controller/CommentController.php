@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForUser;
 use App\Attribute\GetPostRoute;
+use App\Attribute\IsUser;
 use App\Entity\User;
 use App\Form\User\UserCommentType;
 use App\Model\UserComment;
@@ -39,7 +39,7 @@ class CommentController extends AbstractController
     /**
      * Send a comment to the webmaster.
      */
-    #[ForUser]
+    #[IsUser]
     #[GetPostRoute(path: '/comment', name: 'comment')]
     public function invoke(
         Request $request,

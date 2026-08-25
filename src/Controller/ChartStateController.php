@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForUser;
 use App\Attribute\IndexRoute;
+use App\Attribute\IsUser;
 use App\Attribute\PdfRoute;
 use App\Chart\StateChart;
 use App\Entity\Calculation;
@@ -30,7 +30,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * The controller for calculations by state chart.
  */
-#[ForUser]
+#[IsUser]
 #[Route(path: '/chart/state', name: 'chart_state_')]
 class ChartStateController extends AbstractController
 {

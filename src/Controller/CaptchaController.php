@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForPublicAccess;
 use App\Attribute\GetRoute;
+use App\Attribute\IsPublicAccess;
 use App\Form\Type\CaptchaImageType;
 use App\Service\CaptchaImageService;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -26,7 +26,7 @@ use Symfony\Component\Routing\Attribute\Route;
  *
  * @see CaptchaImageType
  */
-#[ForPublicAccess]
+#[IsPublicAccess]
 #[Route(path: '/captcha', name: 'captcha_')]
 class CaptchaController extends AbstractController
 {

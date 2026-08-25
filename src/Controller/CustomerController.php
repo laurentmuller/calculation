@@ -17,8 +17,8 @@ use App\Attribute\AddEntityRoute;
 use App\Attribute\DeleteEntityRoute;
 use App\Attribute\EditEntityRoute;
 use App\Attribute\ExcelRoute;
-use App\Attribute\ForUser;
 use App\Attribute\IndexRoute;
+use App\Attribute\IsUser;
 use App\Attribute\PdfRoute;
 use App\Attribute\ShowEntityRoute;
 use App\Entity\Customer;
@@ -43,7 +43,7 @@ use Symfony\Component\Routing\Attribute\Route;
  *
  * @extends AbstractEntityController<Customer, CustomerRepository>
  */
-#[ForUser]
+#[IsUser]
 #[Route(path: '/customer', name: 'customer_')]
 class CustomerController extends AbstractEntityController
 {

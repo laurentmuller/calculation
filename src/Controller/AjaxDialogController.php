@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
+use App\Attribute\IsUser;
 use App\Attribute\PostRoute;
 use App\Form\Dialog\EditItemDialogType;
 use App\Form\Dialog\EditTaskDialogType;
@@ -45,7 +45,7 @@ class AjaxDialogController extends AbstractController
     /**
      * Render the page selection dialog for the data table.
      */
-    #[ForUser]
+    #[IsUser]
     #[GetRoute(path: '/dialog/page', name: 'dialog_page')]
     public function dialogPage(): JsonResponse
     {
@@ -55,7 +55,7 @@ class AjaxDialogController extends AbstractController
     /**
      * Render the sort dialog for data table.
      */
-    #[ForUser]
+    #[IsUser]
     #[PostRoute(path: '/dialog/sort', name: 'dialog_sort')]
     public function dialogSort(Request $request): JsonResponse
     {

@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Attribute\ExcelRoute;
-use App\Attribute\ForAdmin;
 use App\Attribute\IndexRoute;
+use App\Attribute\IsAdmin;
 use App\Attribute\PdfRoute;
 use App\Model\TranslatableFlashMessage;
 use App\Report\CalculationsDuplicateReport;
@@ -38,7 +38,7 @@ use Symfony\Component\Routing\Attribute\Route;
  *
  * @phpstan-import-type CalculationItemType from CalculationRepository
  */
-#[ForAdmin]
+#[IsAdmin]
 #[Route(path: '/calculation/duplicate', name: 'calculation_duplicate_')]
 class CalculationDuplicateController extends AbstractController
 {

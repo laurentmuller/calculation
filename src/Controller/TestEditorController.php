@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForSuperAdmin;
 use App\Attribute\GetPostRoute;
+use App\Attribute\IsSuperAdmin;
 use App\Entity\User;
 use App\Enums\Importance;
 use App\Form\Type\SimpleEditorType;
@@ -28,7 +28,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
-#[ForSuperAdmin]
+#[IsSuperAdmin]
 #[Route(path: '/test', name: 'test_')]
 class TestEditorController extends AbstractController
 {

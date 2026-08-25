@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForAdmin;
 use App\Attribute\GetPostRoute;
+use App\Attribute\IsAdmin;
 use App\Entity\Product;
 use App\Form\Category\CategoryListType;
 use App\Model\ProductUpdateQuery;
@@ -30,7 +30,7 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * Controller to update product prices.
  */
-#[ForAdmin]
+#[IsAdmin]
 #[Route(path: '/admin', name: 'admin_')]
 class ProductUpdateController extends AbstractController
 {

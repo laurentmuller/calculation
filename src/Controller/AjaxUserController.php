@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForPublicAccess;
-use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
+use App\Attribute\IsPublicAccess;
+use App\Attribute\IsUser;
 use App\Entity\User;
 use App\Interfaces\UserInterface;
 use App\Repository\UserRepository;
@@ -38,7 +38,7 @@ class AjaxUserController extends AbstractController
     /**
      * Check if a username or user e-mail exist.
      */
-    #[ForPublicAccess]
+    #[IsPublicAccess]
     #[GetRoute(path: IndexRoute::PATH, name: 'both')]
     public function checkBoth(#[MapQueryParameter] ?string $user = null): JsonResponse
     {
@@ -55,7 +55,7 @@ class AjaxUserController extends AbstractController
     /**
      * Check if a user e-mail already exists.
      */
-    #[ForUser]
+    #[IsUser]
     #[GetRoute(path: '/email', name: 'email')]
     public function checkEmail(
         #[MapQueryParameter]
@@ -83,7 +83,7 @@ class AjaxUserController extends AbstractController
     /**
      * Check if a username already exists.
      */
-    #[ForUser]
+    #[IsUser]
     #[GetRoute(path: '/name', name: 'name')]
     public function checkUsername(
         #[MapQueryParameter]

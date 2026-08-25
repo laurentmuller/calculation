@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
+use App\Attribute\IsUser;
 use App\Calendar\CalculationsDay;
 use App\Calendar\CalculationsMonth;
 use App\Calendar\CalculationsWeek;
@@ -33,7 +33,7 @@ use Symfony\Component\Routing\Requirement\Requirement;
 /**
  * Controller to display calendar.
  */
-#[ForUser]
+#[IsUser]
 #[Route(path: '/calendar', name: 'calendar_')]
 class CalendarController extends AbstractController
 {

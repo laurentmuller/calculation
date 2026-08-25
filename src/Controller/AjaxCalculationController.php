@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForUser;
+use App\Attribute\IsUser;
 use App\Attribute\PostRoute;
 use App\Model\CalculationAdjustQuery;
 use App\Model\CalculationAdjustResult;
@@ -26,7 +26,7 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * Controller to update calculation's total or the user margin within XMLHttpRequest (Ajax) calls.
  */
-#[ForUser]
+#[IsUser]
 #[Route(path: '/calculation', name: 'calculation_')]
 class AjaxCalculationController extends AbstractController
 {

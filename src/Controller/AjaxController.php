@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
+use App\Attribute\IsUser;
 use App\Attribute\PostRoute;
 use App\Enums\TableView;
 use App\Interfaces\TableInterface;
@@ -47,7 +47,7 @@ class AjaxController extends AbstractController
     /**
      * Compute a task.
      */
-    #[ForUser]
+    #[IsUser]
     #[PostRoute(path: '/task', name: 'task')]
     public function computeTask(
         #[ValueResolver(TaskComputeQueryValueResolver::class)]
@@ -71,7 +71,7 @@ class AjaxController extends AbstractController
     /**
      * Validate a strength password.
      */
-    #[ForUser]
+    #[IsUser]
     #[PostRoute(path: '/password', name: 'password')]
     public function password(#[MapRequestPayload] PasswordQuery $query, PasswordService $service): JsonResponse
     {
@@ -83,7 +83,7 @@ class AjaxController extends AbstractController
     /**
      * Gets random text used to display notifications.
      */
-    #[ForUser]
+    #[IsUser]
     #[GetRoute(path: '/random/text', name: 'random_text')]
     public function randomText(FakerService $service, #[MapQueryParameter] int $maxNbChars = 150): JsonResponse
     {
@@ -96,7 +96,7 @@ class AjaxController extends AbstractController
     /**
      * Sets a session attribute.
      */
-    #[ForUser]
+    #[IsUser]
     #[PostRoute(path: '/session/set', name: 'session_set')]
     public function saveSession(#[MapRequestPayload] SessionQuery $query): JsonResponse
     {
@@ -112,7 +112,7 @@ class AjaxController extends AbstractController
     /**
      * Save table view parameter.
      */
-    #[ForUser]
+    #[IsUser]
     #[PostRoute(path: '/save', name: 'save_table')]
     public function saveTable(Request $request): JsonResponse
     {

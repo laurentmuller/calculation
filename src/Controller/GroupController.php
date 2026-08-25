@@ -18,8 +18,8 @@ use App\Attribute\CloneEntityRoute;
 use App\Attribute\DeleteEntityRoute;
 use App\Attribute\EditEntityRoute;
 use App\Attribute\ExcelRoute;
-use App\Attribute\ForUser;
 use App\Attribute\IndexRoute;
+use App\Attribute\IsUser;
 use App\Attribute\PdfRoute;
 use App\Attribute\ShowEntityRoute;
 use App\Entity\CalculationGroup;
@@ -48,7 +48,7 @@ use Symfony\Component\Routing\Attribute\Route;
  *
  * @extends AbstractEntityController<Group, GroupRepository>
  */
-#[ForUser]
+#[IsUser]
 #[Route(path: '/group', name: 'group_')]
 class GroupController extends AbstractEntityController
 {

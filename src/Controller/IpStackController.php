@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForSuperAdmin;
 use App\Attribute\GetRoute;
+use App\Attribute\IsSuperAdmin;
 use App\Service\IpStackService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Controller for IP stack service.
  */
-#[ForSuperAdmin]
+#[IsSuperAdmin]
 class IpStackController extends AbstractController
 {
     #[GetRoute(path: '/ipstack', name: 'ipstack')]

@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForPublicAccess;
 use App\Attribute\GetPostRoute;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
+use App\Attribute\IsPublicAccess;
 use App\Entity\User;
 use App\Form\User\RequestChangePasswordType;
 use App\Form\User\ResetChangePasswordType;
@@ -37,7 +37,7 @@ use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 /**
  * Controller to reset the user password.
  */
-#[ForPublicAccess]
+#[IsPublicAccess]
 #[Route(path: '/reset-password')]
 class ResetPasswordController extends AbstractController
 {

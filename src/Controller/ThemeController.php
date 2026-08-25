@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
+use App\Attribute\IsUser;
 use App\Service\ThemeService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * Controller for website theme.
  */
-#[ForUser]
+#[IsUser]
 #[Route(path: '/theme', name: 'theme_')]
 class ThemeController extends AbstractController
 {

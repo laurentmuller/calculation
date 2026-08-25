@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForSuperAdmin;
 use App\Attribute\GetRoute;
+use App\Attribute\IsSuperAdmin;
 use App\Attribute\PdfRoute;
 use App\Attribute\WordRoute;
 use App\Entity\Customer;
@@ -40,7 +40,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[ForSuperAdmin]
+#[IsSuperAdmin]
 #[Route(path: '/test', name: 'test_')]
 class TestExportController extends AbstractController
 {

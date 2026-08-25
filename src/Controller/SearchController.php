@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
+use App\Attribute\IsUser;
 use App\Resolver\DataQueryValueResolver;
 use App\Table\DataQuery;
 use App\Table\SearchTable;
@@ -26,7 +26,7 @@ use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 /**
  * Controller to display the search page.
  */
-#[ForUser]
+#[IsUser]
 class SearchController extends AbstractController
 {
     use TableTrait;

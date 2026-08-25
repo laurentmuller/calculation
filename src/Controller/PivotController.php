@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
+use App\Attribute\IsUser;
 use App\Model\TranslatableFlashMessage;
 use App\Pivot\Field\PivotField;
 use App\Pivot\Field\PivotFieldFactory;
@@ -39,7 +39,7 @@ use Symfony\Component\Routing\Attribute\Route;
  *
  * @phpstan-import-type PivotType from CalculationRepository
  */
-#[ForUser]
+#[IsUser]
 #[Route(path: '/pivot', name: 'calculation_pivot_')]
 class PivotController extends AbstractController
 {

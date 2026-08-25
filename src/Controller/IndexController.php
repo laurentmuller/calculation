@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
+use App\Attribute\IsUser;
 use App\Attribute\PostRoute;
 use App\Entity\User;
 use App\Enums\TableView;
@@ -35,7 +35,7 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * Controller to display the home page.
  */
-#[ForUser]
+#[IsUser]
 #[Route(path: '/', name: self::HOME_PAGE)]
 class IndexController extends AbstractController
 {

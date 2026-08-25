@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
+use App\Attribute\IsUser;
 use App\Utils\FileUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +24,7 @@ use Symfony\Component\Routing\RouterInterface;
 /**
  * Controller to display the site map.
  */
-#[ForUser]
+#[IsUser]
 class SiteMapController extends AbstractController
 {
     /** The logout route name. */

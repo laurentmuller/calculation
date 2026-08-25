@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Attribute\ExcelRoute;
-use App\Attribute\ForAdmin;
 use App\Attribute\GetRoute;
+use App\Attribute\IsAdmin;
 use App\Attribute\PdfRoute;
 use App\Report\PhpIniReport;
 use App\Response\PdfResponse;
@@ -31,7 +31,7 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * Controller to output PHP information.
  */
-#[ForAdmin]
+#[IsAdmin]
 #[Route(path: '/about/php', name: 'about_php_')]
 class AboutPhpController extends AbstractController
 {

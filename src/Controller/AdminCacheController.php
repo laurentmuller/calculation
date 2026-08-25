@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForAdmin;
 use App\Attribute\GetPostRoute;
+use App\Attribute\IsAdmin;
 use App\Model\TranslatableFlashMessage;
 use App\Service\CacheService;
 use App\Traits\FormExceptionTrait;
@@ -29,7 +29,7 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * Controller to clear the application cache.
  */
-#[ForAdmin]
+#[IsAdmin]
 #[Route(path: '/admin', name: 'admin_')]
 class AdminCacheController extends AbstractController
 {

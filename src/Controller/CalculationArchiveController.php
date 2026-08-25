@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForAdmin;
 use App\Attribute\GetPostRoute;
+use App\Attribute\IsAdmin;
 use App\Form\CalculationState\CalculationStateListType;
 use App\Model\CalculationArchiveQuery;
 use App\Model\TranslatableFlashMessage;
@@ -29,7 +29,7 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * Controller to archive calculations.
  */
-#[ForAdmin]
+#[IsAdmin]
 #[Route(path: '/admin', name: 'admin_')]
 class CalculationArchiveController extends AbstractController
 {

@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForAdmin;
-use App\Attribute\ForUser;
 use App\Attribute\GetPostRoute;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
+use App\Attribute\IsAdmin;
+use App\Attribute\IsUser;
 use App\Enums\OpenWeatherUnits;
 use App\Form\Type\CountryFlagType;
 use App\Service\OpenWeatherCityUpdater;
@@ -50,7 +50,7 @@ use Symfony\Component\Validator\Constraints\Length;
  *     limit: int,
  *     cnt: int}
  */
-#[ForUser]
+#[IsUser]
 #[Route(path: '/openweather', name: 'openweather_')]
 class OpenWeatherController extends AbstractController
 {
@@ -234,7 +234,7 @@ class OpenWeatherController extends AbstractController
      *
      * Data can be downloaded from <a href="https://bulk.openweathermap.org/sample/">sample directory</a>.
      */
-    #[ForAdmin]
+    #[IsAdmin]
     #[GetPostRoute(path: '/import', name: 'import')]
     public function import(Request $request, OpenWeatherCityUpdater $updater): Response
     {

@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Attribute\ExcelRoute;
-use App\Attribute\ForAdmin;
 use App\Attribute\IndexRoute;
+use App\Attribute\IsAdmin;
 use App\Attribute\PdfRoute;
 use App\Model\TranslatableFlashMessage;
 use App\Report\CalculationsBelowReport;
@@ -36,7 +36,7 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * Controller for calculations where margins are below the minimum.
  */
-#[ForAdmin]
+#[IsAdmin]
 #[Route(path: '/calculation/below', name: 'calculation_below_')]
 class CalculationBelowController extends AbstractController
 {

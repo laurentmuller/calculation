@@ -18,7 +18,7 @@ use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[\Attribute(\Attribute::IS_REPEATABLE | \Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD | \Attribute::TARGET_FUNCTION)]
-class ForSuperAdmin extends IsGranted
+class IsAdmin extends IsGranted
 {
     public function __construct(
         string|array|Expression|\Closure|null $subject = null,
@@ -28,7 +28,7 @@ class ForSuperAdmin extends IsGranted
         array|string $methods = []
     ) {
         parent::__construct(
-            attribute: RoleInterface::ROLE_SUPER_ADMIN,
+            attribute: RoleInterface::ROLE_ADMIN,
             subject: $subject,
             message: $message,
             statusCode: $statusCode,

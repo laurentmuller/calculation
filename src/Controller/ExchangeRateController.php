@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForSuperAdmin;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
+use App\Attribute\IsSuperAdmin;
 use App\Service\ExchangeRateService;
 use App\Utils\FormatUtils;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -27,7 +27,7 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * Controller for the exchange rate service.
  */
-#[ForSuperAdmin]
+#[IsSuperAdmin]
 #[Route(path: '/exchange', name: 'exchange_')]
 class ExchangeRateController extends AbstractController
 {

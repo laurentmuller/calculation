@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForUser;
 use App\Attribute\GetPostRoute;
+use App\Attribute\IsUser;
 use App\Form\Parameters\UserParametersType;
 use App\Traits\EditParametersTrait;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +24,7 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * Controller to edit user preferences.
  */
-#[ForUser]
+#[IsUser]
 #[Route(path: '/user', name: 'user_')]
 class UserParametersController extends AbstractController
 {

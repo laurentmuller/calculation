@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForSuperAdmin;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
+use App\Attribute\IsSuperAdmin;
 use App\Service\TimelineService;
 use App\Utils\DateUtils;
 use Symfony\Component\Clock\DatePoint;
@@ -29,7 +29,7 @@ use Symfony\Component\Routing\Attribute\Route;
  *
  * @phpstan-import-type ParametersType from TimelineService
  */
-#[ForSuperAdmin]
+#[IsSuperAdmin]
 #[Route(path: '/timeline', name: 'timeline_')]
 class TimelineController extends AbstractController
 {

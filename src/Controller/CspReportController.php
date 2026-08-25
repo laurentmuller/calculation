@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
+use App\Attribute\IsUser;
 use App\Enums\Importance;
 use App\Mime\NotificationEmail;
 use App\Service\ApplicationService;
@@ -30,7 +30,7 @@ use Symfony\Component\Translation\TranslatableMessage;
 /**
  * Controller to send CSP violations by e-mail.
  */
-#[ForUser]
+#[IsUser]
 class CspReportController extends AbstractController
 {
     /** The route name. */

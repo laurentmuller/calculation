@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace App\Attribute;
 
+use App\Interfaces\RoleInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
-use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[\Attribute(\Attribute::IS_REPEATABLE | \Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD | \Attribute::TARGET_FUNCTION)]
-class ForPublicAccess extends IsGranted
+class IsUser extends IsGranted
 {
     public function __construct(
         string|array|Expression|\Closure|null $subject = null,
@@ -28,7 +28,7 @@ class ForPublicAccess extends IsGranted
         array|string $methods = []
     ) {
         parent::__construct(
-            attribute: AuthenticatedVoter::PUBLIC_ACCESS,
+            attribute: RoleInterface::ROLE_USER,
             subject: $subject,
             message: $message,
             statusCode: $statusCode,

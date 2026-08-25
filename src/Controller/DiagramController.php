@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForSuperAdmin;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
+use App\Attribute\IsSuperAdmin;
 use App\Model\DiagramQuery;
 use App\Service\DiagramService;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -30,7 +30,7 @@ use Symfony\Component\Routing\Attribute\Route;
  *
  * @see https://mermaid.js.org/
  */
-#[ForSuperAdmin]
+#[IsSuperAdmin]
 #[Route(path: '/diagram', name: 'diagram_')]
 class DiagramController extends AbstractController
 {

@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForAdmin;
-use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
+use App\Attribute\IsAdmin;
+use App\Attribute\IsUser;
 use App\Attribute\PdfRoute;
 use App\Attribute\WordRoute;
 use App\Constants\CacheAttributes;
@@ -39,7 +39,7 @@ use Symfony\Contracts\Cache\CacheInterface;
 /**
  * Controller for application information.
  */
-#[ForUser]
+#[IsUser]
 #[Route(path: '/about', name: 'about_')]
 class AboutController extends AbstractController
 {
@@ -65,7 +65,7 @@ class AboutController extends AbstractController
     ) {
     }
 
-    #[ForAdmin]
+    #[IsAdmin]
     #[GetRoute('/advanced', name: 'advanced')]
     public function advanced(): Response
     {

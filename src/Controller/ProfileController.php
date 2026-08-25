@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForUser;
 use App\Attribute\GetPostRoute;
+use App\Attribute\IsUser;
 use App\Entity\User;
 use App\Form\AbstractEntityType;
 use App\Form\User\ProfileEditType;
@@ -30,7 +30,7 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 /**
  * Controller for the user profile.
  */
-#[ForUser]
+#[IsUser]
 #[Route(path: '/user/profile', name: 'user_profile_')]
 class ProfileController extends AbstractController
 {

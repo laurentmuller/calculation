@@ -18,10 +18,10 @@ use App\Attribute\CloneEntityRoute;
 use App\Attribute\DeleteEntityRoute;
 use App\Attribute\EditEntityRoute;
 use App\Attribute\ExcelRoute;
-use App\Attribute\ForUser;
 use App\Attribute\GetPostRoute;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
+use App\Attribute\IsUser;
 use App\Attribute\PdfRoute;
 use App\Attribute\ShowEntityRoute;
 use App\Entity\Calculation;
@@ -54,7 +54,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @extends AbstractEntityController<Calculation, CalculationRepository>
  */
-#[ForUser]
+#[IsUser]
 #[Route(path: '/calculation', name: 'calculation_')]
 class CalculationController extends AbstractEntityController
 {

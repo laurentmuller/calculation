@@ -18,9 +18,9 @@ use App\Attribute\CloneEntityRoute;
 use App\Attribute\DeleteEntityRoute;
 use App\Attribute\EditEntityRoute;
 use App\Attribute\ExcelRoute;
-use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
+use App\Attribute\IsUser;
 use App\Attribute\PdfRoute;
 use App\Attribute\ShowEntityRoute;
 use App\Entity\Category;
@@ -49,7 +49,7 @@ use Symfony\Component\Routing\Attribute\Route;
  *
  * @extends AbstractEntityController<Task, TaskRepository>
  */
-#[ForUser]
+#[IsUser]
 #[Route(path: '/task', name: 'task_')]
 class TaskController extends AbstractEntityController
 {

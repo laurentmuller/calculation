@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForSuperAdmin;
 use App\Attribute\GetRoute;
+use App\Attribute\IsSuperAdmin;
 use App\Model\HttpClientError;
 use App\Service\AbstractHttpClientService;
 use App\Translator\TranslatorFactory;
@@ -23,7 +23,7 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[ForSuperAdmin]
+#[IsSuperAdmin]
 #[Route(path: '/test', name: 'test_')]
 class TestTranslateController extends AbstractController
 {

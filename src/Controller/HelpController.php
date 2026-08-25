@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForSuperAdmin;
-use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
+use App\Attribute\IsSuperAdmin;
+use App\Attribute\IsUser;
 use App\Attribute\PdfRoute;
 use App\Attribute\PostRoute;
 use App\Model\HelpDownloadQuery;
@@ -38,7 +38,7 @@ use Symfony\Component\Routing\Attribute\Route;
  * @phpstan-import-type HelpDialogType from HelpService
  * @phpstan-import-type HelpEntityType from HelpService
  */
-#[ForUser]
+#[IsUser]
 #[Route(path: '/help', name: 'help_')]
 class HelpController extends AbstractController
 {
@@ -89,7 +89,7 @@ class HelpController extends AbstractController
     /**
      * Save the screenshot image.
      */
-    #[ForSuperAdmin]
+    #[IsSuperAdmin]
     #[PostRoute(path: '/download', name: 'download')]
     public function download(
         #[MapRequestPayload]

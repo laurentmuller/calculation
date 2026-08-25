@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
+use App\Attribute\IsUser;
 use App\Interfaces\EntityInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
@@ -37,7 +37,7 @@ class AjaxSearchController extends AbstractController
     /**
      * Search address.
      */
-    #[ForUser]
+    #[IsUser]
     #[GetRoute(path: '/address', name: 'address')]
     public function searchAddress(
         SwissPostService $service,
@@ -67,7 +67,7 @@ class AjaxSearchController extends AbstractController
     /**
      * Search distinct calculation's customers in existing calculations.
      */
-    #[ForUser]
+    #[IsUser]
     #[GetRoute(path: '/customer', name: 'customer')]
     public function searchCustomer(
         CalculationRepository $repository,
@@ -82,7 +82,7 @@ class AjaxSearchController extends AbstractController
     /**
      * Search products.
      */
-    #[ForUser]
+    #[IsUser]
     #[GetRoute(path: '/product', name: 'product')]
     public function searchProduct(
         ProductRepository $repository,
@@ -97,7 +97,7 @@ class AjaxSearchController extends AbstractController
     /**
      * Searches distinct products and task suppliers.
      */
-    #[ForUser]
+    #[IsUser]
     #[GetRoute(path: '/supplier', name: 'supplier')]
     public function searchSupplier(
         EntityManagerInterface $manager,
@@ -112,7 +112,7 @@ class AjaxSearchController extends AbstractController
     /**
      * Search the distinct customer's titles.
      */
-    #[ForUser]
+    #[IsUser]
     #[GetRoute(path: '/title', name: 'title')]
     public function searchTitle(
         CustomerRepository $repository,
@@ -127,7 +127,7 @@ class AjaxSearchController extends AbstractController
     /**
      * Search distinct units from products and tasks.
      */
-    #[ForUser]
+    #[IsUser]
     #[GetRoute(path: '/unit', name: 'unit')]
     public function searchUnit(
         EntityManagerInterface $manager,

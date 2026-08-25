@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForPublicAccess;
 use App\Attribute\GetPostRoute;
+use App\Attribute\IsPublicAccess;
 use App\Constants\SecurityAttributes;
 use App\Entity\User;
 use App\Form\User\UserLoginType;
@@ -27,7 +27,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
  */
 class SecurityController extends AbstractController
 {
-    #[ForPublicAccess]
+    #[IsPublicAccess]
     #[GetPostRoute(path: '/login', name: SecurityAttributes::LOGIN_ROUTE)]
     public function login(#[CurrentUser] ?User $user, AuthenticationUtils $utils): Response
     {

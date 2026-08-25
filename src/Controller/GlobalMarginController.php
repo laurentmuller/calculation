@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Attribute\ExcelRoute;
-use App\Attribute\ForUser;
 use App\Attribute\GetPostRoute;
 use App\Attribute\IndexRoute;
+use App\Attribute\IsUser;
 use App\Attribute\PdfRoute;
 use App\Attribute\ShowEntityRoute;
 use App\Entity\GlobalMargin;
@@ -42,7 +42,7 @@ use Symfony\Component\Routing\Attribute\Route;
  *
  * @extends AbstractEntityController<GlobalMargin, GlobalMarginRepository>
  */
-#[ForUser]
+#[IsUser]
 #[Route(path: '/globalmargin', name: 'globalmargin_')]
 class GlobalMarginController extends AbstractEntityController
 {

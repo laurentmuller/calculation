@@ -13,15 +13,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
+use App\Attribute\IsUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * Controller to load sidebar and navigation bar.
  */
-#[ForUser]
+#[IsUser]
 #[Route(path: '/navigation', name: 'navigation_')]
 class NavigationController extends AbstractController
 {

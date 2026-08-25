@@ -18,8 +18,8 @@ use App\Attribute\CloneEntityRoute;
 use App\Attribute\DeleteEntityRoute;
 use App\Attribute\EditEntityRoute;
 use App\Attribute\ExcelRoute;
-use App\Attribute\ForUser;
 use App\Attribute\IndexRoute;
+use App\Attribute\IsUser;
 use App\Attribute\PdfRoute;
 use App\Attribute\ShowEntityRoute;
 use App\Entity\Category;
@@ -44,7 +44,7 @@ use Symfony\Component\Routing\Attribute\Route;
  *
  * @extends AbstractEntityController<Product, ProductRepository>
  */
-#[ForUser]
+#[IsUser]
 #[Route(path: '/product', name: 'product_')]
 class ProductController extends AbstractEntityController
 {

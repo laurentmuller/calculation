@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForAdmin;
-use App\Attribute\ForSuperAdmin;
 use App\Attribute\GetRoute;
+use App\Attribute\IsAdmin;
+use App\Attribute\IsSuperAdmin;
 use App\Model\TranslatableFlashMessage;
 use App\Service\CommandService;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,14 +24,14 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * Controller to dump SQL changes.
  */
-#[ForAdmin]
+#[IsAdmin]
 #[Route(path: '/admin', name: 'admin_')]
 class AdminDumSqlController extends AbstractController
 {
     /**
      * @throws \Exception
      */
-    #[ForSuperAdmin]
+    #[IsSuperAdmin]
     #[GetRoute(path: '/dump-sql', name: 'dump_sql')]
     public function dumpSql(CommandService $service): Response
     {

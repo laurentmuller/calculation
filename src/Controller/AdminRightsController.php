@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForAdmin;
-use App\Attribute\ForSuperAdmin;
 use App\Attribute\GetPostRoute;
+use App\Attribute\IsAdmin;
+use App\Attribute\IsSuperAdmin;
 use App\Form\User\RoleRightsType;
 use App\Model\Role;
 use App\Model\TranslatableFlashMessage;
@@ -28,7 +28,7 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * Controller to manage the user and administrator rights.
  */
-#[ForAdmin]
+#[IsAdmin]
 #[Route(path: '/admin', name: 'admin_')]
 class AdminRightsController extends AbstractController
 {
@@ -39,7 +39,7 @@ class AdminRightsController extends AbstractController
     /**
      * Edit rights for the administrator role.
      */
-    #[ForSuperAdmin]
+    #[IsSuperAdmin]
     #[GetPostRoute(path: '/rights/admin', name: 'rights_admin')]
     public function rightsAdmin(Request $request): Response
     {

@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
+use App\Attribute\IsUser;
 use App\Attribute\PostRoute;
 use App\Model\HttpClientError;
 use App\Model\TranslateQuery;
@@ -42,7 +42,7 @@ class AjaxTranslateController extends AbstractController
      *
      * @throws ServiceNotFoundException if the service is not found
      */
-    #[ForUser]
+    #[IsUser]
     #[GetRoute(path: '/detect', name: 'detect')]
     public function detect(
         #[MapQueryParameter]
@@ -77,7 +77,7 @@ class AjaxTranslateController extends AbstractController
      *
      * @throws ServiceNotFoundException if the service is not found
      */
-    #[ForUser]
+    #[IsUser]
     #[GetRoute(path: '/languages', name: 'languages')]
     public function languages(#[MapQueryParameter(name: 'service')] ?string $class = null): JsonResponse
     {
@@ -101,7 +101,7 @@ class AjaxTranslateController extends AbstractController
      *
      * @throws ServiceNotFoundException if the service is not found
      */
-    #[ForUser]
+    #[IsUser]
     #[PostRoute(path: '/translate', name: 'translate')]
     public function translate(#[MapRequestPayload] TranslateQuery $query): JsonResponse
     {

@@ -38,6 +38,7 @@ return Routes::config([
     ],
     'when@prod' => [
         'controllers' => [
+            'resource' => 'routing.controllers',
             'schemes' => 'https',
         ],
     ],

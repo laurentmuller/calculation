@@ -53,13 +53,13 @@ return App::config([
                 'auto_generate_proxy_classes' => false,
                 'entity_managers' => [
                     'default' => [
-                        'metadata_cache_driver' => [
-                            'type' => 'pool',
-                            'pool' => 'doctrine.metadata',
-                        ],
                         'query_cache_driver' => [
                             'type' => 'pool',
                             'pool' => 'doctrine.query',
+                        ],
+                        'metadata_cache_driver' => [
+                            'type' => 'pool',
+                            'pool' => 'doctrine.metadata',
                         ],
                         'result_cache_driver' => [
                             'type' => 'pool',

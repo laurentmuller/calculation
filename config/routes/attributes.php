@@ -11,13 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Symfony\Component\DependencyInjection\Loader\Configurator;
-
-use Symfony\Component\Routing\Loader\Configurator\Routes;
+namespace Symfony\Component\Routing\Loader\Configurator;
 
 return Routes::config([
     'controllers' => [
         'resource' => 'routing.controllers',
+        'schemes' => 'http',
     ],
     '_security_logout' => [
         'resource' => 'security.route_loader.logout',
@@ -35,6 +34,11 @@ return Routes::config([
         'web_profiler_profiler' => [
             'resource' => '@WebProfilerBundle/Resources/config/routing/profiler.php',
             'prefix' => '/_profiler',
+        ],
+    ],
+    'when@prod' => [
+        'controllers' => [
+            'schemes' => 'https',
         ],
     ],
 ]);

@@ -20,37 +20,7 @@ use App\Listener\SwitchUserListener;
 use App\Repository\UserRepository;
 use App\Security\LoginFormAuthenticator;
 use Symfony\Component\HttpFoundation\Cookie;
-use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-
-// access control
-$access = [
-    AuthenticatedVoter::PUBLIC_ACCESS => [
-        '^/login',
-        '^/captcha',
-        '^/about/policy',
-        '^/about/licence',
-        '^/reset-password',
-        '^/ajax/check/user',
-    ],
-    RoleInterface::ROLE_ADMIN => [
-        '^/admin/',
-    ],
-    RoleInterface::ROLE_USER => [
-        '^/',
-    ],
-];
-
-$access_control = [];
-foreach ($access as $role => $paths) {
-    foreach ($paths as $path) {
-        $access_control[] = [
-            'requires_channel' => '%env(string:CHANNEL)%',
-            'roles' => $role,
-            'path' => $path,
-        ];
-    }
-}
 
 return App::config([
     'security' => [
@@ -94,7 +64,6 @@ return App::config([
                 ],
             ],
         ],
-        'access_control' => $access_control,
     ],
     'when@test' => [
         'security' => [

@@ -1,6 +1,6 @@
-{% import 'about/_about_macro.html.twig' as tools %}
-{# macro #}
-{% macro output_attr(entry, colspan = null) %}
+{% from 'about/_about_macro.html.twig' import headerLink %}
+{# macros #}
+{% macro output_entry_attr(entry, colspan = null) %}
     {{ html_attr({
         colspan: colspan,
         class: [
@@ -14,10 +14,36 @@
             color: entry.color ? entry.value,
         },
     }) }}
-{% endmacro output_attr %}
+{% endmacro output_entry_attr %}
+{% macro output_group_configs(group) %}
+    <table class="table table-sm table-hover">
+        {% if group.headers %}
+            <thead>
+            <tr>
+                {% for header in group.headers %}
+                    <th class="{{ loop.index0 === 0 ? 'e' : 'v' }}">{{ header }}</th>
+                {% endfor %}
+            </tr>
+            </thead>
+        {% endif %}
+        <tbody>
+        {% for config in group.configs %}
+            <tr>
+                <td class="e">{{ config.name }}</td>
+                <td {{ _self.output_entry_attr(config.local, config.master ? null : 2) }}>
+                    {{- config.local.value|raw -}}
+                </td>
+                {% if config.master %}
+                    <td {{ _self.output_entry_attr(config.master) }}>{{- config.master.value|raw -}}</td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endmacro output_group_configs %}
 {# content #}
 <div class="phpversion">
-    {{ tools.headerLink('php.net', info.version, 'php') }}
+    {{ headerLink('php.net', info.version, 'php') }}
     <div id="php-accordion">
         {% for module in info.modules %}
             {% set index = loop.index0 %}
@@ -33,14 +59,12 @@
                 'aria-controls': module_id,
                 'aria-expanded': visible,
             } %}
-            <div>
-                <a {{ html_attr(attrs) }}>
-                    <span class="flex-fill">{{ module.name }}</span>
-                    {% if module.size %}
-                        <span class="badge rounded-pill text-bg-secondary lh-sm">{{ module.size }}</span>
-                    {% endif %}
-                </a>
-            </div>
+            <a {{ html_attr(attrs) }}>
+                <span class="flex-fill">{{ module.name }}</span>
+                {% if module.size %}
+                    <span class="badge rounded-pill text-bg-secondary lh-sm">{{ module.size }}</span>
+                {% endif %}
+            </a>
             {% set attrs = {
                 id: module_id,
                 class: ['collapse', 'ms-2', visible ? 'show'],
@@ -55,30 +79,7 @@
                     {% if group.note %}
                         <div class="p-2 bg-body-tertiary small">{{ group.note|nl2br }}</div>
                     {% endif %}
-                    <table class="table table-sm table-hover">
-                        {% if group.headers %}
-                            <thead>
-                            <tr>
-                                {% for header in group.headers %}
-                                    <th class="{{ loop.index0 === 0 ? 'e' : 'v' }}">{{ header }}</th>
-                                {% endfor %}
-                            </tr>
-                            </thead>
-                        {% endif %}
-                        <tbody>
-                        {% for config in group.configs %}
-                            <tr>
-                                <td class="e">{{ config.name }}</td>
-                                <td {{ _self.output_attr(config.local, config.master ? null : 2) }}>
-                                    {{- config.local.value|raw -}}
-                                </td>
-                                {% if config.master %}
-                                    <td {{ _self.output_attr(config.master) }}>{{- config.master.value|raw -}}</td>
-                                {% endif %}
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+                    {{ _self.output_group_configs(group) }}
                 {% endfor %}
             </div>
         {% endfor %}

@@ -40,7 +40,7 @@ final class PhpInfoServiceTest extends TestCase
         $info = new PhpInfo(\PHP_VERSION, new Items([$coreModule, $generalModule]));
         $service = new PhpInfoService();
         $actual = $service->getPhpInfo($info);
-        self::assertCount(3, $actual['modules']);
+        self::assertCount(2, $actual['modules']);
     }
 
     public function testMoveCoreModuleNoGeneral(): void
@@ -54,7 +54,7 @@ final class PhpInfoServiceTest extends TestCase
         $info = new PhpInfo(\PHP_VERSION, new Items([$coreModule]));
         $service = new PhpInfoService();
         $actual = $service->getPhpInfo($info);
-        self::assertCount(2, $actual['modules']);
+        self::assertCount(1, $actual['modules']);
     }
 
     public function testPhpInfo(): void
@@ -108,7 +108,7 @@ final class PhpInfoServiceTest extends TestCase
         $info = new PhpInfo(\PHP_VERSION, new Items([$module]));
         $service = new PhpInfoService();
         $actual = $service->getPhpInfo($info);
-        self::assertCount(2, $actual['modules']);
+        self::assertCount(1, $actual['modules']);
     }
 
     public function testVariablesWithoutGroup(): void
@@ -117,7 +117,7 @@ final class PhpInfoServiceTest extends TestCase
         $info = new PhpInfo(\PHP_VERSION, new Items([$module]));
         $service = new PhpInfoService();
         $actual = $service->getPhpInfo($info);
-        self::assertCount(1, $actual['modules']);
+        self::assertCount(0, $actual['modules']);
     }
 
     private function createConfig(

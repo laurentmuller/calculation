@@ -57,6 +57,9 @@ class PhpInfoService
 {
     use EnablementValueTrait;
 
+    private const string NO_VALUE = 'No value';
+    private const string REDACTED = '********';
+
     /**
      * @return InfoType
      */
@@ -70,57 +73,23 @@ class PhpInfoService
         ];
     }
 
-    /**
-     * @param ModuleType[] $modules
-     */
-    private function addExtensionsModule(array &$modules): void
-    {
-        $local = [
-            'value' => \implode(', ', \get_loaded_extensions()),
-            'color' => false,
-            'no_value' => false,
-            'redacted' => false,
-            'enabled' => false,
-            'disabled' => false,
-        ];
-        $config = [
-            'name' => 'Loaded Extensions',
-            'local' => $local,
-            'master' => null,
-        ];
-        $group = [
-            'name' => null,
-            'note' => null,
-            'configs' => [$config],
-            'headers' => null,
-        ];
-        $module = [
-            'name' => 'Extensions',
-            'groups' => [$group],
-            'size' => 1,
-        ];
-
-        $offset = \max(0, \count($modules) - 3);
-        \array_splice($modules, $offset, 0, [$module]);
-    }
-
     private function convertValue(string $value): string
     {
         if ('none' === $value || '(none)' === $value) {
             return 'None';
         }
 
-        foreach (['REMEMBERME=', 'CALCULATION_SESSION_ID='] as $key) {
-            $pos = \strpos($value, $key);
+        foreach (['REMEMBERME=', 'CALCULATION_SESSION_ID=', 'main_auth_profile_token='] as $key) {
+            $pos = \stripos($value, $key);
             if (false === $pos) {
                 continue;
             }
             $length = \strlen($key);
-            $end = \strpos($value, ';', $pos + $length);
+            $end = \stripos($value, ';', $pos + $length);
             if (false === $end) {
-                $value = \substr($value, 0, $pos + $length) . '********';
+                $value = \substr($value, 0, $pos + $length) . self::REDACTED;
             } else {
-                $value = \substr($value, 0, $pos + $length) . '********' . \substr($value, $end);
+                $value = \substr($value, 0, $pos + $length) . self::REDACTED . \substr($value, $end);
             }
         }
         $value = \mb_convert_encoding($value, 'ISO-8859-1', 'UTF-8');
@@ -130,13 +99,14 @@ class PhpInfoService
 
     private function isNoValue(string $value): bool
     {
-        return StringUtils::equalIgnoreCase('no value', $value);
+        return StringUtils::equalIgnoreCase(self::NO_VALUE, $value);
     }
 
     private function isRedacted(string $name): bool
     {
-        return null !== \array_find(
-            ['_KEY', '_USER_NAME', 'APP_SECRET', '_PASSWORD', 'MAILER_DSN', 'DATABASE_URL', '_SESSION_ID', 'REMEMBERME'],
+        return \array_any(
+            ['_KEY', '_USER_NAME', 'APP_SECRET', '_PASSWORD', 'MAILER_DSN',
+                'DATABASE_URL', '_SESSION_ID', 'REMEMBERME', '_PROFILE_TOKEN'],
             static fn (string $key): bool => StringUtils::containsIgnoreCase($name, $key)
         );
     }
@@ -269,9 +239,6 @@ class PhpInfoService
         // move Core module after General module
         $this->moveCoreModule($modules);
 
-        // add loaded extensions
-        $this->addExtensionsModule($modules);
-
         // remove empty modules
         return \array_filter($modules, static fn (array $module): bool => 0 !== \count($module['groups']));
     }
@@ -281,7 +248,7 @@ class PhpInfoService
      */
     private function parseValue(string $name, ?string $value): array
     {
-        $value = $this->convertValue($value ?? 'No Value');
+        $value = $this->convertValue($value ?? self::NO_VALUE);
 
         $color = false;
         if (StringUtils::pregMatch('/#[\\da-f]{6}/i', $value, $matches)) {
@@ -290,12 +257,12 @@ class PhpInfoService
         }
         $redacted = false;
         if ($this->isRedacted($name)) {
-            $value = '********';
+            $value = self::REDACTED;
             $redacted = true;
         }
         $no_value = false;
         if ($this->isNoValue($value)) {
-            $value = 'No value';
+            $value = self::NO_VALUE;
             $no_value = true;
         }
         $enabled = false;

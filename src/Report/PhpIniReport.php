@@ -40,6 +40,7 @@ class PhpIniReport extends AbstractReport
 {
     use PdfBooleanCellTrait;
 
+    private ?PdfStyle $noteStyle = null;
     private ?PdfStyle $noValueStyle = null;
 
     public function __construct(
@@ -184,6 +185,12 @@ class PhpIniReport extends AbstractReport
         return null === $group ? self::LINE_HEIGHT : self::LINE_HEIGHT + $this->getMinGroupHeight($group);
     }
 
+    private function getNoteStyle(): PdfStyle
+    {
+        return $this->noteStyle ??= PdfStyle::default()
+            ->setFillColor(HtmlColorName::WHITE_SMOKE);
+    }
+
     private function getNoValueStyle(): PdfStyle
     {
         return $this->noValueStyle ??= $this->createRowStyle()
@@ -230,10 +237,8 @@ class PhpIniReport extends AbstractReport
             );
         }
         if (null !== $group['note']) {
-            $style = PdfStyle::default()
-                ->setFillColor(HtmlColorName::WHITE_SMOKE);
             $this->styledMultiCell(
-                style: $style,
+                style: $this->getNoteStyle(),
                 text: $group['note'],
                 border: PdfBorder::all(),
                 align: PdfTextAlignment::LEFT,

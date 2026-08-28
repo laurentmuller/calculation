@@ -133,7 +133,7 @@
 
 {%- macro output_month(month, selection) %}
     {% set attrs = {
-        class: ['dropdown-item', month == selection ? 'dropdown-item-checked-right'],
+        class: ['dropdown-item', month == selection ? 'dropdown-item-checked-right' : null],
         href: path('calculation_pivot_index', {months: month}),
     } %}
     <li><a {{ html_attr(attrs) }}>{{ 'counters.months'|trans({count: month}) }}</a></li>
@@ -141,7 +141,7 @@
 
 {%- macro output_operation(operation, selection) %}
     {% set attrs = {
-        class: ['dropdown-item', operation == selection ? 'dropdown-item-checked-right'],
+        class: ['dropdown-item', operation == selection ? 'dropdown-item-checked-right' : null],
         href: path('calculation_pivot_index', {operation: operation.value}),
     } %}
     <li><a {{ html_attr(attrs) }}>{{ operation|trans }}</a></li>

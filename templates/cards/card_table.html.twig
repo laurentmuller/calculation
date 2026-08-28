@@ -30,7 +30,7 @@
         type: 'button',
         role: 'button',
         'data-value': value,
-        class: ['dropdown-item dropdown-' ~ suffix, value == selection ? 'active']})
+        class: ['dropdown-item dropdown-' ~ suffix, value == selection ? 'active' : null]})
     %}
     <li>
         <button {{ html_attr(attributes) }}>

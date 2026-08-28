@@ -43,7 +43,7 @@ readonly class PdfFillColor extends PdfRgbColor implements PdfDocumentUpdaterInt
     /**
      * Returns a value indicating if the fill color is set.
      *
-     * To be true, this color must be different from white color.
+     * To be true, this color must be different from the white color.
      *
      * @return bool true if the fill color is set
      */

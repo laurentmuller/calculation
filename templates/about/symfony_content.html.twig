@@ -41,9 +41,9 @@
     {%- set is_links = package.homepage or package.source -%}
     {%- set is_dependance = package.production|length or package.development|length -%}
     {%- set is_dropdown = is_license or is_links or is_dependance -%}
-    {% set attrs = {
-        class: is_dropdown ? ['row-package', 'rowlink'] : ['row-package'],
-    } %}
+    {%- set attrs = {
+        class: ['row-package', is_dropdown ? 'rowlink' : null],
+    } -%}
     <tr {{ html_attr(attrs) }}>
         <td class="e">{{ package.name }}</td>
         <td class="text-id">{{ package.version }}</td>

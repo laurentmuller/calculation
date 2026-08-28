@@ -24,7 +24,7 @@
                             </h2>
                             {%- set div_attrs = {
                                 id: key,
-                                class: ['accordion-collapse', 'collapse', loop.first ? 'show'],
+                                class: ['accordion-collapse', 'collapse', loop.first ? 'show' : null],
                                 'data-bs-parent': '#accordion-cache',
                             } -%}
                             <div {{ html_attr(div_attrs) }}>

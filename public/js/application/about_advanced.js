@@ -32,11 +32,8 @@
         const hide = function () {
             $(this).getParentRow().removeClass('table-primary');
         };
-        const $container = $('#aboutAccordion');
-        $container.initContextMenu('.row-package td:not(.rowlink-skip)', show, hide);
 
-        // row link
-        $container.rowlink({
+        $('#aboutAccordion').initContextMenu('.row-package td:not(.rowlink-skip)', show, hide).rowlink({
             target: '.link-license, .link-homepage, .link_source, .link-package'
         });
     });

@@ -1,21 +1,21 @@
 {% from 'about/_about_macro.html.twig' import headerLink %}
 {# macros #}
-{% macro output_entry_attr(entry, colspan = null) %}
-    {{ html_attr({
+{% macro output_entry_attr(entry, colspan = null) -%}
+    {{- html_attr({
         colspan: colspan,
         class: [
             'v',
-            entry.type === constant('App\\Service\\PhpInfoService::TYPE_DISABLED') ? 'disabled',
-            entry.type === constant('App\\Service\\PhpInfoService::TYPE_ENABLED') ? 'enabled',
-            entry.type === constant('App\\Service\\PhpInfoService::TYPE_NO_VALUE') ? 'text-secondary fst-italic',
-            entry.type === constant('App\\Service\\PhpInfoService::TYPE_NONE_VALUE') ? 'text-secondary',
-            entry.type === constant('App\\Service\\PhpInfoService::TYPE_REDACTED') ? 'text-secondary',
+            entry.type === constant('App\\Service\\PhpInfoService::TYPE_DISABLED') ? 'disabled' : null,
+            entry.type === constant('App\\Service\\PhpInfoService::TYPE_ENABLED') ? 'enabled' : null,
+            entry.type === constant('App\\Service\\PhpInfoService::TYPE_NO_VALUE') ? 'text-secondary fst-italic' : null,
+            entry.type === constant('App\\Service\\PhpInfoService::TYPE_NONE_VALUE') ? 'text-secondary' : null,
+            entry.type === constant('App\\Service\\PhpInfoService::TYPE_REDACTED') ? 'text-secondary' : null,
         ],
         style: {
             color: entry.type === constant('App\\Service\\PhpInfoService::TYPE_COLOR') ? entry.value,
         },
-    }) }}
-{% endmacro output_entry_attr %}
+    }) -}}
+{%- endmacro output_entry_attr %}
 {% macro output_group_configs(group) %}
     <table class="table table-sm table-hover">
         {% if group.headers %}
@@ -68,7 +68,7 @@
             </a>
             {% set attrs = {
                 id: module_id,
-                class: ['collapse', 'ms-2', visible ? 'show'],
+                class: ['collapse', 'ms-2', visible ? 'show' : null],
                 'data-bs-parent': '#php-accordion',
                 'aria-labelledby': header_id,
             } %}

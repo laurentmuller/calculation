@@ -7,14 +7,20 @@
         {%- if not disabled -%}
             {%- set label = 'calculation.edit.adjust_label'|trans -%}
             {%- set title = 'calculation.edit.adjust_title'|trans({'%minimum%': minMargin|percent}) -%}
-            {%- set class_name = 'btn btn-adjust btn-outline-secondary px-2 d-print-none' ~ (overallBelow ? '' : ' cursor-default') -%}
             {%- set attrs = {
                 type: 'button',
                 id: 'btn-adjust',
                 name: 'btn-adjust',
+                class: [
+                    'btn',
+                    'btn-adjust',
+                    'btn-outline-secondary',
+                    'px-2',
+                    'd-print-none',
+                    overallBelow ? null : 'cursor-default',
+                ],
                 disabled: not overallBelow,
                 'aria-label': label,
-                class: class_name,
                 'data-bs-html': true,
                 'data-bs-title': title,
                 'data-bs-toggle': 'tooltip',

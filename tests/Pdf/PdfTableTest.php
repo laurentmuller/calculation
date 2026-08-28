@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Pdf;
 
+use App\Pdf\Enums\PdfCellImagePosition;
 use App\Pdf\Events\PdfCellBackgroundEvent;
 use App\Pdf\Events\PdfCellBorderEvent;
 use App\Pdf\Events\PdfCellTextEvent;
@@ -319,7 +320,7 @@ final class PdfTableTest extends TestCase
     public function testImageCellInvalid(): void
     {
         self::expectException(PdfException::class);
-        self::expectExceptionMessage("The image 'fake' does not exist.");
+        self::expectExceptionMessage('The image "fake" does not exist.');
         new PdfImageCell('fake');
     }
 
@@ -329,8 +330,12 @@ final class PdfTableTest extends TestCase
 
         $table = $this->createTable()
             ->addColumn(new PdfColumn());
-        $cell = new PdfImageCell($path);
+        $cell = new PdfImageCell(
+            path: $path,
+            imagePosition: PdfCellImagePosition::RIGHT
+        );
         self::assertSame($path, $cell->getPath());
+        self::assertSame(PdfCellImagePosition::RIGHT, $cell->getImagePosition());
 
         $expected = \getimagesize($path);
         self::assertIsArray($expected);

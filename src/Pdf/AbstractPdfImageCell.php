@@ -14,11 +14,13 @@ declare(strict_types=1);
 namespace App\Pdf;
 
 use App\Model\ImageSize;
+use App\Pdf\Enums\PdfCellImagePosition;
 use App\Pdf\Interfaces\PdfCellOutputInterface;
 use App\Utils\StringUtils;
 use fpdf\Enums\PdfMove;
 use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfDocument;
+use fpdf\PdfException;
 use fpdf\PdfRectangle;
 
 /**
@@ -26,6 +28,27 @@ use fpdf\PdfRectangle;
  */
 abstract class AbstractPdfImageCell extends PdfCell implements PdfCellOutputInterface
 {
+    /**
+     * @param ?string               $text          the cell text
+     * @param positive-int          $cols          the cell columns span
+     * @param ?PdfStyle             $style         the cell style
+     * @param ?PdfTextAlignment     $alignment     the cell alignment
+     * @param string|int|null       $link          the optional cell link
+     * @param ?PdfCellImagePosition $imagePosition the image position
+     *
+     * @throws PdfException if the given image path does not exist
+     */
+    public function __construct(
+        ?string $text = null,
+        int $cols = 1,
+        ?PdfStyle $style = null,
+        ?PdfTextAlignment $alignment = null,
+        int|string|null $link = null,
+        private readonly ?PdfCellImagePosition $imagePosition = null
+    ) {
+        parent::__construct($text, $cols, $style, $alignment, $link);
+    }
+
     /**
      * Override the default behavior by adding this image width.
      */
@@ -38,6 +61,14 @@ abstract class AbstractPdfImageCell extends PdfCell implements PdfCellOutputInte
         }
 
         return $width + $parent->pixels2UserUnit($this->getSize()->width);
+    }
+
+    /**
+     * Gets the image position.
+     */
+    public function getImagePosition(): ?PdfCellImagePosition
+    {
+        return $this->imagePosition;
     }
 
     /**
@@ -87,40 +118,42 @@ abstract class AbstractPdfImageCell extends PdfCell implements PdfCellOutputInte
         }
 
         // total width
-        $totalWidth = $textWidth > 0 ? $imageWidth + $cellMargin + $textWidth : $imageWidth;
+        $totalWidth = 2.0 * $cellMargin + $imageWidth + ($textWidth > 0.0 ? $textWidth + $cellMargin : 0.0);
 
-        // set position
+        // start position
         $alignment ??= $this->getAlignment() ?? PdfTextAlignment::LEFT;
         $x = match ($alignment) {
-            PdfTextAlignment::RIGHT => $bounds->right() - $totalWidth - $cellMargin,
+            PdfTextAlignment::RIGHT => $bounds->right() - $totalWidth,
             PdfTextAlignment::CENTER,
             PdfTextAlignment::JUSTIFIED => $bounds->x + ($bounds->width - $totalWidth) / 2.0,
-            default => $bounds->x + $cellMargin,
+            default => $bounds->x,
         };
         $y = $bounds->y;
 
-        // vertical offset
-        $offset = \max($cellMargin, (PdfDocument::LINE_HEIGHT - $imageHeight) / 2.0);
+        // image and text positions
+        $imagePosition = $this->getImagePosition() ?? PdfCellImagePosition::DEFAULT;
+        $yImage = $y + \max($cellMargin, (PdfDocument::LINE_HEIGHT - $imageHeight) / 2.0);
+        if (PdfCellImagePosition::LEFT === $imagePosition) {
+            $xImage = $x + $cellMargin;
+            $xText = $xImage + $imageWidth;
+        } else {
+            $xText = $x;
+            $xImage = $x + 2.0 * $cellMargin + $textWidth;
+        }
 
-        // image
+        // output
         $parent->image(
-            $this->getPath(),
-            $x,
-            $y + $offset,
-            $imageWidth,
-            $imageHeight,
-            $this->getType(),
-            $this->getLink()
+            file: $this->getPath(),
+            x: $xImage,
+            y: $yImage,
+            width: $imageWidth,
+            height: $imageHeight,
+            type: $this->getType(),
+            link: $this->getLink()
         );
-
-        // text
         if ('' !== $text) {
-            $parent->setXY($x + $imageWidth, $y);
-            $parent->cell(
-                width: $textWidth,
-                text: $text,
-                link: $this->getLink()
-            );
+            $parent->setXY($xText, $y);
+            $parent->cell(width: $textWidth, text: $text, link: $this->getLink());
         }
 
         // move

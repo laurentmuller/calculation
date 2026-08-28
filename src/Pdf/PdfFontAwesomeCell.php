@@ -16,6 +16,7 @@ namespace App\Pdf;
 use App\Model\FontAwesomeImage;
 use App\Model\ImageData;
 use App\Model\ImageSize;
+use App\Pdf\Enums\PdfCellImagePosition;
 use fpdf\Enums\PdfTextAlignment;
 
 /**
@@ -30,13 +31,14 @@ class PdfFontAwesomeCell extends AbstractPdfImageCell
     private readonly ImageSize $size;
 
     /**
-     * @param FontAwesomeImage  $image     the FontAwesome image to output
-     * @param ?string           $text      the cell text
-     * @param int               $size      the desired image size
-     * @param positive-int      $cols      the cell columns span
-     * @param ?PdfStyle         $style     the cell style
-     * @param ?PdfTextAlignment $alignment the cell alignment
-     * @param string|int|null   $link      the optional cell link
+     * @param FontAwesomeImage      $image         the FontAwesome image to output
+     * @param ?string               $text          the cell text
+     * @param int                   $size          the desired image size
+     * @param positive-int          $cols          the cell columns span
+     * @param ?PdfStyle             $style         the cell style
+     * @param ?PdfTextAlignment     $alignment     the cell alignment
+     * @param string|int|null       $link          the optional cell link
+     * @param ?PdfCellImagePosition $imagePosition the image position
      */
     public function __construct(
         FontAwesomeImage $image,
@@ -45,9 +47,10 @@ class PdfFontAwesomeCell extends AbstractPdfImageCell
         int $cols = 1,
         ?PdfStyle $style = null,
         ?PdfTextAlignment $alignment = null,
-        string|int|null $link = null
+        string|int|null $link = null,
+        ?PdfCellImagePosition $imagePosition = null
     ) {
-        parent::__construct($text, $cols, $style, $alignment, $link);
+        parent::__construct($text, $cols, $style, $alignment, $link, $imagePosition);
         $this->size = $image->resize($size);
         $this->imageData = ImageData::instance(
             data: $image->getContent(),

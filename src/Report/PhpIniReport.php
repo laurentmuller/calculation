@@ -171,18 +171,21 @@ class PhpIniReport extends AbstractReport
      */
     private function getMinGroupHeight(array $group): float
     {
-        $count = 1;
+        $lines = 0;
         if (null !== $group['name']) {
-            ++$count;
+            ++$lines;
         }
         if (null !== $group['headers']) {
-            ++$count;
+            ++$lines;
+        }
+        if (0 !== \count($group['configs'])) {
+            ++$lines;
         }
         if (null !== $group['note']) {
-            $count += $this->getLinesCount($group['note']);
+            $lines += $this->getLinesCount($group['note']);
         }
 
-        return (float) $count * self::LINE_HEIGHT;
+        return (float) $lines * self::LINE_HEIGHT;
     }
 
     /**
@@ -190,9 +193,7 @@ class PhpIniReport extends AbstractReport
      */
     private function getMinModuleHeight(array $module): float
     {
-        $group = \array_first($module['groups']);
-
-        return null === $group ? self::LINE_HEIGHT : self::LINE_HEIGHT + $this->getMinGroupHeight($group);
+        return self::LINE_HEIGHT + $this->getMinGroupHeight($module['groups'][0]);
     }
 
     private function getNoneValueStyle(): PdfStyle
@@ -231,7 +232,7 @@ class PhpIniReport extends AbstractReport
         if (null !== $master) {
             $table->addCell($this->getConfigCell($master));
         }
-        $table->endRow();
+        $table->completeRow();
     }
 
     /**

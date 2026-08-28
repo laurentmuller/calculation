@@ -15,6 +15,7 @@ namespace App\Service;
 
 use App\Model\FontAwesomeIcon;
 use App\Model\FontAwesomeImage;
+use App\Pdf\Enums\PdfCellImagePosition;
 use App\Pdf\PdfFontAwesomeCell;
 use App\Pdf\PdfStyle;
 use fpdf\Enums\PdfTextAlignment;
@@ -31,14 +32,15 @@ readonly class FontAwesomeCellService
     /**
      * Gets a Font Awesome cell for the given icon class.
      *
-     * @param FontAwesomeIcon   $icon      the icon to get image for
-     * @param ?string           $color     the foreground color to apply or <code>null</code> for black color
-     * @param int               $size      the image size
-     * @param ?string           $text      the cell text
-     * @param positive-int      $cols      the cell columns span
-     * @param ?PdfStyle         $style     the cell style
-     * @param ?PdfTextAlignment $alignment the cell alignment
-     * @param string|int|null   $link      the cell link
+     * @param FontAwesomeIcon       $icon          the icon to get image for
+     * @param ?string               $color         the foreground color to apply or <code>null</code> for black color
+     * @param int                   $size          the image size
+     * @param ?string               $text          the cell text
+     * @param positive-int          $cols          the cell columns span
+     * @param ?PdfStyle             $style         the cell style
+     * @param ?PdfTextAlignment     $alignment     the cell alignment
+     * @param string|int|null       $link          the cell link
+     * @param ?PdfCellImagePosition $imagePosition the image position
      *
      * @return ?PdfFontAwesomeCell the cell, if icon found, <code>null</code> otherwise
      */
@@ -50,7 +52,8 @@ readonly class FontAwesomeCellService
         int $cols = 1,
         ?PdfStyle $style = null,
         ?PdfTextAlignment $alignment = null,
-        string|int|null $link = null
+        string|int|null $link = null,
+        ?PdfCellImagePosition $imagePosition = null
     ): ?PdfFontAwesomeCell {
         $image = $this->imageService->getImage($icon, $color);
         if (!$image instanceof FontAwesomeImage) {
@@ -64,7 +67,8 @@ readonly class FontAwesomeCellService
             cols: $cols,
             style: $style,
             alignment: $alignment,
-            link: $link
+            link: $link,
+            imagePosition: $imagePosition
         );
     }
 }

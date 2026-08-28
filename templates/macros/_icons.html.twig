@@ -81,7 +81,7 @@
 {% macro dropdownItemWithClass(href, text, icon = null, class = null, hidden = false, parameters = []) -%}
     {% set attrs = {
         href: href,
-        class: ['dropdown-item', 'rowlink-skip', class, hidden ? 'd-none']} %}
+        class: ['dropdown-item', 'rowlink-skip', class, hidden ? 'd-none' : null]} %}
     <li>
         <a {{ html_attr(attrs) }}>
             {{- _self.icon(
@@ -95,7 +95,7 @@
 {% macro dropdownItemButton(text, icon, class = null, hidden = false, parameters = []) -%}
     {% set attrs = {
         type: 'button',
-        class: ['dropdown-item', 'rowlink-skip', class, hidden ? 'd-none']} %}
+        class: ['dropdown-item', 'rowlink-skip', class, hidden ? 'd-none' : null]} %}
     <li>
         <button {{ html_attr(attrs) }}>
             {{- _self.icon(
@@ -107,7 +107,7 @@
 {%- endmacro dropdownItemButton %}
 
 {% macro dropdownSeparator(hidden = false, class = null) -%}
-    {% set attrs = {class: [class, hidden ? 'd-none']} %}
+    {% set attrs = {class: [class, hidden ? 'd-none' : null]} %}
     <li {{ html_attr(attrs) }}>
         <hr class="dropdown-divider">
     </li>

@@ -30,7 +30,10 @@
     </div>
     <div class="card-body px-2 pt-2 pb-1">
         <div class="table-responsive">
-            {%- set table_attributes = {id: 'data-table-edit', class: ['table', 'table-edit', 'table-list', 'table-hover']} -%}
+            {%- set table_attributes = {
+                id: 'data-table-edit',
+                class: ['table', 'table-edit', 'table-list', 'table-hover'],
+            } -%}
             {%- if editable -%}
                 {%- set table_attributes = table_attributes|merge({
                     'data-group-index': groupIndex,

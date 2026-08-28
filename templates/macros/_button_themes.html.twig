@@ -16,7 +16,7 @@
     <ul class="dropdown-menu dropdown-menu-end">
         {% for theme in themes() %}
             {% set attrs = {
-                class: ['dropdown-item', 'dropdown-theme-entry', theme == current ? 'dropdown-item-checked-right'],
+                class: ['dropdown-item', 'dropdown-theme-entry', theme == current ? 'dropdown-item-checked-right' : null],
                 'data-success': theme.success|trans,
                 'data-value': theme.value,
                 'data-icon': theme.icon,

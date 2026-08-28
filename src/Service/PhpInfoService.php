@@ -273,36 +273,47 @@ class PhpInfoService
      */
     private function parseValue(string $name, ?string $value): array
     {
-        $type = self::TYPE_UNDEFINED;
         $value = $this->convertValue($value);
         if (StringUtils::pregMatch('/#[\\da-f]{6}/i', $value, $matches)) {
-            $value = $matches[0];
-            $type = self::TYPE_COLOR;
-        }
-        if ($this->isRedacted($name)) {
-            $value = self::REDACTED;
-            $type = self::TYPE_REDACTED;
-        }
-        if ($this->isNoValue($value)) {
-            $value = self::NO_VALUE;
-            $type = self::TYPE_NO_VALUE;
-        }
-        if ($this->isNoneValue($value)) {
-            $value = self::NONE_VALUE;
-            $type = self::TYPE_NONE_VALUE;
-        }
-        if ($this->isEnabledValue($value)) {
-            $value = StringUtils::capitalize($value);
-            $type = self::TYPE_ENABLED;
+            return [
+                'value' => $matches[0],
+                'type' => self::TYPE_COLOR,
+            ];
         }
         if ($this->isDisabledValue($value)) {
-            $value = StringUtils::capitalize($value);
-            $type = self::TYPE_DISABLED;
+            return [
+                'value' => StringUtils::capitalize($value),
+                'type' => self::TYPE_DISABLED,
+            ];
+        }
+        if ($this->isEnabledValue($value)) {
+            return [
+                'value' => StringUtils::capitalize($value),
+                'type' => self::TYPE_ENABLED,
+            ];
+        }
+        if ($this->isNoValue($value)) {
+            return [
+                'value' => self::NO_VALUE,
+                'type' => self::TYPE_NO_VALUE,
+            ];
+        }
+        if ($this->isNoneValue($value)) {
+            return [
+                'value' => self::NONE_VALUE,
+                'type' => self::TYPE_NONE_VALUE,
+            ];
+        }
+        if ($this->isRedacted($name)) {
+            return [
+                'value' => self::REDACTED,
+                'type' => self::TYPE_REDACTED,
+            ];
         }
 
         return [
             'value' => $value,
-            'type' => $type,
+            'type' => self::TYPE_UNDEFINED,
         ];
     }
 
@@ -337,7 +348,7 @@ class PhpInfoService
                 'master' => $config['master'],
             ];
         }
-        $module['groups'] = \array_values($groups);
+        $module['groups'] = $this->sortGroups($groups);
 
         return $module;
     }
@@ -359,5 +370,19 @@ class PhpInfoService
         }
 
         return $value;
+    }
+
+    /**
+     * @param GroupType[] $groups
+     *
+     * @return GroupType[]
+     */
+    private function sortGroups(array $groups): array
+    {
+        foreach ($groups as &$group) {
+            \uasort($group['configs'], static fn (array $a, array $b): int => $a['name'] <=> $b['name']);
+        }
+
+        return \array_values($groups);
     }
 }

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Pdf;
 
 use App\Model\ImageSize;
+use App\Pdf\Enums\PdfCellImagePosition;
 use App\Traits\ImageSizeTrait;
 use App\Traits\MathTrait;
 use fpdf\Enums\PdfTextAlignment;
@@ -34,12 +35,13 @@ class PdfImageCell extends AbstractPdfImageCell
     private ImageSize $size;
 
     /**
-     * @param string            $path      the image path
-     * @param ?string           $text      the cell text
-     * @param positive-int      $cols      the cell columns span
-     * @param ?PdfStyle         $style     the cell style
-     * @param ?PdfTextAlignment $alignment the cell alignment
-     * @param string|int|null   $link      the optional cell link
+     * @param string                $path          the image path
+     * @param ?string               $text          the cell text
+     * @param positive-int          $cols          the cell columns span
+     * @param ?PdfStyle             $style         the cell style
+     * @param ?PdfTextAlignment     $alignment     the cell alignment
+     * @param string|int|null       $link          the optional cell link
+     * @param ?PdfCellImagePosition $imagePosition the image position
      *
      * @throws PdfException if the given image path does not exist
      */
@@ -49,11 +51,12 @@ class PdfImageCell extends AbstractPdfImageCell
         int $cols = 1,
         ?PdfStyle $style = null,
         ?PdfTextAlignment $alignment = null,
-        string|int|null $link = null
+        string|int|null $link = null,
+        ?PdfCellImagePosition $imagePosition = null
     ) {
-        parent::__construct($text, $cols, $style, $alignment, $link);
+        parent::__construct($text, $cols, $style, $alignment, $link, $imagePosition);
         if (!\file_exists($path)) {
-            throw PdfException::format("The image '%s' does not exist.", $path);
+            throw PdfException::format('The image "%s" does not exist.', $path);
         }
         $this->originalSize = $this->getImageSize($path);
         $this->size = clone $this->originalSize;

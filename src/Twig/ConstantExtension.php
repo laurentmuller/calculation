@@ -18,7 +18,6 @@ use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Interfaces\ConstantsInterface;
 use App\Interfaces\RoleInterface;
-use App\Service\CalculationService;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -107,7 +106,6 @@ final class ConstantExtension extends AbstractExtension implements ConstantsInte
             self::constants(),
             EntityName::constants(),
             EntityPermission::constants(),
-            CalculationService::constants(),
             $this->getClassConstants(RoleInterface::class),
             $this->getClassConstants(AuthenticatedVoter::class),
         );

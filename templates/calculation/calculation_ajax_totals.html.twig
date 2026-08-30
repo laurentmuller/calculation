@@ -2,36 +2,37 @@
 {% for group in groups %}
     <tr>
         {% switch group.id %}
-        {% case ROW_EMPTY %}
+        {% case constant('App\\Service\\CalculationService::ROW_EMPTY') %}
             <td class="text-body-secondary text-center small">{{ group.description }}</td>
-        {% case ROW_GROUP %}
+        {% case constant('App\\Service\\CalculationService::ROW_GROUP') %}
             <td class="text-total text-cell">{{ group.description }}</td>
             <td class="text-currency">{{ group.amount|amount }}</td>
             <td class="text-percent">{{ group.marginPercent|percent }}</td>
             <td class="text-currency">{{ group.marginAmount|amount }}</td>
             <td class="text-currency">{{ group.total|amount }}</td>
-        {% case ROW_TOTAL_GROUP %}
+        {% case constant('App\\Service\\CalculationService::ROW_TOTAL_GROUP') %}
             <td class="text-total text-cell fw-bold">{{ group.description }}</td>
             <td class="text-currency">{{ group.amount|amount }}</td>
             <td class="text-percent">{{ group.marginPercent|percent }}</td>
             <td class="text-currency">{{ group.marginAmount|amount }}</td>
             <td class="text-currency fw-bold">{{ group.total|amount }}</td>
-        {% case ROW_GLOBAL_MARGIN %}
+        {% case constant('App\\Service\\CalculationService::ROW_GLOBAL_MARGIN') %}
             <td class="text-total text-cell" colspan="2">{{ group.description }}</td>
             <td class="text-percent">{{ group.marginPercent|percent }}</td>
             <td colspan="2" class="text-currency">{{ group.total|amount }}</td>
-        {% case ROW_TOTAL_NET %}
+        {% case constant('App\\Service\\CalculationService::ROW_TOTAL_NET') %}
             <td class="text-total text-cell fw-bold" colspan="4">{{ group.description }}</td>
             <td class="text-currency fw-bold">{{ group.total|amount }}</td>
-        {% case ROW_USER_MARGIN %}
+        {% case constant('App\\Service\\CalculationService::ROW_USER_MARGIN') %}
             <td class="text-total text-cell" colspan="2">{{ group.description }}</td>
             <td class="text-percent">{{ group.marginPercent|percent }}</td>
             <td colspan="2" class="text-currency">{{ group.total|amount }}</td>
-        {% case ROW_OVERALL_TOTAL %}
+        {% case constant('App\\Service\\CalculationService::ROW_OVERALL_TOTAL') %}
             <td class="text-total text-cell fw-bold">{{ group.description }}</td>
             <td class="text-currency fw-bold">{{ group.amount|amount }}</td>
             {%- if overallBelow -%}
-                {%- set overall_title = 'calculation.list.margin_below'|trans({'%margin%': group.marginPercent|percent, '%minimum%': minMargin|percent}) -%}
+                {%- set overall_title = 'calculation.list.margin_below'|trans(
+                    {'%margin%': group.marginPercent|percent, '%minimum%': minMargin|percent}) -%}
                 <td class="text-currency text-danger fw-bold has-tooltip"
                     title="{{ overall_title }}">{{ group.marginPercent|percent }}</td>
             {%- else -%}

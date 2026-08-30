@@ -20,25 +20,28 @@ use Symfony\Component\Cache\Adapter\NullAdapter;
 
 final class ConstantExtensionTest extends TestCase
 {
-    public static function getAuthenticatedVoterConstants(): \Generator
+    private array $globals;
+
+    #[\Override]
+    protected function setUp(): void
     {
-        yield ['IS_AUTHENTICATED_FULLY', 'IS_AUTHENTICATED_FULLY'];
-        yield ['IS_AUTHENTICATED_REMEMBERED', 'IS_AUTHENTICATED_REMEMBERED'];
-        yield ['IS_AUTHENTICATED', 'IS_AUTHENTICATED'];
-        yield ['IS_IMPERSONATOR', 'IS_IMPERSONATOR'];
-        yield ['IS_REMEMBERED', 'IS_REMEMBERED'];
-        yield ['PUBLIC_ACCESS', 'PUBLIC_ACCESS'];
+        $extension = new ConstantExtension(new NullAdapter());
+        $this->globals = $extension->getGlobals();
     }
 
-    public static function getCalculationServiceConstants(): \Generator
+    public static function getAuthenticatedVoterConstants(): \Generator
     {
-        yield ['ROW_EMPTY', -1];
-        yield ['ROW_GROUP', -2];
-        yield ['ROW_TOTAL_GROUP', -3];
-        yield ['ROW_GLOBAL_MARGIN', -4];
-        yield ['ROW_TOTAL_NET', -5];
-        yield ['ROW_USER_MARGIN', -6];
-        yield ['ROW_OVERALL_TOTAL', -7];
+        $values = [
+            'IS_AUTHENTICATED_FULLY',
+            'IS_AUTHENTICATED_REMEMBERED',
+            'IS_AUTHENTICATED',
+            'IS_IMPERSONATOR',
+            'IS_REMEMBERED',
+            'PUBLIC_ACCESS',
+        ];
+        foreach ($values as $value) {
+            yield [$value, $value];
+        }
     }
 
     public static function getEntityVoterConstants(): \Generator
@@ -61,44 +64,54 @@ final class ConstantExtensionTest extends TestCase
         yield ['ENTITY_USER', 'EntityUser'];
     }
 
+    public static function getIconsConstants(): \Generator
+    {
+        // entity
+        yield ['ICON_CALCULATION', 'fa-solid fa-calculator'];
+        yield ['ICON_CALCULATION_STATE', 'fa-regular fa-flag'];
+        yield ['ICON_CATEGORY', 'fa-regular fa-folder'];
+        yield ['ICON_CUSTOMER', 'fa-regular fa-address-card'];
+        yield ['ICON_GLOBAL_MARGIN', 'fa-solid fa-percent'];
+        yield ['ICON_GROUP', 'fa-regular fa-folder-closed'];
+        yield ['ICON_LOG', 'fa-solid fa-book'];
+        yield ['ICON_PRODUCT', 'fa-regular fa-file-alt'];
+        yield ['ICON_TASK', 'fa-solid fa-tasks'];
+        yield ['ICON_USER', 'fa-regular fa-user'];
+        // action
+        yield ['ICON_SHOW', 'fa-solid fa-wrench'];
+        yield ['ICON_ADD', 'fa-regular fa-file'];
+        yield ['ICON_EDIT', 'fa-solid fa-pencil'];
+        yield ['ICON_DELETE', 'fa-solid fa-eraser'];
+        yield ['ICON_COPY', 'fa-regular fa-copy'];
+        // export
+        yield ['ICON_PDF', 'fa-regular fa-file-pdf'];
+        yield ['ICON_EXCEL', 'fa-regular fa-file-excel'];
+        yield ['ICON_WORD', 'fa-regular fa-file-word'];
+        // view
+        yield ['ICON_VIEW_TABLE', 'fa-solid fa-table-list'];
+        yield ['ICON_VIEW_CUSTOM', 'fa-solid fa-grip-horizontal'];
+    }
+
     public static function getRoleConstants(): \Generator
     {
-        yield ['ROLE_ADMIN', 'ROLE_ADMIN'];
-        yield ['ROLE_SUPER_ADMIN', 'ROLE_SUPER_ADMIN'];
-        yield ['ROLE_USER', 'ROLE_USER'];
-    }
-
-    #[DataProvider('getAuthenticatedVoterConstants')]
-    public function testAuthenticatedVoterConstants(string $key, string $expected): void
-    {
-        self::assertIsSameConstant($key, $expected);
-    }
-
-    #[DataProvider('getCalculationServiceConstants')]
-    public function testCalculationServiceConstants(string $key, int $expected): void
-    {
-        self::assertIsSameConstant($key, $expected);
-    }
-
-    #[DataProvider('getEntityVoterConstants')]
-    public function testEntityVoterConstants(string $key, string $expected): void
-    {
-        self::assertIsSameConstant($key, $expected);
+        $values = [
+            'ROLE_USER',
+            'ROLE_ADMIN',
+            'ROLE_SUPER_ADMIN',
+        ];
+        foreach ($values as $value) {
+            yield [$value, $value];
+        }
     }
 
     #[DataProvider('getRoleConstants')]
-    public function testRoleConstants(string $key, string $expected): void
+    #[DataProvider('getIconsConstants')]
+    #[DataProvider('getEntityVoterConstants')]
+    #[DataProvider('getAuthenticatedVoterConstants')]
+    public function testConstants(string $key, string $expected): void
     {
-        self::assertIsSameConstant($key, $expected);
-    }
-
-    protected static function assertIsSameConstant(string $key, string|int $expected): void
-    {
-        $extension = new ConstantExtension(new NullAdapter());
-        $globals = $extension->getGlobals();
-        self::assertArrayHasKey($key, $globals);
-
-        $actual = $globals[$key];
+        self::assertArrayHasKey($key, $this->globals);
+        $actual = $this->globals[$key];
         self::assertSame($expected, $actual);
     }
 }

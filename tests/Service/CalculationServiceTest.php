@@ -65,6 +65,22 @@ final class CalculationServiceTest extends KernelServiceTestCase
         self::assertTrue($actual->result);
     }
 
+    public function testConstants(): void
+    {
+        self::assertSame(
+            [-1, -2, -3, -4, -5, -6, -7],
+            [
+                CalculationService::ROW_EMPTY,
+                CalculationService::ROW_GROUP,
+                CalculationService::ROW_TOTAL_GROUP,
+                CalculationService::ROW_GLOBAL_MARGIN,
+                CalculationService::ROW_TOTAL_NET,
+                CalculationService::ROW_USER_MARGIN,
+                CalculationService::ROW_OVERALL_TOTAL,
+            ]
+        );
+    }
+
     public function testCreateGroupsFromCalculation(): void
     {
         self::bootKernel();
@@ -162,26 +178,6 @@ final class CalculationServiceTest extends KernelServiceTestCase
         $actual = $service->createParameters($query);
         self::assertTrue($actual->result);
         self::assertCount(1, $actual->groups);
-    }
-
-    public function testGetConstants(): void
-    {
-        $constants = CalculationService::constants();
-        self::assertCount(7, $constants);
-
-        $this->assertValidConstant($constants, 'ROW_EMPTY', -1);
-        $this->assertValidConstant($constants, 'ROW_GROUP', -2);
-        $this->assertValidConstant($constants, 'ROW_TOTAL_GROUP', -3);
-        $this->assertValidConstant($constants, 'ROW_GLOBAL_MARGIN', -4);
-        $this->assertValidConstant($constants, 'ROW_TOTAL_NET', -5);
-        $this->assertValidConstant($constants, 'ROW_USER_MARGIN', -6);
-        $this->assertValidConstant($constants, 'ROW_OVERALL_TOTAL', -7);
-    }
-
-    protected function assertValidConstant(array $constants, string $name, int $expected): void
-    {
-        self::assertArrayHasKey($name, $constants);
-        self::assertSame($expected, $constants[$name]);
     }
 
     private function createApplicationParameters(): ApplicationParameters

@@ -15,7 +15,6 @@ namespace App\Service;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationGroup;
-use App\Interfaces\ConstantsInterface;
 use App\Model\CalculationAdjustQuery;
 use App\Model\CalculationAdjustResult;
 use App\Model\CalculationQueryGroup;
@@ -33,30 +32,30 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Service to create total groups and update user margin to meet the minimum overall margin.
  */
-class CalculationService implements ConstantsInterface
+class CalculationService
 {
     use MathTrait;
 
     /** Empty row identifier. */
-    private const int ROW_EMPTY = -1;
+    public const int ROW_EMPTY = -1;
 
     /** Global margin row identifier. */
-    private const int ROW_GLOBAL_MARGIN = -4;
+    public const int ROW_GLOBAL_MARGIN = -4;
 
     /** Group row identifier. */
-    private const int ROW_GROUP = -2;
+    public const int ROW_GROUP = -2;
 
     /** Overall total row identifier. */
-    private const int ROW_OVERALL_TOTAL = -7;
+    public const int ROW_OVERALL_TOTAL = -7;
 
     /** Total group row identifier. */
-    private const int ROW_TOTAL_GROUP = -3;
+    public const int ROW_TOTAL_GROUP = -3;
 
     /** Total net row identifier. */
-    private const int ROW_TOTAL_NET = -5;
+    public const int ROW_TOTAL_NET = -5;
 
     /** User margin row identifier. */
-    private const int ROW_USER_MARGIN = -6;
+    public const int ROW_USER_MARGIN = -6;
 
     public function __construct(
         private readonly GlobalMarginRepository $globalMarginRepository,
@@ -65,24 +64,6 @@ class CalculationService implements ConstantsInterface
         private readonly ApplicationParameters $parameters,
         private readonly TranslatorInterface $translator,
     ) {
-    }
-
-    /**
-     * Gets the row constants.
-     *
-     * @return array<string, int>
-     */
-    #[\Override]
-    public static function constants(): array
-    {
-        $reflection = new \ReflectionClass(self::class);
-        $constants = $reflection->getReflectionConstants(\ReflectionClassConstant::IS_PRIVATE);
-
-        return \array_reduce(
-            $constants,
-            static fn (array $carry, \ReflectionClassConstant $c): array => $carry + [$c->getName() => $c->getValue()],
-            []
-        );
     }
 
     /**

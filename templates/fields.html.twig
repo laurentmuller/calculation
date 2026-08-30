@@ -65,13 +65,13 @@
         }) -%}
         {%- set button_attr = {
             type: 'button',
+            class: 'color-picker dropdown-toggle form-control',
             role: 'combobox',
             'data-bs-toggle': 'dropdown',
             'aria-expanded': 'false',
             'aria-label': form.vars.label|trans,
-            class: 'color-picker dropdown-toggle form-control',
         } -%}
-        <button{% with {attr: button_attr} %}{{ block('attributes') }}{% endwith %}>
+        <button {{ html_attr(button_attr) }}>
             <span class="dropdown-color"></span>
             <span class="dropdown-text"></span>
         </button>
@@ -115,11 +115,19 @@
         {%- set empty_image = empty_image|default(false) -%}
         {%- set thumbnail_src = thumbnail_src|default(false) -%}
         {%- set thumbnail_alt = (thumbnail_alt|default('filetype.image'))|trans -%}
-        {%- if thumbnail_src -%}{%- set attr = attr|default({})|merge({'data-src': thumbnail_src}) -%}{%- endif -%}
-        <div class="image-input {{ thumbnail_src ? 'image-input-exist' : 'image-input-new' }}" data-error="{{ 'filetype.invalid'|trans }}">
+        {%- if thumbnail_src -%}
+            {%- set attr = attr|default({})|merge({'data-src': thumbnail_src}) -%}
+        {%- endif -%}
+        <div class="image-input {{ thumbnail_src ? 'image-input-exist' : 'image-input-new' }}"
+             data-error="{{ 'filetype.invalid'|trans }}">
             <div class="image-input-preview img-thumbnail" data-default="{{ empty_image }}" title="{{ thumbnail_alt }}">
                 {% if thumbnail_src or empty_image -%}
-                    <img src="{{ thumbnail_src|default(empty_image) }}" alt="{{ thumbnail_alt }}" loading="lazy" decoding="async">
+                    <img {{ html_attr({
+                        src: thumbnail_src|default(empty_image),
+                        alt: thumbnail_alt,
+                        loading: 'lazy',
+                        decoding: 'async',
+                    }) }}>
                 {% endif %}
             </div>
             <div class="d-flex-wrap">
@@ -138,8 +146,10 @@
     {%- else -%}
         <div class="input-group">
             {{- block('form_widget_simple') }}
-            <button class="btn btn-file-delete btn-outline-secondary{% if not value %} d-none{% endif %}" type="button"
-                    title="{{ 'common.button_delete'|trans }}">
+            <button {{ html_attr({
+                type: 'button',
+                class: ['btn btn-file-delete btn-outline-secondary', not value ? 'd-none' : null],
+                title: 'common.button_delete'|trans}) }}>
                 <i class="fa-solid fa-times"></i>
             </button>
         </div>
@@ -251,9 +261,13 @@
 {%- endblock alpha_captcha_label -%}
 {# alpha captcha widget #}
 {%- block alpha_captcha_widget -%}
+    {% set attrs = {
+        for: id,
+        class: 'col-sm-10 col-form-label',
+        required: required,
+    } %}
     <div class="row align-items-center">
-        <label for="{{ id }}"
-               class="col-sm-10 col-form-label{% if required %} required{% endif %}">{{- question -}}</label>
+        <label {{ html_attr(attrs) }}>{{ question }}</label>
         <div class="col-sm-2 col-3">{{- block('form_widget_simple') -}}</div>
     </div>
 {%- endblock alpha_captcha_widget -%}

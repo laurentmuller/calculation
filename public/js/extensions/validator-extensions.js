@@ -106,7 +106,9 @@
                         $this.on('change', function () {
                             const empty = String($this.val()).length === 0;
                             $delete.toggleClass('d-none', empty);
-                            $this.toggleClass('rounded-end', empty);
+                            if ($this.css('border-bottom-left-radius') !== '0px') {
+                                $this.toggleClass('rounded-end', empty);
+                            }
                             $this.valid();
                         });
                     }

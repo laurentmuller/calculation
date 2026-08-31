@@ -166,13 +166,11 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      */
     private function getEntityNames(RoleInterface $role): array
     {
-        return $this->getFiltered(EntityName::sorted(), function (EntityName $name) use ($role): bool {
-            return match ($name) {
-                EntityName::LOG => false,
-                EntityName::USER => $role->isAdmin(),
-                EntityName::CUSTOMER => $this->parameters->isDebug(),
-                default => true,
-            };
+        return $this->getFiltered(EntityName::sorted(), fn (EntityName $name): bool => match ($name) {
+            EntityName::LOG => false,
+            EntityName::USER => $role->isAdmin(),
+            EntityName::CUSTOMER => $this->parameters->isDebug(),
+            default => true,
         });
     }
 

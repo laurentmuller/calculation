@@ -30,9 +30,7 @@ trait CacheKeyTrait
         }
 
         static $reservedCharacters = null;
-        if (null === $reservedCharacters) {
-            $reservedCharacters = \str_split(ItemInterface::RESERVED_CHARACTERS);
-        }
+        $reservedCharacters ??= \str_split(ItemInterface::RESERVED_CHARACTERS);
 
         return \str_replace($reservedCharacters, '_', $key);
     }

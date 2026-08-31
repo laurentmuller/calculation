@@ -15,6 +15,7 @@ namespace App\Tests\Pdf;
 
 use App\Model\FontAwesomeImage;
 use App\Model\ImageSize;
+use App\Pdf\Enums\PdfCellImagePosition;
 use App\Pdf\PdfFontAwesomeCell;
 use App\Pdf\PdfStyle;
 use App\Tests\Fixture\FixturePdfImageDocument;
@@ -24,6 +25,24 @@ use PHPUnit\Framework\TestCase;
 
 final class PdfFontAwesomeCellTest extends TestCase
 {
+    public function testComputeWidthNoText(): void
+    {
+        $image = $this->getImage();
+        $parent = $this->getDocument();
+        $cell = new PdfFontAwesomeCell($image);
+        $actual = $cell->computeWidth($parent);
+        self::assertEqualsWithDelta(4.91, $actual, 0.01);
+    }
+
+    public function testComputeWidthWithText(): void
+    {
+        $image = $this->getImage();
+        $parent = $this->getDocument();
+        $cell = new PdfFontAwesomeCell($image, 'Text');
+        $actual = $cell->computeWidth($parent);
+        self::assertEqualsWithDelta(12.08, $actual, 0.01);
+    }
+
     public function testIconCell(): void
     {
         $image = $this->getImage();
@@ -64,6 +83,46 @@ final class PdfFontAwesomeCellTest extends TestCase
     {
         $image = $this->getImage();
         $cell = new PdfFontAwesomeCell($image, 'Text');
+        $bounds = new PdfRectangle(0, 0, 100, 5.0);
+        $doc = $this->getDocument();
+        $cell->output($doc, $bounds);
+        $position = $doc->getPosition();
+        self::assertSame(100.0, $position->x);
+        self::assertSame(0.0, $position->y);
+    }
+
+    public function testNoText(): void
+    {
+        $image = $this->getImage();
+        $cell = new PdfFontAwesomeCell($image);
+        $bounds = new PdfRectangle(0, 0, 100, 5.0);
+        $doc = $this->getDocument();
+        $cell->output($doc, $bounds);
+        $position = $doc->getPosition();
+        self::assertSame(100.0, $position->x);
+        self::assertSame(0.0, $position->y);
+    }
+
+    public function testPositionRight(): void
+    {
+        $image = $this->getImage();
+        $cell = new PdfFontAwesomeCell(
+            image: $image,
+            text: 'Text',
+            imagePosition: PdfCellImagePosition::RIGHT
+        );
+        $bounds = new PdfRectangle(0, 0, 100, 5.0);
+        $doc = $this->getDocument();
+        $cell->output($doc, $bounds);
+        $position = $doc->getPosition();
+        self::assertSame(100.0, $position->x);
+        self::assertSame(0.0, $position->y);
+    }
+
+    public function testWithBigText(): void
+    {
+        $image = $this->getImage();
+        $cell = new PdfFontAwesomeCell($image, \str_repeat('Text ', 20));
         $bounds = new PdfRectangle(0, 0, 100, 5.0);
         $doc = $this->getDocument();
         $cell->output($doc, $bounds);

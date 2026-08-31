@@ -192,7 +192,7 @@ class PhpInfoService
     private function parseConfigs(Group $group): array
     {
         return \array_map(
-            fn (Config $config): array => $this->parseConfig($config),
+            $this->parseConfig(...),
             $group->configs()->toArray()
         );
     }
@@ -216,7 +216,7 @@ class PhpInfoService
     private function parseGroups(Module $module): array
     {
         return \array_map(
-            fn (Group $group): array => $this->parseGroup($group),
+            $this->parseGroup(...),
             $module->groups()->toArray()
         );
     }
@@ -257,7 +257,7 @@ class PhpInfoService
     private function parseModules(PhpInfo $info): array
     {
         $modules = \array_map(
-            fn (Module $module): array => $this->parseModule($module),
+            $this->parseModule(...),
             $info->modules()->toArray()
         );
 

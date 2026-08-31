@@ -68,11 +68,7 @@ abstract class AbstractTable implements SortModeInterface
      */
     public function getColumns(): array
     {
-        if (null === $this->columns) {
-            $this->columns = $this->createColumns();
-        }
-
-        return $this->columns;
+        return $this->columns ??= $this->createColumns();
     }
 
     /**

@@ -80,9 +80,7 @@ class FixtureDatabase extends AbstractDatabase
     public static function getDatabaseFilename(): string
     {
         static $fileName = null;
-        if (null === $fileName) {
-            $fileName = FileUtils::normalize(__DIR__ . '/db_test.sqlite');
-        }
+        $fileName ??= FileUtils::normalize(__DIR__ . '/db_test.sqlite');
 
         return $fileName;
     }

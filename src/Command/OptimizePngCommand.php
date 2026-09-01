@@ -17,11 +17,13 @@ use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Process\Process;
 
 /**
@@ -49,77 +51,85 @@ class OptimizePngCommand
         #[Option(description: 'Run the command without replace images.', name: 'dry-run', shortcut: 'd')]
         bool $dryRun = false
     ): int {
-        $io->title(\sprintf('Optimize PNG images in "%s"', $source));
-
         $path = $this->getSourcePath($source);
         if (!\is_dir($path)) {
             return $this->error($io, 'The source path "%s" is not a directory.', $source);
         }
-
         if (!\is_executable($binary)) {
             return $this->error($io, 'The optipng binary "%s" is not executable.', $binary);
         }
-
         if (!\in_array($level, \range(0, 7), true)) {
             return $this->error($io, 'The optimization level must be between 0 and 7, "%d" given.', $level);
         }
 
-        $error = 0;
-        $updated = 0;
-        $unchanged = 0;
-        $totalSourceSize = 0;
-        $totalTargetSize = 0;
+        $io->title(\sprintf('Optimize PNG images in "%s"', $source));
+
+        $finder = $this->createFinder($path);
+        $count = $finder->count();
+        if (0 === $count) {
+            $io->warning(\sprintf('No PNG image found in directory "%s".', $source));
+
+            return Command::SUCCESS;
+        }
+
+        $results = [
+            'error' => 0,
+            'updated' => 0,
+            'unchanged' => 0,
+            'source_size' => 0,
+            'target_size' => 0,
+        ];
 
         $this->start();
         $filesystem = new Filesystem();
         $tempDir = Path::join(\sys_get_temp_dir(), 'optimize-png');
+        $progressBar = $this->createProgressBar($io, $count);
 
         try {
             $filesystem->mkdir($tempDir);
-            $finder = $this->createFinder($path);
-            foreach ($finder as $file) {
+            /** @var SplFileInfo $file */
+            foreach ($progressBar->iterate($finder, $count) as $file) {
                 $source = $file->getPathname();
-                $target = Path::join($tempDir, $file->getBasename());
+                $basename = $file->getBasename();
+                $progressBar->setMessage($basename);
+                $target = Path::join($tempDir, $basename);
 
                 try {
-                    $filesystem->copy($source, $target);
-                    $command = $this->createCommand($binary, $level, $target);
-                    if (!$this->convert($io, $command)) {
-                        $io->writeln(\sprintf('<error>%s ✘</error>', $file->getRelativePathname()));
-                        ++$error;
+                    $filesystem->copy($source, $target, true);
+                    $arguments = $this->createArguments($binary, $level, $target);
+                    if (!$this->convert($io, $arguments)) {
+                        ++$results['error'];
                         continue;
                     }
 
                     $sourceSize = (int) \filesize($source);
                     $targetSize = (int) \filesize($target);
-                    $totalSourceSize += $sourceSize;
-                    $totalTargetSize += $targetSize;
+                    $results['source_size'] += $sourceSize;
+                    $results['target_size'] += $targetSize;
                     if ($sourceSize === $targetSize) {
-                        $io->writeln(\sprintf('<comment>%s</comment>', $file->getRelativePathname()));
-                        ++$unchanged;
+                        ++$results['unchanged'];
                         continue;
                     }
 
                     if (!$dryRun) {
-                        $filesystem->copy($target, $source);
+                        $filesystem->copy($target, $source, true);
                     }
-                    $io->writeln(\sprintf('<info>%s ✔</info>', $file->getRelativePathname()));
-                    ++$updated;
+                    ++$results['updated'];
                 } finally {
                     $filesystem->remove($target);
                 }
             }
+            $io->newLine(2);
 
-            $deltaSize = $totalTargetSize - $totalSourceSize;
-            $deltaPercent = $totalSourceSize > 0 ? (float) $deltaSize * 100.0 / (float) $totalSourceSize : 0.0;
+            $this->updateResults($results);
             $message = \sprintf(
-                "Files processed: %d, Updated: %d, Unchanged: %d, Error: %d, Size reduction: %s (%0.2f%%).\n%s.",
-                $updated + $unchanged + $error,
-                $updated,
-                $unchanged,
-                $error,
-                $this->formatMemory($deltaSize),
-                $deltaPercent,
+                "File(s) processed: %d, Updated: %d, Unchanged: %d, Error: %d, Size reduction: %s (%0.2f%%).\n%s.",
+                $results['total'],
+                $results['updated'],
+                $results['unchanged'],
+                $results['error'],
+                $results['delta_size'],
+                $results['delta_percent'],
                 $this->stop()
             );
             if ($dryRun) {
@@ -133,13 +143,15 @@ class OptimizePngCommand
         return Command::SUCCESS;
     }
 
-    private function convert(SymfonyStyle $io, array $command): bool
+    private function convert(SymfonyStyle $io, array $arguments): bool
     {
-        $process = new Process($command);
+        $process = new Process($arguments);
         $process->run();
         if ($process->isSuccessful()) {
             return true;
         }
+
+        $io->newLine(2);
         $io->error($process->getErrorOutput());
 
         return false;
@@ -148,7 +160,7 @@ class OptimizePngCommand
     /**
      * @return string[]
      */
-    private function createCommand(string $binary, int $level, string $file): array
+    private function createArguments(string $binary, int $level, string $file): array
     {
         return [
             $binary,
@@ -168,6 +180,15 @@ class OptimizePngCommand
             ->name('*.png');
     }
 
+    private function createProgressBar(SymfonyStyle $io, int $count): ProgressBar
+    {
+        $progressBar = $io->createProgressBar($count);
+        $progressBar->setFormat('%current%/%max% [%bar%] %message%');
+        $progressBar->setMessage('Processing images...');
+
+        return $progressBar;
+    }
+
     private function error(SymfonyStyle $io, string $message, string|int ...$values): int
     {
         $io->error(\sprintf($message, ...$values));
@@ -178,5 +199,16 @@ class OptimizePngCommand
     private function getSourcePath(string $source): string
     {
         return Path::isAbsolute($source) ? $source : Path::join($this->projectDir, $source);
+    }
+
+    private function updateResults(array &$results): void
+    {
+        $sourceSize = $results['source_size'];
+        $deltaSize = $results['target_size'] - $sourceSize;
+        $deltaPercent = $sourceSize > 0 ? (float) $deltaSize * 100.0 / (float) $sourceSize : 0.0;
+
+        $results['delta_percent'] = $deltaPercent;
+        $results['delta_size'] = $this->formatMemory($deltaSize);
+        $results['total'] = $results['updated'] + $results['unchanged'] + $results['error'];
     }
 }

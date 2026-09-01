@@ -15,6 +15,7 @@ namespace App\Controller;
 
 use App\Attribute\ExcelRoute;
 use App\Attribute\GetRoute;
+use App\Attribute\IndexRoute;
 use App\Attribute\IsAdmin;
 use App\Attribute\PdfRoute;
 use App\Report\SymfonyReport;
@@ -32,6 +33,7 @@ use App\Traits\RenderPdfDocumentTrait;
 use App\Traits\RenderSpreadsheetDocumentTrait;
 use App\Utils\FileUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -119,6 +121,23 @@ class AboutSymfonyController extends AbstractController
         );
 
         return $this->renderSpreadsheetDocument($doc);
+    }
+
+    #[IndexRoute]
+    public function index(
+        BundleInfoService $bundleService,
+        KernelInfoService $kernelService,
+        PackageInfoService $packageService,
+        RouteInfoService $routeService,
+        SymfonyInfoService $symfonyService
+    ): Response {
+        return $this->render('about/about_symfony.html.twig', [
+            'kernelService' => $kernelService,
+            'bundleService' => $bundleService,
+            'routeService' => $routeService,
+            'packageService' => $packageService,
+            'symfonyService' => $symfonyService,
+        ]);
     }
 
     /**

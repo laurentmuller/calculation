@@ -20,14 +20,16 @@ final class AboutPhpControllerTest extends ControllerTestCase
     #[\Override]
     public static function getRoutes(): \Generator
     {
-        yield ['/about/php/content', self::ROLE_USER, Response::HTTP_FORBIDDEN];
-        yield ['/about/php/content', self::ROLE_ADMIN];
-        yield ['/about/php/content', self::ROLE_SUPER_ADMIN];
-        yield ['/about/php/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN];
-        yield ['/about/php/excel', self::ROLE_ADMIN];
-        yield ['/about/php/excel', self::ROLE_SUPER_ADMIN];
-        yield ['/about/php/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN];
-        yield ['/about/php/pdf', self::ROLE_ADMIN];
-        yield ['/about/php/pdf', self::ROLE_SUPER_ADMIN];
+        $routes = [
+            '/about/php',
+            '/about/php/content',
+            '/about/php/excel',
+            '/about/php/pdf',
+        ];
+        foreach ($routes as $route) {
+            yield [$route, self::ROLE_USER, Response::HTTP_FORBIDDEN];
+            yield [$route, self::ROLE_ADMIN];
+            yield [$route, self::ROLE_SUPER_ADMIN];
+        }
     }
 }

@@ -73,8 +73,8 @@
             href: href,
             text: text,
             class: ('dropdown-item rowlink-skip ' ~ class)|trim,
-            icon: icon ? icon ~ ' fa-fw' : null,
-            parameters: parameters) -}}
+        icon: icon ? icon ~ ' fa-fw' : null,
+        parameters: parameters) -}}
     </li>
 {%- endmacro dropdownItemExternal %}
 
@@ -123,8 +123,7 @@
             id: id,
             title: 'common.actions'|trans,
             'data-bs-toggle': 'dropdown',
-            'aria-expanded': false})
-    }}
+            'aria-expanded': false}) }}
 {%- endmacro dropdownEllipsis %}
 
 {% macro homepage() -%}
@@ -153,8 +152,7 @@
         icon: icon,
         inline: true,
         attributes: attributes,
-        type: 'submit')
-    }}
+        type: 'submit') }}
 {%- endmacro button_submit %}
 
 {% macro button_ok(href, text = 'common.button_ok', class = 'btn btn-ok btn-form btn-primary', icon = 'fa-solid fa-check') -%}
@@ -303,6 +301,5 @@
             'data-success': 'common.copy_success'|trans,
             'data-error': 'common.copy_error'|trans,
             'data-hide-modal': hide_modal,
-            'data-clipboard-target': target})
-    }}
+            'data-clipboard-target': target}) }}
 {%- endmacro button_copy %}

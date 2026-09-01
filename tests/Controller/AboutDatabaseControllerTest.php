@@ -20,14 +20,16 @@ final class AboutDatabaseControllerTest extends ControllerTestCase
     #[\Override]
     public static function getRoutes(): \Generator
     {
-        yield ['/about/database/content', self::ROLE_USER, Response::HTTP_FORBIDDEN];
-        yield ['/about/database/content', self::ROLE_ADMIN];
-        yield ['/about/database/content', self::ROLE_SUPER_ADMIN];
-        yield ['/about/database/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN];
-        yield ['/about/database/excel', self::ROLE_ADMIN];
-        yield ['/about/database/excel', self::ROLE_SUPER_ADMIN];
-        yield ['/about/database/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN];
-        yield ['/about/database/pdf', self::ROLE_ADMIN];
-        yield ['/about/database/pdf', self::ROLE_SUPER_ADMIN];
+        $routes = [
+            '/about/database',
+            '/about/database/content',
+            '/about/database/excel',
+            '/about/database/pdf',
+        ];
+        foreach ($routes as $route) {
+            yield [$route, self::ROLE_USER, Response::HTTP_FORBIDDEN];
+            yield [$route, self::ROLE_ADMIN];
+            yield [$route, self::ROLE_SUPER_ADMIN];
+        }
     }
 }

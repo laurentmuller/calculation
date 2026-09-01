@@ -15,6 +15,7 @@ namespace App\Controller;
 
 use App\Attribute\ExcelRoute;
 use App\Attribute\GetRoute;
+use App\Attribute\IndexRoute;
 use App\Attribute\IsAdmin;
 use App\Attribute\PdfRoute;
 use App\Report\DatabaseReport;
@@ -26,6 +27,7 @@ use App\Spreadsheet\DatabaseDocument;
 use App\Traits\RenderPdfDocumentTrait;
 use App\Traits\RenderSpreadsheetDocumentTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
@@ -50,6 +52,12 @@ class AboutDatabaseController extends AbstractController
     public function excel(DatabaseInfoService $service): SpreadsheetResponse
     {
         return $this->renderSpreadsheetDocument(new DatabaseDocument($this, $service));
+    }
+
+    #[IndexRoute]
+    public function index(DatabaseInfoService $service): Response
+    {
+        return $this->render('about/about_database.html.twig', ['service' => $service]);
     }
 
     #[PdfRoute]

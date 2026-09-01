@@ -184,7 +184,7 @@ class OptimizePngCommand
     {
         $progressBar = $io->createProgressBar($count);
         $progressBar->setFormat('%current%/%max% [%bar%] %message%');
-        $progressBar->setMessage('Processing images...');
+        $progressBar->setMessage('Processing images');
 
         return $progressBar;
     }

@@ -1,6 +1,6 @@
 {% extends 'cards/card_base.html.twig' %}
-{% from 'about/_about_macro.html.twig' import card %}
-{% from 'macros/_icons.html.twig' import link, homepage, button_pdf, button_word %}
+{% from 'about/_about_macro.html.twig' import card, item_link_symfony, item_link_php, item_link_database %}
+{% from 'macros/_icons.html.twig' import link, homepage, button, link_pdf, link_word %}
 {# parameters #}
 {%- set title = 'index.menu_info' -%}
 {%- set title_icon = 'fa-solid fa-info-circle' -%}
@@ -8,7 +8,14 @@
 {% set customer = application_parameters.customerInformation %}
 {# class #}
 {% block card_container_class '' %}
+{% block card_header_class ' d-flex-wrap-center' %}
 {% block card_footer_class ' d-none' %}
+{# card title #}
+{% block card_title %}
+    {{ parent() }}
+    {{ link_pdf('about_pdf') }}
+    {{ link_word('about_word') }}
+{%- endblock card_title %}
 {# card body #}
 {% block card_body %}
     {{ include('about/_about_configuration.html.twig', {full_info: true}) }}
@@ -25,20 +32,26 @@
         {{ link(
             href: path('user_comment'),
             text: 'user.comment.title',
-            class: 'btn btn-form btn-secondary',
+            class: 'btn btn-form btn-success',
             icon: 'fa-regular fa-envelope',
             title: 'user.comment.description',
             inline: true) }}
-        {{ button_pdf('about_pdf') }}
-        {{ button_word('about_word') }}
         {% if is_granted(ROLE_ADMIN) %}
-            {{ link(
-                href: path('about_advanced'),
+            {{ button(
                 text: 'about.advanced.action',
-                class: 'btn btn-form btn-outline-secondary',
+                class: 'btn btn-outline-secondary dropdown-toggle',
                 icon: 'fa-solid fa-screwdriver-wrench',
-                title: 'about.advanced.title',
-                inline: true) }}
+                attributes: {
+                    title: 'about.advanced.title'|trans,
+                    'data-bs-toggle': 'dropdown',
+                    'aria-expanded': false,
+                },
+            ) }}
+            <ul class="dropdown-menu">
+                {{ item_link_symfony() }}
+                {{ item_link_php() }}
+                {{ item_link_database() }}
+            </ul>
         {% endif %}
     </div>
 {% endblock body %}

@@ -2,7 +2,8 @@
 {% macro card(id, title, pdf_route, excel_route = false, word_route = false) -%}
     {% from 'macros/_icons.html.twig' import link_pdf, link_word, link_excel %}
     <div class="card-header d-flex-wrap-center">
-        <a class="drop-down-icon-left card-title flex-fill" href="#{{ id }}" data-bs-toggle="collapse" aria-expanded="false" title="{{ 'common.expand'|trans }}">
+        <a class="drop-down-icon-left card-title flex-fill" href="#{{ id }}" data-bs-toggle="collapse"
+           aria-expanded="false" title="{{ 'common.expand'|trans }}">
             {{- title|trans -}}
         </a>
         {{ link_pdf(pdf_route, 'fa-fw') }}
@@ -16,7 +17,8 @@
     <div class="card-body collapse" id="{{ id }}" data-bs-parent="#aboutAccordion">
         <div class="collapse-content" data-url="{{ path('about_' ~ id ~ '_content') }}">
             <div class="alert py-0 mb-0" role="alert">
-                <span class="spinner-border spinner-border-sm me-2" role="status"></span><span>{{ 'about.load.message'|trans }}</span>
+                <span class="spinner-border spinner-border-sm me-2"
+                      role="status"></span><span>{{ 'about.load.message'|trans }}</span>
             </div>
         </div>
     </div>
@@ -62,9 +64,43 @@
 
 {% macro headerLink(url, version, icon) -%}
     <div class="border-bottom pb-1">
-        <a href="https://{{ url }}" target="_blank" rel="noopener noreferrer" title="{{ 'about.link_homepage'|trans }}" class="h1 d-flex flex-column">
+        <a href="https://{{ url }}" target="_blank" rel="noopener noreferrer" title="{{ 'about.link_homepage'|trans }}"
+           class="h1 d-flex flex-column">
             {{- source('about/' ~ icon ~ '.svg') }}
             <span>{{ 'about.version'|trans({'%version%': version}) -}}</span>
         </a>
     </div>
 {%- endmacro headerLink %}
+
+{% macro item_link_symfony() %}
+    {% from 'macros/_icons.html.twig' import link %}
+    <li>
+        {{- link(
+            href: path('about_symfony_index'),
+            text: 'about.symfony.title',
+            class: 'dropdown-item',
+            icon: 'fa-brands fa-symfony') -}}
+    </li>
+{%- endmacro item_link_symfony %}
+
+{% macro item_link_php() %}
+    {% from 'macros/_icons.html.twig' import link %}
+    <li>
+        {{- link(
+            href: path('about_php_index'),
+            text: 'about.php.title',
+            class: 'dropdown-item',
+            icon: 'fa-brands fa-php') -}}
+    </li>
+{%- endmacro item_link_php %}
+
+{% macro item_link_database() %}
+    {% from 'macros/_icons.html.twig' import link %}
+    <li>
+        {{- link(
+            href: path('about_database_index'),
+            text: 'about.database.title',
+            class: 'dropdown-item',
+            icon: 'fa-solid fa-database') }}
+    </li>
+{%- endmacro item_link_database -%}

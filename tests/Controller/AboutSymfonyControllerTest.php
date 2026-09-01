@@ -30,6 +30,7 @@ final class AboutSymfonyControllerTest extends ControllerTestCase
     public static function getRoutes(): \Generator
     {
         $routes = [
+            '/about/symfony',
             '/about/symfony/content',
             '/about/symfony/excel',
             '/about/symfony/pdf',

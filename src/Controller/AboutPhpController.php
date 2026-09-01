@@ -15,6 +15,7 @@ namespace App\Controller;
 
 use App\Attribute\ExcelRoute;
 use App\Attribute\GetRoute;
+use App\Attribute\IndexRoute;
 use App\Attribute\IsAdmin;
 use App\Attribute\PdfRoute;
 use App\Report\PhpIniReport;
@@ -26,6 +27,7 @@ use App\Spreadsheet\PhpIniDocument;
 use App\Traits\RenderPdfDocumentTrait;
 use App\Traits\RenderSpreadsheetDocumentTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
@@ -50,6 +52,12 @@ class AboutPhpController extends AbstractController
     public function excel(PhpInfoService $service): SpreadsheetResponse
     {
         return $this->renderSpreadsheetDocument(new PhpIniDocument($this, $service));
+    }
+
+    #[IndexRoute]
+    public function index(PhpInfoService $service): Response
+    {
+        return $this->render('about/about_php.html.twig', ['info' => $service->getPhpInfo()]);
     }
 
     #[PdfRoute]

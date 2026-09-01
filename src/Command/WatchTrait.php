@@ -23,6 +23,16 @@ trait WatchTrait
 {
     private ?Stopwatch $stopWatch = null;
 
+    protected function formatDuration(float $duration): string
+    {
+        return Helper::formatTime($duration / 1000.0);
+    }
+
+    protected function formatMemory(int $memory): string
+    {
+        return Helper::formatMemory($memory);
+    }
+
     protected function start(): void
     {
         $this->getStopwatch()->start('run');
@@ -35,16 +45,6 @@ trait WatchTrait
         $memory = $this->formatMemory($event->getMemory());
 
         return \sprintf('Duration: %s, Memory: %s', $duration, $memory);
-    }
-
-    private function formatDuration(float $duration): string
-    {
-        return Helper::formatTime($duration / 1000.0);
-    }
-
-    private function formatMemory(int $memory): string
-    {
-        return Helper::formatMemory($memory);
     }
 
     private function getStopwatch(): Stopwatch

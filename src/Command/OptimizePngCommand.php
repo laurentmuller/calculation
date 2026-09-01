@@ -46,6 +46,8 @@ class OptimizePngCommand
         int $level = 7,
         #[Option(description: 'The path to the optipng binary.', name: 'binary', shortcut: 'b')]
         string $binary = '/usr/bin/optipng',
+        #[Option(description: 'Run the command without replace images.', name: 'dry-run', shortcut: 'd')]
+        bool $dryRun = false
     ): int {
         $io->title(\sprintf('Optimize PNG images in "%s"', $source));
 
@@ -65,12 +67,12 @@ class OptimizePngCommand
         $error = 0;
         $updated = 0;
         $unchanged = 0;
+        $totalSourceSize = 0;
+        $totalTargetSize = 0;
 
         $this->start();
         $filesystem = new Filesystem();
         $tempDir = Path::join(\sys_get_temp_dir(), 'optimize-png');
-
-        $io->writeln($tempDir);
 
         try {
             $filesystem->mkdir($tempDir);
@@ -78,34 +80,52 @@ class OptimizePngCommand
             foreach ($finder as $file) {
                 $source = $file->getPathname();
                 $target = Path::join($tempDir, $file->getBasename());
-                $io->writeln($file->getRelativePathname());
 
                 try {
                     $filesystem->copy($source, $target);
                     $command = $this->createCommand($binary, $level, $target);
                     if (!$this->convert($io, $command)) {
+                        $io->writeln(\sprintf('<error>%s ✘</error>', $file->getRelativePathname()));
                         ++$error;
                         continue;
                     }
-                    if (\filesize($source) === \filesize($target)) {
+
+                    $sourceSize = (int) \filesize($source);
+                    $targetSize = (int) \filesize($target);
+                    $totalSourceSize += $sourceSize;
+                    $totalTargetSize += $targetSize;
+                    if ($sourceSize === $targetSize) {
+                        $io->writeln(\sprintf('<comment>%s</comment>', $file->getRelativePathname()));
                         ++$unchanged;
                         continue;
                     }
-                    $filesystem->copy($target, $source);
+
+                    if (!$dryRun) {
+                        $filesystem->copy($target, $source);
+                    }
+                    $io->writeln(\sprintf('<info>%s ✔</info>', $file->getRelativePathname()));
                     ++$updated;
                 } finally {
                     $filesystem->remove($target);
                 }
             }
 
-            $io->success(\sprintf(
-                'Processed: %d, Updated: %d, Unchanged: %d, Error: %d. %s',
+            $deltaSize = $totalTargetSize - $totalSourceSize;
+            $deltaPercent = $totalSourceSize > 0 ? (float) $deltaSize * 100.0 / (float) $totalSourceSize : 0.0;
+            $message = \sprintf(
+                "Files processed: %d, Updated: %d, Unchanged: %d, Error: %d, Size reduction: %s (%0.2f%%).\n%s.",
                 $updated + $unchanged + $error,
                 $updated,
                 $unchanged,
                 $error,
+                $this->formatMemory($deltaSize),
+                $deltaPercent,
                 $this->stop()
-            ));
+            );
+            if ($dryRun) {
+                $message .= "\nDry-run mode enabled (no change applied).";
+            }
+            $io->success($message);
         } finally {
             $filesystem->remove($tempDir);
         }

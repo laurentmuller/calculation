@@ -72,6 +72,24 @@
     </div>
 {%- endmacro headerLink %}
 
+{% macro about_link %}
+    {% from 'macros/_icons.html.twig' import link %}
+    {{ link(
+        href: path('about_index'),
+        text: 'about.title',
+        class: 'btn btn-outline-secondary',
+        icon: 'fa-solid fa-info-circle',
+        inline: true,
+    ) }}
+{%- endmacro about_link %}
+
+{% macro button_toggle_split %}
+    <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split"
+            data-bs-toggle="dropdown" aria-expanded="false">
+        <span class="visually-hidden">{{ 'common.toggle'|trans }}</span>
+    </button>
+{%- endmacro button_toggle_split -%}
+
 {% macro item_link_symfony() %}
     {% from 'macros/_icons.html.twig' import link %}
     <li>

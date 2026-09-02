@@ -1,7 +1,7 @@
 {% extends 'cards/card_base.html.twig' %}
 {# import #}
-{% from 'macros/_icons.html.twig' import homepage, link, link_pdf, link_excel %}
-{% from 'about/_about_macro.html.twig' import item_link_php, item_link_database %}
+{% from 'macros/_icons.html.twig' import homepage, link_pdf, link_excel %}
+{% from 'about/_about_macro.html.twig' import about_link, button_toggle_split, item_link_php, item_link_database %}
 {# parameters #}
 {%- set title = 'about.symfony.title' -%}
 {%- set title_icon = 'fa-brands fa-symfony' -%}
@@ -25,17 +25,8 @@
     {{ parent() }}
     {{ homepage() }}
     <div class="btn-group">
-        {{ link(
-            href: path('about_index'),
-            text: 'about.title',
-            class: 'btn btn-outline-secondary',
-            icon: 'fa-solid fa-info-circle',
-            inline: true,
-        ) }}
-        <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split"
-                data-bs-toggle="dropdown" aria-expanded="false">
-            <span class="visually-hidden">{{ 'common.toggle'|trans }}</span>
-        </button>
+        {{ about_link() }}
+        {{ button_toggle_split() }}
         <ul class="dropdown-menu dropdown-menu-end">
             {{ item_link_php() }}
             {{ item_link_database() }}

@@ -26,6 +26,7 @@
     "require": {
         "php": "^8.3",
         "ext-ctype": "*",
+        "ext-curl": "*",
         "ext-dom": "*",
         "ext-fileinfo": "*",
         "ext-gd": "*",

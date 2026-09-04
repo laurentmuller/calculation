@@ -22,7 +22,6 @@ final class AboutPhpControllerTest extends ControllerTestCase
     {
         $routes = [
             '/about/php',
-            '/about/php/content',
             '/about/php/excel',
             '/about/php/pdf',
         ];

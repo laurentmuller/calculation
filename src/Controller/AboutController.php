@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
-use App\Attribute\IsAdmin;
 use App\Attribute\IsUser;
 use App\Attribute\PdfRoute;
 use App\Attribute\WordRoute;
@@ -63,15 +61,6 @@ class AboutController extends AbstractController
         #[Target(CacheAttributes::CACHE_SYMFONY)]
         private readonly CacheInterface $cache
     ) {
-    }
-
-    #[IsAdmin]
-    #[GetRoute('/advanced', name: 'advanced')]
-    public function advanced(): Response
-    {
-        return $this->render('about/about_advanced.html.twig', [
-            'deploy' => $this->getDeploy(),
-        ]);
     }
 
     #[IndexRoute]

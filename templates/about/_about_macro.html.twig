@@ -2,7 +2,7 @@
 {% macro card(id, title, pdf_route, excel_route = false, word_route = false) -%}
     {% from 'macros/_icons.html.twig' import link_pdf, link_word, link_excel %}
     <div class="card-header d-flex-wrap-center">
-        <a class="drop-down-icon-left card-title flex-fill" href="#{{ id }}" data-bs-toggle="collapse"
+        <a class="drop-down-icon-left card-title" href="#{{ id }}" data-bs-toggle="collapse"
            aria-expanded="false" title="{{ 'common.expand'|trans }}">
             {{- title|trans -}}
         </a>
@@ -63,29 +63,43 @@
 {%- endmacro rowInfoBoolean %}
 
 {% macro headerLink(url, version, icon) -%}
+    {% set attrs = {
+        href: 'https://' ~ url,
+        class: 'h1 d-flex flex-column',
+        title: 'about.link_homepage'|trans,
+        target: '_blank',
+        rel: 'noopener noreferrer',
+    } %}
     <div class="border-bottom pb-1">
-        <a href="https://{{ url }}" target="_blank" rel="noopener noreferrer" title="{{ 'about.link_homepage'|trans }}"
-           class="h1 d-flex flex-column">
-            {{- source('about/' ~ icon ~ '.svg') }}
+        <a {{ html_attr(attrs) }}>
+            {{- source('about/' ~ icon ~ '.svg') -}}
             <span>{{ 'about.version'|trans({'%version%': version}) -}}</span>
         </a>
     </div>
 {%- endmacro headerLink %}
 
-{% macro about_link %}
+{% macro about_link() %}
     {% from 'macros/_icons.html.twig' import link %}
     {{ link(
         href: path('about_index'),
         text: 'about.title',
+        title: 'footer.about_title',
         class: 'btn btn-outline-secondary',
         icon: 'fa-solid fa-info-circle',
         inline: true,
     ) }}
 {%- endmacro about_link %}
 
-{% macro button_toggle_split %}
-    <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split"
-            data-bs-toggle="dropdown" aria-expanded="false">
+{% macro button_toggle_split() %}
+    {% set attrs = {
+        type: 'button',
+        class: 'btn btn-outline-secondary dropdown-toggle dropdown-toggle-split',
+        title: 'about.advanced.title'|trans,
+        'data-bs-toggle': 'dropdown',
+        'data-bs-reference': 'parent',
+        'aria-expanded': false,
+    } %}
+    <button {{ html_attr(attrs) }}>
         <span class="visually-hidden">{{ 'common.toggle'|trans }}</span>
     </button>
 {%- endmacro button_toggle_split -%}

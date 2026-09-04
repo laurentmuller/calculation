@@ -16,7 +16,7 @@
 {%- endblock card_title %}
 {# card body #}
 {% block card_body -%}
-    {{ include('about/php_content.html.twig') }}
+    {{ include('about/content_php.html.twig') }}
 {% endblock card_body %}
 {# card footer #}
 {% block card_footer -%}
@@ -25,7 +25,7 @@
     <div class="btn-group">
         {{ about_link() }}
         {{ button_toggle_split() }}
-        <ul class="dropdown-menu dropdown-menu-end">
+        <ul class="dropdown-menu">
             {{ item_link_symfony() }}
             {{ item_link_database() }}
         </ul>

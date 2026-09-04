@@ -101,10 +101,14 @@ class PhpIniDocument extends AbstractDocument
         WorksheetDocument $sheet,
         int $row,
         string $value,
-        float $size = 11.0
+        float $size = 11.0,
+        ?string $url = null
     ): void {
         $sheet->setRowValues($row, [$value]);
         $sheet->mergeContent(1, 3, $row);
+        if (null !== $url) {
+            $sheet->setCellLink(1, $row, $url);
+        }
         $this->applyBoldStyle($sheet, \sprintf('A%1$d:C%1$d', $row), $size);
     }
 
@@ -166,7 +170,7 @@ class PhpIniDocument extends AbstractDocument
      */
     private function outputModule(WorksheetDocument $sheet, int $row, array $module): int
     {
-        $this->outputBoldEntry($sheet, $row++, $module['name'], 13.0);
+        $this->outputBoldEntry($sheet, $row++, $module['name'], 13.0, $module['url']);
         foreach ($module['groups'] as $group) {
             $row = $this->outputGroup($sheet, $row, $group);
         }

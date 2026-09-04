@@ -20,6 +20,7 @@ use STS\Phpinfo\Models\Group;
 use STS\Phpinfo\Models\Module;
 use STS\Phpinfo\PhpInfo;
 use STS\Phpinfo\Support\Items;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 
 final class PhpInfoServiceTest extends TestCase
 {
@@ -38,7 +39,7 @@ final class PhpInfoServiceTest extends TestCase
         $generalModule = new Module('General', $generalGroups);
 
         $info = new PhpInfo(\PHP_VERSION, new Items([$coreModule, $generalModule]));
-        $service = new PhpInfoService();
+        $service = $this->createService();
         $actual = $service->getPhpInfo($info);
         self::assertCount(2, $actual['modules']);
     }
@@ -52,7 +53,7 @@ final class PhpInfoServiceTest extends TestCase
         $coreModule = new Module('Core', $coreGroups);
 
         $info = new PhpInfo(\PHP_VERSION, new Items([$coreModule]));
-        $service = new PhpInfoService();
+        $service = $this->createService();
         $actual = $service->getPhpInfo($info);
         self::assertCount(1, $actual['modules']);
     }
@@ -81,7 +82,7 @@ final class PhpInfoServiceTest extends TestCase
         );
 
         $groups = new Items([$group]);
-        $module1 = new Module('module', $groups);
+        $module1 = new Module('calendar', $groups);
         $module2 = $this->createVariablesModule();
 
         $modules = new Items([
@@ -89,8 +90,7 @@ final class PhpInfoServiceTest extends TestCase
             $module2,
         ]);
         $info = new PhpInfo(\PHP_VERSION, $modules);
-
-        $service = new PhpInfoService();
+        $service = $this->createService();
         $actual = $service->getPhpInfo($info);
         self::assertSame(\PHP_VERSION, $actual['version']);
         self::assertNotEmpty($actual['modules']);
@@ -106,7 +106,7 @@ final class PhpInfoServiceTest extends TestCase
         );
         $module = new Module('PHP Variables', new Items([$group]));
         $info = new PhpInfo(\PHP_VERSION, new Items([$module]));
-        $service = new PhpInfoService();
+        $service = $this->createService();
         $actual = $service->getPhpInfo($info);
         self::assertCount(1, $actual['modules']);
     }
@@ -115,7 +115,7 @@ final class PhpInfoServiceTest extends TestCase
     {
         $module = new Module('PHP Variables', new Items());
         $info = new PhpInfo(\PHP_VERSION, new Items([$module]));
-        $service = new PhpInfoService();
+        $service = $this->createService();
         $actual = $service->getPhpInfo($info);
         self::assertCount(0, $actual['modules']);
     }
@@ -140,6 +140,11 @@ final class PhpInfoServiceTest extends TestCase
             'Local Value',
             'Master Value',
         ]);
+    }
+
+    private function createService(): PhpInfoService
+    {
+        return new PhpInfoService(new NullAdapter());
     }
 
     private function createVariablesModule(): Module

@@ -5,7 +5,7 @@
     <div class="border-bottom" id="{{ id }}-header">
         {% set attrs = {
             href: '#' ~ id,
-            class: 'drop-down-icon-right d-flex text-body my-1',
+            class: 'drop-down-icon-left d-flex text-body my-1',
             title: 'common.expand'|trans,
             'data-bs-toggle': 'collapse',
             'aria-expanded': 'false',
@@ -108,7 +108,7 @@
     <tr>
         <td class="w-40">{{ route.name }}</td>
         <td class="w-50">{{ route.path }}</td>
-        <td class="text-category">
+        <td class="text-category text-wrap">
             {% for method in route.methods %}
                 {% switch method %}
                 {% case 'GET' %}
@@ -124,14 +124,6 @@
         </td>
     </tr>
 {%- endmacro rowRoute %}
-{% macro headerNameValue() %}
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Value</th>
-    </tr>
-    </thead>
-{% endmacro headerNameValue %}
 {% macro rowDirectory(directory) -%}
     <tr>
         <td class="e">{{ directory.name }}</td>
@@ -159,11 +151,10 @@
     <p class="fw-bold mb-0 p-1 border-bottom">Configuration</p>
     <div id="symfonyAccordion">
         {# parameters #}
-        {{ _self.headerLinkInfo('Parameters', 'parameters') }}
-        <div class="collapse ps-lg-3" id="parameters" aria-labelledby="parameters-header"
+        {{ _self.headerLinkInfo('Parameters', 'parameters', 5) }}
+        <div class="collapse" id="parameters" aria-labelledby="parameters-header"
              data-bs-parent="#symfonyAccordion">
             <table class="table table-sm table-hover mb-0">
-                {{ _self.headerNameValue() }}
                 <tbody>
                 {{ tools.rowInfo('Architecture', symfonyService.architecture) }}
                 {{ tools.rowInfo('Charset', kernelService.charset) }}
@@ -174,11 +165,10 @@
             </table>
         </div>
         {# extensions #}
-        {{ _self.headerLinkInfo('Extensions', 'extensions') }}
-        <div class="collapse ps-lg-3" id="extensions" aria-labelledby="extensions-header"
+        {{ _self.headerLinkInfo('Extensions', 'extensions', 3) }}
+        <div class="collapse" id="extensions" aria-labelledby="extensions-header"
              data-bs-parent="#symfonyAccordion">
             <table class="table table-sm table-hover mb-0">
-                {{ _self.headerNameValue() }}
                 <tbody>
                 {{ tools.rowInfoBoolean('APCu', symfonyService.apcuStatus, symfonyService.apcuEnabled) }}
                 {{ tools.rowInfoBoolean('OPcache', symfonyService.opCacheStatus, symfonyService.opCacheEnabled) }}
@@ -187,8 +177,8 @@
             </table>
         </div>
         {# directories #}
-        {{ _self.headerLinkInfo('Directories', 'directories') }}
-        <div class="collapse ps-lg-3" id="directories" aria-labelledby="directories-header"
+        {{ _self.headerLinkInfo('Directories', 'directories', 4) }}
+        <div class="collapse" id="directories" aria-labelledby="directories-header"
              data-bs-parent="#symfonyAccordion">
             <table class="table table-sm table-hover mb-0">
                 <thead>
@@ -213,7 +203,7 @@
         {%- set bundles = bundleService.bundles -%}
         {% if bundles|length %}
             {{ _self.headerLinkInfo('Bundles', 'bundles', bundles) }}
-            <div class="collapse ps-lg-3" id="bundles" aria-labelledby="bundles-header"
+            <div class="collapse" id="bundles" aria-labelledby="bundles-header"
                  data-bs-parent="#symfonyAccordion">
                 <table class="table table-sm table-hover mb-0">
                     <thead>
@@ -236,7 +226,7 @@
         {%- set packages = packageService.runtimePackages -%}
         {% if packages|length %}
             {{ _self.headerLinkInfo('Packages', 'runtime-packages', packages) }}
-            <div class="accordion-collapse collapse ps-lg-3 table-responsive" id="runtime-packages"
+            <div class="accordion-collapse collapse table-responsive" id="runtime-packages"
                  aria-labelledby="runtime-packages-header" data-bs-parent="#symfonyAccordion">
                 <table class="table table-no-end-line table-sm table-hover mb-0">
                     {{ _self.headerPackage() }}
@@ -252,7 +242,7 @@
         {%- set packages = packageService.debugPackages -%}
         {% if packages|length %}
             {{ _self.headerLinkInfo('Debug Packages', 'dev-packages', packages) }}
-            <div class="accordion-collapse collapse ps-lg-3" id="dev-packages" aria-labelledby="dev-packages-header"
+            <div class="accordion-collapse collapse" id="dev-packages" aria-labelledby="dev-packages-header"
                  data-bs-parent="#symfonyAccordion">
                 <table class="table table-no-end-line table-sm table-hover mb-0">
                     {{ _self.headerPackage() }}
@@ -268,7 +258,7 @@
         {%- set routes = routeService.runtimeRoutes -%}
         {% if routes|length %}
             {{ _self.headerLinkInfo('Routes', 'runtime-routes', routes) }}
-            <div class="accordion-collapse collapse ps-lg-3" id="runtime-routes" aria-labelledby="runtime-routes-header"
+            <div class="accordion-collapse collapse" id="runtime-routes" aria-labelledby="runtime-routes-header"
                  data-bs-parent="#symfonyAccordion">
                 <table class="table table-no-end-line table-sm table-hover mb-0">
                     {{ _self.headerRoute() }}
@@ -284,7 +274,7 @@
         {%- set routes = routeService.debugRoutes -%}
         {% if routes|length %}
             {{ _self.headerLinkInfo('Debug Routes', 'debug-routes', routes) }}
-            <div class="accordion-collapse collapse ps-lg-3" id="debug-routes" aria-labelledby="debug-routes-header"
+            <div class="accordion-collapse collapse" id="debug-routes" aria-labelledby="debug-routes-header"
                  data-bs-parent="#symfonyAccordion">
                 <table class="table table-no-end-line table-sm table-hover mb-0">
                     {{ _self.headerRoute() }}
@@ -298,5 +288,3 @@
         {% endif %}
     </div>
 </div>
-{{ include('dialog/dialog_license.html.twig') }}
-{{ include('dialog/dialog_package.html.twig') }}

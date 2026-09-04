@@ -1,0 +1,44 @@
+{% import 'about/_about_macro.html.twig' as tools %}
+{# content #}
+<div class="phpversion">
+    {{ tools.headerLink('mariadb.org', service.version, 'database') }}
+    {# database #}
+    <p class="fw-bold border-bottom p-1 mb-0">Database</p>
+    <table class="table table-sm table-hover mb-0">
+        <tbody>
+        {% for key, value in service.database %}
+            {{ tools.rowInfo(key, value) }}
+        {% endfor %}
+        </tbody>
+    </table>
+    {# configuration #}
+    {% set attrs = {
+        href: '#database-configuration',
+        class: 'drop-down-icon-left d-flex text-body my-1',
+        title: 'common.expand'|trans,
+        'data-bs-toggle': 'collapse',
+        'aria-expanded': false,
+        'aria-controls': 'database-configuration',
+    } %}
+    <div class="fw-bold border-bottom px-1">
+        <a {{ html_attr(attrs) }}>
+            <span class="flex-fill">Configuration</span>
+            <span class="badge text-bg-secondary rounded-pill lh-sm">{{- service.configuration|integer -}}</span>
+        </a>
+    </div>
+    <div class="collapse" id="database-configuration">
+        <table class="table table-sm table-hover mb-0">
+            <tbody>
+            {% for key, value in service.configuration %}
+                {% if service.enabledValue(value) %}
+                    {{ tools.rowInfoBoolean(key, value, true) }}
+                {% elseif service.disabledValue(value) %}
+                    {{ tools.rowInfoBoolean(key, value, false) }}
+                {% else %}
+                    {{ tools.rowInfo(key, value) }}
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

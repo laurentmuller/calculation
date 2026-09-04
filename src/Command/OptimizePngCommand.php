@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Traits\MathTrait;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Attribute\Option;
@@ -26,12 +27,10 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Process\Process;
 
-/**
- * Command to optimize PNG images.
- */
 #[AsCommand(name: 'app:optimize-png', description: 'Optimize PNG images.')]
 class OptimizePngCommand
 {
+    use MathTrait;
     use WatchTrait;
 
     public function __construct(
@@ -53,13 +52,13 @@ class OptimizePngCommand
     ): int {
         $path = $this->getSourcePath($source);
         if (!\is_dir($path)) {
-            return $this->error($io, 'The source path "%s" is not a directory.', $source);
-        }
-        if (!\is_executable($binary)) {
-            return $this->error($io, 'The optipng binary "%s" is not executable.', $binary);
+            return $this->error($io, 'The source "%s" is not a directory.', $source);
         }
         if (!\in_array($level, \range(0, 7), true)) {
             return $this->error($io, 'The optimization level must be between 0 and 7, "%d" given.', $level);
+        }
+        if (!\is_executable($binary)) {
+            return $this->error($io, 'The optipng binary "%s" is not executable.', $binary);
         }
 
         $io->title(\sprintf('Optimize PNG images in "%s"', $source));
@@ -83,10 +82,11 @@ class OptimizePngCommand
         $this->start();
         $filesystem = new Filesystem();
         $tempDir = Path::join(\sys_get_temp_dir(), 'optimize-png');
-        $progressBar = $this->createProgressBar($io, $count);
 
         try {
             $filesystem->mkdir($tempDir);
+            $progressBar = $this->createProgressBar($io, $count);
+
             /** @var SplFileInfo $file */
             foreach ($progressBar->iterate($finder, $count) as $file) {
                 $source = $file->getPathname();
@@ -123,7 +123,7 @@ class OptimizePngCommand
 
             $this->updateResults($results);
             $message = \sprintf(
-                "File(s) processed: %d, Updated: %d, Unchanged: %d, Error: %d, Size reduction: %s (%0.2f%%).\n%s.",
+                "File(s) processed: %d, Updated: %d, Unchanged: %d, Error: %d, Size reduction: %s (%0.2f %%).\n%s.",
                 $results['total'],
                 $results['updated'],
                 $results['unchanged'],
@@ -183,7 +183,7 @@ class OptimizePngCommand
     private function createProgressBar(SymfonyStyle $io, int $count): ProgressBar
     {
         $progressBar = $io->createProgressBar($count);
-        $progressBar->setFormat('%current%/%max% [%bar%] %message%');
+        $progressBar->setFormat('%current%/%max% [%bar%] %percent:3s%% %message%');
         $progressBar->setMessage('Processing images');
 
         return $progressBar;
@@ -205,7 +205,7 @@ class OptimizePngCommand
     {
         $sourceSize = $results['source_size'];
         $deltaSize = $results['target_size'] - $sourceSize;
-        $deltaPercent = $sourceSize > 0 ? (float) $deltaSize * 100.0 / (float) $sourceSize : 0.0;
+        $deltaPercent = $this->safeDivide((float) $deltaSize * 100.0, (float) $sourceSize);
 
         $results['delta_percent'] = $deltaPercent;
         $results['delta_size'] = $this->formatMemory($deltaSize);

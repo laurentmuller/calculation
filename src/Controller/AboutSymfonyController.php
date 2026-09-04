@@ -63,25 +63,6 @@ class AboutSymfonyController extends AbstractController
         '</h5>' => '</h6>',
     ];
 
-    #[GetRoute(path: '/content', name: 'content')]
-    public function content(
-        BundleInfoService $bundleService,
-        KernelInfoService $kernelService,
-        PackageInfoService $packageService,
-        RouteInfoService $routeService,
-        SymfonyInfoService $symfonyService
-    ): JsonResponse {
-        $content = $this->renderView('about/symfony_content.html.twig', [
-            'kernelService' => $kernelService,
-            'bundleService' => $bundleService,
-            'routeService' => $routeService,
-            'packageService' => $packageService,
-            'symfonyService' => $symfonyService,
-        ]);
-
-        return $this->jsonTrue(['content' => $content]);
-    }
-
     /**
      * Gets the package dependencies (runtime and development).
      */
@@ -92,11 +73,11 @@ class AboutSymfonyController extends AbstractController
         PackageInfoService $service,
     ): JsonResponse {
         if (!$service->hasPackage($name)) {
-            return $this->jsonFalse(['message' => $this->trans('about.package.not_found')]);
+            return $this->getPackageNotFoundResponse();
         }
         $package = $service->getPackage($name);
         if ([] === $package['production'] && [] === $package['development']) {
-            return $this->jsonFalse(['message' => $this->trans('about.package.not_found')]);
+            return $this->getPackageNotFoundResponse();
         }
         $content = $this->renderView('about/symfony_dependency.html.twig', ['package' => $package]);
 
@@ -150,15 +131,15 @@ class AboutSymfonyController extends AbstractController
         PackageInfoService $service,
     ): JsonResponse {
         if (!$service->hasPackage($name)) {
-            return $this->jsonFalse(['message' => $this->trans('about.licence.not_found')]);
+            return $this->getPackageNotFoundResponse();
         }
         $package = $service->getPackage($name);
         if (null === $package['licenseFile']) {
-            return $this->jsonFalse(['message' => $this->trans('about.licence.not_found')]);
+            return $this->getLicenseNotFoundResponse();
         }
         $license = FileUtils::readFile($package['licenseFile']);
         if (null === $license) {
-            return $this->jsonFalse(['message' => $this->trans('about.licence.not_found')]);
+            return $this->getLicenseNotFoundResponse();
         }
         $content = $this->renderView('about/symfony_license.html.twig', [
             'package' => $package,
@@ -189,5 +170,15 @@ class AboutSymfonyController extends AbstractController
         );
 
         return $this->renderPdfDocument($doc);
+    }
+
+    private function getLicenseNotFoundResponse(): JsonResponse
+    {
+        return $this->jsonFalse(['message' => $this->trans('about.licence.not_found')]);
+    }
+
+    private function getPackageNotFoundResponse(): JsonResponse
+    {
+        return $this->jsonFalse(['message' => $this->trans('about.package.not_found')]);
     }
 }

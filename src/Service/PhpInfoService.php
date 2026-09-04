@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Constants\CacheAttributes;
+use App\Traits\CacheKeyTrait;
 use App\Traits\EnablementValueTrait;
 use App\Utils\StringUtils;
 use STS\Phpinfo\Info;
@@ -20,6 +22,8 @@ use STS\Phpinfo\Models\Config;
 use STS\Phpinfo\Models\Group;
 use STS\Phpinfo\Models\Module;
 use STS\Phpinfo\PhpInfo;
+use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Contracts\Cache\CacheInterface;
 
 /**
  * Service to get PHP information.
@@ -42,6 +46,7 @@ use STS\Phpinfo\PhpInfo;
  * @phpstan-type ModuleType = array{
  *     name: string,
  *     groups: GroupType[],
+ *     url: string|null,
  *     size: int
  * }
  * @phpstan-type InfoType = array{
@@ -51,6 +56,7 @@ use STS\Phpinfo\PhpInfo;
  */
 class PhpInfoService
 {
+    use CacheKeyTrait;
     use EnablementValueTrait;
 
     public const int TYPE_COLOR = 0;
@@ -80,6 +86,13 @@ class PhpInfoService
         'MAIN_AUTH_PROFILE_TOKEN=',
         'REMEMBERME=',
     ];
+    private const string URL_INFO = 'https://www.php.net/manual/en/book.%s.php';
+
+    public function __construct(
+        #[Target(CacheAttributes::CACHE_SYMFONY)]
+        private readonly CacheInterface $cache,
+    ) {
+    }
 
     /**
      * @return InfoType
@@ -119,6 +132,14 @@ class PhpInfoService
         );
     }
 
+    private function getModuleUrl(string $name): ?string
+    {
+        return $this->cache->get(
+            $this->cleanKey('php-url-' . $name),
+            fn (): ?string => $this->loadModuleUrl($name)
+        );
+    }
+
     private function isNoneValue(string $value): bool
     {
         return StringUtils::equalIgnoreCase(self::NONE_VALUE, $value);
@@ -135,6 +156,16 @@ class PhpInfoService
             self::REDACTED_NAMES,
             static fn (string $key): bool => StringUtils::containsIgnoreCase($name, $key)
         );
+    }
+
+    private function loadModuleUrl(string $name): ?string
+    {
+        $url = \sprintf(self::URL_INFO, $name);
+        if (CurlService::instance()->isValidUrl($url)) {
+            return $url;
+        }
+
+        return null;
     }
 
     /**
@@ -237,6 +268,7 @@ class PhpInfoService
         $module = [
             'name' => $module->name(),
             'groups' => $this->parseGroups($module),
+            'url' => $this->getModuleUrl($module->name()),
         ];
         $module['size'] = \array_reduce(
             $module['groups'],

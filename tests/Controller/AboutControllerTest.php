@@ -26,10 +26,6 @@ final class AboutControllerTest extends ControllerTestCase
         yield ['/about', self::ROLE_ADMIN];
         yield ['/about', self::ROLE_SUPER_ADMIN];
 
-        yield ['/about/advanced', self::ROLE_USER, Response::HTTP_FORBIDDEN];
-        yield ['/about/advanced', self::ROLE_ADMIN];
-        yield ['/about/advanced', self::ROLE_SUPER_ADMIN];
-
         yield ['/about/pdf', self::ROLE_USER];
         yield ['/about/pdf', self::ROLE_ADMIN];
         yield ['/about/pdf', self::ROLE_SUPER_ADMIN];

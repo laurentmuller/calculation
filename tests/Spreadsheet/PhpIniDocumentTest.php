@@ -42,6 +42,7 @@ final class PhpIniDocumentTest extends TestCase
             'modules' => [
                 [
                     'name' => 'Module',
+                    'url' => 'https://www.php.net/manual/en/module.core.php',
                     'size' => 8,
                     'groups' => [
                         [

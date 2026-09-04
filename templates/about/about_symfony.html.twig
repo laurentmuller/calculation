@@ -16,9 +16,20 @@
 {%- endblock card_title %}
 {# card body #}
 {% block card_body -%}
-    <div id="aboutAccordion">
-        {{ include('about/symfony_content.html.twig') }}
+    {% set attrs = {
+        id: 'configuration',
+        class: 'phpversion',
+        'data-collapse': 'common.collapse'|trans,
+        'data-expand': 'common.expand'|trans,
+        'data-error': 'about.load.error'|trans,
+    } %}
+    <div {{ html_attr(attrs) }}>
+        <div id="aboutAccordion">
+            {{ include('about/content_symfony.html.twig') }}
+        </div>
     </div>
+    {{ include('dialog/dialog_license.html.twig') }}
+    {{ include('dialog/dialog_package.html.twig') }}
 {% endblock card_body %}
 {# card footer #}
 {% block card_footer -%}
@@ -27,7 +38,7 @@
     <div class="btn-group">
         {{ about_link() }}
         {{ button_toggle_split() }}
-        <ul class="dropdown-menu dropdown-menu-end">
+        <ul class="dropdown-menu">
             {{ item_link_php() }}
             {{ item_link_database() }}
         </ul>

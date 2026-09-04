@@ -22,7 +22,6 @@ final class AboutDatabaseControllerTest extends ControllerTestCase
     {
         $routes = [
             '/about/database',
-            '/about/database/content',
             '/about/database/excel',
             '/about/database/pdf',
         ];

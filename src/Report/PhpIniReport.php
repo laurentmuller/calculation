@@ -284,7 +284,8 @@ class PhpIniReport extends AbstractReport
             style: $this->createRowStyle(true)->setFontSize(11.0),
             text: $module['name'],
             border: PdfBorder::bottom(),
-            move: PdfMove::NEW_LINE
+            move: PdfMove::NEW_LINE,
+            link: $module['url']
         );
         foreach ($module['groups'] as $group) {
             $this->outputGroup($group);

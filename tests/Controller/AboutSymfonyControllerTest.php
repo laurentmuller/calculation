@@ -31,7 +31,6 @@ final class AboutSymfonyControllerTest extends ControllerTestCase
     {
         $routes = [
             '/about/symfony',
-            '/about/symfony/content',
             '/about/symfony/excel',
             '/about/symfony/pdf',
         ];

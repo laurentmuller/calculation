@@ -22,6 +22,7 @@ about:
         title: Configuration de MariaDB
     php:
         title: Configuration de PHP
+        link_doc: Accéder à la documentation PHP
     symfony:
         title: Configuration de Symfony
     policy:

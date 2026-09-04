@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Attribute\ExcelRoute;
-use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
 use App\Attribute\IsAdmin;
 use App\Attribute\PdfRoute;
@@ -26,7 +25,6 @@ use App\Service\PhpInfoService;
 use App\Spreadsheet\PhpIniDocument;
 use App\Traits\RenderPdfDocumentTrait;
 use App\Traits\RenderSpreadsheetDocumentTrait;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -39,14 +37,6 @@ class AboutPhpController extends AbstractController
 {
     use RenderPdfDocumentTrait;
     use RenderSpreadsheetDocumentTrait;
-
-    #[GetRoute(path: '/content', name: 'content')]
-    public function content(PhpInfoService $service): JsonResponse
-    {
-        $content = $this->renderView('about/php_content.html.twig', ['info' => $service->getPhpInfo()]);
-
-        return $this->jsonTrue(['content' => $content]);
-    }
 
     #[ExcelRoute]
     public function excel(PhpInfoService $service): SpreadsheetResponse

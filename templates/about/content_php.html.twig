@@ -1,3 +1,4 @@
+{% from 'macros/_icons.html.twig' import linkExternal %}
 {% from 'about/_about_macro.html.twig' import headerLink %}
 {# macros #}
 {% macro output_entry_attr(entry, colspan = null) -%}
@@ -12,7 +13,7 @@
             entry.type === constant('App\\Service\\PhpInfoService::TYPE_REDACTED') ? 'text-secondary' : null,
         ],
         style: {
-            color: entry.type === constant('App\\Service\\PhpInfoService::TYPE_COLOR') ? entry.value,
+            color: entry.type === constant('App\\Service\\PhpInfoService::TYPE_COLOR') ? entry.value : null,
         },
     }) -}}
 {%- endmacro output_entry_attr %}
@@ -54,18 +55,30 @@
             {% set attrs = {
                 id: header_id,
                 href: '#' ~ module_id,
-                class: 'd-flex drop-down-icon-right fw-bold text-body py-1 mb-1 border-bottom',
+                class: 'd-flex drop-down-icon-left fw-bold text-body py-1',
                 title: (visible ? 'common.collapse' : 'common.expand')|trans,
                 'data-bs-toggle': 'collapse',
                 'aria-controls': module_id,
                 'aria-expanded': visible,
             } %}
-            <a {{ html_attr(attrs) }}>
-                <span class="flex-fill">{{ module.name }}</span>
-                {% if module.size %}
-                    <span class="badge rounded-pill text-bg-secondary lh-sm">{{ module.size }}</span>
-                {% endif %}
-            </a>
+            <div class="d-flex align-items-center pb-1 mb-1 border-bottom">
+                <a {{ html_attr(attrs) }}>
+                    <span class="flex-fill">{{ module.name }}</span>
+                    {% if module.url %}
+                        {{- linkExternal(
+                            href: module.url,
+                            text: null,
+                            class: 'me-1',
+                            icon: 'fa-solid fa-arrow-up-right-from-square',
+                            title: 'about.php.link_doc',
+                        ) -}}
+                    {% endif %}
+                    {% if module.size %}
+                        <span class="badge rounded-pill text-bg-secondary lh-sm">{{ module.size }}</span>
+                    {% endif %}
+                </a>
+            </div>
+
             {% set attrs = {
                 id: module_id,
                 class: ['collapse', 'ms-2', visible ? 'show' : null],

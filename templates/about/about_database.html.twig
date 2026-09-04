@@ -16,8 +16,16 @@
 {%- endblock card_title %}
 {# card body #}
 {% block card_body -%}
-    <div id="aboutAccordion">
-        {{ include('about/database_content.html.twig') }}
+    {% set attrs = {
+        id: 'configuration',
+        'data-collapse': 'common.collapse'|trans,
+        'data-expand': 'common.expand'|trans,
+        'data-error': 'about.load.error'|trans,
+    } %}
+    <div {{ html_attr(attrs) }}>
+        <div id="aboutAccordion">
+            {{ include('about/content_database.html.twig') }}
+        </div>
     </div>
 {% endblock card_body %}
 {# card footer #}
@@ -27,7 +35,7 @@
     <div class="btn-group">
         {{ about_link() }}
         {{ button_toggle_split() }}
-        <ul class="dropdown-menu dropdown-menu-end">
+        <ul class="dropdown-menu">
             {{ item_link_symfony() }}
             {{ item_link_php() }}
         </ul>
@@ -37,3 +45,14 @@
 {% block stylesheets %}
     {{ asset_css('css/phpinfo.css') }}
 {% endblock stylesheets %}
+{# javascripts #}
+{% block javascripts %}
+    {% if is_js_debug %}
+        {{ parent() }}
+        {{ asset_js('build/clipboard/clipboard.js') }}
+        {{ asset_js('js/plugins/plugin-copy.js') }}
+        {{ asset_js('js/application/about_index.js') }}
+    {%- else -%}
+        {{ asset_js('js/compiled/about_index.js') }}
+    {%- endif -%}
+{% endblock javascripts %}

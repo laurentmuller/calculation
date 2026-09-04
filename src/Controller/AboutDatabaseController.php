@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Attribute\ExcelRoute;
-use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
 use App\Attribute\IsAdmin;
 use App\Attribute\PdfRoute;
@@ -26,7 +25,6 @@ use App\Service\FontAwesomeCellService;
 use App\Spreadsheet\DatabaseDocument;
 use App\Traits\RenderPdfDocumentTrait;
 use App\Traits\RenderSpreadsheetDocumentTrait;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -39,14 +37,6 @@ class AboutDatabaseController extends AbstractController
 {
     use RenderPdfDocumentTrait;
     use RenderSpreadsheetDocumentTrait;
-
-    #[GetRoute(path: '/content', name: 'content')]
-    public function content(DatabaseInfoService $service): JsonResponse
-    {
-        $content = $this->renderView('about/database_content.html.twig', ['service' => $service]);
-
-        return $this->jsonTrue(['content' => $content]);
-    }
 
     #[ExcelRoute]
     public function excel(DatabaseInfoService $service): SpreadsheetResponse

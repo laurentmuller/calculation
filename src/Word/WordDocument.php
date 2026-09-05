@@ -41,7 +41,7 @@ class WordDocument extends PhpWord
     }
 
     /**
-     * Set document title.
+     * Set the document title.
      */
     public function setTitle(?string $title): static
     {

@@ -83,7 +83,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      * The style has the following properties:
      *
      * - Font: Arial 9 points Regular.
-     * - Line width: 0.2 mm.
+     * - Line width: 0.2.
      * - Fill color: White.
      * - Draw color: Black.
      * - Text color: Black.
@@ -99,7 +99,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      * The style has the following properties:
      *
      * - Font: Arial 9 points Bold.
-     * - Line width: 0.2 mm.
+     * - Line width: 0.2.
      * - Fill color: Black.
      * - Draw color: Black.
      * - Text color: White.
@@ -119,7 +119,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      * The style has the following properties:
      *
      * - Font: Arial 9 points Bold.
-     * - Line width: 0.2 mm.
+     * - Line width: 0.2.
      * - Fill color: White.
      * - Draw color: RGB(221, 221, 221).
      * - Text color: Black.
@@ -144,7 +144,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      * The style has the following properties:
      *
      * - Font: Symbol 9 points.
-     * - Line width: 0.2 mm.
+     * - Line width: 0.2.
      * - Fill color: White.
      * - Draw color: RGB(221, 221, 221).
      * - Text color: Black.
@@ -166,7 +166,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      * The style has the following properties:
      *
      * - Font: Arial 9 points Regular.
-     * - Line width: 0.2 mm.
+     * - Line width: 0.2.
      * - Fill color: White.
      * - Draw color: RGB(221, 221, 221).
      * - Text color: Black.
@@ -207,7 +207,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      * The style has the following properties:
      *
      * - Font: Arial 9 points Bold.
-     * - Line width: 0.2 mm.
+     * - Line width: 0.2.
      * - Fill color: RGB(245, 245, 245).
      * - Draw color: RGB(221, 221, 221).
      * - Text color: Black.
@@ -241,7 +241,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      * The style has the following properties:
      *
      * - Font: Arial 9 points Regular.
-     * - Line width: 0.2 mm.
+     * - Line width: 0.2.
      * - Fill color: White.
      * - Draw color: Black.
      * - Text color: Blue.
@@ -253,7 +253,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Gets the no border style.
+     * Gets the default style without a border.
      *
      * The style has the following properties:
      * - Font: Arial 9 points Regular.
@@ -294,7 +294,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      * The default values are:
      *
      * - Font: Arial 9 points Regular.
-     * - Line width: 0.2 mm.
+     * - Line width: 0.2.
      * - Fill color: White.
      * - Draw Color: Black.
      * - Text Color: Black.
@@ -345,11 +345,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Sets the left indent to the default value.
-     *
-     * The default value is:
-     *
-     * - 0 mm.
+     * Sets the left indent to the default value (0).
      */
     public function resetIndent(): static
     {
@@ -357,7 +353,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Sets the line style property to the default value (0.2 mm).
+     * Sets the line style property to the default value (0.2).
      */
     public function resetLine(): static
     {

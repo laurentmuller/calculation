@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Pdf\Html;
 
 /**
- * A specialized chunk for the HTML ordered list (ol).
+ * A specialized chunk for the HTML-ordered list (ol).
  *
  * @see HtmlListType
  */

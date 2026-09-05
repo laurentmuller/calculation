@@ -39,7 +39,7 @@ enum HtmlTag: string
     #[EnumCase(extras: ['font-name' => PdfFontName::COURIER, 'text-color' => '#FF0000'])]
     case CODE = 'code';
 
-    /** The description details tag name. */
+    /** The description detail's tag name. */
     #[EnumCase(extras: ['bottom-margin' => 2.0])]
     case DESCRIPTION_DETAIL = 'dd';
 

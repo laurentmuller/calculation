@@ -87,7 +87,7 @@ class FormHelper
      */
     private array $labelAttributes = [];
 
-    /** The labels prefix. */
+    /** The label's prefix. */
     private readonly ?string $labelPrefix;
 
     /**

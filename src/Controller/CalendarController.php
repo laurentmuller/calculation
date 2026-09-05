@@ -31,7 +31,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 
 /**
- * Controller to display calendar.
+ * Controller to display the calendar.
  */
 #[IsUser]
 #[Route(path: '/calendar', name: 'calendar_')]

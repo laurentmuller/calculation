@@ -46,7 +46,7 @@ class HtmlStyle extends PdfStyle
      * The style has the following properties:
      *
      * - Font: Arial 9 points Regular.
-     * - Line width: 0.2 mm.
+     * - Line width: 0.2.
      * - Fill color: White.
      * - Draw color: Black.
      * - Text color: Black.

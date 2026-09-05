@@ -102,3 +102,18 @@ svg.about-icon {
     height: 4em;
     fill: currentcolor;
 }
+
+.php-spy-content {
+    height: 45vh;
+    overflow-y: auto;
+}
+
+.php-spy-link {
+    display: flex;
+    align-items: center;
+    padding: 0.25rem;
+}
+
+.php-spy-link.active {
+    background-color: var(--bs-secondary-bg);
+}

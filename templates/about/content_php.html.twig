@@ -46,56 +46,50 @@
 {# content #}
 <div class="phpversion">
     {{ headerLink('php.net', info.version, 'php') }}
-    <div id="php-accordion">
+    <div id="php-list-spy" class="row row-cols-1 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-1 mt-1">
         {% for module in info.modules %}
-            {% set index = loop.index0 %}
-            {% set visible = index === 0 %}
-            {% set header_id = 'module-header-' ~ index %}
-            {% set module_id = 'module-content-' ~ index %}
-            {% set attrs = {
-                id: header_id,
-                href: '#' ~ module_id,
-                class: 'd-flex drop-down-icon-left fw-bold text-body py-1',
-                title: (visible ? 'common.collapse' : 'common.expand')|trans,
-                'data-bs-toggle': 'collapse',
-                'aria-controls': module_id,
-                'aria-expanded': visible,
-            } %}
-            <div class="d-flex align-items-center pb-1 mb-1 border-bottom">
-                <a {{ html_attr(attrs) }}>
-                    <span class="flex-fill">{{ module.name }}</span>
-                    {% if module.url %}
-                        {{- linkExternal(
-                            href: module.url,
-                            text: null,
-                            class: 'me-1',
-                            icon: 'fa-solid fa-arrow-up-right-from-square',
-                            title: 'about.php.link_doc',
-                        ) -}}
-                    {% endif %}
-                    {% if module.size %}
-                        <span class="badge rounded-pill text-bg-secondary lh-sm">{{ module.size }}</span>
-                    {% endif %}
-                </a>
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body p-2">
+                        <a class="php-spy-link text-body" href="#php-item-{{ loop.index }}">
+                            <span class="flex-fill">{{- module.name -}}</span>
+                            {% if module.size -%}
+                                <span class="badge rounded-pill text-bg-secondary lh-sm">{{ module.size }}</span>
+                            {%- endif %}
+                        </a>
+                    </div>
+                </div>
             </div>
-
-            {% set attrs = {
-                id: module_id,
-                class: ['collapse', 'ms-2', visible ? 'show' : null],
-                'data-bs-parent': '#php-accordion',
-                'aria-labelledby': header_id,
-            } %}
-            <div {{ html_attr(attrs) }}>
-                {% for group in module.groups %}
-                    {% if group.name %}
-                        <div class="my-1 fw-bold">{{- group.name }}</div>
-                    {% endif %}
-                    {% if group.note %}
-                        <div class="p-2 bg-body-tertiary small">{{ group.note|nl2br }}</div>
-                    {% endif %}
-                    {{ _self.output_group_configs(group) }}
-                {% endfor %}
+        {% endfor %}
+    </div>
+    {% set attrs = {
+        class: 'php-spy-content scrollbar-thin mt-1',
+        'data-bs-spy': 'scroll',
+        'data-bs-target': '#php-list-spy',
+        tabindex: 0,
+    } %}
+    <div {{ html_attr(attrs) }}>
+        {% for module in info.modules %}
+            <div id="php-item-{{ loop.index }}" class="d-flex align-items-center pb-1 pe-1 border-bottom">
+                <h1 class="flex-fill pb-1">{{ module.name }}</h1>
+                {% if module.url %}
+                    {{- linkExternal(
+                        href: module.url,
+                        text: null,
+                        icon: 'fa-solid fa-arrow-up-right-from-square',
+                        title: 'about.php.link_doc',
+                    ) -}}
+                {% endif %}
             </div>
+            {% for group in module.groups %}
+                {% if group.name %}
+                    <div class="my-1 fw-bold">{{ group.name }}</div>
+                {% endif %}
+                {% if group.note %}
+                    <div class="p-2 bg-body-tertiary small">{{ group.note|nl2br }}</div>
+                {% endif %}
+                {{ _self.output_group_configs(group) }}
+            {% endfor %}
         {% endfor %}
     </div>
 </div>

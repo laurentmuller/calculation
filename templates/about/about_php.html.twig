@@ -6,6 +6,7 @@
 {%- set title = 'about.php.title' -%}
 {%- set title_icon = 'fa-brands fa-php' -%}
 {# class #}
+{% block container_class 'container-fluid' %}
 {% block card_container_class '' %}
 {% block card_header_class ' d-flex-wrap-center' %}
 {# card title #}
@@ -35,3 +36,14 @@
 {% block stylesheets %}
     {{ asset_css('css/phpinfo.css') }}
 {% endblock stylesheets %}
+{# javascripts #}
+{% block javascripts %}
+    {% if is_js_debug %}
+        {{ parent() }}
+        {{ asset_js('build/clipboard/clipboard.js') }}
+        {{ asset_js('js/plugins/plugin-copy.js') }}
+        {{ asset_js('js/application/about_index.js') }}
+    {%- else -%}
+        {{ asset_js('js/compiled/about_index.js') }}
+    {%- endif -%}
+{% endblock javascripts %}

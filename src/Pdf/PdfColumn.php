@@ -89,7 +89,7 @@ class PdfColumn
     }
 
     /**
-     * Create a column with left alignment.
+     * Create a column with the left alignment.
      *
      * @param ?string $text  the column text
      * @param float   $width the column width

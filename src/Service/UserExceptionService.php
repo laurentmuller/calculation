@@ -49,7 +49,7 @@ readonly class UserExceptionService
     }
 
     /**
-     * Translate the given exception, using the security domain.
+     * Translate the given exception using the security domain.
      */
     public function translate(CustomUserMessageAuthenticationException $exception): string
     {

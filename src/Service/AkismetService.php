@@ -48,7 +48,7 @@ class AkismetService extends AbstractHttpClientService
     /** The usage key URI. */
     private const string URI_USAGE = '1.2/usage-limit';
 
-    /** The URI to verify key. */
+    /** The URI to verify the key. */
     private const string URI_VERIFY = '1.1/verify-key';
 
     /** The value returned when the comment is not spam. */

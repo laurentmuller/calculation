@@ -21,7 +21,7 @@ use fpdf\PdfDocument;
  */
 class PdfLine implements PdfDocumentUpdaterInterface
 {
-    /** The default line width (0.2 mm). */
+    /** The default line width (0.2). */
     public const float DEFAULT_WIDTH = 0.2;
 
     /**

@@ -196,7 +196,7 @@ final class DateUtils
      *
      * @return non-empty-array<int, string>
      */
-    public static function getShortWeekdays(string $firstDay = 'monday'): array
+    public static function getShortWeekdays(string $firstDay = 'Monday'): array
     {
         return self::$shortWeekNames[$firstDay] ??= self::getDayNames('eee', $firstDay);
     }
@@ -225,7 +225,7 @@ final class DateUtils
      *
      * @return non-empty-array<int, string>
      */
-    public static function getWeekdays(string $firstDay = 'monday'): array
+    public static function getWeekdays(string $firstDay = 'Monday'): array
     {
         return self::$weekNames[$firstDay] ??= self::getDayNames('eeee', $firstDay);
     }

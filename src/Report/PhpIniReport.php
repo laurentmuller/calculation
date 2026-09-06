@@ -39,8 +39,8 @@ use fpdf\PdfBorder;
 class PhpIniReport extends AbstractReport
 {
     use PdfBooleanCellTrait;
-    private ?PdfStyle $noneValueStyle = null;
 
+    private ?PdfStyle $noneValueStyle = null;
     private ?PdfStyle $noteStyle = null;
     private ?PdfStyle $noValueStyle = null;
 

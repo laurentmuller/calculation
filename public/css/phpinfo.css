@@ -84,23 +84,29 @@
     color: var(--bs-secondary);
 }
 
-.phpversion td.enabled::before {
-    content: '✓';
+.phpversion td.v.enabled::before,
+.phpversion td.v.disabled::before {
     font-weight: bold;
     margin-right: 0.25rem;
+}
+
+.phpversion td.v.enabled::before {
+    content: '✓';
     color: var(--bs-success);
 }
 
 .phpversion td.v.disabled::before {
     content: '✗';
-    font-weight: bold;
-    margin-right: 0.25rem;
 }
 
 svg.about-icon {
     width: 4em;
     height: 4em;
     fill: currentcolor;
+}
+
+#php-list-spy .card-body:has(.php-spy-link.active) {
+    background-color: var(--bs-secondary-bg);
 }
 
 .php-spy-content {
@@ -112,8 +118,4 @@ svg.about-icon {
     display: flex;
     align-items: center;
     padding: 0.25rem;
-}
-
-.php-spy-link.active {
-    background-color: var(--bs-secondary-bg);
 }

@@ -153,7 +153,7 @@ final class DateUtilsTest extends TestCase
 
     public static function getShortWeekdayNames(): \Generator
     {
-        // default (sunday)
+        // default (Sunday)
         yield ['Dim.', 1];
         yield ['Lun.', 2];
         yield ['Mar.', 3];
@@ -161,19 +161,19 @@ final class DateUtilsTest extends TestCase
         yield ['Jeu.', 5];
         yield ['Ven.', 6];
         yield ['Sam.', 7];
-        // monday
-        yield ['Lun.', 1, 'monday'];
-        yield ['Mar.', 2, 'monday'];
-        yield ['Mer.', 3, 'monday'];
-        yield ['Jeu.', 4, 'monday'];
-        yield ['Ven.', 5, 'monday'];
-        yield ['Sam.', 6, 'monday'];
-        yield ['Dim.', 7, 'monday'];
+        // Monday
+        yield ['Lun.', 1, 'Monday'];
+        yield ['Mar.', 2, 'Monday'];
+        yield ['Mer.', 3, 'Monday'];
+        yield ['Jeu.', 4, 'Monday'];
+        yield ['Ven.', 5, 'Monday'];
+        yield ['Sam.', 6, 'Monday'];
+        yield ['Dim.', 7, 'Monday'];
     }
 
     public static function getWeekdayNames(): \Generator
     {
-        // default (sunday)
+        // default (Sunday)
         yield ['Dimanche', 1];
         yield ['Lundi', 2];
         yield ['Mardi', 3];
@@ -181,14 +181,14 @@ final class DateUtilsTest extends TestCase
         yield ['Jeudi', 5];
         yield ['Vendredi', 6];
         yield ['Samedi', 7];
-        // monday
-        yield ['Lundi', 1, 'monday'];
-        yield ['Mardi', 2, 'monday'];
-        yield ['Mercredi', 3, 'monday'];
-        yield ['Jeudi', 4, 'monday'];
-        yield ['Vendredi', 5, 'monday'];
-        yield ['Samedi', 6, 'monday'];
-        yield ['Dimanche', 7, 'monday'];
+        // Monday
+        yield ['Lundi', 1, 'Monday'];
+        yield ['Mardi', 2, 'Monday'];
+        yield ['Mercredi', 3, 'Monday'];
+        yield ['Jeudi', 4, 'Monday'];
+        yield ['Vendredi', 5, 'Monday'];
+        yield ['Samedi', 6, 'Monday'];
+        yield ['Dimanche', 7, 'Monday'];
     }
 
     public static function getWeeks(): \Generator
@@ -401,7 +401,7 @@ final class DateUtilsTest extends TestCase
     }
 
     #[DataProvider('getShortWeekdayNames')]
-    public function testShortWeekdayNames(string $name, int $index, string $firstDay = 'sunday'): void
+    public function testShortWeekdayNames(string $name, int $index, string $firstDay = 'Sunday'): void
     {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
         $values = DateUtils::getShortWeekdays($firstDay);
@@ -442,7 +442,7 @@ final class DateUtilsTest extends TestCase
     }
 
     #[DataProvider('getWeekdayNames')]
-    public function testWeekdayNames(string $name, int $index, string $firstDay = 'sunday'): void
+    public function testWeekdayNames(string $name, int $index, string $firstDay = 'Sunday'): void
     {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
         $values = DateUtils::getWeekdays($firstDay);

@@ -86,7 +86,7 @@
                     <div class="my-1 fw-bold">{{ group.name }}</div>
                 {% endif %}
                 {% if group.note %}
-                    <div class="p-2 bg-body-tertiary small">{{ group.note|nl2br }}</div>
+                    <div class="mt-1 p-2 bg-body-tertiary small">{{ group.note|nl2br }}</div>
                 {% endif %}
                 {{ _self.output_group_configs(group) }}
             {% endfor %}

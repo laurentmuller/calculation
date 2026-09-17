@@ -16,7 +16,7 @@ namespace App\Tests;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\Filesystem\Filesystem;
 
-$logfile = \dirname(__DIR__) . '/var/log/test.log';
+$logfile = __DIR__ . '/var/log/test.log';
 
 if (\file_exists($logfile)) {
     \file_put_contents($logfile, '');

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-$file = __DIR__ . '/var/cache/prod/App_KernelProdContainer.preload.php';
+$file = __DIR__ . '/../var/cache/prod/App_KernelProdContainer.preload.php';
 if (\file_exists($file)) {
     require $file;
 }

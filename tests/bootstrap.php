@@ -16,13 +16,13 @@ namespace App\Tests;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\Filesystem\Filesystem;
 
-$logfile = __DIR__ . '/var/log/test.log';
+$logfile = __DIR__ . '/../var/log/test.log';
 
 if (\file_exists($logfile)) {
     \file_put_contents($logfile, '');
 }
 
-require \dirname(__DIR__) . '/vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 // clear cache
 try {
@@ -32,9 +32,9 @@ try {
     // ignore
 }
 
-$file = \dirname(__DIR__) . '/config/bootstrap.php';
+$file = __DIR__ . '/../config/bootstrap.php';
 if (\file_exists($file)) {
     require $file;
 } elseif (\method_exists(Dotenv::class, 'bootEnv')) {
-    (new Dotenv())->bootEnv(\dirname(__DIR__) . '/.env');
+    (new Dotenv())->bootEnv(__DIR__ . '/../.env');
 }

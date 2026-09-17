@@ -57,7 +57,6 @@ return App::config([
                 $path . 'Kernel.php',
                 $path . 'Calendar',
                 $path . 'Entity',
-                $path . 'Enums',
                 $path . 'Faker',
                 $path . 'Model',
                 $path . 'Pdf',

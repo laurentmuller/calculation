@@ -18,7 +18,7 @@ jobs:
     validate-composer:
         uses: laurentmuller/.github/.github/workflows/validate-composer.yaml@main
 
-    # validate-container:
+    validate-container:
         uses: laurentmuller/.github/.github/workflows/validate-container.yaml@main
 
     validate-translation:

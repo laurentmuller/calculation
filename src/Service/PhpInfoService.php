@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Constants\CacheAttributes;
+use App\Traits\ArrayTrait;
 use App\Traits\CacheKeyTrait;
 use App\Traits\EnablementValueTrait;
 use App\Utils\StringUtils;
@@ -23,6 +24,7 @@ use STS\Phpinfo\Models\Group;
 use STS\Phpinfo\Models\Module;
 use STS\Phpinfo\PhpInfo;
 use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
@@ -56,6 +58,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 class PhpInfoService
 {
+    use ArrayTrait;
     use CacheKeyTrait;
     use EnablementValueTrait;
 
@@ -157,29 +160,12 @@ class PhpInfoService
      */
     private function loadUrls(array $modules): array
     {
-        $names = \array_map(
-            static fn (array $module): string => $module['name'],
-            $modules
-        );
-        $urls = \array_map(
-            static fn (string $name): string => \sprintf(self::URL_INFO, \strtolower($name)),
-            $names
+        $entries = $this->mapToKeyValue(
+            $modules,
+            static fn (array $module): array => [$module['name'] => \sprintf(self::URL_INFO, \strtolower($module['name']))]
         );
 
-        $service = new CurlService();
-        $results = $service->checkMultipleUrls($urls);
-
-        $output = [];
-        $entries = \array_combine($names, $urls);
-        foreach ($results as $url => $value) {
-            $name = \array_find_key($entries, static fn (string $value): bool => $value === $url);
-            if (null === $name) {
-                continue;
-            }
-            $output[$name] = $value ? $url : null;
-        }
-
-        return $output;
+        return $this->parseUrls($entries);
     }
 
     /**
@@ -317,6 +303,60 @@ class PhpInfoService
     }
 
     /**
+     * @param array<string, string> $entries
+     *
+     * @return array<string, ?string>
+     */
+    private function parseUrls(array $entries): array
+    {
+        $options = [
+            \CURLOPT_RETURNTRANSFER => true,
+            \CURLOPT_NOBODY => true,
+            \CURLOPT_TIMEOUT => 5,
+            \CURLOPT_CONNECTTIMEOUT => 3,
+            \CURLOPT_FOLLOWLOCATION => true,
+            \CURLOPT_MAXREDIRS => 3,
+            \CURLOPT_SSL_VERIFYPEER => false,
+            \CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) URL-Checker/1.0',
+        ];
+
+        $handlers = [];
+        $multiHandle = \curl_multi_init();
+        foreach ($entries as $name => $url) {
+            if (false === \filter_var($url, \FILTER_VALIDATE_URL)) {
+                $handlers[$name] = null;
+                continue;
+            }
+            $ch = \curl_init($url);
+            \curl_setopt_array($ch, $options);
+            \curl_multi_add_handle($multiHandle, $ch);
+            $handlers[$name] = $ch;
+        }
+
+        do {
+            $status = \curl_multi_exec($multiHandle, $running);
+            if ($running > 0) {
+                \curl_multi_select($multiHandle);
+            }
+        } while ($running > 0 && \CURLM_OK === $status);
+
+        $results = [];
+        foreach ($handlers as $name => $ch) {
+            if (!$ch instanceof \CurlHandle) {
+                $results[$name] = null;
+                continue;
+            }
+            $code = \curl_getinfo($ch, \CURLINFO_RESPONSE_CODE);
+            $results[$name] = Response::HTTP_OK === $code ? $entries[$name] : null;
+            \curl_multi_remove_handle($multiHandle, $ch);
+            \curl_close($ch);
+        }
+        \curl_multi_close($multiHandle);
+
+        return $results;
+    }
+
+    /**
      * @return EntryType
      */
     private function parseValue(string $name, ?string $value): array
@@ -442,10 +482,9 @@ class PhpInfoService
         $values = $this->cache->get('php-module-url', fn (): array => $this->loadUrls($modules));
         foreach ($values as $name => $url) {
             $key = \array_find_key($modules, static fn (array $module): bool => $module['name'] === $name);
-            if (null === $key) {
-                continue;
+            if (null !== $key) {
+                $modules[$key]['url'] = $url;
             }
-            $modules[$key]['url'] = $url;
         }
     }
 }

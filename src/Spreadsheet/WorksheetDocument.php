@@ -96,9 +96,6 @@ class WorksheetDocument extends Worksheet
         return $this->getStyle($coordinate);
     }
 
-    /**
-     * Get parent or null.
-     */
     #[\Override]
     public function getParent(): ?SpreadsheetDocument
     {
@@ -134,8 +131,6 @@ class WorksheetDocument extends Worksheet
     }
 
     /**
-     * Re-bind parent.
-     *
      * @throws Exception if the given parent is not an instance of WorksheetDocument
      */
     #[\Override]
@@ -534,23 +529,19 @@ class WorksheetDocument extends Worksheet
         return $this;
     }
 
-    /**
-     * Set title.
-     *
-     * @param string $title                       String containing the dimension of this worksheet
-     * @param bool   $updateFormulaCellReferences Flag indicating whether cell references in formulae should
-     *                                            be updated to reflect the new sheet name.
-     *                                            This should be left as the default true, unless you are
-     *                                            certain no formula cells on any worksheet contain
-     *                                            references to this worksheet
-     * @param bool   $validate                    False to skip validation of the new title. WARNING: This should only
-     *                                            be set at parse time (by Readers), where titles can be assumed to be
-     *                                            valid.
-     */
     #[\Override]
-    public function setTitle(string $title, bool $updateFormulaCellReferences = true, bool $validate = true): static
-    {
-        return parent::setTitle($this->validateTitle($title), $updateFormulaCellReferences, $validate);
+    public function setTitle(
+        string $title,
+        bool $updateFormulaCellReferences = true,
+        bool $validate = true,
+        bool $changeChartSheetNames = true
+    ): static {
+        return parent::setTitle(
+            $this->validateTitle($title),
+            $updateFormulaCellReferences,
+            $validate,
+            $changeChartSheetNames
+        );
     }
 
     /**

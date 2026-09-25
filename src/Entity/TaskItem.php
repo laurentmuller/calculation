@@ -16,7 +16,6 @@ namespace App\Entity;
 use App\Interfaces\ComparableInterface;
 use App\Interfaces\ParentTimestampableInterface;
 use App\Interfaces\PositionInterface;
-use App\Interfaces\SortModeInterface;
 use App\Repository\TaskItemRepository;
 use App\Traits\PositionTrait;
 use App\Traits\ValidateMarginsTrait;
@@ -55,7 +54,7 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
-    #[ORM\OrderBy(['minimum' => SortModeInterface::SORT_ASC])]
+    #[ORM\OrderBy(['minimum' => \SortDirection::Ascending])]
     private Collection $margins;
 
     #[Assert\NotBlank]

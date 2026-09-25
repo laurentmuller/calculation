@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Interfaces\ComparableInterface;
-use App\Interfaces\SortModeInterface;
 use App\Repository\TaskRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -51,7 +50,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
-    #[ORM\OrderBy(['position' => SortModeInterface::SORT_ASC])]
+    #[ORM\OrderBy(['position' => \SortDirection::Ascending])]
     private Collection $items;
 
     /** The name. */

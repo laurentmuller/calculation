@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Interfaces\SortModeInterface;
 use App\Interfaces\TimestampableInterface;
 use App\Repository\CalculationRepository;
 use App\Traits\CollectionTrait;
@@ -75,7 +74,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         fetch: self::EXTRA_LAZY,
         orphanRemoval: true
     )]
-    #[ORM\OrderBy(['position' => SortModeInterface::SORT_ASC])]
+    #[ORM\OrderBy(['position' => \SortDirection::Ascending])]
     private Collection $groups;
 
     /** The total of all items. */

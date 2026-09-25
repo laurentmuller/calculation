@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Interfaces\SortModeInterface;
 use App\Repository\GroupRepository;
 use App\Traits\ValidateMarginsTrait;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -46,7 +45,7 @@ class Group extends AbstractCodeEntity
         fetch: self::EXTRA_LAZY,
         orphanRemoval: true
     )]
-    #[ORM\OrderBy(['code' => SortModeInterface::SORT_ASC])]
+    #[ORM\OrderBy(['code' => \SortDirection::Ascending])]
     private Collection $categories;
 
     /**
@@ -62,7 +61,7 @@ class Group extends AbstractCodeEntity
         fetch: self::EXTRA_LAZY,
         orphanRemoval: true
     )]
-    #[ORM\OrderBy(['minimum' => SortModeInterface::SORT_ASC])]
+    #[ORM\OrderBy(['minimum' => \SortDirection::Ascending])]
     private Collection $margins;
 
     public function __construct()

@@ -20,6 +20,24 @@ final class CurlServiceTest extends TestCase
 {
     private const string EXAMPLE_URL = 'https://example.com';
 
+    public function testCheckMultipleUrlsInvalid(): void
+    {
+        $urls = ['fake'];
+        $service = new CurlService();
+        $results = $service->checkMultipleUrls($urls);
+        self::assertCount(1, $results);
+        self::assertSame(['fake' => false], $results);
+    }
+
+    public function testCheckMultipleUrlsValid(): void
+    {
+        $urls = [self::EXAMPLE_URL];
+        $service = new CurlService();
+        $results = $service->checkMultipleUrls($urls);
+        self::assertCount(1, $results);
+        self::assertSame([self::EXAMPLE_URL => true], $results);
+    }
+
     public function testExecute(): void
     {
         $service = CurlService::instance([

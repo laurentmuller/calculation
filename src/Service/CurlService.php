@@ -38,6 +38,60 @@ readonly class CurlService
         \curl_close($this->handle);
     }
 
+    /**
+     * @param string[] $urls
+     *
+     * @return array<string, bool>
+     */
+    public function checkMultipleUrls(array $urls): array
+    {
+        $options = [
+            \CURLOPT_RETURNTRANSFER => true,
+            \CURLOPT_NOBODY => true,
+            \CURLOPT_TIMEOUT => 5,
+            \CURLOPT_CONNECTTIMEOUT => 3,
+            \CURLOPT_FOLLOWLOCATION => true,
+            \CURLOPT_MAXREDIRS => 3,
+            \CURLOPT_SSL_VERIFYPEER => false,
+            \CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) URL-Checker/1.0',
+        ];
+
+        $handlers = [];
+        $multiHandle = \curl_multi_init();
+        foreach ($urls as $url) {
+            if (false === \filter_var($url, \FILTER_VALIDATE_URL)) {
+                $handlers[$url] = false;
+                continue;
+            }
+            $ch = \curl_init($url);
+            \curl_setopt_array($ch, $options);
+            \curl_multi_add_handle($multiHandle, $ch);
+            $handlers[$url] = $ch;
+        }
+
+        do {
+            $status = \curl_multi_exec($multiHandle, $running);
+            if ($running > 0) {
+                \curl_multi_select($multiHandle);
+            }
+        } while ($running > 0 && \CURLM_OK === $status);
+
+        $results = [];
+        foreach ($handlers as $url => $ch) {
+            if (false === $ch) {
+                $results[$url] = false;
+                continue;
+            }
+            $code = \curl_getinfo($ch, \CURLINFO_RESPONSE_CODE);
+            $results[$url] = Response::HTTP_OK === $code;
+            \curl_multi_remove_handle($multiHandle, $ch);
+            \curl_close($ch);
+        }
+        \curl_multi_close($multiHandle);
+
+        return $results;
+    }
+
     public function execute(): bool|string
     {
         return \curl_exec($this->handle);

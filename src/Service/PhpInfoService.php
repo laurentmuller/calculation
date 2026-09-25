@@ -132,14 +132,6 @@ class PhpInfoService
         );
     }
 
-    private function getModuleUrl(string $name): ?string
-    {
-        return $this->cache->get(
-            $this->cleanKey('php-url-' . $name),
-            fn (): ?string => $this->loadModuleUrl($name)
-        );
-    }
-
     private function isNoneValue(string $value): bool
     {
         return StringUtils::equalIgnoreCase(self::NONE_VALUE, $value);
@@ -158,14 +150,36 @@ class PhpInfoService
         );
     }
 
-    private function loadModuleUrl(string $name): ?string
+    /**
+     * @param ModuleType[] $modules
+     *
+     * @return array<string, ?string>
+     */
+    private function loadUrls(array $modules): array
     {
-        $url = \sprintf(self::URL_INFO, $name);
-        if (CurlService::instance()->isValidUrl($url)) {
-            return $url;
+        $names = \array_map(
+            static fn (array $module): string => $module['name'],
+            $modules
+        );
+        $urls = \array_map(
+            static fn (string $name): string => \sprintf(self::URL_INFO, \strtolower($name)),
+            $names
+        );
+
+        $service = new CurlService();
+        $results = $service->checkMultipleUrls($urls);
+
+        $output = [];
+        $entries = \array_combine($names, $urls);
+        foreach ($results as $url => $value) {
+            $name = \array_find_key($entries, static fn (string $value): bool => $value === $url);
+            if (null === $name) {
+                continue;
+            }
+            $output[$name] = $value ? $url : null;
         }
 
-        return null;
+        return $output;
     }
 
     /**
@@ -268,7 +282,7 @@ class PhpInfoService
         $module = [
             'name' => $module->name(),
             'groups' => $this->parseGroups($module),
-            'url' => $this->getModuleUrl($module->name()),
+            'url' => null,
         ];
         $module['size'] = \array_reduce(
             $module['groups'],
@@ -292,6 +306,8 @@ class PhpInfoService
             $this->parseModule(...),
             $info->modules()->toArray()
         );
+
+        $this->updateUrls($modules);
 
         // move Core module after General module
         $this->moveCoreModule($modules);
@@ -416,5 +432,20 @@ class PhpInfoService
         }
 
         return \array_values($groups);
+    }
+
+    /**
+     * @param ModuleType[] $modules
+     */
+    private function updateUrls(array &$modules): void
+    {
+        $values = $this->cache->get('php-module-url', fn (): array => $this->loadUrls($modules));
+        foreach ($values as $name => $url) {
+            $key = \array_find_key($modules, static fn (array $module): bool => $module['name'] === $name);
+            if (null === $key) {
+                continue;
+            }
+            $modules[$key]['url'] = $url;
+        }
     }
 }

@@ -128,7 +128,7 @@
     },
     "config": {
         "platform": {
-            "php": "8.3.31"
+            "php": "8.3.33"
         },
         "preferred-install": {
             "*": "dist"
@@ -180,6 +180,7 @@
         "app-stan": "vendor-bin/phpstan/vendor/bin/phpstan analyse --configuration phpstan.neon --memory-limit 2G",
         "app-rector": "vendor-bin/rector/vendor/bin/rector process --dry-run --config rector.php",
         "app-rector-fix": "vendor-bin/rector/vendor/bin/rector process --config rector.php",
+        "app-rector-validate": "vendor-bin/rector/vendor/bin/rector validate-config",
         "app-twig": "vendor-bin/twig-cs-fixer/vendor/bin/twig-cs-fixer lint --config=.twig-cs-fixer.php",
         "app-twig-fix": "vendor-bin/twig-cs-fixer/vendor/bin/twig-cs-fixer lint --fix --config=.twig-cs-fixer.php",
         "app-markdown": "markdownlint-cli2",

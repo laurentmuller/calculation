@@ -16,7 +16,6 @@ namespace App\Entity;
 use App\Interfaces\ComparableInterface;
 use App\Interfaces\ParentTimestampableInterface;
 use App\Interfaces\PositionInterface;
-use App\Interfaces\SortModeInterface;
 use App\Repository\CalculationGroupRepository;
 use App\Traits\CollectionTrait;
 use App\Traits\PositionTrait;
@@ -62,7 +61,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
-    #[ORM\OrderBy(['position' => SortModeInterface::SORT_ASC])]
+    #[ORM\OrderBy(['position' => \SortDirection::Ascending])]
     private Collection $categories;
 
     /** The code. */

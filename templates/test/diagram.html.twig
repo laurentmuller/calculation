@@ -21,13 +21,16 @@
                 {% endfor %}
             </select>
             {{- button(
+                text: null,
                 class: 'btn btn-outline-secondary btn-zoom-in',
                 icon: 'fa-solid fa-magnifying-glass-plus',
                 inline: false,
                 attributes: {title: 'diagram.zoom_in'|trans})
             -}}
             {{- button(
+                text: null,
                 class: 'btn btn-outline-secondary btn-zoom dropdown-toggle',
+                icon: null,
                 attributes: {
                     title: 'diagram.zoom'|trans,
                     'data-bs-toggle': 'dropdown',
@@ -35,18 +38,21 @@
                     'aria-expanded': 'false'})
             -}}
             {{- button(
+                text: null,
                 class: 'btn btn-outline-secondary btn-zoom-out',
                 icon: 'fa-solid fa-magnifying-glass-minus',
                 inline: false,
                 attributes: {title: 'diagram.zoom_out'|trans})
             -}}
             {{- button(
+                text: null,
                 class: 'btn btn-outline-secondary btn-reset',
                 icon: 'fa-solid fa-arrows-to-dot',
                 inline: false,
                 attributes: {title: 'diagram.reset'|trans})
             -}}
             {{- button(
+                text: null,
                 class: 'btn btn-outline-secondary btn-code',
                 icon: 'fa-solid fa-code',
                 inline: false,
@@ -60,6 +66,7 @@
                     <input id="rangeZoom" type="range" class="form-range range-zoom border rounded-pill px-1 py-2"
                            aria-label="{{ 'diagram.zoom'|trans }}">
                     {{- button(
+                        text: null,
                         class: 'btn btn-sm btn-link btn-reset-zoom nav-link',
                         icon: 'fa-solid fa-rotate-left',
                         attributes: {title: 'diagram.reset_zoom'|trans})

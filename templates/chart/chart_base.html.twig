@@ -34,7 +34,7 @@
     <div class="d-flex-wrap">
         {{ homepage() }}
         {% if is_granted(PERMISSION_EXPORT, ENTITY_CALCULATION) %}
-            {{ button_pdf(pdf_route, pdf_params|default({})) }}
+            {{ button_pdf(pdf_route) }}
         {% endif %}
         {{ sitemap() }}
     </div>

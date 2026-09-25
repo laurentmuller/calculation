@@ -66,6 +66,7 @@
     {% from 'macros/_icons.html.twig' import link %}
     {{ link(
         href: path('help_index'),
+        text: null,
         class: 'btn btn-outline-secondary',
         icon: 'fa-solid fa-home',
         title: 'help.home_menu') }}
@@ -80,6 +81,7 @@
     {% from 'macros/_icons.html.twig' import link %}
     {{ link(
         href: path('help_dialogs'),
+        text: null,
         class: 'btn btn-outline-secondary',
         icon: 'fa-solid fa-file-code',
         title: 'help.dialog_menu') }}
@@ -89,6 +91,7 @@
     {% from 'macros/_icons.html.twig' import link %}
     {{ link(
         href: path('help_entities'),
+        text: null,
         class: 'btn btn-outline-secondary',
         icon: 'fa-solid fa-database',
         title: 'help.entity_menu') }}

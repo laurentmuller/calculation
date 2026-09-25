@@ -1,5 +1,5 @@
 {# macros for icons, links and navigation entries #}
-{% macro icon(icon, text, parameters = [], inline = false) -%}
+{% macro icon(icon, text = null, parameters = [], inline = false) -%}
     {%- if icon -%}
         {%- if text and not inline -%}
             {%- set icon = icon ~ ' me-1' -%}
@@ -15,7 +15,7 @@
     {%- endif %}
 {%- endmacro icon %}
 
-{% macro link(href, text, class, icon = null, title = null, parameters = [], inline = false) -%}
+{% macro link(href, text, class = null, icon = null, title = null, parameters = [], inline = false) -%}
     {% set attrs = {
         href: href,
         role: (class and 'btn' in class) ? 'button' : null,
@@ -30,7 +30,7 @@
     </a>
 {%- endmacro link %}
 
-{% macro linkExternal(href, text, class, icon = null, title = null, parameters = [], inline = false) -%}
+{% macro linkExternal(href, text, class = null, icon = null, title = null, parameters = [], inline = false) -%}
     {% set attrs = {
         href: href,
         target: '_blank',
@@ -167,8 +167,8 @@
 {% macro button_cancel(href, text = 'common.button_cancel', class = 'btn btn-cancel btn-form btn-secondary') -%}
     {{- _self.link(
         href: href,
-        icon: 'fa-solid fa-xmark',
         text: text,
+        icon: 'fa-solid fa-xmark',
         class: class,
         inline: true) -}}
 {%- endmacro button_cancel %}
@@ -176,6 +176,7 @@
 {% macro link_pdf(route, class = null) -%}
     {{- _self.linkExternal(
         href: path(route),
+        text: null,
         class: class,
         icon: ICON_PDF,
         title: 'common.button_export_pdf',
@@ -195,6 +196,7 @@
 {% macro link_excel(route, class = null) -%}
     {{ _self.linkExternal(
         href: path(route),
+        text: null,
         class: class,
         icon: ICON_EXCEL,
         title: 'common.button_export_excel',
@@ -214,6 +216,7 @@
 {% macro link_word(route, class = null) -%}
     {{- _self.linkExternal(
         href: path(route),
+        text: null,
         class: class,
         icon: ICON_WORD,
         title: 'common.button_export_word',

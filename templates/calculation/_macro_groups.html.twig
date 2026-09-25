@@ -1,5 +1,5 @@
 {# Macro for calculation groups #}
-{% macro outputGroupRow(group, editable, first, last) -%}
+{% macro outputGroupRow(group, editable, first = false, last = false) -%}
 {% from 'macros/_icons.html.twig' import dropdownEllipsis, dropdownSeparator, dropdownItemButton %}
 {% from 'calculation/_macro_categories.html.twig' import outputCategoryRow %}
 {# head #}

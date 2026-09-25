@@ -17,6 +17,7 @@
         {%- if add_route -%}
             {{- link(
                 href: path(add_route, {caller: path(app.current_route)}),
+                text: null,
                 icon: 'fa-solid fa-pen-to-square fa-fw',
                 title: entity ~ '.add.title') -}}
         {%- endif -%}

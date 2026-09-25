@@ -9079,16 +9079,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v3.29.0",
+            "version": "v3.30.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "45a3c6e9224c3377a39c7b150bb29d5d97d2c75d"
+                "reference": "8c737079b726af72ff8ef3c595be9f6a810ea1ef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/45a3c6e9224c3377a39c7b150bb29d5d97d2c75d",
-                "reference": "45a3c6e9224c3377a39c7b150bb29d5d97d2c75d",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/8c737079b726af72ff8ef3c595be9f6a810ea1ef",
+                "reference": "8c737079b726af72ff8ef3c595be9f6a810ea1ef",
                 "shasum": ""
             },
             "require": {
@@ -9143,7 +9143,7 @@
             ],
             "support": {
                 "issues": "https://github.com/twigphp/Twig/issues",
-                "source": "https://github.com/twigphp/Twig/tree/v3.29.0"
+                "source": "https://github.com/twigphp/Twig/tree/v3.30.0"
             },
             "funding": [
                 {
@@ -9155,7 +9155,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-09-18T09:10:14+00:00"
+            "time": "2026-09-25T13:20:01+00:00"
         },
         {
             "name": "vich/uploader-bundle",
@@ -10018,16 +10018,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "12.5.35",
+            "version": "12.5.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "345ac22e42cb14cdc7aa8428655d8bb8c82a4aab"
+                "reference": "ddb775588a0ea447d1c9b190c0f29c174ce81d65"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/345ac22e42cb14cdc7aa8428655d8bb8c82a4aab",
-                "reference": "345ac22e42cb14cdc7aa8428655d8bb8c82a4aab",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/ddb775588a0ea447d1c9b190c0f29c174ce81d65",
+                "reference": "ddb775588a0ea447d1c9b190c0f29c174ce81d65",
                 "shasum": ""
             },
             "require": {
@@ -10096,7 +10096,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.5.35"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.5.36"
             },
             "funding": [
                 {
@@ -10104,7 +10104,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2026-09-09T04:48:50+00:00"
+            "time": "2026-09-25T08:47:40+00:00"
         },
         {
             "name": "sebastian/cli-parser",

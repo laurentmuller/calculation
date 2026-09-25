@@ -15,7 +15,7 @@
     {{ _self.row_text(name, value_unit(value, unit, separator)) }}
 {% endmacro row_unit %}
 {% macro row_temp(name, value, unit = '') %}
-    {{ _self.row_text(name, value_temp(value, unit, '')) }}
+    {{ _self.row_text(name, value_temp(value, unit)) }}
 {% endmacro row_temp %}
 {% macro row_volume(name, value, unit = '') %}
     {{ _self.row_unit(name, value|number_format(1), unit, ' ') }}

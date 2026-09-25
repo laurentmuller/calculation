@@ -41,12 +41,14 @@
         {%- if table_path and is_states -%}
             {{ link(
                 href: path('chart_state_index'),
+                text: null,
                 class: 'btn btn-link p-0 d-print-none',
                 icon: 'fa-solid fa-chart-pie fa-fw',
                 title: 'index.menu_chart_title') }}
             {% if is_granted(PERMISSION_EXPORT, ENTITY_CALCULATION) %}
                 {{ linkExternal(
                     href: path('chart_state_pdf'),
+                    text: null,
                     class: 'btn btn-link p-0 d-print-none',
                     icon: ICON_PDF ~ ' fa-fw',
                     title: 'common.button_export_pdf') }}

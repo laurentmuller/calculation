@@ -13,20 +13,18 @@ declare(strict_types=1);
 
 namespace App\Attribute;
 
-use App\Interfaces\SortModeInterface;
+use App\Enums\SortMode;
 
 /**
  * Attribute to define the sort order of a property.
  */
 #[\Attribute(\Attribute::TARGET_PROPERTY)]
-readonly class SortableField implements SortModeInterface
+readonly class SortableField
 {
     /**
-     * @param string $order the field order
-     *
-     * @phpstan-param self::SORT_* $order
+     * @param SortMode $direction the sort direction
      */
-    public function __construct(public string $order = self::SORT_ASC)
+    public function __construct(public SortMode $direction = SortMode::ASC)
     {
     }
 
@@ -35,15 +33,14 @@ readonly class SortableField implements SortModeInterface
      *
      * @template T of object
      *
-     * @param T|class-string<T> $objectOrClass either a string containing the name of
-     *                                         the class to reflect, or an object
+     * @param T|class-string<T> $objectOrClass either a string containing the name of the class to reflect, or an object
      * @param string            $name          the property name to get order for
      *
-     * @return ?string the default order or null if no attribute is found
+     * @return ?SortMode the default sort direction or null if no attribute is found
      *
      * @throws \ReflectionException if the class does not exist
      */
-    public static function getOrder(object|string $objectOrClass, string $name): ?string
+    public static function getDirection(object|string $objectOrClass, string $name): ?SortMode
     {
         $class = new \ReflectionClass($objectOrClass);
         if (!$class->hasProperty($name)) {
@@ -56,6 +53,6 @@ readonly class SortableField implements SortModeInterface
             return null;
         }
 
-        return $attributes[0]->newInstance()->order;
+        return $attributes[0]->newInstance()->direction;
     }
 }

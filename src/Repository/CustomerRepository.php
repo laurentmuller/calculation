@@ -50,7 +50,7 @@ class CustomerRepository extends AbstractRepository
         $fields = $this->concat(self::DEFAULT_ALIAS, self::NAME_COMPANY_FIELDS, 'ZZZ');
 
         return $this->createQueryBuilder(self::DEFAULT_ALIAS)
-            ->orderBy($fields, self::SORT_ASC)
+            ->orderBy($fields, \SortDirection::Ascending)
             ->getQuery()
             ->getResult();
     }

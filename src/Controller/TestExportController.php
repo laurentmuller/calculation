@@ -18,7 +18,6 @@ use App\Attribute\IsSuperAdmin;
 use App\Attribute\PdfRoute;
 use App\Attribute\WordRoute;
 use App\Entity\Customer;
-use App\Interfaces\SortModeInterface;
 use App\Pdf\PdfLabelDocument;
 use App\Pdf\PdfLabelItem;
 use App\Pdf\PdfStyle;
@@ -80,7 +79,7 @@ class TestExportController extends AbstractController
         $sortField = $repository->getSortField(CustomerRepository::NAME_COMPANY_FIELD);
         /** @var Customer[] $customers */
         $customers = $repository->createDefaultQueryBuilder()
-            ->orderBy($sortField, SortModeInterface::SORT_ASC)
+            ->orderBy($sortField, \SortDirection::Ascending)
             ->setMaxResults(40)
             ->getQuery()
             ->getResult();

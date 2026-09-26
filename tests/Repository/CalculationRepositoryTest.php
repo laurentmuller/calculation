@@ -16,7 +16,6 @@ namespace App\Tests\Repository;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\User;
-use App\Interfaces\SortModeInterface;
 use App\Repository\CalculationRepository;
 use App\Tests\DateAssertTrait;
 use App\Tests\Entity\IdTrait;
@@ -180,7 +179,7 @@ final class CalculationRepositoryTest extends AbstractRepositoryTestCase
         $calculation->addProduct($product);
         $this->addEntity($calculation);
 
-        $actual = $this->repository->getItemsDuplicate('stateCode', SortModeInterface::SORT_ASC);
+        $actual = $this->repository->getItemsDuplicate('stateCode', \SortDirection::Ascending);
         self::assertCount(1, $actual);
     }
 

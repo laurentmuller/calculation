@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace App\Tests\Attribute;
 
 use App\Attribute\SortableEntity;
-use App\Interfaces\SortModeInterface;
+use App\Enums\SortMode;
 use PHPUnit\Framework\TestCase;
 
-#[SortableEntity(name: 'descending', order: SortModeInterface::SORT_DESC)]
+#[SortableEntity(name: 'descending', direction: SortMode::DESC)]
 #[SortableEntity(name: 'ascending')]
 final class SortableEntityTest extends TestCase
 {
@@ -33,12 +33,12 @@ final class SortableEntityTest extends TestCase
         self::assertCount(2, $actual);
         self::assertArrayHasKey('ascending', $actual);
         self::assertArrayHasKey('descending', $actual);
-        self::assertSame(SortModeInterface::SORT_ASC, $actual['ascending']);
-        self::assertSame(SortModeInterface::SORT_DESC, $actual['descending']);
+        self::assertSame(SortMode::ASC, $actual['ascending']);
+        self::assertSame(SortMode::DESC, $actual['descending']);
 
         // test order
         $first = \reset($actual);
-        self::assertSame(SortModeInterface::SORT_DESC, $first);
+        self::assertSame(SortMode::DESC, $first);
     }
 
     /**

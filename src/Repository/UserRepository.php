@@ -109,7 +109,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     public function getResettableUsers(): array
     {
         return $this->createResettableQueryBuilder()
-            ->orderBy('e.username')
+            ->orderBy('e.username', \SortDirection::Ascending)
             ->getQuery()
             ->getResult();
     }
@@ -124,7 +124,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
         $field = $this->getSortField('username', $alias);
 
         return $this->createQueryBuilder($alias)
-            ->orderBy($field, self::SORT_ASC);
+            ->orderBy($field, \SortDirection::Ascending);
     }
 
     #[\Override]

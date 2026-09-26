@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Table;
 
-use App\Interfaces\SortModeInterface;
+use App\Enums\SortMode;
 use App\Repository\GlobalMarginRepository;
 use App\Service\IndexService;
 use App\Table\Column;
@@ -70,7 +70,7 @@ final class ColumnTest extends TestCase
         $column = Column::instance();
         $column->setClass('class')
             ->setField('field')
-            ->setOrder('desc')
+            ->setOrder(SortMode::DESC)
             ->setVisible(false)
             ->setNumeric(true)
             ->setSortable(false)
@@ -115,14 +115,6 @@ final class ColumnTest extends TestCase
         self::assertNull($column->getFieldFormatter());
         self::assertNull($column->getStyleFormatter());
         self::assertNull($column->getTitle());
-    }
-
-    public function testInvalidSort(): void
-    {
-        $column = Column::instance();
-        self::assertSame(SortModeInterface::SORT_ASC, $column->getOrder());
-        $column->setOrder('fake');
-        self::assertSame(SortModeInterface::SORT_ASC, $column->getOrder());
     }
 
     public function testMapValueBool(): void

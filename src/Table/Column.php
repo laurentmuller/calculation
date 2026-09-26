@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Table;
 
+use App\Enums\SortMode;
 use App\Interfaces\EntityInterface;
-use App\Interfaces\SortModeInterface;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
 use Symfony\Component\PropertyAccess\Exception\ExceptionInterface;
@@ -26,10 +26,12 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
  *
  * @phpstan-type EntityType = EntityInterface|array{id: int, ...}
  */
-class Column implements \Stringable, SortModeInterface
+class Column implements \Stringable
 {
     /** The property name of the field formatter. */
     private const string FIELD_FORMATTER = 'fieldFormatter';
+    /** The property name of the field order. */
+    private const string FIELD_ORDER = 'order';
 
     /** The shared property accessor to map JSON columns or values. */
     private static ?PropertyAccessorInterface $accessor = null;
@@ -59,12 +61,8 @@ class Column implements \Stringable, SortModeInterface
     /** The value indicating if this column is displayed as a numeric value. */
     private bool $numeric = false;
 
-    /**
-     * The sort order.
-     *
-     * @phpstan-var self::SORT_*
-     */
-    private string $order = self::SORT_ASC;
+    /** The sort order. */
+    private SortMode $order = SortMode::ASC;
 
     /** The property path for an array object. */
     private string $property = '';
@@ -140,7 +138,7 @@ class Column implements \Stringable, SortModeInterface
         $result = [
             'class' => $this->getClass(),
             'field' => $this->getAlias(),
-            'sort-order' => $this->getOrder(),
+            'sort-order' => $this->getOrder()->value,
             'visible' => $this->isVisible(),
             'numeric' => $this->isNumeric(),
             'sortable' => $this->isSortable(),
@@ -187,10 +185,8 @@ class Column implements \Stringable, SortModeInterface
 
     /**
      * Gets the default sorting order.
-     *
-     * @return self::SORT_*
      */
-    public function getOrder(): string
+    public function getOrder(): SortMode
     {
         return $this->order;
     }
@@ -307,14 +303,9 @@ class Column implements \Stringable, SortModeInterface
     /**
      * Sets the default sorting order.
      */
-    public function setOrder(string $order): self
+    public function setOrder(SortMode $order): self
     {
-        $order = \strtolower($order);
-        $this->order = match ($order) {
-            self::SORT_ASC,
-            self::SORT_DESC => $order,
-            default => $this->order,
-        };
+        $this->order = $order;
 
         return $this;
     }
@@ -386,6 +377,10 @@ class Column implements \Stringable, SortModeInterface
     ): self {
         $column = self::instance();
         foreach ($definition as $key => $value) {
+            // special case for the field order
+            if (self::FIELD_ORDER === $key) {
+                $value = SortMode::from((string) $value);
+            }
             // special case for the field formatter
             if (self::FIELD_FORMATTER === $key) {
                 $value = [$parent, $value];

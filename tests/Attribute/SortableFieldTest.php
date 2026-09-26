@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Attribute;
 
 use App\Attribute\SortableField;
-use App\Interfaces\SortModeInterface;
+use App\Enums\SortMode;
 use PHPUnit\Framework\TestCase;
 
 final class SortableFieldTest extends TestCase
@@ -29,9 +29,8 @@ final class SortableFieldTest extends TestCase
             public string $field = '';
         };
 
-        $actual = SortableField::getOrder($testedClass, 'field');
-        $expected = SortModeInterface::SORT_ASC;
-        self::assertSame($expected, $actual);
+        $actual = SortableField::getDirection($testedClass, 'field');
+        self::assertSame(SortMode::ASC, $actual);
     }
 
     /**
@@ -40,13 +39,12 @@ final class SortableFieldTest extends TestCase
     public function testSortDescending(): void
     {
         $testedClass = new class {
-            #[SortableField(SortModeInterface::SORT_DESC)]
+            #[SortableField(SortMode::DESC)]
             public string $field = '';
         };
 
-        $actual = SortableField::getOrder($testedClass, 'field');
-        $expected = SortModeInterface::SORT_DESC;
-        self::assertSame($expected, $actual);
+        $actual = SortableField::getDirection($testedClass, 'field');
+        self::assertSame(SortMode::DESC, $actual);
     }
 
     /**
@@ -58,7 +56,7 @@ final class SortableFieldTest extends TestCase
             public string $field = '';
         };
 
-        $actual = SortableField::getOrder($testedClass, 'fake');
+        $actual = SortableField::getDirection($testedClass, 'fake');
         self::assertNull($actual);
     }
 
@@ -71,7 +69,7 @@ final class SortableFieldTest extends TestCase
             public string $field = '';
         };
 
-        $actual = SortableField::getOrder($testedClass, 'field');
+        $actual = SortableField::getDirection($testedClass, 'field');
         self::assertNull($actual);
     }
 }

@@ -13,15 +13,15 @@ declare(strict_types=1);
 
 namespace App\Table;
 
+use App\Enums\SortMode;
 use App\Enums\TableView;
-use App\Interfaces\SortModeInterface;
 use App\Interfaces\TableInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Contains the data query parameters.
  */
-class DataQuery implements SortModeInterface
+class DataQuery
 {
     /** The callback state (XMLHttpRequest). */
     public bool $callback = false;
@@ -38,13 +38,9 @@ class DataQuery implements SortModeInterface
     #[Assert\PositiveOrZero]
     public int $offset = 0;
 
-    /**
-     * The sort order ('asc' or 'desc').
-     *
-     * @phpstan-var self::SORT_*
-     */
-    #[Assert\Choice(choices: [self::SORT_ASC, self::SORT_DESC])]
-    public string $order = self::SORT_ASC;
+    /** The sort order. */
+    #[Assert\Choice(choices: [SortMode::ASC, SortMode::DESC])]
+    public SortMode $order = SortMode::ASC;
 
     /** @var array<string, int|string> */
     public array $parameters = [];
@@ -87,7 +83,7 @@ class DataQuery implements SortModeInterface
             'page-size' => $this->limit,
             'page-number' => $this->getPage(),
             'sort-name' => $this->sort,
-            'sort-order' => $this->order,
+            'sort-order' => $this->order->value,
             'custom-view-default-view' => $this->isCustomView(),
         ];
     }
@@ -139,7 +135,7 @@ class DataQuery implements SortModeInterface
             TableInterface::PARAM_ID => $this->id,
             TableInterface::PARAM_SEARCH => $this->search,
             TableInterface::PARAM_SORT => $this->sort,
-            TableInterface::PARAM_ORDER => $this->order,
+            TableInterface::PARAM_ORDER => $this->order->value,
             TableInterface::PARAM_OFFSET => $this->offset,
             TableInterface::PARAM_VIEW => $this->view->value,
             TableInterface::PARAM_LIMIT => $this->limit,

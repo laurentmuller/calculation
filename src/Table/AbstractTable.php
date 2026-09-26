@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Table;
 
 use App\Interfaces\EntityInterface;
-use App\Interfaces\SortModeInterface;
 use App\Interfaces\TableInterface;
 use App\Traits\ArrayTrait;
 use App\Utils\FormatUtils;
@@ -25,7 +24,7 @@ use Symfony\Component\Clock\DatePoint;
  *
  * @phpstan-import-type EntityType from Column
  */
-abstract class AbstractTable implements SortModeInterface
+abstract class AbstractTable
 {
     use ArrayTrait;
 

@@ -15,6 +15,7 @@ namespace App\Repository;
 
 use App\Entity\Category;
 use App\Entity\Product;
+use App\Enums\SortMode;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -43,7 +44,7 @@ class ProductRepository extends AbstractCategoryItemRepository
         return $this->createDefaultQueryBuilder('e')
             ->where('e.category = :category')
             ->setParameter('category', $category->getId(), Types::INTEGER)
-            ->orderBy('e.description')
+            ->orderBy('e.description', \SortDirection::Ascending)
             ->getQuery()
             ->getResult();
     }
@@ -55,7 +56,7 @@ class ProductRepository extends AbstractCategoryItemRepository
      */
     public function findByDescription(): array
     {
-        return $this->findBy([], ['description' => self::SORT_ASC]);
+        return $this->findBy([], ['description' => SortMode::ASC->value]);
     }
 
     /**
@@ -70,9 +71,9 @@ class ProductRepository extends AbstractCategoryItemRepository
         $descriptionField = $this->getSortField('description');
 
         return $this->createDefaultQueryBuilder()
-            ->orderBy($groupField)
-            ->addOrderBy($categoryField)
-            ->addOrderBy($descriptionField)
+            ->orderBy($groupField, \SortDirection::Ascending)
+            ->addOrderBy($categoryField, \SortDirection::Ascending)
+            ->addOrderBy($descriptionField, \SortDirection::Ascending)
             ->getQuery()
             ->getResult();
     }
@@ -84,9 +85,9 @@ class ProductRepository extends AbstractCategoryItemRepository
     public function getQueryBuilderByCategory(): QueryBuilder
     {
         return $this->createDefaultQueryBuilder()
-            ->addOrderBy(self::CATEGORY_ALIAS . '.code')
-            ->addOrderBy(self::GROUP_ALIAS . '.code')
-            ->addOrderBy(self::DEFAULT_ALIAS . '.description');
+            ->addOrderBy(self::CATEGORY_ALIAS . '.code', \SortDirection::Ascending)
+            ->addOrderBy(self::GROUP_ALIAS . '.code', \SortDirection::Ascending)
+            ->addOrderBy(self::DEFAULT_ALIAS . '.description', \SortDirection::Ascending);
     }
 
     /**
@@ -119,8 +120,8 @@ class ProductRepository extends AbstractCategoryItemRepository
             ->addSelect("CONCAT(c.code, ' - ', g.code) AS category")
             ->innerJoin('p.category', 'c')
             ->innerJoin('c.group', 'g')
-            ->orderBy('c.code')
-            ->addOrderBy('p.description')
+            ->orderBy('c.code', \SortDirection::Ascending)
+            ->addOrderBy('p.description', \SortDirection::Ascending)
             ->setMaxResults($maxResults);
         $param = ':search';
         $expr = $builder->expr();

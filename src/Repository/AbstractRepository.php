@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Attribute\SortableEntity;
+use App\Enums\SortMode;
 use App\Interfaces\EntityInterface;
-use App\Interfaces\SortModeInterface;
 use App\Utils\StringUtils;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
@@ -30,7 +30,7 @@ use Doctrine\ORM\QueryBuilder;
  *
  * @extends ServiceEntityRepository<TEntity>
  */
-abstract class AbstractRepository extends ServiceEntityRepository implements SortModeInterface
+abstract class AbstractRepository extends ServiceEntityRepository
 {
     /** The alias for the calculation entity. */
     public const string CALCULATION_ALIAS = 'c';
@@ -80,8 +80,8 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sor
     /**
      * Gets the default order of this entity.
      *
-     * @return array<string, string> an array with the field as the key and the order as the value.
-     *                               An empty array is returned if no attribute is found.
+     * @return array<string, SortMode> an array with the field as the key and the order as the value.
+     *                                 An empty array is returned if no attribute is found.
      *
      * @throws \ReflectionException if the class does not exist or if the validation parameter
      *                              is true and a property name is not found
@@ -106,7 +106,7 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sor
         $builder = $this->createQueryBuilder(self::DEFAULT_ALIAS)
             ->select($name)
             ->distinct()
-            ->orderBy($name);
+            ->orderBy($name, \SortDirection::Ascending);
         if (StringUtils::isString($value)) {
             $param = 'search';
             $builder->where(\sprintf('%s LIKE :%s', $name, $param))
@@ -140,14 +140,14 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sor
     /**
      * Creates a search query.
      *
-     * @param array<string, string>  $sortedFields the sorted fields where key is the field name, and value is the sort
-     *                                             mode ('ASC' or 'DESC')
-     * @param array<Criteria|string> $criteria     the filter criteria (the where clause)
-     * @param string                 $alias        the entity alias
-     *
-     * @see AbstractRepository::createDefaultQueryBuilder()
+     * @param array<string, SortMode> $sortedFields the sorted fields where key is the field name, and value
+     *                                              is the sort mode
+     * @param array<Criteria|string>  $criteria     the filter criteria (the where clause)
+     * @param string                  $alias        the entity alias
      *
      * @return Query<null, mixed>
+     *
+     *@see AbstractRepository::createDefaultQueryBuilder()
      */
     public function getSearchQuery(
         array $sortedFields = [],
@@ -164,7 +164,7 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sor
         }
         foreach ($sortedFields as $name => $order) {
             $field = $this->getSortField($name, $alias);
-            $builder->addOrderBy($field, $order);
+            $builder->addOrderBy($field, $order->direction());
         }
 
         return $builder->getQuery();

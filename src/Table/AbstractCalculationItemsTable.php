@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Table;
 
+use App\Enums\SortMode;
 use App\Repository\CalculationRepository;
 use Symfony\Component\Filesystem\Path;
 
@@ -62,14 +63,12 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
     /**
      * Gets the entities.
      *
-     * @param string $orderColumn    the order column
-     * @param string $orderDirection the order direction ('ASC' or 'DESC')
-     *
-     * @phpstan-param self::SORT_* $orderDirection
+     * @param string   $orderColumn    the order column
+     * @param SortMode $orderDirection the order direction
      *
      * @phpstan-return CalculationItemType[]
      */
-    abstract protected function getEntities(string $orderColumn = 'id', string $orderDirection = self::SORT_DESC): array;
+    abstract protected function getEntities(string $orderColumn = 'id', SortMode $orderDirection = SortMode::DESC): array;
 
     /**
      * Compute the number of calculation items.

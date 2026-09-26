@@ -52,7 +52,7 @@ class TaskRepository extends AbstractCategoryItemRepository
     {
         $field = $this->getSortField('name', $alias);
         $builder = $this->createQueryBuilder($alias)
-            ->orderBy($field, self::SORT_ASC);
+            ->orderBy($field, \SortDirection::Ascending);
         if (!$all) {
             $builder->innerJoin($alias . '.items', 'item')
                 ->innerJoin('item.margins', 'margin')

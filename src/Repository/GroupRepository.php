@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Group;
+use App\Enums\SortMode;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\QueryBuilder;
@@ -41,7 +42,7 @@ class GroupRepository extends AbstractRepository
      */
     public function findByCode(): array
     {
-        return $this->findBy([], ['code' => self::SORT_ASC]);
+        return $this->findBy([], ['code' => SortMode::ASC->value]);
     }
 
     /**
@@ -71,7 +72,7 @@ class GroupRepository extends AbstractRepository
             ->addSelect('g.code')
             ->innerJoin('g.categories', 'c')
             ->groupBy('g.id')
-            ->orderBy('g.code', self::SORT_ASC)
+            ->orderBy('g.code', \SortDirection::Ascending)
             ->getQuery()
             ->getArrayResult();
 
@@ -88,7 +89,7 @@ class GroupRepository extends AbstractRepository
         $field = $this->getSortField('code', $alias);
 
         return $this->createQueryBuilder($alias)
-            ->orderBy($field, self::SORT_ASC);
+            ->orderBy($field, \SortDirection::Ascending);
     }
 
     /**

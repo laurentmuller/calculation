@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Table;
 
+use App\Enums\SortMode;
 use App\Enums\TableView;
-use App\Interfaces\SortModeInterface;
 use App\Interfaces\TableInterface;
 use App\Table\DataQuery;
 use PHPUnit\Framework\TestCase;
@@ -30,7 +30,7 @@ final class DataQueryTest extends TestCase
         self::assertSame(0, $actual['page-size']);
         self::assertSame(1, $actual['page-number']);
         self::assertSame('', $actual['sort-name']);
-        self::assertSame(SortModeInterface::SORT_ASC, $actual['sort-order']);
+        self::assertSame(SortMode::ASC->value, $actual['sort-order']);
         self::assertFalse($actual['custom-view-default-view']);
     }
 
@@ -44,7 +44,7 @@ final class DataQueryTest extends TestCase
         self::assertSame(0, $actual->limit);
         self::assertSame('', $actual->search);
         self::assertSame('', $actual->sort);
-        self::assertSame(SortModeInterface::SORT_ASC, $actual->order);
+        self::assertSame(SortMode::ASC, $actual->order);
         self::assertSame('', $actual->prefix);
         self::assertSame(0, $actual->getIntParameter('groupId'));
         self::assertSame(0, $actual->getIntParameter('categoryId'));
@@ -74,7 +74,7 @@ final class DataQueryTest extends TestCase
         self::assertSame(0, $actual[TableInterface::PARAM_ID]);
         self::assertSame('', $actual[TableInterface::PARAM_SEARCH]);
         self::assertSame('', $actual[TableInterface::PARAM_SORT]);
-        self::assertSame(SortModeInterface::SORT_ASC, $actual[TableInterface::PARAM_ORDER]);
+        self::assertSame(SortMode::ASC->value, $actual[TableInterface::PARAM_ORDER]);
         self::assertSame(0, $actual[TableInterface::PARAM_OFFSET]);
         self::assertSame(TableView::DEFAULT->value, $actual[TableInterface::PARAM_VIEW]);
         self::assertSame(0, $actual[TableInterface::PARAM_LIMIT]);

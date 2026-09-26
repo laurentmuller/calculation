@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Resolver;
 
+use App\Enums\SortMode;
 use App\Enums\TableView;
 use App\Interfaces\TableInterface;
 use App\Resolver\DataQueryValueResolver;
@@ -58,7 +59,7 @@ final class DataQueryValueResolverTest extends TestCase
 
         self::assertSame('', $query->search);
         self::assertSame('', $query->sort);
-        self::assertSame('asc', $query->order);
+        self::assertSame(SortMode::ASC, $query->order);
 
         self::assertSame('', $query->prefix);
 
@@ -149,7 +150,7 @@ final class DataQueryValueResolverTest extends TestCase
         self::assertSame(1, $query->id);
         self::assertSame('search', $query->search);
         self::assertSame('sort', $query->sort);
-        self::assertSame('asc', $query->order);
+        self::assertSame(SortMode::ASC, $query->order);
         self::assertSame(10, $query->offset);
         self::assertSame(50, $query->limit);
         self::assertSame(TableView::DEFAULT, $query->view);

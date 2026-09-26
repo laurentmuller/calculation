@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Table;
 
+use App\Enums\SortMode;
 use App\Repository\CalculationRepository;
 use App\Traits\EmptyItemsTrait;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -44,14 +45,12 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
     }
 
     /**
-     * @phpstan-param self::SORT_* $orderDirection
-     *
      * @phpstan-return CalculationItemType[]
      */
     #[\Override]
-    protected function getEntities(string $orderColumn = 'id', string $orderDirection = self::SORT_DESC): array
+    protected function getEntities(string $orderColumn = 'id', SortMode $orderDirection = SortMode::DESC): array
     {
-        return $this->repository->getItemsEmpty($orderColumn, $orderDirection);
+        return $this->repository->getItemsEmpty($orderColumn, $orderDirection->direction());
     }
 
     #[\Override]

@@ -130,8 +130,8 @@ class CalculationStateRepository extends AbstractRepository
         $codeField = $this->getSortField('code', $alias);
 
         return $this->createQueryBuilder($alias)
-            ->orderBy($editField, self::SORT_ASC)
-            ->addOrderBy($codeField, self::SORT_ASC);
+            ->orderBy($editField, \SortDirection::Ascending)
+            ->addOrderBy($codeField, \SortDirection::Ascending);
     }
 
     /**
@@ -144,7 +144,7 @@ class CalculationStateRepository extends AbstractRepository
         $field = $this->getSortField('code', $alias);
 
         return $this->createQueryBuilder($alias)
-            ->orderBy($field, self::SORT_ASC);
+            ->orderBy($field, \SortDirection::Ascending);
     }
 
     #[\Override]
@@ -178,8 +178,8 @@ class CalculationStateRepository extends AbstractRepository
             ))
             ->innerJoin('s.calculations', 'c')
             ->groupBy('s.id')
-            ->orderBy('s.editable', self::SORT_DESC)
-            ->addOrderBy('s.code', self::SORT_ASC);
+            ->orderBy('s.editable', \SortDirection::Ascending)
+            ->addOrderBy('s.code', \SortDirection::Ascending);
 
         /** @var StateChartDataItem[] $items */
         $items = $builder->getQuery()
@@ -226,8 +226,8 @@ class CalculationStateRepository extends AbstractRepository
             ->addSelect('s.editable')
             ->innerJoin('s.calculations', 'c')
             ->groupBy('s.id')
-            ->orderBy('s.editable', self::SORT_DESC)
-            ->addOrderBy('s.code', self::SORT_ASC);
+            ->orderBy('s.editable', \SortDirection::Descending)
+            ->addOrderBy('s.code', \SortDirection::Ascending);
     }
 
     private function getEditableCriteria(bool $editable): Criteria

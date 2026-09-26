@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Repository;
 
 use App\Entity\GlobalMargin;
+use App\Enums\SortMode;
 use App\Repository\GlobalMarginRepository;
 use App\Tests\EntityTrait\GlobalMarginTrait;
 use Doctrine\Common\Collections\Criteria;
@@ -94,7 +95,7 @@ final class GlobalMarginRepositoryTest extends AbstractRepositoryTestCase
     public function testGetSearchQuery(): void
     {
         $sortedFields = [
-            'minimum' => 'ASC',
+            'minimum' => SortMode::ASC,
         ];
         $criteria = [
             'minimum > 0',

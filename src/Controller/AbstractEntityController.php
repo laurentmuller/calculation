@@ -15,8 +15,8 @@ namespace App\Controller;
 
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
+use App\Enums\SortMode;
 use App\Interfaces\EntityInterface;
-use App\Interfaces\SortModeInterface;
 use App\Model\TranslatableFlashMessage;
 use App\Repository\AbstractRepository;
 use App\Response\PdfResponse;
@@ -202,11 +202,10 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Gets the entities to display.
      *
-     * @param array<string, string>|string $sortedFields the sorted fields where key is the field name and value is
-     *                                                   the sort mode ('ASC' or 'DESC') or a string for a single
-     *                                                   ascending sorted field
-     * @param array<Criteria|string>       $criteria     the filter criteria
-     * @param string                       $alias        the entity alias
+     * @param array<string, SortMode>|string $sortedFields the sorted fields where key is the field name, and value
+     *                                                     is the sort mode or a string for a single ascending sorted field
+     * @param array<Criteria|string>         $criteria     the filter criteria
+     * @param string                         $alias        the entity alias
      *
      * @return TEntity[] the entities
      */
@@ -216,7 +215,7 @@ abstract class AbstractEntityController extends AbstractController
         string $alias = AbstractRepository::DEFAULT_ALIAS
     ): array {
         if (\is_string($sortedFields)) {
-            $sortedFields = [$sortedFields => SortModeInterface::SORT_ASC];
+            $sortedFields = [$sortedFields => SortMode::ASC];
         }
 
         return $this->repository->getSearchQuery($sortedFields, $criteria, $alias)

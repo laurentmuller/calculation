@@ -239,8 +239,8 @@ class CalculationRepository extends AbstractRepository
             ->andWhere('c.date <= :to')
             ->setParameter('from', $from, DatePointType::NAME)
             ->setParameter('to', $to, DatePointType::NAME)
-            ->orderBy('c.date', self::SORT_DESC)
-            ->addOrderBy('c.id', self::SORT_DESC)
+            ->orderBy('c.date', \SortDirection::Descending)
+            ->addOrderBy('c.id', \SortDirection::Descending)
             ->getQuery()
             ->getResult();
     }
@@ -256,7 +256,7 @@ class CalculationRepository extends AbstractRepository
         $builder = $this->createQueryBuilder('e')
             ->select($year)
             ->distinct()
-            ->orderBy($year);
+            ->orderBy($year, \SortDirection::Ascending);
 
         return $builder->getQuery()->getSingleColumnResult();
     }
@@ -280,8 +280,8 @@ class CalculationRepository extends AbstractRepository
             ->addSelect($month . ' AS month')
             ->addSelect($year_month . ' AS year_month')
             ->distinct()
-            ->orderBy($year)
-            ->addOrderBy($month);
+            ->orderBy($year, \SortDirection::Ascending)
+            ->addOrderBy($month, \SortDirection::Ascending);
 
         return $builder->getQuery()->getArrayResult();
     }
@@ -305,8 +305,8 @@ class CalculationRepository extends AbstractRepository
             ->addSelect($week . ' AS week')
             ->addSelect($year_week . ' AS year_week')
             ->distinct()
-            ->orderBy($year)
-            ->addOrderBy($week);
+            ->orderBy($year, \SortDirection::Ascending)
+            ->addOrderBy($week, \SortDirection::Ascending);
 
         return $builder->getQuery()->getArrayResult();
     }
@@ -396,15 +396,15 @@ class CalculationRepository extends AbstractRepository
     /**
      * Find duplicate items in the calculations. Items are duplicate if the descriptions are equal.
      *
-     * @param string $orderColumn    the order column
-     * @param string $orderDirection the order direction ('ASC' or 'DESC')
-     *
-     * @phpstan-param self::SORT_* $orderDirection
+     * @param string         $orderColumn    the order column
+     * @param \SortDirection $orderDirection the order direction
      *
      * @phpstan-return CalculationItemType[]
      */
-    public function getItemsDuplicate(string $orderColumn = 'id', string $orderDirection = self::SORT_DESC): array
-    {
+    public function getItemsDuplicate(
+        string $orderColumn = 'id',
+        \SortDirection $orderDirection = \SortDirection::Descending
+    ): array {
         $builder = $this->createQueryBuilder('e')
             // calculation
             ->select('e.id              as calculation_id')
@@ -461,15 +461,15 @@ class CalculationRepository extends AbstractRepository
     /**
      * Find empty items in the calculations. Items are empty if the price or the quantity is equal to 0.
      *
-     * @param string $orderColumn    the order column
-     * @param string $orderDirection the order direction ('ASC' or 'DESC')
-     *
-     * @phpstan-param self::SORT_* $orderDirection
+     * @param string         $orderColumn    the order column
+     * @param \SortDirection $orderDirection the order direction
      *
      * @phpstan-return CalculationItemType[]
      */
-    public function getItemsEmpty(string $orderColumn = 'id', string $orderDirection = self::SORT_DESC): array
-    {
+    public function getItemsEmpty(
+        string $orderColumn = 'id',
+        \SortDirection $orderDirection = \SortDirection::Descending
+    ): array {
         $builder = $this->createQueryBuilder('e')
             // calculation
             ->select('e.id              as calculation_id')
@@ -538,9 +538,9 @@ class CalculationRepository extends AbstractRepository
     public function getLastCalculations(int $maxResults, ?UserInterface $user = null): array
     {
         $builder = $this->getTableQueryBuilder();
-        $builder->addOrderBy('e.updatedAt', self::SORT_DESC)
-            ->addOrderBy('e.date', self::SORT_DESC)
-            ->addOrderBy('e.id', self::SORT_DESC)
+        $builder->addOrderBy('e.updatedAt', \SortDirection::Descending)
+            ->addOrderBy('e.date', \SortDirection::Descending)
+            ->addOrderBy('e.id', \SortDirection::Descending)
             ->setMaxResults($maxResults);
         if ($user instanceof UserInterface) {
             $identifier = $user->getUserIdentifier();
@@ -589,8 +589,8 @@ class CalculationRepository extends AbstractRepository
             ->addSelect('YEAR(c.date) as year')
             ->addSelect('MONTH(c.date) as month')
             ->groupBy('year', 'month')
-            ->orderBy('year', self::SORT_DESC)
-            ->addOrderBy('month', self::SORT_DESC)
+            ->orderBy('year', \SortDirection::Descending)
+            ->addOrderBy('month', \SortDirection::Descending)
             ->setMaxResults($maxResults)
             ->getQuery();
 
@@ -724,8 +724,8 @@ class CalculationRepository extends AbstractRepository
     private function getCalendarBuilder(int $year): QueryBuilder
     {
         return $this->createQueryBuilder('c')
-            ->orderBy('c.date')
-            ->addOrderBy('c.id', self::SORT_DESC)
+            ->orderBy('c.date', \SortDirection::Ascending)
+            ->addOrderBy('c.id', \SortDirection::Descending)
             ->where('YEAR(c.date) = :year')
             ->setParameter('year', $year, Types::INTEGER);
     }
@@ -751,11 +751,11 @@ class CalculationRepository extends AbstractRepository
             ->innerJoin('e.state', 's');
         // order
         if ($forExcel) {
-            $builder->orderBy('e.id', self::SORT_DESC);
+            $builder->orderBy('e.id', \SortDirection::Descending);
         } else {
-            $builder->orderBy('s.editable', self::SORT_DESC)
-                ->addOrderBy('s.code', self::SORT_ASC)
-                ->addOrderBy('e.id', self::SORT_DESC);
+            $builder->orderBy('s.editable', \SortDirection::Descending)
+                ->addOrderBy('s.code', \SortDirection::Ascending)
+                ->addOrderBy('e.id', \SortDirection::Descending);
         }
 
         return $builder;
@@ -792,11 +792,11 @@ class CalculationRepository extends AbstractRepository
     /**
      * Update the order for the given query builder.
      *
-     * @param QueryBuilder $builder        the query builder to update
-     * @param string       $orderColumn    the order column
-     * @param string       $orderDirection the order direction ('ASC' or 'DESC')
+     * @param QueryBuilder   $builder        the query builder to update
+     * @param string         $orderColumn    the order column
+     * @param \SortDirection $orderDirection the order direction
      */
-    private function updateOrder(QueryBuilder $builder, string $orderColumn, string $orderDirection): void
+    private function updateOrder(QueryBuilder $builder, string $orderColumn, \SortDirection $orderDirection): void
     {
         $orderColumn = $this->getOrder($orderColumn);
         $builder->orderBy($orderColumn, $orderDirection);

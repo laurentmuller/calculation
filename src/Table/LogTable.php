@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Table;
 
 use App\Entity\Log;
+use App\Enums\SortMode;
 use App\Model\LogChannel;
 use App\Model\LogFile;
 use App\Model\LogLevel;
@@ -183,7 +184,7 @@ class LogTable extends AbstractTable implements \Countable
     {
         /** @phpstan-var ''|LogSorterService::COLUMN_* $field */
         $field = $query->sort;
-        $ascending = self::SORT_ASC === $query->order;
+        $ascending = SortMode::ASC === $query->order;
         if ('' === $field || LogSorterService::isDefaultSort($field, $ascending)) {
             return;
         }

@@ -30,9 +30,7 @@ use Doctrine\DBAL\Schema\Index\IndexType;
 use Doctrine\DBAL\Schema\Name;
 use Doctrine\DBAL\Schema\NamedObject;
 use Doctrine\DBAL\Schema\Table;
-use Doctrine\DBAL\Types\BooleanType;
-use Doctrine\DBAL\Types\FloatType;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Symfony\Component\DependencyInjection\Attribute\Target;
@@ -277,22 +275,13 @@ class SchemaService
                 'name' => $name,
                 'primary' => $primary,
                 'unique' => $unique,
-                'type' => $this->getColumnType($column),
+                'type' => $column->getTypeName(),
                 'length' => $column->getLength() ?? 0,
                 'required' => $column->getNotnull(),
                 'foreign_table' => $foreignTable,
                 'default' => $this->getDefaultValue($column),
             ];
         }, $table->getColumns());
-    }
-
-    private function getColumnType(Column $column): string
-    {
-        try {
-            return Type::getTypeRegistry()->lookupName($column->getType());
-        } catch (Exception) {
-            return 'unknown';
-        }
     }
 
     private function getConnection(): Connection
@@ -308,11 +297,12 @@ class SchemaService
             return '';
         }
 
-        $type = $column->getType();
-        if ($type instanceof FloatType && '0' === $default) {
+
+        $typeName = $column->getTypeName();
+        if (Types::FLOAT === $typeName && '0' === $default) {
             return '0.00';
         }
-        if ($type instanceof BooleanType) {
+        if (Types::BOOLEAN === $typeName) {
             $default = StringUtils::encodeJson(\filter_var($default, \FILTER_VALIDATE_BOOLEAN));
         }
 

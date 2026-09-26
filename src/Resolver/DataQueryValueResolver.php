@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Resolver;
 
+use App\Enums\SortMode;
 use App\Enums\TableView;
-use App\Interfaces\SortModeInterface;
 use App\Interfaces\TableInterface;
 use App\Service\UrlGeneratorService;
 use App\Table\AbstractCategoryItemTable;
@@ -24,7 +24,6 @@ use App\Table\DataQuery;
 use App\Table\LogTable;
 use App\Table\SearchTable;
 use App\Traits\CookieTrait;
-use App\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\InputBag;
@@ -36,7 +35,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 /**
  * Value resolver for {@link DataQuery}.
  */
-final readonly class DataQueryValueResolver extends AbstractValueResolver implements SortModeInterface
+final readonly class DataQueryValueResolver extends AbstractValueResolver
 {
     use CookieTrait;
 
@@ -82,13 +81,9 @@ final readonly class DataQueryValueResolver extends AbstractValueResolver implem
         return $this->getCookieInt($request, TableInterface::PARAM_LIMIT, $view->getPageSize(), $prefix);
     }
 
-    /**
-     * @return self::SORT_*
-     */
-    private function getOrder(Request $request, string $prefix): string
+    private function getOrder(Request $request, string $prefix): SortMode
     {
-        /** @phpstan-var self::SORT_* */
-        return $this->getCookieString($request, TableInterface::PARAM_ORDER, self::SORT_ASC, $prefix);
+        return $this->getCookieEnum($request, TableInterface::PARAM_ORDER, SortMode::ASC, $prefix);
     }
 
     private function getPrefix(Request $request): string
@@ -139,7 +134,7 @@ final readonly class DataQueryValueResolver extends AbstractValueResolver implem
                 TableInterface::PARAM_ID => $query->id = $inputBag->getInt($key),
                 TableInterface::PARAM_SEARCH => $query->search = $inputBag->getString($key),
                 TableInterface::PARAM_SORT => $query->sort = $inputBag->getString($key),
-                TableInterface::PARAM_ORDER => $query->order = $this->validateOrder($inputBag->getString($key)),
+                TableInterface::PARAM_ORDER => $query->order = $inputBag->getEnum($key, SortMode::class, $query->order),
                 TableInterface::PARAM_OFFSET => $query->offset = $inputBag->getInt($key),
                 TableInterface::PARAM_LIMIT => $query->limit = $inputBag->getInt($key),
                 TableInterface::PARAM_VIEW => $query->view = $inputBag->getEnum($key, TableView::class, $query->view),
@@ -153,13 +148,5 @@ final readonly class DataQueryValueResolver extends AbstractValueResolver implem
                 default => throw new UnprocessableEntityHttpException(\sprintf('Invalid parameter: "%s".', $key))
             };
         }
-    }
-
-    /**
-     * @return self::SORT_*
-     */
-    private function validateOrder(string $order): string
-    {
-        return StringUtils::equalIgnoreCase(self::SORT_DESC, $order) ? self::SORT_DESC : self::SORT_ASC;
     }
 }

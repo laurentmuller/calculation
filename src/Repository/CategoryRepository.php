@@ -117,8 +117,8 @@ class CategoryRepository extends AbstractRepository
         $codeField = $this->getSortField('code', $alias);
         $builder = $this->createQueryBuilder($alias)
             ->innerJoin($alias . '.group', self::GROUP_ALIAS)
-            ->orderBy($groupField, self::SORT_ASC)
-            ->addOrderBy($codeField, self::SORT_ASC);
+            ->orderBy($groupField, \SortDirection::Ascending)
+            ->addOrderBy($codeField, \SortDirection::Ascending);
 
         return match ($filterType) {
             self::FILTER_PRODUCTS => $builder->innerJoin($alias . '.products', 'p'),
@@ -181,8 +181,8 @@ class CategoryRepository extends AbstractRepository
             ->addSelect($groupId . ' AS groupId')
             ->innerJoin('c.group', self::GROUP_ALIAS)
             ->groupBy('c.id')
-            ->orderBy($group, self::SORT_ASC)
-            ->addOrderBy('c.code', self::SORT_ASC);
+            ->orderBy($group, \SortDirection::Ascending)
+            ->addOrderBy('c.code', \SortDirection::Ascending);
     }
 
     /**

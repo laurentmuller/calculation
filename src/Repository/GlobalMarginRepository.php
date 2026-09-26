@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\GlobalMargin;
+use App\Enums\SortMode;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\Persistence\ManagerRegistry;
@@ -37,7 +38,7 @@ class GlobalMarginRepository extends AbstractRepository
      */
     public function findByMinimum(): array
     {
-        return $this->findBy([], ['minimum' => self::SORT_ASC]);
+        return $this->findBy([], ['minimum' => SortMode::ASC->value]);
     }
 
     /**

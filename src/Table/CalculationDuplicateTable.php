@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Table;
 
+use App\Enums\SortMode;
 use App\Traits\DuplicateItemsTrait;
 
 /**
@@ -37,14 +38,12 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
     }
 
     /**
-     * @phpstan-param self::SORT_* $orderDirection
-     *
      * @phpstan-return CalculationItemType[]
      */
     #[\Override]
-    protected function getEntities(string $orderColumn = 'id', string $orderDirection = self::SORT_DESC): array
+    protected function getEntities(string $orderColumn = 'id', SortMode $orderDirection = SortMode::DESC): array
     {
-        return $this->repository->getItemsDuplicate($orderColumn, $orderDirection);
+        return $this->repository->getItemsDuplicate($orderColumn, $orderDirection->direction());
     }
 
     /**

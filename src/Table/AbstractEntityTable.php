@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Table;
 
+use App\Enums\SortMode;
 use App\Interfaces\EntityInterface;
 use App\Interfaces\TableInterface;
 use App\Repository\AbstractRepository;
@@ -106,7 +107,7 @@ abstract class AbstractEntityTable extends AbstractTable
     /**
      * Gets the default sort order.
      *
-     * @return array<string, self::SORT_*> an array where each key is the field name, and the value is the order direction ('asc' or 'desc')
+     * @return array<string, SortMode> an array where each key is the field name, and the value is the order direction
      */
     protected function getDefaultOrder(): array
     {
@@ -181,7 +182,7 @@ abstract class AbstractEntityTable extends AbstractTable
         }
         $this->updateOrderBy($orderBy, $this->getDefaultOrder(), $alias);
         foreach ($orderBy as $sort => $order) {
-            $builder->addOrderBy($sort, $order);
+            $builder->addOrderBy($sort, $order->direction());
         }
     }
 
@@ -267,8 +268,8 @@ abstract class AbstractEntityTable extends AbstractTable
     /**
      * Update the clause order by.
      *
-     * @param array<string, string>                  $orderBy
-     * @param DataQuery|Column|array<string, string> $value
+     * @param array<string, SortMode>                  $orderBy
+     * @param DataQuery|Column|array<string, SortMode> $value
      */
     private function updateOrderBy(array &$orderBy, DataQuery|Column|array $value, string $alias): void
     {
@@ -278,6 +279,7 @@ abstract class AbstractEntityTable extends AbstractTable
             $value = [$value->getField() => $value->getOrder()];
         }
 
+        /** @phpstan-var SortMode $order */
         foreach ($value as $field => $order) {
             $sortField = $this->repository->getSortField($field, $alias);
             if (!\array_key_exists($sortField, $orderBy)) {

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Table;
 
+use App\Enums\SortMode;
 use App\Interfaces\TableInterface;
 use App\Service\SearchService;
 use App\Traits\AuthorizationCheckerAwareTrait;
@@ -161,9 +162,9 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
      *
      * @param SearchType[] $items
      */
-    private function sortItems(array &$items, string $sort, string $order): void
+    private function sortItems(array &$items, string $sort, SortMode $order): void
     {
-        $columns = [$sort => self::SORT_ASC === $order ? 1 : -1];
+        $columns = [$sort => SortMode::ASC === $order ? 1 : -1];
         foreach (self::SORT_COLUMNS as $field) {
             if (!\array_key_exists($field, $columns)) {
                 $columns[$field] = 1;

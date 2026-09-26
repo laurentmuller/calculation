@@ -28,10 +28,7 @@ use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 use Doctrine\DBAL\Schema\Index;
 use Doctrine\DBAL\Schema\MySQLSchemaManager;
 use Doctrine\DBAL\Schema\Table;
-use Doctrine\DBAL\Types\BooleanType;
-use Doctrine\DBAL\Types\FloatType;
-use Doctrine\DBAL\Types\IntegerType;
-use Doctrine\DBAL\Types\StringType;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\AssociationMapping;
 use Doctrine\ORM\Mapping\ClassMetadata;
@@ -242,9 +239,9 @@ final class SchemaServiceTest extends TestCase
     private function createPropertyTable(): Table
     {
         $columns = [
-            new Column('id', new IntegerType()),
-            new Column('name', new StringType()),
-            new Column('user_id', new IntegerType()),
+            new Column('id', Types::INTEGER),
+            new Column('name', Types::STRING),
+            new Column('user_id', Types::INTEGER),
         ];
         $indexes = [
             new Index('PRIMARY', ['id'], true, true),
@@ -304,10 +301,10 @@ final class SchemaServiceTest extends TestCase
     private function createUserTable(): Table
     {
         $columns = [
-            new Column('id', new IntegerType()),
-            new Column('name', new StringType(), ['default' => 'fake']),
-            new Column('amount', new FloatType(), ['default' => '0']),
-            new Column('active', new BooleanType(), ['default' => 'false']),
+            new Column('id', Types::INTEGER),
+            new Column('name', Types::STRING, ['default' => 'fake']),
+            new Column('amount', Types::FLOAT, ['default' => '0']),
+            new Column('active', Types::BOOLEAN, ['default' => 'false']),
         ];
         $indexes = [
             new Index('PRIMARY', ['id'], true, true),

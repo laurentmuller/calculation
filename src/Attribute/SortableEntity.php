@@ -13,21 +13,19 @@ declare(strict_types=1);
 
 namespace App\Attribute;
 
-use App\Interfaces\SortModeInterface;
+use App\Enums\SortMode;
 
 /**
  * Attribute to define the sort order of an object.
  */
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
-readonly class SortableEntity implements SortModeInterface
+readonly class SortableEntity
 {
     /**
-     * @param string $name  the property name
-     * @param string $order the sort order
-     *
-     * @phpstan-param self::SORT_* $order
+     * @param string   $name      the property name
+     * @param SortMode $direction the sort direction
      */
-    public function __construct(public string $name, public string $order = self::SORT_ASC)
+    public function __construct(public string $name, public SortMode $direction = SortMode::ASC)
     {
     }
 
@@ -36,12 +34,11 @@ readonly class SortableEntity implements SortModeInterface
      *
      * @template T of object
      *
-     * @param T|class-string<T> $objectOrClass either a string containing the name of
-     *                                         the class to reflect, or an object
+     * @param T|class-string<T> $objectOrClass either a string containing the name of the class to reflect, or an object
      * @param bool              $validate      true to validate that the property name exists
      *
-     * @return array<string, string> an array with the field as a key and the order as the value.
-     *                               An empty array is returned if no attribute is found.
+     * @return array<string, SortMode> an array with the field as a key and the sort direction as the value.
+     *                                 An empty array is returned if no attribute is found.
      *
      * @throws \ReflectionException if the class does not exist or if the validated parameter
      *                              is true and a property name is not found
@@ -57,7 +54,7 @@ readonly class SortableEntity implements SortModeInterface
             if ($validate && !$class->hasProperty($name)) {
                 throw new \ReflectionException(\sprintf('The property "%s" is not defined in "%s".', $name, $class->getName()));
             }
-            $result[$name] = $instance->order;
+            $result[$name] = $instance->direction;
         }
 
         return $result;

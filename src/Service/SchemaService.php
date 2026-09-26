@@ -297,16 +297,15 @@ class SchemaService
             return '';
         }
 
-
         $typeName = $column->getTypeName();
         if (Types::FLOAT === $typeName && '0' === $default) {
             return '0.00';
         }
         if (Types::BOOLEAN === $typeName) {
-            $default = StringUtils::encodeJson(\filter_var($default, \FILTER_VALIDATE_BOOLEAN));
+            return StringUtils::encodeJson(\filter_var($default, \FILTER_VALIDATE_BOOLEAN));
         }
 
-        return StringUtils::capitalize(\trim($default, "'"));
+        return \trim($default, "'");
     }
 
     /**

@@ -20,7 +20,7 @@ use Symfony\Component\Clock\DatePoint;
 /**
  * Represents a single day with a date.
  */
-class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
+class Day extends AbstractCalendarItem implements WeekDaysInterface
 {
     /** The date format used to generate this key. */
     public const string KEY_FORMAT = 'Y.m.d';

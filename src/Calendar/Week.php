@@ -18,7 +18,7 @@ use App\Utils\FormatUtils;
 /**
  * Represents a week with a calendar and an array of days.
  */
-class Week extends AbstractCalendarItem implements \Stringable
+class Week extends AbstractCalendarItem
 {
     use DaysTrait;
 

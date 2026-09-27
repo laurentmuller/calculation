@@ -18,7 +18,7 @@ use App\Utils\FormatUtils;
 /**
  * Represents a month with a calendar and an array of days.
  */
-class Month extends AbstractCalendarItem implements \Stringable
+class Month extends AbstractCalendarItem
 {
     use DaysTrait;
 

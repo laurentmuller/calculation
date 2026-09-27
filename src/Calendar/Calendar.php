@@ -20,7 +20,7 @@ use Symfony\Component\Clock\DatePoint;
 /**
  * Represents a calendar for a specified year.
  */
-class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterface, WeekDaysInterface
+class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDaysInterface
 {
     use DaysTrait;
     use ModelTrait;

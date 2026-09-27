@@ -178,7 +178,7 @@ class CalculationStateRepository extends AbstractRepository
             ))
             ->innerJoin('s.calculations', 'c')
             ->groupBy('s.id')
-            ->orderBy('s.editable', \SortDirection::Ascending)
+            ->orderBy('s.editable', \SortDirection::Descending)
             ->addOrderBy('s.code', \SortDirection::Ascending);
 
         /** @var StateChartDataItem[] $items */

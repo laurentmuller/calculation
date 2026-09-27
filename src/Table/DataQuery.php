@@ -39,9 +39,9 @@ class DataQuery
     public int $offset = 0;
 
     /** The sort order. */
-    #[Assert\Choice(choices: [SortMode::ASC, SortMode::DESC])]
     public SortMode $order = SortMode::ASC;
 
+    /** The parameters */
     /** @var array<string, int|string> */
     public array $parameters = [];
 

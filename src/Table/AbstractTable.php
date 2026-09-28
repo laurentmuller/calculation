@@ -114,13 +114,13 @@ abstract class AbstractTable
             return $sizes;
         }
 
-        foreach ($sizes as $index => $size) {
-            if ($size >= $totalNotFiltered) {
-                return \array_slice($sizes, 0, $index + 1);
-            }
+        $index = 0;
+        $count = \count($sizes);
+        while ($index < $count && $sizes[$index] < $totalNotFiltered) {
+            ++$index;
         }
 
-        return $sizes;
+        return \array_slice($sizes, 0, $index + 1);
     }
 
     /**
@@ -171,15 +171,14 @@ abstract class AbstractTable
      */
     protected function updateDataQuery(DataQuery $query): void
     {
-        if ('' !== $query->sort) {
+        if ($query->isSort()) {
             return;
         }
         $column = $this->getDefaultColumn();
-        if (!$column instanceof Column) {
-            return;
+        if ($column instanceof Column) {
+            $query->sort = $column->getField();
+            $query->order = $column->getOrder();
         }
-        $query->sort = $column->getField();
-        $query->order = $column->getOrder();
     }
 
     /**

@@ -66,6 +66,22 @@ abstract class AbstractRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param array<string, SortMode|string>|null $orderBy
+     */
+    #[\Override]
+    public function findBy(array $criteria = [], ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
+    {
+        if (null !== $orderBy && [] !== $orderBy) {
+            $orderBy = \array_combine(
+                \array_keys($orderBy),
+                \array_map($this->mapSortMode(...), $orderBy)
+            );
+        }
+
+        return parent::findBy($criteria, $orderBy, $limit, $offset);
+    }
+
+    /**
      * Flushes all changes to objects that have been queued to the database.
      *
      * This effectively synchronizes the in-memory state of managed objects with the
@@ -244,5 +260,10 @@ abstract class AbstractRepository extends ServiceEntityRepository
     protected function getCountDistinct(string $alias, string $field): string
     {
         return \sprintf('COUNT(DISTINCT %s.id) AS %s', $alias, $field);
+    }
+
+    private function mapSortMode(SortMode|string $direction): string
+    {
+        return $direction instanceof SortMode ? $direction->value : $direction;
     }
 }

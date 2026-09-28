@@ -62,7 +62,7 @@ class Column implements \Stringable
     private bool $numeric = false;
 
     /** The sort order. */
-    private SortMode $order = SortMode::ASC;
+    private SortMode $order = SortMode::DEFAULT;
 
     /** The property path for an array object. */
     private string $property = '';
@@ -377,18 +377,17 @@ class Column implements \Stringable
     ): self {
         $column = self::instance();
         foreach ($definition as $key => $value) {
-            // special case for the field order
-            if (self::FIELD_ORDER === $key) {
-                $value = SortMode::from((string) $value);
-            }
-            // special case for the field formatter
-            if (self::FIELD_FORMATTER === $key) {
-                $value = [$parent, $value];
-            }
-
             try {
+                if (self::FIELD_ORDER === $key) {
+                    $accessor->setValue($column, $key, SortMode::from((string) $value));
+                    continue;
+                }
+                if (self::FIELD_FORMATTER === $key) {
+                    $accessor->setValue($column, $key, [$parent, $value]);
+                    continue;
+                }
                 $accessor->setValue($column, $key, $value);
-            } catch (ExceptionInterface $e) {
+            } catch (\ValueError|ExceptionInterface $e) {
                 throw new \InvalidArgumentException(\sprintf('Unable set the property "%s".', $key), $e->getCode(), $e);
             }
         }

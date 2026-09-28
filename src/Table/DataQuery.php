@@ -39,7 +39,7 @@ class DataQuery
     public int $offset = 0;
 
     /** The sort order. */
-    public SortMode $order = SortMode::ASC;
+    public SortMode $order = SortMode::DEFAULT;
 
     /** The parameters */
     /** @var array<string, int|string> */
@@ -122,6 +122,26 @@ class DataQuery
     public function isCustomView(): bool
     {
         return TableView::CUSTOM === $this->view;
+    }
+
+    /**
+     * Returns if the search is not empty.
+     *
+     * @phpstan-assert-if-true non-empty-string $this->search
+     */
+    public function isSearch(): bool
+    {
+        return '' !== $this->search;
+    }
+
+    /**
+     * Returns if the sorted field is set (not empty).
+     *
+     * @phpstan-assert-if-true non-empty-string $this->sort
+     */
+    public function isSort(): bool
+    {
+        return '' !== $this->sort;
     }
 
     /**

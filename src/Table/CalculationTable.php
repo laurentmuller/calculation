@@ -15,7 +15,6 @@ namespace App\Table;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
-use App\Enums\SortMode;
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
@@ -109,12 +108,6 @@ class CalculationTable extends AbstractEntityTable
     protected function getColumnDefinitions(): string
     {
         return Path::join(__DIR__, 'Definition', 'calculation.json');
-    }
-
-    #[\Override]
-    protected function getDefaultOrder(): array
-    {
-        return ['id' => SortMode::DESC];
     }
 
     /**

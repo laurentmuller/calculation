@@ -43,7 +43,9 @@ final class DataQueryTest extends TestCase
         self::assertSame(0, $actual->offset);
         self::assertSame(0, $actual->limit);
         self::assertSame('', $actual->search);
+        self::assertFalse($actual->isSearch());
         self::assertSame('', $actual->sort);
+        self::assertFalse($actual->isSort());
         self::assertSame(SortMode::ASC, $actual->order);
         self::assertSame('', $actual->prefix);
         self::assertSame(0, $actual->getIntParameter('groupId'));

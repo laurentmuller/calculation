@@ -13,13 +13,22 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
+use App\Interfaces\DefaultEnumInterface;
+
 /**
  * The sort mode enumeration.
+ *
+ * @implements DefaultEnumInterface<SortMode>
  */
-enum SortMode: string
+enum SortMode: string implements DefaultEnumInterface
 {
+    /** Ascending order */
     case ASC = 'asc';
+    /** Descending order */
     case DESC = 'desc';
+
+    /** The default enumeration. */
+    public const self DEFAULT = self::ASC;
 
     public function direction(): \SortDirection
     {

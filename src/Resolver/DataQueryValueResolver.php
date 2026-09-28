@@ -83,7 +83,7 @@ final readonly class DataQueryValueResolver extends AbstractValueResolver
 
     private function getOrder(Request $request, string $prefix): SortMode
     {
-        return $this->getCookieEnum($request, TableInterface::PARAM_ORDER, SortMode::ASC, $prefix);
+        return $this->getCookieEnum($request, TableInterface::PARAM_ORDER, SortMode::DEFAULT, $prefix);
     }
 
     private function getPrefix(Request $request): string
@@ -114,7 +114,7 @@ final readonly class DataQueryValueResolver extends AbstractValueResolver
         if (0 === $query->limit) {
             $query->limit = $this->getLimit($request, $query->view, $query->prefix);
         }
-        if ('' === $query->sort) {
+        if (!$query->isSort()) {
             $query->sort = $this->getSort($request, $query->prefix);
             $query->order = $this->getOrder($request, $query->prefix);
         }

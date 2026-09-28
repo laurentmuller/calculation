@@ -63,8 +63,7 @@ abstract class AbstractEntityTable extends AbstractTable
      */
     protected function addSearch(DataQuery $query, QueryBuilder $builder, string $alias): bool
     {
-        $search = $query->search;
-        if ('' === $search) {
+        if (!$query->isSearch()) {
             return false;
         }
 
@@ -81,7 +80,7 @@ abstract class AbstractEntityTable extends AbstractTable
         }
 
         $builder->andWhere($whereExpr)
-            ->setParameter(TableInterface::PARAM_SEARCH, \sprintf('%%%s%%', $search), Types::STRING);
+            ->setParameter(TableInterface::PARAM_SEARCH, '%' . $query->search . '%', Types::STRING);
 
         return true;
     }
@@ -102,16 +101,6 @@ abstract class AbstractEntityTable extends AbstractTable
     protected function createQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->repository->createDefaultQueryBuilder($alias);
-    }
-
-    /**
-     * Gets the default sort order.
-     *
-     * @return array<string, SortMode> an array where each key is the field name, and the value is the order direction
-     */
-    protected function getDefaultOrder(): array
-    {
-        return [];
     }
 
     /**
@@ -163,7 +152,7 @@ abstract class AbstractEntityTable extends AbstractTable
     }
 
     /**
-     * Add the clause order by.
+     * Add the order by clause.
      *
      * @param DataQuery    $query   the data query
      * @param QueryBuilder $builder the query builder to update
@@ -172,22 +161,20 @@ abstract class AbstractEntityTable extends AbstractTable
     private function addOrderBy(DataQuery $query, QueryBuilder $builder, string $alias): void
     {
         $orderBy = [];
-        if ('' !== $query->sort) {
-            $this->updateOrderBy($orderBy, $query, $alias);
-        } else {
-            $column = $this->getDefaultColumn();
-            if ($column instanceof Column) {
-                $this->updateOrderBy($orderBy, $column, $alias);
-            }
+        if ($query->isSort()) {
+            $this->updateOrderBy($orderBy, $alias, $query->sort, $query->order);
         }
-        $this->updateOrderBy($orderBy, $this->getDefaultOrder(), $alias);
+        $column = $this->getDefaultColumn();
+        if ($column instanceof Column) {
+            $this->updateOrderBy($orderBy, $alias, $column->getField(), $column->getOrder());
+        }
         foreach ($orderBy as $sort => $order) {
-            $builder->addOrderBy($sort, $order->direction());
+            $builder->addOrderBy($sort, $order);
         }
     }
 
     /**
-     * Add the selected entity if any and if it is missing.
+     * Add the selected entity if any, and it is missing.
      *
      * @param EntityType[] $entities the entities to search in or to update
      * @param DataQuery    $query    the query to get values from
@@ -266,25 +253,15 @@ abstract class AbstractEntityTable extends AbstractTable
     }
 
     /**
-     * Update the clause order by.
+     * Update the order by clause.
      *
-     * @param array<string, SortMode>                  $orderBy
-     * @param DataQuery|Column|array<string, SortMode> $value
+     * @param array<string, \SortDirection> $orderBy
      */
-    private function updateOrderBy(array &$orderBy, DataQuery|Column|array $value, string $alias): void
+    private function updateOrderBy(array &$orderBy, string $alias, string $field, SortMode $order): void
     {
-        if ($value instanceof DataQuery) {
-            $value = [$value->sort => $value->order];
-        } elseif ($value instanceof Column) {
-            $value = [$value->getField() => $value->getOrder()];
-        }
-
-        /** @phpstan-var SortMode $order */
-        foreach ($value as $field => $order) {
-            $sortField = $this->repository->getSortField($field, $alias);
-            if (!\array_key_exists($sortField, $orderBy)) {
-                $orderBy[$sortField] = $order;
-            }
+        $sortField = $this->repository->getSortField($field, $alias);
+        if (!\array_key_exists($sortField, $orderBy)) {
+            $orderBy[$sortField] = $order->direction();
         }
     }
 

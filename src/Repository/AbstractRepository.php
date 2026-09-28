@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Attribute\SortableEntity;
 use App\Enums\SortMode;
 use App\Interfaces\EntityInterface;
 use App\Utils\StringUtils;
@@ -80,15 +79,11 @@ abstract class AbstractRepository extends ServiceEntityRepository
     /**
      * Gets the default order of this entity.
      *
-     * @return array<string, SortMode> an array with the field as the key and the order as the value.
-     *                                 An empty array is returned if no attribute is found.
-     *
-     * @throws \ReflectionException if the class does not exist or if the validation parameter
-     *                              is true and a property name is not found
+     * @return array<string, SortMode> an array with the field as the key and the order as the value
      */
     public function getDefaultOrder(): array
     {
-        return SortableEntity::getOrder($this->getEntityName());
+        return [];
     }
 
     /**

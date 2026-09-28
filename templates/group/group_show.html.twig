@@ -18,6 +18,7 @@
         {{ link(
             href: path('category_index', {groupId: item.id}),
             text: 'counters.categories'|trans({count: item.countCategories}),
+            class: null,
             name: 'group.fields.categories',
             title: 'group.list.category_title') }}
     {% else %}
@@ -27,6 +28,7 @@
         {{ link(
             href: path('product_index', {groupId: item.id}),
             text: 'counters.products'|trans({count: item.countProducts}),
+            class: null,
             name: 'category.fields.products',
             title: 'group.list.product_title') }}
     {% else %}
@@ -36,6 +38,7 @@
         {{ link(
             href: path('task_index', {groupId: item.id}),
             text: 'counters.tasks'|trans({count: item.countTasks}),
+            class: null,
             name: 'category.fields.tasks',
             title: 'group.list.task_title') }}
     {% else %}

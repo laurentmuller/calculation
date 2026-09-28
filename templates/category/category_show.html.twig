@@ -15,6 +15,7 @@
     {% if item.countProducts and is_granted(PERMISSION_LIST, ENTITY_PRODUCT) %}
         {{ link(
             href: path('product_index', {categoryId: item.id}),
+            text: null,
             text: 'counters.products'|trans({count: item.countProducts}),
             name: 'category.fields.products',
             title: 'category.list.product_title') }}

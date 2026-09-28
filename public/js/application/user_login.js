@@ -3,10 +3,8 @@
  */
 $(function () {
     'use strict';
-
     // initialize captcha
     const $captcha = $('#captcha').initCaptcha();
-
     // initialize validator
     $('#edit-form').initValidator({
         showModification: false,
@@ -23,7 +21,6 @@ $(function () {
             }
         }
     });
-
     // theme
-    initThemeButtons();
+    initThemeInput();
 });

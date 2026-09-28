@@ -17,6 +17,7 @@
         {{ link(
             href: path('calculation_index', {stateId: item.id}),
             text: 'counters.calculations'|trans({count: item.countCalculations}),
+            class: null,
             name: 'calculationstate.fields.calculations',
             title: 'calculationstate.list.calculation_title') }}
     {% else %}

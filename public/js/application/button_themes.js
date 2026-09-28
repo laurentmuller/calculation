@@ -19,10 +19,9 @@ function getPreferredTheme() {
 }
 
 /**
- * Handle theme input change.
+ * Add theme input handler.
  */
-function initThemeInput() {
-    'use strict';
+function handleThemeInput() {
     $('.dropdown-theme-entry').on('click', function (e) {
         e.preventDefault();
         // get values
@@ -69,6 +68,18 @@ function initThemeInput() {
         const title = $('.btn-theme-dropdown').data('title');
         const message = $this.data('success');
         Toaster.success(message, title);
+    });
+}
+
+/**
+ * Handle theme input change.
+ */
+function initThemeInput() {
+    'use strict';
+    $('.btn-theme-dropdown').on('show.bs.dropdown', function () {
+        handleThemeInput();
+    }).on('hide.bs.dropdown', function () {
+        $('.dropdown-theme-entry').off('click');
     });
 }
 

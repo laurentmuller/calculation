@@ -1,5 +1,5 @@
 {# create a property row #}
-{% macro property(name, value, class) %}
+{% macro property(name, value, class = null) %}
 {%- set value = value|default('&nbsp;') -%}
 {%- set class = ('w-75 ' ~ class|default)|trim -%}
 <tr>

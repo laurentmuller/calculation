@@ -1,5 +1,9 @@
 @import 'style.css';
 
+:root {
+    --spy-content-height: 305px;
+}
+
 .phpversion table {
     margin-bottom: 0;
 }
@@ -105,17 +109,24 @@ svg.about-icon {
     fill: currentcolor;
 }
 
-#php-list-spy .card-body:has(.php-spy-link.active) {
+#php-list-spy div:has(.php-spy-link.active) {
     background-color: var(--bs-secondary-bg);
 }
 
 .php-spy-content {
-    height: 45vh;
+    height: calc(100vh - var(--spy-content-height));
     overflow-y: auto;
 }
 
-.php-spy-link {
-    display: flex;
-    align-items: center;
-    padding: 0.25rem;
+body:not(.statusbar-show) .php-spy-content {
+    height: calc(100vh - var(--spy-content-height) + var(--statusbar-height));
+}
+
+body:not(.sidebar-show) .php-spy-content {
+    height: calc(100vh - var(--spy-content-height) - var(--horizontal-navigation-height));
+}
+
+
+body:not(.statusbar-show):not(.sidebar-show) .php-spy-content {
+    height: calc(100vh - var(--spy-content-height) + var(--statusbar-height) - var(--horizontal-navigation-height));
 }

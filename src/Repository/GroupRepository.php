@@ -42,7 +42,7 @@ class GroupRepository extends AbstractRepository
      */
     public function findByCode(): array
     {
-        return $this->findBy(orderBy: ['code' => SortMode::ASC]);
+        return $this->findBy([], ['code' => SortMode::ASC->value]);
     }
 
     /**

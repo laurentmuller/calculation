@@ -56,7 +56,7 @@ class ProductRepository extends AbstractCategoryItemRepository
      */
     public function findByDescription(): array
     {
-        return $this->findBy(orderBy: ['description' => SortMode::ASC]);
+        return $this->findBy([], ['description' => SortMode::ASC->value]);
     }
 
     /**

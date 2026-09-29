@@ -38,7 +38,7 @@ class GlobalMarginRepository extends AbstractRepository
      */
     public function findByMinimum(): array
     {
-        return $this->findBy(orderBy: ['minimum' => SortMode::ASC]);
+        return $this->findBy([], ['minimum' => SortMode::ASC->value]);
     }
 
     /**

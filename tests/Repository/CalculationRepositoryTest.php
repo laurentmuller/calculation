@@ -22,7 +22,6 @@ use App\Tests\Entity\IdTrait;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
 use App\Utils\DateUtils;
-use Doctrine\ORM\Query\Expr\Andx;
 use Symfony\Component\Clock\DatePoint;
 
 /**
@@ -40,15 +39,6 @@ final class CalculationRepositoryTest extends AbstractRepositoryTestCase
     {
         $this->deleteCalculation();
         parent::tearDown();
-    }
-
-    public function testAddBelowFilter(): void
-    {
-        $builder = $this->repository->createDefaultQueryBuilder();
-        $builder = CalculationRepository::addBelowFilter($builder, 1.1);
-        $actual = $builder->getDQLPart('where');
-        self::assertInstanceOf(Andx::class, $actual);
-        self::assertCount(2, $actual->getParts());
     }
 
     public function testCountDistinctMonths(): void

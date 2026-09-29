@@ -76,6 +76,19 @@ class CustomerRepository extends AbstractRepository
     }
 
     /**
+     * Add alias to the given fields.
+     *
+     * @param string   $alias the entity alias
+     * @param string[] $names the fields to add alias
+     *
+     * @return string[] the fields with alias
+     */
+    private function addPrefixes(string $alias, array $names): array
+    {
+        return \array_map(static fn (string $name): string => \sprintf('%s.%s', $alias, $name), $names);
+    }
+
+    /**
      * Concat fields.
      *
      * @param string   $alias   the entity prefix
@@ -84,7 +97,7 @@ class CustomerRepository extends AbstractRepository
      *
      * @return string the concatenated fields
      */
-    protected function concat(string $alias, array $fields, string $default = ''): string
+    private function concat(string $alias, array $fields, string $default = ''): string
     {
         $values = \array_map(
             static fn (string $field): string => \sprintf("COALESCE(%s.%s, '%s')", $alias, $field, $default),

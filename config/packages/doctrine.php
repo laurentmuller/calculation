@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use App\Types\CalculationBelowFilter;
 use App\Types\FixedFloatType;
 
 return App::config([
@@ -42,6 +43,9 @@ return App::config([
                             'prefix' => 'App\Entity',
                             'alias' => 'App',
                         ],
+                    ],
+                    'filters' => [
+                        CalculationBelowFilter::FILTER_NAME => CalculationBelowFilter::class,
                     ],
                 ],
             ],

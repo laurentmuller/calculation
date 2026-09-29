@@ -75,27 +75,6 @@ class CalculationRepository extends AbstractRepository
     }
 
     /**
-     * Update the given query builder by adding the filter for calculations below the given margin.
-     *
-     * @param QueryBuilder $builder   the query builder to update
-     * @param float        $minMargin the minimum margin
-     * @param ?string      $alias     the entity alias to use or null to use the first root alias
-     *
-     * @return QueryBuilder the updated query builder
-     */
-    public static function addBelowFilter(QueryBuilder $builder, float $minMargin, ?string $alias = null): QueryBuilder
-    {
-        $param = 'minMargin';
-        $alias ??= $builder->getRootAliases()[0];
-        $itemsField = $alias . '.itemsTotal';
-        $overallField = $alias . '.overallTotal';
-
-        return $builder->andWhere($itemsField . ' != 0')
-            ->andWhere(\sprintf('(%s / %s) < :%s', $overallField, $itemsField, $param))
-            ->setParameter($param, $minMargin, Types::FLOAT);
-    }
-
-    /**
      * Returns the number of distinct years and months.
      */
     public function countDistinctMonths(): int
@@ -115,11 +94,11 @@ class CalculationRepository extends AbstractRepository
      */
     public function countItemsBelow(float $minMargin): int
     {
-        $builder = $this->createQueryBuilder('e')
-            ->select('COUNT(e.id)');
+        $this->enableMarginBelowFilter($minMargin);
 
         /** @phpstan-var int<0, max> */
-        return (int) self::addBelowFilter($builder, $minMargin)
+        return (int) $this->createQueryBuilder('e')
+            ->select('COUNT(e.id)')
             ->getQuery()
             ->getSingleScalarResult();
     }
@@ -386,10 +365,10 @@ class CalculationRepository extends AbstractRepository
      */
     public function getItemsBelow(float $minMargin): iterable
     {
-        $builder = $this->getIterableBuilder(true);
-        $builder = self::addBelowFilter($builder, $minMargin);
+        $this->enableMarginBelowFilter($minMargin);
 
-        return $builder->getQuery()
+        return $this->getIterableBuilder(true)
+            ->getQuery()
             ->toIterable(hydrationMode: AbstractQuery::HYDRATE_ARRAY);
     }
 

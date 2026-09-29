@@ -54,11 +54,10 @@ class CalculationBelowTable extends CalculationTable implements \Countable
     #[\Override]
     protected function createQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
-        return CalculationRepository::addBelowFilter(
-            parent::createQueryBuilder($alias),
-            $this->getMinMargin(),
-            $alias
-        );
+        $this->getRepository()
+            ->enableMarginBelowFilter($this->getMinMargin());
+
+        return parent::createQueryBuilder($alias);
     }
 
     #[\Override]

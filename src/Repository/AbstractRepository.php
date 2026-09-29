@@ -15,6 +15,7 @@ namespace App\Repository;
 
 use App\Enums\SortMode;
 use App\Interfaces\EntityInterface;
+use App\Types\CalculationBelowFilter;
 use App\Utils\StringUtils;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
@@ -63,6 +64,17 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function createDefaultQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->createQueryBuilder($alias);
+    }
+
+    /**
+     * Enable calculation margin below filter.
+     */
+    public function enableMarginBelowFilter(float $minMargin): void
+    {
+        $this->getEntityManager()
+            ->getFilters()
+            ->enable(CalculationBelowFilter::FILTER_NAME)
+            ->setParameter(CalculationBelowFilter::MARGIN_PARAMETER, $minMargin);
     }
 
     /**
@@ -220,19 +232,6 @@ abstract class AbstractRepository extends ServiceEntityRepository
         if ($flush) {
             $this->flush();
         }
-    }
-
-    /**
-     * Add alias to the given fields.
-     *
-     * @param string   $alias the entity alias
-     * @param string[] $names the fields to add alias
-     *
-     * @return string[] the fields with alias
-     */
-    protected function addPrefixes(string $alias, array $names): array
-    {
-        return \array_map(static fn (string $name): string => \sprintf('%s.%s', $alias, $name), $names);
     }
 
     /**

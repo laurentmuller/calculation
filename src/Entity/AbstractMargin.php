@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Doctrine\FixedFloatType;
 use App\Interfaces\MarginInterface;
-use App\Types\FixedFloatType;
 use App\Utils\FormatUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace App\Types;
+namespace App\Doctrine;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;

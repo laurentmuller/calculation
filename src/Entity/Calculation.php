@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Doctrine\FixedFloatType;
 use App\Interfaces\TimestampableInterface;
 use App\Repository\CalculationRepository;
 use App\Traits\CollectionTrait;
 use App\Traits\MathTrait;
 use App\Traits\TimestampableTrait;
-use App\Types\FixedFloatType;
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;

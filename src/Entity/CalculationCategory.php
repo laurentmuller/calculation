@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Doctrine\FixedFloatType;
 use App\Interfaces\ComparableInterface;
 use App\Interfaces\ParentTimestampableInterface;
 use App\Interfaces\PositionInterface;
 use App\Repository\CalculationCategoryRepository;
 use App\Traits\CollectionTrait;
 use App\Traits\PositionTrait;
-use App\Types\FixedFloatType;
 use App\Utils\StringUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

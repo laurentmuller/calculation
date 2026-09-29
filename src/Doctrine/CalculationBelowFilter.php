@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace App\Types;
+namespace App\Doctrine;
 
 use App\Entity\Calculation;
 use Doctrine\ORM\Mapping\ClassMetadata;

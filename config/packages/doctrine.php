@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use App\Types\CalculationBelowFilter;
-use App\Types\FixedFloatType;
+use App\Doctrine\CalculationBelowFilter;
+use App\Doctrine\FixedFloatType;
 
 return App::config([
     'doctrine' => [

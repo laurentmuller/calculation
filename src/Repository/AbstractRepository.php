@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Doctrine\CalculationBelowFilter;
 use App\Enums\SortMode;
 use App\Interfaces\EntityInterface;
-use App\Types\CalculationBelowFilter;
 use App\Utils\StringUtils;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;

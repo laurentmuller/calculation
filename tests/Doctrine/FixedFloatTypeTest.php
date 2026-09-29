@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Types;
+namespace App\Tests\Doctrine;
 
-use App\Types\FixedFloatType;
+use App\Doctrine\FixedFloatType;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Types\ConversionException;

@@ -71,8 +71,11 @@ class PhpInfoService
     public const int TYPE_UNDEFINED = -1;
 
     private const string NO_VALUE = 'No value';
+
     private const string NONE_VALUE = 'None';
+
     private const string REDACTED = '********';
+
     private const array  REDACTED_NAMES = [
         'APP_SECRET',
         'DATABASE_URL',
@@ -84,12 +87,35 @@ class PhpInfoService
         '_SESSION_ID',
         '_USER_NAME',
     ];
+
     private const array SEARCH_KEYS = [
         'CALCULATION_SESSION_ID=',
         'MAIN_AUTH_PROFILE_TOKEN=',
         'REMEMBERME=',
     ];
+
     private const string URL_INFO = 'https://www.php.net/manual/en/book.%s.php';
+
+    private const array URL_NAMES = [
+        'Core' => 'https://www.php.net/manual/en/ref.info.php',
+        'Zend OPcache' => 'https://www.php.net/manual/fr/book.opcache.php',
+        'bcmath' => 'https://www.php.net/manual/en/book.bc.php',
+        'bz2' => 'https://www.php.net/manual/en/book.bzip2.php',
+        'cgi-fcgi' => 'https://www.php.net/manual/en/book.fpm.php',
+        'com_dotnet' => 'https://www.php.net/manual/en/class.dotnet.php',
+        'date' => 'https://www.php.net/manual/en/book.datetime.php',
+        'excimer' => 'https://www.php.net/manual-lookup.php?pattern=excimer',
+        'gd' => 'https://www.php.net/manual/en/book.image.php',
+        'http' => 'https://www.php.net/manual/en/book.network.php',
+        'pdo_mysql' => 'https://www.php.net/manual/en/ref.pdo-mysql.php',
+        'pdo_pgsql' => 'https://www.php.net/manual/en/ref.pdo-pgsql.php',
+        'pdo_sqlite' => 'https://www.php.net/manual/en/ref.pdo-sqlite.php',
+        'raphf' => 'https://pecl.php.net/package/raphf',
+        'standard' => 'https://www.php.net/manual/en/ref.info.php',
+        'timezonedb' => 'https://pecl.php.net/package/timezonedb',
+        'uploadprogress' => 'https://pecl.php.net/package/uploadprogress',
+        'xdebug' => 'https://xdebug.org/docs/',
+    ];
 
     public function __construct(
         #[Target(CacheAttributes::CACHE_SYMFONY)]
@@ -164,6 +190,7 @@ class PhpInfoService
             $modules,
             static fn (array $module): array => [$module['name'] => \sprintf(self::URL_INFO, \strtolower($module['name']))]
         );
+        $entries = \array_merge($entries, self::URL_NAMES);
 
         return $this->parseUrls($entries);
     }

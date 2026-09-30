@@ -150,5 +150,15 @@
         }).on('click', '.link-package', function (e) {
             $(this).loadModalContent(e, 'package');
         });
+
+        // PHP list spy
+        const phpListSpy = document.querySelector('[data-bs-target="#php-list-spy"]');
+        if (phpListSpy) {
+            phpListSpy.addEventListener('activate.bs.scrollspy', (e) => {
+                if (e.relatedTarget) {
+                    e.relatedTarget.scrollIntoView();
+                }
+            });
+        }
     });
 }(jQuery));

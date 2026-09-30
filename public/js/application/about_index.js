@@ -156,7 +156,9 @@
         if (phpListSpy) {
             phpListSpy.addEventListener('activate.bs.scrollspy', (e) => {
                 if (e.relatedTarget) {
-                    e.relatedTarget.scrollIntoView();
+                    e.relatedTarget.scrollIntoView({
+                       'block': 'nearest'
+                    });
                 }
             });
         }

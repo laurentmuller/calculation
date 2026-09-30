@@ -22,11 +22,11 @@ use Doctrine\ORM\Query\Filter\SQLFilter;
  */
 class CalculationBelowFilter extends SQLFilter
 {
-    /** The filter name. */
-    public const string FILTER_NAME = 'below_filter';
-
     /** The parameter name for the minimum margin. */
     public const string MARGIN_PARAMETER = 'minMargin';
+
+    /** This filter name. */
+    public const string NAME = 'below_filter';
 
     /**
      * @param ClassMetadata<Calculation> $targetEntity
@@ -34,7 +34,7 @@ class CalculationBelowFilter extends SQLFilter
     #[\Override]
     public function addFilterConstraint(ClassMetadata $targetEntity, string $targetTableAlias): string
     {
-        if (Calculation::class !== $targetEntity->getName()) {
+        if (Calculation::class !== $targetEntity->name) {
             return '';
         }
 
@@ -60,6 +60,6 @@ class CalculationBelowFilter extends SQLFilter
 
     private function getMinMargin(): string
     {
-        return \trim($this->getParameter(self::MARGIN_PARAMETER), '\'"');
+        return \trim($this->getParameter(self::MARGIN_PARAMETER), '"\'');
     }
 }

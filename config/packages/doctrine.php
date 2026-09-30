@@ -45,7 +45,7 @@ return App::config([
                         ],
                     ],
                     'filters' => [
-                        CalculationBelowFilter::FILTER_NAME => CalculationBelowFilter::class,
+                        CalculationBelowFilter::NAME => CalculationBelowFilter::class,
                     ],
                 ],
             ],

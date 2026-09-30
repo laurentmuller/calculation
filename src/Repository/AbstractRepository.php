@@ -19,6 +19,7 @@ use App\Interfaces\EntityInterface;
 use App\Utils\StringUtils;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
@@ -73,8 +74,8 @@ abstract class AbstractRepository extends ServiceEntityRepository
     {
         $this->getEntityManager()
             ->getFilters()
-            ->enable(CalculationBelowFilter::FILTER_NAME)
-            ->setParameter(CalculationBelowFilter::MARGIN_PARAMETER, $minMargin);
+            ->enable(CalculationBelowFilter::NAME)
+            ->setParameter(CalculationBelowFilter::MARGIN_PARAMETER, $minMargin, Types::FLOAT);
 
         return $this;
     }

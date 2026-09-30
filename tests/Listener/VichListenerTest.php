@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Vich\UploaderBundle\Event\Event;
 use Vich\UploaderBundle\Mapping\PropertyMapping;
+use Vich\UploaderBundle\Mapping\PropertyMappingInterface;
 
 final class VichListenerTest extends TestCase
 {
@@ -52,7 +53,7 @@ final class VichListenerTest extends TestCase
     {
         $namer = new class extends UserNamer {
             #[\Override]
-            public function name(object|array $object, PropertyMapping $mapping): string
+            public function name(object|array $object, PropertyMappingInterface $mapping): string
             {
                 return '';
             }
@@ -82,7 +83,7 @@ final class VichListenerTest extends TestCase
         return new VichListener($resizer);
     }
 
-    private function createPropertyMapping(?UserNamer $namer = null): PropertyMapping
+    private function createPropertyMapping(?UserNamer $namer = null): PropertyMappingInterface
     {
         $mapping = new PropertyMapping(
             filePropertyPath: 'imageFile',

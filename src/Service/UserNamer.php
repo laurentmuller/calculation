@@ -15,7 +15,7 @@ namespace App\Service;
 
 use App\Entity\User;
 use App\Enums\ImageExtension;
-use Vich\UploaderBundle\Mapping\PropertyMapping;
+use Vich\UploaderBundle\Mapping\PropertyMappingInterface;
 use Vich\UploaderBundle\Naming\NamerInterface;
 
 /**
@@ -26,7 +26,7 @@ use Vich\UploaderBundle\Naming\NamerInterface;
 class UserNamer implements NamerInterface
 {
     #[\Override]
-    public function name(object|array $object, PropertyMapping $mapping): string
+    public function name(object|array $object, PropertyMappingInterface $mapping): string
     {
         if (!$object instanceof User) {
             throw new \InvalidArgumentException(\sprintf('Expected argument of type "%s", "%s" given.', User::class, \get_debug_type($object)));

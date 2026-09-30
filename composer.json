@@ -91,7 +91,7 @@
         "twig/inky-extra": "^3.0",
         "twig/markdown-extra": "^3.0",
         "twig/twig": "^3.0",
-        "vich/uploader-bundle": "^2.0"
+        "vich/uploader-bundle": "^3.0"
     },
     "require-dev": {
         "bamarni/composer-bin-plugin": "^1.0",

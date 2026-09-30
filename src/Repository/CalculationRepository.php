@@ -94,10 +94,9 @@ class CalculationRepository extends AbstractRepository
      */
     public function countItemsBelow(float $minMargin): int
     {
-        $this->enableMarginBelowFilter($minMargin);
-
         /** @phpstan-var int<0, max> */
-        return (int) $this->createQueryBuilder('e')
+        return (int) $this->enableMarginBelowFilter($minMargin)
+            ->createQueryBuilder('e')
             ->select('COUNT(e.id)')
             ->getQuery()
             ->getSingleScalarResult();
@@ -365,9 +364,8 @@ class CalculationRepository extends AbstractRepository
      */
     public function getItemsBelow(float $minMargin): iterable
     {
-        $this->enableMarginBelowFilter($minMargin);
-
-        return $this->getIterableBuilder(true)
+        return $this->enableMarginBelowFilter($minMargin)
+            ->getIterableBuilder(true)
             ->getQuery()
             ->toIterable(hydrationMode: AbstractQuery::HYDRATE_ARRAY);
     }

@@ -69,12 +69,14 @@ abstract class AbstractRepository extends ServiceEntityRepository
     /**
      * Enable calculation margin below filter.
      */
-    public function enableMarginBelowFilter(float $minMargin): void
+    public function enableMarginBelowFilter(float $minMargin): static
     {
         $this->getEntityManager()
             ->getFilters()
             ->enable(CalculationBelowFilter::FILTER_NAME)
             ->setParameter(CalculationBelowFilter::MARGIN_PARAMETER, $minMargin);
+
+        return $this;
     }
 
     /**

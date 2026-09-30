@@ -45,7 +45,7 @@
 <div class="phpversion">
     {{ headerLink('php.net', info.version, 'php') }}
     <div class="row g-2">
-        <div id="php-list-spy" class="col-2 php-spy-content scrollbar-thin">
+        <div id="php-list-spy" class="col-md-4 col-lg-2 col-12 php-spy-content border-end scrollbar-thin">
             {% for module in info.modules %}
                 <div class="d-flex justify-content-between align-items-start position-relative border-bottom p-1">
                     <a class="php-spy-link stretched-link text-body pe-3" href="#php-item-{{ loop.index }}">
@@ -58,9 +58,9 @@
             {% endfor %}
         </div>
         {% set attrs = {
-            class: 'col-10 php-spy-content scrollbar-thin',
-            'data-bs-spy': 'scroll',
+            class: 'col-md-8 col-lg-10 col-12 php-spy-content scrollbar-thin',
             'data-bs-target': '#php-list-spy',
+            'data-bs-spy': 'scroll',
             tabindex: 0,
         } %}
         <div {{ html_attr(attrs) }}>

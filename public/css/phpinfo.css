@@ -126,7 +126,6 @@ body:not(.sidebar-show) .php-spy-content {
     height: calc(100vh - var(--spy-content-height) - var(--horizontal-navigation-height));
 }
 
-
-body:not(.statusbar-show):not(.sidebar-show) .php-spy-content {
+body:not(.statusbar-show, .sidebar-show) .php-spy-content {
     height: calc(100vh - var(--spy-content-height) + var(--statusbar-height) - var(--horizontal-navigation-height));
 }

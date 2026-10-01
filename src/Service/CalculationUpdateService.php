@@ -25,7 +25,6 @@ use App\Traits\MathTrait;
 use App\Traits\SessionAwareTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Utils\FormatUtils;
-use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
@@ -56,11 +55,10 @@ class CalculationUpdateService implements ServiceSubscriberInterface
     public function createQuery(): CalculationUpdateQuery
     {
         $query = new CalculationUpdateQuery();
-        $query->setDate($this->getDate($query->getDate()))
+
+        return $query->setDate($this->getDate($query->getDate()))
             ->setInterval($this->getInterval($query->getInterval()))
             ->setStates($this->getStates(true));
-
-        return $query;
     }
 
     public function saveQuery(CalculationUpdateQuery $query): void
@@ -75,29 +73,21 @@ class CalculationUpdateService implements ServiceSubscriberInterface
     public function update(CalculationUpdateQuery $query): CalculationUpdateResult
     {
         $result = new CalculationUpdateResult();
-        if ([] === $query->getStates()) {
+        if (!$query->hasStates()) {
             return $result;
         }
 
         $calculations = $this->getCalculations($query);
-        if ([] === $calculations) {
-            return $result;
-        }
-
         foreach ($calculations as $calculation) {
             $oldTotal = $calculation->getOverallTotal();
-            if (!$this->updateCalculation($calculation)) {
-                continue;
+            if ($this->updateCalculation($calculation)) {
+                $result->addCalculation($oldTotal, $calculation);
             }
-            $result->addCalculation($oldTotal, $calculation);
         }
-
-        if ($query->isSimulate() || !$result->isValid()) {
-            return $result;
+        if (!$query->isSimulate()) {
+            $this->listenerService->suspendListeners($this->flush(...));
+            $this->logResult($query, $result);
         }
-
-        $this->listenerService->suspendListeners($this->calculationRepository->flush(...));
-        $this->logResult($query, $result);
 
         return $result;
     }
@@ -145,22 +135,27 @@ class CalculationUpdateService implements ServiceSubscriberInterface
         return true;
     }
 
-    /**
-     * @return Calculation[]
-     */
-    private function getCalculations(CalculationUpdateQuery $query): array
+    private function flush(): void
     {
-        $expr = Criteria::expr();
-        $criteria = Criteria::create(true)
-            ->andWhere($expr->in('state', $query->getStates()))
-            ->andWhere($expr->gte('date', $query->getDateFrom()))
-            ->andWhere($expr->lte('date', $query->getDate()));
+        $this->calculationRepository->flush()
+            ->clear();
+    }
 
+    /**
+     * @return iterable<Calculation>
+     */
+    private function getCalculations(CalculationUpdateQuery $query): iterable
+    {
         return $this->calculationRepository
             ->createQueryBuilder('c')
-            ->addCriteria($criteria)
+            ->where('c.state IN (:states)')
+            ->andWhere('c.date >= :dateFrom')
+            ->andWhere('c.date <= :dateTo')
+            ->setParameter('states', $query->getStates())
+            ->setParameter('dateFrom', $query->getDateFrom())
+            ->setParameter('dateTo', $query->getDate())
             ->getQuery()
-            ->getResult();
+            ->toIterable();
     }
 
     private function getDate(DatePoint $default): DatePoint
@@ -168,9 +163,6 @@ class CalculationUpdateService implements ServiceSubscriberInterface
         return $this->getSessionDate(self::KEY_DATE, $default);
     }
 
-    /**
-     * Gets the global margin, in percent, for the given amount.
-     */
     private function getGlobalMargin(float $amount): float
     {
         return $this->isFloatZero($amount) ? 0.0 : $this->globalMarginRepository->getMargin($amount);

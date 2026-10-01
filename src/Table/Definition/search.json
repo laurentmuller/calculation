@@ -7,19 +7,19 @@
         "field": "entityName",
         "title": "search.fields.entity",
         "searchable": false,
-        "class": "text-code text-ellipsis"
+        "class": "text-code text-truncate"
     },
     {
         "field": "fieldName",
         "title": "search.fields.field",
         "searchable": false,
-        "class": "text-code text-ellipsis"
+        "class": "text-code text-truncate"
     },
     {
         "field": "content",
         "title": "search.fields.content",
         "searchable": false,
-        "class": "w-auto text-ellipsis",
+        "class": "w-auto text-truncate",
         "default": true
     },
     {

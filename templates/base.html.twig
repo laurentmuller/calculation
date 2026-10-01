@@ -50,6 +50,7 @@
     {# container #}
     <div role="main" class="{% block container_class 'container' %}">
         <div class="row g-0">
+
             {% block body -%}{%- endblock body %}
         </div>
     </div>
@@ -63,7 +64,9 @@
 {# cookie_banner #}
 {% block cookie_banner -%}{{ include('cookie_banner.html.twig') }}{%- endblock cookie_banner %}
 {# java scripts #}
-<noscript>{{ 'common.no_script_support'|trans }}</noscript>
+<noscript>
+    <div class="alert alert-danger alert-no-script">{{ 'common.no_script_support'|trans }}</div>
+</noscript>
 {% block javascripts %}
     {% if is_js_debug %}
         {{ asset_js('build/jquery/jquery.js') }}

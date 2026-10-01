@@ -51,15 +51,6 @@ final class GlobalMarginRepositoryTest extends AbstractRepositoryTestCase
         }
     }
 
-    /**
-     * @throws \ReflectionException
-     */
-    public function testGetDefaultOrder(): void
-    {
-        $actual = $this->repository->getDefaultOrder();
-        self::assertSame([], $actual);
-    }
-
     public function testGetDistinctValues(): void
     {
         $actual = $this->repository->getDistinctValues('minimum');

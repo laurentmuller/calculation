@@ -49,8 +49,8 @@
                                 <tr>
                                     <th class="text-id text-border">{{ 'calculation.fields.id'|trans }}</th>
                                     <th class="text-date">{{ 'calculation.fields.date'|trans }}</th>
-                                    <th class="text-nowrap">{{ 'calculation.fields.customer'|trans }}</th>
-                                    <th class="text-nowrap">{{ 'calculation.fields.description'|trans }}</th>
+                                    <th class="mv-150 text-truncate">{{ 'calculation.fields.customer'|trans }}</th>
+                                    <th class="mv-150 text-truncate">{{ 'calculation.fields.description'|trans }}</th>
                                     <th class="text-currency">{{ 'calculation.result.old_value'|trans }}</th>
                                     <th class="text-currency">{{ 'calculation.result.new_value'|trans }}</th>
                                     <th class="text-currency">{{ 'calculation.result.delta'|trans }}</th>
@@ -61,8 +61,8 @@
                                     <tr>
                                         <td class="text-id text-border state-border-{{ value.stateId }}">{{ value.id|identifier }}</td>
                                         <td class="text-date">{{ value.date|locale_date }}</td>
-                                        <td class="text-truncate mw-100">{{ value.customer }}</td>
-                                        <td class="text-truncate mw-100">{{ value.description }}</td>
+                                        <td class="mv-150 text-truncate" style="max-width: 150px;">{{ value.customer }}</td>
+                                        <td class="mv-150 text-truncate" style="max-width: 150px;">{{ value.description }}</td>
                                         <td class="text-currency">{{ value.old_value|amount }}</td>
                                         <td class="text-currency">{{ value.new_value|amount }}</td>
                                         <td class="text-currency">{{ value.delta|amount }}</td>

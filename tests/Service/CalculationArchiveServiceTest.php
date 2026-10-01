@@ -321,8 +321,8 @@ final class CalculationArchiveServiceTest extends TestCase
     private function setCalculations(array $calculations = []): void
     {
         $query = self::createStub(Query::class);
-        $query->method('getResult')
-            ->willReturn($calculations);
+        $query->method('toIterable')
+            ->willReturn(new \ArrayIterator($calculations));
 
         $queryBuilder = self::createStub(QueryBuilder::class);
         $queryBuilder->method('getQuery')

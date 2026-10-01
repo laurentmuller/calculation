@@ -930,3 +930,16 @@ form:has(.alert-submit) {
 html[data-bs-theme=dark] .btn-close {
     filter: invert(1) grayscale(100%) brightness(200%) !important;
 }
+
+/* no JS script alert */
+.alert-no-script {
+    text-align: center;
+    position: absolute;
+    width: 25%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+
+
+}

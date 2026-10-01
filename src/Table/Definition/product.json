@@ -7,7 +7,7 @@
         "field": "description",
         "title": "product.fields.description",
         "default": true,
-        "class": "f-400 text-ellipsis"
+        "class": "mv-400 text-truncate"
     },
     {
         "field": "groupCode",

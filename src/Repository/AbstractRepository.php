@@ -58,6 +58,17 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public const string TASK_ITEM_ALIAS = 'i';
 
     /**
+     * Clears the underlying entity manager. All objects that are currently managed
+     * by the entity manager become detached.
+     */
+    public function clear(): static
+    {
+        $this->getEntityManager()->clear();
+
+        return $this;
+    }
+
+    /**
      * Creates a default query builder.
      *
      * @param string $alias the entity alias
@@ -86,23 +97,15 @@ abstract class AbstractRepository extends ServiceEntityRepository
      * This effectively synchronizes the in-memory state of managed objects with the
      * database.
      */
-    public function flush(): void
+    public function flush(): static
     {
         $this->getEntityManager()->flush();
+
+        return $this;
     }
 
     /**
-     * Gets the default order of this entity.
-     *
-     * @return array<string, SortMode> an array with the field as the key and the order as the value
-     */
-    public function getDefaultOrder(): array
-    {
-        return [];
-    }
-
-    /**
-     * Gets sorted, distinct and not null values for the given column.
+     * Gets sorted, distinct, and not null values for the given column.
      *
      * @param string $field the field name (column) to get values for
      * @param string $value a value to search within the column or an empty string for all
@@ -215,12 +218,11 @@ abstract class AbstractRepository extends ServiceEntityRepository
      *
      * @see AbstractRepository::flush()
      */
-    public function persist(EntityInterface $entity, bool $flush = true): void
+    public function persist(EntityInterface $entity, bool $flush = true): static
     {
         $this->getEntityManager()->persist($entity);
-        if ($flush) {
-            $this->flush();
-        }
+
+        return $flush ? $this->flush() : $this;
     }
 
     /**
@@ -229,12 +231,11 @@ abstract class AbstractRepository extends ServiceEntityRepository
      * @param EntityInterface $entity the entity to remove
      * @param bool            $flush  true to flush change to the database
      */
-    public function remove(EntityInterface $entity, bool $flush = true): void
+    public function remove(EntityInterface $entity, bool $flush = true): static
     {
         $this->getEntityManager()->remove($entity);
-        if ($flush) {
-            $this->flush();
-        }
+
+        return $flush ? $this->flush() : $this;
     }
 
     /**

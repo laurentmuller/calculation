@@ -25,7 +25,9 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 class CalculationUpdateQuery extends AbstractSimulateQuery
 {
     private DatePoint $date;
+
     private string $interval = 'P1M';
+
     /** @var CalculationState[] */
     #[Assert\Count(min: 1)]
     private array $states = [];
@@ -72,6 +74,15 @@ class CalculationUpdateQuery extends AbstractSimulateQuery
     public function getStatesId(): array
     {
         return $this->mapStates(static fn (CalculationState $state): int => (int) $state->getId());
+    }
+
+    /**
+     * @phpstan-assert-if-true non-empty-array<int> $this->getStatesId()
+     * @phpstan-assert-if-true non-empty-array<CalculationState> $this->getStates()
+     */
+    public function hasStates(): bool
+    {
+        return [] !== $this->states;
     }
 
     public function setDate(DatePoint $date): self

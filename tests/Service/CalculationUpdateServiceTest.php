@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Service;
 
+use App\Entity\Calculation;
 use App\Entity\Category;
 use App\Entity\Group;
 use App\Entity\GroupMargin;
@@ -38,7 +39,7 @@ final class CalculationUpdateServiceTest extends AuthenticateWebTestCase
     #[\Override]
     protected function tearDown(): void
     {
-        $this->deleteCalculation();
+        $this->deleteEntitiesByClass(Calculation::class);
         parent::tearDown();
     }
 

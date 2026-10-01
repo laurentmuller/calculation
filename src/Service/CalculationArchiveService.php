@@ -46,7 +46,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     public function __construct(
         private readonly CalculationRepository $calculationRepository,
         private readonly CalculationStateRepository $stateRepository,
-        private readonly SuspendEventListenerService $service,
+        private readonly SuspendEventListenerService $listenerService,
     ) {
     }
 
@@ -56,11 +56,10 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     public function createQuery(): CalculationArchiveQuery
     {
         $query = new CalculationArchiveQuery();
-        $query->setSources($this->getSources(true))
+
+        return $query->setSources($this->getSources(true))
             ->setTarget($this->getTarget())
             ->setDate($this->getDate());
-
-        return $query;
     }
 
     /**
@@ -119,26 +118,23 @@ class CalculationArchiveService implements ServiceSubscriberInterface
      */
     public function update(CalculationArchiveQuery $query): CalculationArchiveResult
     {
-        $target = $query->getTarget();
-        $sources = $query->getSources();
-        $date = $query->getDate();
-
         $result = new CalculationArchiveResult();
-        $calculations = $this->getCalculations($date, $sources);
-        foreach ($calculations as $calculation) {
-            $oldState = $calculation->getState();
-            if ($oldState instanceof CalculationState && $oldState !== $target) {
-                $calculation->setState($target);
-                $result->addCalculation($oldState, $calculation);
-            }
-        }
-
-        if ($query->isSimulate() || !$result->isValid()) {
+        if (!$query->hasTarget() || !$query->hasSources()) {
             return $result;
         }
 
-        $this->service->suspendListeners($this->calculationRepository->flush(...));
-        $this->logResult($query, $result);
+        $target = $query->getTarget();
+        $calculations = $this->getCalculations($query);
+        foreach ($calculations as $calculation) {
+            $oldState = $calculation->getState();
+            if ($this->updateCalculation($calculation, $oldState, $target)) {
+                $result->addCalculation($oldState, $calculation);
+            }
+        }
+        if (!$query->isSimulate()) {
+            $this->listenerService->suspendListeners($this->flush(...));
+            $this->logResult($query, $result);
+        }
 
         return $result;
     }
@@ -151,7 +147,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
         $builder = $this->calculationRepository
             ->createQueryBuilder('c');
         if ([] !== $sources) {
-            $builder->andWhere('c.state IN (:states)')
+            $builder->where('c.state IN (:states)')
                 ->setParameter('states', $sources);
         }
         if ($date instanceof DatePoint) {
@@ -162,23 +158,17 @@ class CalculationArchiveService implements ServiceSubscriberInterface
         return $builder;
     }
 
-    /**
-     * Gets the calculations to archive.
-     *
-     * @param CalculationState[] $sources
-     *
-     * @return Calculation[]
-     */
-    private function getCalculations(DatePoint $date, array $sources): array
+    private function flush(): void
     {
-        if ([] === $sources) {
-            return [];
-        }
+        $this->calculationRepository->flush()
+            ->clear();
+    }
 
-        /** @var Calculation[] */
-        return $this->createQueryBuilder($sources, $date)
+    private function getCalculations(CalculationArchiveQuery $query): iterable
+    {
+        return $this->createQueryBuilder($query->getSources(), $query->getDate())
             ->getQuery()
-            ->getResult();
+            ->toIterable();
     }
 
     private function getDate(): DatePoint
@@ -224,13 +214,12 @@ class CalculationArchiveService implements ServiceSubscriberInterface
      */
     private function getScalarDate(array $sources, string $function): ?DatePoint
     {
-        $builder = $this->createQueryBuilder($sources)
-            ->select(\sprintf('%s(c.date)', $function));
+        $date = $this->createQueryBuilder($sources)
+            ->select(\sprintf('%s(c.date)', $function))
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        /** @var string|null $date */
-        $date = $builder->getQuery()->getSingleScalarResult();
-
-        return null === $date ? null : DateUtils::createDatePoint($date);
+        return \is_string($date) ? DateUtils::createDatePoint($date) : null;
     }
 
     /**
@@ -238,7 +227,6 @@ class CalculationArchiveService implements ServiceSubscriberInterface
      */
     private function getSources(bool $useSession): array
     {
-        /** @var CalculationState[] $sources */
         $sources = $this->stateRepository
             ->getEditableQueryBuilder()
             ->getQuery()
@@ -273,9 +261,20 @@ class CalculationArchiveService implements ServiceSubscriberInterface
             $this->trans('archive.fields.date') => $query->getDateFormatted(),
             $this->trans('archive.fields.sources') => $query->getSourcesCode(),
             $this->trans('archive.fields.target') => $query->getTargetCode(),
-            $this->trans('archive.result.calculations') => $result->count(),
+            $this->trans('calculation.list.title') => $result->count(),
         ];
         $message = $this->trans('counters.calculations_archive', ['count' => $result->count()]);
         $this->logInfo($message, $context);
+    }
+
+    private function updateCalculation(Calculation $calculation, ?CalculationState $oldState, CalculationState $target): bool
+    {
+        if (!$oldState instanceof CalculationState || $oldState === $target) {
+            return false;
+        }
+
+        $calculation->setState($target);
+
+        return true;
     }
 }

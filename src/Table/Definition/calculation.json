@@ -24,12 +24,12 @@
     {
         "field": "customer",
         "title": "calculation.fields.customer",
-        "class": "f-200 text-ellipsis"
+        "class": "mv-200 text-truncate"
     },
     {
         "field": "description",
         "title": "calculation.fields.description",
-        "class": "f-200 text-ellipsis"
+        "class": "mv-200 text-truncate"
     },
     {
         "field": "overallMargin",

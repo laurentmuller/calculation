@@ -6,17 +6,26 @@ parameters:
         - tests
         - public
 
+    checkDynamicProperties: true
     checkFunctionNameCase: true
     checkInternalClassCaseSensitivity: true
     checkMissingOverrideMethodAttribute: true
-    checkUninitializedProperties: true
+    checkTooWideParameterOutInProtectedAndPublicMethods: true
     checkTooWideReturnTypesInProtectedAndPublicMethods: true
+    checkTooWideThrowTypesInProtectedAndPublicMethods: true
+    checkUninitializedProperties: true
+
+    polluteScopeWithBlock: true
+    polluteScopeWithLoopInitialAssignments: true
+
+    rememberPossiblyImpureFunctionValues: true
+
+    reportAlwaysTrueInLastCondition: true
     reportMaybesInMethodSignatures: true
     reportMaybesInPropertyPhpDocTypes: true
+    reportNonIntStringArrayKey: true
     reportStaticMethodSignatures: true
     reportUnmatchedIgnoredErrors: true
-    checkDynamicProperties: true
-    reportNonIntStringArrayKey: true
 
     doctrine:
     	allowNullablePropertyForRequiredField: true

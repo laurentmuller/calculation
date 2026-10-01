@@ -1491,7 +1491,6 @@ archive:
         empty: Aucune calculation ne correspond aux critères d'archivage.
         total: Total
         old_state: Ancien statut
-        calculations: Calculations
         show: Afficher les calculations modifiées
     fields:
         date: Date limite

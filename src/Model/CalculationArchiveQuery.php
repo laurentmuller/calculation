@@ -85,6 +85,25 @@ class CalculationArchiveQuery extends AbstractSimulateQuery
         return $this->target?->getId();
     }
 
+    /**
+     * @phpstan-assert-if-true non-empty-array<int> $this->getSourcesId()
+     * @phpstan-assert-if-true non-empty-array<CalculationState> $this->getSources()
+     */
+    public function hasSources(): bool
+    {
+        return [] !== $this->sources;
+    }
+
+    /**
+     * @phpstan-assert-if-true int $this->getTargetId()
+     * @phpstan-assert-if-true string $this->getTargetCode()
+     * @phpstan-assert-if-true CalculationState $this->getTarget()
+     */
+    public function hasTarget(): bool
+    {
+        return $this->target instanceof CalculationState;
+    }
+
     public function setDate(DatePoint $date): self
     {
         $this->date = $date;

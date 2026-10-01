@@ -14,27 +14,24 @@ declare(strict_types=1);
 namespace App\Tests;
 
 use Symfony\Component\Dotenv\Dotenv;
+use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
-
-$logfile = __DIR__ . '/../var/log/test.log';
-
-if (\file_exists($logfile)) {
-    \file_put_contents($logfile, '');
-}
 
 require __DIR__ . '/../vendor/autoload.php';
 
 // clear cache
 try {
     $fs = new Filesystem();
-    $fs->remove([__DIR__ . '/../var/cache/test']);
-} catch (\Exception) {
+    $fs->remove(__DIR__ . '/../var/cache/test');
+} catch (IOException) {
     // ignore
 }
 
-$file = __DIR__ . '/../config/bootstrap.php';
-if (\file_exists($file)) {
-    require $file;
-} elseif (\method_exists(Dotenv::class, 'bootEnv')) {
+// @phpstan-ignore function.alreadyNarrowedType
+if (\method_exists(Dotenv::class, 'bootEnv')) {
     (new Dotenv())->bootEnv(__DIR__ . '/../.env');
+}
+
+if ((bool) $_SERVER['APP_DEBUG']) {
+    \umask(0o000);
 }

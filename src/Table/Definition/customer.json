@@ -7,16 +7,16 @@
         "field": "nameAndCompany",
         "title": "customer.fields.nameAndCompany",
         "default": true,
-        "class": "w-35 text-ellipsis"
+        "class": "w-35 text-truncate"
     },
     {
         "field": "address",
         "title": "customer.fields.address",
-        "class": "w-auto text-ellipsis"
+        "class": "w-auto text-truncate"
     },
     {
         "field": "zipCity",
         "title": "customer.fields.zipCity",
-        "class": "w-20 text-ellipsis"
+        "class": "w-20 text-truncate"
     }
 ]

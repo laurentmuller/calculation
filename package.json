@@ -6,14 +6,14 @@
     "author": "bibi@bibi.nu",
     "type": "commonjs",
     "scripts": {
-        "build": "run-s clean generate copy",
-        "clean": "del-cli public/build -f",
-        "copy": "copy-files-from-to --config package-copy.json",
-        "generate": "sass scss:public/build/bootstrap -q --no-source-map",
         "outdated": "npm outdated --loglevel info",
+        "update": "npm update --loglevel info",
         "stylelint": "npx stylelint strict -f verbose public/css/*.css",
         "stylelint-fix": "npx stylelint strict --fix lazy -f verbose public/css/*.css",
-        "update": "npm update --loglevel info"
+        "clean": "del-cli public/build -f",
+        "generate": "sass scss:public/build/bootstrap -q --no-source-map",
+        "copy": "copy-files-from-to --config package-copy.json",
+        "build": "run-s clean generate copy"
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^7.0",

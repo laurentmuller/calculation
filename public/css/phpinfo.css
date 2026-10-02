@@ -109,7 +109,7 @@ svg.about-icon {
     fill: currentcolor;
 }
 
-#php-list-spy div:has(.php-spy-link.active) {
+#php-list-spy td:has(a.active) {
     background-color: var(--bs-secondary-bg);
 }
 

@@ -70,6 +70,17 @@ class PhpInfoService
     public const int TYPE_REDACTED = 5;
     public const int TYPE_UNDEFINED = -1;
 
+    private const array CURL_OPTIONS = [
+        \CURLOPT_RETURNTRANSFER => true,
+        \CURLOPT_NOBODY => true,
+        \CURLOPT_TIMEOUT => 5,
+        \CURLOPT_CONNECTTIMEOUT => 3,
+        \CURLOPT_FOLLOWLOCATION => true,
+        \CURLOPT_MAXREDIRS => 3,
+        \CURLOPT_SSL_VERIFYPEER => false,
+        \CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) URL-Checker/1.0',
+    ];
+
     private const string NO_VALUE = 'No value';
 
     private const string NONE_VALUE = 'None';
@@ -256,15 +267,20 @@ class PhpInfoService
     }
 
     /**
-     * @return GroupType
+     * @return GroupType|null
      */
-    private function parseGroup(Group $group): array
+    private function parseGroup(Group $group): ?array
     {
+        $configs = $this->parseConfigs($group);
+        if ([] === $configs) {
+            return null;
+        }
+
         return [
             'name' => StringUtils::trim($group->name()),
             'note' => StringUtils::trim($group->note()),
             'headers' => $this->parseHeaders($group),
-            'configs' => $this->parseConfigs($group),
+            'configs' => $configs,
         ];
     }
 
@@ -273,9 +289,11 @@ class PhpInfoService
      */
     private function parseGroups(Module $module): array
     {
-        return \array_map(
-            $this->parseGroup(...),
-            $module->groups()->toArray()
+        return \array_filter(
+            \array_map(
+                $this->parseGroup(...),
+                $module->groups()->toArray()
+            )
         );
     }
 
@@ -288,13 +306,17 @@ class PhpInfoService
     }
 
     /**
-     * @return ModuleType
+     * @return ModuleType|null
      */
-    private function parseModule(Module $module): array
+    private function parseModule(Module $module): ?array
     {
+        $groups = $this->parseGroups($module);
+        if ([] === $groups) {
+            return null;
+        }
         $module = [
             'name' => $module->name(),
-            'groups' => $this->parseGroups($module),
+            'groups' => $groups,
             'url' => null,
         ];
         $module['size'] = \array_reduce(
@@ -307,26 +329,28 @@ class PhpInfoService
             return $this->parseVariables($module);
         }
 
+        if (StringUtils::equalIgnoreCase('xdebug', $module['name'])) {
+            return $this->parseXdebug($module);
+        }
+
         return $module;
     }
 
     /**
-     * @return ModuleType[]
+     * @return array<string, ModuleType>
      */
     private function parseModules(PhpInfo $info): array
     {
-        $modules = \array_map(
-            $this->parseModule(...),
-            $info->modules()->toArray()
+        $modules = \array_filter(
+            \array_map(
+                $this->parseModule(...),
+                $info->modules()->toArray()
+            )
         );
-
         $this->updateUrls($modules);
-
-        // move Core module after General module
         $this->moveCoreModule($modules);
 
-        // remove empty modules
-        return \array_filter($modules, static fn (array $module): bool => 0 !== \count($module['groups']));
+        return $modules;
     }
 
     /**
@@ -336,17 +360,6 @@ class PhpInfoService
      */
     private function parseUrls(array $entries): array
     {
-        $options = [
-            \CURLOPT_RETURNTRANSFER => true,
-            \CURLOPT_NOBODY => true,
-            \CURLOPT_TIMEOUT => 5,
-            \CURLOPT_CONNECTTIMEOUT => 3,
-            \CURLOPT_FOLLOWLOCATION => true,
-            \CURLOPT_MAXREDIRS => 3,
-            \CURLOPT_SSL_VERIFYPEER => false,
-            \CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) URL-Checker/1.0',
-        ];
-
         $handlers = [];
         $multiHandle = \curl_multi_init();
         foreach ($entries as $name => $url) {
@@ -355,7 +368,7 @@ class PhpInfoService
                 continue;
             }
             $ch = \curl_init($url);
-            \curl_setopt_array($ch, $options);
+            \curl_setopt_array($ch, self::CURL_OPTIONS);
             \curl_multi_add_handle($multiHandle, $ch);
             $handlers[$name] = $ch;
         }
@@ -439,10 +452,6 @@ class PhpInfoService
      */
     private function parseVariables(array $module): array
     {
-        if (1 !== \count($module['groups'])) {
-            return $module;
-        }
-
         $groups = [];
         $group = $module['groups'][0];
         $pattern = '/\\$_(.*)\\[\'(.*)\']/';
@@ -464,6 +473,27 @@ class PhpInfoService
             ];
         }
         $module['groups'] = $this->sortGroups($groups);
+
+        return $module;
+    }
+
+    /**
+     * @param ModuleType $module
+     *
+     * @return ModuleType
+     */
+    private function parseXdebug(array $module): array
+    {
+        if (\count($module['groups']) < 2) {
+            return $module;
+        }
+
+        $group = &$module['groups'][1];
+        $group['headers'] = null;
+        \array_shift($group['configs']);
+        foreach ($group['configs'] as &$config) {
+            $config['master'] = null;
+        }
 
         return $module;
     }

@@ -274,6 +274,26 @@ final class CalculationArchiveServiceTest extends TestCase
         self::assertCount(1, $actual);
     }
 
+    public function testWithSameState(): void
+    {
+        $state = new CalculationState();
+        $state->setCode('editable')
+            ->setEditable(true);
+        $this->setCalculationStates([$state]);
+
+        $calculation = new Calculation();
+        $calculation->setState($state);
+        $this->setCalculations([$calculation]);
+
+        $query = new CalculationArchiveQuery();
+        $query->setSources([$state]);
+        $query->setTarget($state);
+
+        $service = $this->createService();
+        $actual = $service->update($query);
+        self::assertCount(0, $actual);
+    }
+
     private function createRequestStack(): RequestStack
     {
         $request = new Request();
@@ -292,13 +312,22 @@ final class CalculationArchiveServiceTest extends TestCase
         $service = new CalculationArchiveService(
             $this->calculationRepository,
             $this->stateRepository,
-            self::createStub(SuspendEventListenerService::class)
+            $this->createSuspendEventListenerService()
         );
         $service->setLogger(self::createStub(LoggerInterface::class))
             ->setTranslator($this->createStubTranslator())
             ->setRequestStack($this->createRequestStack());
 
         return $service;
+    }
+
+    private function createSuspendEventListenerService(): SuspendEventListenerService
+    {
+        $listener = self::createStub(SuspendEventListenerService::class);
+        $listener->method('suspendListeners')
+            ->willReturnCallback(static fn (callable $callback): mixed => $callback());
+
+        return $listener;
     }
 
     private function setCalculationDate(?string $value = null): void

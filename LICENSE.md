@@ -28,23 +28,23 @@ aucun droit d'auteur n'est cédé au preneur de licence.
 
 ## Définition de la licence
 
-Pendant la durée de l'abonnement, le preneur de licence et les utilisateurs
-autorisés ont le droit non-exclusif et non transmissible à des tiers d'utiliser
-l'abonnement, l'application, ses mises à jour et son mode d'emploi. Le preneur
-de licence et les utilisateurs autorisés peuvent charger autant de fois qu'ils
-le désirent les éléments de l'application. Aucun droit d'utilisation
-supplémentaire n'est accordé au preneur de contrat et aux utilisateurs
-autorisés. Ils n'ont en particulier pas le droit de modifier cette application,
-de la corriger, de la développer, de la traduire, de la déchiffrer ou de la
-décompiler ni de la vendre, la louer, la prêter, la transmettre et ni surtout,
-de permettre à des tiers de l'utiliser.
+Pendant la durée de l'abonnement, le preneur de licence, les utilisatrices et
+les utilisateurs autorisés ont le droit non-exclusif et non transmissible à des
+tiers d'utiliser l'abonnement, l'application, ses mises à jour et son mode
+d'emploi. Le preneur de licence, les utilisatrices et les utilisateurs autorisés
+peuvent charger autant de fois qu'ils le désirent les éléments de l'application.
+Aucun droit d'utilisation supplémentaire n'est accordé au preneur de contrat,
+aux utilisatrices et aux utilisateurs autorisés. Ils n'ont en particulier pas le
+droit de modifier cette application, de la corriger, de la développer, de la
+traduire, de la déchiffrer ou de la décompiler ni de la vendre, la louer, la
+prêter, la transmettre et ni surtout, de permettre à des tiers de l'utiliser.
 
 ## Mises à jour, développements, assistance technique
 
-Le preneur de licence et les utilisateurs autorisés ont le devoir d'installer
-des mises à jour et de nouvelles versions de l'application en temps opportun.
-La maintenance d'anciennes versions n'est assurée que trois mois au maximum
-après le lancement de la version la plus récente. Pour les questions
+Le preneur de licence, les utilisatrices et les utilisateurs autorisés ont le
+devoir d'installer des mises à jour et de nouvelles versions de l'application en
+temps opportun. La maintenance d'anciennes versions n'est assurée que trois mois
+au maximum après le lancement de la version la plus récente. Pour les questions
 d'assistance technique, le fournisseur propose une centrale d'appels ainsi
 qu'une aide en ligne selon la description des prestations de l'abonnement.
 
@@ -72,9 +72,9 @@ relatives à la communication électronique des données s'appliquent par ailleu
 ## Perte du droit d'utilisation
 
 En cas de violation de l'une ou de plusieurs dispositions de ce contrat, le
-preneur de licence et les utilisateurs autorisés perdent le droit d'utiliser
-l'application. Le fournisseur peut refuser toute nouvelle installation de
-l'application.
+preneur de licence, les utilisatrices et les utilisateurs autorisés perdent le
+droit d'utiliser l'application. Le fournisseur peut refuser toute nouvelle
+installation de l'application.
 
 ## Résiliation
 
@@ -96,4 +96,4 @@ preneur de licence ou à son siège.
 Pour toute question relative au présent accord de licence, veuillez nous
 contacter par courrier électronique.
 
-Montévraz, décembre 2024.
+Montévraz, octobre 2026.

@@ -24,21 +24,38 @@ use Symfony\Component\Cache\Adapter\NullAdapter;
 
 final class PhpInfoServiceTest extends TestCase
 {
-    public function testMoveCoreModule(): void
+    public function testConfigsEmpty(): void
     {
-        $coreGroup = new Group(
-            configs: new Items(),
-        );
-        $coreGroups = new Items([$coreGroup]);
+        $configs = $this->createItems();
+        $coreGroup = new Group(configs: $configs);
+        $coreGroups = $this->createItems($coreGroup);
         $coreModule = new Module('Core', $coreGroups);
 
-        $generalGroup = new Group(
-            configs: new Items(),
+        $info = new PhpInfo(\PHP_VERSION, $this->createItems($coreModule));
+        $service = $this->createService();
+        $actual = $service->getPhpInfo($info);
+        self::assertCount(0, $actual['modules']);
+    }
+
+    public function testMoveCoreModule(): void
+    {
+        $coreConfigs = $this->createItems(
+            $this->createConfig(name: 'Default', localValue: 'local1', masterValue: 'master1'),
         );
-        $generalGroups = new Items([$generalGroup]);
+        $coreGroup = new Group(configs: $coreConfigs);
+        $coreGroups = $this->createItems($coreGroup);
+        $coreModule = new Module('Core', $coreGroups);
+
+        $generalConfigs = $this->createItems(
+            $this->createConfig(name: 'Default', localValue: 'local1', masterValue: 'master1'),
+        );
+        $generalGroup = new Group(
+            configs: $generalConfigs,
+        );
+        $generalGroups = $this->createItems($generalGroup);
         $generalModule = new Module('General', $generalGroups);
 
-        $info = new PhpInfo(\PHP_VERSION, new Items([$coreModule, $generalModule]));
+        $info = new PhpInfo(\PHP_VERSION, $this->createItems($coreModule, $generalModule));
         $service = $this->createService();
         $actual = $service->getPhpInfo($info);
         self::assertCount(2, $actual['modules']);
@@ -46,13 +63,14 @@ final class PhpInfoServiceTest extends TestCase
 
     public function testMoveCoreModuleNoGeneral(): void
     {
-        $coreGroup = new Group(
-            configs: new Items(),
+        $coreConfigs = $this->createItems(
+            $this->createConfig(name: 'Default', localValue: 'local1', masterValue: 'master1'),
         );
-        $coreGroups = new Items([$coreGroup]);
+        $coreGroup = new Group(configs: $coreConfigs);
+        $coreGroups = $this->createItems($coreGroup);
         $coreModule = new Module('Core', $coreGroups);
 
-        $info = new PhpInfo(\PHP_VERSION, new Items([$coreModule]));
+        $info = new PhpInfo(\PHP_VERSION, $this->createItems($coreModule));
         $service = $this->createService();
         $actual = $service->getPhpInfo($info);
         self::assertCount(1, $actual['modules']);
@@ -60,7 +78,7 @@ final class PhpInfoServiceTest extends TestCase
 
     public function testPhpInfo(): void
     {
-        $configs = new Items([
+        $configs1 = $this->createItems(
             $this->createConfig(name: 'Default', localValue: 'local1', masterValue: 'master1'),
             $this->createConfig(name: 'Empty Master', localValue: 'local2', masterValue: ''),
             $this->createConfig(name: 'UTF-8', localValue: '✘'),
@@ -72,40 +90,34 @@ final class PhpInfoServiceTest extends TestCase
             $this->createConfig(name: 'Disabled Value', localValue: 'false'),
             $this->createConfig(name: 'Replace Middle', localValue: 'REMEMBERME=12345;FAKE'),
             $this->createConfig(name: 'Replace End', localValue: 'REMEMBERME=12345'),
-        ]);
-        $headings = $this->createHeadings();
-        $group = new Group(
-            configs: $configs,
-            headings: $headings,
+        );
+        $group1 = new Group(
+            configs: $configs1,
+            headings: $this->createHeadings(),
             name: 'Group',
             note: 'Note',
         );
+        $groups1 = $this->createItems($group1);
+        $module1 = new Module('calendar', $groups1);
 
-        $groups = new Items([$group]);
-        $module1 = new Module('calendar', $groups);
         $module2 = $this->createVariablesModule();
+        $modules = $this->createItems($module1, $module2);
 
-        $modules = new Items([
-            $module1,
-            $module2,
-        ]);
         $info = new PhpInfo(\PHP_VERSION, $modules);
         $service = $this->createService();
         $actual = $service->getPhpInfo($info);
         self::assertSame(\PHP_VERSION, $actual['version']);
-        self::assertNotEmpty($actual['modules']);
+        self::assertCount(2, $actual['modules']);
     }
 
     public function testVariablesWithNoMatchName(): void
     {
-        $configs = new Items([
-            $this->createConfig(name: 'FAKE', localValue: 'local', masterValue: 'master'),
-        ]);
-        $group = new Group(
-            configs: $configs,
+        $configs = $this->createItems(
+            $this->createConfig(name: 'Fake', localValue: 'local', masterValue: 'master'),
         );
-        $module = new Module('PHP Variables', new Items([$group]));
-        $info = new PhpInfo(\PHP_VERSION, new Items([$module]));
+        $group = new Group(configs: $configs);
+        $module = new Module('PHP Variables', $this->createItems($group));
+        $info = new PhpInfo(\PHP_VERSION, $this->createItems($module));
         $service = $this->createService();
         $actual = $service->getPhpInfo($info);
         self::assertCount(1, $actual['modules']);
@@ -113,11 +125,56 @@ final class PhpInfoServiceTest extends TestCase
 
     public function testVariablesWithoutGroup(): void
     {
-        $module = new Module('PHP Variables', new Items());
-        $info = new PhpInfo(\PHP_VERSION, new Items([$module]));
+        $module = new Module('PHP Variables', $this->createItems());
+        $info = new PhpInfo(\PHP_VERSION, $this->createItems($module));
         $service = $this->createService();
         $actual = $service->getPhpInfo($info);
         self::assertCount(0, $actual['modules']);
+    }
+
+    public function testXdebugEmpty(): void
+    {
+        $configs = $this->createItems(
+            $this->createConfig(name: 'Fake', localValue: 'local', masterValue: 'master'),
+        );
+        $group = new Group(configs: $configs);
+        $groups = $this->createItems($group);
+        $module = new Module('xdebug', $groups);
+
+        $info = new PhpInfo(\PHP_VERSION, $this->createItems($module));
+        $service = $this->createService();
+        $actual = $service->getPhpInfo($info);
+        self::assertCount(1, $actual['modules']);
+    }
+
+    public function testXdebugFound(): void
+    {
+        $configs0 = $this->createItems(
+            $this->createConfig(name: 'Entry1', localValue: 'local1', masterValue: 'master1'),
+        );
+        $group0 = new Group(configs: $configs0);
+        $configs1 = $this->createItems(
+            $this->createConfig(name: 'Directive', localValue: 'Local Value', masterValue: 'Master Value'),
+            $this->createConfig(name: 'Entry2', localValue: 'local2', masterValue: 'master2'),
+        );
+        $group1 = new Group(configs: $configs1);
+        $groups = $this->createItems($group0, $group1);
+        $module = new Module('xdebug', $groups);
+
+        $info = new PhpInfo(\PHP_VERSION, $this->createItems($module));
+        $service = $this->createService();
+
+        $actual = $service->getPhpInfo($info);
+        self::assertCount(1, $actual['modules']);
+
+        $actual = $actual['modules'][0]['groups'];
+        self::assertCount(2, $actual);
+
+        $actual = $actual[1]['configs'];
+        self::assertCount(1, $actual);
+
+        $actual = $actual[0];
+        self::assertNull($actual['master']);
     }
 
     private function createConfig(
@@ -135,11 +192,12 @@ final class PhpInfoServiceTest extends TestCase
 
     private function createHeadings(): Items
     {
-        return new Items([
-            'Directive',
-            'Local Value',
-            'Master Value',
-        ]);
+        return $this->createItems('Directive', 'Local Value', 'Master Value');
+    }
+
+    private function createItems(mixed ...$values): Items
+    {
+        return new Items($values);
     }
 
     private function createService(): PhpInfoService
@@ -149,13 +207,11 @@ final class PhpInfoServiceTest extends TestCase
 
     private function createVariablesModule(): Module
     {
-        $configs = new Items([
+        $configs = $this->createItems(
             $this->createConfig(name: '$_REQUEST[\'FAKE\']', localValue: 'local', masterValue: 'master'),
-        ]);
-        $group = new Group(
-            configs: $configs,
         );
-        $groups = new Items([$group]);
+        $group = new Group(configs: $configs);
+        $groups = $this->createItems($group);
 
         return new Module('PHP Variables', $groups);
     }

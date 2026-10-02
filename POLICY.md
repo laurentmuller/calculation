@@ -18,12 +18,12 @@ signification que dans notre Accord de licence.
 
 ## Définitions
 
-- **Application.** Par application, nous entendons le site web
-  **Calculation** exploité par **bibi.nu**.
+- **Application.** Par application, nous entendons le site web **Calculation**
+  exploité par **bibi.nu**.
 
 - **Données à caractère personnel.** Les données à caractère personnel désignent
-  des données concernant un individu vivant qui peut être identifié à partir de
-  ces données (ou à partir de ces données et d'autres informations en notre
+  des données concernant une personne vivante qui peut être identifié à partir
+  de ces données (ou à partir de ces données et d'autres informations en notre
   possession ou susceptibles d'entrer en notre possession).
 
 - **Données d'utilisation.** Les données d'utilisation sont recueillies
@@ -85,7 +85,7 @@ Exemples de cookies que nous utilisons
 
 - **Cookies de session.** Nous utilisons des cookies de session pour faire
   fonctionner notre application.
-  
+
 - **Cookies de préférences.** Nous utilisons des cookies de préférences pour
   mémoriser vos préférences et vos différents paramètres.
 
@@ -139,8 +139,8 @@ de bonne foi que cela est nécessaire pour
 - Protéger et défendre les droits ou les biens du fournisseur.
 - Prévenir d'éventuels actes répréhensibles ou enquêter sur de tels actes dans
   le cadre de l'application.
-- Assurer la sécurité personnelle des utilisateurs, de l'application ou
-  du public.
+- Assurer la sécurité personnelle des utilisatrices et des utilisateurs, de
+  l'application ou du public.
 - Se protéger contre la responsabilité civile.
 
 ## Sécurité des données
@@ -194,7 +194,7 @@ nouvelle politique de confidentialité sur cette page.
 
 Avant que la modification ne prenne effet, nous vous en informerons par courrier
 électronique ou/et en plaçant un avis bien en vue dans notre application et nous
-actualiserons la "date de prise d'effet" qui figure en bas de la présente
+actualiserons la date de prise d'effet qui figure en bas de la présente
 politique de confidentialité.
 
 Nous vous conseillons de consulter la présente politique de confidentialité
@@ -207,4 +207,4 @@ effet lorsqu'elles sont publiées sur cette page.
 Pour toute question relative à la présente politique de confidentialité,
 veuillez nous contacter par courrier électronique.
 
-Montévraz, décembre 2024.
+Montévraz, octobre 2026.

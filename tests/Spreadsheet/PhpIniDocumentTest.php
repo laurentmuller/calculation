@@ -37,8 +37,6 @@ final class PhpIniDocumentTest extends TestCase
     {
         return [
             'version' => \PHP_VERSION,
-            'hostname' => null,
-            'os' => null,
             'modules' => [
                 [
                     'name' => 'Module',

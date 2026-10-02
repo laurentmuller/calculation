@@ -127,7 +127,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
         $calculations = $this->getCalculations($query);
         foreach ($calculations as $calculation) {
             $oldState = $calculation->getState();
-            if ($this->updateCalculation($calculation, $oldState, $target)) {
+            if ($this->updateCalculation($calculation, $target)) {
                 $result->addCalculation($oldState, $calculation);
             }
         }
@@ -267,9 +267,9 @@ class CalculationArchiveService implements ServiceSubscriberInterface
         $this->logInfo($message, $context);
     }
 
-    private function updateCalculation(Calculation $calculation, ?CalculationState $oldState, CalculationState $target): bool
+    private function updateCalculation(Calculation $calculation, CalculationState $target): bool
     {
-        if (!$oldState instanceof CalculationState || $oldState === $target) {
+        if ($calculation->getState() === $target) {
             return false;
         }
 

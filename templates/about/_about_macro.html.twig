@@ -72,7 +72,7 @@
     } %}
     <div class="border-bottom pb-1">
         <a {{ html_attr(attrs) }}>
-            {{- source('about/' ~ icon ~ '.svg') -}}
+            {{- source('about/about_' ~ icon ~ '.svg') -}}
             <span>{{ 'about.version'|trans({'%version%': version}) -}}</span>
         </a>
     </div>

@@ -19,7 +19,7 @@
 {% block card_body -%}
     {% set attrs = {
         id: 'configuration',
-        class: 'phpversion',
+        class: 'about',
         'data-collapse': 'common.collapse'|trans,
         'data-expand': 'common.expand'|trans,
         'data-error': 'about.load.error'|trans,
@@ -47,7 +47,7 @@
 {%- endblock card_footer %}
 {# stylesheets #}
 {% block stylesheets %}
-    {{ asset_css('css/phpinfo.css') }}
+    {{ asset_css('css/about.css') }}
 {% endblock stylesheets %}
 {# javascripts #}
 {% block javascripts %}

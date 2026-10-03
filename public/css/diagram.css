@@ -34,10 +34,6 @@ body:not(.sidebar-show) .diagram {
     font-family: var(--bs-body-font-family) !important;
     cursor: grab;
 
-    .clickable {
-        cursor: pointer !important;
-    }
-
     .error-icon {
         fill: var(--bs-danger) !important;
     }

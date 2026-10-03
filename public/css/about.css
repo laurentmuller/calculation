@@ -4,75 +4,75 @@
     --spy-content-height: 305px;
 }
 
-.phpversion table {
+.about table {
     margin-bottom: 0;
 }
 
-.phpversion td {
+.about td {
     word-break: break-word;
     -webkit-hyphens: auto;
     -moz-hyphens: auto;
     hyphens: auto;
 }
 
-.phpversion td.h {
+.about td.h {
     font-size: initial;
 }
 
-.phpversion tr.h th,
-.phpversion td.e {
+.about tr.h th,
+.about td.e {
     width: 30%;
 }
 
 /* one value */
-.phpversion td.v:nth-child(2):nth-last-child(1) {
+.about td.v:nth-child(2):nth-last-child(1) {
     width: 70%;
 }
 
 /* two values */
-.phpversion td.v:nth-child(2):nth-last-child(2),
-.phpversion td.v:nth-child(3):nth-last-child(1),
-.phpversion td.d:nth-child(2):nth-last-child(2),
-.phpversion td.d:nth-child(3):nth-last-child(1) {
+.about td.v:nth-child(2):nth-last-child(2),
+.about td.v:nth-child(3):nth-last-child(1),
+.about td.d:nth-child(2):nth-last-child(2),
+.about td.d:nth-child(3):nth-last-child(1) {
     width: 35%;
 }
 
-.phpversion td.f {
+.about td.f {
     width: 10%;
 }
 
-.phpversion td > p {
+.about td > p {
     margin-bottom: 5px;
 }
 
-.phpversion h1,
-.phpversion h2,
-.phpversion .h1,
-.phpversion .h2 {
+.about h1,
+.about h2,
+.about .h1,
+.about .h2 {
     font-weight: bold;
     margin-bottom: 0;
 }
 
-.phpversion h1,
-.phpversion .h1 {
+.about h1,
+.about .h1 {
     font-size: 1.25rem;
 }
 
-.phpversion h2,
-.phpversion .h2 {
+.about h2,
+.about .h2 {
     font-size: 1.15rem;
 }
 
-.phpversion h2 p {
+.about h2 p {
     margin-top: 5px;
     margin-bottom: 0;
 }
 
-.phpversion tbody .h th {
+.about tbody .h th {
     font-weight: normal;
 }
 
-.phpversion tbody .h th.v {
+.about tbody .h th.v {
     width: 70%;
 }
 
@@ -82,24 +82,28 @@
         color: inherit;
         text-decoration: none;
     }
+    .php-spy-content {
+        height: auto;
+        overflow-y: revert !important;
+    }
 }
 
-.phpversion td.v.disabled {
+.about td.v.disabled {
     color: var(--bs-secondary);
 }
 
-.phpversion td.v.enabled::before,
-.phpversion td.v.disabled::before {
+.about td.v.enabled::before,
+.about td.v.disabled::before {
     font-weight: bold;
     margin-right: 0.25rem;
 }
 
-.phpversion td.v.enabled::before {
+.about td.v.enabled::before {
     content: '✓';
     color: var(--bs-success);
 }
 
-.phpversion td.v.disabled::before {
+.about td.v.disabled::before {
     content: '✗';
 }
 

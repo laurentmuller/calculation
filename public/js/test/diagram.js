@@ -311,13 +311,17 @@
     const loadDiagram = (zoom = DEFAULT_ZOOM) => {
         mermaid.initialize({
             theme: 'base',
+            look: 'classic',
             startOnLoad: false,
             useMaxWidth: false,
             securityLevel: 'loose',
             themeVariables: getThemeVariables(),
             class: {
                 hideEmptyMembersBox: true
-            }
+            },
+            themeCSS: `
+                g .label { fill: red; stroke: #4a148c;  stroke-width: 8px;}
+            `
         });
         mermaid.run({
             nodes: [diagram]

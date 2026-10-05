@@ -27,10 +27,10 @@
     <div {{ html_attr(attrs) }}>
         <div id="aboutAccordion">
             {{ include('about/about_symfony_content.html.twig') }}
+            {{ include('dialog/dialog_license.html.twig') }}
+            {{ include('dialog/dialog_package.html.twig') }}
         </div>
     </div>
-    {{ include('dialog/dialog_license.html.twig') }}
-    {{ include('dialog/dialog_package.html.twig') }}
 {% endblock card_body %}
 {# card footer #}
 {% block card_footer -%}

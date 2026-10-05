@@ -82,6 +82,7 @@
         color: inherit;
         text-decoration: none;
     }
+
     .php-spy-content {
         height: auto;
         overflow-y: revert !important;
@@ -94,17 +95,18 @@
 
 .about td.v.enabled::before,
 .about td.v.disabled::before {
-    font-weight: bold;
+    font-family: 'Font Awesome 7 Free', sans-serif;
+    font-weight: 900;
     margin-right: 0.25rem;
 }
 
 .about td.v.enabled::before {
-    content: '✓';
+    content: '\f00c';
     color: var(--bs-success);
 }
 
 .about td.v.disabled::before {
-    content: '✗';
+    content: '\f00d';
 }
 
 svg.about-icon {
@@ -115,6 +117,12 @@ svg.about-icon {
 
 #php-list-spy td:has(a.active) {
     background-color: var(--bs-secondary-bg);
+}
+
+@media (width <= 768px) {
+    #php-list-spy {
+        height: 10rem;
+    }
 }
 
 .php-spy-content {

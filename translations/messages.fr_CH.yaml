@@ -1122,9 +1122,10 @@ security:
         submit: Connexion
         success: Bienvenue <b>%user_name%</b>. Vous vous êtes connecté à l'application <b>%app_name%</b> avec succès.
         error: Le nom de l'utilisateur ou le mot de passe est invalide.
+        already_connect: <b>%user_name%</b>, vous vous êtes déjà connecté à l'application <b>%app_name%</b>.
     logout:
         title: Se déconnecter de l'application
-        success: <b>%user_name%</b>, vous vous êtes déconnecté de l'application <b>%app_name%</b> avec succès.
+        success: <b>%user_name%</b>, vous êtes déconnecté de l'application <b>%app_name%</b> avec succès.
 show:
     name: Nom
     value: Valeur

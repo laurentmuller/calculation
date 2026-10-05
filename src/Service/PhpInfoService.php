@@ -24,8 +24,13 @@ use STS\Phpinfo\Models\Group;
 use STS\Phpinfo\Models\Module;
 use STS\Phpinfo\PhpInfo;
 use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
  * Service to get PHP information.
@@ -69,17 +74,6 @@ class PhpInfoService
     public const int TYPE_NONE_VALUE = 4;
     public const int TYPE_REDACTED = 5;
     public const int TYPE_UNDEFINED = -1;
-
-    private const array CURL_OPTIONS = [
-        \CURLOPT_RETURNTRANSFER => true,
-        \CURLOPT_NOBODY => true,
-        \CURLOPT_TIMEOUT => 5,
-        \CURLOPT_CONNECTTIMEOUT => 3,
-        \CURLOPT_FOLLOWLOCATION => true,
-        \CURLOPT_MAXREDIRS => 3,
-        \CURLOPT_SSL_VERIFYPEER => false,
-        \CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) URL-Checker/1.0',
-    ];
 
     private const string NO_VALUE = 'No value';
 
@@ -162,6 +156,40 @@ class PhpInfoService
     }
 
     /**
+     * @param array<string, string> $entries
+     *
+     * @return ResponseInterface[]
+     */
+    private function createResponses(HttpClientInterface $client, array $entries): array
+    {
+        return $this->mapKeyAndValue(
+            $entries,
+            static fn (string $name, string $url): ResponseInterface => $client->request(
+                Request::METHOD_HEAD,
+                $url,
+                ['user_data' => $name]
+            ),
+        );
+    }
+
+    /**
+     * @param ModuleType[] $modules
+     *
+     * @return array<string, string>
+     */
+    private function createUrls(array $modules): array
+    {
+        $names = \array_column($modules, 'name');
+        $urls = \array_map(static fn (string $name): string => \sprintf(self::URL_INFO, \strtolower($name)), $names);
+        $entries = \array_merge(\array_combine($names, $urls), self::URL_NAMES);
+
+        return \array_filter(
+            $entries,
+            static fn (string $entry): bool => \is_string(\filter_var($entry, \FILTER_VALIDATE_URL))
+        );
+    }
+
+    /**
      * @param array<int, ModuleType> $modules
      */
     private function findKeyModule(array $modules, string $name): ?int
@@ -188,22 +216,6 @@ class PhpInfoService
             self::REDACTED_NAMES,
             static fn (string $key): bool => StringUtils::containsIgnoreCase($name, $key)
         );
-    }
-
-    /**
-     * @param ModuleType[] $modules
-     *
-     * @return array<string, ?string>
-     */
-    private function loadUrls(array $modules): array
-    {
-        $entries = $this->mapToKeyValue(
-            $modules,
-            static fn (array $module): array => [$module['name'] => \sprintf(self::URL_INFO, \strtolower($module['name']))]
-        );
-        $entries = \array_merge($entries, self::URL_NAMES);
-
-        return $this->parseUrls($entries);
     }
 
     /**
@@ -354,49 +366,6 @@ class PhpInfoService
     }
 
     /**
-     * @param array<string, string> $entries
-     *
-     * @return array<string, ?string>
-     */
-    private function parseUrls(array $entries): array
-    {
-        $handlers = [];
-        $multiHandle = \curl_multi_init();
-        foreach ($entries as $name => $url) {
-            if (false === \filter_var($url, \FILTER_VALIDATE_URL)) {
-                $handlers[$name] = null;
-                continue;
-            }
-            $ch = \curl_init($url);
-            \curl_setopt_array($ch, self::CURL_OPTIONS);
-            \curl_multi_add_handle($multiHandle, $ch);
-            $handlers[$name] = $ch;
-        }
-
-        do {
-            $status = \curl_multi_exec($multiHandle, $running);
-            if ($running > 0) {
-                \curl_multi_select($multiHandle);
-            }
-        } while ($running > 0 && \CURLM_OK === $status);
-
-        $results = [];
-        foreach ($handlers as $name => $ch) {
-            if (!$ch instanceof \CurlHandle) {
-                $results[$name] = null;
-                continue;
-            }
-            $code = \curl_getinfo($ch, \CURLINFO_RESPONSE_CODE);
-            $results[$name] = Response::HTTP_OK === $code ? $entries[$name] : null;
-            \curl_multi_remove_handle($multiHandle, $ch);
-            \curl_close($ch);
-        }
-        \curl_multi_close($multiHandle);
-
-        return $results;
-    }
-
-    /**
      * @return EntryType
      */
     private function parseValue(string $name, ?string $value): array
@@ -536,12 +505,36 @@ class PhpInfoService
      */
     private function updateUrls(array &$modules): void
     {
-        $values = $this->cache->get('php-module-url', fn (): array => $this->loadUrls($modules));
-        foreach ($values as $name => $url) {
-            $key = \array_find_key($modules, static fn (array $module): bool => $module['name'] === $name);
-            if (null !== $key) {
-                $modules[$key]['url'] = $url;
+        $values = $this->cache->get('php-modules-url', fn (): array => $this->validateUrls($modules));
+        foreach ($modules as &$module) {
+            $module['url'] = $values[$module['name']] ?? null;
+        }
+    }
+
+    /**
+     * @param ModuleType[] $modules
+     *
+     * @return array<string, string>
+     */
+    private function validateUrls(array $modules): array
+    {
+        $client = HttpClient::create();
+        $entries = $this->createUrls($modules);
+        $responses = $this->createResponses($client, $entries);
+
+        $results = [];
+        foreach ($client->stream($responses) as $response => $chunk) {
+            if ($chunk->isFirst()) {
+                try {
+                    if (Response::HTTP_OK === $response->getStatusCode()) {
+                        $name = $response->getInfo('user_data');
+                        $results[$name] = $entries[$name];
+                    }
+                } catch (TransportExceptionInterface) {
+                }
             }
         }
+
+        return $results;
     }
 }

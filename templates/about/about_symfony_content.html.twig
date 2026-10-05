@@ -23,14 +23,14 @@
     <tr>
         <td class="e">{{ bundle.name }}</td>
         <td class="v">{{ bundle.path }}</td>
-        <td class="v text-percent">{{ bundle.files }}</td>
-        <td class="v text-percent">{{ bundle.size }}</td>
+        <td class="text-percent">{{ bundle.files }}</td>
+        <td class="text-percent">{{ bundle.size }}</td>
     </tr>
 {%- endmacro rowBundle %}
 {% macro headerPackage() %}
     <thead>
     <tr>
-        <th>Name</th>
+        <th class="e">Name</th>
         <th class="text-id">Version</th>
         <th colspan="2">Description</th>
     </tr>
@@ -38,18 +38,19 @@
 {% endmacro headerPackage %}
 {% macro rowPackage(package) -%}
     {%- set is_license = package.licenseFile -%}
-    {%- set is_links = package.homepage or package.source -%}
+    {%- set is_homepage = package.homepage -%}
+    {%- set is_source = package.source -%}
     {%- set is_dependance = package.production|length or package.development|length -%}
-    {%- set is_dropdown = is_license or is_links or is_dependance -%}
+    {%- set is_dropdown = is_license or is_homepage or is_source or is_dependance -%}
     {%- set attrs = {
         class: ['row-package', is_dropdown ? 'rowlink' : null],
     } -%}
     <tr {{ html_attr(attrs) }}>
         <td class="e">{{ package.name }}</td>
         <td class="text-id">{{ package.version }}</td>
+        <td class="text" {% if not is_dropdown %} colspan="2"{% endif %}>{{ package.description|default('&nbsp;') }}</td>
         {% if is_dropdown %}
-            <td class="text">{{ package.description|default('&nbsp;') }}</td>
-            <td class="rowlink-skip">
+            <td class="rowlink-skip d-print-none">
                 {{ dropdownEllipsis() }}
                 <ul class="dropdown-menu dropdown-menu-end">
                     {%- if is_license -%}
@@ -59,29 +60,24 @@
                             icon: 'fa-fw fa-solid fa-book-open-reader',
                             class: 'link-license btn-default') -}}
                     {% endif %}
-                    {%- if is_links -%}
-                        {%- if is_license -%}
-                            {{ dropdownSeparator() }}
-                        {%- endif -%}
-                        {%- if package.homepage -%}
-                            {{- dropdownItemExternal(
-                                href: package.homepage,
-                                text: 'about.link_homepage',
-                                icon: 'fa-fw fa-solid fa-arrow-up-right-from-square',
-                                class: 'link-homepage') -}}
-                        {%- endif -%}
-                        {%- if package.source -%}
-                            {{- dropdownItemExternal(
-                                href: package.source,
-                                text: 'about.link_source',
-                                icon: 'fa-fw fa-brands fa-github',
-                                class: 'link-source') -}}
-                        {%- endif -%}
+                    {%- if is_homepage -%}
+                        {{- dropdownItemExternal(
+                            href: package.homepage,
+                            text: 'about.link_homepage',
+                            icon: 'fa-fw fa-solid fa-arrow-up-right-from-square',
+                            class: 'link-homepage') -}}
+                    {%- endif -%}
+                    {% if (is_license or is_homepage) and (is_source or is_dependance) %}
+                        {{ dropdownSeparator() }}
+                    {% endif %}
+                    {%- if is_source -%}
+                        {{- dropdownItemExternal(
+                            href: package.source,
+                            text: 'about.link_source',
+                            icon: 'fa-fw fa-brands fa-github',
+                            class: 'link-source') -}}
                     {%- endif -%}
                     {%- if is_dependance -%}
-                        {%- if is_license or is_links -%}
-                            {{ dropdownSeparator() }}
-                        {%- endif -%}
                         {{- dropdownItemWithClass(
                             href: path('about_symfony_dependency', {name: package.name}),
                             text: 'about.package.title',
@@ -90,8 +86,6 @@
                     {% endif %}
                 </ul>
             </td>
-        {% else %}
-            <td class="text" colspan="2">{{ package.description|default('&nbsp;') }}</td>
         {% endif %}
     </tr>
 {%- endmacro rowPackage %}
@@ -111,11 +105,11 @@
         <td class="text-category text-wrap">
             {% for method in route.methods %}
                 {% switch method %}
-                {% case 'GET' %}
+                {% case constant('Symfony\\Component\\HttpFoundation\\Request::METHOD_GET') %}
                     <span class="badge rounded me-1 text-bg-success">{{ method }}</span>
-                {% case 'POST' %}
+                {% case constant('Symfony\\Component\\HttpFoundation\\Request::METHOD_POST') %}
                     <span class="badge rounded me-1 text-bg-secondary">{{ method }}</span>
-                {% case 'DELETE' %}
+                {% case constant('Symfony\\Component\\HttpFoundation\\Request::METHOD_DELETE') %}
                     <span class="badge rounded me-1 text-bg-danger">{{ method }}</span>
                 {% default %}
                     <span class="badge rounded me-1 text-bg-light">{{ method }}</span>
@@ -128,7 +122,7 @@
     <tr>
         <td class="e">{{ directory.name }}</td>
         <td class="v">{{ directory.relative }}</td>
-        <td class="v text-percent">{{ directory.size }}</td>
+        <td class="text-percent">{{ directory.size }}</td>
     </tr>
 {%- endmacro rowDirectory %}
 {# content #}
@@ -183,8 +177,8 @@
             <table class="table table-sm table-hover mb-0">
                 <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Path</th>
+                    <th class="e">Name</th>
+                    <th class="v">Path</th>
                     <th class="text-percent">Size</th>
                 </tr>
                 </thead>
@@ -208,8 +202,8 @@
                 <table class="table table-sm table-hover mb-0">
                     <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Path</th>
+                        <th class="e">Name</th>
+                        <th class="v">Path</th>
                         <th class="text-percent">Files</th>
                         <th class="text-percent">Size</th>
                     </tr>

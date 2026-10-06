@@ -36,7 +36,6 @@ use App\Traits\RenderWordDocumentTrait;
 use App\Utils\StringUtils;
 use App\Word\HtmlDocument;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[IsSuperAdmin]
@@ -59,7 +58,7 @@ class TestExportController extends AbstractController
      * Output a report with Fontawesome images.
      */
     #[GetRoute(path: '/fontawesome', name: 'fontawesome')]
-    public function exportFontAwesome(FontAwesomeImageService $service): Response
+    public function exportFontAwesome(FontAwesomeImageService $service): PdfResponse
     {
         return $this->renderPdfDocument(new FontAwesomeReport($this, $service));
     }

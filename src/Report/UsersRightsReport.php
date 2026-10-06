@@ -25,7 +25,6 @@ use App\Pdf\Interfaces\PdfGroupListenerInterface;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
-use App\Pdf\PdfTable;
 use App\Service\FontAwesomeCellService;
 use App\Service\RoleBuilderService;
 use App\Service\RoleService;
@@ -259,7 +258,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         $this->outputRole($table, $rights->getUserRole());
     }
 
-    private function outputTotal(PdfTable $table, array $entities): void
+    private function outputTotal(PdfGroupTable $table, array $entities): void
     {
         $count = $this->superAdmin ? 3 : 2;
         $roles = $this->translateCount($count, 'counters.roles');

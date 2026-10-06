@@ -27,6 +27,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * The access permissions type.
  *
  * @extends AbstractType<EntityPermission[]>
+ *
+ * @phpstan-type TFlagBag FlagBag<EntityPermission>
+ * @phpstan-type TForm FormInterface<TFlagBag>
  */
 class RightsType extends AbstractType implements DataMapperInterface
 {
@@ -55,7 +58,7 @@ class RightsType extends AbstractType implements DataMapperInterface
     }
 
     /**
-     * @param \Traversable<FormInterface<mixed>> $forms
+     * @phpstan-ignore missingType.generics
      */
     #[\Override]
     public function mapDataToForms(mixed $viewData, \Traversable $forms): void
@@ -68,31 +71,31 @@ class RightsType extends AbstractType implements DataMapperInterface
         }
 
         $viewData = (int) $viewData;
-        /** @var FormInterface<mixed>[] $forms */
-        $forms = \iterator_to_array($forms);
+        /** @var array<string, TForm> $array */
+        $array = \iterator_to_array($forms);
 
         $entities = $this->service->getEntities();
         foreach ($entities as $entity) {
             $value = $entity->getOffsetValue($viewData);
             $flagBag = new FlagBag(EntityPermission::class, $value);
-            $forms[$entity->getFormField()]->setData($flagBag);
+            $array[$entity->getFormField()]->setData($flagBag);
         }
     }
 
     /**
-     * @param \Traversable<FormInterface<mixed>> $forms
+     * @phpstan-ignore missingType.generics
      */
     #[\Override]
     public function mapFormsToData(\Traversable $forms, mixed &$viewData): void
     {
         $viewData = 0;
-        /** @var FormInterface<mixed>[] $forms */
-        $forms = \iterator_to_array($forms);
+        /** @var array<string, TForm> $array */
+        $array = \iterator_to_array($forms);
 
         $entites = $this->service->getEntities();
         foreach ($entites as $entity) {
-            $form = $forms[$entity->getFormField()];
-            /** @var FlagBag<EntityPermission> $flagBag */
+            $form = $array[$entity->getFormField()];
+            /** @var TFlagBag $flagBag */
             $flagBag = $form->getData();
             $viewData |= $entity->getShiftedValue($flagBag->getValue());
         }

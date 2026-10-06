@@ -126,6 +126,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
         $target = $query->getTarget();
         $calculations = $this->getCalculations($query);
         foreach ($calculations as $calculation) {
+            /** @phpstan-var CalculationState $oldState */
             $oldState = $calculation->getState();
             if ($this->updateCalculation($calculation, $target)) {
                 $result->addCalculation($oldState, $calculation);
@@ -164,6 +165,9 @@ class CalculationArchiveService implements ServiceSubscriberInterface
             ->clear();
     }
 
+    /**
+     * @return iterable<Calculation>
+     */
     private function getCalculations(CalculationArchiveQuery $query): iterable
     {
         return $this->createQueryBuilder($query->getSources(), $query->getDate())

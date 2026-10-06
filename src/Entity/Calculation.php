@@ -557,6 +557,8 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * Items are duplicate when two or more item descriptions are equal.
      *
      * @return bool true if duplicates items
+     *
+     * @phpstan-assert-if-true non-empty-array<CalculationItem> $this->getDuplicateItems()
      */
     public function hasDuplicateItems(): bool
     {
@@ -582,6 +584,8 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * Items are empty if the price or the quantity is equal to zero.
      *
      * @return bool true if empty items
+     *
+     * @phpstan-assert-if-true non-empty-array<CalculationItem> $this->getEmptyItems()
      */
     public function hasEmptyItems(): bool
     {

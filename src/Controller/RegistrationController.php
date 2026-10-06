@@ -27,6 +27,7 @@ use App\Service\EmailVerifier;
 use App\Service\UserExceptionService;
 use App\Traits\LoggerTrait;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -127,7 +128,7 @@ class RegistrationController extends AbstractController
         return 0 === $id ? null : $this->repository->find($id);
     }
 
-    private function handleException(Request $request, \Throwable $e): Response
+    private function handleException(Request $request, \Throwable $e): RedirectResponse
     {
         $exception = $this->service->handleException($request, $e);
         $message = $this->service->translate($exception);

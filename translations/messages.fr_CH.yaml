@@ -319,7 +319,7 @@ common:
     button_property: Propriétés
     button_refresh: Actualiser
     button_search: Rechercher
-    button_show: Afficher
+    button_show_properties: Afficher les propriétés
     button_table: Mode tabulaire
     button_submit_edit: Enregistrer
     button_submit_add: Ajouter

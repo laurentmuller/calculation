@@ -29,12 +29,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class TaskServiceType extends AbstractHelperType
 {
-    /**
-     * @param array{simple_widget: bool, ...} $options
-     */
     #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
+        /** @phpstan-var array{simple_widget: bool, ...} $options */
         if ($options['simple_widget']) {
             $form->remove('task')
                 ->add('task', PlainType::class, $this->getPlainTypeOptions());

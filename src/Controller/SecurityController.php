@@ -16,7 +16,6 @@ namespace App\Controller;
 use App\Attribute\GetPostRoute;
 use App\Attribute\IsPublicAccess;
 use App\Constants\SecurityAttributes;
-use App\Entity\User;
 use App\Form\User\UserLoginType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;

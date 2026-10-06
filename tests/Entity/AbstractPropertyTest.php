@@ -55,6 +55,7 @@ final class AbstractPropertyTest extends TestCase
         $entity = $this->getEntity();
         self::assertNull($entity->getDatePoint());
         $entity->setDate($date);
+        /** @var DatePoint|null $actual */
         $actual = $entity->getDatePoint();
         self::assertNotNull($actual);
         self::assertTimestampEquals($date, $actual);
@@ -81,6 +82,7 @@ final class AbstractPropertyTest extends TestCase
         $entity = $this->getEntity();
         self::assertNull($entity->getIntEnum(EntityPermission::class));
         $entity->setBackedEnum(EntityPermission::ADD);
+        /** @var EntityPermission|null $actual */
         $actual = $entity->getIntEnum(EntityPermission::class);
         self::assertSame(EntityPermission::ADD, $actual);
     }
@@ -98,6 +100,7 @@ final class AbstractPropertyTest extends TestCase
         $entity = $this->getEntity();
         self::assertNull($entity->getStringEnum(TableView::class));
         $entity->setBackedEnum(TableView::CUSTOM);
+        /** @var TableView|null $actual */
         $actual = $entity->getStringEnum(TableView::class);
         self::assertSame(TableView::CUSTOM, $actual);
     }

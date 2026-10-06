@@ -52,9 +52,9 @@ class FontAwesomeReport extends AbstractReport
     }
 
     /**
-     * @return \Iterator<string, SplFileInfo>
+     * @return \LimitIterator<string, SplFileInfo, \Iterator<non-empty-string, SplFileInfo>>
      */
-    private function createIterator(string $path): \Iterator
+    private function createIterator(string $path): \LimitIterator
     {
         $pattern = '*' . FontAwesomeImageService::SVG_EXTENSION;
         $finder = Finder::create()

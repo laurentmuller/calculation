@@ -16,7 +16,7 @@ namespace App\Form\Type;
 use App\Service\CountryFlagService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\ChoiceList\ChoiceList;
-use Symfony\Component\Form\ChoiceList\Loader\ChoiceLoaderInterface;
+use Symfony\Component\Form\ChoiceList\Factory\Cache\ChoiceLoader;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -60,7 +60,7 @@ class CountryFlagType extends AbstractType
     /**
      * @param Options<array{choice_translation_locale: ?string, only_flag: bool, ...}> $options
      */
-    private function getChoiceLoader(Options $options): ChoiceLoaderInterface
+    private function getChoiceLoader(Options $options): ChoiceLoader
     {
         return ChoiceList::lazy($this, fn (): array => $this->loadChoices($options));
     }

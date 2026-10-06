@@ -305,8 +305,6 @@ abstract class AbstractEntityController extends AbstractController
 
     /**
      * Update the parameters by adding the request query values.
-     *
-     * @param array{params?: array, ...} $parameters
      */
     protected function updateQueryParameters(
         Request $request,

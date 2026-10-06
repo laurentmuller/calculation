@@ -72,12 +72,10 @@ class PlainType extends AbstractType implements DateFormatInterface
     {
     }
 
-    /**
-     * @param OptionsType $options
-     */
     #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
+        /** @phpstan-var OptionsType $options */
         $data = $form->getViewData();
         $value = $this->getDataValue($data, $options);
         $display_value = $this->transform($options['display_transformer'], $data, $value);

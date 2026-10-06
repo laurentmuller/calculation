@@ -16,6 +16,7 @@ namespace App\Tests\Twig;
 use App\Tests\TranslatorStubTrait;
 use App\Twig\FormatExtension;
 use App\Utils\FormatUtils;
+use Twig\Error\Error;
 use Twig\Extension\AttributeExtension;
 
 /**
@@ -41,23 +42,17 @@ final class FormatExtensionTest extends RuntimeTestCase
     }
 
     /**
-     * @param string                $file
-     * @param string                $message
-     * @param string                $condition
-     * @param array<string, string> $templateSources
-     * @param false|string          $exception
-     * @param array<int, string[]>  $outputs
-     * @param string                $deprecation
+     * @throws Error
      */
     #[\Override]
     protected function doIntegrationTest(
-        $file,
-        $message,
-        $condition,
-        $templateSources,
-        $exception,
-        $outputs,
-        $deprecation = ''
+        mixed $file,
+        mixed $message,
+        mixed $condition,
+        mixed $templateSources,
+        mixed $exception,
+        mixed $outputs,
+        mixed $deprecation = ''
     ): void {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
         parent::doIntegrationTest($file, $message, $condition, $templateSources, $exception, $outputs, $deprecation);

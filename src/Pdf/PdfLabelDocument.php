@@ -154,11 +154,16 @@ class PdfLabelDocument extends PdfDocument
     private function convertLabel(string|PdfLabelItem|array $label): array
     {
         $items = [];
-        foreach ((array) $label as $item) {
+        if (!\is_array($label)) {
+            $label = [$label];
+        }
+        foreach ($label as $item) {
             if (null === $item) {
                 continue;
             }
-            $item = \is_string($item) ? new PdfLabelItem($item) : $item;
+            if (\is_string($item)) {
+                $item = new PdfLabelItem($item);
+            }
             if ($item->isText()) {
                 $items[] = $item;
             }

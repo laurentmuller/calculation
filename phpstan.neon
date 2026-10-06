@@ -39,23 +39,23 @@ parameters:
 
     type_coverage:
         constant: 100
-        declare: 100
-        param: 95
+        param: 99
         property: 100
         return: 100
 
+    type_perfect:
+        no_isset_on_object: true
+        no_empty_on_object: true
+        no_param_type_removal: true
+        no_mixed_property: true
+        no_mixed_caller: true
+        narrow_param: true
+        narrow_return: true
+
     ignoreErrors:
-        -
-            message: '#should be contravariant#'
-            identifier: method.childParameterType
         -
             message: '#no value type specified#'
             identifier: missingType.iterableValue
         -
             message: '#Call to static method .* will always evaluate to true.#'
             path: tests/*
-        -
-            identifier: staticMethod.impossibleType
-            paths:
-                - tests/Entity/AbstractPropertyTest.php
-                - tests/Entity/CalculationTest.php

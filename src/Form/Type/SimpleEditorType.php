@@ -52,12 +52,10 @@ class SimpleEditorType extends AbstractType
     ) {
     }
 
-    /**
-     * @param array{required: bool, ...} $options
-     */
     #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
+        /** @phpstan-var array{required: bool, ...} $options */
         if ($options['required']) {
             $view->vars['attr'] = \array_merge($view->vars['attr'], ['class' => $this->getWidgetClass($view)]);
         }

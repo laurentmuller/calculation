@@ -16,7 +16,6 @@ namespace App\Report;
 use App\Entity\Group;
 use App\Interfaces\DocumentHelperInterface;
 use App\Pdf\PdfStyle;
-use App\Pdf\PdfTable;
 use App\Report\Table\ReportTable;
 use App\Utils\FormatUtils;
 use fpdf\Enums\PdfOrientation;
@@ -136,7 +135,7 @@ class GroupsReport extends AbstractArrayReport
     /**
      * @param Group[] $entities
      */
-    private function outputTotals(PdfTable $table, array $entities): void
+    private function outputTotals(ReportTable $table, array $entities): void
     {
         $values = $this->getTotals($entities);
         $texts = [

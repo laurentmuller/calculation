@@ -158,7 +158,8 @@ class CommandController extends AbstractController
         }
 
         $session = $request->getSession();
-        $query ??= $session->get(self::KEY_QUERY_COMMAND, new CommandQuery());
+        $query ??= $this->getQuery($session);
+        /** @phpstan-var CommandType $command */
         $command = $this->getCommand($service, $query->name);
         $this->saveQuery($session, $query, $command);
 
@@ -219,6 +220,11 @@ class CommandController extends AbstractController
         }
 
         return $dataService->validateData($command, \array_merge($data, $existing));
+    }
+
+    private function getQuery(SessionInterface $session): CommandQuery
+    {
+        return $session->get(self::KEY_QUERY_COMMAND, new CommandQuery());
     }
 
     /**

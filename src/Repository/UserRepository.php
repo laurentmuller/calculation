@@ -49,8 +49,6 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
 
     /**
      * @see ResetPasswordRequestRepositoryInterface
-     *
-     * @phpstan-param User $user
      */
     #[\Override]
     public function createResetPasswordRequest(
@@ -59,6 +57,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
         string $selector,
         string $hashedToken
     ): ResetPasswordRequestInterface {
+        /** @var User $user */
         return $user->setResetPasswordRequest(DateUtils::toDatePoint($expiresAt), $selector, $hashedToken);
     }
 
@@ -92,12 +91,11 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
 
     /**
      * @see ResetPasswordRequestRepositoryInterface
-     *
-     * @phpstan-param User $user
      */
     #[\Override]
     public function getMostRecentNonExpiredRequestDate(object $user): ?DatePoint
     {
+        /** @var User $user */
         return $user->isExpired() ? null : $user->getRequestedAt();
     }
 
@@ -229,12 +227,11 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
 
     /**
      * @see ResetPasswordRequestRepositoryInterface
-     *
-     * @phpstan-param User $resetPasswordRequest
      */
     #[\Override]
     public function removeResetPasswordRequest(ResetPasswordRequestInterface $resetPasswordRequest): void
     {
+        /** @phpstan-var User $resetPasswordRequest */
         $this->resetPasswordRequest($resetPasswordRequest);
     }
 
@@ -266,12 +263,12 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
 
     /**
      * @see PasswordUpgraderInterface
-     *
-     * @param User $user
      */
     #[\Override]
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
+        /* @var User $user */
+        /** @phpstan-var User $user */
         $user->setPassword($newHashedPassword);
         $this->persist($user);
     }

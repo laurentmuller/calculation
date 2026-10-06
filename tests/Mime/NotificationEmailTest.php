@@ -129,7 +129,7 @@ final class NotificationEmailTest extends TestCase
         self::expectException(\InvalidArgumentException::class);
         self::expectExceptionMessage('Invalid importance value: "fake".');
         $this->createNotificationEmail()
-            ->importance('fake'); // @phpstan-ignore argument.type
+            ->importance('fake');
     }
 
     public function testPreparedHeadersWithoutSubject(): void
@@ -139,7 +139,7 @@ final class NotificationEmailTest extends TestCase
             ->to('fake@fake.com');
         $headers = $email->getPreparedHeaders();
 
-        $expected = '[LOW] ';
+        $expected = 'importance.low_title';
         $actual = $headers->getHeaderBody('Subject');
         self::assertSame($expected, $actual);
     }
@@ -173,7 +173,7 @@ final class NotificationEmailTest extends TestCase
             ->to('fake@fake.com');
         $headers = $email->getPreparedHeaders();
 
-        $expected = '[LOW] user.comment.title';
+        $expected = 'user.comment.title - importance.low_title';
         $actual = $headers->getHeaderBody('Subject');
         self::assertSame($expected, $actual);
     }

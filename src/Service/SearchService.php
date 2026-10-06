@@ -54,34 +54,34 @@ class SearchService implements ServiceSubscriberInterface
     use AuthorizationCheckerAwareTrait;
     use ServiceMethodsSubscriberTrait;
 
-    /** The action column name. */
+    /** The column name for the action. */
     public const string COLUMN_ACTION = 'action';
 
-    /** The content column name. */
+    /** The column name for the content. */
     public const string COLUMN_CONTENT = 'content';
 
-    /** The entity column name. */
+    /** The column name for the entity. */
     public const string COLUMN_ENTITY_NAME = 'entityName';
 
-    /** The field column name. */
+    /** The column name for the field. */
     public const string COLUMN_FIELD = 'field';
 
-    /** The field name column name. */
+    /** The column name for the field name. */
     public const string COLUMN_FIELD_NAME = 'fieldName';
 
-    /** The granted delete column name. */
+    /** The column name for the granted delete. */
     public const string COLUMN_GRANTED_DELETE = 'allowDelete';
 
-    /** The granted edit column name. */
+    /** The column name for the granted edit. */
     public const string COLUMN_GRANTED_EDIT = 'allowEdit';
 
-    /** The granted show column name. */
+    /** The column name for the granted show. */
     public const string COLUMN_GRANTED_SHOW = 'allowShow';
 
-    /** The identifier column name. */
+    /** The column name for the identifier. */
     public const string COLUMN_ID = 'id';
 
-    /** The type column name. */
+    /** The column name for the type. */
     public const string COLUMN_TYPE = 'type';
 
     /** Limit value to return all rows. */
@@ -295,7 +295,7 @@ class SearchService implements ServiceSubscriberInterface
         if (!$this->isGrantedSearch($class)) {
             return;
         }
-        if ($this->isTimestampable($class)) {
+        if ($this->isTimestampableInterface($class)) {
             $fields = \array_unique(\array_merge($fields, ['createdBy', 'updatedBy']));
         }
         foreach ($fields as $field) {
@@ -327,11 +327,11 @@ class SearchService implements ServiceSubscriberInterface
         $where = \sprintf('%s LIKE :%s', $content, self::SEARCH_PARAM);
 
         return $this->manager->createQueryBuilder()
-            ->select($alias . '.id')
+            ->select(\sprintf('%s.id', $alias))
             ->addSelect(\sprintf("'%s'", $name))
             ->addSelect(\sprintf("'%s'", $field))
             ->addSelect($content)
-            ->from($class, $alias)
+            ->from($class /* @type EntityInterface $class */, $alias)
             ->where($where);
     }
 
@@ -451,7 +451,7 @@ class SearchService implements ServiceSubscriberInterface
         return $this->isGrantedList($subject) && $this->isGrantedShow($subject);
     }
 
-    private function isTimestampable(string $class): bool
+    private function isTimestampableInterface(string $class): bool
     {
         return \is_a($class, TimestampableInterface::class, true);
     }

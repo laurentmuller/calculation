@@ -22,7 +22,6 @@ use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfFontAwesomeCell;
 use App\Pdf\PdfStyle;
-use App\Pdf\PdfTable;
 use App\Report\Table\ReportTable;
 use App\Service\FontAwesomeImageService;
 use App\Service\SchemaService;
@@ -88,7 +87,7 @@ class SchemaReport extends AbstractReport
         }
     }
 
-    private function createTable(string $id, PdfColumn ...$columns): PdfTable
+    private function createTable(string $id, PdfColumn ...$columns): ReportTable
     {
         /** @var positive-int $cols */
         $cols = \count($columns);

@@ -68,7 +68,7 @@ readonly class HtmlParser
         return new HtmlLiChunk($parent, $className);
     }
 
-    private function createOlChunk(HtmlParentChunk $parent, ?string $className, \DOMNode $node): HtmlOlChunk
+    private function createOlChunk(HtmlParentChunk $parent, ?string $className, \DOMElement $node): HtmlOlChunk
     {
         /** @var positive-int $start */
         $start = HtmlAttribute::LIST_START->getIntValue($node, 1);

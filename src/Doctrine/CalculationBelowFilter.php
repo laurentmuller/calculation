@@ -29,7 +29,7 @@ class CalculationBelowFilter extends SQLFilter
     public const string NAME = 'below_filter';
 
     /**
-     * @param ClassMetadata<Calculation> $targetEntity
+     * @param ClassMetadata<object> $targetEntity
      */
     #[\Override]
     public function addFilterConstraint(ClassMetadata $targetEntity, string $targetTableAlias): string
@@ -51,7 +51,7 @@ class CalculationBelowFilter extends SQLFilter
     }
 
     /**
-     * @param ClassMetadata<Calculation> $targetEntity
+     * @param ClassMetadata<object> $targetEntity
      */
     private function getColumnName(ClassMetadata $targetEntity, string $targetTableAlias, string $fieldName): string
     {

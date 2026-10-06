@@ -19,7 +19,6 @@ use App\Utils\StringUtils;
 use Symfony\Bridge\Twig\Mime\NotificationEmail as BaseNotificationEmail;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Header\HeaderInterface;
 use Symfony\Component\Mime\Header\Headers;
 use Symfony\Component\Translation\TranslatableMessage;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -31,7 +30,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class NotificationEmail extends BaseNotificationEmail
 {
-    private ?string $importance = null;
+    private Importance $importance = Importance::LOW;
 
     final public function __construct(private readonly TranslatorInterface $translator)
     {
@@ -121,37 +120,36 @@ class NotificationEmail extends BaseNotificationEmail
     #[\Override]
     public function getContext(): array
     {
-        $context = parent::getContext();
-        if (StringUtils::isString($this->importance)) {
-            $context['importance_text'] = $this->importance;
-        }
+        return parent::getContext() + ['importance_title' => $this->getImportanceTitle()];
+    }
 
-        return $context;
+    public function getImportanceTitle(): string
+    {
+        return $this->importance->transTitle($this->translator);
     }
 
     #[\Override]
     public function getPreparedHeaders(): Headers
     {
         $subject = $this->getSubject();
-        $headers = parent::getPreparedHeaders();
-        if (!StringUtils::isString($subject) || !StringUtils::isString($this->importance)) {
-            return $headers;
+        $body = $this->getImportanceTitle();
+        if (StringUtils::isString($subject)) {
+            $body = \sprintf('%s - %s', $subject, $body);
         }
 
-        $header = $headers->get('Subject');
-        if ($header instanceof HeaderInterface) {
-            $content = \sprintf('%s - %s', $subject, $this->importance);
-            $header->setBody($content);
-        }
+        $headers = parent::getPreparedHeaders();
+        $headers->setHeaderBody(
+            type: 'Text',
+            name: 'Subject',
+            body: $body
+        );
 
         return $headers;
     }
 
     /**
-     * @phpstan-param Importance|self::IMPORTANCE_* $importance
-     *
-     * @throws \InvalidArgumentException if the importance is a string and cannot be translated to the corresponding
-     *                                   enumeration
+     * @throws \InvalidArgumentException if the importance is a string and cannot be translated to a corresponding
+     *                                   Importance enumeration
      */
     #[\Override]
     public function importance(Importance|string $importance): static
@@ -163,7 +161,7 @@ class NotificationEmail extends BaseNotificationEmail
                 throw new \InvalidArgumentException(\sprintf('Invalid importance value: "%s".', $importance), $e->getCode(), $e);
             }
         }
-        $this->importance = $importance->transTitle($this->translator);
+        $this->importance = $importance;
 
         return parent::importance($importance->value);
     }

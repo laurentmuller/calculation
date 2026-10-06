@@ -163,7 +163,7 @@ class LogController extends AbstractController
      * Clear the log file cache.
      */
     #[GetRoute(path: '/refresh', name: 'refresh')]
-    public function refresh(Request $request): Response
+    public function refresh(Request $request): RedirectResponse
     {
         $this->service->clearCache();
 

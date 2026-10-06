@@ -109,8 +109,8 @@ final class NotificationEmailTest extends TestCase
         $context = $email->getContext();
         self::assertArrayHasKey('importance', $context);
         self::assertSame('medium', $context['importance']);
-        self::assertArrayHasKey('importance_text', $context);
-        self::assertSame('importance.medium_title', $context['importance_text']);
+        self::assertArrayHasKey('importance_title', $context);
+        self::assertSame('importance.medium_title', $context['importance_title']);
     }
 
     public function testImportanceAsEnumValue(): void
@@ -120,8 +120,8 @@ final class NotificationEmailTest extends TestCase
         $context = $email->getContext();
         self::assertArrayHasKey('importance', $context);
         self::assertSame('medium', $context['importance']);
-        self::assertArrayHasKey('importance_text', $context);
-        self::assertSame('importance.medium_title', $context['importance_text']);
+        self::assertArrayHasKey('importance_title', $context);
+        self::assertSame('importance.medium_title', $context['importance_title']);
     }
 
     public function testImportanceInvalid(): void

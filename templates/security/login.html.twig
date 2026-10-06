@@ -1,5 +1,5 @@
 {% extends 'cards/card_edit_center.html.twig' %}
-{% from 'macros/_icons.html.twig' import link %}
+{% from 'macros/_icons.html.twig' import link, homepage %}
 {% from 'macros/_button_themes.html.twig' import inline_theme %}
 {# parameters #}
 {%- set title = 'security.login.title' -%}
@@ -19,15 +19,27 @@
 {# card_body #}
 {% block card_body -%}
     {{ parent() }}
+    {% if app.user %}
+        <p class="mb-0">{{ 'security.login.already_connect'|trans({'%user_name%': app.user})|raw }}</p>
+    {% endif %}
     <input type="hidden" name="{{ login_token }}" value="{{ csrf_token(authenticate_token) }}">
 {% endblock card_body %}
 {# actions #}
 {% block actions_form %}
     {{ parent() }}
+    {% if app.user %}
+        {{ link(
+            href: path('homepage'),
+            text: 'common.button_cancel',
+            class: 'btn btn-form btn-secondary',
+            icon: 'fa-solid fa-xmark',
+            title: 'index.title_help',
+            inline: true) }}
+    {% endif %}
     {{ link(
         href: path('app_forgot_password_request'),
         text: 'resetting.link',
-        class: 'btn btn-form btn-secondary',
+        class: 'btn btn-form btn-outline-secondary',
         icon: 'fa-solid fa-circle-question',
         title: 'resetting.request.description',
         inline: true) }}

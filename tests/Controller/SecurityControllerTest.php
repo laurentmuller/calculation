@@ -22,8 +22,8 @@ final class SecurityControllerTest extends ControllerTestCase
     public static function getRoutes(): \Generator
     {
         yield ['/login', AuthenticatedVoter::PUBLIC_ACCESS];
-        yield ['/login', self::ROLE_USER, Response::HTTP_FOUND];
-        yield ['/login', self::ROLE_ADMIN, Response::HTTP_FOUND];
-        yield ['/login', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND];
+        yield ['/login', self::ROLE_USER, Response::HTTP_OK];
+        yield ['/login', self::ROLE_ADMIN, Response::HTTP_OK];
+        yield ['/login', self::ROLE_SUPER_ADMIN, Response::HTTP_OK];
     }
 }

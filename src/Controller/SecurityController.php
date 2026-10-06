@@ -17,12 +17,8 @@ use App\Attribute\GetPostRoute;
 use App\Attribute\IsPublicAccess;
 use App\Constants\SecurityAttributes;
 use App\Entity\User;
-use App\Enums\FlashType;
 use App\Form\User\UserLoginType;
-use App\Model\TranslatableFlashMessage;
-use App\Service\ApplicationService;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 /**
@@ -32,22 +28,8 @@ class SecurityController extends AbstractController
 {
     #[IsPublicAccess]
     #[GetPostRoute(path: '/login', name: SecurityAttributes::LOGIN_ROUTE)]
-    public function login(#[CurrentUser] ?User $user, AuthenticationUtils $utils): Response
+    public function login(AuthenticationUtils $utils): Response
     {
-        // already logged in?
-        if ($user instanceof User) {
-            return $this->redirectToHomePage(
-                new TranslatableFlashMessage(
-                    message: 'security.login.already_connect',
-                    parameters: [
-                        '%user_name%' => $user->getUserIdentifier(),
-                        '%app_name%' => ApplicationService::APP_FULL_NAME,
-                    ],
-                    type: FlashType::INFO
-                )
-            );
-        }
-
         $form = $this->createForm(UserLoginType::class, [
             SecurityAttributes::USER_FIELD => $utils->getLastUsername(),
             SecurityAttributes::REMEMBER_FIELD => true,

@@ -410,6 +410,9 @@ $(function () {
          */
         _getState() {
             const menus = {};
+            if (!this.$verticalNavigation) {
+                return menus;
+            }
             const options = this.options;
             const selector = `div.collapse[id^='${options.menuPrefix}']`;
             this.$verticalNavigation.find(selector).each(function (index, element) {

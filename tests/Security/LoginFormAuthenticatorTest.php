@@ -249,7 +249,7 @@ final class LoginFormAuthenticatorTest extends TestCase
         $request = self::createRequest();
         $token = self::createStub(TokenInterface::class);
         $actual = $authenticator->onAuthenticationSuccess($request, $token, 'fake');
-        self::assertNull($actual);
+        self::assertNotNull($actual);
     }
 
     #[DataProvider('getSupports')]

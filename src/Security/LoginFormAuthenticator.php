@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Security;
 
 use App\Constants\SecurityAttributes;
+use App\Controller\AbstractController;
 use App\Parameter\ApplicationParameters;
 use App\Repository\UserRepository;
 use App\Service\CaptchaImageService;
@@ -59,9 +60,9 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     }
 
     #[\Override]
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): Response
     {
-        return null;
+        return $this->httpUtils->createRedirectResponse($request, AbstractController::HOME_PAGE);
     }
 
     #[\Override]

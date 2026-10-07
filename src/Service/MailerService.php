@@ -41,22 +41,41 @@ readonly class MailerService
     }
 
     /**
+     * @throws \InvalidArgumentException if the address parameter cannot be converted to an Address
+     */
+    public static function convertAddress(string|Address|User $address): Address
+    {
+        return $address instanceof User ? $address->getAddress() : Address::create($address);
+    }
+
+    /**
      * Send a comment.
      *
+     * @throws \InvalidArgumentException   if the subject or the message are null, if the sender or the recipient are
+     *                                     null or cannot be converted to an Address
      * @throws TransportExceptionInterface if an exception occurs while sending the comment
      */
     public function sendComment(UserComment $comment): void
     {
-        /** @var Address $from */
-        $from = $comment->getFrom();
-        /** @var Address $to */
-        $to = $comment->getTo();
+        if (null === $comment->getSubject()) {
+            throw new \InvalidArgumentException('The comment must have a subject.');
+        }
+        if (null === $comment->getMessage()) {
+            throw new \InvalidArgumentException('The comment must have a message.');
+        }
+        if (!$comment->getFrom() instanceof Address) {
+            throw new \InvalidArgumentException('The comment must have a sender.');
+        }
+        if (!$comment->getTo() instanceof Address) {
+            throw new \InvalidArgumentException('The comment must have a recipient.');
+        }
 
-        $notification = $this->createNotification($comment->getImportance(), (string) $comment->getMessage())
+        $notification = $this->createNotification($comment->getImportance(), $comment->getMessage())
             ->attachFromUploadedFiles(...$comment->getAttachments())
-            ->subject((string) $comment->getSubject())
-            ->from($from)
-            ->to($to);
+            ->from(self::convertAddress($comment->getFrom()))
+            ->to(self::convertAddress($comment->getTo()))
+            ->subject($comment->getSubject())
+            ->setSignature(false);
 
         $this->send($notification);
     }
@@ -66,6 +85,7 @@ readonly class MailerService
      *
      * @param UploadedFile[] $attachments
      *
+     * @throws \InvalidArgumentException   if the sender or the recipient cannot be converted to an Address
      * @throws TransportExceptionInterface if an exception occurs while sending the notification
      */
     public function sendNotification(
@@ -73,22 +93,29 @@ readonly class MailerService
         string|Address|User $to,
         string $message,
         Importance $importance = Importance::DEFAULT,
-        array $attachments = []
+        array $attachments = [],
+        bool $signature = true,
     ): void {
         $notification = $this->createNotification($importance, $message)
             ->subject(new TranslatableMessage('user.comment.title'))
             ->attachFromUploadedFiles(...$attachments)
-            ->from($from)
-            ->to($to);
+            ->from(self::convertAddress($from))
+            ->to(self::convertAddress($to))
+            ->setSignature($signature);
 
         $this->send($notification);
+    }
+
+    private function convertToMarkdown(string $message): string
+    {
+        return $this->markdown->convert($message);
     }
 
     private function createNotification(Importance $importance, string $message): NotificationEmail
     {
         return NotificationEmail::instance($this->translator)
             ->action($this->getActionText(), $this->getActionURL())
-            ->markdown($this->getMarkdown($message))
+            ->markdown($this->convertToMarkdown($message))
             ->importance($importance);
     }
 
@@ -103,11 +130,6 @@ readonly class MailerService
             name: AbstractController::HOME_PAGE,
             referenceType: UrlGeneratorInterface::ABSOLUTE_URL
         );
-    }
-
-    private function getMarkdown(string $message): string
-    {
-        return $this->markdown->convert($message);
     }
 
     /**

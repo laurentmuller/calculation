@@ -179,6 +179,26 @@ final class NotificationEmailTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    public function testWithMediumImportance(): void
+    {
+        $notification = new NotificationEmail(
+            translator: $this->createStubTranslator(),
+            importance: Importance::MEDIUM
+        );
+        $notification->from('fake@fake.com')
+            ->to('fake@fake.com');
+
+        $actual = $notification->getImportanceTitle();
+        self::assertSame('importance.medium_title', $actual);
+
+        $headers = $notification->getPreparedHeaders();
+        self::assertTrue($headers->has('Subject'));
+
+        $subject = $headers->getHeaderBody('Subject');
+        $expected = ApplicationService::APP_FULL_NAME . ' - importance.medium_title';
+        self::assertSame($expected, $subject);
+    }
+
     protected static function assertCountAttachments(NotificationEmail $email, int $expected): void
     {
         self::assertCount($expected, $email->getAttachments());

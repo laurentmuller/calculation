@@ -37,7 +37,7 @@ final class UserCommentTest extends TestCase
     {
         $subject = 'subject';
         $user = $this->createUser();
-        $comment = UserComment::instance($subject, $user, $user);
+        $comment = UserComment::instance($user, $user, $subject);
         self::assertSame('subject', $comment->getSubject());
         $expected = $user->getAddress();
         self::assertEqualsCanonicalizing($expected, $comment->getFrom());

@@ -15,6 +15,8 @@ namespace App\Model;
 
 use App\Entity\User;
 use App\Enums\Importance;
+use App\Service\ApplicationService;
+use App\Service\MailerService;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -24,34 +26,23 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class UserComment
 {
-    /**
-     * The attachments.
-     *
-     * @var ?UploadedFile[]
-     */
+    /** @var ?UploadedFile[] */
     #[Assert\Count(max: 3)]
     #[Assert\All([new Assert\File(maxSize: 10_485_760)])]
     private ?array $attachments = null;
 
-    /** The address from. */
     #[Assert\NotNull]
     private ?Address $from = null;
 
-    /*
-     * The importance.
-     */
     #[Assert\NotNull]
     private Importance $importance = Importance::DEFAULT;
 
-    /** The message. */
     #[Assert\NotNull]
     private ?string $message = null;
 
-    /** The subject. */
     #[Assert\NotNull]
     private ?string $subject = null;
 
-    /** The address to. */
     #[Assert\NotNull]
     private ?Address $to = null;
 
@@ -109,13 +100,11 @@ class UserComment
      *                                   to an Address
      */
     public static function instance(
-        string $subject,
         Address|User|string $from,
-        Address|User|string $to
+        Address|User|string $to,
+        string $subject = ApplicationService::APP_FULL_NAME
     ): self {
-        $instance = new self();
-
-        return $instance->setSubject($subject)
+        return (new self())->setSubject($subject)
             ->setFrom($from)
             ->setTo($to);
     }
@@ -135,11 +124,11 @@ class UserComment
     /**
      * Sets the "from" address.
      *
-     * @throws \InvalidArgumentException if the given parameter cannot be converted to an Address
+     * @throws \InvalidArgumentException if the sender cannot be converted to an Address
      */
     public function setFrom(Address|User|string $from): self
     {
-        $this->from = $this->convertAddress($from);
+        $this->from = MailerService::convertAddress($from);
 
         return $this;
     }
@@ -174,17 +163,12 @@ class UserComment
     /**
      * Sets the "to" address.
      *
-     * @throws \InvalidArgumentException if the given parameter cannot be converted to an Address
+     * @throws \InvalidArgumentException if the recipient cannot be converted to an Address
      */
     public function setTo(Address|User|string $to): self
     {
-        $this->to = $this->convertAddress($to);
+        $this->to = MailerService::convertAddress($to);
 
         return $this;
-    }
-
-    private function convertAddress(string|Address|User $address): Address
-    {
-        return $address instanceof User ? $address->getAddress() : Address::create($address);
     }
 }

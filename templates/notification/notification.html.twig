@@ -13,7 +13,7 @@
             <columns large="1" small="2" valign="top">
                 <img class="favicon" src="{{ email.image('@images/icons/favicon-48x48.png') }}" alt="{{ app_description }}">
             </columns>
-            <columns large="11" small="10" valign="top">
+            <columns large="11" small="10" valign="middle">
                 {% if importance_title ?? false %}
                     <small><strong>{{ importance_title }}</strong></small>
                 {% endif %}
@@ -24,9 +24,11 @@
 {% endblock lead %}
 {# action #}
 {% block action %}
-    <spacer size="8"></spacer>
-    Cordialement,<br>
-    L'équipe de {{ app_name }}
+    {% if signature %}
+        <spacer size="8"></spacer>
+        Cordialement,<br>
+        L'équipe de {{ app_name }}
+    {% endif %}
     {{ parent() }}
 {% endblock action %}
 {# exception #}

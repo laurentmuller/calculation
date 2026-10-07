@@ -48,11 +48,7 @@ class CommentController extends AbstractController
         MailerService $service,
         LoggerInterface $logger
     ): Response {
-        $comment = UserComment::instance(
-            subject: ApplicationService::APP_FULL_NAME,
-            from: $from,
-            to: ApplicationService::getOwnerAddress()
-        );
+        $comment = UserComment::instance($from, ApplicationService::getOwnerAddress());
         $form = $this->createForm(UserCommentType::class, $comment);
         if ($this->handleRequestForm($request, $form)) {
             try {

@@ -40,7 +40,6 @@ use App\Repository\UserRepository;
 use App\Resolver\DataQueryValueResolver;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
-use App\Service\ApplicationService;
 use App\Service\FontAwesomeCellService;
 use App\Service\MailerService;
 use App\Service\PasswordTooltipService;
@@ -156,7 +155,7 @@ class UserController extends AbstractEntityController
                 message: TranslatableFlashMessage::warning('user.message.connected')
             );
         }
-        $comment = UserComment::instance(ApplicationService::APP_FULL_NAME, $from, $user);
+        $comment = UserComment::instance($from, $user);
         $form = $this->createForm(UserCommentType::class, $comment);
         if ($this->handleRequestForm($request, $form)) {
             try {

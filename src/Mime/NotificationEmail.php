@@ -13,58 +13,28 @@ declare(strict_types=1);
 
 namespace App\Mime;
 
-use App\Entity\User;
 use App\Enums\Importance;
 use App\Service\ApplicationService;
 use Symfony\Bridge\Twig\Mime\NotificationEmail as BaseNotificationEmail;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Header\Headers;
 use Symfony\Component\Translation\TranslatableMessage;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Extends the NotificationEmail class with the translated subject and custom footer.
- *
- * Each address parameter can be also a user.
+ * Extends the NotificationEmail class with a translatable subject or importance, and a custom footer.
  */
 class NotificationEmail extends BaseNotificationEmail
 {
-    private Importance $importance = Importance::DEFAULT;
-
-    final public function __construct(private readonly TranslatorInterface $translator)
-    {
+    final public function __construct(
+        private readonly TranslatorInterface $translator,
+        private Importance $importance = Importance::DEFAULT,
+        private bool $signature = true
+    ) {
         parent::__construct();
-    }
-
-    #[\Override]
-    public function addBcc(string|Address|User ...$addresses): static
-    {
-        return parent::addBcc(...$this->convertAddresses(...$addresses));
-    }
-
-    #[\Override]
-    public function addCc(string|Address|User ...$addresses): static
-    {
-        return parent::addCc(...$this->convertAddresses(...$addresses));
-    }
-
-    #[\Override]
-    public function addFrom(string|Address|User ...$addresses): static
-    {
-        return parent::addFrom(...$this->convertAddresses(...$addresses));
-    }
-
-    #[\Override]
-    public function addReplyTo(string|Address|User ...$addresses): static
-    {
-        return parent::addReplyTo(...$this->convertAddresses(...$addresses));
-    }
-
-    #[\Override]
-    public function addTo(string|Address|User ...$addresses): static
-    {
-        return parent::addTo(...$this->convertAddresses(...$addresses));
+        if (Importance::DEFAULT !== $importance) {
+            parent::importance($importance->value);
+        }
     }
 
     /**
@@ -75,11 +45,11 @@ class NotificationEmail extends BaseNotificationEmail
     public function attachFromUploadedFile(?UploadedFile $file): static
     {
         if ($file instanceof UploadedFile && $file->isValid()) {
-            $path = $file->getPathname();
-            $name = $file->getClientOriginalName();
-            $type = $file->getClientMimeType();
-
-            return $this->attachFromPath($path, $name, $type);
+            return $this->attachFromPath(
+                path: $file->getPathname(),
+                name: $file->getClientOriginalName(),
+                contentType: $file->getClientMimeType()
+            );
         }
 
         return $this;
@@ -100,27 +70,12 @@ class NotificationEmail extends BaseNotificationEmail
     }
 
     #[\Override]
-    public function bcc(string|Address|User ...$addresses): static
-    {
-        return parent::bcc(...$this->convertAddresses(...$addresses));
-    }
-
-    #[\Override]
-    public function cc(string|Address ...$addresses): static
-    {
-        return parent::cc(...$this->convertAddresses(...$addresses));
-    }
-
-    #[\Override]
-    public function from(string|Address|User ...$addresses): static
-    {
-        return parent::from(...$this->convertAddresses(...$addresses));
-    }
-
-    #[\Override]
     public function getContext(): array
     {
-        return parent::getContext() + ['importance_title' => $this->getImportanceTitle()];
+        return parent::getContext() + [
+            'importance_title' => $this->getImportanceTitle(),
+            'signature' => $this->signature,
+        ];
     }
 
     public function getImportanceTitle(): string
@@ -182,10 +137,16 @@ class NotificationEmail extends BaseNotificationEmail
         return (new static($translator))->htmlTemplate($template);
     }
 
-    #[\Override]
-    public function replyTo(string|Address|User ...$addresses): static
+    public function isSignature(): bool
     {
-        return parent::replyTo(...$this->convertAddresses(...$addresses));
+        return $this->signature;
+    }
+
+    public function setSignature(bool $signature): static
+    {
+        $this->signature = $signature;
+
+        return $this;
     }
 
     #[\Override]
@@ -196,22 +157,5 @@ class NotificationEmail extends BaseNotificationEmail
         }
 
         return parent::subject($subject);
-    }
-
-    #[\Override]
-    public function to(string|Address|User ...$addresses): static
-    {
-        return parent::to(...$this->convertAddresses(...$addresses));
-    }
-
-    /**
-     * @return array<string|Address>
-     */
-    private function convertAddresses(string|Address|User ...$addresses): array
-    {
-        return \array_map(
-            static fn (string|Address|User $address): string|Address => $address instanceof User ? $address->getAddress() : $address,
-            $addresses
-        );
     }
 }

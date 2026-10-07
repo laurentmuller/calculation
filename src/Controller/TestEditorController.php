@@ -80,11 +80,11 @@ class TestEditorController extends AbstractController
 
             try {
                 $service->sendNotification(
-                    $data['email'],
-                    $user,
-                    $data['message'],
-                    $data['importance'],
-                    $data['attachments']
+                    from: $data['email'],
+                    to: $user,
+                    message: $data['message'],
+                    importance: $data['importance'],
+                    attachments: $data['attachments'],
                 );
 
                 return $this->redirectToHomePage('user.comment.success');

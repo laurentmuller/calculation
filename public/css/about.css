@@ -121,7 +121,9 @@ svg.about-icon {
 
 @media (width <= 768px) {
     #php-list-spy {
-        height: 10rem;
+        height: 10.5rem;
+        border-bottom: var(--bs-border-width) solid var(--bs-border-color);
+        border-right: 0 !important;
     }
 }
 

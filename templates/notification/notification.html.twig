@@ -11,15 +11,13 @@
     <container>
         <row>
             <columns large="1" small="2" valign="top">
-                <img src="{{ email.image('@images/icons/favicon-48x48.png') }}" alt="{{ app_description }}">
+                <img class="favicon" src="{{ email.image('@images/icons/favicon-48x48.png') }}" alt="{{ app_description }}">
             </columns>
-            <columns large="11" small="10" valign="middle">
+            <columns large="11" small="10" valign="top">
                 {% if importance_title ?? false %}
                     <small><strong>{{ importance_title }}</strong></small>
                 {% endif %}
-                <p class="lead">
-                    {{- email.subject -}}
-                </p>
+                <p class="lead">{{- email.subject -}}</p>
             </columns>
         </row>
     </container>

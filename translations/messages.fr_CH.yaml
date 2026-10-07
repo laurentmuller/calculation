@@ -1367,6 +1367,7 @@ user:
         description: Envoyer vos commentaires au responsable du site.
         error: Une erreur s'est produite lors de l'envoi de vos commentaires. Veuillez de nouveau tenter cette action plus tard.
         success: Vos commentaires ont été envoyé avec succès au responsable du site et vous allez être contacté bientôt.
+        submit: Envoie des commentaires
     delete:
         title: Supprimer l'utilisateur
         message: Êtes-vous sûr de vouloir supprimer l'utilisateur <b>%name%</b> ?
@@ -1416,6 +1417,7 @@ user:
         success: Votre message ont été envoyé avec succès à l'utilisateur <b>%name%</b>.
         error: Une erreur s'est produite lors de l'envoi de votre message. Veuillez de nouveau tenter cette action plus tard.
         connected: Le nom de l'expéditeur et du destinataire sont les mêmes.
+        submit: Envoie du message
     name: Utilisateur
     password:
         confirmation: Répéter le mot de passe

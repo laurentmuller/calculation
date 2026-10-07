@@ -15,6 +15,7 @@ namespace App\Tests\Mime;
 
 use App\Enums\Importance;
 use App\Mime\NotificationEmail;
+use App\Service\ApplicationService;
 use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -139,7 +140,7 @@ final class NotificationEmailTest extends TestCase
             ->to('fake@fake.com');
         $headers = $email->getPreparedHeaders();
 
-        $expected = 'importance.low_title';
+        $expected = ApplicationService::APP_FULL_NAME . ' - importance.low_title';
         $actual = $headers->getHeaderBody('Subject');
         self::assertSame($expected, $actual);
     }

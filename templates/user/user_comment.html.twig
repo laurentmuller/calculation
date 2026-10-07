@@ -6,6 +6,7 @@
 {%- set page_list = message ? 'user_index' : 'homepage' -%}
 {%- set submit_icon = 'fa-regular fa-envelope' -%}
 {%- set submit_text = 'common.button_send' -%}
+{%- set submit_title = message ? 'user.message.submit' : 'user.comment.submit' -%}
 {# body #}
 {% block card_body %}
     {{ form_row(form.to) }}

@@ -15,7 +15,7 @@ namespace App\Mime;
 
 use App\Entity\User;
 use App\Enums\Importance;
-use App\Utils\StringUtils;
+use App\Service\ApplicationService;
 use Symfony\Bridge\Twig\Mime\NotificationEmail as BaseNotificationEmail;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mime\Address;
@@ -30,7 +30,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class NotificationEmail extends BaseNotificationEmail
 {
-    private Importance $importance = Importance::LOW;
+    private Importance $importance = Importance::DEFAULT;
 
     final public function __construct(private readonly TranslatorInterface $translator)
     {
@@ -131,11 +131,11 @@ class NotificationEmail extends BaseNotificationEmail
     #[\Override]
     public function getPreparedHeaders(): Headers
     {
-        $subject = $this->getSubject();
-        $body = $this->getImportanceTitle();
-        if (StringUtils::isString($subject)) {
-            $body = \sprintf('%s - %s', $subject, $body);
-        }
+        $body = \sprintf(
+            '%s - %s',
+            $this->getSubject(),
+            $this->getImportanceTitle()
+        );
 
         $headers = parent::getPreparedHeaders();
         $headers->setHeaderBody(
@@ -145,6 +145,12 @@ class NotificationEmail extends BaseNotificationEmail
         );
 
         return $headers;
+    }
+
+    #[\Override]
+    public function getSubject(): string
+    {
+        return parent::getSubject() ?? ApplicationService::APP_FULL_NAME;
     }
 
     /**

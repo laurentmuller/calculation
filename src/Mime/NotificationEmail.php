@@ -119,7 +119,7 @@ class NotificationEmail extends BaseNotificationEmail
             try {
                 $importance = Importance::from($importance);
             } catch (\ValueError $e) {
-                throw new \InvalidArgumentException(\sprintf('Invalid importance value: "%s".', $importance), previous: $e);
+                throw new \InvalidArgumentException(\sprintf('Invalid importance value: "%s".', $importance), $e->getCode(), $e);
             }
         }
         $this->importance = $importance;

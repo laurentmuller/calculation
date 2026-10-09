@@ -120,7 +120,7 @@ final class StringUtils
         try {
             return \json_encode($value, $flags | \JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
-            throw new \InvalidArgumentException(\sprintf("Unable to encode value '%s'.", self::getDebugType($value)), previous: $e);
+            throw new \InvalidArgumentException(\sprintf("Unable to encode value '%s'.", self::getDebugType($value)), $e->getCode(), $e);
         }
     }
 

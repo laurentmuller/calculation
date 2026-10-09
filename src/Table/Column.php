@@ -388,7 +388,7 @@ class Column implements \Stringable
                 }
                 $accessor->setValue($column, $key, $value);
             } catch (\ValueError|ExceptionInterface $e) {
-                throw new \InvalidArgumentException(\sprintf('Unable set the property "%s".', $key), $e->getCode(), $e);
+                throw new \InvalidArgumentException(\sprintf('Unable set the property "%s".', $key), previous: $e);
             }
         }
 

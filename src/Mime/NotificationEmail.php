@@ -119,7 +119,7 @@ class NotificationEmail extends BaseNotificationEmail
             try {
                 $importance = Importance::from($importance);
             } catch (\ValueError $e) {
-                throw new \InvalidArgumentException(\sprintf('Invalid importance value: "%s".', $importance), $e->getCode(), $e);
+                throw new \InvalidArgumentException(\sprintf('Invalid importance value: "%s".', $importance), previous: $e);
             }
         }
         $this->importance = $importance;
@@ -132,9 +132,12 @@ class NotificationEmail extends BaseNotificationEmail
      */
     public static function instance(
         TranslatorInterface $translator,
-        string $template = 'notification/notification.html.twig'
+        string $htmlTemplate = 'notification/notification.html.twig',
+        string $textTemplate = 'notification/notification.txt.twig',
     ): static {
-        return (new static($translator))->htmlTemplate($template);
+        return (new static($translator))
+            ->htmlTemplate($htmlTemplate)
+            ->textTemplate($textTemplate);
     }
 
     public function isSignature(): bool

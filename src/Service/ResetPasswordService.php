@@ -25,9 +25,7 @@ use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Translation\TranslatableMessage;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordToken;
@@ -106,7 +104,11 @@ readonly class ResetPasswordService
      */
     public function getThrottleLifeTime(): string
     {
-        return $this->trans('%count% minute|%count% minutes', ['%count%' => self::THROTTLE_MINUTES], 'ResetPasswordBundle');
+        return $this->trans(
+            '%count% minute|%count% minutes',
+            ['%count%' => self::THROTTLE_MINUTES],
+            'ResetPasswordBundle'
+        );
     }
 
     /**
@@ -142,7 +144,7 @@ readonly class ResetPasswordService
         }
 
         try {
-            $notification = $this->createEmail($user, $token);
+            $notification = $this->createNotificationEmail($user, $token);
             $this->mailer->send($notification);
 
             return $token;
@@ -156,14 +158,17 @@ readonly class ResetPasswordService
         }
     }
 
-    private function createEmail(User $user, ResetPasswordToken $token): NotificationEmail
+    private function createNotificationEmail(User $user, ResetPasswordToken $token): NotificationEmail
     {
-        return NotificationEmail::instance($this->translator, 'notification/reset_password.html.twig')
-            ->subject(new TranslatableMessage('resetting.request.title'))
+        return NotificationEmail::instance(
+            translator: $this->translator,
+            htmlTemplate: 'notification/reset_password.html.twig',
+            textTemplate: 'notification/reset_password.txt.twig',
+        )->subject($this->trans('resetting.request.title'))
             ->importance(Importance::HIGH)
-            ->from($this->getAddressFrom())
+            ->from(ApplicationService::getOwnerAddress())
             ->to($user->getAddress())
-            ->action($this->trans('resetting.request.submit'), $this->getResetAction($token))
+            ->action($this->getResetText(), $this->getResetAction($token))
             ->context([
                 'token' => $token->getToken(),
                 'username' => $user->getUserIdentifier(),
@@ -172,11 +177,6 @@ readonly class ResetPasswordService
                 'throttle_date' => $this->getThrottleAt($token),
                 'throttle_life_time' => $this->getThrottleLifeTime(),
             ]);
-    }
-
-    private function getAddressFrom(): Address
-    {
-        return ApplicationService::getOwnerAddress();
     }
 
     private function getExpiresAt(ResetPasswordToken $token): DatePoint
@@ -191,6 +191,11 @@ readonly class ResetPasswordService
             ['token' => $token->getToken()],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
+    }
+
+    private function getResetText(): string
+    {
+        return $this->trans('resetting.request.submit');
     }
 
     private function trans(string $id, array $parameters = [], ?string $domain = null): string

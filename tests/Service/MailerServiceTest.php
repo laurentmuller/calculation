@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Service;
 
-use App\Entity\User;
-use App\Enums\Importance;
 use App\Model\UserComment;
 use App\Service\MailerService;
 use App\Tests\TranslatorStubTrait;
@@ -111,24 +109,6 @@ final class MailerServiceTest extends TestCase
         self::expectException(\InvalidArgumentException::class);
         self::expectExceptionMessage('The comment must have a recipient.');
         $service->sendComment($comment);
-    }
-
-    /**
-     * @throws TransportExceptionInterface
-     */
-    public function testSendNotification(): void
-    {
-        $toUser = new User();
-        $toUser->setUsername('username')
-            ->setEmail('to@example.com');
-        $service = $this->createService();
-        $service->sendNotification(
-            'from@example.com',
-            $toUser,
-            'message',
-            Importance::DEFAULT,
-            [$this->createAttachement()]
-        );
     }
 
     private function createAttachement(): UploadedFile

@@ -259,10 +259,9 @@ abstract class AbstractController extends BaseController implements DocumentHelp
      */
     protected function redirectToHomePage(TranslatableFlashMessage|string|null $message = null): RedirectResponse
     {
-        if (\is_string($message)) {
-            $this->addFlashMessage(FlashType::DEFAULT, $this->trans($message));
-        } elseif ($message instanceof TranslatableFlashMessage) {
-            $this->addFlashMessage($message->getType(), $this->trans($message));
+        if (null !== $message) {
+            $type = \is_string($message) ? FlashType::DEFAULT : $message->getType();
+            $this->addFlashMessage($type, $this->trans($message));
         }
         $request = $this->getRequestStack()->getCurrentRequest();
         if ($request instanceof Request) {

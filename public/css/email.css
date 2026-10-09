@@ -1,5 +1,5 @@
 body {
-    background-color: #fff;
+    background-color: white;
 }
 
 table.container {
@@ -8,20 +8,20 @@ table.container {
 
 .wrapper.secondary {
     color: darkgray;
-    background-color: #fff;
+    background-color: white;
 }
 
 table.body.wrapper {
-    background-color: #fff;
+    background-color: white;
 }
 
 /* stylelint-disable selector-class-pattern */
 .container.body_alert,
 .container.body_warning,
 .container.body_default {
-    border-left: 1px solid #f3f3f3;
-    border-right: 1px solid #f3f3f3;
-    border-bottom: 1px solid #f3f3f3;
+    border-left: 1px solid whitesmoke;
+    border-right: 1px solid whitesmoke;
+    border-bottom: 1px solid whitesmoke;
 }
 
 /* stylelint-enable selector-class-pattern */
@@ -34,6 +34,13 @@ a {
     padding-top: 5px;
 }
 
-img.favicon {
-    margin-right: 10px;
+small,
+.small {
+    color: slategray;
+}
+
+a,
+button {
+    font-weight: normal !important;
+    padding: 0.5rem 1rem !important;
 }

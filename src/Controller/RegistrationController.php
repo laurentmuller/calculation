@@ -33,7 +33,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Symfony\Component\Translation\TranslatableMessage;
 
 /**
  * Controller to register a new user.
@@ -114,8 +113,11 @@ class RegistrationController extends AbstractController
 
     private function createEmail(User $user): NotificationEmail
     {
-        return NotificationEmail::instance($this->getTranslator(), 'notification/registration.html.twig')
-            ->subject(new TranslatableMessage('registration.subject'))
+        return NotificationEmail::instance(
+            translator: $this->getTranslator(),
+            htmlTemplate: 'notification/registration.html.twig',
+            textTemplate: 'notification/registration.txt.twig'
+        )->subject($this->trans('registration.subject'))
             ->importance(Importance::MEDIUM)
             ->from(ApplicationService::getOwnerAddress())
             ->to($user->getAddress());

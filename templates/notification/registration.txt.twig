@@ -1,0 +1,14 @@
+{% extends 'notification/notification.txt.twig' %}
+{# content #}
+{% block content %}
+Bonjour {{ username }},
+
+Merci de vous être connecté à notre application. Nous sommes très heureux de vous compter parmi nous.
+Veuillez confirmer votre adresse électronique en cliquant sur le bouton ci-dessous.
+
+Si vous avez des questions ou si vous rencontrez des problèmes, n'hésitez pas à contacter
+l'administrateur du site : {{ app_owner_email }}.
+
+Remarque :
+-  Ce lien expire dans {{ expires_life_time }} (à {{ expires_date|locale_time('short') }}).
+{% endblock %}

@@ -15,15 +15,12 @@ namespace App\Service;
 
 use App\Controller\AbstractController;
 use App\Entity\User;
-use App\Enums\Importance;
 use App\Mime\NotificationEmail;
 use App\Model\UserComment;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Translation\TranslatableMessage;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extra\Markdown\MarkdownInterface;
 
@@ -41,7 +38,7 @@ readonly class MailerService
     }
 
     /**
-     * @throws \InvalidArgumentException if the address parameter cannot be converted to an Address
+     * @throws \InvalidArgumentException if the parameter cannot be converted to an Address
      */
     public static function convertAddress(string|Address|User $address): Address
     {
@@ -51,59 +48,13 @@ readonly class MailerService
     /**
      * Send a comment.
      *
-     * @throws \InvalidArgumentException   if the subject or the message are null, if the sender or the recipient are
-     *                                     null or cannot be converted to an Address
+     * @throws \InvalidArgumentException   if the sender (from), the recipient (to), the subject or the message is null
      * @throws TransportExceptionInterface if an exception occurs while sending the comment
      */
     public function sendComment(UserComment $comment): void
     {
-        if (null === $comment->getSubject()) {
-            throw new \InvalidArgumentException('The comment must have a subject.');
-        }
-        if (null === $comment->getMessage()) {
-            throw new \InvalidArgumentException('The comment must have a message.');
-        }
-        if (!$comment->getFrom() instanceof Address) {
-            throw new \InvalidArgumentException('The comment must have a sender.');
-        }
-        if (!$comment->getTo() instanceof Address) {
-            throw new \InvalidArgumentException('The comment must have a recipient.');
-        }
-
-        $notification = $this->createNotification($comment->getImportance(), $comment->getMessage())
-            ->attachFromUploadedFiles(...$comment->getAttachments())
-            ->from(self::convertAddress($comment->getFrom()))
-            ->to(self::convertAddress($comment->getTo()))
-            ->subject($comment->getSubject())
-            ->setSignature(false);
-
-        $this->send($notification);
-    }
-
-    /**
-     * Send a notification.
-     *
-     * @param UploadedFile[] $attachments
-     *
-     * @throws \InvalidArgumentException   if the sender or the recipient cannot be converted to an Address
-     * @throws TransportExceptionInterface if an exception occurs while sending the notification
-     */
-    public function sendNotification(
-        string|Address|User $from,
-        string|Address|User $to,
-        string $message,
-        Importance $importance = Importance::DEFAULT,
-        array $attachments = [],
-        bool $signature = true,
-    ): void {
-        $notification = $this->createNotification($importance, $message)
-            ->subject(new TranslatableMessage('user.comment.title'))
-            ->attachFromUploadedFiles(...$attachments)
-            ->from(self::convertAddress($from))
-            ->to(self::convertAddress($to))
-            ->setSignature($signature);
-
-        $this->send($notification);
+        $notification = $this->createNotification($comment);
+        $this->mailer->send($notification);
     }
 
     private function convertToMarkdown(string $message): string
@@ -111,12 +62,22 @@ readonly class MailerService
         return $this->markdown->convert($message);
     }
 
-    private function createNotification(Importance $importance, string $message): NotificationEmail
+    /**
+     * @throws \InvalidArgumentException
+     */
+    private function createNotification(UserComment $comment): NotificationEmail
     {
+        $this->validateComment($comment);
+
         return NotificationEmail::instance($this->translator)
+            ->from(self::convertAddress($comment->getFrom()))
+            ->to(self::convertAddress($comment->getTo()))
+            ->importance($comment->getImportance())
+            ->subject($comment->getSubject())
+            ->markdown($this->convertToMarkdown($comment->getMessage()))
             ->action($this->getActionText(), $this->getActionURL())
-            ->markdown($this->convertToMarkdown($message))
-            ->importance($importance);
+            ->attachFromUploadedFiles(...$comment->getAttachments())
+            ->setSignature(false);
     }
 
     private function getActionText(): string
@@ -133,10 +94,26 @@ readonly class MailerService
     }
 
     /**
-     * @throws TransportExceptionInterface
+     * @throws \InvalidArgumentException
+     *
+     * @phpstan-assert Address $comment->getFrom()
+     * @phpstan-assert Address $comment->getTo()
+     * @phpstan-assert string $comment->getSubject()
+     * @phpstan-assert string $comment->getMessage()
      */
-    private function send(NotificationEmail $notification): void
+    private function validateComment(UserComment $comment): void
     {
-        $this->mailer->send($notification);
+        if (!$comment->getFrom() instanceof Address) {
+            throw new \InvalidArgumentException('The comment must have a sender.');
+        }
+        if (!$comment->getTo() instanceof Address) {
+            throw new \InvalidArgumentException('The comment must have a recipient.');
+        }
+        if (null === $comment->getSubject()) {
+            throw new \InvalidArgumentException('The comment must have a subject.');
+        }
+        if (null === $comment->getMessage()) {
+            throw new \InvalidArgumentException('The comment must have a message.');
+        }
     }
 }

@@ -32,7 +32,7 @@ class AddressTransformer implements DataTransformerInterface
     #[\Override]
     public function reverseTransform(mixed $value): ?Address
     {
-        if (null === $value) {
+        if (null === $value || '' === $value) {
             return null;
         }
 
@@ -53,7 +53,7 @@ class AddressTransformer implements DataTransformerInterface
     #[\Override]
     public function transform(mixed $value): ?string
     {
-        if (null === $value) {
+        if (null === $value || '' === $value) {
             return null;
         }
 

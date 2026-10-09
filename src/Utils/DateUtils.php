@@ -114,7 +114,7 @@ final class DateUtils
         try {
             return new \DateInterval($duration);
         } catch (\DateMalformedIntervalStringException  $e) {
-            throw new \InvalidArgumentException(\sprintf('Invalid duration: "%s".', $duration), $e->getCode(), $e);
+            throw new \InvalidArgumentException(\sprintf('Invalid duration: "%s".', $duration), previous: $e);
         }
     }
 
@@ -253,7 +253,7 @@ final class DateUtils
         try {
             return $date->modify($modifier);
         } catch (\DateMalformedStringException $e) {
-            throw new \InvalidArgumentException(\sprintf('Invalid modifier: "%s".', $modifier), $e->getCode(), $e);
+            throw new \InvalidArgumentException(\sprintf('Invalid modifier: "%s".', $modifier), previous: $e);
         }
     }
 

@@ -9,7 +9,14 @@
 {%- set submit_title = message ? 'user.message.submit' : 'user.comment.submit' -%}
 {# body #}
 {% block card_body %}
-    {{ form_row(form.to) }}
+    <div class="row">
+        <div class="col-md-6">
+            {{ form_row(form.from) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_row(form.to) }}
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-8">
             {{ form_row(form.subject) }}

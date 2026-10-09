@@ -20,6 +20,7 @@ use App\Form\Type\SimpleEditorType;
 use App\Model\UserComment;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Type to send a comment.
@@ -35,8 +36,14 @@ class UserCommentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $helper = new FormHelper($builder, 'user.fields.');
+
+        $helper->field('from')
+            ->prependIcon('fa-solid fa-user-pen')
+            ->modelTransformer(new AddressTransformer())
+            ->addPlainType();
+
         $helper->field('to')
-            ->prependIcon('fa-solid fa-user')
+            ->prependIcon('fa-solid fa-user-plus')
             ->modelTransformer(new AddressTransformer())
             ->addPlainType();
 
@@ -61,6 +68,12 @@ class UserCommentType extends AbstractType
                 'maxsizetotal' => '30mi', ])
             ->notRequired()
             ->addFileType();
+    }
+
+    #[\Override]
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefault('data_class', UserComment::class);
     }
 
     #[\Override]

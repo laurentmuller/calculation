@@ -37,10 +37,10 @@ class UserComment
     #[Assert\NotNull]
     private Importance $importance = Importance::DEFAULT;
 
-    #[Assert\NotNull]
+    #[Assert\NotBlank]
     private ?string $message = null;
 
-    #[Assert\NotNull]
+    #[Assert\NotBlank]
     private ?string $subject = null;
 
     #[Assert\NotNull]
@@ -57,7 +57,7 @@ class UserComment
     }
 
     /**
-     * Gets the "from" address.
+     * Gets the sender address.
      */
     public function getFrom(): ?Address
     {
@@ -86,7 +86,7 @@ class UserComment
     }
 
     /**
-     * Gets the "to" address.
+     * Gets the recipient address.
      */
     public function getTo(): ?Address
     {
@@ -100,13 +100,19 @@ class UserComment
      *                                   to an Address
      */
     public static function instance(
-        Address|User|string $from,
-        Address|User|string $to,
+        Address|User|string|null $from,
+        Address|User|string|null $to,
         string $subject = ApplicationService::APP_FULL_NAME
     ): self {
-        return (new self())->setSubject($subject)
-            ->setFrom($from)
-            ->setTo($to);
+        $comment = (new self())->setSubject($subject);
+        if (null !== $from) {
+            $comment->setFrom($from);
+        }
+        if (null !== $to) {
+            $comment->setTo($to);
+        }
+
+        return $comment;
     }
 
     /**
@@ -122,7 +128,7 @@ class UserComment
     }
 
     /**
-     * Sets the "from" address.
+     * Sets the sender address.
      *
      * @throws \InvalidArgumentException if the sender cannot be converted to an Address
      */
@@ -161,7 +167,7 @@ class UserComment
     }
 
     /**
-     * Sets the "to" address.
+     * Sets the recipient address.
      *
      * @throws \InvalidArgumentException if the recipient cannot be converted to an Address
      */

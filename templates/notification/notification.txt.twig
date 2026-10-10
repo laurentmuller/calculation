@@ -1,5 +1,12 @@
 {# vendor/symfony/twig-bridge/Resources/views/Email/zurb_2/notification/body.txt.twig #}
 {% extends '@email/default/notification/body.txt.twig' %}
+{% block lead %}
+{{ email.subject }} - {{ importance_title }}
+{% endblock lead %}
+{# content #}
+{% block content %}
+{{ content|html_to_markdown }}
+{% endblock content %}
 {# action #}
 {% block action %}
 {% if signature %}

@@ -74,7 +74,7 @@ class NotificationEmail extends BaseNotificationEmail
     {
         return parent::getContext() + [
             'importance_title' => $this->getImportanceTitle(),
-            'signature' => $this->signature,
+            'signature' => $this->isSignature(),
         ];
     }
 
@@ -86,17 +86,11 @@ class NotificationEmail extends BaseNotificationEmail
     #[\Override]
     public function getPreparedHeaders(): Headers
     {
-        $body = \sprintf(
-            '%s - %s',
-            $this->getSubject(),
-            $this->getImportanceTitle()
-        );
-
         $headers = parent::getPreparedHeaders();
         $headers->setHeaderBody(
             type: 'Text',
             name: 'Subject',
-            body: $body
+            body: \sprintf('%s - %s', $this->getSubject(), $this->getImportanceTitle())
         );
 
         return $headers;

@@ -35,7 +35,7 @@
     },
     "devDependencies": {
         "copy-files-from-to": "^4.0",
-        "del-cli": "^7.0",
+        "del-cli": "^8.0",
         "npm-run-all2": "^9.0",
         "sass": "^1.0",
         "stylelint": "^17.0",

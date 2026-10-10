@@ -51,6 +51,7 @@
         "laurentmuller/fpdf2": "^4.0",
         "laurentmuller/highcharts-bundle": "^4.0",
         "league/commonmark": "^2.0",
+        "league/html-to-markdown": "^5.0",
         "phpdocumentor/type-resolver": "^2.0",
         "phpoffice/phpspreadsheet": "^5.0",
         "phpoffice/phpword": "^1.0",

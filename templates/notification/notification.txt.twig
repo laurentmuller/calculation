@@ -1,7 +1,9 @@
 {# vendor/symfony/twig-bridge/Resources/views/Email/zurb_2/notification/body.txt.twig #}
 {% extends '@email/default/notification/body.txt.twig' %}
 {% block lead %}
-{{ email.subject }} - {{ importance_title }}
+{%- set content = email.subject ~ ' - ' ~ importance_title -%}
+{{ content }}
+{{ '='|repeat(content|length) }}
 {% endblock lead %}
 {# content #}
 {% block content %}

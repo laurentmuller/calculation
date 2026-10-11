@@ -112,6 +112,10 @@ html[data-bs-theme=light] {
     .popover.popover-light {
         #{prefix-property(popover-border-color)}: #{var-property(light-border-subtle)};
     }
+
+    .btn-outline-info {
+        color: var(--bs-btn-hover-color);
+    }
 }
 
 /* dark theme exceptions */

@@ -1,0 +1,19 @@
+--TEST--
+"repeat" filter test
+--TEMPLATE--
+{{ name|repeat(-1) }}
+{{ name|repeat(0) }}
+{{ name|repeat(1) }}
+{{ name|repeat(2) }}
+{{ id|repeat(2) }}
+--DATA--
+return [
+    'id' => 10,
+    'name' => 'Test',
+]
+--EXPECT--
+
+
+Test
+TestTest
+1010

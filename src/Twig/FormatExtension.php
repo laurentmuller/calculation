@@ -137,6 +137,12 @@ final class FormatExtension implements DateFormatInterface
         return $this->translator;
     }
 
+    #[AsTwigFilter(name: 'repeat')]
+    public function repeat(string $value, int $times): string
+    {
+        return $times <= 0 ? '' : \str_repeat($value, $times);
+    }
+
     private function convertDate(Environment $env, \DateTimeInterface|string|null $date): DatePoint
     {
         $date = $this->getCoreExtension($env)->convertDate($date);

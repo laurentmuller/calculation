@@ -179,12 +179,11 @@ class PhpInfoService
      */
     private function createUrls(array $modules): array
     {
-        $names = \array_column($modules, 'name');
+        $names = \array_diff(\array_column($modules, 'name'), \array_keys(self::URL_NAMES));
         $urls = \array_map(static fn (string $name): string => \sprintf(self::URL_INFO, \strtolower($name)), $names);
-        $entries = \array_merge(\array_combine($names, $urls), self::URL_NAMES);
 
         return \array_filter(
-            $entries,
+            \array_combine($names, $urls),
             static fn (string $entry): bool => \is_string(\filter_var($entry, \FILTER_VALIDATE_URL))
         );
     }
@@ -494,10 +493,11 @@ class PhpInfoService
     private function sortGroups(array $groups): array
     {
         foreach ($groups as &$group) {
-            \uasort($group['configs'], static fn (array $a, array $b): int => $a['name'] <=> $b['name']);
+            \usort($group['configs'], static fn (array $a, array $b): int => $a['name'] <=> $b['name']);
         }
+        \usort($groups, static fn (array $a, array $b): int => $a['name'] <=> $b['name']);
 
-        return \array_values($groups);
+        return $groups;
     }
 
     /**
@@ -522,7 +522,7 @@ class PhpInfoService
         $entries = $this->createUrls($modules);
         $responses = $this->createResponses($client, $entries);
 
-        $results = [];
+        $results = self::URL_NAMES;
         foreach ($client->stream($responses) as $response => $chunk) {
             if ($chunk->isFirst()) {
                 try {

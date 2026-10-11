@@ -116,9 +116,9 @@ final class SymfonyReportTest extends TestCase
             'size' => '100 MB',
         ];
         $kernelService = self::createStub(KernelInfoService::class);
-        $kernelService->method('getApplicationEnvironment')
-            ->willReturn(Environment::PRODUCTION);
         $kernelService->method('getKernelEnvironment')
+            ->willReturn(Environment::PRODUCTION);
+        $kernelService->method('getRuntimeEnvironment')
             ->willReturn(Environment::PRODUCTION);
         $kernelService->method('getCacheInfo')
             ->willReturn($directory);

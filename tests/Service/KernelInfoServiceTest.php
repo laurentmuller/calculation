@@ -28,7 +28,7 @@ final class KernelInfoServiceTest extends TestCase
     public function testGetApplicationEnvironment(): void
     {
         $service = $this->createService();
-        $actual = $service->getApplicationEnvironment();
+        $actual = $service->getRuntimeEnvironment();
         self::assertSame(self::ENVIRONMENT, $actual);
     }
 

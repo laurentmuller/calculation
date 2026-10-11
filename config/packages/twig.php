@@ -39,7 +39,7 @@ return App::config([
         'globals' => [
             // application
             'app_env' => '%app_env%',
-            'app_mode' => '%app_mode%',
+            'app_runtime' => '%app_runtime%',
             'app_name' => ApplicationService::APP_NAME,
             'app_version' => ApplicationService::APP_VERSION,
             'app_full_name' => ApplicationService::APP_FULL_NAME,

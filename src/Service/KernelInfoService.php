@@ -35,18 +35,10 @@ readonly class KernelInfoService
         private KernelInterface $kernel,
         #[Autowire(param: 'app_env')]
         private Environment $kernelEnvironment,
-        #[Autowire(param: 'app_mode')]
-        private Environment $applicationEnvironment,
+        #[Autowire(param: 'app_runtime')]
+        private Environment $runtimeEnvironment,
     ) {
         $this->projectDir = FileUtils::normalize($kernel->getProjectDir());
-    }
-
-    /**
-     * Gets the application mode.
-     */
-    public function getApplicationEnvironment(): Environment
-    {
-        return $this->applicationEnvironment;
     }
 
     /**
@@ -109,6 +101,14 @@ readonly class KernelInfoService
     public function getProjectDir(): string
     {
         return $this->projectDir;
+    }
+
+    /**
+     * Gets the kernel runtime mode.
+     */
+    public function getRuntimeEnvironment(): Environment
+    {
+        return $this->runtimeEnvironment;
     }
 
     /**

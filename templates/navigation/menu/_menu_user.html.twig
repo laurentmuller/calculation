@@ -15,10 +15,10 @@
     {{ dropdownItem(path('user_parameters'), 'user.parameters.title', 'fa-solid fa-user-gear') }}
     {{ dropdownItem(path('user_profile_edit'), 'profile.edit.title', 'fa-solid fa-user-pen') }}
     {{ dropdownItem(path('user_profile_password'), 'profile.password.title', 'fa-solid fa-unlock') }}
-    {% if app_mode.development -%}
+    {% if app_runtime.development -%}
         {{ dropdownSeparator() }}
         {{ dropdownItem(link_prod, 'environment.switch', 'fa-solid fa-location-arrow', {'%name%': 'environment.prod'|trans}) }}
-    {% elseif app_mode.production -%}
+    {% elseif app_runtime.production -%}
         {{ dropdownSeparator() }}
         {{ dropdownItem(link_dev, 'environment.switch', 'fa-solid fa-location-arrow', {'%name%': 'environment.dev'|trans}) }}
     {% endif %}
@@ -26,7 +26,7 @@
     {% if is_granted_data %}
         {{ dropdownItem(path('site_map'), 'index.menu_site_map', 'fa-solid fa-sitemap') }}
     {% endif %}
-    {% if app_mode.development %}
+    {% if app_runtime.development %}
         {{ dropdownItem(path('help_index'), 'help.title', 'fa-solid fa-question-circle') }}
     {% endif %}
     {{ dropdownItem(path('user_comment'), 'user.comment.title', 'fa-regular fa-envelope') }}

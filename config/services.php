@@ -24,7 +24,7 @@ return App::config([
         // application
         'app_secret' => '%env(string:APP_SECRET)%',
         'app_env' => '%env(enum:App\Enums\Environment:APP_ENV)%',
-        'app_mode' => '%env(enum:App\Enums\Environment:APP_MODE)%',
+        'app_runtime' => '%env(enum:App\Enums\Environment:APP_RUNTIME_ENV)%',
         // cookies
         'cookie_path' => '%env(string:COOKIE_PATH)%',
         // keys

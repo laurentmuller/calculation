@@ -132,8 +132,8 @@
         <tbody>
         {{ tools.headerInfo('Kernel') }}
         {{ tools.rowInfo('Type', kernelService.type) }}
-        {{ tools.rowInfo('Environment', kernelService.kernelEnvironment|trans) }}
-        {{ tools.rowInfo('Running Mode', kernelService.applicationEnvironment|trans) }}
+        {{ tools.rowInfo('Kernel Environnement', kernelService.kernelEnvironment|trans) }}
+        {{ tools.rowInfo('Runtime Environnement', kernelService.runtimeEnvironment|trans) }}
         {{ tools.rowInfo('Status', symfonyService.maintenanceStatus) }}
         {{ tools.rowInfo('Release', symfonyService.releaseDate) }}
         {{ tools.rowInfoBoolean('Long-Term support', symfonyService.longTermSupport) }}

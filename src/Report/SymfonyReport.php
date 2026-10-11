@@ -192,8 +192,8 @@ class SymfonyReport extends AbstractReport implements PdfDrawCellTextInterface
         $table->setGroupKey('Kernel')->outputHeaders();
         $this->outputRow($table, 'Version', $symfony->getVersion())
             ->outputRow($table, 'Type', $kernel->getType())
-            ->outputRow($table, 'Environment', $this->trans($kernel->getKernelEnvironment()))
-            ->outputRow($table, 'Running Mode', $this->trans($kernel->getApplicationEnvironment()))
+            ->outputRow($table, 'Kernel Environnement', $this->trans($kernel->getKernelEnvironment()))
+            ->outputRow($table, 'Runtime Environnement', $this->trans($kernel->getRuntimeEnvironment()))
             ->outputRow($table, 'Status', $symfony->getMaintenanceStatus())
             ->outputRow($table, 'Release', $symfony->getReleaseDate())
             ->outputRowEnabled($table, 'Long-Term support', $symfony->isLongTermSupport())

@@ -3,8 +3,8 @@ application:
     name: Application
     version: Version
     description: Description
-    environment: Environnement
-    mode: Mode d'exécution
+    environment: Environnement du noyau
+    runtime: Environnement d'exécution
     owner: Concepteur
     github: Code source
     github_url: GitHub

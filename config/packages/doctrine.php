@@ -15,6 +15,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use App\Doctrine\CalculationBelowFilter;
 use App\Doctrine\FixedFloatType;
+use App\Doctrine\SuperAdminFilter;
 
 return App::config([
     'doctrine' => [
@@ -46,6 +47,7 @@ return App::config([
                     ],
                     'filters' => [
                         CalculationBelowFilter::NAME => CalculationBelowFilter::class,
+                        SuperAdminFilter::NAME => SuperAdminFilter::class,
                     ],
                 ],
             ],

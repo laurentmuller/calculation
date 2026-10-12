@@ -13,13 +13,11 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Doctrine\CalculationBelowFilter;
 use App\Enums\SortMode;
 use App\Interfaces\EntityInterface;
 use App\Utils\StringUtils;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
@@ -76,19 +74,6 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function createDefaultQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->createQueryBuilder($alias);
-    }
-
-    /**
-     * Enable calculation margin below filter.
-     */
-    public function enableMarginBelowFilter(float $minMargin): static
-    {
-        $this->getEntityManager()
-            ->getFilters()
-            ->enable(CalculationBelowFilter::NAME)
-            ->setParameter(CalculationBelowFilter::MARGIN_PARAMETER, $minMargin, Types::FLOAT);
-
-        return $this;
     }
 
     /**

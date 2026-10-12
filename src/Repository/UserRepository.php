@@ -13,10 +13,11 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Doctrine\SuperAdminFilter;
 use App\Entity\User;
-use App\Interfaces\RoleInterface;
 use App\Utils\DateUtils;
 use App\Utils\StringUtils;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Types\DatePointType;
@@ -56,9 +57,21 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
         \DateTimeInterface $expiresAt,
         string $selector,
         string $hashedToken
-    ): ResetPasswordRequestInterface {
+    ): User {
         /** @var User $user */
         return $user->setResetPasswordRequest(DateUtils::toDatePoint($expiresAt), $selector, $hashedToken);
+    }
+
+    /**
+     * Enable super-administrator filter.
+     */
+    public function enableSuperAdminFilter(): static
+    {
+        $this->getEntityManager()
+            ->getFilters()
+            ->enable(SuperAdminFilter::NAME);
+
+        return $this;
     }
 
     /**
@@ -80,13 +93,14 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     /**
      * Finds a user by their username or email.
      */
-    public function findByUsernameOrEmail(string $usernameOrEmail): ?User
+    public function findByUsernameOrEmail(string $identifier): ?User
     {
-        if (false !== \filter_var($usernameOrEmail, \FILTER_VALIDATE_EMAIL)) {
-            return $this->findByEmail($usernameOrEmail);
-        }
-
-        return $this->findByUsername($usernameOrEmail);
+        return $this->createQueryBuilder('u')
+            ->where('u.email = :identifier')
+            ->orWhere('u.username = :identifier')
+            ->setParameter('identifier', $identifier, Types::STRING)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
     /**
@@ -136,19 +150,6 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     }
 
     /**
-     * Returns the criteria clause to filter users where the role name is not the super-administrator role name.
-     */
-    public function getSuperAdminFilter(string $alias = self::DEFAULT_ALIAS): string
-    {
-        return \sprintf(
-            "IFNULL(%s.role, '%s') <> '%s'",
-            $alias,
-            RoleInterface::ROLE_USER,
-            RoleInterface::ROLE_SUPER_ADMIN
-        );
-    }
-
-    /**
      * Gets the query builder for the table.
      *
      * @param string $alias the entity alias
@@ -184,9 +185,11 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     #[\Override]
     public function loadUserByIdentifier(string $identifier): User
     {
-        $user = $this->findByUsername($identifier);
+        $user = $this->findByUsernameOrEmail($identifier);
         if (!$user instanceof User) {
-            throw $this->createUserNotFoundException($identifier);
+            $e = new UserNotFoundException(\sprintf('User "%s" not found.', $identifier));
+            $e->setUserIdentifier($identifier);
+            throw $e;
         }
 
         return $user;
@@ -277,13 +280,5 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     {
         return $this->createQueryBuilder('e')
             ->where('e.hashedToken IS NOT NULL');
-    }
-
-    private function createUserNotFoundException(string $identifier): UserNotFoundException
-    {
-        $e = new UserNotFoundException(\sprintf('User "%s" not found.', $identifier));
-        $e->setUserIdentifier($identifier);
-
-        return $e;
     }
 }

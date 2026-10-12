@@ -23,15 +23,15 @@ use App\Entity\Product;
 use App\Entity\Task;
 use App\Entity\User;
 use App\Interfaces\EntityInterface;
+use App\Interfaces\RoleInterface;
 use App\Model\MonthChartData;
 use App\Model\StateChartData;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
-use Psr\Cache\CacheException;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Target;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
@@ -57,6 +57,7 @@ class IndexService
 
     public function __construct(
         private readonly EntityManagerInterface $manager,
+        private readonly Security $security,
         #[Target(CacheAttributes::CACHE_PARAMETERS)]
         private readonly TagAwareCacheInterface $cache
     ) {
@@ -77,15 +78,19 @@ class IndexService
      */
     public function getCatalog(): array
     {
-        /** @phpstan-var array<key-of<self::CATALOG>, int> */
-        return $this->cache->get(
-            'index.catalog',
-            fn (ItemInterface $item): array => $this->loadCatalog($item)
+        $catalog = $this->loadData(
+            'catalog',
+            fn (): array => \array_replace(self::CATALOG, \array_map($this->countEntities(...), self::CATALOG))
         );
+        if (!$this->security->isGranted(RoleInterface::ROLE_SUPER_ADMIN)) {
+            $catalog['user'] = $this->countFilteredUsers();
+        }
+
+        return $catalog;
     }
 
     /**
-     * Gets the number of entities for the given key.
+     * Gets the number of entities for the given entity key.
      *
      * @phpstan-param key-of<self::CATALOG> $key the entity key
      */
@@ -102,9 +107,9 @@ class IndexService
      */
     public function getLastCalculations(int $maxResults, ?User $user = null): array
     {
-        return $this->cache->get(
-            \sprintf('index.calculations.last.%d.%d', $maxResults, $user?->getId() ?? 0),
-            fn (ItemInterface $item): array => $this->loadLastCalculations($item, $maxResults, $user)
+        return $this->loadData(
+            \sprintf('last.%d.%d', $maxResults, $user?->getId() ?? 0),
+            fn (): array => $this->manager->getRepository(Calculation::class)->getLastCalculations($maxResults, $user)
         );
     }
 
@@ -115,9 +120,9 @@ class IndexService
      */
     public function getMonthChartData(int $maxResults = 6): MonthChartData
     {
-        return $this->cache->get(
-            \sprintf('index.calculations.months.%d', $maxResults),
-            fn (ItemInterface $item): MonthChartData => $this->loadMonthChartData($item, $maxResults)
+        return $this->loadData(
+            \sprintf('month.%d', $maxResults),
+            fn (): MonthChartData => $this->manager->getRepository(Calculation::class)->getMonthChartData($maxResults)
         );
     }
 
@@ -126,9 +131,9 @@ class IndexService
      */
     public function getStateChartData(): StateChartData
     {
-        return $this->cache->get(
-            'index.calculations.states',
-            fn (ItemInterface $item): StateChartData => $this->loadStateChartData($item)
+        return $this->loadData(
+            'state',
+            fn (): StateChartData => $this->manager->getRepository(CalculationState::class)->getStateChartData()
         );
     }
 
@@ -147,6 +152,14 @@ class IndexService
         return $this->manager->getRepository($className)->count();
     }
 
+    private function countFilteredUsers(): int
+    {
+        return $this->loadData(
+            'users',
+            fn (): int => $this->manager->getRepository(User::class)->enableSuperAdminFilter()->count()
+        );
+    }
+
     private function isScheduledEntities(OnFlushEventArgs $args): bool
     {
         $unitOfWork = $args->getObjectManager()->getUnitOfWork();
@@ -157,47 +170,21 @@ class IndexService
     }
 
     /**
-     * @return array<key-of<self::CATALOG>, int>
+     * @template T
      *
-     * @throws CacheException
+     * @param callable(): T $callable
+     *
+     * @return T
      */
-    private function loadCatalog(ItemInterface $item): array
+    private function loadData(string $key, callable $callable): mixed
     {
-        $item->tag(self::TAG_NAME);
+        return $this->cache->get(
+            self::TAG_NAME . '.' . $key,
+            static function (ItemInterface $item) use ($callable): mixed {
+                $item->tag(self::TAG_NAME);
 
-        return \array_replace(self::CATALOG, \array_map($this->countEntities(...), self::CATALOG));
-    }
-
-    /**
-     * @throws CacheException
-     */
-    private function loadLastCalculations(ItemInterface $item, int $maxResults, ?UserInterface $user): array
-    {
-        $item->tag(self::TAG_NAME);
-
-        return $this->manager->getRepository(Calculation::class)
-            ->getLastCalculations($maxResults, $user);
-    }
-
-    /**
-     * @throws CacheException
-     */
-    private function loadMonthChartData(ItemInterface $item, int $maxResults): MonthChartData
-    {
-        $item->tag(self::TAG_NAME);
-
-        return $this->manager->getRepository(Calculation::class)
-            ->getMonthChartData($maxResults);
-    }
-
-    /**
-     * @throws CacheException
-     */
-    private function loadStateChartData(ItemInterface $item): StateChartData
-    {
-        $item->tag(self::TAG_NAME);
-
-        return $this->manager->getRepository(CalculationState::class)
-            ->getStateChartData();
+                return $callable();
+            }
+        );
     }
 }

@@ -462,7 +462,7 @@ class UserController extends AbstractEntityController
         string $alias = AbstractRepository::DEFAULT_ALIAS
     ): array {
         if (!$this->isGranted(RoleInterface::ROLE_SUPER_ADMIN)) {
-            $criteria[] = $this->getRepository()->getSuperAdminFilter($alias);
+            $this->getRepository()->enableSuperAdminFilter();
         }
 
         return parent::getEntities($sortedFields, $criteria, $alias);

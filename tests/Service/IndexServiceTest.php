@@ -18,17 +18,30 @@ use App\Model\MonthChartData;
 use App\Model\StateChartData;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
+use App\Repository\UserRepository;
 use App\Service\IndexService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\UnitOfWork;
 use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 
 final class IndexServiceTest extends TestCase
 {
+    private const array KEYS = [
+        'user',
+        'task',
+        'group',
+        'product',
+        'category',
+        'calculation',
+        'globalMargin',
+        'calculationState',
+    ];
+
     public function testClear(): void
     {
         $cache = self::createMock(TagAwareAdapter::class);
@@ -40,17 +53,6 @@ final class IndexServiceTest extends TestCase
 
     public function testGetCatalog(): void
     {
-        $keys = [
-            'user',
-            'task',
-            'group',
-            'product',
-            'category',
-            'calculation',
-            'globalMargin',
-            'calculationState',
-        ];
-
         $repository = self::createStub(EntityRepository::class);
         $repository->method('count')
             ->willReturn(0);
@@ -59,10 +61,34 @@ final class IndexServiceTest extends TestCase
         $manager->method('getRepository')
             ->willReturn($repository);
 
-        $service = $this->createService($manager);
+        $service = $this->createService(manager: $manager);
         $actual = $service->getCatalog();
-        self::assertCount(\count($keys), $actual);
-        foreach ($keys as $key) {
+        self::assertCount(\count(self::KEYS), $actual);
+        foreach (self::KEYS as $key) {
+            self::assertSame(0, $service->getEntitiesCount($key));
+            self::assertArrayHasKey($key, $actual);
+            self::assertSame(0, $actual[$key]);
+        }
+    }
+
+    public function testGetCatalogForAdmin(): void
+    {
+        $repository = self::createStub(UserRepository::class);
+        $repository->method('count')
+            ->willReturn(0);
+        $repository->method('enableSuperAdminFilter')
+            ->willReturnSelf();
+
+        $manager = self::createStub(EntityManagerInterface::class);
+        $manager->method('getRepository')
+            ->willReturn($repository);
+
+        $security = $this->createSecurity(false);
+        $service = $this->createService(manager: $manager, security: $security);
+        $actual = $service->getCatalog();
+
+        self::assertCount(\count(self::KEYS), $actual);
+        foreach (self::KEYS as $key) {
             self::assertSame(0, $service->getEntitiesCount($key));
             self::assertArrayHasKey($key, $actual);
             self::assertSame(0, $actual[$key]);
@@ -81,7 +107,7 @@ final class IndexServiceTest extends TestCase
             ->method('getRepository')
             ->willReturn($repository);
 
-        $service = $this->createService($manager);
+        $service = $this->createService(manager: $manager);
         $actual = $service->getLastCalculations(6);
         self::assertCount(0, $actual);
     }
@@ -99,7 +125,7 @@ final class IndexServiceTest extends TestCase
             ->method('getRepository')
             ->willReturn($repository);
 
-        $service = self::createService($manager);
+        $service = self::createService(manager: $manager);
         $actual = $service->getMonthChartData();
         self::assertCount(0, $actual);
     }
@@ -117,7 +143,7 @@ final class IndexServiceTest extends TestCase
             ->method('getRepository')
             ->willReturn($repository);
 
-        $service = $this->createService($manager);
+        $service = $this->createService(manager: $manager);
         $actual = $service->getStateChartData();
         self::assertCount(0, $actual);
     }
@@ -139,17 +165,28 @@ final class IndexServiceTest extends TestCase
             ->method('getObjectManager')
             ->willReturn($manager);
 
-        $service = $this->createService($manager);
+        $service = $this->createService(manager: $manager);
         $service->onFlush($args);
+    }
+
+    private function createSecurity(bool $granted = true): Security
+    {
+        $security = self::createStub(Security::class);
+        $security->method('isGranted')
+            ->willReturn($granted);
+
+        return $security;
     }
 
     private function createService(
         ?EntityManagerInterface $manager = null,
+        ?Security $security = null,
         ?TagAwareAdapter $cache = null
     ): IndexService {
         $manager ??= self::createStub(EntityManagerInterface::class);
+        $security ??= $this->createSecurity();
         $cache ??= new TagAwareAdapter(new ArrayAdapter());
 
-        return new IndexService($manager, $cache);
+        return new IndexService($manager, $security, $cache);
     }
 }

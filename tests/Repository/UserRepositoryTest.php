@@ -15,12 +15,10 @@ namespace App\Tests\Repository;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
-use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\InMemoryUser;
-use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
 
 /**
  * @extends AbstractRepositoryTestCase<User, UserRepository>
@@ -29,14 +27,17 @@ final class UserRepositoryTest extends AbstractRepositoryTestCase
 {
     public function testCreateResetPasswordRequest(): void
     {
+        $date = new DatePoint();
         $user = $this->getUser();
         $actual = $this->repository->createResetPasswordRequest(
             $user,
-            new DatePoint(),
+            $date,
             'selector',
             'hashedToken'
         );
-        self::assertInstanceOf(ResetPasswordRequestInterface::class, $actual);
+        self::assertSame($date, $actual->getExpiresAt());
+        self::assertSame('selector', $actual->getSelector());
+        self::assertSame('hashedToken', $actual->getHashedToken());
     }
 
     public function testFindByEmail(): void
@@ -86,7 +87,7 @@ final class UserRepositoryTest extends AbstractRepositoryTestCase
     public function testGetSortedBuilder(): void
     {
         $actual = $this->repository->getSortedBuilder();
-        self::assertInstanceOf(QueryBuilder::class, $actual);
+        self::assertNotNull($actual->getDQLPart('orderBy'));
     }
 
     public function testGetSortFields(): void
@@ -95,16 +96,10 @@ final class UserRepositoryTest extends AbstractRepositoryTestCase
         $this->assertSameSortField('role', "SUBSTRING(IFNULL(e.role, 'ROLE_USER'), 5)");
     }
 
-    public function testGetSuperAdminFilter(): void
-    {
-        $actual = $this->repository->getSuperAdminFilter();
-        self::assertSame("IFNULL(e.role, 'ROLE_USER') <> 'ROLE_SUPER_ADMIN'", $actual);
-    }
-
     public function testGetTableQueryBuilder(): void
     {
         $actual = $this->repository->getTableQueryBuilder();
-        self::assertInstanceOf(QueryBuilder::class, $actual);
+        self::assertNotNull($actual->getDQLPart('select'));
     }
 
     public function testIsResettableUsers(): void
@@ -116,7 +111,7 @@ final class UserRepositoryTest extends AbstractRepositoryTestCase
     public function testLoadUserByIdentifier(): void
     {
         $user = $this->repository->loadUserByIdentifier('ROLE_USER');
-        self::assertInstanceOf(User::class, $user);
+        self::assertSame('ROLE_USER', $user->getUserIdentifier());
     }
 
     public function testLoadUserByIdentifierException(): void
@@ -129,12 +124,13 @@ final class UserRepositoryTest extends AbstractRepositoryTestCase
     {
         $user = $this->getUser();
         $refreshedUser = $this->repository->refreshUser($user);
-        self::assertInstanceOf(User::class, $refreshedUser);
+        self::assertSame('ROLE_USER', $refreshedUser->getUserIdentifier());
     }
 
     public function testRefreshUserException(): void
     {
         self::expectException(UnsupportedUserException::class);
+        self::expectExceptionMessage('Instances of "' . InMemoryUser::class . '" are not supported.');
         $user = new InMemoryUser('username', 'password', ['ROLE_USER']);
         $this->repository->refreshUser($user);
     }

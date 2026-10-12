@@ -1,5 +1,9 @@
 {%- if route|default(false) and count > 0 -%}
-    <a class="rowlink-skip" href="{{ path(route, parameters|default({})) }}"{% if title %} title="{{ title|trans }}"{% endif %}>{{ count|integer }}</a>
+    {%- set attrs = {
+        class: 'rowlink-skip',
+        href: path(route, parameters|default({})),
+        title: title ? title|trans : null} -%}
+    <a {{ html_attr(attrs) }}>{{ count|integer }}</a>
 {%- else -%}
     {{- count|integer -}}
 {%- endif -%}

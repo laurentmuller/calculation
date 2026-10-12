@@ -17,6 +17,7 @@ use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Model\MonthChartData;
 use App\Model\MonthChartDataItem;
+use App\Traits\MarginBelowFilterTrait;
 use App\Utils\DateUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\AbstractQuery;
@@ -69,6 +70,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class CalculationRepository extends AbstractRepository
 {
+    use MarginBelowFilterTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Calculation::class);

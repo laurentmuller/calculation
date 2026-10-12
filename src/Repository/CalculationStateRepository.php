@@ -18,6 +18,7 @@ use App\Model\StateChartData;
 use App\Model\StateChartDataItem;
 use App\Traits\ArrayTrait;
 use App\Traits\GroupByTrait;
+use App\Traits\MarginBelowFilterTrait;
 use App\Traits\MathTrait;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
@@ -38,6 +39,7 @@ class CalculationStateRepository extends AbstractRepository
 {
     use ArrayTrait;
     use GroupByTrait;
+    use MarginBelowFilterTrait;
     use MathTrait;
 
     public function __construct(ManagerRegistry $registry)

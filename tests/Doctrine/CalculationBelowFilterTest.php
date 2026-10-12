@@ -15,7 +15,6 @@ namespace App\Tests\Doctrine;
 
 use App\Doctrine\CalculationBelowFilter;
 use App\Entity\Calculation;
-use App\Entity\User;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,10 +25,8 @@ final class CalculationBelowFilterTest extends TestCase
 {
     public function testCalculationEntity(): void
     {
-        $manager = $this->createEntityManager();
-        $filter = new CalculationBelowFilter($manager);
+        $filter = $this->createFilter();
         $filter->setParameter(CalculationBelowFilter::MARGIN_PARAMETER, 1.1, Types::FLOAT);
-
         $targetEntity = self::createMock(ClassMetadata::class);
         $targetEntity->name = Calculation::class;
         $targetEntity->expects(self::exactly(2))
@@ -45,11 +42,9 @@ final class CalculationBelowFilterTest extends TestCase
 
     public function testInvalidEntity(): void
     {
-        $manager = $this->createEntityManager();
-        $filter = new CalculationBelowFilter($manager);
-
+        $filter = $this->createFilter();
         $targetEntity = self::createStub(ClassMetadata::class);
-        $targetEntity->name = User::class;
+        $targetEntity->name = self::class;
 
         $actual = $filter->addFilterConstraint($targetEntity, 'a');
         self::assertSame('', $actual);
@@ -66,5 +61,10 @@ final class CalculationBelowFilterTest extends TestCase
             ->willReturn($connection);
 
         return $manager;
+    }
+
+    private function createFilter(): CalculationBelowFilter
+    {
+        return new CalculationBelowFilter($this->createEntityManager());
     }
 }

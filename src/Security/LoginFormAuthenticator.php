@@ -18,8 +18,8 @@ use App\Controller\AbstractController;
 use App\Parameter\ApplicationParameters;
 use App\Repository\UserRepository;
 use App\Service\CaptchaImageService;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator;
@@ -32,9 +32,12 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordC
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\HttpUtils;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 {
+    use TargetPathTrait;
+
     public function __construct(
         private readonly ApplicationParameters $parameters,
         private readonly CaptchaImageService $captchaImageService,
@@ -60,8 +63,19 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     }
 
     #[\Override]
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): Response
-    {
+    public function onAuthenticationSuccess(
+        Request $request,
+        TokenInterface $token,
+        string $firewallName
+    ): RedirectResponse {
+        $session = $request->getSession();
+        $targetPath = $this->getTargetPath($session, $firewallName);
+        if (null !== $targetPath) {
+            $this->removeTargetPath($session, $firewallName);
+
+            return new RedirectResponse($targetPath);
+        }
+
         return $this->httpUtils->createRedirectResponse($request, AbstractController::HOME_PAGE);
     }
 

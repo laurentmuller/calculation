@@ -24,6 +24,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -252,6 +253,21 @@ final class LoginFormAuthenticatorTest extends TestCase
         self::assertNotNull($actual);
     }
 
+    public function testOnAuthenticationSuccessWithTargetPath(): void
+    {
+        $session = self::createMock(SessionInterface::class);
+        $session->expects(self::once())
+            ->method('get')
+            ->willReturn('/product');
+        $request = self::createRequest(session: $session);
+        $authenticator = $this->createAuthenticator();
+
+        $token = self::createStub(TokenInterface::class);
+        $actual = $authenticator->onAuthenticationSuccess($request, $token, 'fake');
+        self::assertTrue($actual->isRedirection());
+        self::assertSame('/product', $actual->getTargetUrl());
+    }
+
     #[DataProvider('getSupports')]
     public function testSupports(Request $request, bool $expected): void
     {
@@ -286,11 +302,12 @@ final class LoginFormAuthenticatorTest extends TestCase
     private static function createRequest(
         array $values = [],
         string $method = Request::METHOD_POST,
-        string $contentType = 'application/x-www-form-urlencoded'
+        string $contentType = 'application/x-www-form-urlencoded',
+        ?SessionInterface $session = null,
     ): Request {
         $request = new Request(request: $values);
         $request->setMethod($method);
-        $request->setSession(new Session(new MockArraySessionStorage()));
+        $request->setSession($session ?? new Session(new MockArraySessionStorage()));
         $request->headers->set('Content-Type', $contentType);
 
         return $request;

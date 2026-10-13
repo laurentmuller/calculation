@@ -46,7 +46,7 @@ final class OpenWeatherControllerTest extends ControllerTestCase
 
         yield ['/openweather/import', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/openweather/import', self::ROLE_ADMIN];
-        yield ['/openweather/import', self::ROLE_SUPER_ADMIN];
+        yield ['/openweather/import', self::ROLE_WEBMASTER];
     }
 
     public function testApiCurrentException(): void

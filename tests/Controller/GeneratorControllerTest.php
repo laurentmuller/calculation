@@ -32,13 +32,13 @@ final class GeneratorControllerTest extends ControllerTestCase
     {
         yield ['/generate', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/generate', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
-        yield ['/generate', self::ROLE_SUPER_ADMIN];
+        yield ['/generate', self::ROLE_WEBMASTER];
         yield ['/generate/calculation', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/generate/calculation', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
-        yield ['/generate/calculation', self::ROLE_SUPER_ADMIN];
+        yield ['/generate/calculation', self::ROLE_WEBMASTER];
         yield ['/generate/customer', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/generate/customer', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
-        yield ['/generate/customer', self::ROLE_SUPER_ADMIN];
+        yield ['/generate/customer', self::ROLE_WEBMASTER];
     }
 
     #[\Override]

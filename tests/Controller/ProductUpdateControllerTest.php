@@ -22,6 +22,6 @@ final class ProductUpdateControllerTest extends ControllerTestCase
     {
         yield ['/admin/product', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/admin/product', self::ROLE_ADMIN];
-        yield ['/admin/product', self::ROLE_SUPER_ADMIN];
+        yield ['/admin/product', self::ROLE_WEBMASTER];
     }
 }

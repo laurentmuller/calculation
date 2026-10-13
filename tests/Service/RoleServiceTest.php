@@ -26,36 +26,47 @@ final class RoleServiceTest extends TestCase
 {
     use TranslatorStubTrait;
 
+    public static function getRoleIconAndNames(): \Generator
+    {
+        yield [RoleInterface::ROLE_USER, '<i class="fa-solid fa-user me-1"></i>user.roles.user'];
+        yield [RoleInterface::ROLE_ADMIN, '<i class="fa-solid fa-user-shield me-1"></i>user.roles.admin'];
+        yield [RoleInterface::ROLE_WEBMASTER, '<i class="fa-solid fa-user-gear me-1"></i>user.roles.webmaster'];
+
+        yield [new Role(RoleInterface::ROLE_USER), '<i class="fa-solid fa-user me-1"></i>user.roles.user'];
+        yield [new Role(RoleInterface::ROLE_ADMIN), '<i class="fa-solid fa-user-shield me-1"></i>user.roles.admin'];
+        yield [new Role(RoleInterface::ROLE_WEBMASTER), '<i class="fa-solid fa-user-gear me-1"></i>user.roles.webmaster'];
+    }
+
     public static function getRoleIcons(): \Generator
     {
         yield [RoleInterface::ROLE_USER, 'fa-solid fa-user'];
         yield [RoleInterface::ROLE_ADMIN, 'fa-solid fa-user-shield'];
-        yield [RoleInterface::ROLE_SUPER_ADMIN, 'fa-solid fa-user-gear'];
+        yield [RoleInterface::ROLE_WEBMASTER, 'fa-solid fa-user-gear'];
 
         yield [new Role(RoleInterface::ROLE_USER), 'fa-solid fa-user'];
         yield [new Role(RoleInterface::ROLE_ADMIN), 'fa-solid fa-user-shield'];
-        yield [new Role(RoleInterface::ROLE_SUPER_ADMIN), 'fa-solid fa-user-gear'];
+        yield [new Role(RoleInterface::ROLE_WEBMASTER), 'fa-solid fa-user-gear'];
 
         yield [self::createUser(null), 'fa-solid fa-user'];
         yield [self::createUser(RoleInterface::ROLE_USER), 'fa-solid fa-user'];
         yield [self::createUser(RoleInterface::ROLE_ADMIN), 'fa-solid fa-user-shield'];
-        yield [self::createUser(RoleInterface::ROLE_SUPER_ADMIN), 'fa-solid fa-user-gear'];
+        yield [self::createUser(RoleInterface::ROLE_WEBMASTER), 'fa-solid fa-user-gear'];
     }
 
     public static function getTranslateRoles(): \Generator
     {
         yield [RoleInterface::ROLE_USER, 'user.roles.user'];
         yield [RoleInterface::ROLE_ADMIN, 'user.roles.admin'];
-        yield [RoleInterface::ROLE_SUPER_ADMIN, 'user.roles.super_admin'];
+        yield [RoleInterface::ROLE_WEBMASTER, 'user.roles.webmaster'];
 
         yield [new Role(RoleInterface::ROLE_USER), 'user.roles.user'];
         yield [new Role(RoleInterface::ROLE_ADMIN), 'user.roles.admin'];
-        yield [new Role(RoleInterface::ROLE_SUPER_ADMIN), 'user.roles.super_admin'];
+        yield [new Role(RoleInterface::ROLE_WEBMASTER), 'user.roles.webmaster'];
 
         yield [self::createUser(null), 'user.roles.user'];
         yield [self::createUser(RoleInterface::ROLE_USER), 'user.roles.user'];
         yield [self::createUser(RoleInterface::ROLE_ADMIN), 'user.roles.admin'];
-        yield [self::createUser(RoleInterface::ROLE_SUPER_ADMIN), 'user.roles.super_admin'];
+        yield [self::createUser(RoleInterface::ROLE_WEBMASTER), 'user.roles.webmaster'];
     }
 
     public function testGetRoleNamesWithHierarchy(): void
@@ -114,12 +125,14 @@ final class RoleServiceTest extends TestCase
         self::assertSame($actual, $expected);
     }
 
-    public function testRoleIconAndName(): void
+    /**
+     * @phpstan-param RoleInterface|RoleInterface::ROLE_* $role
+     */
+    #[DataProvider('getRoleIconAndNames')]
+    public function testRoleIconAndName(RoleInterface|string $role, string $expected): void
     {
         $service = $this->createService();
-        $role = new Role(RoleInterface::ROLE_USER);
         $actual = $service->getRoleIconAndName($role);
-        $expected = '<i class="fa-solid fa-user me-1"></i>user.roles.user';
         self::assertSame($expected, $actual);
     }
 

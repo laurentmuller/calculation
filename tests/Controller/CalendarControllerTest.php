@@ -27,7 +27,7 @@ final class CalendarControllerTest extends ControllerTestCase
     {
         // valid
         foreach (['week', 'month', 'year'] as $suffix) {
-            foreach ([self::ROLE_USER, self::ROLE_ADMIN, self::ROLE_SUPER_ADMIN] as $role) {
+            foreach ([self::ROLE_USER, self::ROLE_ADMIN, self::ROLE_WEBMASTER] as $role) {
                 yield ['/calendar/' . $suffix, $role];
             }
         }

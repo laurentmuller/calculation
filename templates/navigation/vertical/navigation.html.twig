@@ -41,7 +41,7 @@
         {% if is_admin -%}
             {{ include('navigation/vertical/navigation_admin.html.twig') }}
         {% endif %}
-        {% if is_granted(ROLE_SUPER_ADMIN) %}
+        {% if is_granted(ROLE_WEBMASTER) %}
             {{ include('navigation/vertical/navigation_test.html.twig') }}
         {% endif %}
     </ul>

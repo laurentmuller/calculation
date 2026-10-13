@@ -24,18 +24,18 @@ final class AdminRightsControllerTest extends ControllerTestCase
     {
         yield ['/admin/rights/admin', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/admin/rights/admin', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
-        yield ['/admin/rights/admin', self::ROLE_SUPER_ADMIN];
+        yield ['/admin/rights/admin', self::ROLE_WEBMASTER];
 
         yield ['/admin/rights/user', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/admin/rights/user', self::ROLE_ADMIN];
-        yield ['/admin/rights/user', self::ROLE_SUPER_ADMIN];
+        yield ['/admin/rights/user', self::ROLE_WEBMASTER];
     }
 
     public function testRightAdmin(): void
     {
         $this->checkForm(
             uri: 'admin/rights/admin',
-            userName: self::ROLE_SUPER_ADMIN
+            userName: self::ROLE_WEBMASTER
         );
     }
 

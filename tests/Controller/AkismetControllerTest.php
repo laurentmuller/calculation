@@ -29,7 +29,7 @@ final class AkismetControllerTest extends ControllerTestCase
         foreach ($routes as $route) {
             yield ['/akismet/' . $route, self::ROLE_USER, Response::HTTP_FORBIDDEN];
             yield ['/akismet/' . $route, self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
-            yield ['/akismet/' . $route, self::ROLE_SUPER_ADMIN];
+            yield ['/akismet/' . $route, self::ROLE_WEBMASTER];
         }
     }
 }

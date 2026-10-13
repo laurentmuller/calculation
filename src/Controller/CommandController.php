@@ -16,7 +16,7 @@ namespace App\Controller;
 use App\Attribute\GetPostRoute;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
-use App\Attribute\IsSuperAdmin;
+use App\Attribute\IsWebmaster;
 use App\Attribute\PdfRoute;
 use App\Model\CommandQuery;
 use App\Model\TranslatableFlashMessage;
@@ -41,7 +41,7 @@ use Symfony\Component\Routing\Attribute\Route;
  *
  * @phpstan-import-type CommandType from CommandService
  */
-#[IsSuperAdmin]
+#[IsWebmaster]
 #[Route(path: '/command', name: 'command_')]
 class CommandController extends AbstractController
 {

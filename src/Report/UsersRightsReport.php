@@ -46,7 +46,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     private ?PdfStyle $bulletStyle = null;
     private ?PdfStyle $entityStyle = null;
     private ?PdfStyle $italicStyle = null;
-    private readonly bool $superAdmin;
+    private readonly bool $webmaster;
 
     public function __construct(
         DocumentHelperInterface $helper,
@@ -59,7 +59,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         parent::__construct($helper, $entities);
         $this->setTranslatedTitle(id: 'user.rights.title', isUTF8: true)
             ->setTranslatedDescription('user.rights.description');
-        $this->superAdmin = $this->anyMatch($entities, static fn (User $user): bool => $user->isSuperAdmin());
+        $this->webmaster = $this->anyMatch($entities, static fn (User $user): bool => $user->isWebmaster());
     }
 
     #[\Override]
@@ -250,8 +250,8 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     private function outputRoles(PdfGroupTable $table): void
     {
         $this->addBookmark($this->trans('user.roles.name'), true);
-        if ($this->superAdmin) {
-            $this->outputRole($table, $this->roleBuilderService->getSuperAdminRole());
+        if ($this->webmaster) {
+            $this->outputRole($table, $this->roleBuilderService->getWebmasterRole());
         }
         $rights = $this->parameters->getRights();
         $this->outputRole($table, $rights->getAdminRole());
@@ -260,7 +260,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
 
     private function outputTotal(PdfGroupTable $table, array $entities): void
     {
-        $count = $this->superAdmin ? 3 : 2;
+        $count = $this->webmaster ? 3 : 2;
         $roles = $this->translateCount($count, 'counters.roles');
         $users = $this->translateCount($entities, 'counters.users');
         $table->singleLine(\sprintf('%s, %s', $roles, $users), PdfStyle::getHeaderStyle());

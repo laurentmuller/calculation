@@ -26,25 +26,25 @@ final class ResetPasswordControllerTest extends ControllerTestCase
     {
         yield ['/reset-password', self::ROLE_USER];
         yield ['/reset-password', self::ROLE_ADMIN];
-        yield ['/reset-password', self::ROLE_SUPER_ADMIN];
+        yield ['/reset-password', self::ROLE_WEBMASTER];
 
         yield ['/reset-password/check-email', self::ROLE_USER];
         yield ['/reset-password/check-email', self::ROLE_ADMIN];
-        yield ['/reset-password/check-email', self::ROLE_SUPER_ADMIN];
+        yield ['/reset-password/check-email', self::ROLE_WEBMASTER];
 
         yield ['/reset-password/reset/', self::ROLE_USER, Response::HTTP_MOVED_PERMANENTLY];
         yield ['/reset-password/reset/', self::ROLE_ADMIN, Response::HTTP_MOVED_PERMANENTLY];
-        yield ['/reset-password/reset/', self::ROLE_SUPER_ADMIN, Response::HTTP_MOVED_PERMANENTLY];
+        yield ['/reset-password/reset/', self::ROLE_WEBMASTER, Response::HTTP_MOVED_PERMANENTLY];
 
         yield ['/reset-password/reset/fake', '', Response::HTTP_FOUND];
         yield ['/reset-password/reset/fake', self::ROLE_USER, Response::HTTP_FOUND];
         yield ['/reset-password/reset/fake', self::ROLE_ADMIN, Response::HTTP_FOUND];
-        yield ['/reset-password/reset/fake', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND];
+        yield ['/reset-password/reset/fake', self::ROLE_WEBMASTER, Response::HTTP_FOUND];
     }
 
     public function testRequestForm(): void
     {
-        $data = ['user' => self::ROLE_SUPER_ADMIN];
+        $data = ['user' => self::ROLE_WEBMASTER];
         $this->setResetPasswordPublicToken();
         $this->checkForm(
             uri: '/reset-password',
@@ -72,7 +72,7 @@ final class ResetPasswordControllerTest extends ControllerTestCase
     public function testResetWithToken(): void
     {
         /** @var User $user */
-        $user = $this->loadUser(self::ROLE_SUPER_ADMIN);
+        $user = $this->loadUser(self::ROLE_WEBMASTER);
         $helper = self::createStub(ResetPasswordHelperInterface::class);
         $helper->method('validateTokenAndFetchUser')
             ->willReturn($user);

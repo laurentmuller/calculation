@@ -22,7 +22,7 @@ final class ImportAddressControllerTest extends ControllerTestCase
     {
         yield ['/admin/import', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/admin/import', self::ROLE_ADMIN];
-        yield ['/admin/import', self::ROLE_SUPER_ADMIN];
+        yield ['/admin/import', self::ROLE_WEBMASTER];
     }
 
     public function testImport(): void
@@ -30,7 +30,7 @@ final class ImportAddressControllerTest extends ControllerTestCase
         $this->checkForm(
             uri: 'admin/import',
             id: 'common.button_ok',
-            userName: self::ROLE_SUPER_ADMIN,
+            userName: self::ROLE_WEBMASTER,
             followRedirect: false
         );
     }

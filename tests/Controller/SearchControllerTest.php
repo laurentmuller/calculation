@@ -20,9 +20,9 @@ final class SearchControllerTest extends ControllerTestCase
     {
         yield ['/search', self::ROLE_USER];
         yield ['/search', self::ROLE_ADMIN];
-        yield ['/search', self::ROLE_SUPER_ADMIN];
+        yield ['/search', self::ROLE_WEBMASTER];
         yield ['/search?search=22', self::ROLE_USER];
         yield ['/search?search=22', self::ROLE_ADMIN];
-        yield ['/search?search=22', self::ROLE_SUPER_ADMIN];
+        yield ['/search?search=22', self::ROLE_WEBMASTER];
     }
 }

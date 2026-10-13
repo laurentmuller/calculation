@@ -1461,7 +1461,7 @@ user:
     roles:
         name: Rôles
         admin: Administrateur
-        super_admin: Administrateur du site
+        webmaster: Administrateur du site
         user: Utilisateur
     parameters:
         title: Mes préférences

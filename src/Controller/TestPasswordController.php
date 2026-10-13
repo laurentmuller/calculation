@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Attribute\GetPostRoute;
-use App\Attribute\IsSuperAdmin;
+use App\Attribute\IsWebmaster;
 use App\Constraint\Captcha;
 use App\Constraint\Password;
 use App\Constraint\Strength;
@@ -34,7 +34,7 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-#[IsSuperAdmin]
+#[IsWebmaster]
 #[Route(path: '/test', name: 'test_')]
 class TestPasswordController extends AbstractController
 {

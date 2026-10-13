@@ -24,14 +24,14 @@ final class AboutControllerTest extends ControllerTestCase
 
         yield ['/about', self::ROLE_USER];
         yield ['/about', self::ROLE_ADMIN];
-        yield ['/about', self::ROLE_SUPER_ADMIN];
+        yield ['/about', self::ROLE_WEBMASTER];
 
         yield ['/about/pdf', self::ROLE_USER];
         yield ['/about/pdf', self::ROLE_ADMIN];
-        yield ['/about/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/about/pdf', self::ROLE_WEBMASTER];
 
         yield ['/about/word', self::ROLE_USER];
         yield ['/about/word', self::ROLE_ADMIN];
-        yield ['/about/word', self::ROLE_SUPER_ADMIN];
+        yield ['/about/word', self::ROLE_WEBMASTER];
     }
 }

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Attribute\GetRoute;
-use App\Attribute\IsSuperAdmin;
+use App\Attribute\IsWebmaster;
 use App\Service\AkismetService;
 use App\Service\FakerService;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -26,7 +26,7 @@ use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 /**
  * Controller for the Askimet service.
  */
-#[IsSuperAdmin]
+#[IsWebmaster]
 #[Route(path: '/akismet', name: 'akismet_')]
 class AkismetController extends AbstractController
 {

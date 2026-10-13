@@ -23,14 +23,14 @@ final class AdminParametersControllerTest extends ControllerTestCase
     {
         yield ['/admin/parameters', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/admin/parameters', self::ROLE_ADMIN];
-        yield ['/admin/parameters', self::ROLE_SUPER_ADMIN];
+        yield ['/admin/parameters', self::ROLE_WEBMASTER];
     }
 
     public function testParametersNoChange(): void
     {
         $this->checkForm(
             uri: 'admin/parameters',
-            userName: self::ROLE_SUPER_ADMIN
+            userName: self::ROLE_WEBMASTER
         );
     }
 
@@ -42,7 +42,7 @@ final class AdminParametersControllerTest extends ControllerTestCase
         $this->checkForm(
             uri: 'admin/parameters',
             data: $data,
-            userName: self::ROLE_SUPER_ADMIN
+            userName: self::ROLE_WEBMASTER
         );
     }
 }

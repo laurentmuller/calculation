@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Doctrine\SuperAdminFilter;
+use App\Doctrine\WebmasterFilter;
 use App\Entity\User;
 use App\Utils\DateUtils;
 use App\Utils\StringUtils;
@@ -63,13 +63,13 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     }
 
     /**
-     * Enable super-administrator filter.
+     * Enable webmaster role filter.
      */
-    public function enableSuperAdminFilter(): static
+    public function enableWebmasterFilter(): static
     {
         $this->getEntityManager()
             ->getFilters()
-            ->enable(SuperAdminFilter::NAME);
+            ->enable(WebmasterFilter::NAME);
 
         return $this;
     }

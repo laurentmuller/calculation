@@ -24,6 +24,6 @@ final class SecurityControllerTest extends ControllerTestCase
         yield ['/login', AuthenticatedVoter::PUBLIC_ACCESS];
         yield ['/login', self::ROLE_USER, Response::HTTP_OK];
         yield ['/login', self::ROLE_ADMIN, Response::HTTP_OK];
-        yield ['/login', self::ROLE_SUPER_ADMIN, Response::HTTP_OK];
+        yield ['/login', self::ROLE_WEBMASTER, Response::HTTP_OK];
     }
 }

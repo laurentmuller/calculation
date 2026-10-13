@@ -15,7 +15,7 @@ namespace App\Controller;
 
 use App\Attribute\GetRoute;
 use App\Attribute\IsAdmin;
-use App\Attribute\IsSuperAdmin;
+use App\Attribute\IsWebmaster;
 use App\Model\TranslatableFlashMessage;
 use App\Service\CommandService;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,7 +31,7 @@ class AdminDumSqlController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[IsSuperAdmin]
+    #[IsWebmaster]
     #[GetRoute(path: '/dump-sql', name: 'dump_sql')]
     public function dumpSql(CommandService $service): Response
     {

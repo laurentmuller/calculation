@@ -13,14 +13,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Doctrine;
 
-use App\Doctrine\SuperAdminFilter;
+use App\Doctrine\WebmasterFilter;
 use App\Entity\User;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
 
-final class SuperAdminFilterTest extends TestCase
+final class WebmasterFilterTest extends TestCase
 {
     public function testInvalidEntity(): void
     {
@@ -39,7 +39,7 @@ final class SuperAdminFilterTest extends TestCase
         $targetEntity->name = User::class;
 
         $actual = $filter->addFilterConstraint($targetEntity, 'a');
-        self::assertSame("IFNULL(a.role, 'ROLE_USER') <> 'ROLE_SUPER_ADMIN'", $actual);
+        self::assertSame('a.role IS NULL OR a.role <> "ROLE_WEBMASTER"', $actual);
     }
 
     private function createEntityManager(): EntityManagerInterface
@@ -55,8 +55,8 @@ final class SuperAdminFilterTest extends TestCase
         return $manager;
     }
 
-    private function createFilter(): SuperAdminFilter
+    private function createFilter(): WebmasterFilter
     {
-        return new SuperAdminFilter($this->createEntityManager());
+        return new WebmasterFilter($this->createEntityManager());
     }
 }

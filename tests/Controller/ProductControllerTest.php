@@ -27,35 +27,35 @@ final class ProductControllerTest extends EntityControllerTestCase
     {
         yield ['/product', self::ROLE_USER];
         yield ['/product', self::ROLE_ADMIN];
-        yield ['/product', self::ROLE_SUPER_ADMIN];
+        yield ['/product', self::ROLE_WEBMASTER];
 
         yield ['/product/add', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/product/add', self::ROLE_ADMIN];
-        yield ['/product/add', self::ROLE_SUPER_ADMIN];
+        yield ['/product/add', self::ROLE_WEBMASTER];
 
         yield ['/product/edit/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/product/edit/1', self::ROLE_ADMIN];
-        yield ['/product/edit/1', self::ROLE_SUPER_ADMIN];
+        yield ['/product/edit/1', self::ROLE_WEBMASTER];
 
         yield ['/product/delete/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/product/delete/1', self::ROLE_ADMIN];
-        yield ['/product/delete/1', self::ROLE_SUPER_ADMIN];
+        yield ['/product/delete/1', self::ROLE_WEBMASTER];
 
         yield ['/product/show/1', self::ROLE_USER];
         yield ['/product/show/1', self::ROLE_ADMIN];
-        yield ['/product/show/1', self::ROLE_SUPER_ADMIN];
+        yield ['/product/show/1', self::ROLE_WEBMASTER];
 
         yield ['/product/clone/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/product/clone/1', self::ROLE_ADMIN];
-        yield ['/product/clone/1', self::ROLE_SUPER_ADMIN];
+        yield ['/product/clone/1', self::ROLE_WEBMASTER];
 
         yield ['/product/pdf', self::ROLE_USER];
         yield ['/product/pdf', self::ROLE_ADMIN];
-        yield ['/product/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/product/pdf', self::ROLE_WEBMASTER];
 
         yield ['/product/excel', self::ROLE_USER];
         yield ['/product/excel', self::ROLE_ADMIN];
-        yield ['/product/excel', self::ROLE_SUPER_ADMIN];
+        yield ['/product/excel', self::ROLE_WEBMASTER];
     }
 
     public function testAdd(): void

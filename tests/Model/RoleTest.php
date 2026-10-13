@@ -48,17 +48,17 @@ final class RoleTest extends TestCase
         $role = new Role(RoleInterface::ROLE_USER);
         self::assertTrue($role->hasRole(RoleInterface::ROLE_USER));
         self::assertFalse($role->hasRole(RoleInterface::ROLE_ADMIN));
-        self::assertFalse($role->hasRole(RoleInterface::ROLE_SUPER_ADMIN));
+        self::assertFalse($role->hasRole(RoleInterface::ROLE_WEBMASTER));
 
         $role = new Role(RoleInterface::ROLE_ADMIN);
         self::assertFalse($role->hasRole(RoleInterface::ROLE_USER));
         self::assertTrue($role->hasRole(RoleInterface::ROLE_ADMIN));
-        self::assertFalse($role->hasRole(RoleInterface::ROLE_SUPER_ADMIN));
+        self::assertFalse($role->hasRole(RoleInterface::ROLE_WEBMASTER));
 
-        $role = new Role(RoleInterface::ROLE_SUPER_ADMIN);
+        $role = new Role(RoleInterface::ROLE_WEBMASTER);
         self::assertFalse($role->hasRole(RoleInterface::ROLE_USER));
         self::assertFalse($role->hasRole(RoleInterface::ROLE_ADMIN));
-        self::assertTrue($role->hasRole(RoleInterface::ROLE_SUPER_ADMIN));
+        self::assertTrue($role->hasRole(RoleInterface::ROLE_WEBMASTER));
     }
 
     public function testIsAdmin(): void
@@ -69,20 +69,20 @@ final class RoleTest extends TestCase
         $role = new Role(RoleInterface::ROLE_ADMIN);
         self::assertTrue($role->isAdmin());
 
-        $role = new Role(RoleInterface::ROLE_SUPER_ADMIN);
+        $role = new Role(RoleInterface::ROLE_WEBMASTER);
         self::assertTrue($role->isAdmin());
     }
 
-    public function testIsSuperAdmin(): void
+    public function testIsWebmaster(): void
     {
         $role = new Role(RoleInterface::ROLE_USER);
-        self::assertFalse($role->isSuperAdmin());
+        self::assertFalse($role->isWebmaster());
 
         $role = new Role(RoleInterface::ROLE_ADMIN);
-        self::assertFalse($role->isSuperAdmin());
+        self::assertFalse($role->isWebmaster());
 
-        $role = new Role(RoleInterface::ROLE_SUPER_ADMIN);
-        self::assertTrue($role->isSuperAdmin());
+        $role = new Role(RoleInterface::ROLE_WEBMASTER);
+        self::assertTrue($role->isWebmaster());
     }
 
     public function testSetName(): void
@@ -95,8 +95,8 @@ final class RoleTest extends TestCase
     public function testSetRole(): void
     {
         $role = new Role(RoleInterface::ROLE_USER);
-        $role->setRole(RoleInterface::ROLE_SUPER_ADMIN);
-        self::assertTrue($role->isSuperAdmin());
+        $role->setRole(RoleInterface::ROLE_WEBMASTER);
+        self::assertTrue($role->isWebmaster());
     }
 
     public function testToString(): void

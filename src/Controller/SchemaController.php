@@ -15,7 +15,7 @@ namespace App\Controller;
 
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
-use App\Attribute\IsSuperAdmin;
+use App\Attribute\IsWebmaster;
 use App\Attribute\PdfRoute;
 use App\Report\SchemaReport;
 use App\Response\PdfResponse;
@@ -28,7 +28,7 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * Controller to display the database schema.
  */
-#[IsSuperAdmin]
+#[IsWebmaster]
 #[Route(path: '/schema', name: 'schema_')]
 class SchemaController extends AbstractController
 {

@@ -33,7 +33,7 @@ trait RoleTrait
      * @phpstan-var RoleInterface::ROLE_*|null
      */
     #[Assert\Length(max: 25)]
-    #[Assert\Choice(choices: [RoleInterface::ROLE_USER, RoleInterface::ROLE_ADMIN, RoleInterface::ROLE_SUPER_ADMIN])]
+    #[Assert\Choice(choices: [RoleInterface::ROLE_USER, RoleInterface::ROLE_ADMIN, RoleInterface::ROLE_WEBMASTER])]
     #[ORM\Column(length: 25, nullable: true)]
     private ?string $role = null; // @phpstan-ignore doctrine.columnType
 
@@ -74,15 +74,15 @@ trait RoleTrait
      */
     public function isAdmin(): bool
     {
-        return $this->isSuperAdmin() || $this->hasRole(RoleInterface::ROLE_ADMIN);
+        return $this->isWebmaster() || $this->hasRole(RoleInterface::ROLE_ADMIN);
     }
 
     /**
      * @see RoleInterface
      */
-    public function isSuperAdmin(): bool
+    public function isWebmaster(): bool
     {
-        return $this->hasRole(RoleInterface::ROLE_SUPER_ADMIN);
+        return $this->hasRole(RoleInterface::ROLE_WEBMASTER);
     }
 
     /**

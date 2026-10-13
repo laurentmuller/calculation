@@ -28,7 +28,7 @@ final class AboutPhpControllerTest extends ControllerTestCase
         foreach ($routes as $route) {
             yield [$route, self::ROLE_USER, Response::HTTP_FORBIDDEN];
             yield [$route, self::ROLE_ADMIN];
-            yield [$route, self::ROLE_SUPER_ADMIN];
+            yield [$route, self::ROLE_WEBMASTER];
         }
     }
 }

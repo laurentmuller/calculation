@@ -24,19 +24,19 @@ final class ExchangeRateControllerTest extends ControllerTestCase
     {
         yield ['/exchange', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/exchange', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
-        yield ['/exchange', self::ROLE_SUPER_ADMIN];
+        yield ['/exchange', self::ROLE_WEBMASTER];
 
         yield ['/exchange/codes', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/exchange/codes', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
-        yield ['/exchange/codes', self::ROLE_SUPER_ADMIN];
+        yield ['/exchange/codes', self::ROLE_WEBMASTER];
 
         yield ['/exchange/latest/CHF', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/exchange/latest/CHF', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
-        yield ['/exchange/latest/CHF', self::ROLE_SUPER_ADMIN];
+        yield ['/exchange/latest/CHF', self::ROLE_WEBMASTER];
 
         yield ['/exchange/rate?baseCode=CHF&targetCode=EUR', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/exchange/rate?baseCode=CHF&targetCode=EUR', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
-        yield ['/exchange/rate?baseCode=CHF&targetCode=EUR', self::ROLE_SUPER_ADMIN];
+        yield ['/exchange/rate?baseCode=CHF&targetCode=EUR', self::ROLE_WEBMASTER];
     }
 
     public function testGetCodesWithError(): void
@@ -46,7 +46,7 @@ final class ExchangeRateControllerTest extends ControllerTestCase
 
         $this->checkRoute(
             url: '/exchange/codes',
-            username: self::ROLE_SUPER_ADMIN,
+            username: self::ROLE_WEBMASTER,
             xmlHttpRequest: true
         );
     }
@@ -69,7 +69,7 @@ final class ExchangeRateControllerTest extends ControllerTestCase
 
         $this->checkRoute(
             url: '/exchange/codes',
-            username: self::ROLE_SUPER_ADMIN,
+            username: self::ROLE_WEBMASTER,
             xmlHttpRequest: true
         );
     }
@@ -84,7 +84,7 @@ final class ExchangeRateControllerTest extends ControllerTestCase
 
         $this->checkRoute(
             url: '/exchange/latest/CHF',
-            username: self::ROLE_SUPER_ADMIN,
+            username: self::ROLE_WEBMASTER,
             xmlHttpRequest: true
         );
     }
@@ -96,7 +96,7 @@ final class ExchangeRateControllerTest extends ControllerTestCase
 
         $this->checkRoute(
             url: '/exchange/latest/CHF',
-            username: self::ROLE_SUPER_ADMIN,
+            username: self::ROLE_WEBMASTER,
             xmlHttpRequest: true
         );
     }
@@ -111,7 +111,7 @@ final class ExchangeRateControllerTest extends ControllerTestCase
 
         $this->checkRoute(
             url: '/exchange/rate?baseCode=CHF&targetCode=EUR',
-            username: self::ROLE_SUPER_ADMIN,
+            username: self::ROLE_WEBMASTER,
             xmlHttpRequest: true
         );
     }
@@ -130,7 +130,7 @@ final class ExchangeRateControllerTest extends ControllerTestCase
 
         $this->checkRoute(
             url: '/exchange/rate?baseCode=CHF&targetCode=EUR',
-            username: self::ROLE_SUPER_ADMIN,
+            username: self::ROLE_WEBMASTER,
             xmlHttpRequest: true
         );
     }
@@ -142,7 +142,7 @@ final class ExchangeRateControllerTest extends ControllerTestCase
 
         $this->checkRoute(
             url: '/exchange/rate?baseCode=CHF&targetCode=EUR',
-            username: self::ROLE_SUPER_ADMIN,
+            username: self::ROLE_WEBMASTER,
             xmlHttpRequest: true
         );
     }

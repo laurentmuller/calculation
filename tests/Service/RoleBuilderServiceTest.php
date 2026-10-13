@@ -47,20 +47,20 @@ final class RoleBuilderServiceTest extends FlagBagTestCase
         self::assertRoleDisabled($role);
     }
 
-    public function testGetRoleSuperAdmin(): void
-    {
-        $user = new User();
-        $user->setRole(RoleInterface::ROLE_SUPER_ADMIN);
-        $role = $this->service->getRole($user);
-        self::assertRoleSuperAdmin($role);
-    }
-
     public function testGetRoleUser(): void
     {
         $user = new User();
         $user->setRole(RoleInterface::ROLE_USER);
         $role = $this->service->getRole($user);
         self::assertRoleUser($role);
+    }
+
+    public function testGetRoleWebmaster(): void
+    {
+        $user = new User();
+        $user->setRole(RoleInterface::ROLE_WEBMASTER);
+        $role = $this->service->getRole($user);
+        self::assertRoleWebmaster($role);
     }
 
     public function testRoleAdmin(): void
@@ -75,16 +75,16 @@ final class RoleBuilderServiceTest extends FlagBagTestCase
         self::assertRoleDisabled($role);
     }
 
-    public function testRoleSuperAdmin(): void
-    {
-        $role = $this->service->getSuperAdminRole();
-        self::assertRoleSuperAdmin($role);
-    }
-
     public function testRoleUser(): void
     {
         $role = $this->service->getUserRole();
         self::assertRoleUser($role);
+    }
+
+    public function testRoleWebmaster(): void
+    {
+        $role = $this->service->getWebmasterRole();
+        self::assertRoleWebmaster($role);
     }
 
     protected static function assertRoleAdmin(Role $role): void
@@ -113,19 +113,6 @@ final class RoleBuilderServiceTest extends FlagBagTestCase
         }
     }
 
-    protected static function assertRoleSuperAdmin(Role $role): void
-    {
-        $entities = EntityName::cases();
-        $permission = EntityPermission::getAllPermission();
-
-        self::assertFalse($role->isOverwrite());
-        self::assertSame(RoleInterface::ROLE_SUPER_ADMIN, $role->getName());
-
-        foreach ($entities as $entity) {
-            self::assertSameFlagBag($permission, $role->getPermission($entity));
-        }
-    }
-
     protected static function assertRoleUser(Role $role): void
     {
         $all = EntityPermission::getAllPermission();
@@ -147,5 +134,18 @@ final class RoleBuilderServiceTest extends FlagBagTestCase
 
         self::assertSameFlagBag($none, $role->getPermission(EntityName::USER));
         self::assertSameFlagBag($none, $role->getPermission(EntityName::LOG));
+    }
+
+    protected static function assertRoleWebmaster(Role $role): void
+    {
+        $entities = EntityName::cases();
+        $permission = EntityPermission::getAllPermission();
+
+        self::assertFalse($role->isOverwrite());
+        self::assertSame(RoleInterface::ROLE_WEBMASTER, $role->getName());
+
+        foreach ($entities as $entity) {
+            self::assertSameFlagBag($permission, $role->getPermission($entity));
+        }
     }
 }

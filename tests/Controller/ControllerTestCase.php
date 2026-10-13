@@ -27,7 +27,7 @@ abstract class ControllerTestCase extends AuthenticateWebTestCase
     protected const array DEFAULT_USERS = [
         self::ROLE_USER,
         self::ROLE_ADMIN,
-        self::ROLE_SUPER_ADMIN,
+        self::ROLE_WEBMASTER,
     ];
 
     /**

@@ -30,35 +30,35 @@ final class GroupControllerTest extends EntityControllerTestCase
     {
         yield ['/group', self::ROLE_USER];
         yield ['/group', self::ROLE_ADMIN];
-        yield ['/group', self::ROLE_SUPER_ADMIN];
+        yield ['/group', self::ROLE_WEBMASTER];
 
         yield ['/group/add', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/group/add', self::ROLE_ADMIN];
-        yield ['/group/add', self::ROLE_SUPER_ADMIN];
+        yield ['/group/add', self::ROLE_WEBMASTER];
 
         yield ['/group/edit/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/group/edit/1', self::ROLE_ADMIN];
-        yield ['/group/edit/1', self::ROLE_SUPER_ADMIN];
+        yield ['/group/edit/1', self::ROLE_WEBMASTER];
 
         yield ['/group/clone/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/group/clone/1', self::ROLE_ADMIN];
-        yield ['/group/clone/1', self::ROLE_SUPER_ADMIN];
+        yield ['/group/clone/1', self::ROLE_WEBMASTER];
 
         yield ['/group/delete/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/group/delete/1', self::ROLE_ADMIN];
-        yield ['/group/delete/1', self::ROLE_SUPER_ADMIN];
+        yield ['/group/delete/1', self::ROLE_WEBMASTER];
 
         yield ['/group/show/1', self::ROLE_USER];
         yield ['/group/show/1', self::ROLE_ADMIN];
-        yield ['/group/show/1', self::ROLE_SUPER_ADMIN];
+        yield ['/group/show/1', self::ROLE_WEBMASTER];
 
         yield ['/group/pdf', self::ROLE_USER];
         yield ['/group/pdf', self::ROLE_ADMIN];
-        yield ['/group/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/group/pdf', self::ROLE_WEBMASTER];
 
         yield ['/group/excel', self::ROLE_USER];
         yield ['/group/excel', self::ROLE_ADMIN];
-        yield ['/group/excel', self::ROLE_SUPER_ADMIN];
+        yield ['/group/excel', self::ROLE_WEBMASTER];
     }
 
     public function testAdd(): void

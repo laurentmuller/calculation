@@ -22,7 +22,7 @@ final class UserParametersControllerTest extends ControllerTestCase
     {
         yield ['/user/parameters', self::ROLE_USER];
         yield ['/user/parameters', self::ROLE_ADMIN];
-        yield ['/user/parameters', self::ROLE_SUPER_ADMIN];
+        yield ['/user/parameters', self::ROLE_WEBMASTER];
     }
 
     public function testParametersNoChange(): void

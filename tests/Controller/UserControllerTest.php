@@ -36,7 +36,7 @@ final class UserControllerTest extends EntityControllerTestCase
     {
         yield [self::ID_USER];
         yield [self::ID_ADMIN];
-        yield [self::ID_SUPER_ADMIN];
+        yield [self::ID_WEBMASTER];
         yield [self::ID_DISABLE];
     }
 
@@ -45,16 +45,16 @@ final class UserControllerTest extends EntityControllerTestCase
     {
         yield ['/user', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/user', self::ROLE_ADMIN];
-        yield ['/user', self::ROLE_SUPER_ADMIN];
+        yield ['/user', self::ROLE_WEBMASTER];
         yield ['/user', self::ROLE_DISABLED, Response::HTTP_FORBIDDEN];
 
         yield ['/user/add', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/user/add', self::ROLE_ADMIN];
-        yield ['/user/add', self::ROLE_SUPER_ADMIN];
+        yield ['/user/add', self::ROLE_WEBMASTER];
 
         yield ['/user/edit/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/user/edit/1', self::ROLE_ADMIN];
-        yield ['/user/edit/1', self::ROLE_SUPER_ADMIN];
+        yield ['/user/edit/1', self::ROLE_WEBMASTER];
 
         // for last login
         yield ['/user/edit/2', self::ROLE_ADMIN];
@@ -63,56 +63,56 @@ final class UserControllerTest extends EntityControllerTestCase
         yield ['/user/delete/1', self::ROLE_ADMIN];
 
         // can delete it when connected
-        yield ['/user/delete/1', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND];
-        yield ['/user/delete/2', self::ROLE_SUPER_ADMIN];
+        yield ['/user/delete/1', self::ROLE_WEBMASTER, Response::HTTP_FOUND];
+        yield ['/user/delete/2', self::ROLE_WEBMASTER];
 
         yield ['/user/show/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/user/show/1', self::ROLE_ADMIN];
-        yield ['/user/show/1', self::ROLE_SUPER_ADMIN];
+        yield ['/user/show/1', self::ROLE_WEBMASTER];
 
         yield ['/user/password/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/user/password/1', self::ROLE_ADMIN];
-        yield ['/user/password/1', self::ROLE_SUPER_ADMIN];
+        yield ['/user/password/1', self::ROLE_WEBMASTER];
 
         yield ['/user/reset', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/user/reset', self::ROLE_ADMIN, Response::HTTP_FOUND];
-        yield ['/user/reset', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND];
+        yield ['/user/reset', self::ROLE_WEBMASTER, Response::HTTP_FOUND];
 
         yield ['/user/reset/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/user/reset/1', self::ROLE_ADMIN];
-        yield ['/user/reset/1', self::ROLE_SUPER_ADMIN];
+        yield ['/user/reset/1', self::ROLE_WEBMASTER];
 
         yield ['/user/rights/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/user/rights/1', self::ROLE_ADMIN];
-        yield ['/user/rights/1', self::ROLE_SUPER_ADMIN];
+        yield ['/user/rights/1', self::ROLE_WEBMASTER];
 
         yield ['/user/rights/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/user/rights/pdf', self::ROLE_ADMIN];
-        yield ['/user/rights/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/user/rights/pdf', self::ROLE_WEBMASTER];
 
         yield ['/user/rights/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/user/rights/excel', self::ROLE_ADMIN];
-        yield ['/user/rights/excel', self::ROLE_SUPER_ADMIN];
+        yield ['/user/rights/excel', self::ROLE_WEBMASTER];
 
         yield ['/user/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/user/pdf', self::ROLE_ADMIN];
-        yield ['/user/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/user/pdf', self::ROLE_WEBMASTER];
 
         yield ['/user/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/user/excel', self::ROLE_ADMIN];
-        yield ['/user/excel', self::ROLE_SUPER_ADMIN];
+        yield ['/user/excel', self::ROLE_WEBMASTER];
 
         yield ['/user/parameters', self::ROLE_USER];
         yield ['/user/parameters', self::ROLE_ADMIN];
-        yield ['/user/parameters', self::ROLE_SUPER_ADMIN];
+        yield ['/user/parameters', self::ROLE_WEBMASTER];
 
         yield ['/user/reset/send/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/user/reset/send/1', self::ROLE_ADMIN];
-        yield ['/user/reset/send/1', self::ROLE_SUPER_ADMIN];
+        yield ['/user/reset/send/1', self::ROLE_WEBMASTER];
 
         yield ['/user/message/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/user/message/1', self::ROLE_ADMIN];
-        yield ['/user/message/1', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND];
+        yield ['/user/message/1', self::ROLE_WEBMASTER, Response::HTTP_FOUND];
     }
 
     public function testMessageSuccess(): void
@@ -150,7 +150,7 @@ final class UserControllerTest extends EntityControllerTestCase
 
     public function testResetAllPasswordRequestNoUser(): void
     {
-        $this->loginUsername(self::ROLE_SUPER_ADMIN);
+        $this->loginUsername(self::ROLE_WEBMASTER);
         $this->client->request(Request::METHOD_POST, '/user/reset');
         $this->client->followRedirect();
         self::assertResponseIsSuccessful();
@@ -159,7 +159,7 @@ final class UserControllerTest extends EntityControllerTestCase
     public function testResetAllPasswordRequestOneUser(): void
     {
         $this->setResetPasswordRequest(self::ROLE_USER);
-        $this->loginUsername(self::ROLE_SUPER_ADMIN);
+        $this->loginUsername(self::ROLE_WEBMASTER);
         $this->client->request(Request::METHOD_POST, '/user/reset');
         $this->client->followRedirect();
         self::assertResponseIsSuccessful();
@@ -200,7 +200,7 @@ final class UserControllerTest extends EntityControllerTestCase
             'user_rights[overwrite]' => 1,
         ];
 
-        $this->loginUsername(self::ROLE_SUPER_ADMIN);
+        $this->loginUsername(self::ROLE_WEBMASTER);
         $uri = \sprintf('/user/rights/%d', self::ID_USER);
         $this->client->request(Request::METHOD_POST, $uri);
         $name = $this->getService(TranslatorInterface::class)
@@ -221,7 +221,7 @@ final class UserControllerTest extends EntityControllerTestCase
 
     public function testRightsWithChanges(): void
     {
-        $this->loginUsername(self::ROLE_SUPER_ADMIN);
+        $this->loginUsername(self::ROLE_WEBMASTER);
         $data = ['user_rights[overwrite]' => 1];
         $uri = \sprintf('/user/rights/%d', self::ID_USER);
         $this->client->request(Request::METHOD_POST, $uri);
@@ -235,7 +235,7 @@ final class UserControllerTest extends EntityControllerTestCase
     #[DataProvider('getRoleIds')]
     public function testRightsWithRole(int $id): void
     {
-        $this->loginUsername(self::ROLE_SUPER_ADMIN);
+        $this->loginUsername(self::ROLE_WEBMASTER);
         $uri = \sprintf('/user/rights/%d', $id);
         $this->client->request(Request::METHOD_POST, $uri);
         self::assertResponseIsSuccessful();
@@ -246,7 +246,7 @@ final class UserControllerTest extends EntityControllerTestCase
         $this->checkForm(
             uri: 'user/reset/send/1',
             id: 'user.send.submit',
-            userName: self::ROLE_SUPER_ADMIN,
+            userName: self::ROLE_WEBMASTER,
         );
     }
 
@@ -270,7 +270,7 @@ final class UserControllerTest extends EntityControllerTestCase
         $this->checkForm(
             uri: 'user/reset/send/1',
             id: 'user.send.submit',
-            userName: self::ROLE_SUPER_ADMIN,
+            userName: self::ROLE_WEBMASTER,
             disableReboot: true
         );
     }
@@ -301,7 +301,7 @@ final class UserControllerTest extends EntityControllerTestCase
         $this->checkForm(
             uri: 'user/reset/send/1',
             id: 'user.send.submit',
-            userName: self::ROLE_SUPER_ADMIN,
+            userName: self::ROLE_WEBMASTER,
             disableReboot: true
         );
     }

@@ -23,6 +23,6 @@ final class PolicyControllerTest extends ControllerTestCase
         yield ['/policy/accept', '', Response::HTTP_FOUND];
         yield ['/policy/accept', self::ROLE_USER, Response::HTTP_FOUND];
         yield ['/policy/accept', self::ROLE_ADMIN, Response::HTTP_FOUND];
-        yield ['/policy/accept', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND];
+        yield ['/policy/accept', self::ROLE_WEBMASTER, Response::HTTP_FOUND];
     }
 }

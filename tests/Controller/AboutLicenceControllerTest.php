@@ -21,20 +21,20 @@ final class AboutLicenceControllerTest extends ControllerTestCase
         yield ['/about/licence'];
         yield ['/about/licence', self::ROLE_USER];
         yield ['/about/licence', self::ROLE_ADMIN];
-        yield ['/about/licence', self::ROLE_SUPER_ADMIN];
+        yield ['/about/licence', self::ROLE_WEBMASTER];
 
         yield ['/about/licence/content', self::ROLE_USER];
         yield ['/about/licence/content', self::ROLE_ADMIN];
-        yield ['/about/licence/content', self::ROLE_SUPER_ADMIN];
+        yield ['/about/licence/content', self::ROLE_WEBMASTER];
 
         yield ['/about/licence/pdf'];
         yield ['/about/licence/pdf', self::ROLE_USER];
         yield ['/about/licence/pdf', self::ROLE_ADMIN];
-        yield ['/about/licence/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/about/licence/pdf', self::ROLE_WEBMASTER];
 
         yield ['/about/licence/word'];
         yield ['/about/licence/word', self::ROLE_USER];
         yield ['/about/licence/word', self::ROLE_ADMIN];
-        yield ['/about/licence/word', self::ROLE_SUPER_ADMIN];
+        yield ['/about/licence/word', self::ROLE_WEBMASTER];
     }
 }

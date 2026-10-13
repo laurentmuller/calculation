@@ -28,51 +28,51 @@ final class CalculationControllerTest extends EntityControllerTestCase
     {
         yield ['/calculation', self::ROLE_USER];
         yield ['/calculation', self::ROLE_ADMIN];
-        yield ['/calculation', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation', self::ROLE_WEBMASTER];
 
         yield ['/calculation/add', self::ROLE_USER];
         yield ['/calculation/add', self::ROLE_ADMIN];
-        yield ['/calculation/add', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/add', self::ROLE_WEBMASTER];
 
         yield ['/calculation/edit/1', self::ROLE_USER];
         yield ['/calculation/edit/1', self::ROLE_ADMIN];
-        yield ['/calculation/edit/1', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/edit/1', self::ROLE_WEBMASTER];
 
         yield ['/calculation/state/1', self::ROLE_USER];
         yield ['/calculation/state/1', self::ROLE_ADMIN];
-        yield ['/calculation/state/1', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/state/1', self::ROLE_WEBMASTER];
 
         yield ['/calculation/delete/1', self::ROLE_USER];
         yield ['/calculation/delete/1', self::ROLE_ADMIN];
-        yield ['/calculation/delete/1', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/delete/1', self::ROLE_WEBMASTER];
 
         yield ['/calculation/clone/1', self::ROLE_USER];
         yield ['/calculation/clone/1', self::ROLE_ADMIN];
-        yield ['/calculation/clone/1', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/clone/1', self::ROLE_WEBMASTER];
 
         yield ['/calculation/show/1', self::ROLE_USER];
         yield ['/calculation/show/1', self::ROLE_ADMIN];
-        yield ['/calculation/show/1', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/show/1', self::ROLE_WEBMASTER];
 
         yield ['/calculation/pdf/1', self::ROLE_USER];
         yield ['/calculation/pdf/1', self::ROLE_ADMIN];
-        yield ['/calculation/pdf/1', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/pdf/1', self::ROLE_WEBMASTER];
 
         yield ['/calculation/pdf', self::ROLE_USER];
         yield ['/calculation/pdf', self::ROLE_ADMIN];
-        yield ['/calculation/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/pdf', self::ROLE_WEBMASTER];
 
         yield ['/calculation/excel', self::ROLE_USER];
         yield ['/calculation/excel', self::ROLE_ADMIN];
-        yield ['/calculation/excel', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/excel', self::ROLE_WEBMASTER];
 
         yield ['/calculation/excel/1', self::ROLE_USER];
         yield ['/calculation/excel/1', self::ROLE_ADMIN];
-        yield ['/calculation/excel/1', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/excel/1', self::ROLE_WEBMASTER];
 
         yield ['/calculation?search=22', self::ROLE_USER];
         yield ['/calculation?search=22', self::ROLE_ADMIN];
-        yield ['/calculation?search=22', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation?search=22', self::ROLE_WEBMASTER];
     }
 
     public function testAdd(): void

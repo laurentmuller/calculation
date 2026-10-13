@@ -308,7 +308,7 @@ class UserController extends AbstractEntityController
         RoleService $service,
         RoleBuilderService $builder
     ): Response {
-        if ($this->isConnectedUser($item) && !$service->hasRole($item, RoleInterface::ROLE_SUPER_ADMIN)) {
+        if ($this->isConnectedUser($item) && !$service->hasRole($item, RoleInterface::ROLE_WEBMASTER)) {
             return $this->redirectToDefaultRoute(
                 request: $request,
                 item: $item,
@@ -461,8 +461,8 @@ class UserController extends AbstractEntityController
         array $criteria = [],
         string $alias = AbstractRepository::DEFAULT_ALIAS
     ): array {
-        if (!$this->isGranted(RoleInterface::ROLE_SUPER_ADMIN)) {
-            $this->getRepository()->enableSuperAdminFilter();
+        if (!$this->isGranted(RoleInterface::ROLE_WEBMASTER)) {
+            $this->getRepository()->enableWebmasterFilter();
         }
 
         return parent::getEntities($sortedFields, $criteria, $alias);
@@ -470,7 +470,7 @@ class UserController extends AbstractEntityController
 
     private function getDefaultRole(RoleBuilderService $builder, User $user): Role
     {
-        if ($user->isSuperAdmin()) {
+        if ($user->isWebmaster()) {
             return $builder->getRole($user);
         }
         if ($user->isAdmin()) {

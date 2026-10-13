@@ -25,31 +25,31 @@ final class CustomerControllerTest extends EntityControllerTestCase
     {
         yield ['/customer', self::ROLE_USER];
         yield ['/customer', self::ROLE_ADMIN];
-        yield ['/customer', self::ROLE_SUPER_ADMIN];
+        yield ['/customer', self::ROLE_WEBMASTER];
 
         yield ['/customer/add', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/customer/add', self::ROLE_ADMIN];
-        yield ['/customer/add', self::ROLE_SUPER_ADMIN];
+        yield ['/customer/add', self::ROLE_WEBMASTER];
 
         yield ['/customer/edit/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/customer/edit/1', self::ROLE_ADMIN];
-        yield ['/customer/edit/1', self::ROLE_SUPER_ADMIN];
+        yield ['/customer/edit/1', self::ROLE_WEBMASTER];
 
         yield ['/customer/delete/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/customer/delete/1', self::ROLE_ADMIN];
-        yield ['/customer/delete/1', self::ROLE_SUPER_ADMIN];
+        yield ['/customer/delete/1', self::ROLE_WEBMASTER];
 
         yield ['/customer/show/1', self::ROLE_USER];
         yield ['/customer/show/1', self::ROLE_ADMIN];
-        yield ['/customer/show/1', self::ROLE_SUPER_ADMIN];
+        yield ['/customer/show/1', self::ROLE_WEBMASTER];
 
         yield ['/customer/pdf', self::ROLE_USER];
         yield ['/customer/pdf', self::ROLE_ADMIN];
-        yield ['/customer/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/customer/pdf', self::ROLE_WEBMASTER];
 
         yield ['/customer/excel', self::ROLE_USER];
         yield ['/customer/excel', self::ROLE_ADMIN];
-        yield ['/customer/excel', self::ROLE_SUPER_ADMIN];
+        yield ['/customer/excel', self::ROLE_WEBMASTER];
     }
 
     public function testAdd(): void

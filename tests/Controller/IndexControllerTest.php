@@ -24,7 +24,7 @@ final class IndexControllerTest extends ControllerTestCase
         yield ['/', self::ROLE_DISABLED];
         yield ['/', self::ROLE_USER];
         yield ['/', self::ROLE_ADMIN];
-        yield ['/', self::ROLE_SUPER_ADMIN];
+        yield ['/', self::ROLE_WEBMASTER];
         yield ['/?custom=1&restrict=1', self::ROLE_USER];
         yield ['/?custom=1&restrict=1&count=8', self::ROLE_USER];
 

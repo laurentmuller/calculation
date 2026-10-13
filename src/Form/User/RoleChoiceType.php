@@ -41,15 +41,15 @@ class RoleChoiceType extends AbstractChoiceType
             'user.roles.user' => RoleInterface::ROLE_USER,
             'user.roles.admin' => RoleInterface::ROLE_ADMIN,
         ];
-        if ($this->isSuperAdmin()) {
-            $choices['user.roles.super_admin'] = RoleInterface::ROLE_SUPER_ADMIN;
+        if ($this->isWebmaster()) {
+            $choices['user.roles.webmaster'] = RoleInterface::ROLE_WEBMASTER;
         }
 
         return $choices;
     }
 
-    private function isSuperAdmin(): bool
+    private function isWebmaster(): bool
     {
-        return $this->security->isGranted(RoleInterface::ROLE_SUPER_ADMIN);
+        return $this->security->isGranted(RoleInterface::ROLE_WEBMASTER);
     }
 }

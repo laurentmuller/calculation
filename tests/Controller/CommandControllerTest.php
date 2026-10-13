@@ -40,20 +40,20 @@ final class CommandControllerTest extends ControllerTestCase
         foreach ($routes as $route) {
             yield [$route, self::ROLE_USER, Response::HTTP_FORBIDDEN];
             yield [$route, self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
-            yield [$route, self::ROLE_SUPER_ADMIN];
+            yield [$route, self::ROLE_WEBMASTER];
         }
 
         // command not found
         yield [
             '/command/content?name=fake_command_not_exist',
-            self::ROLE_SUPER_ADMIN,
+            self::ROLE_WEBMASTER,
             Response::HTTP_OK,
             Request::METHOD_GET,
             true];
 
         yield [
             '/command/execute?name=fake_command_not_exist',
-            self::ROLE_SUPER_ADMIN,
+            self::ROLE_WEBMASTER,
             Response::HTTP_NOT_FOUND,
         ];
     }
@@ -63,7 +63,7 @@ final class CommandControllerTest extends ControllerTestCase
         $this->checkForm(
             uri: '/command/execute?name=about',
             id: 'command.execute.title',
-            userName: self::ROLE_SUPER_ADMIN,
+            userName: self::ROLE_WEBMASTER,
             followRedirect: false
         );
     }

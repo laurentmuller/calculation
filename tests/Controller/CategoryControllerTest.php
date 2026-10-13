@@ -34,35 +34,35 @@ final class CategoryControllerTest extends EntityControllerTestCase
     {
         yield ['/category', self::ROLE_USER];
         yield ['/category', self::ROLE_ADMIN];
-        yield ['/category', self::ROLE_SUPER_ADMIN];
+        yield ['/category', self::ROLE_WEBMASTER];
 
         yield ['/category/add', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/category/add', self::ROLE_ADMIN];
-        yield ['/category/add', self::ROLE_SUPER_ADMIN];
+        yield ['/category/add', self::ROLE_WEBMASTER];
 
         yield ['/category/edit/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/category/edit/1', self::ROLE_ADMIN];
-        yield ['/category/edit/1', self::ROLE_SUPER_ADMIN];
+        yield ['/category/edit/1', self::ROLE_WEBMASTER];
 
         yield ['/category/clone/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/category/clone/1', self::ROLE_ADMIN];
-        yield ['/category/clone/1', self::ROLE_SUPER_ADMIN];
+        yield ['/category/clone/1', self::ROLE_WEBMASTER];
 
         yield ['/category/delete/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/category/delete/1', self::ROLE_ADMIN];
-        yield ['/category/delete/1', self::ROLE_SUPER_ADMIN];
+        yield ['/category/delete/1', self::ROLE_WEBMASTER];
 
         yield ['/category/show/1', self::ROLE_USER];
         yield ['/category/show/1', self::ROLE_ADMIN];
-        yield ['/category/show/1', self::ROLE_SUPER_ADMIN];
+        yield ['/category/show/1', self::ROLE_WEBMASTER];
 
         yield ['/category/pdf', self::ROLE_USER];
         yield ['/category/pdf', self::ROLE_ADMIN];
-        yield ['/category/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/category/pdf', self::ROLE_WEBMASTER];
 
         yield ['/category/excel', self::ROLE_USER];
         yield ['/category/excel', self::ROLE_ADMIN];
-        yield ['/category/excel', self::ROLE_SUPER_ADMIN];
+        yield ['/category/excel', self::ROLE_WEBMASTER];
     }
 
     public function testAdd(): void

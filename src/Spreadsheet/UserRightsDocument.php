@@ -35,7 +35,7 @@ class UserRightsDocument extends AbstractArrayDocument
 {
     use ArrayTrait;
 
-    private readonly bool $superAdmin;
+    private readonly bool $webmaster;
 
     public function __construct(
         DocumentHelperInterface $helper,
@@ -45,7 +45,7 @@ class UserRightsDocument extends AbstractArrayDocument
         private readonly RoleBuilderService $roleBuilderService
     ) {
         parent::__construct($helper, $entities);
-        $this->superAdmin = $this->anyMatch($entities, static fn (User $user): bool => $user->isSuperAdmin());
+        $this->webmaster = $this->anyMatch($entities, static fn (User $user): bool => $user->isWebmaster());
     }
 
     /**
@@ -141,8 +141,8 @@ class UserRightsDocument extends AbstractArrayDocument
 
     private function outputRoles(WorksheetDocument $sheet, int &$row): void
     {
-        if ($this->superAdmin) {
-            $this->outputRole($sheet, $this->roleBuilderService->getSuperAdminRole(), $row);
+        if ($this->webmaster) {
+            $this->outputRole($sheet, $this->roleBuilderService->getWebmasterRole(), $row);
         }
         $rights = $this->parameters->getRights();
         $this->outputRole($sheet, $rights->getAdminRole(), $row);

@@ -28,7 +28,7 @@ final class CommentControllerTest extends ControllerTestCase
     {
         yield ['/user/comment', self::ROLE_USER];
         yield ['/user/comment', self::ROLE_ADMIN];
-        yield ['/user/comment', self::ROLE_SUPER_ADMIN];
+        yield ['/user/comment', self::ROLE_WEBMASTER];
     }
 
     public function testInvoke(): void

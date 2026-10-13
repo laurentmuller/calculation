@@ -23,7 +23,7 @@ final class IpStackControllerTest extends ControllerTestCase
     {
         yield ['/ipstack', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/ipstack', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
-        yield ['/ipstack', self::ROLE_SUPER_ADMIN];
+        yield ['/ipstack', self::ROLE_WEBMASTER];
     }
 
     public function testIpstack(): void
@@ -36,6 +36,6 @@ final class IpStackControllerTest extends ControllerTestCase
         $service->method('getIpInfo')
             ->willReturn($data);
         self::getContainer()->set(IpStackService::class, $service);
-        $this->checkRoute('/ipstack', self::ROLE_SUPER_ADMIN);
+        $this->checkRoute('/ipstack', self::ROLE_WEBMASTER);
     }
 }

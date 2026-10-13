@@ -82,7 +82,7 @@ class IndexService
             'catalog',
             fn (): array => \array_replace(self::CATALOG, \array_map($this->countEntities(...), self::CATALOG))
         );
-        if (!$this->security->isGranted(RoleInterface::ROLE_SUPER_ADMIN)) {
+        if (!$this->security->isGranted(RoleInterface::ROLE_WEBMASTER)) {
             $catalog['user'] = $this->countFilteredUsers();
         }
 
@@ -156,7 +156,7 @@ class IndexService
     {
         return $this->loadData(
             'users',
-            fn (): int => $this->manager->getRepository(User::class)->enableSuperAdminFilter()->count()
+            fn (): int => $this->manager->getRepository(User::class)->enableWebmasterFilter()->count()
         );
     }
 

@@ -31,13 +31,13 @@ final class CalculationDuplicateControllerTest extends ControllerTestCase
     {
         yield ['/calculation/duplicate', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/calculation/duplicate', self::ROLE_ADMIN];
-        yield ['/calculation/duplicate', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/duplicate', self::ROLE_WEBMASTER];
         yield ['/calculation/duplicate/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/calculation/duplicate/pdf', self::ROLE_ADMIN];
-        yield ['/calculation/duplicate/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/duplicate/pdf', self::ROLE_WEBMASTER];
         yield ['/calculation/duplicate/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/calculation/duplicate/excel', self::ROLE_ADMIN];
-        yield ['/calculation/duplicate/excel', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/duplicate/excel', self::ROLE_WEBMASTER];
     }
 
     public function testEmptyCalculation(): void

@@ -1,6 +1,6 @@
 {# common admin menu #}
 {# parameters #}
-{%- set is_super_admin = is_granted(ROLE_SUPER_ADMIN) -%}
+{%- set is_webmaster = is_granted(ROLE_WEBMASTER) -%}
 {%- set is_log = is_granted(PERMISSION_LIST, ENTITY_LOG) -%}
 {% from 'macros/_icons.html.twig' import dropdownItem, dropdownSeparator %}
 {% from 'navigation/menu/_menu_data.html.twig' import dropdownItemCount %}
@@ -11,18 +11,18 @@
     {{ dropdownSeparator() }}
     {{ dropdownItemCount('user_index', ICON_USER, 'user.list.title', index_service.catalog.user) }}
     {{ dropdownItem(path('admin_rights_user'), 'index.menu_rights_user', 'fa-solid fa-user-check') }}
-    {% if is_super_admin -%}
+    {% if is_webmaster -%}
         {{ dropdownItem(path('admin_rights_admin'), 'index.menu_rights_admin', 'fa-solid fa-user-shield') }}
     {% endif %}
     {{ dropdownSeparator() }}
     {{ dropdownItem(path('admin_parameters'), 'parameters.title', 'fa-solid fa-cogs') }}
-    {% if is_super_admin or is_log %}
+    {% if is_webmaster or is_log %}
         {{ dropdownSeparator() }}
     {% endif %}
     {% if is_log %}
         {{ dropdownItem(path('log_index'), 'log.title', ICON_LOG) }}
     {% endif %}
-    {% if is_super_admin -%}
+    {% if is_webmaster -%}
         {{ dropdownItem(path('admin_clear'), 'clear_cache.title', ICON_DELETE) }}
     {% endif %}
 </ul>

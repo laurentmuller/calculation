@@ -141,15 +141,6 @@ final class EntityVoterTest extends TestCase
         self::assertSame(VoterInterface::ACCESS_DENIED, $actual);
     }
 
-    public function testSuperAdmin(): void
-    {
-        $user = $this->getSuperAdminUser();
-        $subject = Calculation::class;
-        $attribute = EntityPermission::ADD;
-        $expected = VoterInterface::ACCESS_GRANTED;
-        $this->assertVote($user, $subject, $attribute, $expected);
-    }
-
     #[DataProvider('getSupportsAttribute')]
     public function testSupportsAttribute(string $value, bool $expected): void
     {
@@ -198,6 +189,15 @@ final class EntityVoterTest extends TestCase
         self::assertFalse($actual);
     }
 
+    public function testWebmaster(): void
+    {
+        $user = $this->getWebmasterUser();
+        $subject = Calculation::class;
+        $attribute = EntityPermission::ADD;
+        $expected = VoterInterface::ACCESS_GRANTED;
+        $this->assertVote($user, $subject, $attribute, $expected);
+    }
+
     /**
      * @param VoterInterface::ACCESS_* $expected
      */
@@ -237,11 +237,6 @@ final class EntityVoterTest extends TestCase
         return $this->getDefaultUser()->setEnabled(false);
     }
 
-    private function getSuperAdminUser(): User
-    {
-        return $this->getUser(RoleInterface::ROLE_SUPER_ADMIN);
-    }
-
     /**
      * @phpstan-param RoleInterface::ROLE_* $role
      */
@@ -256,5 +251,10 @@ final class EntityVoterTest extends TestCase
     private function getUserToken(User $user): UsernamePasswordToken
     {
         return new UsernamePasswordToken($user, SecurityAttributes::MAIN_FIREWALL, $user->getRoles());
+    }
+
+    private function getWebmasterUser(): User
+    {
+        return $this->getUser(RoleInterface::ROLE_WEBMASTER);
     }
 }

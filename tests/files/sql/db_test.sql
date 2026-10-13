@@ -202,10 +202,10 @@ CREATE TABLE IF NOT EXISTS sy_TaskItemMargin (
 INSERT INTO sy_User
     (id, email, username, enabled, password, role, last_login)
 VALUES
-    (1, 'ROLE_SUPER_ADMIN@TEST.COM', 'ROLE_SUPER_ADMIN', 1, 'ROLE_SUPER_ADMIN', 'ROLE_SUPER_ADMIN', '2024-01-01 12:00:00'),
-    (2, 'ROLE_ADMIN@TEST.COM',       'ROLE_ADMIN',       1, 'ROLE_ADMIN',       'ROLE_ADMIN',       null),
-    (3, 'ROLE_USER@TEST.COM',        'ROLE_USER',        1, 'ROLE_USER',        null,               null),
-    (4, 'ROLE_DISABLED@TEST.COM',    'ROLE_DISABLED',    0, 'ROLE_DISABLED',    null,               null);
+    (1, 'ROLE_WEBMASTER@TEST.COM', 'ROLE_WEBMASTER', 1, 'ROLE_WEBMASTER', 'ROLE_WEBMASTER', '2024-01-01 12:00:00'),
+    (2, 'ROLE_ADMIN@TEST.COM',     'ROLE_ADMIN',     1, 'ROLE_ADMIN',     'ROLE_ADMIN',     null),
+    (3, 'ROLE_USER@TEST.COM',      'ROLE_USER',      1, 'ROLE_USER',      null,             null),
+    (4, 'ROLE_DISABLED@TEST.COM',  'ROLE_DISABLED',  0, 'ROLE_DISABLED',  null,             null);
 
 INSERT INTO sy_Property
     (id, name, value)

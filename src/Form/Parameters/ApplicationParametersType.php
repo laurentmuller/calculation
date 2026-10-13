@@ -34,7 +34,7 @@ class ApplicationParametersType extends AbstractParametersType
         $builder->add('customer', CustomerParameterType::class);
         $builder->add('default', DefaultParameterType::class);
         $builder->add('product', ProductParameterType::class);
-        if ($this->isSuperAdmin()) {
+        if ($this->isWebmaster()) {
             $builder->add('security', SecurityParameterType::class);
         }
     }
@@ -45,8 +45,8 @@ class ApplicationParametersType extends AbstractParametersType
         return ApplicationParameters::class;
     }
 
-    private function isSuperAdmin(): bool
+    private function isWebmaster(): bool
     {
-        return $this->security->isGranted(RoleInterface::ROLE_SUPER_ADMIN);
+        return $this->security->isGranted(RoleInterface::ROLE_WEBMASTER);
     }
 }

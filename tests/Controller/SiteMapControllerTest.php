@@ -20,6 +20,6 @@ final class SiteMapControllerTest extends ControllerTestCase
     {
         yield ['/sitemap', self::ROLE_USER];
         yield ['/sitemap', self::ROLE_ADMIN];
-        yield ['/sitemap', self::ROLE_SUPER_ADMIN];
+        yield ['/sitemap', self::ROLE_WEBMASTER];
     }
 }

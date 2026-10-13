@@ -98,8 +98,8 @@ class UserTable extends AbstractEntityTable
         $user = $this->security->getUser();
         $repository = $this->getRepository();
         $query = $repository->getTableQueryBuilder($alias);
-        if (!$user instanceof User || !$user->isSuperAdmin()) {
-            $repository->enableSuperAdminFilter();
+        if (!$user instanceof User || !$user->isWebmaster()) {
+            $repository->enableWebmasterFilter();
         }
 
         return $query;

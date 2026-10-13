@@ -27,7 +27,7 @@ final class UsersTest extends AuthenticateWebTestCase
     {
         yield [self::ROLE_USER];
         yield [self::ROLE_ADMIN];
-        yield [self::ROLE_SUPER_ADMIN];
+        yield [self::ROLE_WEBMASTER];
         yield [self::ROLE_DISABLED];
     }
 
@@ -40,7 +40,7 @@ final class UsersTest extends AuthenticateWebTestCase
     {
         yield [self::ROLE_USER];
         yield [self::ROLE_ADMIN];
-        yield [self::ROLE_SUPER_ADMIN];
+        yield [self::ROLE_WEBMASTER];
     }
 
     #[DataProvider('getUserExist')]

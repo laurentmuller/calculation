@@ -15,7 +15,7 @@ namespace App\Controller;
 
 use App\Attribute\GetPostRoute;
 use App\Attribute\IsAdmin;
-use App\Attribute\IsSuperAdmin;
+use App\Attribute\IsWebmaster;
 use App\Form\User\RoleRightsType;
 use App\Model\Role;
 use App\Model\TranslatableFlashMessage;
@@ -39,7 +39,7 @@ class AdminRightsController extends AbstractController
     /**
      * Edit rights for the administrator role.
      */
-    #[IsSuperAdmin]
+    #[IsWebmaster]
     #[GetPostRoute(path: '/rights/admin', name: 'rights_admin')]
     public function rightsAdmin(Request $request): Response
     {

@@ -34,12 +34,12 @@ final class CaptchaControllerTest extends ControllerTestCase
         yield ['/captcha/image', AuthenticatedVoter::PUBLIC_ACCESS, Response::HTTP_OK,  Request::METHOD_GET, true];
         yield ['/captcha/image', self::ROLE_USER];
         yield ['/captcha/image', self::ROLE_ADMIN];
-        yield ['/captcha/image', self::ROLE_SUPER_ADMIN];
+        yield ['/captcha/image', self::ROLE_WEBMASTER];
 
         yield ['/captcha/validate', AuthenticatedVoter::PUBLIC_ACCESS, Response::HTTP_OK,  Request::METHOD_GET, true];
         yield ['/captcha/validate', self::ROLE_USER];
         yield ['/captcha/validate', self::ROLE_ADMIN];
-        yield ['/captcha/validate', self::ROLE_SUPER_ADMIN];
+        yield ['/captcha/validate', self::ROLE_WEBMASTER];
     }
 
     /**

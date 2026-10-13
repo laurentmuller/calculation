@@ -52,7 +52,7 @@ readonly class RoleService
         }
 
         return match ($role) {
-            RoleInterface::ROLE_SUPER_ADMIN => new FontAwesomeIcon(FontAwesomePath::SOLID, 'user-gear'),
+            RoleInterface::ROLE_WEBMASTER => new FontAwesomeIcon(FontAwesomePath::SOLID, 'user-gear'),
             RoleInterface::ROLE_ADMIN => new FontAwesomeIcon(FontAwesomePath::SOLID, 'user-shield'),
             default => new FontAwesomeIcon(FontAwesomePath::SOLID, 'user'),
         };

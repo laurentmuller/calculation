@@ -91,7 +91,7 @@ final class DatabaseTest extends KernelServiceTestCase
     {
         yield [AuthenticateWebTestCase::ROLE_USER, RoleInterface::ROLE_USER];
         yield [AuthenticateWebTestCase::ROLE_ADMIN, RoleInterface::ROLE_ADMIN];
-        yield [AuthenticateWebTestCase::ROLE_SUPER_ADMIN, RoleInterface::ROLE_SUPER_ADMIN];
+        yield [AuthenticateWebTestCase::ROLE_WEBMASTER, RoleInterface::ROLE_WEBMASTER];
         yield [AuthenticateWebTestCase::ROLE_DISABLED, RoleInterface::ROLE_USER];
     }
 

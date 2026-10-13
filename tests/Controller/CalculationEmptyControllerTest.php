@@ -28,13 +28,13 @@ final class CalculationEmptyControllerTest extends ControllerTestCase
     {
         yield ['/calculation/empty', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/calculation/empty', self::ROLE_ADMIN];
-        yield ['/calculation/empty', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/empty', self::ROLE_WEBMASTER];
         yield ['/calculation/empty/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/calculation/empty/pdf', self::ROLE_ADMIN];
-        yield ['/calculation/empty/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/empty/pdf', self::ROLE_WEBMASTER];
         yield ['/calculation/empty/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/calculation/empty/excel', self::ROLE_ADMIN];
-        yield ['/calculation/empty/excel', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/empty/excel', self::ROLE_WEBMASTER];
     }
 
     public function testEmptyCalculation(): void

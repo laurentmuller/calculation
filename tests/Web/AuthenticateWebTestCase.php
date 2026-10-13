@@ -34,13 +34,14 @@ abstract class AuthenticateWebTestCase extends WebTestCase
 
     public const int ID_ADMIN = 2;
     public const int ID_DISABLE = 4;
-    public const int ID_SUPER_ADMIN = 1;
     public const int ID_USER = 3;
+    public const int ID_WEBMASTER = 1;
+
     public const string ROLE_ADMIN = RoleInterface::ROLE_ADMIN;
     public const string ROLE_DISABLED = 'ROLE_DISABLED';
     public const string ROLE_FAKE = 'ROLE_FAKE';
-    public const string ROLE_SUPER_ADMIN = RoleInterface::ROLE_SUPER_ADMIN;
     public const string ROLE_USER = RoleInterface::ROLE_USER;
+    public const string ROLE_WEBMASTER = RoleInterface::ROLE_WEBMASTER;
 
     protected KernelBrowser $client;
 

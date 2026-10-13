@@ -75,7 +75,7 @@ final class HelpControllerTest extends ControllerTestCase
         ];
         $this->checkRoute(
             '/help/download',
-            self::ROLE_SUPER_ADMIN,
+            self::ROLE_WEBMASTER,
             method: Request::METHOD_POST,
             xmlHttpRequest: true,
             parameters: $parameters
@@ -91,7 +91,7 @@ final class HelpControllerTest extends ControllerTestCase
         ];
         $this->checkRoute(
             '/help/download',
-            self::ROLE_SUPER_ADMIN,
+            self::ROLE_WEBMASTER,
             method: Request::METHOD_POST,
             xmlHttpRequest: true,
             parameters: $parameters
@@ -107,7 +107,7 @@ final class HelpControllerTest extends ControllerTestCase
         ];
         $this->checkRoute(
             '/help/download',
-            self::ROLE_SUPER_ADMIN,
+            self::ROLE_WEBMASTER,
             method: Request::METHOD_POST,
             xmlHttpRequest: true,
             parameters: $parameters

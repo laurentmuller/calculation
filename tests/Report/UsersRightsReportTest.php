@@ -36,7 +36,7 @@ final class UsersRightsReportTest extends TestCase
         foreach (\range(1, 5) as $index) {
             $users[] = (new User())
                 ->setUsername(\sprintf('User %d', $index))
-                ->setRole(RoleInterface::ROLE_SUPER_ADMIN);
+                ->setRole(RoleInterface::ROLE_WEBMASTER);
         }
 
         $report = new UsersRightsReport(

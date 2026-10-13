@@ -15,8 +15,8 @@ namespace App\Controller;
 
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
-use App\Attribute\IsSuperAdmin;
 use App\Attribute\IsUser;
+use App\Attribute\IsWebmaster;
 use App\Attribute\PdfRoute;
 use App\Attribute\PostRoute;
 use App\Model\HelpDownloadQuery;
@@ -89,7 +89,7 @@ class HelpController extends AbstractController
     /**
      * Save the screenshot image.
      */
-    #[IsSuperAdmin]
+    #[IsWebmaster]
     #[PostRoute(path: '/download', name: 'download')]
     public function download(
         #[MapRequestPayload]

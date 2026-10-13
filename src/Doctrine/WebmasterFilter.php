@@ -19,12 +19,12 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query\Filter\SQLFilter;
 
 /**
- * SQL filter to get users where the role name is not 'ROLE_SUPER_ADMIN'.
+ * SQL filter to get users where the role name is not 'ROLE_WEBMASTER'.
  */
-class SuperAdminFilter extends SQLFilter
+class WebmasterFilter extends SQLFilter
 {
     /** This filter name. */
-    public const string NAME = 'super_admin_filter';
+    public const string NAME = 'webmaster_filter';
 
     #[\Override]
     public function addFilterConstraint(ClassMetadata $targetEntity, string $targetTableAlias): string
@@ -33,11 +33,6 @@ class SuperAdminFilter extends SQLFilter
             return '';
         }
 
-        return \sprintf(
-            "IFNULL(%s.role, '%s') <> '%s'",
-            $targetTableAlias,
-            RoleInterface::ROLE_USER,
-            RoleInterface::ROLE_SUPER_ADMIN
-        );
+        return \sprintf('%1$s.role IS NULL OR %1$s.role <> "%2$s"', $targetTableAlias, RoleInterface::ROLE_WEBMASTER);
     }
 }

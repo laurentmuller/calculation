@@ -29,15 +29,15 @@ final class PivotControllerTest extends ControllerTestCase
     {
         yield ['/pivot', self::ROLE_USER];
         yield ['/pivot', self::ROLE_ADMIN];
-        yield ['/pivot', self::ROLE_SUPER_ADMIN];
+        yield ['/pivot', self::ROLE_WEBMASTER];
 
         yield ['/pivot/csv', self::ROLE_USER];
         yield ['/pivot/csv', self::ROLE_ADMIN];
-        yield ['/pivot/csv', self::ROLE_SUPER_ADMIN];
+        yield ['/pivot/csv', self::ROLE_WEBMASTER];
 
         yield ['/pivot/json', self::ROLE_USER];
         yield ['/pivot/json', self::ROLE_ADMIN];
-        yield ['/pivot/json', self::ROLE_SUPER_ADMIN];
+        yield ['/pivot/json', self::ROLE_WEBMASTER];
     }
 
     public function testInvalidMonths(): void

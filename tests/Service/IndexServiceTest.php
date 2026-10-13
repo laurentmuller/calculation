@@ -76,7 +76,7 @@ final class IndexServiceTest extends TestCase
         $repository = self::createStub(UserRepository::class);
         $repository->method('count')
             ->willReturn(0);
-        $repository->method('enableSuperAdminFilter')
+        $repository->method('enableWebmasterFilter')
             ->willReturnSelf();
 
         $manager = self::createStub(EntityManagerInterface::class);

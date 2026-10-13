@@ -22,16 +22,16 @@ final class SchemaControllerTest extends ControllerTestCase
     {
         yield ['/schema', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/schema', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
-        yield ['/schema', self::ROLE_SUPER_ADMIN];
+        yield ['/schema', self::ROLE_WEBMASTER];
 
         yield ['/schema/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/schema/pdf', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
-        yield ['/schema/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/schema/pdf', self::ROLE_WEBMASTER];
 
         yield ['/schema/sy_Calculation', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/schema/sy_Calculation', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
-        yield ['/schema/sy_Calculation', self::ROLE_SUPER_ADMIN];
+        yield ['/schema/sy_Calculation', self::ROLE_WEBMASTER];
 
-        yield ['/schema/fake_table', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND];
+        yield ['/schema/fake_table', self::ROLE_WEBMASTER, Response::HTTP_FOUND];
     }
 }

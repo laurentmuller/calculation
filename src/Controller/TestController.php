@@ -15,7 +15,7 @@ namespace App\Controller;
 
 use App\Attribute\GetPostRoute;
 use App\Attribute\GetRoute;
-use App\Attribute\IsSuperAdmin;
+use App\Attribute\IsWebmaster;
 use App\Entity\CalculationState;
 use App\Entity\Category;
 use App\Entity\Product;
@@ -44,7 +44,7 @@ use Symfony\Component\Routing\Attribute\Route;
  *
  * @phpstan-type CurrencyType = array{code: string, name: string}
  */
-#[IsSuperAdmin]
+#[IsWebmaster]
 #[Route(path: '/test', name: 'test_')]
 class TestController extends AbstractController
 {

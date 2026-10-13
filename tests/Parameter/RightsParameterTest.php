@@ -81,8 +81,8 @@ final class RightsParameterTest extends ParameterTestCase
     public function testSetRightsFromRoleInvalid(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid role: "ROLE_SUPER_ADMIN".');
-        $role = new Role(RoleInterface::ROLE_SUPER_ADMIN);
+        $this->expectExceptionMessage('Invalid role: "ROLE_WEBMASTER".');
+        $role = new Role(RoleInterface::ROLE_WEBMASTER);
         $this->parameter->setRightsFromRole($role);
     }
 

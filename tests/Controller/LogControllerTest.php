@@ -34,39 +34,39 @@ final class LogControllerTest extends ControllerTestCase
         yield ['/log', self::ROLE_DISABLED, Response::HTTP_FORBIDDEN];
         yield ['/log', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/log', self::ROLE_ADMIN];
-        yield ['/log', self::ROLE_SUPER_ADMIN];
+        yield ['/log', self::ROLE_WEBMASTER];
 
         yield ['/log/delete', self::ROLE_DISABLED, Response::HTTP_FORBIDDEN];
         yield ['/log/delete', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/log/delete', self::ROLE_ADMIN];
-        yield ['/log/delete', self::ROLE_SUPER_ADMIN];
+        yield ['/log/delete', self::ROLE_WEBMASTER];
 
         yield ['/log/download', self::ROLE_DISABLED, Response::HTTP_FORBIDDEN];
         yield ['/log/download', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/log/download', self::ROLE_ADMIN];
-        yield ['/log/download', self::ROLE_SUPER_ADMIN];
+        yield ['/log/download', self::ROLE_WEBMASTER];
 
         yield ['/log/excel', self::ROLE_DISABLED, Response::HTTP_FORBIDDEN];
         yield ['/log/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/log/excel', self::ROLE_ADMIN];
-        yield ['/log/excel', self::ROLE_SUPER_ADMIN];
+        yield ['/log/excel', self::ROLE_WEBMASTER];
 
         yield ['/log/refresh', self::ROLE_DISABLED, Response::HTTP_FORBIDDEN];
         yield ['/log/refresh', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/log/refresh', self::ROLE_ADMIN, Response::HTTP_FOUND];
-        yield ['/log/refresh', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND];
+        yield ['/log/refresh', self::ROLE_WEBMASTER, Response::HTTP_FOUND];
 
         yield ['/log/pdf', self::ROLE_DISABLED, Response::HTTP_FORBIDDEN];
         yield ['/log/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/log/pdf', self::ROLE_ADMIN];
-        yield ['/log/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/log/pdf', self::ROLE_WEBMASTER];
 
         yield ['/log/show/1', self::ROLE_DISABLED, Response::HTTP_FORBIDDEN];
         yield ['/log/show/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/log/show/1', self::ROLE_ADMIN];
-        yield ['/log/show/1', self::ROLE_SUPER_ADMIN];
+        yield ['/log/show/1', self::ROLE_WEBMASTER];
 
-        yield ['/log/show/100000', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND];
+        yield ['/log/show/100000', self::ROLE_WEBMASTER, Response::HTTP_FOUND];
     }
 
     #[Depends('testRoutes')]

@@ -21,20 +21,20 @@ final class AboutPolicyControllerTest extends ControllerTestCase
         yield ['/about/policy'];
         yield ['/about/policy', self::ROLE_USER];
         yield ['/about/policy', self::ROLE_ADMIN];
-        yield ['/about/policy', self::ROLE_SUPER_ADMIN];
+        yield ['/about/policy', self::ROLE_WEBMASTER];
 
         yield ['/about/policy/content', self::ROLE_USER];
         yield ['/about/policy/content', self::ROLE_ADMIN];
-        yield ['/about/policy/content', self::ROLE_SUPER_ADMIN];
+        yield ['/about/policy/content', self::ROLE_WEBMASTER];
 
         yield ['/about/policy/pdf'];
         yield ['/about/policy/pdf', self::ROLE_USER];
         yield ['/about/policy/pdf', self::ROLE_ADMIN];
-        yield ['/about/policy/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/about/policy/pdf', self::ROLE_WEBMASTER];
 
         yield ['/about/policy/word'];
         yield ['/about/policy/word', self::ROLE_USER];
         yield ['/about/policy/word', self::ROLE_ADMIN];
-        yield ['/about/policy/word', self::ROLE_SUPER_ADMIN];
+        yield ['/about/policy/word', self::ROLE_WEBMASTER];
     }
 }

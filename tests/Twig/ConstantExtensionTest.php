@@ -97,7 +97,7 @@ final class ConstantExtensionTest extends TestCase
         $values = [
             'ROLE_USER',
             'ROLE_ADMIN',
-            'ROLE_SUPER_ADMIN',
+            'ROLE_WEBMASTER',
         ];
         foreach ($values as $value) {
             yield [$value, $value];

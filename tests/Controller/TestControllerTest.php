@@ -51,7 +51,7 @@ final class TestControllerTest extends ControllerTestCase
         $users = [
             self::ROLE_USER => Response::HTTP_FORBIDDEN,
             self::ROLE_ADMIN => Response::HTTP_FORBIDDEN,
-            self::ROLE_SUPER_ADMIN => Response::HTTP_OK,
+            self::ROLE_WEBMASTER => Response::HTTP_OK,
         ];
 
         foreach ($routes as $route) {
@@ -62,7 +62,7 @@ final class TestControllerTest extends ControllerTestCase
 
         yield [
             '/test/tree',
-            self::ROLE_SUPER_ADMIN,
+            self::ROLE_WEBMASTER,
             Response::HTTP_OK,
             Request::METHOD_GET,
             true,
@@ -70,7 +70,7 @@ final class TestControllerTest extends ControllerTestCase
 
         yield [
             '/test/swiss?all=fribourg',
-            self::ROLE_SUPER_ADMIN,
+            self::ROLE_WEBMASTER,
             Response::HTTP_OK,
             Request::METHOD_GET,
             true,
@@ -100,7 +100,7 @@ final class TestControllerTest extends ControllerTestCase
 
         $this->checkRoute(
             url: '/test/label',
-            username: self::ROLE_SUPER_ADMIN,
+            username: self::ROLE_WEBMASTER,
         );
     }
 
@@ -119,7 +119,7 @@ final class TestControllerTest extends ControllerTestCase
                 'form[message]' => 'My message',
                 'form[captcha]' => 'fake',
             ],
-            userName: self::ROLE_SUPER_ADMIN,
+            userName: self::ROLE_WEBMASTER,
             disableReboot: true
         );
     }
@@ -135,7 +135,7 @@ final class TestControllerTest extends ControllerTestCase
         $this->setService(SearchService::class, $service);
         $this->checkRoute(
             url: '/test/search',
-            username: self::ROLE_SUPER_ADMIN,
+            username: self::ROLE_WEBMASTER,
             xmlHttpRequest: true
         );
     }
@@ -160,7 +160,7 @@ final class TestControllerTest extends ControllerTestCase
 
         $this->checkRoute(
             url: '/test/translate',
-            username: self::ROLE_SUPER_ADMIN
+            username: self::ROLE_WEBMASTER
         );
     }
 
@@ -180,7 +180,7 @@ final class TestControllerTest extends ControllerTestCase
 
         $this->checkRoute(
             url: '/test/tree',
-            username: self::ROLE_SUPER_ADMIN,
+            username: self::ROLE_WEBMASTER,
             xmlHttpRequest: true
         );
     }

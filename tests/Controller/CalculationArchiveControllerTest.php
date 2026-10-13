@@ -28,7 +28,7 @@ final class CalculationArchiveControllerTest extends ControllerTestCase
     {
         yield ['/admin/archive', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/admin/archive', self::ROLE_ADMIN];
-        yield ['/admin/archive', self::ROLE_SUPER_ADMIN];
+        yield ['/admin/archive', self::ROLE_WEBMASTER];
     }
 
     public function testArchiveEditableEmpty(): void

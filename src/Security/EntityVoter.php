@@ -67,7 +67,7 @@ class EntityVoter extends Voter
         if (!$user instanceof User) {
             return false;
         }
-        if ($user->isSuperAdmin()) {
+        if ($user->isWebmaster()) {
             return true;
         }
         $entityPermission = $this->getEntityPermission($attribute, $vote);

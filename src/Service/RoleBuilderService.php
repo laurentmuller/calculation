@@ -51,22 +51,14 @@ class RoleBuilderService
         if (!$user->isEnabled()) {
             return $this->getDisabledRole();
         }
-        if ($user->isSuperAdmin()) {
-            return $this->getSuperAdminRole();
+        if ($user->isWebmaster()) {
+            return $this->getWebmasterRole();
         }
         if ($user->isAdmin()) {
             return $this->getAdminRole();
         }
 
         return $this->getUserRole();
-    }
-
-    /**
-     * Gets the super admin role ('ROLE_SUPER_ADMIN').
-     */
-    public function getSuperAdminRole(): Role
-    {
-        return $this->getRoleWithAll(RoleInterface::ROLE_SUPER_ADMIN);
     }
 
     /**
@@ -96,6 +88,14 @@ class RoleBuilderService
         );
 
         return $role;
+    }
+
+    /**
+     * Gets the super admin role ('ROLE_WEBMASTER').
+     */
+    public function getWebmasterRole(): Role
+    {
+        return $this->getRoleWithAll(RoleInterface::ROLE_WEBMASTER);
     }
 
     /**

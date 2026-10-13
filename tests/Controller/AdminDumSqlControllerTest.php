@@ -38,7 +38,7 @@ final class AdminDumSqlControllerTest extends ControllerTestCase
     {
         yield ['/admin/dump-sql', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/admin/dump-sql', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
-        yield ['/admin/dump-sql', self::ROLE_SUPER_ADMIN];
+        yield ['/admin/dump-sql', self::ROLE_WEBMASTER];
     }
 
     public function testDumSqlFailure(): void
@@ -47,7 +47,7 @@ final class AdminDumSqlControllerTest extends ControllerTestCase
         $this->content = 'Fake output';
         $this->checkRoute(
             url: 'admin/dump-sql',
-            username: self::ROLE_SUPER_ADMIN,
+            username: self::ROLE_WEBMASTER,
             expected: Response::HTTP_FOUND
         );
     }
@@ -58,7 +58,7 @@ final class AdminDumSqlControllerTest extends ControllerTestCase
         $this->content = '[OK]';
         $this->checkRoute(
             url: 'admin/dump-sql',
-            username: self::ROLE_SUPER_ADMIN,
+            username: self::ROLE_WEBMASTER,
             expected: Response::HTTP_FOUND
         );
     }
@@ -69,7 +69,7 @@ final class AdminDumSqlControllerTest extends ControllerTestCase
         $this->content = 'Some Change;10';
         $this->checkRoute(
             url: 'admin/dump-sql',
-            username: self::ROLE_SUPER_ADMIN,
+            username: self::ROLE_WEBMASTER,
         );
     }
 }

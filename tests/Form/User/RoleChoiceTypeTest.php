@@ -40,7 +40,7 @@ final class RoleChoiceTypeTest extends TypeTestCase
     protected function getPreloadedExtensions(): array
     {
         $user = new User();
-        $user->setRole(RoleInterface::ROLE_SUPER_ADMIN);
+        $user->setRole(RoleInterface::ROLE_WEBMASTER);
         $security = self::createStub(Security::class);
         $security->method('getUser')
             ->willReturn($user);

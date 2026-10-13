@@ -43,10 +43,10 @@ final class RegistrationControllerTest extends ControllerTestCase
     {
         yield ['/register', self::ROLE_USER];
         yield ['/register', self::ROLE_ADMIN];
-        yield ['/register', self::ROLE_SUPER_ADMIN];
+        yield ['/register', self::ROLE_WEBMASTER];
         yield ['/register/verify', self::ROLE_USER, Response::HTTP_FOUND];
         yield ['/register/verify', self::ROLE_ADMIN, Response::HTTP_FOUND];
-        yield ['/register/verify', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND];
+        yield ['/register/verify', self::ROLE_WEBMASTER, Response::HTTP_FOUND];
     }
 
     public function testRegister(): void
@@ -62,7 +62,7 @@ final class RegistrationControllerTest extends ControllerTestCase
             uri: '/register',
             id: 'registration.register.submit',
             data: $data,
-            userName: self::ROLE_SUPER_ADMIN,
+            userName: self::ROLE_WEBMASTER,
             disableReboot: true,
         );
     }
@@ -81,7 +81,7 @@ final class RegistrationControllerTest extends ControllerTestCase
             uri: '/register',
             id: 'registration.register.submit',
             data: $data,
-            userName: self::ROLE_SUPER_ADMIN,
+            userName: self::ROLE_WEBMASTER,
             disableReboot: true,
         );
     }
@@ -89,8 +89,8 @@ final class RegistrationControllerTest extends ControllerTestCase
     public function testVerify(): void
     {
         $this->checkRoute(
-            url: \sprintf('/register/verify?id=%d', self::ID_SUPER_ADMIN),
-            username: self::ROLE_SUPER_ADMIN,
+            url: \sprintf('/register/verify?id=%d', self::ID_WEBMASTER),
+            username: self::ROLE_WEBMASTER,
             expected: Response::HTTP_FOUND,
         );
     }
@@ -99,8 +99,8 @@ final class RegistrationControllerTest extends ControllerTestCase
     {
         $this->throwOnHandleEmail = true;
         $this->checkRoute(
-            url: \sprintf('/register/verify?id=%d', self::ID_SUPER_ADMIN),
-            username: self::ROLE_SUPER_ADMIN,
+            url: \sprintf('/register/verify?id=%d', self::ID_WEBMASTER),
+            username: self::ROLE_WEBMASTER,
             expected: Response::HTTP_FOUND,
         );
     }

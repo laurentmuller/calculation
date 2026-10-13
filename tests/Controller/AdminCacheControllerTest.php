@@ -24,7 +24,7 @@ final class AdminCacheControllerTest extends ControllerTestCase
     {
         yield ['/admin/clear', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/admin/clear', self::ROLE_ADMIN];
-        yield ['/admin/clear', self::ROLE_SUPER_ADMIN];
+        yield ['/admin/clear', self::ROLE_WEBMASTER];
     }
 
     public function testClearCache(): void
@@ -32,7 +32,7 @@ final class AdminCacheControllerTest extends ControllerTestCase
         $this->checkForm(
             uri: 'admin/clear',
             id: 'clear_cache.submit',
-            userName: self::ROLE_SUPER_ADMIN
+            userName: self::ROLE_WEBMASTER
         );
     }
 
@@ -48,7 +48,7 @@ final class AdminCacheControllerTest extends ControllerTestCase
         $this->checkForm(
             uri: 'admin/clear',
             id: 'clear_cache.submit',
-            userName: self::ROLE_SUPER_ADMIN,
+            userName: self::ROLE_WEBMASTER,
             disableReboot: true
         );
     }
@@ -65,7 +65,7 @@ final class AdminCacheControllerTest extends ControllerTestCase
         $this->checkForm(
             uri: 'admin/clear',
             id: 'clear_cache.submit',
-            userName: self::ROLE_SUPER_ADMIN,
+            userName: self::ROLE_WEBMASTER,
             followRedirect: false,
             disableReboot: true
         );
@@ -80,7 +80,7 @@ final class AdminCacheControllerTest extends ControllerTestCase
 
         $this->checkRoute(
             url: 'admin/clear',
-            username: self::ROLE_SUPER_ADMIN,
+            username: self::ROLE_WEBMASTER,
             expected: Response::HTTP_FOUND,
             method: Request::METHOD_POST
         );

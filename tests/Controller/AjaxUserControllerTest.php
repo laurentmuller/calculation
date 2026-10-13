@@ -26,28 +26,28 @@ final class AjaxUserControllerTest extends AuthenticateWebTestCase
     public static function getEmails(): \Generator
     {
         yield [true, 'myemail_fake_zz@myemail.com'];
-        yield [true, 'ROLE_SUPER_ADMIN@TEST.COM', 1];
+        yield [true, 'ROLE_WEBMASTER@TEST.COM', 1];
         yield ['email.blank'];
         yield ['email.short', 'A'];
         yield ['email.long', \str_repeat('A', 200)];
-        yield ['user.unique_email', 'ROLE_SUPER_ADMIN@TEST.COM'];
+        yield ['user.unique_email', 'ROLE_WEBMASTER@TEST.COM'];
     }
 
     public static function getNames(): \Generator
     {
         yield [true, 'myEmail_fake_zz'];
-        yield [true, 'ROLE_SUPER_ADMIN', 1];
+        yield [true, 'ROLE_WEBMASTER', 1];
         yield ['username.blank'];
         yield ['username.short', 'A'];
         yield ['username.long', \str_repeat('A', 200)];
-        yield ['user.unique_username', 'ROLE_SUPER_ADMIN'];
+        yield ['user.unique_username', 'ROLE_WEBMASTER'];
     }
 
     public static function getUsers(): \Generator
     {
         yield ['username.blank'];
-        yield [true, 'ROLE_SUPER_ADMIN'];
-        yield [true, 'ROLE_SUPER_ADMIN@TEST.COM'];
+        yield [true, 'ROLE_WEBMASTER'];
+        yield [true, 'ROLE_WEBMASTER@TEST.COM'];
         yield ['username.not_found', 'USER_XXX_INVALID'];
         yield ['username.not_found', 'USER_XXX_INVALID@INVALID.COM'];
     }
@@ -58,7 +58,7 @@ final class AjaxUserControllerTest extends AuthenticateWebTestCase
     #[DataProvider('getEmails')]
     public function testCheckEmail(string|bool $expected, ?string $email = null, ?int $id = null): void
     {
-        $this->loginUsername('ROLE_SUPER_ADMIN');
+        $this->loginUsername('ROLE_WEBMASTER');
         $parameters = ['email' => $email, 'id' => $id];
         $this->client->request(Request::METHOD_GET, '/ajax/check/user/email', $parameters);
         $response = $this->client->getResponse();
@@ -71,7 +71,7 @@ final class AjaxUserControllerTest extends AuthenticateWebTestCase
     #[DataProvider('getNames')]
     public function testCheckName(string|bool $expected, ?string $username = null, ?int $id = null): void
     {
-        $this->loginUsername('ROLE_SUPER_ADMIN');
+        $this->loginUsername('ROLE_WEBMASTER');
         $parameters = ['username' => $username, 'id' => $id];
         $this->client->request(Request::METHOD_GET, '/ajax/check/user/name', $parameters);
         $response = $this->client->getResponse();

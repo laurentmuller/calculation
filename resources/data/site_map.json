@@ -270,7 +270,7 @@
                 },
                 {
                     "route": "admin_rights_admin",
-                    "role": "super_admin",
+                    "role": "webmaster",
                     "text": "index.menu_rights_admin",
                     "icon": "fa-solid fa-user-shield"
                 },

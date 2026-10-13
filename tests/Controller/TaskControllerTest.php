@@ -27,43 +27,43 @@ final class TaskControllerTest extends EntityControllerTestCase
     {
         yield ['/task', self::ROLE_USER];
         yield ['/task', self::ROLE_ADMIN];
-        yield ['/task', self::ROLE_SUPER_ADMIN];
+        yield ['/task', self::ROLE_WEBMASTER];
 
         yield ['/task/add', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/task/add', self::ROLE_ADMIN];
-        yield ['/task/add', self::ROLE_SUPER_ADMIN];
+        yield ['/task/add', self::ROLE_WEBMASTER];
 
         yield ['/task/edit/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/task/edit/1', self::ROLE_ADMIN];
-        yield ['/task/edit/1', self::ROLE_SUPER_ADMIN];
+        yield ['/task/edit/1', self::ROLE_WEBMASTER];
 
         yield ['/task/clone/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/task/clone/1', self::ROLE_ADMIN];
-        yield ['/task/clone/1', self::ROLE_SUPER_ADMIN];
+        yield ['/task/clone/1', self::ROLE_WEBMASTER];
 
         yield ['/task/delete/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/task/delete/1', self::ROLE_ADMIN];
-        yield ['/task/delete/1', self::ROLE_SUPER_ADMIN];
+        yield ['/task/delete/1', self::ROLE_WEBMASTER];
 
         yield ['/task/clone/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/task/clone/1', self::ROLE_ADMIN];
-        yield ['/task/clone/1', self::ROLE_SUPER_ADMIN];
+        yield ['/task/clone/1', self::ROLE_WEBMASTER];
 
         yield ['/task/show/1', self::ROLE_USER];
         yield ['/task/show/1', self::ROLE_ADMIN];
-        yield ['/task/show/1', self::ROLE_SUPER_ADMIN];
+        yield ['/task/show/1', self::ROLE_WEBMASTER];
 
         yield ['/task/pdf', self::ROLE_USER];
         yield ['/task/pdf', self::ROLE_ADMIN];
-        yield ['/task/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/task/pdf', self::ROLE_WEBMASTER];
 
         yield ['/task/excel', self::ROLE_USER];
         yield ['/task/excel', self::ROLE_ADMIN];
-        yield ['/task/excel', self::ROLE_SUPER_ADMIN];
+        yield ['/task/excel', self::ROLE_WEBMASTER];
 
         yield ['/task/compute/1', self::ROLE_USER];
         yield ['/task/compute/1', self::ROLE_ADMIN];
-        yield ['/task/compute/1', self::ROLE_SUPER_ADMIN];
+        yield ['/task/compute/1', self::ROLE_WEBMASTER];
     }
 
     public function testAdd(): void

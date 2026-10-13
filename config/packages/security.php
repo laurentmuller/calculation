@@ -29,7 +29,7 @@ return App::config([
         ],
         'role_hierarchy' => [
             RoleInterface::ROLE_ADMIN => [RoleInterface::ROLE_USER],
-            RoleInterface::ROLE_SUPER_ADMIN => [RoleInterface::ROLE_ADMIN],
+            RoleInterface::ROLE_WEBMASTER => [RoleInterface::ROLE_ADMIN],
         ],
         'providers' => [
             'user_provider' => ['id' => UserRepository::class],
@@ -46,7 +46,7 @@ return App::config([
                 'custom_authenticators' => [LoginFormAuthenticator::class],
                 'login_throttling' => [], // allows 5 login attempts per minute
                 'switch_user' => [
-                    'role' => RoleInterface::ROLE_SUPER_ADMIN,
+                    'role' => RoleInterface::ROLE_WEBMASTER,
                     'parameter' => SwitchUserListener::SWITCH_USER_PARAMETER,
                 ],
                 'logout' => [

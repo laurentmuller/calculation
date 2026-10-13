@@ -16,7 +16,7 @@ namespace App\Controller;
 use App\Attribute\GetPostRoute;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
-use App\Attribute\IsSuperAdmin;
+use App\Attribute\IsWebmaster;
 use App\Generator\CalculationGenerator;
 use App\Generator\CustomerGenerator;
 use App\Generator\ProductGenerator;
@@ -31,7 +31,7 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * Controller to generate entities.
  */
-#[IsSuperAdmin]
+#[IsWebmaster]
 #[Route(path: '/generate', name: self::PREFIX)]
 class GeneratorController extends AbstractController
 {

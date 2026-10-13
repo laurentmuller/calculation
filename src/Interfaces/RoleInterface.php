@@ -62,12 +62,12 @@ interface RoleInterface
     public function hasRole(string $role): bool;
 
     /**
-     * Tells if this has the admin or the super admin role.
+     * Tells if this has the admin or the webmaster role.
      */
     public function isAdmin(): bool;
 
     /**
-     * Tells if this has the super admin role.
+     * Tells if this has the webmaster role.
      */
     public function isWebmaster(): bool;
 

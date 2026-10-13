@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Constants\CacheAttributes;
-use App\Traits\ArrayTrait;
-use App\Traits\CacheKeyTrait;
 use App\Traits\EnablementValueTrait;
 use App\Utils\StringUtils;
 use STS\Phpinfo\Info;
@@ -23,14 +20,6 @@ use STS\Phpinfo\Models\Config;
 use STS\Phpinfo\Models\Group;
 use STS\Phpinfo\Models\Module;
 use STS\Phpinfo\PhpInfo;
-use Symfony\Component\DependencyInjection\Attribute\Target;
-use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Contracts\Cache\CacheInterface;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
  * Service to get PHP information.
@@ -63,8 +52,6 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  */
 class PhpInfoService
 {
-    use ArrayTrait;
-    use CacheKeyTrait;
     use EnablementValueTrait;
 
     public const int TYPE_COLOR = 0;
@@ -81,7 +68,7 @@ class PhpInfoService
 
     private const string REDACTED = '********';
 
-    private const array  REDACTED_NAMES = [
+    private const array REDACTED_NAMES = [
         'APP_SECRET',
         'DATABASE_URL',
         'MAILER_DSN',
@@ -101,7 +88,14 @@ class PhpInfoService
 
     private const string URL_INFO = 'https://www.php.net/manual/en/book.%s.php';
 
-    private const array URL_NAMES = [
+    private const array URLS_EXCLUDED = [
+        'General',
+        'Environment',
+        'PHP Variables',
+        'PHP Credits',
+    ];
+
+    private const array URLS_INCLUDED = [
         'Core' => 'https://www.php.net/manual/en/ref.info.php',
         'Zend OPcache' => 'https://www.php.net/manual/fr/book.opcache.php',
         'bcmath' => 'https://www.php.net/manual/en/book.bc.php',
@@ -115,18 +109,14 @@ class PhpInfoService
         'pdo_mysql' => 'https://www.php.net/manual/en/ref.pdo-mysql.php',
         'pdo_pgsql' => 'https://www.php.net/manual/en/ref.pdo-pgsql.php',
         'pdo_sqlite' => 'https://www.php.net/manual/en/ref.pdo-sqlite.php',
+        'pgsql' => 'https://www.php.net/manual/en/ref.pdo-pgsql.php',
         'raphf' => 'https://pecl.php.net/package/raphf',
+        'posix' => 'https://www.php.net/manual/en/ref.posix.php',
         'standard' => 'https://www.php.net/manual/en/ref.info.php',
         'timezonedb' => 'https://pecl.php.net/package/timezonedb',
         'uploadprogress' => 'https://pecl.php.net/package/uploadprogress',
         'xdebug' => 'https://xdebug.org/docs/',
     ];
-
-    public function __construct(
-        #[Target(CacheAttributes::CACHE_SYMFONY)]
-        private readonly CacheInterface $cache,
-    ) {
-    }
 
     /**
      * @return InfoType
@@ -156,39 +146,6 @@ class PhpInfoService
     }
 
     /**
-     * @param array<string, string> $entries
-     *
-     * @return ResponseInterface[]
-     */
-    private function createResponses(HttpClientInterface $client, array $entries): array
-    {
-        return $this->mapKeyAndValue(
-            $entries,
-            static fn (string $name, string $url): ResponseInterface => $client->request(
-                Request::METHOD_HEAD,
-                $url,
-                ['user_data' => $name]
-            ),
-        );
-    }
-
-    /**
-     * @param ModuleType[] $modules
-     *
-     * @return array<string, string>
-     */
-    private function createUrls(array $modules): array
-    {
-        $names = \array_diff(\array_column($modules, 'name'), \array_keys(self::URL_NAMES));
-        $urls = \array_map(static fn (string $name): string => \sprintf(self::URL_INFO, \strtolower($name)), $names);
-
-        return \array_filter(
-            \array_combine($names, $urls),
-            static fn (string $entry): bool => \is_string(\filter_var($entry, \FILTER_VALIDATE_URL))
-        );
-    }
-
-    /**
      * @param array<int, ModuleType> $modules
      */
     private function findKeyModule(array $modules, string $name): ?int
@@ -197,6 +154,15 @@ class PhpInfoService
             $modules,
             static fn (array $module): bool => StringUtils::equalIgnoreCase($name, $module['name'])
         );
+    }
+
+    private function getModuleUrl(string $name): ?string
+    {
+        if (\in_array($name, self::URLS_EXCLUDED, true)) {
+            return null;
+        }
+
+        return self::URLS_INCLUDED[$name] ?? \sprintf(self::URL_INFO, \strtolower($name));
     }
 
     private function isNoneValue(string $value): bool
@@ -328,7 +294,7 @@ class PhpInfoService
         $module = [
             'name' => $module->name(),
             'groups' => $groups,
-            'url' => null,
+            'url' => $this->getModuleUrl($module->name()),
         ];
         $module['size'] = \array_reduce(
             $module['groups'],
@@ -358,7 +324,6 @@ class PhpInfoService
                 $info->modules()->toArray()
             )
         );
-        $this->updateUrls($modules);
         $this->moveCoreModule($modules);
 
         return $modules;
@@ -498,43 +463,5 @@ class PhpInfoService
         \usort($groups, static fn (array $a, array $b): int => $a['name'] <=> $b['name']);
 
         return $groups;
-    }
-
-    /**
-     * @param ModuleType[] $modules
-     */
-    private function updateUrls(array &$modules): void
-    {
-        $values = $this->cache->get('php-modules-url', fn (): array => $this->validateUrls($modules));
-        foreach ($modules as &$module) {
-            $module['url'] = $values[$module['name']] ?? null;
-        }
-    }
-
-    /**
-     * @param ModuleType[] $modules
-     *
-     * @return array<string, string>
-     */
-    private function validateUrls(array $modules): array
-    {
-        $client = HttpClient::create();
-        $entries = $this->createUrls($modules);
-        $responses = $this->createResponses($client, $entries);
-
-        $results = self::URL_NAMES;
-        foreach ($client->stream($responses) as $response => $chunk) {
-            if ($chunk->isFirst()) {
-                try {
-                    if (Response::HTTP_OK === $response->getStatusCode()) {
-                        $name = $response->getInfo('user_data');
-                        $results[$name] = $entries[$name];
-                    }
-                } catch (TransportExceptionInterface) {
-                }
-            }
-        }
-
-        return $results;
     }
 }

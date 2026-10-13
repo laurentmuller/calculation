@@ -95,10 +95,9 @@ class UserTable extends AbstractEntityTable
     #[\Override]
     protected function createQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
-        $user = $this->security->getUser();
         $repository = $this->getRepository();
         $query = $repository->getTableQueryBuilder($alias);
-        if (!$user instanceof User || !$user->isWebmaster()) {
+        if (!$this->security->isGranted(RoleInterface::ROLE_WEBMASTER)) {
             $repository->enableWebmasterFilter();
         }
 

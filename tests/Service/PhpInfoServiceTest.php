@@ -20,7 +20,6 @@ use STS\Phpinfo\Models\Group;
 use STS\Phpinfo\Models\Module;
 use STS\Phpinfo\PhpInfo;
 use STS\Phpinfo\Support\Items;
-use Symfony\Component\Cache\Adapter\NullAdapter;
 
 final class PhpInfoServiceTest extends TestCase
 {
@@ -202,7 +201,7 @@ final class PhpInfoServiceTest extends TestCase
 
     private function createService(): PhpInfoService
     {
-        return new PhpInfoService(new NullAdapter());
+        return new PhpInfoService();
     }
 
     private function createVariablesModule(): Module

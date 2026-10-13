@@ -91,7 +91,7 @@ class RoleBuilderService
     }
 
     /**
-     * Gets the super admin role ('ROLE_WEBMASTER').
+     * Gets the webmaster role ('ROLE_WEBMASTER').
      */
     public function getWebmasterRole(): Role
     {

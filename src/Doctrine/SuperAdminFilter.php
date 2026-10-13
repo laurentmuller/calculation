@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query\Filter\SQLFilter;
 
 /**
- * SQL filter to get users where the role name is not the super-administrator role name.
+ * SQL filter to get users where the role name is not 'ROLE_SUPER_ADMIN'.
  */
 class SuperAdminFilter extends SQLFilter
 {

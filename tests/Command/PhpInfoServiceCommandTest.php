@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Command;
 
 use App\Service\PhpInfoService;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 final class PhpInfoServiceCommandTest extends CommandTestCase
 {
@@ -21,9 +22,7 @@ final class PhpInfoServiceCommandTest extends CommandTestCase
 
     public function testFailure(): void
     {
-        $kernel = self::bootKernel();
-        $service = self::createStub(PhpInfoService::class);
-        $service->method('getPhpInfo')->willReturn([
+        $kernel = $this->createService([
             'version' => '1.0',
             'modules' => [
                 [
@@ -40,7 +39,6 @@ final class PhpInfoServiceCommandTest extends CommandTestCase
                 ],
             ],
         ]);
-        self::getContainer()->set(PhpInfoService::class, $service);
         $output = $this->executeFailure(kernel: $kernel);
         self::assertOutputContainsString(
             $output,
@@ -57,7 +55,24 @@ final class PhpInfoServiceCommandTest extends CommandTestCase
 
     public function testSuccess(): void
     {
-        $output = $this->execute();
+        $kernel = $this->createService([
+            'version' => '1.0',
+            'modules' => [
+                [
+                    'name' => 'General',
+                    'url' => null,
+                ],
+                [
+                    'name' => 'bcmath',
+                    'url' => 'https://www.php.net/manual/en/book.bc.php',
+                ],
+                [
+                    'name' => 'ftp',
+                    'url' => 'https://www.php.net/manual/en/book.bc.php',
+                ],
+            ],
+        ]);
+        $output = $this->execute(kernel: $kernel);
         self::assertOutputContainsString(
             $output,
             'Modules',
@@ -71,5 +86,15 @@ final class PhpInfoServiceCommandTest extends CommandTestCase
     protected function getCommandName(): string
     {
         return self::COMMAND_NAME;
+    }
+
+    private function createService(array $values): KernelInterface
+    {
+        $kernel = self::bootKernel();
+        $service = self::createStub(PhpInfoService::class);
+        $service->method('getPhpInfo')->willReturn($values);
+        self::getContainer()->set(PhpInfoService::class, $service);
+
+        return $kernel;
     }
 }

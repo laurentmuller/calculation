@@ -19,6 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 abstract class CommandTestCase extends KernelTestCase
 {
@@ -49,9 +50,13 @@ abstract class CommandTestCase extends KernelTestCase
         return $path;
     }
 
-    protected function execute(array $input = [], array $options = [], int $statusCode = Command::SUCCESS): string
-    {
-        $kernel = self::bootKernel();
+    protected function execute(
+        array $input = [],
+        array $options = [],
+        int $statusCode = Command::SUCCESS,
+        ?KernelInterface $kernel = null
+    ): string {
+        $kernel ??= self::bootKernel();
         $application = new Application($kernel);
         $name = $this->getCommandName();
         $command = $application->get($name);
@@ -62,14 +67,14 @@ abstract class CommandTestCase extends KernelTestCase
         return $tester->getDisplay(true);
     }
 
-    protected function executeFailure(array $input = [], array $options = []): string
+    protected function executeFailure(array $input = [], array $options = [], ?KernelInterface $kernel = null): string
     {
-        return $this->execute($input, $options, Command::FAILURE);
+        return $this->execute($input, $options, Command::FAILURE, $kernel);
     }
 
-    protected function executeInvalid(array $input = [], array $options = []): string
+    protected function executeInvalid(array $input = [], array $options = [], ?KernelInterface $kernel = null): string
     {
-        return $this->execute($input, $options, Command::INVALID);
+        return $this->execute($input, $options, Command::INVALID, $kernel);
     }
 
     abstract protected function getCommandName(): string;

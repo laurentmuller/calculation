@@ -457,10 +457,11 @@ class PhpInfoService
      */
     private function sortGroups(array $groups): array
     {
+        $callback = static fn (array $a, array $b): int => $a['name'] <=> $b['name'];
         foreach ($groups as &$group) {
-            \usort($group['configs'], static fn (array $a, array $b): int => $a['name'] <=> $b['name']);
+            \usort($group['configs'], $callback);
         }
-        \usort($groups, static fn (array $a, array $b): int => $a['name'] <=> $b['name']);
+        \usort($groups, $callback);
 
         return $groups;
     }

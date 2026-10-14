@@ -2,13 +2,13 @@
 {% from 'command/_command.htm.twig' import encode_query %}
 {# macros #}
 {% macro outputChildren(children) -%}
-{% if children|length %}
-    <div class="row">
-        {% for child in children %}
-            {{ form_row(child) }}
-        {% endfor %}
-    </div>
-{% endif %}
+    {% if children|length %}
+        <div class="row">
+            {% for child in children %}
+                {{ form_row(child) }}
+            {% endfor %}
+        </div>
+    {% endif %}
 {% endmacro outputChildren %}
 {# parameters #}
 {%- set title = 'command.execute.title' -%}
@@ -20,20 +20,20 @@
 {%- set submit_title = 'command.execute.submit_title' -%}
 {# body #}
 {% block card_body %}
-{# name #}
-{{ include('command/_command_name.html.twig', {command: command}, with_context: false) }}
-{# arguments #}
-{% if arguments|length %}
-    <p class="horizontal-line">{{ 'command.list.fields.arguments'|trans }}</p>
-    {{ _self.outputChildren(arguments) }}
-{% endif %}
-{# options #}
-{% if options.texts|length or options.checkboxes|length %}
-    <p class="horizontal-line">{{ 'command.list.fields.options'|trans }}</p>
-    {{ _self.outputChildren(options.texts) }}
-    {{ _self.outputChildren(options.checkboxes) }}
-{% endif %}
-{{ parent() }}
+    {# name #}
+    {{ include('command/_command_name.html.twig', {command: command}, with_context: false) }}
+    {# arguments #}
+    {% if command.arguments|length %}
+        <p class="horizontal-line">{{ 'command.list.fields.arguments'|trans }}</p>
+        {{ _self.outputChildren(arguments) }}
+    {% endif %}
+    {# options #}
+    {% if command.options|length %}
+        <p class="horizontal-line">{{ 'command.list.fields.options'|trans }}</p>
+        {{ _self.outputChildren(options.texts) }}
+        {{ _self.outputChildren(options.checkboxes) }}
+    {% endif %}
+    {{ parent() }}
 {% endblock card_body %}
 {# javascript #}
 {% block javascripts %}

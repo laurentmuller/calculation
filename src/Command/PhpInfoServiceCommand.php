@@ -14,25 +14,20 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Service\PhpInfoService;
+use App\Utils\StringUtils;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[AsCommand(name: 'app:phpinfo', description: 'Validate URL from PHP information.')]
 class PhpInfoServiceCommand
 {
     use WatchTrait;
-
-    private const array CURL_OPTIONS = [
-        \CURLOPT_NOBODY => true,
-        \CURLOPT_RETURNTRANSFER => true,
-        \CURLOPT_FOLLOWLOCATION => true,
-        \CURLOPT_MAXREDIRS => 5,
-        \CURLOPT_TIMEOUT => 10,
-        \CURLOPT_CONNECTTIMEOUT => 5,
-        \CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Validator/1.0', // Évite d'être bloqué par les pare-feux
-    ];
 
     public function __construct(private readonly PhpInfoService $service)
     {
@@ -45,27 +40,29 @@ class PhpInfoServiceCommand
         $invalid = [];
 
         $this->start();
+        $client = HttpClient::create();
         $info = $this->service->getPhpInfo();
         $modules = $info['modules'];
         $io->title(\sprintf('URL validation for PHP v%s', $info['version']));
         foreach ($io->progressIterate($modules) as $module) {
             $url = $module['url'];
-            if (null === $url) {
-                $empty[] = $module['name'];
+            $name = $module['name'];
+            if (!StringUtils::isString($url)) {
+                $empty[] = $name;
                 continue;
             }
 
-            if (false === \filter_var($url, \FILTER_VALIDATE_URL)) {
-                $invalid[$module['name']] = $url;
+            if (!$this->filterUrl($url)) {
+                $invalid[$name] = $url;
                 continue;
             }
 
-            if (!$this->validateUrl($url)) {
-                $invalid[$module['name']] = $url;
+            if (!$this->validateUrl($client, $url)) {
+                $invalid[$name] = $url;
                 continue;
             }
 
-            $valid[$module['name']] = $url;
+            $valid[$name] = $url;
         }
 
         $message = \sprintf(
@@ -101,24 +98,20 @@ class PhpInfoServiceCommand
         return Command::SUCCESS;
     }
 
-    private function validateUrl(string $url): bool
+    private function filterUrl(string $url): bool
     {
-        $ch = \curl_init($url);
-        if (false === $ch) {
+        return false !== \filter_var($url, \FILTER_VALIDATE_URL);
+    }
+
+    private function validateUrl(HttpClientInterface $client, string $url): bool
+    {
+        try {
+            $response = $client->request(Request::METHOD_HEAD, $url);
+            $statusCode = $response->getStatusCode();
+
+            return $statusCode >= Response::HTTP_OK && $statusCode < Response::HTTP_BAD_REQUEST;
+        } catch (TransportExceptionInterface) {
             return false;
         }
-
-        \curl_setopt_array($ch, self::CURL_OPTIONS);
-        $response = \curl_exec($ch);
-        if (false === $response) {
-            \curl_close($ch);
-
-            return false;
-        }
-
-        $httpCode = \curl_getinfo($ch, \CURLINFO_RESPONSE_CODE);
-        \curl_close($ch);
-
-        return Response::HTTP_OK === $httpCode;
     }
 }

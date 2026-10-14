@@ -22,7 +22,7 @@ final class PhpInfoServiceCommandTest extends CommandTestCase
 
     public function testFailure(): void
     {
-        $kernel = $this->createService([
+        $kernel = $this->mockService([
             'version' => '1.0',
             'modules' => [
                 [
@@ -34,28 +34,30 @@ final class PhpInfoServiceCommandTest extends CommandTestCase
                     'url' => 'invalid',
                 ],
                 [
-                    'name' => 'Invalid CURL',
-                    'url' => 'https://www.not_exist_fake.fake',
+                    'name' => 'Invalid Client',
+                    'url' => 'https://www.fake.swiss',
                 ],
             ],
         ]);
         $output = $this->executeFailure(kernel: $kernel);
         self::assertOutputContainsString(
             $output,
-            '1.0',
+            'URL validation for PHP v1.0',
             'Module(s) with an empty URL:',
-            'Empty Module',
+            '- Empty Module',
             'Module(s) with an invalid URL:',
-            'Invalid URL',
-            'invalid',
-            'Invalid CURL',
-            'https://www.not_exist_fake.fake'
+            '- Invalid URL: invalid',
+            '- Invalid Client: https://www.fake.swiss',
+            'Modules: 3',
+            'Empty: 1',
+            'Valid: 0',
+            'Invalid: 2'
         );
     }
 
     public function testSuccess(): void
     {
-        $kernel = $this->createService([
+        $kernel = $this->mockService([
             'version' => '1.0',
             'modules' => [
                 [
@@ -68,17 +70,20 @@ final class PhpInfoServiceCommandTest extends CommandTestCase
                 ],
                 [
                     'name' => 'ftp',
-                    'url' => 'https://www.php.net/manual/en/book.bc.php',
+                    'url' => 'https://www.php.net/manual/en/book.ftp.php',
                 ],
             ],
         ]);
         $output = $this->execute(kernel: $kernel);
         self::assertOutputContainsString(
             $output,
-            'Modules',
-            'Empty',
-            'Valid',
-            'Invalid'
+            'URL validation for PHP v1.0',
+            'Module(s) with an empty URL:',
+            '- General',
+            'Modules: 3',
+            'Empty: 1',
+            'Valid: 2',
+            'Invalid: 0'
         );
     }
 
@@ -88,7 +93,7 @@ final class PhpInfoServiceCommandTest extends CommandTestCase
         return self::COMMAND_NAME;
     }
 
-    private function createService(array $values): KernelInterface
+    private function mockService(array $values): KernelInterface
     {
         $kernel = self::bootKernel();
         $service = self::createStub(PhpInfoService::class);

@@ -35,9 +35,9 @@ use STS\Phpinfo\PhpInfo;
  * }
  * @phpstan-type GroupType = array{
  *     name: string|null,
- *     note: string|null,
  *     headers: string[]|null,
- *     configs: ConfigType[]
+ *     configs: ConfigType[],
+ *     note: string|null
  * }
  * @phpstan-type ModuleType = array{
  *     name: string,
@@ -89,15 +89,16 @@ class PhpInfoService
     private const string URL_INFO = 'https://www.php.net/manual/en/book.%s.php';
 
     private const array URLS_EXCLUDED = [
-        'General',
-        'Environment',
-        'PHP Variables',
-        'PHP Credits',
+        'general',
+        'environment',
+        'php variables',
+        'php credits',
+        'php license',
     ];
 
     private const array URLS_INCLUDED = [
-        'Core' => 'https://www.php.net/manual/en/ref.info.php',
-        'Zend OPcache' => 'https://www.php.net/manual/fr/book.opcache.php',
+        'core' => 'https://www.php.net/manual/en/ref.info.php',
+        'zend opcache' => 'https://www.php.net/manual/fr/book.opcache.php',
         'bcmath' => 'https://www.php.net/manual/en/book.bc.php',
         'bz2' => 'https://www.php.net/manual/en/book.bzip2.php',
         'cgi-fcgi' => 'https://www.php.net/manual/en/book.fpm.php',
@@ -162,7 +163,7 @@ class PhpInfoService
             return null;
         }
 
-        return self::URLS_INCLUDED[$name] ?? \sprintf(self::URL_INFO, \strtolower($name));
+        return self::URLS_INCLUDED[$name] ?? \sprintf(self::URL_INFO, $name);
     }
 
     private function isNoneValue(string $value): bool
@@ -225,11 +226,7 @@ class PhpInfoService
      */
     private function parseConfigMaster(Config $config): ?array
     {
-        if ($config->hasMasterValue()) {
-            return $this->parseValue($config->name(), $config->masterValue());
-        }
-
-        return null;
+        return $config->hasMasterValue() ? $this->parseValue($config->name(), $config->masterValue()) : null;
     }
 
     /**
@@ -249,15 +246,16 @@ class PhpInfoService
     private function parseGroup(Group $group): ?array
     {
         $configs = $this->parseConfigs($group);
-        if ([] === $configs) {
+        $note = StringUtils::trim($group->note());
+        if ([] === $configs && null === $note) {
             return null;
         }
 
         return [
             'name' => StringUtils::trim($group->name()),
-            'note' => StringUtils::trim($group->note()),
             'headers' => $this->parseHeaders($group),
             'configs' => $configs,
+            'note' => $note,
         ];
     }
 
@@ -294,7 +292,7 @@ class PhpInfoService
         $module = [
             'name' => $module->name(),
             'groups' => $groups,
-            'url' => $this->getModuleUrl($module->name()),
+            'url' => $this->getModuleUrl(\strtolower($module->name())),
         ];
         $module['size'] = \array_reduce(
             $module['groups'],

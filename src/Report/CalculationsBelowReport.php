@@ -20,8 +20,9 @@ use App\Report\Table\ReportTable;
 use App\Repository\CalculationRepository;
 use App\Traits\MathTrait;
 use App\Utils\FormatUtils;
+use fpdf\Enums\PdfMove;
 use fpdf\Enums\PdfOrientation;
-use fpdf\Enums\PdfTextAlignment;
+use fpdf\PdfDocument;
 
 /**
  * Report for the list of calculations with a margin below.
@@ -58,9 +59,8 @@ class CalculationsBelowReport extends AbstractReport
     public function render(): bool
     {
         $this->addPage();
-        $table = $this->createTable();
-        $this->outputEntities($table);
-        $this->outputTotal($table);
+        $this->outputEntities();
+        $this->outputTotal();
 
         return $this->count > 0;
     }
@@ -80,11 +80,12 @@ class CalculationsBelowReport extends AbstractReport
             )->outputHeaders();
     }
 
-    private function outputEntities(ReportTable $table): void
+    private function outputEntities(): void
     {
         $this->count = 0;
         $this->items = 0.0;
         $this->overall = 0.0;
+        $table = $this->createTable();
         $style = PdfStyle::getCellStyle()->setTextColor(PdfTextColor::red());
         foreach ($this->entities as $entity) {
             $this->outputEntity($table, $entity, $style);
@@ -116,21 +117,10 @@ class CalculationsBelowReport extends AbstractReport
         $this->overall += $overallTotal;
     }
 
-    private function outputTotal(ReportTable $table): void
+    private function outputTotal(): void
     {
-        $margins = $this->safeDivide($this->overall, $this->items);
+        $this->resetStyle();
         $text = $this->translateCount($this->count, 'counters.calculations');
-        $style = PdfStyle::getHeaderStyle()->setTextColor(PdfTextColor::red());
-        /** @var positive-int $cols */
-        $cols = $table->getColumnsCount() - 3;
-        $table->getColumns()[0]
-            ->setAlignment(PdfTextAlignment::LEFT)
-            ->setFixed(false);
-        $table->startHeaderRow()
-            ->add($text, $cols)
-            ->addCellAmount($this->items)
-            ->addCellPercent($margins, style: $style)
-            ->addCellAmount($this->overall)
-            ->endRow();
+        $this->useCellMargin(fn (): PdfDocument => $this->cell(text: $text, move: PdfMove::NEW_LINE));
     }
 }

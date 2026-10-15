@@ -2,17 +2,10 @@
 {# parameters #}
 {%- set title = 'duplicate.title' -%}
 {%- set title_icon = ICON_COPY -%}
+{%- set title_description = 'duplicate.description' -%}
 {%- set object_type = ENTITY_CALCULATION -%}
 {%- set allow_add = false -%}
-{# header #}
-{% block card_header -%}
-{{ parent() }}
-<small>{{ 'duplicate.description'|trans }}</small>
-{%- endblock card_header %}
-{# header actions #}
-{% block header_actions -%}
-{% if customData.itemsCount and rows|length -%}<small>{{ 'duplicate.count'|trans({'%calculations%': rows|length, '%items%': customData.itemsCount}) }}</small>{%- endif %}
-{%- endblock header_actions %}
+{% block card_header_class '' %}
 {# global actions #}
 {% block global_actions -%}
 {{- _self.item_external(path('calculation_duplicate_pdf'), 'calculation.list.pdf_title', ICON_PDF) }}

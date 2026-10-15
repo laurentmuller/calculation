@@ -15,9 +15,7 @@
 {# container #}
 {% block start_card_container %}
     {{ parent() -}}
-    {% block start_form %}
-        {{ form_start(form, {attr: form_attr}) }}
-    {% endblock start_form %}
+    {% block start_form %}{{ form_start(form, {attr: form_attr}) }}{% endblock start_form %}
 {% endblock start_card_container %}
 {# header #}
 {% block card_header %}

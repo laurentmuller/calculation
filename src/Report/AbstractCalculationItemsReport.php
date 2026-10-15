@@ -55,26 +55,8 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
     protected function doRender(array $entities): bool
     {
         $this->addPage();
-        $table = $this->createTable();
-        $style = PdfStyle::getCellStyle()
-            ->setTextColor(PdfTextColor::red());
-        foreach ($entities as $entity) {
-            $table->startRow()
-                ->add(FormatUtils::formatId($entity['id']))
-                ->add(FormatUtils::formatDate($entity['date']))
-                ->add($entity['stateCode'])
-                ->add($entity['customer'])
-                ->add($entity['description'])
-                ->add($this->formatItems($entity['items']), style: $style)
-                ->endRow();
-        }
-        PdfStyle::default()->updateDocument($this);
-        $parameters = [
-            '%calculations%' => \count($entities),
-            '%items%' => $this->computeItemsCount($entities),
-        ];
-        $text = $this->transCount($parameters);
-        $this->useCellMargin(fn (): PdfDocument => $this->cell(text: $text, move: PdfMove::NEW_LINE));
+        $this->outputEntities();
+        $this->outputTotal();
 
         return true;
     }
@@ -113,5 +95,32 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
                 $this->leftColumn('calculation.fields.description', 60),
                 $this->leftColumn('calculation.fields.items', 70),
             )->outputHeaders();
+    }
+
+    private function outputEntities(): void
+    {
+        $table = $this->createTable();
+        $style = PdfStyle::getCellStyle()
+            ->setTextColor(PdfTextColor::red());
+        foreach ($this->entities as $entity) {
+            $table->startRow()
+                ->add(FormatUtils::formatId($entity['id']))
+                ->add(FormatUtils::formatDate($entity['date']))
+                ->add($entity['stateCode'])
+                ->add($entity['customer'])
+                ->add($entity['description'])
+                ->add($this->formatItems($entity['items']), style: $style)
+                ->endRow();
+        }
+    }
+
+    private function outputTotal(): void
+    {
+        $this->resetStyle();
+        $text = $this->transCount([
+            '%calculations%' => \count($this->entities),
+            '%items%' => $this->computeItemsCount($this->entities),
+        ]);
+        $this->useCellMargin(fn (): PdfDocument => $this->cell(text: $text, move: PdfMove::NEW_LINE));
     }
 }

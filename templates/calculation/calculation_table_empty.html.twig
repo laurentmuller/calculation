@@ -2,18 +2,11 @@
 {# parameters #}
 {%- set title = 'empty.title' -%}
 {%- set title_icon = 'fa-regular fa-file-code' -%}
+{%- set title_description = 'empty.description' -%}
 {%- set object_type = ENTITY_CALCULATION -%}
 {%- set allow_add = false -%}
-{# header #}
-{% block card_header -%}
-{{ parent() }}
-<small>{{ 'empty.description'|trans }}</small>
-{%- endblock card_header %}
-{# header actions #}
-{% block header_actions -%}
-{% if customData.itemsCount and rows|length -%}<small>{{ 'empty.count'|trans({'%calculations%': rows|length, '%items%': customData.itemsCount}) }}</small>{%- endif %}
-{%- endblock header_actions %}
-{# gloval actions #}
+{% block card_header_class '' %}
+{# global actions #}
 {% block global_actions -%}
 {{- _self.item_external(path('calculation_empty_pdf'), 'calculation.list.pdf_title', ICON_PDF) }}
 {{- _self.item_external(path('calculation_empty_excel'), 'calculation.list.excel_title', ICON_EXCEL) }}

@@ -3,9 +3,9 @@
 {# body #}
 {% block body -%}
     {% block start_card_container -%}
-    <div class="col{% block card_container_class %} col-xl-8 offset-xl-2{% endblock card_container_class -%}">
+        <div class="col{% block card_container_class %} col-xl-8 offset-xl-2{% endblock card_container_class -%}">
     {% endblock start_card_container %}
-        {# card #}
+    {# card #}
         <div class="card mb-3{% block card_class %}{% endblock card_class %}">
             {# card header #}
             <div class="card-header{% block card_header_class %}{% endblock card_header_class %}">
@@ -16,7 +16,7 @@
                         </h1>
                     {% endblock card_title %}
                     {% if title_description ?? false %}
-                        <small>{{ title_description|trans }}</small>
+                        <small>{{ title_description|trans(title_description_parameters|default({})) }}</small>
                     {% endif %}
                 {%- endblock card_header %}
             </div>
@@ -29,7 +29,7 @@
                 {% block card_footer -%}{%- endblock card_footer %}
             </div>
         </div>
-        {%- block end_card_container %}
-    </div>
+    {%- block end_card_container %}
+        </div>
     {%- endblock end_card_container %}
 {%- endblock body %}

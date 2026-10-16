@@ -15,13 +15,13 @@ namespace App\Tests\Spreadsheet;
 
 use App\Interfaces\DocumentHelperInterface;
 use App\Service\PhpInfoService;
-use App\Spreadsheet\PhpIniDocument;
+use App\Spreadsheet\PhpDocument;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @phpstan-import-type InfoType from PhpInfoService
  */
-final class PhpIniDocumentTest extends TestCase
+final class PhpDocumentTest extends TestCase
 {
     public function testRender(): void
     {
@@ -148,7 +148,7 @@ final class PhpIniDocumentTest extends TestCase
         ];
     }
 
-    private function createDocument(): PhpIniDocument
+    private function createDocument(): PhpDocument
     {
         $phpinfo = $this->createData();
         $helper = self::createStub(DocumentHelperInterface::class);
@@ -156,6 +156,6 @@ final class PhpIniDocumentTest extends TestCase
         $service->method('getPhpInfo')
             ->willReturn($phpinfo);
 
-        return new PhpIniDocument($helper, $service);
+        return new PhpDocument($helper, $service);
     }
 }

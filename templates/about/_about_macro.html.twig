@@ -70,7 +70,7 @@
         target: '_blank',
         rel: 'noopener noreferrer',
     } %}
-    <div class="border-bottom pb-1">
+    <div class="border-bottom pb-2">
         <a {{ html_attr(attrs) }}>
             {{- source('about/about_' ~ icon ~ '.svg') -}}
             <span>{{ 'about.version'|trans({'%version%': version}) -}}</span>

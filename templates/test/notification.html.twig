@@ -62,11 +62,12 @@
 {# parameters #}
 {%- set title = 'test.notification' -%}
 {%- set title_icon = 'fa-regular fa-bell' -%}
-{% block card_header_class ' d-flex-wrap-center' %}
 {# card_title #}
 {% block card_title -%}
-    {{ parent() }}
-    {{ inline_theme(true) }}
+    <div class="d-flex-wrap-center">
+        {{ parent() }}
+        {{ inline_theme(true) }}
+    </div>
 {%- endblock card_title %}
 {# body #}
 {% block card_body %}

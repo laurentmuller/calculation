@@ -66,7 +66,7 @@ class DatabaseDocument extends AbstractDocument
         if ($this->service->isEnabledValue($value)) {
             return $this->enabledColor ??= new Color('008000');
         }
-        if ($this->service->isDisabledValue($value)) {
+        if ($this->service->isDisabledValue($value) || $this->service->isNoneValue($value)) {
             return $this->disabledColor ??= new Color('A9A9A9');
         }
 

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Report;
 
 use App\Interfaces\DocumentHelperInterface;
-use App\Report\PhpIniReport;
+use App\Report\PhpReport;
 use App\Service\FontAwesomeCellService;
 use App\Service\PhpInfoService;
 use PHPUnit\Framework\TestCase;
@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @phpstan-import-type InfoType from PhpInfoService
  */
-final class PhpIniReportTest extends TestCase
+final class PhpReportTest extends TestCase
 {
     public function testRender(): void
     {
@@ -149,7 +149,7 @@ final class PhpIniReportTest extends TestCase
         ];
     }
 
-    private function createReport(): PhpIniReport
+    private function createReport(): PhpReport
     {
         $phpinfo = $this->createData();
         $helper = self::createStub(DocumentHelperInterface::class);
@@ -158,6 +158,6 @@ final class PhpIniReportTest extends TestCase
         $infoService->method('getPhpInfo')
             ->willReturn($phpinfo);
 
-        return new PhpIniReport($helper, $infoService, $cellService);
+        return new PhpReport($helper, $infoService, $cellService);
     }
 }

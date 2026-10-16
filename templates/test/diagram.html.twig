@@ -5,72 +5,73 @@
 {%- set title_icon = 'fa-solid fa-diagram-project' -%}
 {% block container_class 'container-fluid' %}
 {% block card_container_class '' %}
-{% block card_header_class ' d-flex-wrap-center' %}
 {% block card_body_class ' p-1' %}
 {% block card_footer_class ' d-none' %}
 {# card_title #}
 {% block card_title -%}
-    {{ parent() }}
-    <div class="d-flex-wrap-center d-print-none">
-        <div class="input-group input-group-sm">
-            <select class="form-select form-select-sm w-auto" id="diagrams" name="diagrams" title="{{ 'diagram.list'|trans }}">
-                {% for current in diagrams %}
-                    <option value="{{ current.name }}"{% if current == diagram %} selected{% endif %}>
-                        {{- current.title -}}
-                    </option>
-                {% endfor %}
-            </select>
-            {{- button(
-                text: null,
-                class: 'btn btn-outline-secondary btn-zoom-in',
-                icon: 'fa-solid fa-magnifying-glass-plus',
-                inline: false,
-                attributes: {title: 'diagram.zoom_in'|trans})
-            -}}
-            {{- button(
-                text: null,
-                class: 'btn btn-outline-secondary btn-zoom dropdown-toggle',
-                icon: null,
-                attributes: {
-                    title: 'diagram.zoom'|trans,
-                    'data-bs-toggle': 'dropdown',
-                    'data-bs-target': '#dropdownZoom',
-                    'aria-expanded': 'false'})
-            -}}
-            {{- button(
-                text: null,
-                class: 'btn btn-outline-secondary btn-zoom-out',
-                icon: 'fa-solid fa-magnifying-glass-minus',
-                inline: false,
-                attributes: {title: 'diagram.zoom_out'|trans})
-            -}}
-            {{- button(
-                text: null,
-                class: 'btn btn-outline-secondary btn-reset',
-                icon: 'fa-solid fa-arrows-to-dot',
-                inline: false,
-                attributes: {title: 'diagram.reset'|trans})
-            -}}
-            {{- button(
-                text: null,
-                class: 'btn btn-outline-secondary btn-code',
-                icon: 'fa-solid fa-code',
-                inline: false,
-                attributes: {
-                    title: 'diagram.content'|trans,
-                    'data-bs-toggle': 'modal',
-                    'data-bs-target': '#diagram-modal'})
-            -}}
-            <div id="dropdownZoom" class="dropdown-menu dropdown-menu-end px-2 py-3">
-                <div class="d-flex-no-wrap-center">
-                    <input id="rangeZoom" type="range" class="form-range range-zoom border rounded-pill px-1 py-2"
-                           aria-label="{{ 'diagram.zoom'|trans }}">
-                    {{- button(
-                        text: null,
-                        class: 'btn btn-sm btn-link btn-reset-zoom nav-link',
-                        icon: 'fa-solid fa-rotate-left',
-                        attributes: {title: 'diagram.reset_zoom'|trans})
-                    -}}
+    <div class="d-flex-wrap-center">
+        {{ parent() }}
+        <div class="d-flex-wrap-center d-print-none">
+            <div class="input-group input-group-sm">
+                <select class="form-select form-select-sm w-auto" id="diagrams" name="diagrams" title="{{ 'diagram.list'|trans }}">
+                    {% for current in diagrams %}
+                        <option value="{{ current.name }}"{% if current == diagram %} selected{% endif %}>
+                            {{- current.title -}}
+                        </option>
+                    {% endfor %}
+                </select>
+                {{- button(
+                    text: null,
+                    class: 'btn btn-outline-secondary btn-zoom-in',
+                    icon: 'fa-solid fa-magnifying-glass-plus',
+                    inline: false,
+                    attributes: {title: 'diagram.zoom_in'|trans})
+                -}}
+                {{- button(
+                    text: null,
+                    class: 'btn btn-outline-secondary btn-zoom dropdown-toggle',
+                    icon: null,
+                    attributes: {
+                        title: 'diagram.zoom'|trans,
+                        'data-bs-toggle': 'dropdown',
+                        'data-bs-target': '#dropdownZoom',
+                        'aria-expanded': 'false'})
+                -}}
+                {{- button(
+                    text: null,
+                    class: 'btn btn-outline-secondary btn-zoom-out',
+                    icon: 'fa-solid fa-magnifying-glass-minus',
+                    inline: false,
+                    attributes: {title: 'diagram.zoom_out'|trans})
+                -}}
+                {{- button(
+                    text: null,
+                    class: 'btn btn-outline-secondary btn-reset',
+                    icon: 'fa-solid fa-arrows-to-dot',
+                    inline: false,
+                    attributes: {title: 'diagram.reset'|trans})
+                -}}
+                {{- button(
+                    text: null,
+                    class: 'btn btn-outline-secondary btn-code',
+                    icon: 'fa-solid fa-code',
+                    inline: false,
+                    attributes: {
+                        title: 'diagram.content'|trans,
+                        'data-bs-toggle': 'modal',
+                        'data-bs-target': '#diagram-modal'})
+                -}}
+                <div id="dropdownZoom" class="dropdown-menu dropdown-menu-end px-2 py-3">
+                    <div class="d-flex-no-wrap-center">
+                        <input id="rangeZoom" type="range" class="form-range range-zoom border rounded-pill px-1 py-2"
+                               aria-label="{{ 'diagram.zoom'|trans }}">
+                        {{- button(
+                            text: null,
+                            class: 'btn btn-sm btn-link btn-reset-zoom nav-link',
+                            icon: 'fa-solid fa-rotate-left',
+                            attributes: {title: 'diagram.reset_zoom'|trans})
+                        -}}
+                    </div>
                 </div>
             </div>
         </div>

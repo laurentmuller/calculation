@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Interfaces\DocumentHelperInterface;
-use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Html\HtmlColorName;
 use App\Pdf\PdfCell;
@@ -36,7 +35,7 @@ use fpdf\PdfBorder;
  * @phpstan-import-type GroupType from PhpInfoService
  * @phpstan-import-type ModuleType from PhpInfoService
  */
-class PhpIniReport extends AbstractReport
+class PhpReport extends AbstractReport
 {
     use PdfBooleanCellTrait;
 
@@ -51,10 +50,6 @@ class PhpIniReport extends AbstractReport
     ) {
         parent::__construct($helper);
         $this->setTranslatedTitle('about.php.title');
-        $file = \php_ini_loaded_file();
-        if (\is_string($file)) {
-            $this->setTranslatedDescription('log.list.file', ['%file%' => $file]);
-        }
     }
 
     #[\Override]
@@ -72,14 +67,10 @@ class PhpIniReport extends AbstractReport
 
     private function createRowStyle(bool $bold = false): PdfStyle
     {
-        $style = PdfStyle::default()
-            ->setDrawColor(PdfDrawColor::cellBorder())
+        $style = PdfStyle::getCellStyle()
             ->setBorder(PdfBorder::bottom());
-        if ($bold) {
-            $style->setFontBold();
-        }
 
-        return $style;
+        return $bold ? $style->setFontBold() : $style;
     }
 
     /**
@@ -212,7 +203,7 @@ class PhpIniReport extends AbstractReport
     {
         return $this->noValueStyle ??= $this->createRowStyle()
             ->setTextColor(PdfTextColor::darkGray())
-            ->setFontItalic(true);
+            ->setFontItalic();
     }
 
     /**

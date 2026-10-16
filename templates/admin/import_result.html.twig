@@ -6,60 +6,60 @@
 {%- set title_description = 'swisspost.result.description' -%}
 {# class #}
 {% block card_class -%}
-{% if result.valid %}{{ parent() }}{% else %} border-danger{% endif %}
+    {% if result.valid %}{{ parent() }}{% else %} border-danger{% endif %}
 {%- endblock card_class %}
 {% block card_header_class -%}
-{% if result.valid %}{{ parent() }}{% else %} text-bg-danger{% endif %}
+    {% if result.valid %}{{ parent() }}{% else %} text-bg-danger{% endif %}
 {%- endblock card_header_class %}
 {# body #}
 {% block card_body %}
-{%- if result.valid %}
-<p>{{ 'swisspost.result.success'|trans({'%date%': result.validity|locale_date('long')}) }}</p>
-<table class="table table-bordered table-sm mb-0">
-    <thead>
-        <tr>
-            <th>{{ 'swisspost.fields.objects'|trans }}</th>
-            <th class="text-currency">{{ 'swisspost.fields.previous'|trans }}</th>
-            <th class="text-currency">{{ 'swisspost.fields.invalid'|trans }}</th>
-            <th class="text-currency">{{ 'swisspost.fields.valid'|trans }}</th>
-            <th class="text-currency">{{ 'swisspost.fields.difference'|trans }}</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>{{ 'swisspost.fields.states'|trans }}</td>
-            <td class="text-currency">{{ result.oldEntries.state|integer }}</td>
-            <td class="text-currency">{{ result.invalidEntries.state|integer }}</td>
-            <td class="text-currency">{{ result.validEntries.state|integer }}</td>
-            <td class="text-currency">{{ (result.validEntries.state - result.oldEntries.state)|integer }}</td>
-        </tr>
-        <tr>
-            <td>{{ 'swisspost.fields.cities'|trans }}</td>
-            <td class="text-currency">{{ result.oldEntries.city|integer }}</td>
-            <td class="text-currency">{{ result.invalidEntries.city|integer }}</td>
-            <td class="text-currency">{{ result.validEntries.city|integer }}</td>
-            <td class="text-currency">{{ (result.validEntries.city - result.oldEntries.city)|integer }}</td>
-        </tr>
-        <tr>
-            <td>{{ 'swisspost.fields.streets'|trans }}</td>
-            <td class="text-currency">{{ result.oldEntries.street|integer }}</td>
-            <td class="text-currency">{{ result.invalidEntries.street|integer }}</td>
-            <td class="text-currency">{{ result.validEntries.street|integer }}</td>
-            <td class="text-currency">{{ (result.validEntries.street - result.oldEntries.street)|integer }}</td>
-        </tr>
-        <tr>
-            <th>{{ 'swisspost.fields.total'|trans }}</th>
-            <th class="text-currency">{{ (result.oldEntriesCount)|integer }}</th>
-            <th class="text-currency">{{ (result.invalidEntriesCount)|integer }}</th>
-            <th class="text-currency">{{ (result.validEntriesCount)|integer }}</th>
-            <td class="text-currency">{{ (result.validEntriesCount - result.oldEntriesCount)|integer }}</td>
-        </tr>
-    </tbody>
-</table>
-{%- else -%}
-<p>{{ 'swisspost.result.failure'|trans }}</p>
-{% if result.error -%}<p class="mb-0">{{ result.error }}</p>{%- endif %}
-{%- endif %}
+    {%- if result.valid %}
+        <p>{{ 'swisspost.result.success'|trans({'%date%': result.validity|locale_date('long')}) }}</p>
+        <table class="table table-bordered table-sm mb-0">
+            <thead>
+            <tr>
+                <th>{{ 'swisspost.fields.objects'|trans }}</th>
+                <th class="text-currency">{{ 'swisspost.fields.previous'|trans }}</th>
+                <th class="text-currency">{{ 'swisspost.fields.invalid'|trans }}</th>
+                <th class="text-currency">{{ 'swisspost.fields.valid'|trans }}</th>
+                <th class="text-currency">{{ 'swisspost.fields.difference'|trans }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ 'swisspost.fields.states'|trans }}</td>
+                <td class="text-currency">{{ result.oldEntries.state|integer }}</td>
+                <td class="text-currency">{{ result.invalidEntries.state|integer }}</td>
+                <td class="text-currency">{{ result.validEntries.state|integer }}</td>
+                <td class="text-currency">{{ (result.validEntries.state - result.oldEntries.state)|integer }}</td>
+            </tr>
+            <tr>
+                <td>{{ 'swisspost.fields.cities'|trans }}</td>
+                <td class="text-currency">{{ result.oldEntries.city|integer }}</td>
+                <td class="text-currency">{{ result.invalidEntries.city|integer }}</td>
+                <td class="text-currency">{{ result.validEntries.city|integer }}</td>
+                <td class="text-currency">{{ (result.validEntries.city - result.oldEntries.city)|integer }}</td>
+            </tr>
+            <tr>
+                <td>{{ 'swisspost.fields.streets'|trans }}</td>
+                <td class="text-currency">{{ result.oldEntries.street|integer }}</td>
+                <td class="text-currency">{{ result.invalidEntries.street|integer }}</td>
+                <td class="text-currency">{{ result.validEntries.street|integer }}</td>
+                <td class="text-currency">{{ (result.validEntries.street - result.oldEntries.street)|integer }}</td>
+            </tr>
+            <tr>
+                <th>{{ 'swisspost.fields.total'|trans }}</th>
+                <th class="text-currency">{{ (result.oldEntriesCount)|integer }}</th>
+                <th class="text-currency">{{ (result.invalidEntriesCount)|integer }}</th>
+                <th class="text-currency">{{ (result.validEntriesCount)|integer }}</th>
+                <td class="text-currency">{{ (result.validEntriesCount - result.oldEntriesCount)|integer }}</td>
+            </tr>
+            </tbody>
+        </table>
+    {%- else -%}
+        <p>{{ 'swisspost.result.failure'|trans }}</p>
+        {% if result.error -%}<p class="mb-0">{{ result.error }}</p>{%- endif %}
+    {%- endif %}
 {% endblock card_body %}
 {# footer #}
 {% block card_footer %}

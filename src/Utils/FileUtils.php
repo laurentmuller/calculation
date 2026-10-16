@@ -17,6 +17,7 @@ use Random\RandomException;
 use Symfony\Component\Console\Helper\Helper;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -195,7 +196,7 @@ final class FileUtils
     {
         $realPath = \realpath($path);
 
-        return \str_replace('\\', '/', \is_string($realPath) ? $realPath : $path);
+        return Path::normalize(\is_string($realPath) ? $realPath : $path);
     }
 
     /**

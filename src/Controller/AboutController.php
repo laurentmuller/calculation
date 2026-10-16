@@ -26,6 +26,7 @@ use App\Service\ApplicationService;
 use App\Service\MarkdownService;
 use App\Traits\RenderPdfDocumentTrait;
 use App\Traits\RenderWordDocumentTrait;
+use App\Utils\StringUtils;
 use App\Word\HtmlDocument;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
@@ -102,7 +103,7 @@ class AboutController extends AbstractController
     {
         return $this->cache->get('about-controller-content', function (): string {
             $license = $this->processFile(AboutLicenceController::LICENCE_FILE);
-            $license = \substr($license, 0, (int) \strrpos($license, '<h4'));
+            $license = StringUtils::left($license, (int) \strrpos($license, '<h4'));
             $policy = $this->processFile(AboutPolicyController::POLICY_FILE);
 
             return $license . $policy;

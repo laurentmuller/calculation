@@ -10,11 +10,12 @@
 {%- set cancel_path = false -%}
 {%- set login_token = constant('App\\Constants\\SecurityAttributes::LOGIN_TOKEN') -%}
 {%- set authenticate_token = constant('App\\Constants\\SecurityAttributes::AUTHENTICATE_TOKEN') -%}
-{% block card_header_class ' d-flex-wrap-center' %}
 {# card_title #}
 {% block card_title %}
-    {{ parent() }}
-    {{ inline_theme() }}
+    <div class="d-flex-wrap-center">
+        {{ parent() }}
+        {{ inline_theme() }}
+    </div>
 {%- endblock card_title %}
 {# card_body #}
 {% block card_body -%}

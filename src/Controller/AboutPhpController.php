@@ -17,12 +17,12 @@ use App\Attribute\ExcelRoute;
 use App\Attribute\IndexRoute;
 use App\Attribute\IsAdmin;
 use App\Attribute\PdfRoute;
-use App\Report\PhpIniReport;
+use App\Report\PhpReport;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Service\FontAwesomeCellService;
 use App\Service\PhpInfoService;
-use App\Spreadsheet\PhpIniDocument;
+use App\Spreadsheet\PhpDocument;
 use App\Traits\RenderPdfDocumentTrait;
 use App\Traits\RenderSpreadsheetDocumentTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,7 +41,7 @@ class AboutPhpController extends AbstractController
     #[ExcelRoute]
     public function excel(PhpInfoService $service): SpreadsheetResponse
     {
-        return $this->renderSpreadsheetDocument(new PhpIniDocument($this, $service));
+        return $this->renderSpreadsheetDocument(new PhpDocument($this, $service));
     }
 
     #[IndexRoute]
@@ -53,6 +53,6 @@ class AboutPhpController extends AbstractController
     #[PdfRoute]
     public function pdf(PhpInfoService $infoService, FontAwesomeCellService $cellService): PdfResponse
     {
-        return $this->renderPdfDocument(new PhpIniReport($this, $infoService, $cellService));
+        return $this->renderPdfDocument(new PhpReport($this, $infoService, $cellService));
     }
 }

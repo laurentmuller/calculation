@@ -93,6 +93,14 @@ final class StringUtilsTest extends TestCase
         yield ['my home', true];
     }
 
+    public static function getLeft(): \Generator
+    {
+        yield ['abcdef', 0, 'abcdef'];
+        yield ['abcdef', -1, 'abcdef'];
+        yield ['abcdef', 3, 'abc'];
+        yield ['abcdef', 13, 'abcdef'];
+    }
+
     public static function getPregMatch(): \Generator
     {
         yield ['/\d+/', '1234', true];
@@ -258,6 +266,13 @@ final class StringUtilsTest extends TestCase
     public function testIsString(?string $var, bool $expected): void
     {
         $actual = StringUtils::isString($var);
+        self::assertSame($expected, $actual);
+    }
+
+    #[DataProvider('getLeft')]
+    public function testLeft(string $str, int $length, string $expected): void
+    {
+        $actual = StringUtils::left($str, $length);
         self::assertSame($expected, $actual);
     }
 

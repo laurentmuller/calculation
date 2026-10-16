@@ -28,9 +28,11 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
  * @phpstan-import-type GroupType from PhpInfoService
  * @phpstan-import-type ModuleType from PhpInfoService
  */
-class PhpIniDocument extends AbstractDocument
+class PhpDocument extends AbstractDocument
 {
-    public function __construct(DocumentHelperInterface $helper, private readonly PhpInfoService $service)
+    private ?Color $disableColor = null;
+
+    public function __construct(DocumentHelperInterface $helper, private readonly PhpInfoService $infoService)
     {
         parent::__construct($helper);
     }
@@ -48,7 +50,7 @@ class PhpIniDocument extends AbstractDocument
             ->setVertical(Alignment::VERTICAL_TOP);
 
         $row = 1;
-        $info = $this->service->getPhpInfo();
+        $info = $this->infoService->getPhpInfo();
         foreach ($info['modules'] as $module) {
             $row = $this->outputModule($sheet, $row, $module);
         }
@@ -67,7 +69,7 @@ class PhpIniDocument extends AbstractDocument
 
         $style->getBorders()->getAllBorders()
             ->setBorderStyle(Border::BORDER_THIN)
-            ->setColor(new Color('7F7F7F'));
+            ->setColor($this->getDisabledColor());
 
         $style->getFont()
             ->setSize($size)
@@ -79,22 +81,26 @@ class PhpIniDocument extends AbstractDocument
      */
     private function applyStyle(WorksheetDocument $sheet, int $column, int $row, array $entry): void
     {
-        $type = $entry['type'];
-        $color = match ($type) {
-            PhpInfoService::TYPE_COLOR => \substr($entry['value'], 1),
+        $color = match ($entry['type']) {
+            PhpInfoService::TYPE_COLOR => new Color(\substr($entry['value'], 1)),
             PhpInfoService::TYPE_DISABLED,
             PhpInfoService::TYPE_NO_VALUE,
             PhpInfoService::TYPE_NONE_VALUE,
-            PhpInfoService::TYPE_REDACTED => '7F7F7F',
+            PhpInfoService::TYPE_REDACTED => $this->getDisabledColor(),
             default => null
         };
-        if (null === $color) {
+        if (!$color instanceof Color) {
             return;
         }
         $sheet->getCell([$column, $row])
             ->getStyle()->getFont()
-            ->setColor(new Color($color))
-            ->setItalic(PhpInfoService::TYPE_NO_VALUE === $type);
+            ->setColor($color)
+            ->setItalic(PhpInfoService::TYPE_NO_VALUE === $entry['type']);
+    }
+
+    private function getDisabledColor(): Color
+    {
+        return $this->disableColor ??= new Color('7F7F7F');
     }
 
     private function outputBoldEntry(

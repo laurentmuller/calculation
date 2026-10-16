@@ -280,7 +280,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
         $length = $this->validateRange($length, 2, \strlen(self::ALLOWED_VALUES));
         $result = \str_shuffle(self::ALLOWED_VALUES);
 
-        return \substr($result, 0, $length);
+        return StringUtils::left($result, $length);
     }
 
     /**

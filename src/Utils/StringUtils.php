@@ -200,6 +200,18 @@ final class StringUtils
     }
 
     /**
+     * Gets the left part of the given string.
+     *
+     * @param string $str    the input string
+     * @param int    $length the length of the left part to extract. If the length is not positive or is greather that
+     *                       the input string, the input string is returned.
+     */
+    public static function left(string $str, int $length): string
+    {
+        return $length <= 0 ? $str : \substr($str, 0, $length);
+    }
+
+    /**
      * Perform a regular expression match.
      *
      * @template TFlags as int-mask<0, 256, 512>

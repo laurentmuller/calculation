@@ -13,11 +13,19 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use App\Utils\StringUtils;
+
 /**
  * Trait to validate enabled/disabled values.
  */
 trait EnablementValueTrait
 {
+    /** The no value. */
+    public const string NO_VALUE = 'No value';
+
+    /** The none value. */
+    public const string NONE_VALUE = 'None';
+
     private const array DISABLED_VALUES = ['false', 'off', 'no', 'disabled', 'not enabled'];
     private const array ENABLED_VALUES = ['true', 'on', 'yes', 'enabled', 'supported', 'active'];
 
@@ -35,5 +43,15 @@ trait EnablementValueTrait
     public function isEnabledValue(string $value): bool
     {
         return \in_array(\strtolower($value), self::ENABLED_VALUES, true);
+    }
+
+    public function isNoneValue(string $value): bool
+    {
+        return StringUtils::equalIgnoreCase(self::NONE_VALUE, $value);
+    }
+
+    public function isNoValue(string $value): bool
+    {
+        return StringUtils::equalIgnoreCase(self::NO_VALUE, $value);
     }
 }

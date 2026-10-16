@@ -106,10 +106,9 @@ final class AbstractControllerTest extends KernelTestCase
 
     public function testRelativePathFound(): void
     {
-        $expected = 'tests/Controller';
         $controller = $this->createController();
         $actual = $controller->getRelativePath(__DIR__);
-        self::assertSame($expected, $actual);
+        self::assertSame('/tests/Controller', $actual);
     }
 
     public function testRelativePathNotFound(): void

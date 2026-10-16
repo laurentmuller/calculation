@@ -8,12 +8,13 @@
 {# class #}
 {% block container_class 'container-fluid' %}
 {% block card_container_class '' %}
-{% block card_header_class ' d-flex-wrap-center' %}
 {# card title #}
 {% block card_title %}
-    {{ parent() }}
-    {{ link_pdf('about_database_pdf') }}
-    {{ link_excel('about_database_excel') }}
+    <div class="d-flex-wrap-center">
+        {{ parent() }}
+        {{ link_pdf('about_database_pdf') }}
+        {{ link_excel('about_database_excel') }}
+    </div>
 {%- endblock card_title %}
 {# card body #}
 {% block card_body -%}

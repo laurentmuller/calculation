@@ -8,13 +8,14 @@
 {% set customer = application_parameters.customerInformation %}
 {# class #}
 {% block card_container_class '' %}
-{% block card_header_class ' d-flex-wrap-center' %}
 {% block card_footer_class ' d-none' %}
 {# card title #}
 {% block card_title %}
-    {{ parent() }}
-    {{ link_pdf('about_pdf') }}
-    {{ link_word('about_word') }}
+    <div class="d-flex-wrap-center">
+        {{ parent() }}
+        {{ link_pdf('about_pdf') }}
+        {{ link_word('about_word') }}
+    </div>
 {%- endblock card_title %}
 {# card body #}
 {% block card_body %}

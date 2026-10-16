@@ -15,6 +15,7 @@ namespace App\Tests\Service;
 
 use App\Service\DatabaseInfoService;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception\NoActiveTransaction;
 use Doctrine\DBAL\Result;
 use Doctrine\DBAL\Statement;
 use Doctrine\ORM\EntityManagerInterface;
@@ -81,6 +82,10 @@ final class DatabaseInfoServiceTest extends TestCase
                 'Value' => 'ON',
             ],
             [
+                'Variable_name' => 'Variable OFF',
+                'Value' => 'OFF',
+            ],
+            [
                 'Variable_name' => 'Variable empty',
                 'Value' => '',
             ],
@@ -88,11 +93,19 @@ final class DatabaseInfoServiceTest extends TestCase
                 'Variable_name' => 'Variable other',
                 'Value' => 'other',
             ],
+            [
+                'Variable_name' => 'Variable none',
+                'Value' => 'none',
+            ],
+            [
+                'Variable_name' => 'Variable AUTOMATIC',
+                'Value' => 'AUTOMATIC',
+            ],
         ];
         $manager = $this->createEntityManager($values);
         $service = new DatabaseInfoService($manager);
         $actual = $service->getConfiguration();
-        self::assertCount(2, $actual);
+        self::assertCount(5, $actual);
     }
 
     public function testGetConfigurationWithException(): void
@@ -127,7 +140,7 @@ final class DatabaseInfoServiceTest extends TestCase
                 'Value' => '10.11.15-MariaDB-deb11-log',
             ],
         ];
-        $expected = '10.11.15-MariaDB-deb11-log';
+        $expected = '10.11.15';
         $manager = $this->createEntityManager($values);
         $service = new DatabaseInfoService($manager);
         $actual = $service->getVersion();
@@ -172,7 +185,7 @@ final class DatabaseInfoServiceTest extends TestCase
     {
         $connection = self::createStub(Connection::class);
         $connection->method('prepare')
-            ->willThrowException(new \Exception());
+            ->willThrowException(NoActiveTransaction::new());
 
         $manager = self::createStub(EntityManagerInterface::class);
         $manager->method('getConnection')

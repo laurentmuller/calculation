@@ -62,10 +62,6 @@ class PhpInfoService
     public const int TYPE_REDACTED = 5;
     public const int TYPE_UNDEFINED = -1;
 
-    private const string NO_VALUE = 'No value';
-
-    private const string NONE_VALUE = 'None';
-
     private const string REDACTED = '********';
 
     private const array REDACTED_NAMES = [
@@ -137,7 +133,7 @@ class PhpInfoService
         if (!StringUtils::isString($value)) {
             return self::NO_VALUE;
         }
-        if (StringUtils::equalIgnoreCase(\trim($value, '()'), self::NONE_VALUE)) {
+        if ($this->isNoneValue(\trim($value, '()'))) {
             return self::NONE_VALUE;
         }
         $value = $this->replaceKeysValue($value);
@@ -164,16 +160,6 @@ class PhpInfoService
         }
 
         return self::URLS_INCLUDED[$name] ?? \sprintf(self::URL_INFO, $name);
-    }
-
-    private function isNoneValue(string $value): bool
-    {
-        return StringUtils::equalIgnoreCase(self::NONE_VALUE, $value);
-    }
-
-    private function isNoValue(string $value): bool
-    {
-        return StringUtils::equalIgnoreCase(self::NO_VALUE, $value);
     }
 
     private function isRedacted(string $name): bool
@@ -439,9 +425,9 @@ class PhpInfoService
             $pos += \strlen($key);
             $end = \stripos($value, ';', $pos);
             if (false === $end) {
-                $value = \substr($value, 0, $pos) . self::REDACTED;
+                $value = StringUtils::left($value, $pos) . self::REDACTED;
             } else {
-                $value = \substr($value, 0, $pos) . self::REDACTED . \substr($value, $end);
+                $value = StringUtils::left($value, $pos) . self::REDACTED . \substr($value, $end);
             }
         }
 

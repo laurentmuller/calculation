@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Interfaces\DocumentHelperInterface;
+use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
@@ -28,6 +29,8 @@ use App\Service\FontAwesomeCellService;
 class DatabaseReport extends AbstractReport
 {
     use PdfBooleanCellTrait;
+
+    private ?PdfStyle $noneStyle = null;
 
     public function __construct(
         DocumentHelperInterface $helper,
@@ -60,6 +63,16 @@ class DatabaseReport extends AbstractReport
         return true;
     }
 
+    private function getNoneStyle(): PdfStyle
+    {
+        return $this->noneStyle ??= PdfStyle::getCellStyle()->setTextColor(PdfTextColor::darkGray());
+    }
+
+    private function getNoneValueCell(string $value): PdfCell
+    {
+        return PdfCell::instance(text: $value, style: $this->getNoneStyle());
+    }
+
     private function getValueCell(string $value): PdfCell
     {
         if ($this->databaseService->isEnabledValue($value)) {
@@ -67,6 +80,9 @@ class DatabaseReport extends AbstractReport
         }
         if ($this->databaseService->isDisabledValue($value)) {
             return $this->getBooleanCell(false, $value);
+        }
+        if ($this->databaseService->isNoneValue($value)) {
+            return $this->getNoneValueCell($value);
         }
 
         return PdfCell::instance($value);

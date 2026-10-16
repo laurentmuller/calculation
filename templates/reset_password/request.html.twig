@@ -9,11 +9,12 @@
 {%- set submit_title = 'resetting.request.submit_title' -%}
 {%- set cancel_path = false -%}
 {%- set form_attr = form_attr|default({})|merge({'data-check-user': url('ajax_check_user_both')}) -%}
-{% block card_header_class ' d-flex-wrap-center' %}
 {# card_title #}
 {% block card_title %}
-    {{ parent() }}
-    {{ inline_theme() }}
+    <div class="d-flex-wrap-center">
+        {{ parent() }}
+        {{ inline_theme() }}
+    </div>
 {%- endblock card_title %}
 {# actions #}
 {% block actions_form %}

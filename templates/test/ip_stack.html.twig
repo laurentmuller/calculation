@@ -38,13 +38,14 @@
 {# parameters #}
 {%- set title = 'test.ip_stack' -%}
 {%- set title_icon = 'fa-solid fa-location-dot' -%}
-{% block card_header_class ' d-flex-wrap-center' %}
 {# card_title #}
 {% block card_title %}
-    {{ parent() }}
-    <a href="#raw_data_modal" data-bs-toggle="modal" title="{{ 'dialog_raw_data.tooltip'|trans }}">
-        <i class="fa-solid fa-code"></i>
-    </a>
+    <div class="d-flex-wrap-center">
+        {{ parent() }}
+        <a href="#raw_data_modal" data-bs-toggle="modal" title="{{ 'dialog_raw_data.tooltip'|trans }}">
+            <i class="fa-solid fa-code"></i>
+        </a>
+    </div>
 {%- endblock card_title %}
 {# body #}
 {% block card_body %}

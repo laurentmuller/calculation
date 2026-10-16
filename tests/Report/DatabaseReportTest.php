@@ -25,6 +25,8 @@ final class DatabaseReportTest extends TestCase
         'Key' => 'Value',
         'On' => 'on',
         'Off' => 'off',
+        'None Value' => 'None',
+        'No value' => 'No value',
     ];
 
     private const array DATABASE = [
@@ -73,6 +75,8 @@ final class DatabaseReportTest extends TestCase
             ->willReturnCallback(static fn (string $value): bool => 'on' === $value);
         $databaseService->method('isDisabledValue')
             ->willReturnCallback(static fn (string $value): bool => 'off' === $value);
+        $databaseService->method('isNoneValue')
+            ->willReturnCallback(static fn (string $value): bool => 'None' === $value);
 
         return new DatabaseReport($helper, $databaseService, $cellService);
     }

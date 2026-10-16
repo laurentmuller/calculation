@@ -178,11 +178,12 @@
 {# classes #}
 {% block card_container_class '' %}
 {% block card_body_class ' px-3 pt-0 pb-3' %}
-{% block card_header_class ' d-flex-wrap-center' %}
 {# card_title #}
 {% block card_title -%}
-    {{ parent() }}
-    <div class="d-print-none">{% block header_actions -%}{%- endblock header_actions %}</div>
+    <div class="d-flex-wrap-center">
+        {{ parent() }}
+        <div class="d-print-none">{% block header_actions -%}{%- endblock header_actions %}</div>
+    </div>
 {%- endblock card_title %}
 {# body #}
 {% block card_body -%}

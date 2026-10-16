@@ -1,6 +1,43 @@
 {% extends 'cards/card_base.html.twig' %}
 {# imports #}
 {% from 'macros/_icons.html.twig' import link, homepage, button_copy %}
+{# macros #}
+{% macro header(name, value) -%}
+    <tr>
+        <th>{{ name|trans }}</th>
+        <th>{{ value|trans }}</th>
+    </tr>
+{% endmacro header %}
+{% macro row(id, text) -%}
+    <tr>
+        <td>{{ id|trans }}</td>
+        <td>{{ text }}</td>
+    </tr>
+{% endmacro row %}
+{% macro trace(index, trace) -%}
+    <tr>
+        <td>{{ index }}</td>
+        <td>
+            {%- if trace.file -%}
+                <span class="me-1">{{ trace.file|relative_path }}</span>
+            {%- endif -%}
+            {%- if trace.short_class|default -%}
+                <span class="text-warning">{{ trace.short_class }}</span>
+            {%- endif -%}
+            {%- if trace.type|default -%}
+                <span class="text-body-secondary">{{ trace.type }}</span>
+            {%- endif -%}
+            {%- if trace.function|default -%}
+                <span class="text-danger me-1">{{ trace.function }}</span>
+            {%- endif -%}
+            {%- if trace.line|default -%}
+                <span class="text-body-secondary">
+                    {{- 'error_page.fields.line_number'|trans({'%line%': trace.line}) -}}
+                </span>
+            {%- endif -%}
+        </td>
+    </tr>
+{% endmacro trace %}
 {# parameters #}
 {%- set title_icon = 'fa-solid fa-exclamation-circle' -%}
 {% set status_code = status_code|default(0) %}
@@ -26,73 +63,38 @@
         {%- endblock error_message %}
     </p>
     <div class="d-flex-wrap-center d-print-none">
-        <p class="mb-0 me-auto">{{ 'error_page.link'|trans({'%mailto%': app_owner_email, '%subject%': app_full_name|url_encode})|raw }}</p>
+        <span class="me-auto">{{ 'error_page.link'|trans({'%path%': path('user_comment')})|raw }}</span>
         {% if is_exception %}
-            <a data-bs-toggle="collapse" href="#exception-detail" class="drop-down-icon-right text-end"
-               aria-expanded="false" aria-controls="exception-detail">
-                {{- 'error_page.details'|trans -}}
-            </a>
+            {%- set attrs = {
+                class: ['drop-down-icon-right', 'text-end'],
+                href: '#exception-detail',
+                'data-bs-toggle': 'collapse',
+                'aria-controls': 'exception-detail',
+                'aria-expanded': 'false'} -%}
+            <a {{ html_attr(attrs) }}>{{- 'error_page.details'|trans -}}</a>
         {% endif %}
     </div>
     {% if is_exception %}
         <div id="exception-detail" class="collapse border-top mt-3">
             <table id="exception-table" class="table table-exception table-no-end-line table-sm mb-0">
                 <thead>
-                <tr>
-                    <th>{{ 'error_page.fields.property'|trans }}</th>
-                    <th>{{ 'error_page.fields.value'|trans }}</th>
-                </tr>
+                {{ _self.header('error_page.fields.property', 'error_page.fields.value') }}
                 </thead>
                 <tbody>
-                <tr>
-                    <td>{{ 'error_page.fields.message'|trans }}</td>
-                    <td>{{ exception.message }}</td>
-                </tr>
+                {{ _self.row('error_page.fields.message', exception.message) }}
                 {% if exception.code|default %}
-                    <tr>
-                        <td>{{ 'error_page.fields.code'|trans }}</td>
-                        <td>{{ exception.code }}</td>
-                    </tr>
+                    {{ _self.row('error_page.fields.code', exception.code) }}
                 {% endif %}
                 {% if exception.file|default %}
-                    <tr>
-                        <td>{{ 'error_page.fields.file'|trans }}</td>
-                        <td>{{ exception.file|relative_path }}</td>
-                    </tr>
+                    {{ _self.row('error_page.fields.file', exception.file|relative_path) }}
                 {% endif %}
                 {% if exception.line|default %}
-                    <tr>
-                        <td>{{ 'error_page.fields.line'|trans }}</td>
-                        <td>{{ exception.line }}</td>
-                    </tr>
+                    {{ _self.row('error_page.fields.line', exception.line) }}
                 {% endif %}
-                <tr>
-                    <th>{{ 'error_page.fields.trace'|trans }}</th>
-                    <th>{{ 'error_page.fields.call'|trans }}</th>
-                </tr>
-                {% set line = 'error_page.fields.line'|trans|lower %}
+                {{ _self.header('error_page.fields.trace', 'error_page.fields.call') }}
                 {% set traces = traces|default(exception.trace|default({})) %}
                 {% for trace in traces %}
-                    <tr>
-                        <td>{{ loop.index0 }}</td>
-                        <td>
-                            {%- if trace.file -%}
-                                <span class="me-1">{{ trace.file|relative_path }}</span>
-                            {%- endif -%}
-                            {%- if trace.short_class|default -%}
-                                <span class="text-warning">{{ trace.short_class }}</span>
-                            {%- endif -%}
-                            {%- if trace.type|default -%}
-                                <span class="text-body-secondary">{{ trace.type }}</span>
-                            {%- endif -%}
-                            {%- if trace.function|default -%}
-                                <span class="text-danger">{{ trace.function }}</span>
-                            {%- endif -%}
-                            {%- if trace.line|default -%}
-                                <span class="text-body-secondary{% if trace.function|default %} ms-1{% endif %}">{{ 'error_page.fields.line_number'|trans({'%line%': trace.line}) }}</span>
-                            {%- endif -%}
-                        </td>
-                    </tr>
+                    {{ _self.trace(loop.index0, trace) }}
                 {% else %}
                     <tr>
                         <td colspan="2">{{ 'error_page.no_trace'|trans }}</td>

@@ -58,12 +58,14 @@ class DatabaseInfoService
             try {
                 $variables = $this->getVariables();
                 foreach ($variables as $variable) {
-                    $value = $variable['Value'];
-                    if ('' !== $value) {
-                        $this->configuration[$variable['Variable_name']] = $this->convertValue($value);
+                    $value = StringUtils::trim($variable['Value']);
+                    if (null === $value) {
+                        continue;
                     }
+                    $name = $variable['Variable_name'];
+                    $this->configuration[$name] = $this->convertValue($value, $name);
                 }
-            } catch (\Exception|Exception) {
+            } catch (Exception) {
             }
         }
 
@@ -97,15 +99,22 @@ class DatabaseInfoService
         return $this->version ??= $this->getConfiguration()['version'] ?? 'Unknown';
     }
 
-    private function convertValue(string $value): string
+    private function convertValue(string $value, string $name): string
     {
-        return match ($value) {
-            'ON', 'OFF',
-            'YES', 'NO',
-            'ENABLED', 'DISABLED',
-            'AUTO', 'AUTOMATIC' => StringUtils::capitalize($value),
-            default => $value
-        };
+        if ($this->isDisabledValue($value) || $this->isEnabledValue($value)) {
+            return StringUtils::capitalize($value);
+        }
+        if ($this->isNoneValue($value)) {
+            return self::NONE_VALUE;
+        }
+        if ('version' === $name) {
+            $index = \strpos($value, '-');
+            if (\is_int($index)) {
+                return StringUtils::left($value, $index);
+            }
+        }
+
+        return $value;
     }
 
     /**
@@ -125,17 +134,11 @@ class DatabaseInfoService
      */
     private function getVariables(): array
     {
-        $result = null;
+        $connection = $this->getConnection();
+        $statement = $connection->prepare('SHOW VARIABLES;');
+        $result = $statement->executeQuery();
 
-        try {
-            $connection = $this->getConnection();
-            $statement = $connection->prepare('SHOW VARIABLES;');
-            $result = $statement->executeQuery();
-
-            /** @phpstan-var array<array{Variable_name: string, Value: string}> */
-            return $result->fetchAllAssociative();
-        } finally {
-            $result?->free();
-        }
+        /** @phpstan-var array<array{Variable_name: string, Value: string}> */
+        return $result->fetchAllAssociative();
     }
 }

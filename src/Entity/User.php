@@ -21,6 +21,7 @@ use App\Traits\ResetPasswordRequestTrait;
 use App\Traits\RoleTrait;
 use App\Traits\TimestampableTrait;
 use App\Utils\DateUtils;
+use App\Utils\StringUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -223,7 +224,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
      */
     public function getInitials(): string
     {
-        return \strtoupper(\substr((string) $this->username, 0, 2));
+        return \strtoupper(StringUtils::left((string) $this->username, 2));
     }
 
     /**

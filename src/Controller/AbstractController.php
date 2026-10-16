@@ -99,7 +99,7 @@ abstract class AbstractController extends BaseController implements DocumentHelp
         $file = FileUtils::normalize($file);
         $projectDir = FileUtils::normalize($this->getProjectDir());
         if (StringUtils::startWith($file, $projectDir)) {
-            return \ltrim(\substr($file, \strlen($projectDir)), '/');
+            return \substr($file, \strlen($projectDir));
         }
 
         return $file;

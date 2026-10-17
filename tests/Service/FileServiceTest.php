@@ -162,13 +162,13 @@ final class FileServiceTest extends TestCase
     public function testMakePathRelative(): void
     {
         $service = $this->createFileService();
-        $expected = 'videos';
+        $expected = '/videos';
         $actual = $service->makePathRelative('/tmp/videos', '/tmp');
         self::assertSame($expected, $actual);
 
         $endPath = __FILE__;
         $startPath = __DIR__;
-        $expected = \basename($endPath);
+        $expected = '/' . \basename($endPath);
         $actual = $service->makePathRelative($endPath, $startPath);
         self::assertSame($expected, $actual);
     }

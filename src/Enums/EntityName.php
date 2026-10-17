@@ -71,7 +71,7 @@ enum EntityName: string implements ConstantsInterface, EnumSortableInterface, Tr
     #[EnumCase('user')]
     case USER = 'EntityUser';
 
-    /** The entity mask */
+    /** The entity mask (63 = 0b111111) */
     private const int ENTITY_MASK = 0x3F;
     /** The entity offset */
     private const int ENTITY_OFFSET = 6;
@@ -123,7 +123,8 @@ enum EntityName: string implements ConstantsInterface, EnumSortableInterface, Tr
 
     public function index(): int
     {
-        return (int) \array_search($this, self::cases(), true);
+        /** @phpstan-var int */
+        return \array_search($this, self::cases(), true);
     }
 
     /**

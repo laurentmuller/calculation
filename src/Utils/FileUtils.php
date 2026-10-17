@@ -156,12 +156,16 @@ final class FileUtils
 
     /**
      * Given an existing end path, convert it to a path relative to a given starting path.
-     *
-     * @throws \InvalidArgumentException if the end path or the start path are not absolute
      */
     public static function makePathRelative(string $endPath, string $startPath): string
     {
-        return \rtrim(self::getFilesystem()->makePathRelative($endPath, $startPath), '/');
+        $endPath = self::normalize($endPath);
+        $startPath = self::normalize($startPath);
+        if (StringUtils::startWith($endPath, $startPath)) {
+            $endPath = \substr($endPath, \strlen($startPath));
+        }
+
+        return \rtrim($endPath, '/');
     }
 
     /**

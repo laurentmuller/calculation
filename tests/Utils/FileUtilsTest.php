@@ -153,13 +153,13 @@ final class FileUtilsTest extends TestCase
 
     public function testMakePathRelative(): void
     {
-        $expected = 'videos';
+        $expected = '/videos';
         $actual = FileUtils::makePathRelative('/tmp/videos', '/tmp');
         self::assertSame($expected, $actual);
 
         $endPath = __FILE__;
         $startPath = __DIR__;
-        $expected = \basename($endPath);
+        $expected = '/' . \basename($endPath);
         $actual = FileUtils::makePathRelative($endPath, $startPath);
         self::assertSame($expected, $actual);
     }

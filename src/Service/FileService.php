@@ -165,7 +165,13 @@ readonly class FileService
      */
     public function makePathRelative(string $endPath, string $startPath): string
     {
-        return \rtrim($this->fs->makePathRelative($endPath, $startPath), '/');
+        $endPath = self::normalize($endPath);
+        $startPath = self::normalize($startPath);
+        if (StringUtils::startWith($endPath, $startPath)) {
+            $endPath = \substr($endPath, \strlen($startPath));
+        }
+
+        return \rtrim($endPath, '/');
     }
 
     /**

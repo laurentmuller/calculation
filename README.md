@@ -14,9 +14,9 @@ Ce programme est distribué avec une [licence propriétaire](LICENSE.md) et une
 [![Application](https://img.shields.io/badge/Application-3.0.0-blue)](https://github.com/laurentmuller/calculation)
 [![Symfony](https://img.shields.io/badge/Symfony-7.4.21-informational?logo=symfony)](https://symfony.com)
 [![PHP](https://img.shields.io/badge/PHP-8.3.33-informational?logo=php)](https://www.php.net)
-[![MariaDB](https://img.shields.io/badge/mariadb-10.11.15-informational?logo=mariadb)](https://mariadb.org/)
+[![MariaDB](https://img.shields.io/badge/mariadb-10.11.19-informational?logo=mariadb)](https://mariadb.org/)
 [![Apache](https://img.shields.io/badge/Apache-2.4.67-informational?logo=apache)](https://httpd.apache.org)
-[![PhpStorm](https://img.shields.io/badge/PhpStorm-2026.2-informational?logo=phpstorm)](https://www.jetbrains.com/phpstorm)
+[![PhpStorm](https://img.shields.io/badge/PhpStorm-2026.3-informational?logo=phpstorm)](https://www.jetbrains.com/phpstorm)
 
 ## Qualité du code
 

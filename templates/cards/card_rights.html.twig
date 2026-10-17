@@ -80,12 +80,12 @@
 {% macro actions(overwrite) %}
     {{ button(
         text: 'common.actions',
-        class: 'btn btn-outline-secondary dropdown-toggle',
+        class: 'btn btn-sm btn-outline-secondary dropdown-toggle',
         icon: 'fa-solid fa-bars',
         attributes: {
             'data-bs-toggle': 'dropdown',
             'aria-expanded': false}) }}
-    <ul class="dropdown-menu">
+    <ul class="dropdown-menu dropdown-menu-end">
         {{ _self.action('all', 'fa-fw fa-solid fa-check-circle', overwrite) }}
         {{ _self.action('none', 'fa-fw fa-solid fa-times-circle', overwrite) }}
         {{ _self.action('toggle', 'fa-fw fa-solid fa-right-left', overwrite) }}
@@ -93,11 +93,13 @@
         {{ _self.action('default', 'fa-fw fa-solid fa-rotate-left', true) }}
     </ul>
 {% endmacro actions %}
-{# actions form #}
-{% block actions_form -%}
-    {{ parent() }}
-    {{ _self.actions(overwrite) }}
-{% endblock actions_form %}
+{# card_title #}
+{% block card_title -%}
+    <div class="d-flex-wrap-center">
+        {{ parent() }}
+        {{ _self.actions(overwrite) }}
+    </div>
+{%- endblock card_title %}
 {# javascripts #}
 {% block javascripts %}
     {% if is_js_debug %}

@@ -167,7 +167,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
      */
     public function getAddress(): Address
     {
-        return new Address((string) $this->email, (string) $this->username);
+        return new Address((string) $this->email, $this->getUsername());
     }
 
     #[\Override]
@@ -224,7 +224,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
      */
     public function getInitials(): string
     {
-        return \strtoupper(StringUtils::left((string) $this->username, 2));
+        return \strtoupper(StringUtils::left($this->getUsername(), 2));
     }
 
     /**

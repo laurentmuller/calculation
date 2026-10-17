@@ -26,7 +26,6 @@ use App\Traits\JsonResponseTrait;
 use App\Traits\RequestTrait;
 use App\Traits\TranslatorFlashMessageAwareTrait;
 use App\Utils\FileUtils;
-use App\Utils\StringUtils;
 use Psr\Container\ContainerExceptionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
 use Symfony\Component\Form\FormInterface;
@@ -96,13 +95,7 @@ abstract class AbstractController extends BaseController implements DocumentHelp
     #[AsTwigFilter('relative_path')]
     public function getRelativePath(string $file): string
     {
-        $file = FileUtils::normalize($file);
-        $projectDir = FileUtils::normalize($this->getProjectDir());
-        if (StringUtils::startWith($file, $projectDir)) {
-            return \substr($file, \strlen($projectDir));
-        }
-
-        return $file;
+        return FileUtils::makePathRelative($file, $this->getProjectDir());
     }
 
     /**

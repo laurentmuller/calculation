@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Form\User;
 
+use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Service\EntityNameService;
 use Elao\Enum\FlagBag;
@@ -71,15 +72,11 @@ class RightsType extends AbstractType implements DataMapperInterface
         }
 
         $viewData = (int) $viewData;
-        /** @var array<string, TForm> $array */
-        $array = \iterator_to_array($forms);
-
-        $entities = $this->service->getEntities();
-        foreach ($entities as $entity) {
+        $this->handleForms($forms, static function (EntityName $entity, array $array) use ($viewData): void {
             $value = $entity->getOffsetValue($viewData);
             $flagBag = new FlagBag(EntityPermission::class, $value);
             $array[$entity->getFormField()]->setData($flagBag);
-        }
+        });
     }
 
     /**
@@ -89,15 +86,23 @@ class RightsType extends AbstractType implements DataMapperInterface
     public function mapFormsToData(\Traversable $forms, mixed &$viewData): void
     {
         $viewData = 0;
+        $this->handleForms($forms, static function (EntityName $entity, array $array) use (&$viewData): void {
+            $form = $array[$entity->getFormField()];
+            $value = $form->getData()->getValue();
+            $viewData |= $value;
+        });
+    }
+
+    /**
+     * @param callable(EntityName $entity, array<string, TForm> $array):void $callback
+     */
+    private function handleForms(\Traversable $forms, callable $callback): void
+    {
         /** @var array<string, TForm> $array */
         $array = \iterator_to_array($forms);
-
         $entites = $this->service->getEntities();
         foreach ($entites as $entity) {
-            $form = $array[$entity->getFormField()];
-            /** @var TFlagBag $flagBag */
-            $flagBag = $form->getData();
-            $viewData |= $entity->getShiftedValue($flagBag->getValue());
+            $callback($entity, $array);
         }
     }
 }

@@ -26,7 +26,7 @@
     }
 
     /**
-     * Toggle the cell highlight enablement.
+     * Toggle the cell's highlight enablement.
      *
      * @param {jQuery<HTMLLinkElement>} $source - The highlight link.
      * @param {jQuery<HTMLTableElement>} $table - The table to update.

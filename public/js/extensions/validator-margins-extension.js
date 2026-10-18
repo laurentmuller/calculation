@@ -91,7 +91,7 @@ function getBodyRows($element) {
 /**
  * Gets the sorted rows by first the minimum and if equal, then by the maximum values.
  *
- * @param {jQuery<HTMLInputElement>} $element the element to get rows from.
+ * @param {jQuery} $element the element to get rows from.
  * @return {jQuery} the sorted rows.
  */
 function getSortedMargins($element) {

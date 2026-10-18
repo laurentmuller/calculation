@@ -5,6 +5,7 @@
  * @property {boolean} [imageInput]
  * @property {boolean} [colorPicker]
  * @property {boolean} [simpleEditor]
+ * @property {boolean} [showModification]
  * @property {function} [submitHandler]
  * @property {function} [highlight]
  * @property {function} [unhighlight]

@@ -54,6 +54,7 @@ class ResetAllPasswordType extends AbstractType
             'choice_translation_domain' => false,
             'choices' => $this->repository->getResettableUsers(),
             'row_attr' => ['class' => 'ms-5 mb-3'],
+            'label_attr' => ['class' => 'checkbox-switch'],
         ]);
     }
 

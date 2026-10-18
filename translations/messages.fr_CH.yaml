@@ -1437,6 +1437,10 @@ user:
         empty: Aucune demande de mot de passe n'a été requise.
         success: Les %count% demandes de mot de passe ont été supprimées avec succès.
         error: Un ou plusieurs utilisateurs doivent être sélectionnés.
+        actions:
+            all: Sélectionner tous les utilisateurs
+            none: Désélectionner tous les utilisateurs
+            toggle: Inverser la sélection
     send:
         title: Renvoyer une demande de mot de passe
         message: |

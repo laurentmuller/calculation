@@ -19,7 +19,7 @@ function getPreferredTheme() {
 }
 
 /**
- * Add theme input handler.
+ * Add the theme input handler.
  */
 function handleThemeInput() {
     $('.dropdown-theme-entry').on('click', function (e) {

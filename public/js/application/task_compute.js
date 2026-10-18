@@ -111,7 +111,7 @@ function cancelSubmit($form) {
 }
 
 /**
- * Send form to server and update UI.
+ * Send the form to the server and update the UI.
  * @param {HTMLFormElement} form - the submitted form.
  */
 function submitForm(form) {

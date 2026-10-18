@@ -13,7 +13,7 @@
  */
 function getDataContent() {
     'use strict';
-    return $('#content [data-content');
+    return $('#content [data-content]');
 }
 
 function disposePopover() {

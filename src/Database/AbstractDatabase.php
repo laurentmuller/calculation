@@ -232,8 +232,8 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
     protected function createIndex(string $table, string ...$columns): bool
     {
         $name = \sprintf('idx_%s_%s', $table, \implode('_', $columns));
-        $indexed_columns = \implode(',', $columns);
-        $query = \sprintf('CREATE INDEX IF NOT EXISTS %s ON %s(%s)', $name, $table, $indexed_columns);
+        $columns = \implode(',', $columns);
+        $query = \sprintf('CREATE INDEX IF NOT EXISTS %s ON %s(%s)', $name, $table, $columns);
 
         return $this->exec($query);
     }
@@ -250,7 +250,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      *
      * @param \SQLite3Stmt $stmt the statement to execute
      *
-     * @return array<array<string, mixed>>
+     * @return array<array<string, string|int|float|null>>
      */
     protected function executeAndFetch(\SQLite3Stmt $stmt): array
     {
@@ -319,7 +319,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      * @param string $value the value to search for
      * @param int    $limit the maximum number of rows to return
      *
-     * @return array<array<string, mixed>>
+     * @return array<array<string, string|int|float|null>>
      */
     protected function search(string $query, string $value, int $limit): array
     {

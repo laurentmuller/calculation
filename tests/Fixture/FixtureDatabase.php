@@ -66,7 +66,7 @@ class FixtureDatabase extends AbstractDatabase
     /**
      * Make public for tests.
      *
-     * @return array<array<string, mixed>>
+     * @return array<array<string, string|int|float|null>>
      */
     #[\Override]
     public function executeAndFetch(\SQLite3Stmt $stmt): array
@@ -98,7 +98,7 @@ class FixtureDatabase extends AbstractDatabase
     }
 
     /**
-     * @return array<array<string, mixed>>
+     * @return array<array<string, string|int|float|null>>
      */
     #[\Override]
     public function search(string $query, string $value, int $limit): array

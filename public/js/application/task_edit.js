@@ -4,8 +4,10 @@
     isSortedMargins,
     addMarginsMethods,
     validateOtherMargins,
-    getMinimumInput, getMaximumInput,
-    getMinimumSelector, getMaximumSelector,
+    getMinimumInput,
+    getMaximumInput,
+    getMinimumSelector,
+    getMaximumSelector,
 */
 
 /**
@@ -49,7 +51,7 @@ function updateUI() {
 
     // update tables
     $('#items .table-edit').each(function () {
-        /** @type {JQuery<HTMLTableElement>|any} */
+        /** @type {jQuery<HTMLTableElement>|any} */
         const $table = $(this);
         const rows = $table.find('tbody > tr').length;
         $table.toggleClass('d-none', rows === 0);
@@ -62,6 +64,7 @@ function updateUI() {
     // update actions, rules and positions
     const isValidator = $('#edit-form').getValidator() || false;
     $items.each(function (index, item) {
+        /** @type {jQuery<HTMLTableRowElement>} */
         const $item = $(item);
         $item.find('.btn-up-item').toggleDisabled($item.is(':first-of-type'));
         $item.find('.btn-down-item').toggleDisabled($item.is(':last-of-type'));
@@ -171,6 +174,7 @@ function addItem() {
     const $items = $('#items');
     const index = getNextItemIndex();
     const prototype = $items.data('prototype');
+    /** @type {jQuery} */
     const $item = $(prototype.replace(/__itemIndex__/g, index));
 
     // append

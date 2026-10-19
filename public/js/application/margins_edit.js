@@ -32,7 +32,7 @@ function updateSortButton() {
  */
 function updateUI() {
     'use strict';
-    // initialize the number input formats
+    // initialize the number of input formats
     $(getMinimumSelector()).on('change', updateSortButton)
         .inputNumberFormat();
     $(getMaximumSelector()).on('change', updateSortButton)

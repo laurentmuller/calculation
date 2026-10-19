@@ -87,7 +87,7 @@ function renderProducts(items) {
 }
 
 /**
- * Disable the submit and the cancel buttons.
+ * Disable the Submit button and the cancel buttons.
  */
 function disableButtons() {
     'use strict';

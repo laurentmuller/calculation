@@ -46,7 +46,7 @@ function formatValue(value, digits) {
 }
 
 /**
- * Compute values and update UI.
+ * Compute values and update the UI.
  */
 function compute() {
     'use strict';

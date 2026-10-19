@@ -341,7 +341,7 @@ function updateTaskComputeAction(_$table, row, _$element, $action) {
  *
  * @param {Object} row the row data.
  * @param {jQuery<HTMLElement>} $action the action to update
- * @param {String} propertyName  the property name to get from row.
+ * @param {String} propertyName  the property name to get from the row.
  */
 function updateShowEntityAction(row, $action, propertyName) {
     'use strict';

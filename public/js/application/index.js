@@ -141,7 +141,7 @@
         /**
          * Returns if this has the right-checked class.
          *
-         * @returns {bool}
+         * @returns {boolean}
          */
         isRightChecked: function () {
             return $(this).hasClass('dropdown-item-checked-right');

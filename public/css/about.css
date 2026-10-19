@@ -15,10 +15,6 @@
     hyphens: auto;
 }
 
-.about td.h {
-    font-size: initial;
-}
-
 .about th.e,
 .about td.e {
     width: 30%;
@@ -37,23 +33,11 @@
     width: 35%;
 }
 
-.about td.f {
-    width: 10%;
-}
-
 .about h1,
 .about .h1 {
     font-weight: bold;
     margin-bottom: 0;
     font-size: 1.25rem;
-}
-
-.about tbody .h th {
-    font-weight: normal;
-}
-
-.about tbody .h th.v {
-    width: 70%;
 }
 
 @media print {

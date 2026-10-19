@@ -1,4 +1,5 @@
 {% from 'macros/_icons.html.twig' import icon, link %}
+{% from 'index/_macros.html.twig' import hide_panel %}
 {# macros #}
 {% macro cardEntry(entity, count, index_route, add_route, icon) -%}
 <div class="border index-child item-hover p-2 m-1">
@@ -53,9 +54,7 @@
         <a {{ html_attr(header_attributes) }}>
             {{- icon('fa-solid fa-database ms-1', 'index.panel_catalog') -}}
         </a>
-        <button type="button" class="btn btn-link hide-panel text-body p-0" title="{{ 'index.panel_catalog_hide'|trans }}">
-            {{- icon('fa-solid fa-xmark fa-fw') -}}
-        </button>
+        {{ hide_panel('index.panel_catalog_hide') }}
     </div>
     <div class="collapse{% if panel_show %} show{% endif %}" id="{{ panel_key }}">
         <div class="card-body index-parent g-0 p-1">

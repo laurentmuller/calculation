@@ -57,6 +57,18 @@ body:not(.sidebar-show) .page-content {
         height: 0 !important;
         margin-left: 0 !important;
     }
+
+    .card-header:has(.drop-down-icon-left) {
+        padding-left: 0 !important;
+    }
+
+    .drop-down-icon-left::before,
+    .drop-down-icon-right::after {
+        flex: none !important;
+        content: '' !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
 }
 
 /* vertical navigation border */
@@ -436,7 +448,7 @@ input[type=number]::-webkit-inner-spin-button {
 
 /* horizontal line on the right of a label or a link */
 .horizontal-line {
-    display: flex !important;
+    display: flex;
     flex-direction: row;
 }
 
@@ -469,7 +481,6 @@ input[type=number]::-webkit-inner-spin-button {
 
 .drop-down-icon-left[aria-expanded=true]::before {
     transform: rotate(90deg);
-
 }
 
 /* Toggle icon after the element */
@@ -785,21 +796,21 @@ span.bottom-border-gradient {
 }
 
 .d-flex-wrap {
-    display: flex !important;
+    display: flex;
     flex-wrap: wrap !important;
     align-items: start !important;
     gap: 0.25rem 0.5rem !important;
 }
 
 .d-flex-wrap-center {
-    display: flex !important;
+    display: flex;
     flex-wrap: wrap !important;
     align-items: center !important;
     gap: 0.25rem 0.5rem !important;
 }
 
 .d-flex-no-wrap-center {
-    display: flex !important;
+    display: flex;
     align-items: center !important;
     column-gap: 0.5rem !important;
 }

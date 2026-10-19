@@ -56,7 +56,7 @@
 {# card_body #}
 {% block card_body %}
     {{ parent() }}
-    <p class="small mb-0">{{ 'chart.state.tooltip'|trans|raw }}</p>
+    <p class="small mb-0 d-print-none">{{ 'chart.state.tooltip'|trans|raw }}</p>
 {%- endblock card_body %}
 {# body #}
 {% block body -%}

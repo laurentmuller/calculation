@@ -177,7 +177,7 @@
     {{- _self.linkExternal(
         href: path(route),
         text: null,
-        class: class,
+        class: ('d-print-none ' ~ class|default)|trim,
         icon: ICON_PDF,
         title: 'common.button_export_pdf',
         inline: true) -}}
@@ -197,7 +197,7 @@
     {{ _self.linkExternal(
         href: path(route),
         text: null,
-        class: class,
+        class: ('d-print-none ' ~ class|default)|trim,
         icon: ICON_EXCEL,
         title: 'common.button_export_excel',
         inline: true) }}
@@ -217,7 +217,7 @@
     {{- _self.linkExternal(
         href: path(route),
         text: null,
-        class: class,
+        class: ('d-print-none ' ~ class|default)|trim,
         icon: ICON_WORD,
         title: 'common.button_export_word',
         inline: true) -}}

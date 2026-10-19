@@ -1,21 +1,28 @@
 {# macros #}
 {% macro margin(margin, min_margin) -%}
-{%- if margin < min_margin -%}
-    {%- set overall_title = 'calculation.list.margin_below'|trans({'%margin%': margin|percent, '%minimum%': min_margin|percent}) -%}
-    {%- set class_name = 'text-danger has-tooltip' -%}
-{% else %}
-    {%- set overall_title = 'calculation.fields.globalMargin'|trans -%}
-    {%- set class_name = false -%}
-{%- endif -%}
-<sup title="{{ overall_title }}"{% if class_name %} class="{{ class_name }}"{% endif %}>
-    <small>{{ margin|percent }}</small>
-</sup>
+    {%- if margin < min_margin -%}
+        {%- set overall_title = 'calculation.list.margin_below'|trans({'%margin%': margin|percent, '%minimum%': min_margin|percent}) -%}
+        {%- set class_name = 'text-danger has-tooltip' -%}
+    {% else %}
+        {%- set overall_title = 'calculation.fields.globalMargin'|trans -%}
+        {%- set class_name = false -%}
+    {%- endif -%}
+    <sup title="{{ overall_title }}"{% if class_name %} class="{{ class_name }}"{% endif %}>
+        <small>{{ margin|percent }}</small>
+    </sup>
 {%- endmacro margin %}
 
 {% macro empty_content() %}
-<div class="card-body p-2">
-    <div class="alert alert-warning flex-fill mb-0 py-2 text-center" role="alert">
-        {{- 'calculation.list.empty'|trans -}}
+    <div class="card-body p-2">
+        <div class="alert alert-warning flex-fill mb-0 py-2 text-center" role="alert">
+            {{- 'calculation.list.empty'|trans -}}
+        </div>
     </div>
-</div>
 {% endmacro empty_content %}
+
+{% macro hide_panel(title) %}
+    {% from 'macros/_icons.html.twig' import icon %}
+    <button type="button" class="btn btn-link hide-panel text-body d-print-none p-0" title="{{ title|trans }}">
+        {{- icon('fa-solid fa-xmark fa-fw') -}}
+    </button>
+{% endmacro hide_panel %}

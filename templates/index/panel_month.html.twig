@@ -1,6 +1,6 @@
 {# import #}
 {% from 'macros/_icons.html.twig' import icon, link, linkExternal %}
-{% from 'index/_macros.html.twig' import margin as macros_margin, empty_content %}
+{% from 'index/_macros.html.twig' import margin as macros_margin, empty_content, hide_panel %}
 {# macros #}
 {% macro cardEntry(item, route_name, min_margin) -%}
 {%- set text = item.date|locale_date('none', 'MMMM Y') -%}
@@ -54,9 +54,7 @@
                     title: 'common.button_export_pdf') }}
             {% endif %}
         {%- endif -%}
-        <button type="button" class="btn btn-link hide-panel text-body p-0" title="{{ 'index.panel_month_hide'|trans }}">
-            {{- icon('fa-solid fa-xmark fa-fw') -}}
-        </button>
+        {{ hide_panel('index.panel_month_hide') }}
     </div>
     <div class="collapse{% if panel_show %} show{% endif %}" id="{{ panel_key }}">
         {% if is_months %}

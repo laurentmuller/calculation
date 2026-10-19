@@ -1,5 +1,5 @@
 {% from 'macros/_icons.html.twig' import icon, link, linkExternal %}
-{% from 'index/_macros.html.twig' import margin as macros_margin, empty_content %}
+{% from 'index/_macros.html.twig' import margin as macros_margin, empty_content, hide_panel %}
 {# macros #}
 {% macro cardEntry(state, index_route, parameters, min_margin) -%}
 {% set color = state.color|default(false) %}
@@ -54,9 +54,7 @@
                     title: 'common.button_export_pdf') }}
             {% endif %}
         {%- endif -%}
-        <button type="button" class="btn btn-link hide-panel text-body p-0" title="{{ 'index.panel_state_hide'|trans }}">
-            {{- icon('fa-solid fa-xmark fa-fw') -}}
-        </button>
+        {{ hide_panel('index.panel_state_hide') }}
     </div>
     <div class="collapse{% if panel_show %} show{% endif %}" id="{{ panel_key }}">
         {% if is_states %}

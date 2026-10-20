@@ -173,7 +173,7 @@ abstract class AbstractTable
     protected function updateDataQuery(DataQuery $query): void
     {
         if ($query->isSort()) {
-            $this->validateSort($query);
+            $this->validateSort($query->sort);
 
             return;
         }
@@ -204,23 +204,18 @@ abstract class AbstractTable
     }
 
     /**
-     * Validate the sort column.
+     * Validate the given sorted field.
      *
-     * @throws \LogicException if the sort column is not found
+     * @param non-empty-string $field the sorted field to validate
+     *
+     * @throws \LogicException if the sorted field is not found
+     *
+     * @see Column::getField()
      */
-    protected function validateSort(DataQuery $query): void
+    protected function validateSort(string $field): void
     {
-        if (!$query->isSort()) {
-            return;
-        }
-
-        $column = $this->findFirst(
-            $this->getColumns(),
-            static fn (Column $column): bool => $column->getField() === $query->sort
-        );
-        if (!$column instanceof Column) {
-            throw new \InvalidArgumentException(\sprintf('Invalid sort column: "%s".', $query->sort));
-        }
+        $this->findFirst($this->getColumns(), static fn (Column $column): bool => $column->getField() === $field)
+            ?? throw new \InvalidArgumentException(\sprintf('Invalid sorted field: "%s".', $field));
     }
 
     /**

@@ -38,8 +38,7 @@ readonly class CacheService
      */
     public function clear(): bool
     {
-        $parameters = ['--all' => true];
-        $result = $this->service->execute('cache:pool:clear', $parameters);
+        $result = $this->service->execute('cache:pool:clear', ['--all' => true]);
 
         return $result->isSuccess();
     }

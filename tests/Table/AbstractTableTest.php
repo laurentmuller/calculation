@@ -66,4 +66,14 @@ final class AbstractTableTest extends TestCase
         $table->updateDataQuery($query);
         self::assertSame('', $query->sort);
     }
+
+    public function testValidateSortThrowException(): void
+    {
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage('Invalid sort column: "fake".');
+        $table = new FixtureTable();
+        $query = new DataQuery();
+        $query->sort = 'fake';
+        $table->updateDataQuery($query);
+    }
 }

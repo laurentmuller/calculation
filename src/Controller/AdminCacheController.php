@@ -65,9 +65,12 @@ class AdminCacheController extends AbstractController
             return $this->redirectToHomePage(TranslatableFlashMessage::info('clear_cache.empty'));
         }
 
+        $count = \array_reduce($pools, static fn (int $carry, array $items): int => $carry + \count($items), 0);
+
         return $this->render('admin/clear_cache.html.twig', [
             'size' => FileUtils::formatSize($kernel->getCacheDir()),
             'pools' => $pools,
+            'count' => $count,
             'form' => $form,
         ]);
     }

@@ -1,5 +1,5 @@
 {% extends 'cards/card_delete.html.twig' %}
-{% from 'macros/_icons.html.twig' import button %}
+{% from 'macros/_icons.html.twig' import button, modal_title, modal_close_button %}
 {# parameters #}
 {%- set title = 'clear_cache.title' -%}
 {%- set submit_text = 'clear_cache.submit' -%}
@@ -9,7 +9,32 @@
 {# body #}
 {% block body -%}
     {{ parent() }}
-    {{ include('admin/_cache_dialog.html.twig') }}
+    <div class="modal fade" id="modal-cache-list" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                {{ modal_title(id: null, title_icon: 'fa-solid fa-list-check', title_text: 'clear_cache.list') }}
+                <div class="modal-body p-2">
+                    <div class="pre-scrollable">
+                        {% for key, pool in pools %}
+                            <div class="d-flex-wrap-center justify-content-between border p-2">
+                                <h5 class="my-0">{{- key|title -}}</h5>
+                                <small class="badge rounded-pill text-bg-secondary">{{ pool|integer }}</small>
+                            </div>
+                            <ul>
+                                {% for line in pool %}
+                                    <li class="text-break">{{ line }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="modal-footer align-items-start">
+                    {{- modal_close_button() -}}
+                    <span class="ms-auto my-0">{{ 'clear_cache.count'|trans({'%count%': count|integer}) }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock body %}
 {# actions #}
 {% block actions_form -%}
@@ -20,6 +45,5 @@
         icon: 'fa-solid fa-list-check',
         attributes: {
             'data-bs-toggle': 'modal',
-            'data-bs-target': '#modal-cache-list'})
-    -}}
+            'data-bs-target': '#modal-cache-list'}) -}}
 {% endblock actions_form %}

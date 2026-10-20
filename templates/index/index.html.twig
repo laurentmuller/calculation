@@ -24,8 +24,8 @@
         {% endif %}
         {{ include('user/user_switch.html.twig') }}
     {% else %}
-        <div class="row">
-            <div class="col-md-8 offset-md-2 my-auto h-50">
+        <div class="row g-0">
+            <div class="col-md-10 offset-md-1 col-xl-6 offset-xl-3">
                 {{ include('index/panel_disabled.html.twig') }}
                 {{ include('user/user_switch.html.twig') }}
             </div>
@@ -49,17 +49,17 @@
 {%- endblock stylesheets %}
 {# javascripts #}
 {% block javascripts -%}
-{% if navigation_show %}
-    {% if is_js_debug %}
-        {{ parent() -}}
-        {{ asset_js('build/jquery-contextmenu/jquery.contextMenu.js') }}
-        {{ asset_js('build/jquery-contextmenu/jquery.ui.position.js') }}
-        {{ asset_js('js/plugins/plugin-rowlink.js') }}
-        {{ asset_js('js/plugins/plugin-cookie.js') }}
-        {{ asset_js('js/extensions/contextmenu-extensions.js') }}
-        {{ asset_js('js/application/index.js') }}
-    {% else %}
-        {{ asset_js('js/compiled/index.js') }}
+    {% if navigation_show %}
+        {% if is_js_debug %}
+            {{ parent() -}}
+            {{ asset_js('build/jquery-contextmenu/jquery.contextMenu.js') }}
+            {{ asset_js('build/jquery-contextmenu/jquery.ui.position.js') }}
+            {{ asset_js('js/plugins/plugin-rowlink.js') }}
+            {{ asset_js('js/plugins/plugin-cookie.js') }}
+            {{ asset_js('js/extensions/contextmenu-extensions.js') }}
+            {{ asset_js('js/application/index.js') }}
+        {% else %}
+            {{ asset_js('js/compiled/index.js') }}
+        {% endif %}
     {% endif %}
-{% endif %}
 {% endblock javascripts %}

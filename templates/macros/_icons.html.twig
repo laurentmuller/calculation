@@ -263,6 +263,7 @@
         class: for_header ? ['btn-close'] : ['btn', 'btn-form', 'btn-secondary'],
         icon: for_header ? null : 'fa-solid fa-xmark',
         attributes: {
+            title: for_header ? label|trans : null,
             'data-bs-dismiss': 'modal',
             'data-target': data_target ? '#' ~ data_target : null,
         }) }}

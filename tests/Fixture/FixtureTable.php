@@ -26,6 +26,12 @@ class FixtureTable extends AbstractTable
     }
 
     #[\Override]
+    public function getColumns(): array
+    {
+        return [];
+    }
+
+    #[\Override]
     public function updateDataQuery(DataQuery $query): void
     {
         parent::updateDataQuery($query);
@@ -38,8 +44,11 @@ class FixtureTable extends AbstractTable
     }
 
     #[\Override]
-    protected function getDefaultColumn(): ?Column
+    protected function getDefaultColumn(): Column
     {
-        return null;
+        $column = new Column();
+        $column->setVisible(false);
+
+        return $column;
     }
 }

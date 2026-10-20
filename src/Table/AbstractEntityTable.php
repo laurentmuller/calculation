@@ -165,16 +165,14 @@ abstract class AbstractEntityTable extends AbstractTable
             $this->updateOrderBy($orderBy, $alias, $query->sort, $query->order);
         }
         $column = $this->getDefaultColumn();
-        if ($column instanceof Column) {
-            $this->updateOrderBy($orderBy, $alias, $column->getField(), $column->getOrder());
-        }
+        $this->updateOrderBy($orderBy, $alias, $column->getField(), $column->getOrder());
         foreach ($orderBy as $sort => $order) {
             $builder->addOrderBy($sort, $order);
         }
     }
 
     /**
-     * Add the selected entity if any, and it is missing.
+     * Add the selected entity, if any, and it is missing.
      *
      * @param EntityType[] $entities the entities to search in or to update
      * @param DataQuery    $query    the query to get values from
@@ -187,11 +185,7 @@ abstract class AbstractEntityTable extends AbstractTable
             return;
         }
 
-        if ($this->anyMatch(
-            $entities,
-            /** @param EntityType $current */
-            fn (EntityInterface|array $current): bool => $id === $this->getEntityId($current)
-        )) {
+        if ($this->anyMatch($entities, fn (EntityInterface|array $current): bool => $id === $this->getEntityId($current))) {
             return;
         }
 

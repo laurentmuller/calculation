@@ -626,7 +626,7 @@ table.table-no-end-line tfoot tr:last-child td {
 }
 
 .pre-scrollable {
-    max-height: 340px;
+    max-height: 22rem;
     overflow-y: auto;
 }
 
@@ -951,6 +951,4 @@ html[data-bs-theme=dark] .btn-close {
     top: 50%;
     transform: translate(-50%, -50%);
     z-index: 1;
-
-
 }

@@ -13,7 +13,7 @@
     {{ include('meta_links.html.twig') }}
     {{ include('icon_links.html.twig') }}
     <title>{{ title_text }}</title>
-    {# preload stylesheets #}
+    {# preloaded stylesheets #}
     {{ preload_css('build/bootstrap/bootstrap.css') }}
     {{ preload_css('build/font-awesome/css/all.css') }}
     {% block preload %}{% endblock preload %}
@@ -21,7 +21,7 @@
     {{ asset_css('build/bootstrap/bootstrap.css') }}
     {{ asset_css('build/font-awesome/css/all.css') }}
     {% block stylesheets %}
-        {{ asset_css('css/style.css') }}
+        {{ asset_css(navigation_show ? 'css/style.css' : 'css/center.css') }}
     {% endblock stylesheets %}
 </head>
 {# body #}
@@ -50,7 +50,6 @@
     {# container #}
     <div role="main" class="{% block container_class 'container' %}">
         <div class="row g-0">
-
             {% block body -%}{%- endblock body %}
         </div>
     </div>

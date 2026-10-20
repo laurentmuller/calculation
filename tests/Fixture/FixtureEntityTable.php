@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Fixture;
 
+use App\Repository\AbstractRepository;
 use App\Table\AbstractEntityTable;
 use App\Table\Column;
 use App\Table\DataQuery;
@@ -27,6 +28,12 @@ class FixtureEntityTable extends AbstractEntityTable
     public function getColumns(): array
     {
         return [];
+    }
+
+    #[\Override]
+    public function getRepository(): AbstractRepository
+    {
+        return parent::getRepository();
     }
 
     #[\Override]

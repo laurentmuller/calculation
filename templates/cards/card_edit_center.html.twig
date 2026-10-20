@@ -4,7 +4,7 @@
 {%- set statusbar_show = false -%}
 {%- set navigation_show = false -%}
 {# class styles #}
-{% block card_container_class ' col-md-8 offset-md-2 col-xl-6 offset-xl-3' %}
+{% block card_container_class ' col-md-10 offset-md-1 col-xl-6 offset-xl-3' %}
 {# header #}
 {% block card_header -%}
     {{ parent() }}
@@ -19,7 +19,3 @@
     {{ parent() }}
     {{ footer_center() }}
 {% endblock card_footer %}
-{# stylesheets #}
-{% block stylesheets -%}
-    {{- asset_css('css/center.css') }}
-{% endblock stylesheets %}

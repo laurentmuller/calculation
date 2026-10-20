@@ -1,18 +1,17 @@
 @import 'style.css';
 
-/* full height */
-html, body, main, .container, .row, .page-content {
-    height: 100%;
+.page-content {
+    overflow: auto;
+    scrollbar-width: none;
 }
 
-html {
-    overflow: scroll;
-    overflow-x: hidden;
+.page-content::-webkit-scrollbar {
+    display: none;
 }
 
 @media (width >= 768px) {
     .page-content {
-        margin-top: 10rem;
+        margin-top: 5%;
     }
 }
 

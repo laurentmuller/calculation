@@ -21,7 +21,7 @@
                     <h5 class="modal-title" id="{{ dialog_id }}">
                         {{- icon(dialog_icon ~ ' me-1') }}<span class="dialog-title">{{ edit_title }}</span>
                     </h5>
-                    {{- modal_close_button(for_header: true, data_target: dialog_id) }}
+                    {{- modal_close_button(for_header: true, label: 'common.button_cancel', data_target: dialog_id) }}
                 </div>
                 <div class="modal-body">
                     {% block modal_body %}{% endblock modal_body %}
@@ -34,13 +34,11 @@
                                 class: 'btn btn-form btn-primary',
                                 icon: 'fa-solid fa-check',
                                 type: 'submit',
-                                attributes: {id: 'dialog_submit_button'})
-                            -}}
+                                attributes: {id: 'dialog_submit_button'}) -}}
                             {{- modal_close_button(
                                 for_header: false,
                                 label: 'common.button_cancel',
-                                data_target: dialog_id)
-                            -}}
+                                data_target: dialog_id) -}}
                             {%- block modal_buttons -%}{%- endblock modal_buttons -%}
                         </div>
                         <small class="small-required">{{ 'common.required'|trans }}</small>

@@ -131,12 +131,13 @@ abstract class AbstractTable
     /**
      * Gets the default sorting column.
      */
-    protected function getDefaultColumn(): ?Column
+    protected function getDefaultColumn(): Column
     {
         $columns = $this->getColumns();
 
         return $this->findFirst($columns, static fn (Column $column): bool => $column->isDefault())
-            ?? $this->findFirst($columns, static fn (Column $column): bool => $column->isVisible());
+            ?? $this->findFirst($columns, static fn (Column $column): bool => $column->isVisible())
+            ?? throw new \LogicException('No default column found.');
     }
 
     /**
@@ -172,13 +173,14 @@ abstract class AbstractTable
     protected function updateDataQuery(DataQuery $query): void
     {
         if ($query->isSort()) {
+            $this->validateSort($query);
+
             return;
         }
+
         $column = $this->getDefaultColumn();
-        if ($column instanceof Column) {
-            $query->sort = $column->getField();
-            $query->order = $column->getOrder();
-        }
+        $query->sort = $column->getField();
+        $query->order = $column->getOrder();
     }
 
     /**
@@ -199,6 +201,26 @@ abstract class AbstractTable
             'total-not-filtered' => $results->totalNotFiltered,
             'page-list' => \json_encode($results->pageList),
         ], $query->attributes(), $results->attributes);
+    }
+
+    /**
+     * Validate the sort column.
+     *
+     * @throws \LogicException if the sort column is not found
+     */
+    protected function validateSort(DataQuery $query): void
+    {
+        if (!$query->isSort()) {
+            return;
+        }
+
+        $column = $this->findFirst(
+            $this->getColumns(),
+            static fn (Column $column): bool => $column->getField() === $query->sort
+        );
+        if (!$column instanceof Column) {
+            throw new \InvalidArgumentException(\sprintf('Invalid sort column: "%s".', $query->sort));
+        }
     }
 
     /**

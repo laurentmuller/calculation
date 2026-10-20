@@ -10,43 +10,55 @@
 {%- set form_attr = form_attr|default({})|merge({'data-copy': copy_title}) -%}
 {# body #}
 {% block modal_body %}
-<div class="row" id="item_search_row">
-    <div class="col-md-4 form-group mb-3">
-        <div class="input-group">
-            <input type="text" class="form-control" id="item_search_input" name="item_search_input" aria-label="{{ 'list.search_placeholder'|trans }}" placeholder="{{ 'list.search_placeholder'|trans }}">
-            <button class="btn btn-outline-secondary" type="button" id="item_search_clear" disabled title="{{ 'help.actions.clear'|trans }}">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
+    <div class="row" id="item_search_row">
+        <div class="col-md-4 form-group mb-3">
+            <div class="input-group">
+                {%- set attrs = {
+                    type: 'text',
+                    class: 'form-control',
+                    id: 'item_search_input',
+                    name: 'item_search_input',
+                    placeholder: 'list.search_placeholder'|trans,
+                    'aria-label': 'list.search_placeholder'|trans} -%}
+                <input {{ html_attr(attrs) }}>
+                {%- set attrs = {
+                    class: 'btn btn-outline-secondary',
+                    type: 'button',
+                    id: 'item_search_clear',
+                    name: 'item_search_clear',
+                    title: 'help.actions.clear'|trans,
+                    disabled: true} -%}
+                <button {{ html_attr(attrs) }}><i class="fa-solid fa-xmark"></i></button>
+            </div>
         </div>
     </div>
-</div>
-<div class="row">
-    <div class="col">
-        {{ form_row(form.description) }}
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-8">
-        {{ form_row(form.category) }}
-    </div>
-    <div class="col-md-4">
-        {{ form_row(form.unit) }}
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-4">
-        {{ form_row(form.price) }}
-    </div>
-    <div class="col-md-4">
-        {{ form_row(form.quantity) }}
-    </div>
-    <div class="col-md-4">
-        <div class="form-group mb-3">
-            <span class="form-label">{{ 'calculationitem.fields.total'|trans }}</span>
-            <div id="item_total" class="form-control-read-only text-end">{{ 0|amount }}</div>
+    <div class="row">
+        <div class="col">
+            {{ form_row(form.description) }}
         </div>
     </div>
-</div>
+    <div class="row">
+        <div class="col-md-8">
+            {{ form_row(form.category) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_row(form.unit) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            {{ form_row(form.price) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_row(form.quantity) }}
+        </div>
+        <div class="col-md-4">
+            <div class="form-group mb-3">
+                <span class="form-label">{{ 'calculationitem.fields.total'|trans }}</span>
+                <div id="item_total" class="form-control-read-only text-end">{{ 0|amount }}</div>
+            </div>
+        </div>
+    </div>
 {% endblock modal_body %}
 {# buttons #}
 {% block modal_buttons %}
@@ -54,6 +66,5 @@
         text: 'common.button_delete',
         class: 'btn btn-form btn-outline-danger',
         icon: ICON_DELETE,
-        attributes: {id: 'item_delete_button'})
-    -}}
+        attributes: {id: 'item_delete_button'}) -}}
 {% endblock modal_buttons %}

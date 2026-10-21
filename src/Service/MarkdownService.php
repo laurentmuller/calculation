@@ -31,7 +31,7 @@ readonly class MarkdownService
     /**
      * Process the given Markdown file path.
      *
-     * Each tag entry contains the old tag name, the new tag name and optionally a class name to add.
+     * Each tag entry contains the old tag name, the new tag name, and optionally a class name to add.
      *
      * @param string $path        the file path to process
      * @param array  $tags        the HTML tags to update

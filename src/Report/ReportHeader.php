@@ -48,7 +48,7 @@ class ReportHeader
     /** The style for the customer name. */
     private ?PdfStyle $nameStyle = null;
 
-    /** The style for customer address, contact and description. */
+    /** The style for customer address, contact, and description. */
     private ?PdfStyle $smallStyle = null;
 
     /** The style for the document title. */

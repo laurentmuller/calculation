@@ -216,7 +216,7 @@ final class DateUtils
 
     /**
      * Gets the localized week day names.
-     * For example, with 'fr' as locale and 'sunday' as the first day, return
+     * For example, with 'fr' as locale and 'Sunday' as the first day, return
      * <pre>
      * Dimanche, Lundi, Mardi, ...
      * </pre>.

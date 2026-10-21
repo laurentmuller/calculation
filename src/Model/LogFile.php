@@ -95,7 +95,7 @@ class LogFile implements \Countable
     }
 
     /**
-     * Sorts levels, channels and logs.
+     * Sorts levels, channels, and logs.
      */
     public function sort(): self
     {

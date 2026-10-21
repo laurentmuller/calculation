@@ -25,7 +25,7 @@ use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
- * Controller to display calculations timeline.
+ * Controller to display a timeline with calculations.
  *
  * @phpstan-import-type ParametersType from TimelineService
  */

@@ -20,19 +20,6 @@
     width: 30%;
 }
 
-/* one value */
-.about td.v:nth-child(2):nth-last-child(1) {
-    width: 70%;
-}
-
-/* two values */
-.about th.v:nth-child(2):nth-last-child(2),
-.about td.v:nth-child(2):nth-last-child(2),
-.about th.v:nth-child(3):nth-last-child(1),
-.about td.v:nth-child(3):nth-last-child(1) {
-    width: 35%;
-}
-
 .about h1,
 .about .h1 {
     font-weight: bold;

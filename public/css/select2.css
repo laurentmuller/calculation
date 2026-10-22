@@ -35,7 +35,7 @@ html[data-bs-theme=dark] .select2-container--bootstrap-5 .select2-selection__cho
 .select2-container--bootstrap-5 .select2-selection.select2-selection--single {
     padding-top: 5px !important;
     min-height: calc(1.5em + 0.7rem);
-    border-radius: 0;
+    border-radius: var(--bs-default-radius);
 }
 
 .select2-container--bootstrap-5 .select2-selection.select2-selection--multiple {
@@ -70,7 +70,7 @@ html[data-bs-theme=dark] .select2-container--bootstrap-5 .select2-selection__cho
 .select2-container--bootstrap-5 .select2-selection,
 .select2-container--bootstrap-5 .select2-dropdown .select2-search .select2-search__field,
 .select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__rendered .select2-selection__choice {
-    border-radius: 0 !important;
+    border-radius: var(--bs-default-radius) !important;
 }
 
 .select2-container--bootstrap-5 .select2-selection--multiple .select2-search {

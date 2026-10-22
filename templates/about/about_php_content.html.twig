@@ -1,10 +1,14 @@
 {% from 'macros/_icons.html.twig' import linkExternal %}
 {% from 'about/_about_macro.html.twig' import headerLink %}
 {# macros #}
-{% macro output_module_entry(module, index) -%}
+{% macro output_module_id(module) -%}
+    {{- module.name|lower|url_encode -}}
+{%- endmacro output_module_id %}
+
+{% macro output_module_entry(module) -%}
     <tr>
         <td class="position-relative">
-            <a class="d-flex align-items-center stretched-link text-body" href="#php-item-{{ index }}">
+            <a class="d-flex-center stretched-link text-body" href="#{{ _self.output_module_id(module) }}">
                 {%- if module.url -%}
                     <i class="fa-solid fa-plug-circle-plus me-1"></i>
                 {% else %}
@@ -19,8 +23,8 @@
     </tr>
 {%- endmacro output_module_entry %}
 
-{% macro output_module_content(module, index) -%}
-    <div id="php-item-{{ index }}" class="d-flex align-items-center py-1 border-bottom">
+{% macro output_module_content(module) -%}
+    <div id="{{ _self.output_module_id(module) }}" class="d-flex-center py-1 border-bottom">
         <h1 class="flex-fill pb-1">{{ module.name }}</h1>
         {% if module.url %}
             {{- linkExternal(
@@ -100,7 +104,7 @@
             <table class="table table-sm table-hover">
                 <tbody>
                 {% for module in info.modules %}
-                    {{ _self.output_module_entry(module, loop.index) }}
+                    {{ _self.output_module_entry(module) }}
                 {% endfor %}
                 </tbody>
             </table>
@@ -114,7 +118,7 @@
         } -%}
         <div {{ html_attr(attrs) }}>
             {% for module in info.modules %}
-                {{ _self.output_module_content(module, loop.index) }}
+                {{ _self.output_module_content(module) }}
             {% endfor %}
         </div>
     </div>

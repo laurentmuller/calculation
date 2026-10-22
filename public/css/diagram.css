@@ -58,5 +58,5 @@ div.mermaidTooltip {
     color: var(--bs-body-bg) !important;
     background: var(--bs-emphasis-color) !important;
     border: var(--bs-border-width) solid var(--bs-border-color) !important;
-    border-radius: 0 !important;
+    border-radius: var(--bs-default-radius) !important;
 }

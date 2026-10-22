@@ -18,7 +18,7 @@
     {% for item in data.items -%}
         <tr class="row-data" title="{{ 'chart.state.row'|trans({'%name%': item.code}) }}">
             <td class="text-nowrap">
-                <a class="d-flex align-items-center" href="{{ path(list_path, {stateId: item.id}) }}">
+                <a class="d-flex-center" href="{{ path(list_path, {stateId: item.id}) }}">
                     <span class="border state-color state-background-{{ item.id }} me-1"></span>
                     <span>{{ item.code }}</span>
                 </a>

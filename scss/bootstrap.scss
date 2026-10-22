@@ -38,6 +38,15 @@ $badge-font-weight: 400;
     #{prefix-property($property)}: #{color-contrast($value)};
 }
 
+:root {
+    /* default radius */
+    @if $enable-rounded {
+        #{prefix-property(default-radius)}: $border-radius;
+    } @else {
+        #{prefix-property(default-radius)}: 0;
+    }
+}
+
 /* themed tooltips */
 @each $key, $value in $theme-colors {
     .tooltip.tooltip-#{$key} {

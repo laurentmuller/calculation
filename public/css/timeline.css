@@ -39,7 +39,7 @@ ul.timeline > li::before {
 }
 
 ul.timeline-square > li::before {
-    border-radius: initial;
+    border-radius: var(--bs-default-radius);
 }
 
 ul.timeline-fill > li::before {

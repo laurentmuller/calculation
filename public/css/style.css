@@ -802,6 +802,12 @@ span.bottom-border-gradient {
     gap: 0.25rem 0.5rem !important;
 }
 
+.d-flex-center {
+    display: flex;
+    align-items: center !important;
+    gap: 0.25rem 0.5rem !important;
+}
+
 .d-flex-wrap-center {
     display: flex;
     flex-wrap: wrap !important;
@@ -852,8 +858,9 @@ span.bottom-border-gradient {
  * Google recaptcha
  */
 .grecaptcha-badge {
-    bottom: 5px !important;
     right: 5px !important;
+    bottom: 5px !important;
+    border-radius: var(--bs-default-radius) !important;
 }
 
 body.statusbar-show .grecaptcha-badge {

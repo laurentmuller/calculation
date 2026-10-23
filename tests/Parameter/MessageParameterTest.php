@@ -67,7 +67,7 @@ final class MessageParameterTest extends ParameterTestCase
         self::assertFalse($actual['display-subtitle']);
         self::assertSame(1, $actual['progress']);
         self::assertSame(4000, $actual['timeout']);
-        self::assertSame('bottom-right', $actual['position']);
+        self::assertSame(MessagePosition::BOTTOM_RIGHT, $actual['position']);
     }
 
     public function testSetValue(): void

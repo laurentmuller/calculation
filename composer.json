@@ -129,7 +129,7 @@
     },
     "config": {
         "platform": {
-            "php": "8.3.35"
+            "php": "8.3.36"
         },
         "preferred-install": {
             "*": "dist"

@@ -57,7 +57,7 @@ class MessageParameter implements ParameterInterface
      *     display-subtitle: bool,
      *     timeout: int,
      *     progress: int,
-     *     position: string}
+     *     position: MessagePosition}
      */
     public function getAttributes(): array
     {
@@ -68,7 +68,7 @@ class MessageParameter implements ParameterInterface
             'display-subtitle' => $this->subTitle,
             'timeout' => $this->timeout,
             'progress' => $this->progress,
-            'position' => $this->position->value,
+            'position' => $this->position,
         ];
     }
 

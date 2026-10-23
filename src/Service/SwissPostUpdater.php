@@ -214,20 +214,10 @@ class SwissPostUpdater implements ServiceSubscriberInterface
 
     private function openReader(SwissPostUpdateResult $result, \ZipArchive $archive): ?CsvReader
     {
-        $name = $archive->getNameIndex(0);
-        if (false === $name) {
-            $this->setError($result, 'reader_name', [
-                '%name%' => $result->getSourceName(),
-            ]);
-
-            return null;
-        }
-
-        $stream = $archive->getStream($name);
+        $stream = $archive->getStreamIndex(0);
         if (!\is_resource($stream)) {
             $this->setError($result, 'reader_open', [
                 '%name%' => $result->getSourceName(),
-                '%stream%' => $name,
             ]);
 
             return null;

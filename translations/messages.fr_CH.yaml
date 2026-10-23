@@ -1183,8 +1183,7 @@ swisspost:
         database_compact: Une erreur s'est produite du compactage de la base de données.
         database_rename: Impossible de renommer la base de données.
         database_close: Une erreur s'est produite lors de la fermeture de la base de données.
-        reader_name: Impossible de trouver un nom dans le ficher d'archive '%name%'.
-        reader_open: Impossible d'ouvrir le flux de données '%stream%' du fichier d'archive '%name%'.
+        reader_open: Impossible d'ouvrir le flux de données du fichier d'archive '%name%'.
         reader_close: Une erreur s'est produite de la fermeture du flux de données.
     fields:
         file: Fichier d'archive

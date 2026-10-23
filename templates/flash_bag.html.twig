@@ -13,7 +13,7 @@
 <div id="flashes" class="d-none" {{ html_data_attr(flash_attrs) }}>
     {% for key, messages in app.flashes %}
         {% for message in messages %}
-            <div class="flash" data-type="{{ key }}"  data-title="{{ ('flash_bag.' ~ key)|trans }}">{{ message }}</div>
+            <div class="flash" data-type="{{ key }}" data-title="{{ ('flash_bag.' ~ key)|trans }}">{{ message }}</div>
         {% endfor %}
     {% endfor %}
 </div>

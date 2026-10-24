@@ -9,9 +9,8 @@
 <html lang="{{ app.request.locale|replace({_: '-'}) }}" data-bs-theme="{{ theme_value(app.request) }}">
 {# head #}
 <head>
-    {# links #}
-    {{ include('meta_links.html.twig') }}
-    {{ include('icon_links.html.twig') }}
+    {# meta-data, icons and manifest #}
+    {{ include('heads.html.twig') }}
     <title>{{ title_text }}</title>
     {# preloaded stylesheets #}
     {{ preload_css('build/bootstrap/bootstrap.css') }}

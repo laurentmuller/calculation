@@ -25,6 +25,8 @@ use Symfony\Bridge\Twig\Extension\WebLinkExtension;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Path;
 use Twig\Attribute\AsTwigFunction;
+use Twig\Environment;
+use Twig\Extra\Html\HtmlExtension;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 /**
@@ -54,8 +56,8 @@ final readonly class ExtendedAssetExtension
      *
      * @param array<string, string|int> $parameters
      */
-    #[AsTwigFunction(name: 'asset_css', isSafe: ['html'])]
-    public function assetCss(string $path, array $parameters = []): string
+    #[AsTwigFunction(name: 'asset_css', needsEnvironment: true, isSafe: ['html'])]
+    public function assetCss(Environment $env, string $path, array $parameters = []): string
     {
         $parameters = \array_merge([
             'rel' => 'stylesheet',
@@ -63,7 +65,7 @@ final readonly class ExtendedAssetExtension
             'nonce' => $this->getNonce(),
         ], $parameters);
 
-        return $this->reduceParams($parameters, '<link ');
+        return $this->reduceParams($env, $parameters, 'link');
     }
 
     /**
@@ -95,8 +97,8 @@ final readonly class ExtendedAssetExtension
      *
      * @param array<string, string|int> $parameters
      */
-    #[AsTwigFunction(name: 'asset_image', isSafe: ['html'])]
-    public function assetImage(string $path, array $parameters = []): string
+    #[AsTwigFunction(name: 'asset_image', needsEnvironment: true, isSafe: ['html'])]
+    public function assetImage(Environment $env, string $path, array $parameters = []): string
     {
         $size = $this->imageSize($path);
         $parameters = \array_merge([
@@ -107,7 +109,7 @@ final readonly class ExtendedAssetExtension
             'decoding' => 'async',
         ], $parameters);
 
-        return $this->reduceParams($parameters, '<image ');
+        return $this->reduceParams($env, $parameters, 'image');
     }
 
     /**
@@ -115,8 +117,9 @@ final readonly class ExtendedAssetExtension
      *
      * @param array<string, string|int> $parameters additional parameters
      */
-    #[AsTwigFunction(name: 'asset_image_user', isSafe: ['html'])]
+    #[AsTwigFunction(name: 'asset_image_user', needsEnvironment: true, isSafe: ['html'])]
     public function assetImageUser(
+        Environment $env,
         User|array|null $user,
         int $size = ImageResizer::IMAGE_SIZE,
         array $parameters = []
@@ -139,7 +142,7 @@ final readonly class ExtendedAssetExtension
             ], $parameters);
         }
 
-        return $this->assetImage(\ltrim($asset, '/'), $parameters);
+        return $this->assetImage($env, \ltrim($asset, '/'), $parameters);
     }
 
     /**
@@ -147,15 +150,15 @@ final readonly class ExtendedAssetExtension
      *
      * @param array<string, string|int> $parameters
      */
-    #[AsTwigFunction(name: 'asset_js', isSafe: ['html'])]
-    public function assetJs(string $path, array $parameters = []): string
+    #[AsTwigFunction(name: 'asset_js', needsEnvironment: true, isSafe: ['html'])]
+    public function assetJs(Environment $env, string $path, array $parameters = []): string
     {
         $parameters = \array_merge([
             'src' => $this->getAssetUrl($path),
             'nonce' => $this->getNonce(),
         ], $parameters);
 
-        return $this->reduceParams($parameters, '<script ', '></script>');
+        return $this->reduceParams($env, $parameters, 'script', '</script>');
     }
 
     /**
@@ -163,8 +166,8 @@ final readonly class ExtendedAssetExtension
      *
      * @param array<string, string|int> $parameters
      */
-    #[AsTwigFunction(name: 'preload_css', isSafe: ['html'])]
-    public function preloadCss(string $path, array $parameters = []): string
+    #[AsTwigFunction(name: 'preload_css', needsEnvironment: true, isSafe: ['html'])]
+    public function preloadCss(Environment $env, string $path, array $parameters = []): string
     {
         $url = $this->getAssetUrl($path);
         $href = $this->webLinkExtension->preload($url, ['as' => 'style']);
@@ -175,7 +178,7 @@ final readonly class ExtendedAssetExtension
             'nonce' => $this->getNonce(),
         ], $parameters);
 
-        return $this->reduceParams($parameters, '<link ');
+        return $this->reduceParams($env, $parameters, 'link');
     }
 
     /**
@@ -217,16 +220,17 @@ final readonly class ExtendedAssetExtension
     /**
      * Reduce parameters.
      *
-     * @param array<string, string|int> $parameters
+     * @param array<string, scalar|\BackedEnum> $parameters
      */
-    private function reduceParams(array $parameters, string $prefix, string $suffix = '>'): string
+    private function reduceParams(Environment $env, array $parameters, string $prefix, string $suffix = ''): string
     {
-        $parameters = \array_map(
-            static fn (string $key, string|int $value): string => \sprintf('%s="%s"', $key, $value),
-            \array_keys($parameters),
-            \array_values($parameters)
-        );
+        foreach ($parameters as &$value) {
+            if (\is_bool($value)) {
+                $value = \json_encode($value);
+            }
+        }
+        $attributes = HtmlExtension::htmlAttr($env, $parameters);
 
-        return $prefix . \implode(' ', $parameters) . $suffix;
+        return \sprintf('<%s %s>%s', $prefix, $attributes, $suffix);
     }
 }

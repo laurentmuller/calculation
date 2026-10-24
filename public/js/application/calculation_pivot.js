@@ -76,7 +76,7 @@
                     html: true,
                     trigger: 'hover',
                     placement: 'top',
-                    customClass: 'popover-primary popover-w-100',
+                    customClass: 'popover-primary popover-w-100 popover-py-1',
                     fallbackPlacements: ['top', 'bottom', 'right', 'left'],
                     content: function (e) {
                         const content = $(e).data('bs-html');

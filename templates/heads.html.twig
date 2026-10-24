@@ -1,3 +1,4 @@
+{# meta-data #}
 <meta charset="utf-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,3 +14,10 @@
 <meta property="og:url" content="{{ app.request.uri }}"/>
 <meta property="og:description" content="{{ app_description }}">
 <meta property="og:type" content="website"/>
+{# icons #}
+<link rel="icon" type="image/png" sizes="96x96" href="{{ asset_icon(96) }}">
+<link rel="icon" type="image/svg+xml" href="{{ asset('images/icons/favicon.svg') }}">
+<link rel="apple-touch-icon" sizes="180x180" href="{{ asset_icon(180) }}">
+<link rel="shortcut icon" href="{{ asset('images/icons/favicon.ico') }}">
+{# manifest #}
+<link rel="manifest" type="application/manifest+json" href="{{ asset('site.webmanifest') }}">

@@ -82,6 +82,22 @@ $badge-font-weight: 400;
     max-width: 100%;
 }
 
+@each $key, $value in $spacers {
+    .popover.popover-p-#{$key} .popover-body {
+        padding: $value;
+    }
+
+    .popover.popover-px-#{$key} .popover-body {
+        padding-left: $value;
+        padding-right: $value;
+    }
+
+    .popover.popover-py-#{$key} .popover-body {
+        padding-top: $value;
+        padding-bottom: $value;
+    }
+}
+
 /* themed form-check */
 @each $key, $value in $theme-colors {
     $color: var-property($key);

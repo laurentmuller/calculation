@@ -29,21 +29,19 @@ class HtmlDataExtension
     #[AsTwigFunction(name: 'html_data_attr', needsEnvironment: true, isSafe: ['html'])]
     public static function htmlDataAttributes(Environment $env, iterable|string|false|null ...$args): string
     {
-        $attr = [];
-        /** @var array<string, mixed> $args */
+        $attributes = [];
+        /** @var array<string, scalar|\BackedEnum> $args */
         $args = HtmlExtension::htmlAttrMerge(...$args);
         foreach ($args as $name => $value) {
             if (!\str_starts_with($name, 'data-')) {
                 $name = 'data-' . $name;
             }
-            if (\is_bool($value)) {
-                $value = \json_encode($value);
-            } elseif ($value instanceof \BackedEnum) {
-                $value = $value->value;
+            if (false === $value) {
+                $value = 'false';
             }
-            $attr[$name] = $value;
+            $attributes[$name] = HtmlExtension::htmlAttrValue($name, $value);
         }
 
-        return HtmlExtension::htmlAttr($env, $attr);
+        return HtmlExtension::htmlAttr($env, $attributes);
     }
 }

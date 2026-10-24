@@ -27,7 +27,7 @@ function createPopover() {
         html: true,
         trigger: 'hover',
         placement: 'top',
-        customClass: 'popover-w-100',
+        customClass: 'popover-w-100 popover-py-1 popover-px-2',
         content: function (element) {
             return $(element.dataset.content);
         }
@@ -40,7 +40,7 @@ function createPopover() {
  */
 function isShow(id) {
     'use strict';
-    const $element = $('#' + id);
+    const $element = $(id);
     if ($element.length) {
         return $element.hasClass('show');
     }
@@ -54,9 +54,9 @@ function getParams() {
     'use strict';
     return {
         name: $('#command').val(),
-        arguments: isShow('arguments'),
-        options: isShow('options'),
-        help: isShow('help')
+        arguments: isShow('#arguments'),
+        options: isShow('#options'),
+        help: isShow('#help')
     };
 }
 
@@ -172,7 +172,6 @@ $(function () {
 
     // handle pop state change
     window.addEventListener('popstate', (e) => {
-        // console.log(`location: ${document.location}, state: ${JSON.stringify(e.state)}`);
         if (e.state && e.state.command) {
             document.location.reload();
         }

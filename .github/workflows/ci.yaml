@@ -5,18 +5,28 @@ on: [ push, pull_request ]
 jobs:
     php-cs-fixer:
         uses: laurentmuller/.github/.github/workflows/php-cs-fixer.yaml@main
+        with:
+            php-version: '8.4'
 
     phpstan:
         uses: laurentmuller/.github/.github/workflows/phpstan.yaml@main
+        with:
+            php-version: '8.4'
 
     rector:
         uses: laurentmuller/.github/.github/workflows/rector.yaml@main
+        with:
+            php-version: '8.4'
 
     twig-cs-fixer:
         uses: laurentmuller/.github/.github/workflows/twig-cs-fixer.yaml@main
+        with:
+            php-version: '8.4'
 
     validate-composer:
         uses: laurentmuller/.github/.github/workflows/validate-composer.yaml@main
+        with:
+            php-version: '8.4'
 
     # suspend until https://github.com/symfony/symfony/issues/64575 is fixed
     # validate-container:
@@ -24,18 +34,25 @@ jobs:
 
     validate-translation:
         uses: laurentmuller/.github/.github/workflows/validate-translation.yaml@main
+        with:
+            php-version: '8.4'
 
     validate-markdown:
         uses: laurentmuller/.github/.github/workflows/validate-markdown.yaml@main
 
     validate-twig:
         uses: laurentmuller/.github/.github/workflows/validate-twig.yaml@main
+        with:
+            php-version: '8.4'
 
     validate-yaml:
         uses: laurentmuller/.github/.github/workflows/validate-yaml.yaml@main
+        with:
+            php-version: '8.4'
 
     phpunit:
         uses: laurentmuller/.github/.github/workflows/phpunit.yaml@main
         with:
+            php-version: '8.4'
             ini-values: 'intl.default_locale=fr_CH.UTF-8, date.timezone=Europe/Zurich'
             extensions: 'imagick'

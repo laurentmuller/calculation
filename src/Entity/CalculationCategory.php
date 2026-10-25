@@ -134,9 +134,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, Comparab
      */
     public static function create(Category $category): self
     {
-        $created = new self();
-
-        return $created->setCategory($category);
+        return new self()->setCategory($category);
     }
 
     /**

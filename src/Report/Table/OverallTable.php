@@ -63,8 +63,7 @@ class OverallTable extends ReportTable
      */
     public static function render(CalculationReport $parent): void
     {
-        $table = new self($parent);
-        $table->output();
+        new self($parent)->output();
     }
 
     #[\Override]

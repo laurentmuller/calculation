@@ -338,7 +338,7 @@ abstract class AbstractParameters
      */
     private function getProperties(ParameterInterface|string $parameter): array
     {
-        return (new \ReflectionClass($parameter))->getProperties(
+        return new \ReflectionClass($parameter)->getProperties(
             \ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED | \ReflectionProperty::IS_PRIVATE
         );
     }
@@ -351,7 +351,7 @@ abstract class AbstractParameters
     private function getPropertyType(string $name): PropertyType
     {
         if (\enum_exists($name) && \is_a($name, \BackedEnum::class, true)) {
-            $name = 'enum_' . (new \ReflectionEnum($name))->getBackingType();
+            $name = 'enum_' . new \ReflectionEnum($name)->getBackingType();
         }
 
         return match ($name) {

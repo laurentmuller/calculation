@@ -104,7 +104,7 @@ class UserComment
         Address|User|string|null $to,
         string $subject = ApplicationService::APP_FULL_NAME
     ): self {
-        $comment = (new self())->setSubject($subject);
+        $comment = new self()->setSubject($subject);
         if (null !== $from) {
             $comment->setFrom($from);
         }

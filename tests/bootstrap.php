@@ -29,7 +29,7 @@ try {
 
 // @phpstan-ignore function.alreadyNarrowedType
 if (\method_exists(Dotenv::class, 'bootEnv')) {
-    (new Dotenv())->bootEnv(__DIR__ . '/../.env');
+    new Dotenv()->bootEnv(__DIR__ . '/../.env');
 }
 
 if ((bool) $_SERVER['APP_DEBUG']) {

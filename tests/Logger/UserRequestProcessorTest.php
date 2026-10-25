@@ -33,7 +33,7 @@ final class UserRequestProcessorTest extends TestCase
 
     public function testWithUser(): void
     {
-        $user = (new User())->setUsername('user-name');
+        $user = new User()->setUsername('user-name');
         $processor = $this->createProcessor($user);
         $record = $processor($this->createRecord());
 

@@ -118,8 +118,8 @@ readonly class PdfYaxis
     private static function roundValue(float $value, bool $roundDown): float
     {
         $exponent = \floor(\log10($value));
-        $fraction = $value / 10.0 ** $exponent;
-        $value = 10.0 ** $exponent;
+        $fraction = $value / \fpow(10.0, $exponent);
+        $value = \fpow(10.0, $exponent);
 
         if ($roundDown) {
             return match (true) {

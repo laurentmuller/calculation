@@ -366,7 +366,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
             return \round($value, $precision);
         }
 
-        $power = 10.0 ** (float) $precision;
+        $power = \fpow(10.0, (float) $precision);
 
         return \floor($value * $power) / $power;
     }

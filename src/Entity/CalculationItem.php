@@ -75,12 +75,10 @@ class CalculationItem extends AbstractEntity implements ComparableInterface, Par
      */
     public static function create(Product $product): self
     {
-        $item = new self();
-        $item->setDescription($product->getDescription())
+        return new self()
+            ->setDescription($product->getDescription())
             ->setPrice($product->getPrice())
             ->setUnit($product->getUnit());
-
-        return $item;
     }
 
     /**

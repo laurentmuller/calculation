@@ -206,7 +206,7 @@ class Column implements \Stringable
      */
     public static function instance(string $field = ''): self
     {
-        return (new self())->setField($field);
+        return new self()->setField($field);
     }
 
     public function isDefault(): bool

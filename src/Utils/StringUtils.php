@@ -183,7 +183,7 @@ final class StringUtils
     public static function getShortName(object|string $objectOrClass): string
     {
         try {
-            return (new \ReflectionClass($objectOrClass))->getShortName();
+            return new \ReflectionClass($objectOrClass)->getShortName();
         } catch (\ReflectionException $e) {
             throw new \RuntimeException(\sprintf('Unable to get short name for "%s".', self::getDebugType($objectOrClass)), $e->getCode(), $e);
         }
@@ -399,6 +399,6 @@ final class StringUtils
      */
     public static function unicode(string $string, bool $ignoreCase = false): UnicodeString
     {
-        return $ignoreCase ? (new UnicodeString($string))->ignoreCase() : new UnicodeString($string);
+        return $ignoreCase ? new UnicodeString($string)->ignoreCase() : new UnicodeString($string);
     }
 }

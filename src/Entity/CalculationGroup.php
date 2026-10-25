@@ -138,9 +138,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
      */
     public static function create(Group $group): self
     {
-        $created = new self();
-
-        return $created->setGroup($group);
+        return new self()->setGroup($group);
     }
 
     /**

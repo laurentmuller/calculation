@@ -271,14 +271,14 @@ final class FormatUtils
      */
     public static function getRomanFormatter(): \NumberFormatter
     {
-        return self::$romanFormatter ??= new \NumberFormatter('@numbers=roman', \NumberFormatter::DECIMAL);
+        return self::$romanFormatter ??= new \NumberFormatter('en@numbers=roman', \NumberFormatter::DECIMAL);
     }
 
     private static function checkNegativeZero(int|float|string|null $number): float
     {
         $value = (float) $number;
 
-        return ($value ** -1.0) === -\INF ? 0.0 : $value;
+        return \fpow($value, -1.0) === -\INF ? 0.0 : $value;
     }
 
     private static function createDateFormatter(

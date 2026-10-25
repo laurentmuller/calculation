@@ -43,6 +43,10 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(path: '/pivot', name: 'calculation_pivot_')]
 class PivotController extends AbstractController
 {
+    private const string CSV_ENCLOSURE = '"';
+    private const string CSV_ESCAPE = '\\';
+    private const string CSV_SEPARATOR = ';';
+
     public function __construct(private readonly CalculationRepository $repository)
     {
     }
@@ -86,17 +90,17 @@ class PivotController extends AbstractController
         }
 
         $callback = static function () use ($dataset): void {
-            /** @var resource $handle */
-            $handle = \fopen('php://output', 'w+');
-            \fprintf($handle, \chr(0xEF) . \chr(0xBB) . \chr(0xBF));
-            \fputcsv($handle, \array_keys($dataset[0]), ';');
+            /** @var resource $stream */
+            $stream = \fopen('php://output', 'w+');
+            \fprintf($stream, \chr(0xEF) . \chr(0xBB) . \chr(0xBF));
+            self::putCSV($stream, \array_keys($dataset[0]));
             foreach ($dataset as $row) {
                 $row['calculation_date'] = FormatUtils::formatDate($row['calculation_date']);
                 $row['calculation_overall_margin'] = \round($row['calculation_overall_margin'], 3);
                 $row['item_total'] = \round($row['item_total'], 2);
-                \fputcsv($handle, $row, ';');
+                self::putCSV($stream, $row);
             }
-            \fclose($handle);
+            \fclose($stream);
         };
 
         return new CsvResponse(callback: $callback, name: 'calculations_pivot');
@@ -203,6 +207,20 @@ class PivotController extends AbstractController
             PivotFieldFactory::default('group_code', $this->trans('group.name')),
             PivotFieldFactory::default('category_code', $this->trans('category.name')),
         ];
+    }
+
+    /**
+     * @param resource $stream
+     */
+    private static function putCSV($stream, array $values): void
+    {
+        \fputcsv(
+            stream: $stream,
+            fields: $values,
+            separator: self::CSV_SEPARATOR,
+            enclosure: self::CSV_ENCLOSURE,
+            escape: self::CSV_ESCAPE
+        );
     }
 
     /**

@@ -239,7 +239,7 @@ final class DateUtilsTest extends TestCase
 
     public function testCompletYearWithDefault(): void
     {
-        $expected = (int) (new DatePoint())->format('Y');
+        $expected = (int) new DatePoint()->format('Y');
         $actual = DateUtils::completYear();
         self::assertSame($expected, $actual);
     }
@@ -297,28 +297,28 @@ final class DateUtilsTest extends TestCase
     public function testGetDefaultDay(): void
     {
         $actual = DateUtils::getDay();
-        $expected = (int) (new DatePoint())->format('j');
+        $expected = (int) new DatePoint()->format('j');
         self::assertSame($expected, $actual);
     }
 
     public function testGetDefaultMonth(): void
     {
         $actual = DateUtils::getMonth();
-        $expected = (int) (new DatePoint())->format('n');
+        $expected = (int) new DatePoint()->format('n');
         self::assertSame($expected, $actual);
     }
 
     public function testGetDefaultWeek(): void
     {
         $actual = DateUtils::getWeek();
-        $expected = (int) (new DatePoint())->format('W');
+        $expected = (int) new DatePoint()->format('W');
         self::assertSame($expected, $actual);
     }
 
     public function testGetDefaultYear(): void
     {
         $actual = DateUtils::getYear();
-        $expected = (int) (new DatePoint())->format('Y');
+        $expected = (int) new DatePoint()->format('Y');
         self::assertSame($expected, $actual);
     }
 

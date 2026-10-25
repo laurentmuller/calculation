@@ -119,7 +119,7 @@ final class SwitchUserListenerTest extends TestCase
 
     private function createUser(string $name): User
     {
-        return (new User())->setUsername($name);
+        return new User()->setUsername($name);
     }
 
     private function createUsernamePasswordToken(): UsernamePasswordToken

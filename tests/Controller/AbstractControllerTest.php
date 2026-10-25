@@ -343,7 +343,7 @@ final class AbstractControllerTest extends KernelTestCase
 
     private function login(): void
     {
-        $user = (new User())->setUsername('test');
+        $user = new User()->setUsername('test');
         $token = new TestBrowserToken($user->getRoles(), $user);
         /** @var TokenStorageInterface $storage */
         $storage = self::getContainer()->get(TokenStorageInterface::class);

@@ -131,7 +131,7 @@ class UsersReport extends AbstractArrayReport
             return $this->getDefaultImageCell();
         }
 
-        return (new PdfImageCell($path))->resize(self::IMAGE_SIZE);
+        return new PdfImageCell($path)->resize(self::IMAGE_SIZE);
     }
 
     private function getRoleCell(User $user): PdfCell

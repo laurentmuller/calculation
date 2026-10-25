@@ -123,7 +123,7 @@ final class PasswordValidatorTest extends ConstraintValidatorTestCase
     public function testIsOptionInvalid(): void
     {
         self::expectException(InvalidOptionsException::class);
-        self::expectExceptionMessage('The option "fake" does not exist.');
+        self::expectExceptionMessageIsOrContains('The option "fake" does not exist.');
         $constraint = $this->createConstraint([]);
         $constraint->isOption('fake');
     }
@@ -148,7 +148,7 @@ final class PasswordValidatorTest extends ConstraintValidatorTestCase
     public function testSetOptionInvalid(): void
     {
         self::expectException(InvalidOptionsException::class);
-        self::expectExceptionMessage('The option "fake" does not exist.');
+        self::expectExceptionMessageIsOrContains('The option "fake" does not exist.');
         $constraint = $this->createConstraint([]);
         $constraint->setOption('fake', false);
     }

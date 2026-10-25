@@ -64,7 +64,7 @@ final class CommandServiceTest extends KernelServiceTestCase
     public function testGetCommandInvalid(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessage('Unable to find the command "_fake_command_test".');
+        self::expectExceptionMessageIsOrContains('Unable to find the command "_fake_command_test".');
         $service = $this->getCommandService();
         $service->getCommand('_fake_command_test');
     }

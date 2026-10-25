@@ -23,21 +23,21 @@ final class CsvServiceTest extends TestCase
     public function testInvalidEnclosure(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessage('Field enclosure character must be a single byte character.');
+        self::expectExceptionMessageIsOrContains('Field enclosure character must be a single byte character.');
         CsvService::instance(enclosure: 'fake');
     }
 
     public function testInvalidEscape(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessage('Escape character must be a single byte character or an empty string.');
+        self::expectExceptionMessageIsOrContains('Escape character must be a single byte character or an empty string.');
         CsvService::instance(escape: 'fake');
     }
 
     public function testInvalidSeparator(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessage('Field separator must be a single byte character.');
+        self::expectExceptionMessageIsOrContains('Field separator must be a single byte character.');
         CsvService::instance(separator: 'fake');
     }
 

@@ -70,7 +70,7 @@ final class PivotQuarterFieldTest extends TestCase
     public function testInvalidValue(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessage('Invalid value: 5, allowed values [1..4].');
+        self::expectExceptionMessageIsOrContains('Invalid value: 5, allowed values [1..4].');
         $field = new PivotQuarterField('name');
         $field->getDisplayValue(5);
     }

@@ -130,7 +130,7 @@ final class AbstractDatabaseTest extends TestCase
     public function testRecordsCountInvalidName(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessage('Invalid table name: "?*".');
+        self::expectExceptionMessageIsOrContains('Invalid table name: "?*".');
         $this->database->getRecordsCount('?*');
     }
 

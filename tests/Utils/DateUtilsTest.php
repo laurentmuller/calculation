@@ -269,7 +269,7 @@ final class DateUtilsTest extends TestCase
     public function testDateIntervalInvalid(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessage('Invalid duration: "fake".');
+        self::expectExceptionMessageIsOrContains('Invalid duration: "fake".');
         DateUtils::createDateInterval('fake');
     }
 
@@ -346,7 +346,7 @@ final class DateUtilsTest extends TestCase
     public function testModifyInvalid(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessage('Invalid modifier: "fake".');
+        self::expectExceptionMessageIsOrContains('Invalid modifier: "fake".');
         DateUtils::modify(DateUtils::createDate(), 'fake');
     }
 

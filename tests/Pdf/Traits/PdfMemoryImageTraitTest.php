@@ -109,7 +109,7 @@ final class PdfMemoryImageTraitTest extends TestCase
             }
         };
         self::expectException(PdfException::class);
-        self::expectExceptionMessage('The image file "fake" is not a valid image.');
+        self::expectExceptionMessageIsOrContains('The image file "fake" is not a valid image.');
         $doc->loadInvalidImage();
     }
 

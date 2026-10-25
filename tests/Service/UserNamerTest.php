@@ -23,7 +23,7 @@ final class UserNamerTest extends TestCase
     public function testInvalidObject(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Expected argument of type "App\Entity\User", "array" given.');
+        $this->expectExceptionMessageIsOrContains('Expected argument of type "App\Entity\User", "array" given.');
         $namer = new UserNamer();
         $mapping = new PropertyMapping('', '');
         $namer->name([], $mapping);

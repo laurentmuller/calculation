@@ -69,7 +69,7 @@ final class PdfLabelTest extends TestCase
             'pageSize' => 'A4',
         ];
         self::expectException(\ValueError::class);
-        self::expectExceptionMessage('"fake" is not a valid backing value for enum fpdf\Enums\PdfUnit');
+        self::expectExceptionMessageIsOrContains('"fake" is not a valid backing value for enum fpdf\Enums\PdfUnit');
         PdfLabel::fromArray($source);
     }
 

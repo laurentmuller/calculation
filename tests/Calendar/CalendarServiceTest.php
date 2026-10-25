@@ -38,7 +38,7 @@ final class CalendarServiceTest extends TestCase
     public function testNotExistClass(): void
     {
         self::expectException(CalendarException::class);
-        self::expectExceptionMessage('Model class "FakeClass" not found.');
+        self::expectExceptionMessageIsOrContains('Model class "FakeClass" not found.');
         $service = new CalendarService();
         $service->setCalendarModel('FakeClass'); // @phpstan-ignore argument.type
     }

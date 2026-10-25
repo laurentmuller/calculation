@@ -40,7 +40,7 @@ final class ImageSizeTraitTest extends TestCase
         $filename = __DIR__ . '/__fake__.png';
         $expected = 'The file "' . $filename . '" does not exist.';
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessage($expected);
+        self::expectExceptionMessageIsOrContains($expected);
         $this->getImageSize($filename);
     }
 
@@ -49,7 +49,7 @@ final class ImageSizeTraitTest extends TestCase
         $filename = __FILE__;
         $expected = 'Unable to get image size for "' . $filename . '".';
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessage($expected);
+        self::expectExceptionMessageIsOrContains($expected);
         $this->getImageSize($filename);
     }
 }

@@ -64,7 +64,7 @@ final class PdfLabelServiceTest extends TestCase
     public function testGetInvalid(): void
     {
         self::expectException(PdfException::class);
-        self::expectExceptionMessage('Unable to find the label "fake".');
+        self::expectExceptionMessageIsOrContains('Unable to find the label "fake".');
         $service = $this->createLabelService();
         $service->get('fake');
     }

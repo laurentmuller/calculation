@@ -56,7 +56,7 @@ final class MailerServiceTest extends TestCase
         $service = $this->createService(false);
 
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessage('The comment must have a sender.');
+        self::expectExceptionMessageIsOrContains('The comment must have a sender.');
         $service->sendComment($comment);
     }
 
@@ -73,7 +73,7 @@ final class MailerServiceTest extends TestCase
         $service = $this->createService(false);
 
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessage('The comment must have a message.');
+        self::expectExceptionMessageIsOrContains('The comment must have a message.');
         $service->sendComment($comment);
     }
 
@@ -90,7 +90,7 @@ final class MailerServiceTest extends TestCase
         $service = $this->createService(false);
 
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessage('The comment must have a subject.');
+        self::expectExceptionMessageIsOrContains('The comment must have a subject.');
         $service->sendComment($comment);
     }
 
@@ -107,7 +107,7 @@ final class MailerServiceTest extends TestCase
         $service = $this->createService(false);
 
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessage('The comment must have a recipient.');
+        self::expectExceptionMessageIsOrContains('The comment must have a recipient.');
         $service->sendComment($comment);
     }
 

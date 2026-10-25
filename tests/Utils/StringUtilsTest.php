@@ -248,7 +248,7 @@ final class StringUtilsTest extends TestCase
     {
         $objectOrClass = 'FakeClass';
         self::expectException(\RuntimeException::class);
-        self::expectExceptionMessage('Unable to get short name for "FakeClass".');
+        self::expectExceptionMessageIsOrContains('Unable to get short name for "FakeClass".');
         StringUtils::getShortName($objectOrClass); // @phpstan-ignore argument.type
     }
 

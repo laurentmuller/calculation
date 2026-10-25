@@ -130,7 +130,7 @@ final class UserRepositoryTest extends AbstractRepositoryTestCase
     public function testRefreshUserException(): void
     {
         self::expectException(UnsupportedUserException::class);
-        self::expectExceptionMessage('Instances of "' . InMemoryUser::class . '" are not supported.');
+        self::expectExceptionMessageIsOrContains('Instances of "' . InMemoryUser::class . '" are not supported.');
         $user = new InMemoryUser('username', 'password', ['ROLE_USER']);
         $this->repository->refreshUser($user);
     }

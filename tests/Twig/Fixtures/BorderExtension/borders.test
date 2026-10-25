@@ -1,0 +1,9 @@
+--TEST--
+"css_border" filter test
+--TEMPLATE--
+ {{ css_border() }}
+--DATA--
+return []
+--EXPECT--
+.state-border-1 { border-left-color: #000000 !important; }
+.state-background-1 { background-color: #000000; }

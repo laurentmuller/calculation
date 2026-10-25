@@ -96,11 +96,7 @@
 <div class="about">
     {{ headerLink('php.net', info.version, 'php') }}
     <div class="row g-2">
-        {%- set attrs = {
-            id: 'php-list-spy',
-            class: 'col-md-4 col-lg-2 col-12 php-spy-content scrollbar-thin border-end d-print-none',
-        } -%}
-        <div {{ html_attr(attrs) }}>
+        <div class="col-md-4 col-lg-2 col-12 php-list-spy border-end d-print-none">
             <table class="table table-sm table-hover">
                 <tbody>
                 {% for module in info.modules %}
@@ -110,9 +106,8 @@
             </table>
         </div>
         {%- set attrs = {
-            id: 'php-content-spy',
-            class: 'col-md-8 col-lg-10 col-12 php-spy-content scrollbar-thin',
-            'data-bs-target': '#php-list-spy',
+            class: 'col-md-8 col-lg-10 col-12 php-content-spy php-spy-content',
+            'data-bs-target': '.php-list-spy',
             'data-bs-spy': 'scroll',
             tabindex: 0,
         } -%}

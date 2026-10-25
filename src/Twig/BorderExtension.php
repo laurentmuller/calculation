@@ -13,16 +13,17 @@ declare(strict_types=1);
 
 namespace App\Twig;
 
+use App\Constants\CacheAttributes;
 use App\Entity\CalculationState;
 use App\Interfaces\DisableListenerInterface;
 use App\Repository\CalculationStateRepository;
 use App\Traits\DisableListenerTrait;
+use App\Utils\StringUtils;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Events;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Contracts\Cache\CacheInterface;
 use Twig\Attribute\AsTwigFunction;
-use Twig\Environment;
-use Twig\Error\Error;
 
 /**
  * Twig extension to output calculation state colors as CSS classes.
@@ -34,33 +35,44 @@ final class BorderExtension implements DisableListenerInterface
 {
     use DisableListenerTrait;
 
-    private const string KEY_TEMPLATE = 'border_colors_template';
+    private const string KEY = 'border_colors_template';
+
+    private const string TEMPLATE = <<<'TWIG'
+        .state-border-#id { border-left-color: #color !important; }
+        .state-background-#id { background-color: #color; }
+        TWIG;
 
     public function __construct(
         private readonly CalculationStateRepository $repository,
+        #[Target(CacheAttributes::CACHE_ASSET)]
         private readonly CacheInterface $cache,
     ) {
     }
 
     public function deleteCache(): void
     {
-        $this->cache->delete(self::KEY_TEMPLATE);
+        $this->cache->delete(self::KEY);
     }
 
-    #[AsTwigFunction(name: 'css_border', needsEnvironment: true)]
-    public function render(Environment $twig): string
+    #[AsTwigFunction(name: 'css_border', isSafe: ['html'])]
+    public function render(): string
     {
-        return $this->cache->get(self::KEY_TEMPLATE, fn (): string => $this->loadTemplate($twig));
+        return $this->cache->get(self::KEY, fn (): string => $this->loadTemplate());
     }
 
-    /**
-     * @throws Error
-     */
-    private function loadTemplate(Environment $twig): string
+    private function loadTemplate(): string
     {
-        return $twig->render(
-            'macros/_border_colors.css.twig',
-            ['states' => $this->repository->findAll()]
+        return \implode(
+            StringUtils::NEW_LINE,
+            \array_map($this->replace(...), $this->repository->findAll())
         );
+    }
+
+    private function replace(CalculationState $state): string
+    {
+        return \strtr(self::TEMPLATE, [
+            '#id' => $state->getId(),
+            '#color' => $state->getColor(),
+        ]);
     }
 }

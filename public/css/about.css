@@ -33,11 +33,6 @@
         color: inherit;
         text-decoration: none;
     }
-
-    .php-spy-content {
-        height: auto;
-        overflow-y: revert !important;
-    }
 }
 
 .about td.v.disabled {
@@ -66,31 +61,47 @@ svg.about-icon {
     fill: currentcolor;
 }
 
-#php-list-spy td:has(a.active) {
+/* PHP list and content */
+.php-list-spy,
+.php-content-spy {
+    height: calc(100vh - var(--spy-content-height));
+    overflow-y: auto;
+}
+
+body:not(.statusbar-show) .php-list-spy,
+body:not(.statusbar-show) .php-content-spy {
+    height: calc(100vh - var(--spy-content-height) + var(--statusbar-height));
+}
+
+body:not(.sidebar-show) .php-list-spy,
+body:not(.sidebar-show) .php-content-spy {
+    height: calc(100vh - var(--spy-content-height) - var(--horizontal-navigation-height));
+}
+
+body:not(.statusbar-show, .sidebar-show) .php-list-spy,
+body:not(.statusbar-show, .sidebar-show) .php-content-spy {
+    height: calc(100vh - var(--spy-content-height) + var(--statusbar-height) - var(--horizontal-navigation-height));
+}
+
+.php-list-spy {
+    scrollbar-width: none;
+}
+
+.php-list-spy td:has(a.active) {
     background-color: var(--bs-secondary-bg);
 }
 
 @media (width <= 768px) {
-    #php-list-spy {
-        height: 10.5rem;
+    .php-list-spy {
+        height: 10rem !important;
         border-bottom: var(--bs-border-width) solid var(--bs-border-color);
         border-right: 0 !important;
     }
 }
 
-.php-spy-content {
-    height: calc(100vh - var(--spy-content-height));
-    overflow-y: auto;
-}
-
-body:not(.statusbar-show) .php-spy-content {
-    height: calc(100vh - var(--spy-content-height) + var(--statusbar-height));
-}
-
-body:not(.sidebar-show) .php-spy-content {
-    height: calc(100vh - var(--spy-content-height) - var(--horizontal-navigation-height));
-}
-
-body:not(.statusbar-show, .sidebar-show) .php-spy-content {
-    height: calc(100vh - var(--spy-content-height) + var(--statusbar-height) - var(--horizontal-navigation-height));
+@media print {
+    .php-content-spy {
+        height: auto;
+        overflow-y: revert !important;
+    }
 }

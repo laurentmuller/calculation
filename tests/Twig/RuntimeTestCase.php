@@ -60,6 +60,14 @@ abstract class RuntimeTestCase extends IntegrationTestCase implements RuntimeLoa
     }
 
     /**
+     * @return TService
+     */
+    protected function getService(): object
+    {
+        return $this->service;
+    }
+
+    /**
      * @return class-string<TService>
      */
     protected function getServiceClass(): string

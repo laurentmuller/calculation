@@ -1,8 +1,8 @@
 --TEST--
 "asset_image" function test
 --TEMPLATE--
-{{ asset_image('images/avatar.png') }}
+{{ asset_image('images/avatar.png', {'decoding': false}) }}
 --DATA--
 return []
 --EXPECT--
-<image src="url" height="170" width="192" loading="lazy" decoding="async">
+<image src="url" height="170" width="192" loading="lazy" decoding="false">

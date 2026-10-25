@@ -30,7 +30,7 @@ class HtmlDataExtension
     public static function htmlDataAttributes(Environment $env, iterable|string|false|null ...$args): string
     {
         $attributes = [];
-        /** @var array<string, scalar|\BackedEnum> $args */
+        /** @var array<string, mixed> $args */
         $args = HtmlExtension::htmlAttrMerge(...$args);
         foreach ($args as $name => $value) {
             if (!\str_starts_with($name, 'data-')) {

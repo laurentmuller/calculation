@@ -220,7 +220,7 @@ final readonly class ExtendedAssetExtension
     /**
      * Reduce parameters.
      *
-     * @param array<string, scalar|\BackedEnum> $parameters
+     * @param array<string, mixed> $parameters
      */
     private function reduceParams(Environment $env, array $parameters, string $prefix, string $suffix = ''): string
     {

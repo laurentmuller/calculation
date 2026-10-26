@@ -16,7 +16,7 @@ namespace App\Model;
 use Symfony\Component\Clock\DatePoint;
 
 /**
- * Contains the result of updated states, cities and streets.
+ * Contains the result of updated states, cities, and streets.
  *
  * @phpstan-type SwissPostResultType = array{state: int, city: int, street: int}
  */

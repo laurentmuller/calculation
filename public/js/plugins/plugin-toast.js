@@ -32,7 +32,7 @@
             settings.type = this._checkType(type);
             settings.message = message;
             settings.title = title;
-            if (!settings.title && settings.displaySubtitle && settings.subtitle) {
+            if (!settings.title && settings.subtitle) {
                 settings.title = settings.subtitle;
                 settings.displaySubtitle = false;
                 settings.subtitle = null;

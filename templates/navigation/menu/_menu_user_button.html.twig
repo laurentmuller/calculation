@@ -11,6 +11,6 @@
     {%- else -%}
         <span class="badge rounded-circle text-bg-secondary user-image-empty">{{ app.user.initials }}</span>
     {%- endif -%}
-    <span{% if not vertical %} class="d-lg-none"{% endif %}>{{ app.user.userIdentifier }}</span>
+    <span{% if not vertical %} class="ms-2 d-lg-none"{% endif %}>{{ app.user.userIdentifier }}</span>
 </button>
 {{ include('navigation/menu/_menu_user.html.twig', {dropdown_class: vertical ? 'dropdown-menu-default' : 'dropdown-menu-end'}) }}

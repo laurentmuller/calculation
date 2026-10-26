@@ -16,7 +16,7 @@ namespace App\Form\User;
 use App\Form\FormHelper;
 
 /**
- * Type to request change password of a user.
+ * Type to request changing password of a user.
  */
 class RequestChangePasswordType extends AbstractUserCaptchaType
 {

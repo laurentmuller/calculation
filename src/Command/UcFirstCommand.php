@@ -87,13 +87,7 @@ class UcFirstCommand
             return null;
         }
 
-        foreach ($entities as $key => $entity) {
-            if ($entity['name'] === $class) {
-                return $key;
-            }
-        }
-
-        return null;
+        return \array_find_key($entities, static fn (array $entity): bool => $entity['name'] === $class);
     }
 
     /**

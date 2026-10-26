@@ -116,13 +116,11 @@ class Week extends AbstractCalendarItem
         $months = $this->getMonths();
         $number = $month->getNumber();
         $year = $month->getYear();
-        foreach ($months as $current) {
-            if ($year === $current->getYear() && $number === $current->getNumber()) {
-                return true;
-            }
-        }
 
-        return false;
+        return \array_any(
+            $months,
+            static fn (Month $current): bool => $year === $current->getYear() && $number === $current->getNumber()
+        );
     }
 
     /**

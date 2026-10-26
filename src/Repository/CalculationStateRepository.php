@@ -231,7 +231,7 @@ class CalculationStateRepository extends AbstractRepository
 
     private function getEditableCriteria(bool $editable): Criteria
     {
-        return Criteria::create(true)
+        return Criteria::create()
             ->where(Criteria::expr()->eq('editable', $editable));
     }
 

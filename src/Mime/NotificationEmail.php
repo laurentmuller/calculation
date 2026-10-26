@@ -129,7 +129,7 @@ class NotificationEmail extends BaseNotificationEmail
         string $htmlTemplate = 'notification/notification.html.twig',
         string $textTemplate = 'notification/notification.txt.twig',
     ): static {
-        return (new static($translator))
+        return new static($translator)
             ->htmlTemplate($htmlTemplate)
             ->textTemplate($textTemplate);
     }

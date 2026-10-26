@@ -34,7 +34,6 @@ class RecaptchaResponseService
         $html .= $this->formatLine('Challenge TS', $this->formatChallenge($response->getChallengeTs()));
         $html .= $this->formatLine('APK Package', $response->getApkPackageName());
 
-        /** @var string[] $errorCodes */
         $errorCodes = $response->getErrorCodes();
         if ([] !== $errorCodes) {
             $html .= $this->formatLine('Error Codes', \implode('<br>', $errorCodes));

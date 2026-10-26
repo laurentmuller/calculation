@@ -20,52 +20,42 @@ use App\Doctrine\WebmasterFilter;
 return App::config([
     'doctrine' => [
         'dbal' => [
-            'connections' => [
-                'default' => [
-                    'url' => '%env(resolve:DATABASE_URL)%',
-                    'profiling_collect_backtrace' => '%kernel.debug%',
-                ],
+            'url' => '%env(resolve:DATABASE_URL)%',
+            'profiling_collect_backtrace' => '%kernel.debug%',
+            'types' => [
+                FixedFloatType::NAME => FixedFloatType::class,
             ],
-            'types' => [FixedFloatType::NAME => FixedFloatType::class],
         ],
         'orm' => [
-            'entity_managers' => [
-                'default' => [
-                    'naming_strategy' => 'doctrine.orm.naming_strategy.underscore_number_aware',
-                    'mappings' => [
-                        'App' => [
-                            'type' => 'attribute',
-                            'dir' => '%kernel.project_dir%/src/Entity',
-                            'prefix' => 'App\Entity',
-                            'alias' => 'App',
-                        ],
-                    ],
-                    'filters' => [
-                        CalculationBelowFilter::NAME => CalculationBelowFilter::class,
-                        WebmasterFilter::NAME => WebmasterFilter::class,
-                    ],
+            'naming_strategy' => 'doctrine.orm.naming_strategy.underscore_number_aware',
+            'mappings' => [
+                'App' => [
+                    'type' => 'attribute',
+                    'dir' => '%kernel.project_dir%/src/Entity',
+                    'prefix' => 'App\Entity',
+                    'alias' => 'App',
                 ],
+            ],
+            'filters' => [
+                CalculationBelowFilter::NAME => CalculationBelowFilter::class,
+                WebmasterFilter::NAME => WebmasterFilter::class,
             ],
         ],
     ],
     'when@prod' => [
         'doctrine' => [
             'orm' => [
-                'entity_managers' => [
-                    'default' => [
-                        'query_cache_driver' => [
-                            'type' => 'pool',
-                            'pool' => 'doctrine.query',
-                        ],
-                        'metadata_cache_driver' => [
-                            'type' => 'pool',
-                            'pool' => 'doctrine.metadata',
-                        ],
-                        'result_cache_driver' => [
-                            'type' => 'pool',
-                            'pool' => 'doctrine.result',
-                        ],
-                    ],
+                'query_cache_driver' => [
+                    'type' => 'pool',
+                    'pool' => 'doctrine.query',
+                ],
+                'metadata_cache_driver' => [
+                    'type' => 'pool',
+                    'pool' => 'doctrine.metadata',
+                ],
+                'result_cache_driver' => [
+                    'type' => 'pool',
+                    'pool' => 'doctrine.result',
                 ],
             ],
         ],
@@ -73,11 +63,7 @@ return App::config([
     'when@test' => [
         'doctrine' => [
             'dbal' => [
-                'connections' => [
-                    'default' => [
-                        'logging' => false,
-                    ],
-                ],
+                'logging' => false,
             ],
         ],
     ],

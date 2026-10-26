@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "213df3a29c5ee9a7d88714321ca3e3ab",
+    "content-hash": "6b332940f47095c0c21a9966c2ab715f",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -3131,16 +3131,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "2.3.6",
+            "version": "2.3.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "1427af4647235b4a73b13940b1f1258d3584f36e"
+                "reference": "3fcdcf021e840f1ec9383152e3603fc790c7c15b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/1427af4647235b4a73b13940b1f1258d3584f36e",
-                "reference": "1427af4647235b4a73b13940b1f1258d3584f36e",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/3fcdcf021e840f1ec9383152e3603fc790c7c15b",
+                "reference": "3fcdcf021e840f1ec9383152e3603fc790c7c15b",
                 "shasum": ""
             },
             "require": {
@@ -3172,9 +3172,9 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/2.3.6"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/2.3.7"
             },
-            "time": "2026-09-27T20:07:45+00:00"
+            "time": "2026-10-26T17:24:37+00:00"
         },
         {
             "name": "psr/cache",
@@ -3583,62 +3583,6 @@
                 "source": "https://github.com/RobQuistNL/SimpleHtmlToText/tree/v1.1.1"
             },
             "time": "2016-11-24T15:02:44+00:00"
-        },
-        {
-            "name": "stechstudio/phpinfo",
-            "version": "1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/stechstudio/phpinfo.git",
-                "reference": "87a913db268b566aec2670a40bf158433688b190"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/stechstudio/phpinfo/zipball/87a913db268b566aec2670a40bf158433688b190",
-                "reference": "87a913db268b566aec2670a40bf158433688b190",
-                "shasum": ""
-            },
-            "require": {
-                "ext-dom": "*",
-                "php": "^8.3"
-            },
-            "require-dev": {
-                "laravel/pint": "^1.29",
-                "pestphp/pest": "^4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "helpers.php"
-                ],
-                "psr-4": {
-                    "STS\\Phpinfo\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Joseph Szobody",
-                    "email": "joseph@stechstudio.com"
-                }
-            ],
-            "description": "A beautiful, searchable replacement for phpinfo() with a clean programmatic API",
-            "homepage": "https://prettyphpinfo.com",
-            "keywords": [
-                "configuration",
-                "php-info",
-                "phpinfo",
-                "pretty-phpinfo",
-                "server-info"
-            ],
-            "support": {
-                "issues": "https://github.com/stechstudio/phpinfo/issues",
-                "source": "https://github.com/stechstudio/phpinfo"
-            },
-            "time": "2026-04-06T18:53:01+00:00"
         },
         {
             "name": "symfony/asset",

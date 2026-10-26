@@ -89,7 +89,7 @@ class RightsType extends AbstractType implements DataMapperInterface
         $this->handleForms($forms, static function (EntityName $entity, array $array) use (&$viewData): void {
             $form = $array[$entity->getFormField()];
             $value = $form->getData()->getValue();
-            $viewData |= $value;
+            $viewData |= $entity->getShiftedValue($value);
         });
     }
 

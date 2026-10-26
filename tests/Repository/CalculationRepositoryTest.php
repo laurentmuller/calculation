@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Repository;
 
+use App\Doctrine\CalculationBelowFilter;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\User;
@@ -22,6 +23,7 @@ use App\Tests\Entity\IdTrait;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
 use App\Utils\DateUtils;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\DatePoint;
 
 /**
@@ -79,6 +81,15 @@ final class CalculationRepositoryTest extends AbstractRepositoryTestCase
         $actual = $this->repository->createDefaultQueryBuilder();
         $join = $actual->getDQLPart('join');
         self::assertCount(1, $join);
+    }
+
+    public function testEnableMarginBelowFilter(): void
+    {
+        $this->repository->enableMarginBelowFilter(0.15);
+        $manager = $this->getService(EntityManagerInterface::class);
+        $filters = $manager->getFilters();
+        self::assertTrue($filters->has(CalculationBelowFilter::NAME));
+        self::assertTrue($filters->isEnabled(CalculationBelowFilter::NAME));
     }
 
     public function testFindOneByIdFound(): void

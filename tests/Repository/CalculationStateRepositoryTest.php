@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace App\Tests\Repository;
 
+use App\Doctrine\CalculationBelowFilter;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Repository\CalculationStateRepository;
 use App\Tests\EntityTrait\CalculationStateTrait;
 use App\Tests\EntityTrait\CalculationTrait;
-use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @extends AbstractRepositoryTestCase<CalculationState, CalculationStateRepository>
@@ -33,6 +34,15 @@ final class CalculationStateRepositoryTest extends AbstractRepositoryTestCase
     {
         $this->deleteCalculation();
         parent::tearDown();
+    }
+
+    public function testEnableMarginBelowFilter(): void
+    {
+        $this->repository->enableMarginBelowFilter(0.15);
+        $manager = $this->getService(EntityManagerInterface::class);
+        $filters = $manager->getFilters();
+        self::assertTrue($filters->has(CalculationBelowFilter::NAME));
+        self::assertTrue($filters->isEnabled(CalculationBelowFilter::NAME));
     }
 
     public function testGetCalculations(): void
@@ -115,14 +125,16 @@ final class CalculationStateRepositoryTest extends AbstractRepositoryTestCase
 
     public function testGetQueryBuilderByEditable(): void
     {
-        $actual = $this->repository->getQueryBuilderByEditable();
-        self::assertInstanceOf(QueryBuilder::class, $actual);
+        $actual = $this->repository->getQueryBuilderByEditable()
+            ->getDQLPart('where');
+        self::assertNull($actual);
     }
 
     public function testGetTableQueryBuilder(): void
     {
-        $actual = $this->repository->getTableQueryBuilder();
-        self::assertInstanceOf(QueryBuilder::class, $actual);
+        $actual = $this->repository->getTableQueryBuilder()
+            ->getDQLPart('where');
+        self::assertNull($actual);
     }
 
     #[\Override]

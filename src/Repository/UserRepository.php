@@ -58,7 +58,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
         string $selector,
         string $hashedToken
     ): User {
-        /** @var User $user */
+        /** @phpstan-var User $user */
         return $user->setResetPasswordRequest(DateUtils::toDatePoint($expiresAt), $selector, $hashedToken);
     }
 
@@ -109,7 +109,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     #[\Override]
     public function getMostRecentNonExpiredRequestDate(object $user): ?DatePoint
     {
-        /** @var User $user */
+        /** @phpstan-var User $user */
         return $user->isExpired() ? null : $user->getRequestedAt();
     }
 
@@ -270,8 +270,9 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     #[\Override]
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
-        /* @var User $user */
-        /** @phpstan-var User $user */
+        if (!$user instanceof User) {
+            throw new UnsupportedUserException(\sprintf('Instances of "%s" are not supported.', StringUtils::getDebugType($user)));
+        }
         $user->setPassword($newHashedPassword);
         $this->persist($user);
     }

@@ -13,12 +13,15 @@ declare(strict_types=1);
 
 namespace App\Tests\Repository;
 
+use App\Doctrine\WebmasterFilter;
 use App\Entity\User;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\InMemoryUser;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 /**
  * @extends AbstractRepositoryTestCase<User, UserRepository>
@@ -38,6 +41,15 @@ final class UserRepositoryTest extends AbstractRepositoryTestCase
         self::assertSame($date, $actual->getExpiresAt());
         self::assertSame('selector', $actual->getSelector());
         self::assertSame('hashedToken', $actual->getHashedToken());
+    }
+
+    public function testEnableWebmasterFilter(): void
+    {
+        $this->repository->enableWebmasterFilter();
+        $manager = $this->getService(EntityManagerInterface::class);
+        $filters = $manager->getFilters();
+        self::assertTrue($filters->has(WebmasterFilter::NAME));
+        self::assertTrue($filters->isEnabled(WebmasterFilter::NAME));
     }
 
     public function testFindByEmail(): void
@@ -161,6 +173,20 @@ final class UserRepositoryTest extends AbstractRepositoryTestCase
         $this->repository->upgradePassword($user, (string) $oldPassword);
         $newPassword = $user->getPassword();
         self::assertSame($oldPassword, $newPassword);
+    }
+
+    public function testUpgradePasswordInvalid(): void
+    {
+        $user = new class implements PasswordAuthenticatedUserInterface {
+            #[\Override]
+            public function getPassword(): ?string
+            {
+                return null;
+            }
+        };
+        self::expectException(UnsupportedUserException::class);
+        self::expectExceptionMessageIsOrContains('Instances of "' . PasswordAuthenticatedUserInterface::class . '@anonymous" are not supported.');
+        $this->repository->upgradePassword($user, 'fake');
     }
 
     #[\Override]

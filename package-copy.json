@@ -90,6 +90,10 @@
         {
             "from": "node_modules/select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.css",
             "to": "public/build/select2/css/"
+        },
+        {
+            "from": "node_modules/country-flag-icons/3x2/*",
+            "to": "public/build/country-flags/"
         }
     ],
     "copyFilesSettings": {

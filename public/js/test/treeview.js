@@ -15,7 +15,7 @@ function formatCountry(country) {
     }
 
     const path = $('#country').data('path');
-    const src = `${path}${id.toLowerCase()}.png`;
+    const src = `${path}${id.toUpperCase()}.svg`;
     const $img = $('<img/>', {
         class: 'country-flag me-1',
         alt: text,

@@ -41,7 +41,7 @@
         "ext-zlib": "*",
         "beberlei/doctrineextensions": "^v1.0",
         "createnl/zxcvbn-bundle": "^3.0",
-        "doctrine/doctrine-bundle": "^2.0",
+        "doctrine/doctrine-bundle": "^3.0",
         "doctrine/orm": "^3.0",
         "elao/enum": "^3.0",
         "endroid/qr-code": "^6.0",

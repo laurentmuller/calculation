@@ -45,10 +45,13 @@ final class UserRepositoryTest extends AbstractRepositoryTestCase
 
     public function testEnableWebmasterFilter(): void
     {
-        $this->repository->enableWebmasterFilter();
         $manager = $this->getService(EntityManagerInterface::class);
         $filters = $manager->getFilters();
+
         self::assertTrue($filters->has(WebmasterFilter::NAME));
+        self::assertFalse($filters->isEnabled(WebmasterFilter::NAME));
+
+        $this->repository->enableWebmasterFilter();
         self::assertTrue($filters->isEnabled(WebmasterFilter::NAME));
     }
 

@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Parameter;
 
 use App\Attribute\Parameter;
-use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Service\RoleBuilderService;
 
@@ -40,18 +39,23 @@ class RightsParameter implements ParameterInterface
 
     public function getAdminRole(): Role
     {
-        $role = $this->getService()->getAdminRole();
-        if (null !== $this->adminRights) {
-            $role->setRights($this->adminRights);
-        }
-
-        return $role;
+        return $this->updateRole($this->getDefaultAdminRole(), $this->adminRights);
     }
 
     #[\Override]
     public static function getCacheKey(): string
     {
         return 'parameter_rights';
+    }
+
+    public function getDefaultAdminRole(): Role
+    {
+        return $this->getService()->getAdminRole();
+    }
+
+    public function getDefaultUserRole(): Role
+    {
+        return $this->getService()->getUserRole();
     }
 
     public function getUserRights(): ?int
@@ -61,87 +65,66 @@ class RightsParameter implements ParameterInterface
 
     public function getUserRole(): Role
     {
-        $role = $this->getService()->getUserRole();
-        if (null !== $this->userRights) {
-            $role->setRights($this->userRights);
-        }
+        return $this->updateRole($this->getDefaultUserRole(), $this->userRights);
+    }
 
-        return $role;
+    public function resetAdminRights(): self
+    {
+        return $this->setAdminRights(null);
+    }
+
+    public function resetUserRights(): self
+    {
+        return $this->setUserRights(null);
     }
 
     /**
-     * @param non-negative-int|null $adminRights
+     * @param Role|non-negative-int|null $adminRights
      */
-    public function setAdminRights(?int $adminRights): self
+    public function setAdminRights(Role|int|null $adminRights): self
     {
-        $this->adminRights = $this->cleanRights($adminRights, $this->getDefaultAdminRights());
+        $this->adminRights = $this->cleanRights($adminRights, $this->getDefaultAdminRole());
 
         return $this;
     }
 
     /**
-     * Sets rights from the given role.
-     *
-     * @throws \InvalidArgumentException if the role is invalid
+     * @param Role|non-negative-int|null $userRights
      */
-    public function setRightsFromRole(Role $role): self
+    public function setUserRights(Role|int|null $userRights): self
     {
-        if ($role->hasRole(RoleInterface::ROLE_ADMIN)) {
-            return $this->setAdminRights($role->getRights());
-        }
-        if ($role->hasRole(RoleInterface::ROLE_USER)) {
-            return $this->setUserRights($role->getRights());
-        }
-
-        throw new \InvalidArgumentException(\sprintf('Invalid role: "%s".', $role));
-    }
-
-    /**
-     * @param non-negative-int|null $userRights
-     */
-    public function setUserRights(?int $userRights): self
-    {
-        $this->userRights = $this->cleanRights($userRights, $this->getDefaultUserRights());
+        $this->userRights = $this->cleanRights($userRights, $this->getDefaultUserRole());
 
         return $this;
     }
 
     /**
-     * @param non-negative-int|null $rights
+     * @param Role|non-negative-int|null $rights
      *
      * @return non-negative-int|null
      */
-    private function cleanRights(?int $rights, int $default): ?int
+    private function cleanRights(Role|int|null $rights, Role $default): ?int
     {
-        if (null === $rights || $rights === $default) {
+        if ($rights instanceof Role) {
+            $rights = $rights->getRights();
+        }
+        if (null === $rights || 0 === $rights || $rights === $default->getRights()) {
             return null;
         }
 
         return $rights;
     }
 
-    /**
-     * @phpstan-return non-negative-int
-     */
-    private function getDefaultAdminRights(): int
-    {
-        return $this->getService()
-            ->getAdminRole()
-            ->getRights();
-    }
-
-    /**
-     * @phpstan-return non-negative-int
-     */
-    private function getDefaultUserRights(): int
-    {
-        return $this->getService()
-            ->getUserRole()
-            ->getRights();
-    }
-
     private function getService(): RoleBuilderService
     {
         return $this->service ??= new RoleBuilderService();
+    }
+
+    /**
+     * @param non-negative-int|null $rights
+     */
+    private function updateRole(Role $role, ?int $rights): Role
+    {
+        return null !== $rights ? $role->setRights($rights) : $role;
     }
 }

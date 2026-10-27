@@ -38,10 +38,13 @@ final class CalculationStateRepositoryTest extends AbstractRepositoryTestCase
 
     public function testEnableMarginBelowFilter(): void
     {
-        $this->repository->enableMarginBelowFilter(0.15);
         $manager = $this->getService(EntityManagerInterface::class);
         $filters = $manager->getFilters();
+
         self::assertTrue($filters->has(CalculationBelowFilter::NAME));
+        self::assertFalse($filters->isEnabled(CalculationBelowFilter::NAME));
+
+        $this->repository->enableMarginBelowFilter(0.15);
         self::assertTrue($filters->isEnabled(CalculationBelowFilter::NAME));
     }
 

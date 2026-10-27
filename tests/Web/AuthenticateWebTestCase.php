@@ -17,7 +17,6 @@ use App\Entity\User;
 use App\Interfaces\RoleInterface;
 use App\Parameter\ApplicationParameters;
 use App\Repository\UserRepository;
-use App\Service\RoleBuilderService;
 use App\Tests\ContainerServiceTrait;
 use App\Tests\DatabaseTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -49,14 +48,12 @@ abstract class AuthenticateWebTestCase extends WebTestCase
     protected function setUp(): void
     {
         $this->client = static::createClient();
-        // get rights
-        $builder = new RoleBuilderService();
-        $userRight = $builder->getUserRole()->getRights();
-        $adminRight = $builder->getAdminRole()->getRights();
+
+        // update parameters
         $parameters = $this->getService(ApplicationParameters::class);
         $parameters->getRights()
-            ->setAdminRights($adminRight)
-            ->setUserRights($userRight);
+            ->resetAdminRights()
+            ->resetUserRights();
         $parameters->getSecurity()
             ->setCaptcha(false);
         $parameters->save();

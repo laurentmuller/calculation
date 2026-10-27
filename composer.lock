@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6b332940f47095c0c21a9966c2ab715f",
+    "content-hash": "213df3a29c5ee9a7d88714321ca3e3ab",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -879,23 +879,23 @@
         },
         {
             "name": "doctrine/inflector",
-            "version": "2.1.0",
+            "version": "2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/inflector.git",
-                "reference": "6d6c96277ea252fc1304627204c3d5e6e15faa3b"
+                "reference": "46351b6812b7b6d52b82c3efa5dfb786a198ec88"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/inflector/zipball/6d6c96277ea252fc1304627204c3d5e6e15faa3b",
-                "reference": "6d6c96277ea252fc1304627204c3d5e6e15faa3b",
+                "url": "https://api.github.com/repos/doctrine/inflector/zipball/46351b6812b7b6d52b82c3efa5dfb786a198ec88",
+                "reference": "46351b6812b7b6d52b82c3efa5dfb786a198ec88",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2 || ^8.0"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^12.0 || ^13.0",
+                "doctrine/coding-standard": "^12.0 || ^14.0",
                 "phpstan/phpstan": "^1.12 || ^2.0",
                 "phpstan/phpstan-phpunit": "^1.4 || ^2.0",
                 "phpstan/phpstan-strict-rules": "^1.6 || ^2.0",
@@ -949,7 +949,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/inflector/issues",
-                "source": "https://github.com/doctrine/inflector/tree/2.1.0"
+                "source": "https://github.com/doctrine/inflector/tree/2.1.1"
             },
             "funding": [
                 {
@@ -965,7 +965,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-08-10T19:31:58+00:00"
+            "time": "2026-10-26T08:14:14+00:00"
         },
         {
             "name": "doctrine/instantiator",
@@ -3131,16 +3131,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "2.3.7",
+            "version": "2.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "3fcdcf021e840f1ec9383152e3603fc790c7c15b"
+                "reference": "ec4293f7caf9936acce286b589ccb84faf1aa88d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/3fcdcf021e840f1ec9383152e3603fc790c7c15b",
-                "reference": "3fcdcf021e840f1ec9383152e3603fc790c7c15b",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/ec4293f7caf9936acce286b589ccb84faf1aa88d",
+                "reference": "ec4293f7caf9936acce286b589ccb84faf1aa88d",
                 "shasum": ""
             },
             "require": {
@@ -3172,9 +3172,9 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/2.3.7"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/2.3.8"
             },
-            "time": "2026-10-26T17:24:37+00:00"
+            "time": "2026-10-26T20:24:50+00:00"
         },
         {
             "name": "psr/cache",
@@ -3583,6 +3583,62 @@
                 "source": "https://github.com/RobQuistNL/SimpleHtmlToText/tree/v1.1.1"
             },
             "time": "2016-11-24T15:02:44+00:00"
+        },
+        {
+            "name": "stechstudio/phpinfo",
+            "version": "1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stechstudio/phpinfo.git",
+                "reference": "87a913db268b566aec2670a40bf158433688b190"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stechstudio/phpinfo/zipball/87a913db268b566aec2670a40bf158433688b190",
+                "reference": "87a913db268b566aec2670a40bf158433688b190",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "php": "^8.3"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.29",
+                "pestphp/pest": "^4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "helpers.php"
+                ],
+                "psr-4": {
+                    "STS\\Phpinfo\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Joseph Szobody",
+                    "email": "joseph@stechstudio.com"
+                }
+            ],
+            "description": "A beautiful, searchable replacement for phpinfo() with a clean programmatic API",
+            "homepage": "https://prettyphpinfo.com",
+            "keywords": [
+                "configuration",
+                "php-info",
+                "phpinfo",
+                "pretty-phpinfo",
+                "server-info"
+            ],
+            "support": {
+                "issues": "https://github.com/stechstudio/phpinfo/issues",
+                "source": "https://github.com/stechstudio/phpinfo"
+            },
+            "time": "2026-04-06T18:53:01+00:00"
         },
         {
             "name": "symfony/asset",
@@ -9943,16 +9999,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "13.4.3",
+            "version": "13.4.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "2180c47c4229e5da117ff248753370443c074f10"
+                "reference": "941457a4f147a60fe2074d40e1fce0d08ea8d930"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/2180c47c4229e5da117ff248753370443c074f10",
-                "reference": "2180c47c4229e5da117ff248753370443c074f10",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/941457a4f147a60fe2074d40e1fce0d08ea8d930",
+                "reference": "941457a4f147a60fe2074d40e1fce0d08ea8d930",
                 "shasum": ""
             },
             "require": {
@@ -9977,7 +10033,7 @@
                 "sebastian/environment": "^9.3.3",
                 "sebastian/exporter": "^8.2.1",
                 "sebastian/file-filter": "^1.0",
-                "sebastian/git-state": "^1.0",
+                "sebastian/git-state": "^1.1",
                 "sebastian/global-state": "^9.0.1",
                 "sebastian/object-enumerator": "^8.1.0",
                 "sebastian/recursion-context": "^8.0.1",
@@ -10023,7 +10079,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/13.4.3"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/13.4.5"
             },
             "funding": [
                 {
@@ -10031,7 +10087,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2026-10-16T05:56:47+00:00"
+            "time": "2026-10-27T04:16:22+00:00"
         },
         {
             "name": "sebastian/cli-parser",

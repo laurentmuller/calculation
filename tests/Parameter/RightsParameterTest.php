@@ -13,10 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Parameter;
 
-use App\Interfaces\RoleInterface;
-use App\Model\Role;
 use App\Parameter\RightsParameter;
-use App\Service\RoleBuilderService;
 
 /**
  * @extends ParameterTestCase<RightsParameter>
@@ -42,14 +39,11 @@ final class RightsParameterTest extends ParameterTestCase
         self::assertNull($this->parameter->getAdminRights());
         self::assertNull($this->parameter->getUserRights());
 
-        $service = new RoleBuilderService();
-        $default = $service->getAdminRole()
-            ->getRights();
+        $default = $this->parameter->getDefaultAdminRole();
         $this->parameter->setAdminRights($default);
         self::assertNull($this->parameter->getAdminRights());
 
-        $default = $service->getUserRole()
-            ->getRights();
+        $default = $this->parameter->getDefaultUserRole();
         $this->parameter->setUserRights($default);
         self::assertNull($this->parameter->getUserRights());
 
@@ -66,34 +60,6 @@ final class RightsParameterTest extends ParameterTestCase
     {
         $role = $this->parameter->getUserRole();
         self::assertSame('ROLE_USER', $role->getName());
-    }
-
-    public function testSetRightsFromRoleAdmin(): void
-    {
-        $rights = 1;
-        $role = new Role(RoleInterface::ROLE_ADMIN);
-        $role->setRights($rights);
-        $this->parameter->setRightsFromRole($role);
-        self::assertNull($this->parameter->getUserRights());
-        self::assertSame($rights, $this->parameter->getAdminRights());
-    }
-
-    public function testSetRightsFromRoleInvalid(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessageIsOrContains('Invalid role: "ROLE_WEBMASTER".');
-        $role = new Role(RoleInterface::ROLE_WEBMASTER);
-        $this->parameter->setRightsFromRole($role);
-    }
-
-    public function testSetRightsFromRoleUser(): void
-    {
-        $rights = 1;
-        $role = new Role(RoleInterface::ROLE_USER);
-        $role->setRights($rights);
-        $this->parameter->setRightsFromRole($role);
-        self::assertSame($rights, $this->parameter->getUserRights());
-        self::assertNull($this->parameter->getAdminRights());
     }
 
     public function testSetValue(): void

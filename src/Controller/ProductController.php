@@ -54,6 +54,15 @@ class ProductController extends AbstractEntityController
     }
 
     /**
+     * Add a product.
+     */
+    #[AddEntityRoute]
+    public function add(Request $request): Response
+    {
+        return $this->editEntity($request, $this->createProduct());
+    }
+
+    /**
      * Clone (copy) a product.
      */
     #[CloneEntityRoute]
@@ -79,13 +88,12 @@ class ProductController extends AbstractEntityController
     }
 
     /**
-     * Add or edit a product.
+     * Edit a product.
      */
-    #[AddEntityRoute]
     #[EditEntityRoute]
-    public function edit(Request $request, ?Product $item): Response
+    public function edit(Request $request, Product $item): Response
     {
-        return $this->editEntity($request, $item ?? $this->createProduct());
+        return $this->editEntity($request, $item);
     }
 
     /**

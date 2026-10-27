@@ -28,6 +28,7 @@ trait TranslatorAwareTrait
 
     private ?TranslatorInterface $translator = null;
 
+    #[\Override]
     #[SubscribedService]
     public function getTranslator(): TranslatorInterface
     {

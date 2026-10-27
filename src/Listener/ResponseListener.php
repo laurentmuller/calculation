@@ -56,8 +56,8 @@ class ResponseListener
     // the Nonce search parameter
     private const string NONCE_PARAMETER = '%nonce%';
 
-    // the Report search parameter
-    private const string REPORT_PARAMETER = '%report%';
+    // the report end points header key
+    private const string REPORTING_END_POINTS_HEADER = 'Reporting-Endpoints';
 
     // the headers to add for secure request.
     private const array SECURE_HEADERS = [
@@ -99,6 +99,7 @@ class ResponseListener
         if ($request->isSecure()) {
             $headers->add(self::SECURE_HEADERS);
         }
+        $headers->set(self::REPORTING_END_POINTS_HEADER, $this->getSecurityEndpoint());
 
         $csp = $this->buildCSP();
         if (null !== $csp) {
@@ -126,6 +127,18 @@ class ResponseListener
         return $this->security->getFirewallConfig($request)?->getName();
     }
 
+    private function getSecurityEndpoint(): string
+    {
+        return $this->cache->get('security_endpoint', function (): string {
+            $url = $this->generator->generate(
+                name: CspReportController::ROUTE_NAME,
+                referenceType: UrlGeneratorInterface::ABSOLUTE_URL
+            );
+
+            return \sprintf('security-endpoint="%1$s", default="%1$s"', $url);
+        });
+    }
+
     private function isDevFirewall(Request $request): bool
     {
         return $this->debug && SecurityAttributes::DEV_FIREWALL === $this->getFirewallName($request);
@@ -141,7 +154,6 @@ class ResponseListener
         try {
             /** @var array<string, string[]> $content */
             $content = FileUtils::decodeJson($this->file);
-            $content = $this->replaceReportUrl($content);
             $content = $this->reduceValues($content);
             $csp = \implode('', $content);
             $save = true;
@@ -168,23 +180,5 @@ class ResponseListener
     private function replaceNonce(string $csp): string
     {
         return \str_replace(self::NONCE_PARAMETER, $this->service->getCspNonce(), $csp);
-    }
-
-    /**
-     * @param array<string, string[]> $array
-     *
-     * @return array<string, string[]>
-     */
-    private function replaceReportUrl(array $array): array
-    {
-        $reportUrl = $this->generator->generate(
-            name: CspReportController::ROUTE_NAME,
-            referenceType: UrlGeneratorInterface::ABSOLUTE_URL
-        );
-
-        return \array_map(
-            static fn (array $subject): array => \str_replace(self::REPORT_PARAMETER, $reportUrl, $subject),
-            $array
-        );
     }
 }

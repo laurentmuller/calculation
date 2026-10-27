@@ -25,6 +25,7 @@ trait TranslatorTrait
     /**
      * Gets the translator.
      */
+    #[\Override]
     abstract public function getTranslator(): TranslatorInterface;
 
     /**

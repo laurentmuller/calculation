@@ -42,7 +42,6 @@ use App\Spreadsheet\CalculationsDocument;
 use App\Table\CalculationTable;
 use App\Table\DataQuery;
 use Psr\Log\LoggerInterface;
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
@@ -64,6 +63,15 @@ class CalculationController extends AbstractEntityController
         private readonly CalculationUpdateService $updateService,
     ) {
         parent::__construct($repository);
+    }
+
+    /**
+     * Add a calculation.
+     */
+    #[AddEntityRoute]
+    public function add(Request $request): Response
+    {
+        return $this->editEntity($request, $this->createCalculation());
     }
 
     /**
@@ -94,16 +102,12 @@ class CalculationController extends AbstractEntityController
     }
 
     /**
-     * Add or edit a calculation.
+     * Edit a calculation.
      */
-    #[AddEntityRoute]
     #[EditEntityRoute]
-    public function edit(
-        Request $request,
-        #[MapEntity(expr: 'repository.findOneById(id ?? 0)')]
-        ?Calculation $item
-    ): Response {
-        return $this->editEntity($request, $item ?? $this->createCalculation());
+    public function edit(Request $request, Calculation $item): Response
+    {
+        return $this->editEntity($request, $item);
     }
 
     /**

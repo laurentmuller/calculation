@@ -54,6 +54,15 @@ class CalculationStateController extends AbstractEntityController
     }
 
     /**
+     * Add a calculation state.
+     */
+    #[AddEntityRoute]
+    public function add(Request $request): Response
+    {
+        return $this->editEntity($request, new CalculationState());
+    }
+
+    /**
      * Clone (copy) a calculation state.
      */
     #[CloneEntityRoute]
@@ -87,13 +96,12 @@ class CalculationStateController extends AbstractEntityController
     }
 
     /**
-     * Add or edit a calculation state.
+     * Edit a calculation state.
      */
-    #[AddEntityRoute]
     #[EditEntityRoute]
-    public function edit(Request $request, ?CalculationState $item): Response
+    public function edit(Request $request, CalculationState $item): Response
     {
-        return $this->editEntity($request, $item ?? new CalculationState());
+        return $this->editEntity($request, $item);
     }
 
     /**

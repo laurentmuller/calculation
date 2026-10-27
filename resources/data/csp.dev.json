@@ -58,5 +58,8 @@
         "https://wise.com",
         "https://robohash.org",
         "https://openweathermap.org"
+    ],
+    "report-to": [
+        "security-endpoint"
     ]
 }

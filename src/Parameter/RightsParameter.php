@@ -22,13 +22,11 @@ use App\Service\RoleBuilderService;
  */
 class RightsParameter implements ParameterInterface
 {
-    /** @var non-negative-int|null */
     #[Parameter('admin_rights')]
     private ?int $adminRights = null;
 
     private ?RoleBuilderService $service = null;
 
-    /** @var non-negative-int|null */
     #[Parameter('user_rights')]
     private ?int $userRights = null;
 
@@ -78,9 +76,6 @@ class RightsParameter implements ParameterInterface
         return $this->setUserRights(null);
     }
 
-    /**
-     * @param Role|non-negative-int|null $adminRights
-     */
     public function setAdminRights(Role|int|null $adminRights): self
     {
         $this->adminRights = $this->cleanRights($adminRights, $this->getDefaultAdminRole());
@@ -88,9 +83,6 @@ class RightsParameter implements ParameterInterface
         return $this;
     }
 
-    /**
-     * @param Role|non-negative-int|null $userRights
-     */
     public function setUserRights(Role|int|null $userRights): self
     {
         $this->userRights = $this->cleanRights($userRights, $this->getDefaultUserRole());
@@ -98,21 +90,16 @@ class RightsParameter implements ParameterInterface
         return $this;
     }
 
-    /**
-     * @param Role|non-negative-int|null $rights
-     *
-     * @return non-negative-int|null
-     */
     private function cleanRights(Role|int|null $rights, Role $default): ?int
     {
         if ($rights instanceof Role) {
             $rights = $rights->getRights();
         }
-        if (null === $rights || 0 === $rights || $rights === $default->getRights()) {
+        if (null === $rights || $rights <= 0) {
             return null;
         }
 
-        return $rights;
+        return $rights === $default->getRights() ? null : $rights;
     }
 
     private function getService(): RoleBuilderService
@@ -120,9 +107,6 @@ class RightsParameter implements ParameterInterface
         return $this->service ??= new RoleBuilderService();
     }
 
-    /**
-     * @param non-negative-int|null $rights
-     */
     private function updateRole(Role $role, ?int $rights): Role
     {
         return null !== $rights ? $role->setRights($rights) : $role;

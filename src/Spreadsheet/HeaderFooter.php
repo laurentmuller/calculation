@@ -61,7 +61,7 @@ class HeaderFooter
     /**
      * Add the given text to the center section.
      *
-     * Do nothing if the text is null or empty('').
+     * Do nothing if the text is null or empty.
      *
      * @param ?string $text the text to add
      * @param bool    $bold true to use bold font
@@ -86,7 +86,7 @@ class HeaderFooter
     /**
      * Add the given text to the left section.
      *
-     * Do nothing if the text is null or empty('').
+     * Do nothing if the text is null or empty.
      *
      * @param ?string $text the text to add
      * @param bool    $bold true to use bold font
@@ -111,7 +111,7 @@ class HeaderFooter
     /**
      * Add the given text to the right section.
      *
-     * Do nothing if the text is null or empty('').
+     * Do nothing if the text is null or empty.
      *
      * @param ?string $text the text to add
      * @param bool    $bold true to use bold font

@@ -21,6 +21,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Bundle\SecurityBundle\Security\FirewallConfig;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Symfony\Component\Filesystem\Path;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -85,7 +86,8 @@ final class ResponseListenerTest extends TestCase
         self::assertResponse($response, true, true);
 
         $headers = $response->headers;
-        $actual = $headers->get('Content-Security-Policy');
+        self::assertTrue($headers->has('Reporting-Endpoints'));
+        $actual = $headers->get('Reporting-Endpoints');
         self::assertIsString($actual);
         self::assertStringContainsString(CspReportController::ROUTE_NAME, $actual);
     }
@@ -186,10 +188,8 @@ final class ResponseListenerTest extends TestCase
 
     private function getCspFile(bool $debug = true): string
     {
-        if ($debug) {
-            return __DIR__ . '/../../resources/data/csp.dev.json';
-        }
+        $file = $debug ? 'csp.dev.json' : 'csp.prod.json';
 
-        return __DIR__ . '/../../resources/data/csp.prod.json';
+        return Path::join(__DIR__, '../../resources/data', $file);
     }
 }

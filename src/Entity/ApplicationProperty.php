@@ -27,7 +27,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class ApplicationProperty extends AbstractProperty
 {
     /**
-     * Create a new instance for the given.
+     * Create a new instance for the given name.
      */
     public static function instance(string $name): self
     {

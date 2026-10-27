@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\GetRoute;
 use App\Attribute\IsUser;
 use App\Enums\Importance;
 use App\Mime\NotificationEmail;
@@ -24,6 +23,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Translation\TranslatableMessage;
 
@@ -36,7 +36,7 @@ class CspReportController extends AbstractController
     /** The route name. */
     public const string ROUTE_NAME = 'log_csp';
 
-    #[GetRoute(path: '/csp', name: self::ROUTE_NAME)]
+    #[Route(path: '/csp', name: self::ROUTE_NAME)]
     public function invoke(Request $request, LoggerInterface $logger, MailerInterface $mailer): Response
     {
         $content = StringUtils::trim($request->getContent());

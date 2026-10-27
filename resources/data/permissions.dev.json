@@ -1,0 +1,9 @@
+{
+    "camera": "",
+    "microphone": "",
+    "display-capture": "",
+    "payment": "self",
+    "fullscreen": "self",
+    "geolocation": "self",
+    "report-to": "security-endpoint"
+}

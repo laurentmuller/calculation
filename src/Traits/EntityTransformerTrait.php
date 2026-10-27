@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Traits;
 
 use App\Interfaces\EntityInterface;
-use Doctrine\ORM\Proxy\DefaultProxyClassNameResolver;
 use Symfony\Component\Form\Exception\InvalidArgumentException;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 
@@ -74,6 +73,6 @@ trait EntityTransformerTrait
 
     private function validate(mixed $entity): bool
     {
-        return \is_object($entity) && $this->getClassName() === DefaultProxyClassNameResolver::getClass($entity);
+        return \is_object($entity) && $this->getClassName() === $entity::class;
     }
 }

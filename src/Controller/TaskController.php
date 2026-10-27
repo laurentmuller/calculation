@@ -59,6 +59,15 @@ class TaskController extends AbstractEntityController
     }
 
     /**
+     * Add a task.
+     */
+    #[AddEntityRoute]
+    public function add(Request $request): Response
+    {
+        return $this->editEntity($request, $this->createTask());
+    }
+
+    /**
      * Edit a copy (cloned) task.
      */
     #[CloneEntityRoute]
@@ -111,13 +120,12 @@ class TaskController extends AbstractEntityController
     }
 
     /**
-     * Add or edit a task.
+     * Edit a task.
      */
-    #[AddEntityRoute]
     #[EditEntityRoute]
-    public function edit(Request $request, ?Task $item): Response
+    public function edit(Request $request, Task $item): Response
     {
-        return $this->editEntity($request, $item ?? $this->createTask());
+        return $this->editEntity($request, $item);
     }
 
     /**

@@ -226,7 +226,7 @@ abstract class AbstractHtmlChunk
     }
 
     /**
-     * Apply the given font (if any), call the callback and restore the previous font.
+     * Apply the given font (if any), call the callback, and restore the previous font.
      *
      * @template TResult
      *

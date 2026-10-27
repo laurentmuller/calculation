@@ -19,8 +19,6 @@ use App\Attribute\IsWebmaster;
 use App\Form\User\RoleRightsType;
 use App\Model\Role;
 use App\Model\TranslatableFlashMessage;
-use App\Parameter\ApplicationParameters;
-use App\Parameter\RightsParameter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -39,15 +37,13 @@ class AdminRightsController extends AbstractController
     #[GetPostRoute(path: '/rights/admin', name: 'rights_admin')]
     public function rightsAdmin(Request $request): Response
     {
-        $parameters = $this->getApplicationParameters();
-        $rights = $parameters->getRights();
+        $rights = $this->getApplicationParameters()
+            ->getRights();
 
         return $this->editRights(
-            $request,
-            $parameters,
-            $rights->getAdminRole(),
-            $rights->getDefaultAdminRole(),
-            static fn (Role $role): RightsParameter => $rights->setAdminRights($role)
+            request: $request,
+            role: $rights->getAdminRole(),
+            defaultRole: $rights->getDefaultAdminRole()
         );
     }
 
@@ -57,29 +53,24 @@ class AdminRightsController extends AbstractController
     #[GetPostRoute(path: '/rights/user', name: 'rights_user')]
     public function rightsUser(Request $request): Response
     {
-        $parameters = $this->getApplicationParameters();
-        $rights = $parameters->getRights();
+        $rights = $this->getApplicationParameters()
+            ->getRights();
 
         return $this->editRights(
-            $request,
-            $parameters,
-            $rights->getUserRole(),
-            $rights->getDefaultUserRole(),
-            static fn (Role $role): RightsParameter => $rights->setUserRights($role)
+            request: $request,
+            role: $rights->getUserRole(),
+            defaultRole: $rights->getDefaultUserRole()
         );
     }
 
     private function editRights(
         Request $request,
-        ApplicationParameters $parameters,
         Role $role,
         Role $defaultRole,
-        \Closure $save
     ): Response {
         $form = $this->createForm(RoleRightsType::class, $role);
         if ($this->handleRequestForm($request, $form)) {
-            $save($role);
-            if ($parameters->save()) {
+            if ($this->saveRights($role)) {
                 return $this->redirectToHomePage(
                     TranslatableFlashMessage::success(
                         message: 'admin.rights.success',
@@ -96,5 +87,17 @@ class AdminRightsController extends AbstractController
             'overwrite' => true,
             'permissions' => $defaultRole->getPermissions(),
         ]);
+    }
+
+    private function saveRights(Role $role): bool
+    {
+        $parameters = $this->getApplicationParameters();
+        if ($role->isAdmin()) {
+            $parameters->getRights()->setAdminRights($role);
+        } else {
+            $parameters->getRights()->setUserRights($role);
+        }
+
+        return $parameters->save();
     }
 }

@@ -82,6 +82,15 @@ class UserController extends AbstractEntityController
     }
 
     /**
+     * Add a user.
+     */
+    #[AddEntityRoute]
+    public function add(Request $request): Response
+    {
+        return $this->editEntity($request, new User());
+    }
+
+    /**
      * Delete a user.
      */
     #[DeleteEntityRoute]
@@ -102,13 +111,12 @@ class UserController extends AbstractEntityController
     }
 
     /**
-     * Add or edit a user.
+     * Edit a user.
      */
-    #[AddEntityRoute]
     #[EditEntityRoute]
-    public function edit(Request $request, ?User $item): Response
+    public function edit(Request $request, User $item): Response
     {
-        return $this->editEntity($request, $item ?? new User());
+        return $this->editEntity($request, $item);
     }
 
     /**

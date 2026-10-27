@@ -18,7 +18,7 @@ use App\Repository\CalculationRepository;
 use App\Utils\FormatUtils;
 
 /**
- * Spreadsheet document for the list of calculations with margin below.
+ * Spreadsheet document for the list of calculations with the margin below.
  *
  * @phpstan-import-type ExportType from CalculationRepository
  */

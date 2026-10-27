@@ -60,6 +60,15 @@ class GroupController extends AbstractEntityController
     }
 
     /**
+     * Add a group.
+     */
+    #[AddEntityRoute]
+    public function add(Request $request): Response
+    {
+        return $this->editEntity($request, new Group());
+    }
+
+    /**
      * Clone (copy) a group.
      */
     #[CloneEntityRoute]
@@ -94,13 +103,12 @@ class GroupController extends AbstractEntityController
     }
 
     /**
-     * Add or edit a group.
+     * Edit a group.
      */
-    #[AddEntityRoute]
     #[EditEntityRoute]
-    public function edit(Request $request, ?Group $item): Response
+    public function edit(Request $request, Group $item): Response
     {
-        return $this->editEntity($request, $item ?? new Group());
+        return $this->editEntity($request, $item);
     }
 
     /**

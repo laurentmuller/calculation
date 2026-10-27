@@ -60,6 +60,15 @@ class CategoryController extends AbstractEntityController
     }
 
     /**
+     * Add a category.
+     */
+    #[AddEntityRoute]
+    public function add(Request $request): Response
+    {
+        return $this->editEntity($request, new Category());
+    }
+
+    /**
      * Clone (copy) a category.
      */
     #[CloneEntityRoute]
@@ -94,13 +103,12 @@ class CategoryController extends AbstractEntityController
     }
 
     /**
-     * Add or edit a category.
+     * Edit a category.
      */
-    #[AddEntityRoute]
     #[EditEntityRoute]
-    public function edit(Request $request, ?Category $item): Response
+    public function edit(Request $request, Category $item): Response
     {
-        return $this->editEntity($request, $item ?? new Category());
+        return $this->editEntity($request, $item);
     }
 
     /**

@@ -53,6 +53,15 @@ class CustomerController extends AbstractEntityController
     }
 
     /**
+     * Add a customer.
+     */
+    #[AddEntityRoute]
+    public function add(Request $request): Response
+    {
+        return $this->editEntity($request, new Customer());
+    }
+
+    /**
      * Delete a customer.
      */
     #[DeleteEntityRoute]
@@ -62,13 +71,12 @@ class CustomerController extends AbstractEntityController
     }
 
     /**
-     * Add or edit a customer.
+     * Edit a customer.
      */
-    #[AddEntityRoute]
     #[EditEntityRoute]
-    public function edit(Request $request, ?Customer $item): Response
+    public function edit(Request $request, Customer $item): Response
     {
-        return $this->editEntity($request, $item ?? new Customer());
+        return $this->editEntity($request, $item);
     }
 
     /**

@@ -111,7 +111,7 @@ class AkismetService extends AbstractHttpClientService
     /**
      * Verify if the given comment is spam.
      * <p>
-     * The parameters options can be one of the following:
+     * Parameters options can be one of the following:
      * </p>
      * <ul>
      * <li><b>blog</b> (required): The front page or home URL of the instance making the request. For a blog or wiki,
@@ -137,7 +137,7 @@ class AkismetService extends AbstractHttpClientService
      * <li><b>comment_author_url</b>: URL submitted with comment.</li>
      * <li><b>comment_date_gmt</b>: The UTC timestamp of the creation of the comment, in ISO 8601 format. May be
      * omitted for comment-check requests if the comment is sent to the API at the time it is created.</li>
-     * <li><b>comment_post_modified_gmt</b>: The UTC timestamp of the publication time for the post, page or thread
+     * <li><b>comment_post_modified_gmt</b>: The UTC timestamp of the publication time for the post, page, or thread
      * on which the comment was posted.</li>
      * <li><b>blog_lang</b>: Indicates the language(s) in use on the blog or site, in ISO 639-1 format, comma-separated.
      * A site with articles in English and French might use "en, fr_ca".</li>

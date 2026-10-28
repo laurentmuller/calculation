@@ -78,6 +78,7 @@ class TestController extends AbstractController
             ->field('message')->addTextType()
             ->field('captcha')
             ->updateOption('expectedAction', $expectedAction)
+            ->updateAttribute('data-error', $this->trans('test.recaptcha_error'))
             ->add(ReCaptchaType::class)
             ->getBuilder()->setAttribute('block_name', '');
         $form = $helper->createForm();

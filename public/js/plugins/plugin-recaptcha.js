@@ -67,11 +67,17 @@ $(function () {
             const cursor = $target.css('cursor');
             grecaptcha.ready(() => {
                 $target.css('cursor', 'wait');
-                grecaptcha.execute(options.key, {action: options.action}).then((token) => {
-                    $target.css('cursor', cursor);
-                    $element.val(token);
-                    that._dispatchSubmit();
-                });
+                try {
+                    grecaptcha.execute(options.key, {action: options.action}).then((token) => {
+                        $target.css('cursor', cursor);
+                        $element.val(token);
+                        that._dispatchSubmit();
+                    });
+                } catch (e) {
+                    const message = this.$element.data('error');
+                    const title = $('.card-title').text();
+                    Toaster.danger(message, title);
+                }
             });
         }
 
@@ -129,7 +135,7 @@ $(function () {
     // --------------------------------
     // Recaptcha data-api
     // --------------------------------
-    $(document).on('click',  Recaptcha.DEFAULTS.selector, function (e) {
+    $(document).on('click', Recaptcha.DEFAULTS.selector, function (e) {
         const $this = $(this);
         const $source = $this.parents('form').find('.recaptcha');
         if ($source.length && !$source.data(Recaptcha.NAME)) {

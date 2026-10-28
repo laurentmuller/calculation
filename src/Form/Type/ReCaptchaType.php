@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Form\Type;
 
 use App\Service\RecaptchaService;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Event\PostSubmitEvent;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -33,7 +32,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @extends AbstractType<HiddenType>
  */
-class ReCaptchaType extends AbstractType implements EventSubscriberInterface
+class ReCaptchaType extends AbstractType
 {
     private const string RECAPTCHA_URL = 'https://www.google.com/recaptcha/api.js?render=';
 
@@ -46,7 +45,7 @@ class ReCaptchaType extends AbstractType implements EventSubscriberInterface
     #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->addEventSubscriber($this);
+        $builder->addEventListener(FormEvents::POST_SUBMIT, $this->onPostSubmit(...));
     }
 
     #[\Override]
@@ -108,15 +107,7 @@ class ReCaptchaType extends AbstractType implements EventSubscriberInterface
         return HiddenType::class;
     }
 
-    #[\Override]
-    public static function getSubscribedEvents(): array
-    {
-        return [
-            FormEvents::POST_SUBMIT => 'onPostSubmit',
-        ];
-    }
-
-    public function onPostSubmit(PostSubmitEvent $event): void
+    private function onPostSubmit(PostSubmitEvent $event): void
     {
         $form = $event->getForm();
         $data = (string) $event->getData();

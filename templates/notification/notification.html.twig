@@ -25,9 +25,9 @@
 {# action #}
 {% block action %}
     {% if signature %}
+        <hr/>
         <spacer size="8"></spacer>
-        Cordialement,<br>
-        L'équipe de {{ app_name }}
+        Cordialement,<br><br>L'équipe de {{ app_name }}
     {% endif %}
     {{ parent() }}
 {% endblock action %}

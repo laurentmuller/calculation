@@ -42,9 +42,6 @@ class ResponseListener
 {
     use ArrayTrait;
 
-    // the CSP header key
-    private const string CSP_HEADER = 'Content-Security-Policy';
-
     // the default headers to add
     private const array DEFAULT_HEADERS = [
         'Referrer-Policy' => 'same-origin',
@@ -53,11 +50,14 @@ class ResponseListener
         'X-Permitted-Cross-Domain-Policies' => 'none',
     ];
 
-    // the Nonce search parameter
-    private const string NONCE_PARAMETER = '%nonce%';
+    // the CSP header key
+    private const string KEY_CSP = 'Content-Security-Policy';
 
-    // the report end points header key
-    private const string REPORTING_END_POINTS_HEADER = 'Reporting-Endpoints';
+    // the reporting end points header key
+    private const string KEY_END_POINTS = 'Reporting-Endpoints';
+
+    // the nonce search parameter
+    private const string NONCE_PARAMETER = '%nonce%';
 
     // the headers to add for secure request.
     private const array SECURE_HEADERS = [
@@ -99,11 +99,11 @@ class ResponseListener
         if ($request->isSecure()) {
             $headers->add(self::SECURE_HEADERS);
         }
-        $headers->set(self::REPORTING_END_POINTS_HEADER, $this->getSecurityEndpoint());
+        $headers->set(self::KEY_END_POINTS, $this->getSecurityEndpoint());
 
         $csp = $this->buildCSP();
         if (null !== $csp) {
-            $headers->set(self::CSP_HEADER, $csp);
+            $headers->set(self::KEY_CSP, $csp);
         }
     }
 

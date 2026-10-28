@@ -118,6 +118,16 @@ final class NotificationEmailTest extends TestCase
         self::assertFalse($email->isSignature());
     }
 
+    public function testTranslatableAction(): void
+    {
+        $email = $this->createNotificationEmail()
+            ->action(new TranslatableMessage('user.comment.submit'), 'https://www.example.com');
+
+        $context = $email->getContext();
+        self::assertSame('user.comment.submit', $context['action_text']);
+        self::assertSame('https://www.example.com', $context['action_url']);
+    }
+
     public function testTranslatableSubject(): void
     {
         $email = $this->createNotificationEmail()

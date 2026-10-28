@@ -25,10 +25,9 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Translation\TranslatableMessage;
 
 /**
- * Controller to send CSP violations by e-mail.
+ * Controller to log and send an e-mail for CSP and permission violations.
  */
 #[IsUser]
 class CspReportController extends AbstractController
@@ -45,10 +44,14 @@ class CspReportController extends AbstractController
         }
 
         try {
-            $context = $this->getContext($content);
-            $message = $this->trans('notification.csp_title');
-            $logger->error($message, $context);
-            $this->sendNotification($context, $mailer);
+            $entries = StringUtils::decodeJson($content);
+            if ([] !== $entries) {
+                $message = $this->trans('notification.csp_title');
+                foreach ($entries as $entry) {
+                    $logger->error($message, $entry);
+                }
+                $this->sendNotification($mailer, $entries);
+            }
         } catch (\InvalidArgumentException|TransportExceptionInterface $e) {
             $message = $this->trans('notification.csp_error');
             $context = $this->getExceptionContext($e);
@@ -58,60 +61,22 @@ class CspReportController extends AbstractController
         }
     }
 
-    private function explodeOriginalPolicy(string $value): array
-    {
-        $result = [];
-        $policies = \array_filter(\explode(';', $value));
-        foreach ($policies as $policy) {
-            $entries = \array_filter(\explode(' ', $policy));
-            if (\count($entries) > 1) {
-                $key = \reset($entries);
-                $values = \array_map(
-                    static fn (string $entry): string => \trim($entry, "'"),
-                    \array_slice($entries, 1)
-                );
-                \sort($values);
-                $result[$key] = \implode(StringUtils::NEW_LINE, $values);
-            }
-        }
-
-        return $result;
-    }
-
     private function getActionUrl(): string
     {
         return $this->generateUrl(route: self::HOME_PAGE, referenceType: UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
     /**
-     * @throws \InvalidArgumentException
-     */
-    private function getContext(string $content): array
-    {
-        /** @var array{csp-report?: string[]} $data */
-        $data = StringUtils::decodeJson($content);
-        if (!isset($data['csp-report'])) {
-            throw new \InvalidArgumentException('Content without "csp-report".');
-        }
-        $context = \array_filter($data['csp-report']);
-        if (isset($context['original-policy'])) {
-            $context['original-policy'] = $this->explodeOriginalPolicy($context['original-policy']);
-        }
-
-        return $context;
-    }
-
-    /**
      * @throws TransportExceptionInterface
      */
-    private function sendNotification(array $context, MailerInterface $mailer): void
+    private function sendNotification(MailerInterface $mailer, array $entries): void
     {
         $address = ApplicationService::getOwnerAddress();
         $notification = NotificationEmail::instance($this->getTranslator(), 'notification/csp_violation.html.twig')
-            ->subject(new TranslatableMessage('notification.csp_title'))
+            ->subject($this->trans('notification.csp_title'))
             ->from($address)
             ->to($address)
-            ->context(['context' => $context])
+            ->context(['entries' => $entries])
             ->action($this->trans('index.title'), $this->getActionUrl())
             ->importance(Importance::HIGH);
 

@@ -30,10 +30,6 @@ a {
     line-height: 100%;
 }
 
-#csp td {
-    padding-top: 5px;
-}
-
 small,
 .small {
     color: gray;
@@ -43,4 +39,9 @@ a,
 button {
     font-weight: normal !important;
     padding: 0.5rem 1rem !important;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid #dddddd;
 }

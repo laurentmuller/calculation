@@ -37,6 +37,16 @@ class NotificationEmail extends BaseNotificationEmail
         }
     }
 
+    #[\Override]
+    public function action(string|TranslatableMessage $text, string $url): static
+    {
+        if ($text instanceof TranslatableMessage) {
+            $text = $text->trans($this->translator);
+        }
+
+        return parent::action($text, $url);
+    }
+
     /**
      * Adds the given uploaded file as an attachment.
      *

@@ -60,18 +60,37 @@ final class CspReportControllerTest extends ControllerTestCase
     private function getValidContent(): string
     {
         return <<<'JSON'
-              {
-                "csp-report": {
-                    "blocked-uri": "https://example.com/css/style.css",
-                    "disposition": "report",
-                    "document-uri": "https://example.com/signup.html",
-                    "effective-directive": "style-src-elem",
-                    "original-policy": "default-src 'none'; style-src cdn.example.com; report-uri /csp-reports",
-                    "referrer": "",
-                    "status-code": 200,
-                    "violated-directive": "style-src-elem"
+            [
+                {
+                    "type": "csp-violation",
+                    "age": 53531,
+                    "url": "https://example.com/signup",
+                    "user_agent": "Mozilla/5.0",
+                    "body": {
+                        "documentURL": "https://example.com/signup",
+                        "blockedURL": "https://apis.google.com/js/platform.js",
+                        "effectiveDirective": "script-src-elem",
+                        "originalPolicy": "script-src-elem 'none'; form-action 'self'",
+                        "disposition": "report",
+                        "statusCode": 200,
+                        "sample": "This a sample."
+                    }
+                },
+                {
+                    "type": "permissions-policy-violation",
+                    "age": 48512,
+                    "url": "https://example.com/",
+                    "user_agent": "Mozilla/5.0",
+                    "body": {
+                        "columnNumber": 29,
+                        "disposition": "enforce",
+                        "lineNumber": 44,
+                        "message": "Permissions policy violation: geolocation access has been blocked because of a permissions policy applied to the current document.",
+                        "featureId": "geolocation",
+                        "sourceFile": "https://example.com/"
+                    }
                 }
-            }
+            ]    
             JSON;
     }
 
@@ -84,7 +103,7 @@ final class CspReportControllerTest extends ControllerTestCase
             $this->checkRoute(
                 url: '/csp',
                 username: self::ROLE_USER,
-                expected: Response::HTTP_NO_CONTENT
+                expected: Response::HTTP_NO_CONTENT,
             );
         } finally {
             MockPhpStream::restore();

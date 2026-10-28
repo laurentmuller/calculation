@@ -90,7 +90,7 @@ final class CspReportControllerTest extends ControllerTestCase
                         "sourceFile": "https://example.com/"
                     }
                 }
-            ]    
+            ]
             JSON;
     }
 

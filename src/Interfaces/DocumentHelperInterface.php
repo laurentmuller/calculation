@@ -14,12 +14,11 @@ declare(strict_types=1);
 namespace App\Interfaces;
 
 use App\Model\CustomerInformation;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class implementing this interface provides methods to help generate documents.
  */
-interface DocumentHelperInterface
+interface DocumentHelperInterface extends TranslatorProviderInterface
 {
     /**
      * Gets the customer information.
@@ -30,11 +29,6 @@ interface DocumentHelperInterface
      * Gets the minimum margin, in percent, for a calculation.
      */
     public function getMinMargin(): float;
-
-    /**
-     * Gets the translator.
-     */
-    public function getTranslator(): TranslatorInterface;
 
     /**
      * Gets the connected user identifier or null if not connected.

@@ -16,6 +16,7 @@ namespace App\Service;
 use App\Controller\ResetPasswordController;
 use App\Entity\User;
 use App\Enums\Importance;
+use App\Interfaces\TranslatorProviderInterface;
 use App\Mime\NotificationEmail;
 use App\Repository\UserRepository;
 use App\Traits\LoggerTrait;
@@ -34,7 +35,7 @@ use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 /**
  * Service to reset user password.
  */
-readonly class ResetPasswordService
+readonly class ResetPasswordService implements TranslatorProviderInterface
 {
     use LoggerTrait;
 
@@ -111,6 +112,12 @@ readonly class ResetPasswordService
         );
     }
 
+    #[\Override]
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
+    }
+
     /**
      * Handle an exception.
      */
@@ -161,10 +168,10 @@ readonly class ResetPasswordService
     private function createNotificationEmail(User $user, ResetPasswordToken $token): NotificationEmail
     {
         return NotificationEmail::instance(
-            translator: $this->translator,
-            htmlTemplate: 'notification/reset_password.html.twig',
-            textTemplate: 'notification/reset_password.txt.twig',
-        )->subject($this->trans('resetting.request.title'))
+            $this,
+            'notification/reset_password.html.twig',
+            'notification/reset_password.txt.twig',
+        )->translatedSubject('resetting.request.title')
             ->importance(Importance::HIGH)
             ->from(ApplicationService::getOwnerAddress())
             ->to($user->getAddress())

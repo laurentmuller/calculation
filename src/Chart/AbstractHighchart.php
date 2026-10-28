@@ -83,12 +83,9 @@ abstract class AbstractHighchart extends Highchart
     /**
      * Sets the chart type.
      */
-    public function setType(ChartType|string $type): static
+    public function setType(ChartType $type): static
     {
-        if ($type instanceof ChartType) {
-            $type = $type->value;
-        }
-        $this->chart['type'] = $type;
+        $this->chart['type'] = $type->value;
 
         return $this;
     }

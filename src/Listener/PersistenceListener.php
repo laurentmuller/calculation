@@ -40,7 +40,7 @@ use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 /**
- * Listener to add flash messages when entities are created, updated or deleted.
+ * Listener to add flash messages when entities are created, updated, or deleted.
  */
 #[AsDoctrineListener(Events::onFlush)]
 class PersistenceListener implements DisableListenerInterface, ServiceSubscriberInterface

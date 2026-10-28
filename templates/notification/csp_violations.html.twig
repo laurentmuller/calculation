@@ -10,9 +10,12 @@
 {% block content %}
     <container>
         <row class="collapse">
-            <columns style="padding-bottom: 4px;">
-                {{ 'notification.csp_description'|trans({'%name%': app_name}) }}
-            </columns>
+            <columns>{{ 'notification.csp_description'|trans({'%name%': app_name}) }}</columns>
+        </row>
+    </container>
+    <container>
+        <row class="collapse">
+            <columns style="padding-bottom: 0;"><b>Violations :</b></columns>
         </row>
     </container>
     {% for entry in entries %}

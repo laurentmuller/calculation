@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Spreadsheet;
 
 use App\Interfaces\DocumentHelperInterface;
+use App\Interfaces\TranslatorProviderInterface;
 use App\Service\ApplicationService;
 use App\Traits\TranslatorTrait;
 use App\Utils\StringUtils;
@@ -33,9 +34,12 @@ class SpreadsheetDocument extends Spreadsheet
     /** The file title. */
     private ?string $title = null;
 
-    public function __construct(private readonly TranslatorInterface $translator)
+    private readonly TranslatorInterface $translator;
+
+    public function __construct(TranslatorProviderInterface|TranslatorInterface $translator)
     {
         parent::__construct();
+        $this->translator = $translator instanceof TranslatorProviderInterface ? $translator->getTranslator() : $translator;
 
         // replace default sheet
         $this->removeSheetByIndex(0);

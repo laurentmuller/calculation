@@ -62,6 +62,6 @@ enum Importance: string implements DefaultEnumInterface, EnumSortableInterface, 
      */
     public function transTitle(TranslatorInterface $translator): string
     {
-        return $translator->trans(id: \sprintf('%s_title', $this->getReadable()));
+        return $translator->trans(id: $this->getReadable() . '_title');
     }
 }

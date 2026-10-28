@@ -15,6 +15,7 @@ namespace App\Controller;
 
 use App\Attribute\IsUser;
 use App\Enums\Importance;
+use App\Interfaces\TranslatorProviderInterface;
 use App\Mime\NotificationEmail;
 use App\Service\ApplicationService;
 use App\Utils\StringUtils;
@@ -30,7 +31,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  * Controller to log and send an e-mail for CSP and permission violations.
  */
 #[IsUser]
-class CspReportController extends AbstractController
+class CspReportController extends AbstractController implements TranslatorProviderInterface
 {
     /** The route name. */
     public const string ROUTE_NAME = 'log_csp';
@@ -50,7 +51,8 @@ class CspReportController extends AbstractController
                 foreach ($entries as $entry) {
                     $logger->error($message, $entry);
                 }
-                $this->sendNotification($mailer, $entries);
+                $notification = $this->createNotification($entries);
+                $mailer->send($notification);
             }
         } catch (\InvalidArgumentException|TransportExceptionInterface $e) {
             $message = $this->trans('notification.csp_error');
@@ -61,25 +63,24 @@ class CspReportController extends AbstractController
         }
     }
 
+    private function createNotification(array $entries): NotificationEmail
+    {
+        $address = ApplicationService::getOwnerAddress();
+
+        return NotificationEmail::instance(
+            $this,
+            'notification/csp_violations.html.twig',
+            'notification/csp_violations.txt.twig'
+        )->importance(Importance::HIGH)
+            ->from($address)
+            ->to($address)
+            ->translatedSubject('notification.csp_title')
+            ->context(['entries' => $entries])
+            ->action($this->trans('index.title'), $this->getActionUrl());
+    }
+
     private function getActionUrl(): string
     {
         return $this->generateUrl(route: self::HOME_PAGE, referenceType: UrlGeneratorInterface::ABSOLUTE_URL);
-    }
-
-    /**
-     * @throws TransportExceptionInterface
-     */
-    private function sendNotification(MailerInterface $mailer, array $entries): void
-    {
-        $address = ApplicationService::getOwnerAddress();
-        $notification = NotificationEmail::instance($this->getTranslator(), 'notification/csp_violation.html.twig')
-            ->subject($this->trans('notification.csp_title'))
-            ->from($address)
-            ->to($address)
-            ->context(['entries' => $entries])
-            ->action($this->trans('index.title'), $this->getActionUrl())
-            ->importance(Importance::HIGH);
-
-        $mailer->send($notification);
     }
 }

@@ -1,0 +1,18 @@
+{% extends 'notification/notification.txt.twig' %}
+{# content #}
+{% block content %}
+{{ 'notification.csp_description'|trans({'%name%': app_name}) }}
+
+Violations :
+------------
+{% for entry in entries %}
+type: {{ entry.type ?? 'Unknown' }}
+url : {{ entry.url ?? 'Unknown' }}
+{% if entry.body and entry.body|length %}
+{% for key, value in entry.body %}
+- {{ key }}: {{ value }}
+{% endfor %}
+{% endif %}
+
+{% endfor %}
+{% endblock content %}

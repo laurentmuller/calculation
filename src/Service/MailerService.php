@@ -15,6 +15,7 @@ namespace App\Service;
 
 use App\Controller\AbstractController;
 use App\Entity\User;
+use App\Interfaces\TranslatorProviderInterface;
 use App\Mime\NotificationEmail;
 use App\Model\UserComment;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -27,7 +28,7 @@ use Twig\Extra\Markdown\MarkdownInterface;
 /**
  * Service to send comments and notifications.
  */
-readonly class MailerService
+readonly class MailerService implements TranslatorProviderInterface
 {
     public function __construct(
         private UrlGeneratorInterface $generator,
@@ -43,6 +44,12 @@ readonly class MailerService
     public static function convertAddress(string|Address|User $address): Address
     {
         return $address instanceof User ? $address->getAddress() : Address::create($address);
+    }
+
+    #[\Override]
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
     }
 
     /**
@@ -69,7 +76,7 @@ readonly class MailerService
     {
         $this->validateComment($comment);
 
-        return NotificationEmail::instance($this->translator)
+        return NotificationEmail::instance($this)
             ->from(self::convertAddress($comment->getFrom()))
             ->to(self::convertAddress($comment->getTo()))
             ->importance($comment->getImportance())

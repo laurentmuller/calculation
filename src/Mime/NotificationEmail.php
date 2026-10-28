@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Mime;
 
 use App\Enums\Importance;
+use App\Interfaces\TranslatorProviderInterface;
 use App\Service\ApplicationService;
 use Symfony\Bridge\Twig\Mime\NotificationEmail as BaseNotificationEmail;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -26,12 +27,15 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class NotificationEmail extends BaseNotificationEmail
 {
+    private readonly TranslatorInterface $translator;
+
     final public function __construct(
-        private readonly TranslatorInterface $translator,
+        TranslatorProviderInterface|TranslatorInterface $translator,
         private Importance $importance = Importance::DEFAULT,
         private bool $signature = true
     ) {
         parent::__construct();
+        $this->translator = $translator instanceof TranslatorProviderInterface ? $translator->getTranslator() : $translator;
         if (Importance::DEFAULT !== $importance) {
             parent::importance($importance->value);
         }
@@ -135,7 +139,7 @@ class NotificationEmail extends BaseNotificationEmail
      * Creates a new instance.
      */
     public static function instance(
-        TranslatorInterface $translator,
+        TranslatorProviderInterface|TranslatorInterface $translator,
         string $htmlTemplate = 'notification/notification.html.twig',
         string $textTemplate = 'notification/notification.txt.twig',
     ): static {
@@ -164,5 +168,10 @@ class NotificationEmail extends BaseNotificationEmail
         }
 
         return parent::subject($subject);
+    }
+
+    public function translatedSubject(string $id, array $parameters = [], ?string $domain = null): static
+    {
+        return $this->subject($this->translator->trans($id, $parameters, $domain));
     }
 }

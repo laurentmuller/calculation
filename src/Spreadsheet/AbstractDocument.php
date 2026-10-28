@@ -23,7 +23,7 @@ abstract class AbstractDocument extends SpreadsheetDocument
 {
     public function __construct(protected readonly DocumentHelperInterface $helper)
     {
-        parent::__construct($this->helper->getTranslator());
+        parent::__construct($this->helper);
     }
 
     /**

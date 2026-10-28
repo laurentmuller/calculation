@@ -114,10 +114,10 @@ class RegistrationController extends AbstractController
     private function createEmail(User $user): NotificationEmail
     {
         return NotificationEmail::instance(
-            translator: $this->getTranslator(),
-            htmlTemplate: 'notification/registration.html.twig',
-            textTemplate: 'notification/registration.txt.twig'
-        )->subject($this->trans('registration.subject'))
+            $this,
+            'notification/registration.html.twig',
+            'notification/registration.txt.twig'
+        )->translatedSubject('registration.subject')
             ->importance(Importance::MEDIUM)
             ->from(ApplicationService::getOwnerAddress())
             ->to($user->getAddress());

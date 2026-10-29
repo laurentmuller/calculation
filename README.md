@@ -2,7 +2,7 @@
 
 Programme de calcul basé sur l'environnement de développement Symfony 7.x.
 
-![Screenshot](public/images/screenshots/home_light.png)
+![Screenshot](public/images/screenshots/home_page.png)
 
 ## Licence
 
@@ -12,7 +12,7 @@ Ce programme est distribué avec une [licence propriétaire](LICENSE.md) et une
 ## Versions
 
 [![Application](https://img.shields.io/badge/Application-3.0.0-blue)](https://github.com/laurentmuller/calculation)
-[![Symfony](https://img.shields.io/badge/Symfony-7.4.21-informational?logo=symfony)](https://symfony.com)
+[![Symfony](https://img.shields.io/badge/Symfony-7.4.22-informational?logo=symfony)](https://symfony.com)
 [![PHP](https://img.shields.io/badge/PHP-8.4.27-informational?logo=php)](https://www.php.net)
 [![MariaDB](https://img.shields.io/badge/mariadb-10.11.19-informational?logo=mariadb)](https://mariadb.org/)
 [![Apache](https://img.shields.io/badge/Apache-2.4.67-informational?logo=apache)](https://httpd.apache.org)

@@ -44,11 +44,11 @@ class InputGroupTypeExtension extends AbstractTypeExtension
     #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
-        foreach (self::OPTIONS as $option) {
-            if (isset($options[$option])) {
-                $view->vars[$option] = $options[$option];
-            }
-        }
+        $view->vars += \array_filter(
+            $options,
+            static fn (string $key): bool => \in_array($key, self::OPTIONS, true),
+            \ARRAY_FILTER_USE_KEY
+        );
     }
 
     #[\Override]

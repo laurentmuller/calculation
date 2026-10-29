@@ -21,9 +21,9 @@ final class ApplicationServiceTest extends TestCase
     public function testService(): void
     {
         self::assertNotEmpty(ApplicationService::APP_DESCRIPTION);
-        self::assertSame('Calculation v3.0.0', ApplicationService::APP_FULL_NAME);
+        self::assertSame('Calculation v3.1.0', ApplicationService::APP_FULL_NAME);
         self::assertSame('Calculation', ApplicationService::APP_NAME);
-        self::assertSame('3.0.0', ApplicationService::APP_VERSION);
+        self::assertSame('3.1.0', ApplicationService::APP_VERSION);
 
         self::assertSame('Montévraz', ApplicationService::OWNER_CITY);
         self::assertSame('calculation@bibi.nu', ApplicationService::OWNER_EMAIL);

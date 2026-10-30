@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Form\Extension;
 
 use App\Form\Type\PlainType;
-use Elao\Enum\Bridge\Symfony\Form\Type\EnumType as ElaoEnumType;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
@@ -69,7 +68,6 @@ class InputGroupTypeExtension extends AbstractTypeExtension
             ChoiceType::class,
             PlainType::class,
             EnumType::class,
-            ElaoEnumType::class,
         ];
     }
 }

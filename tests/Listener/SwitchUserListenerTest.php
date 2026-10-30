@@ -18,7 +18,6 @@ use App\Entity\User;
 use App\Listener\SwitchUserListener;
 use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -86,12 +85,7 @@ final class SwitchUserListenerTest extends TestCase
 
     private function createRequest(string $action = ''): Request
     {
-        /** @var InputBag<string> $query */
-        $query = new InputBag([self::SWITCH_USER_PARAMETER => $action]);
-        $request = self::createStub(Request::class);
-        $request->query = $query;
-
-        return $request;
+        return new Request([self::SWITCH_USER_PARAMETER => $action]);
     }
 
     private function createRequestStack(): RequestStack

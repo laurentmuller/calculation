@@ -30,7 +30,6 @@ use App\Tests\Fixture\FixtureStringable;
 use App\Tests\Form\User\PasswordHasherExtensionTrait;
 use App\Tests\Form\User\VichImageTypeTrait;
 use App\Tests\TranslatorStubTrait;
-use Elao\Enum\Bridge\Symfony\Form\Type\EnumType as ElaoEnumType;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -261,7 +260,7 @@ final class FormHelperTest extends TypeTestCase
             ->createForm();
         $this->validateForm(
             form: $form,
-            class: ElaoEnumType::class,
+            class: EnumType::class,
         );
     }
 

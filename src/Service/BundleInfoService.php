@@ -18,8 +18,8 @@ use App\Utils\FileUtils;
 use App\Utils\FormatUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Component\DependencyInjection\Kernel\BundleInterface;
 use Symfony\Component\Filesystem\Path;
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 
@@ -77,15 +77,18 @@ readonly class BundleInfoService
 
     /**
      * @phpstan-return BundleType
+     *
+     * @phpstan-ignore typePerfect.narrowPrivateClassMethodParamType
      */
     private function parseBundle(string $name, BundleInterface $bundle, string $vendorDir): array
     {
         $path = $bundle->getPath();
         $size = FileUtils::sizeAndFiles($path);
+        $namespace = new \ReflectionClass($bundle)->getNamespaceName();
 
         return [
             'name' => $name,
-            'namespace' => $bundle->getNamespace(),
+            'namespace' => $namespace,
             'path' => $this->makePathRelative($path),
             'package' => $this->makePathRelative($path, $vendorDir),
             'files' => FormatUtils::formatInt($size['files']),

@@ -31,14 +31,14 @@ final class AbstractConstraintValidatorTest extends ConstraintValidatorTestCase
     public function testEmptyIsValid(): void
     {
         $constraint = new Password();
-        $this->validator->validate('', $constraint);
+        $this->validate('', $constraint);
         self::assertNoViolation();
     }
 
     public function testEmptyStringable(): void
     {
         $constraint = new Password();
-        $this->validator->validate(new FixtureStringable(), $constraint);
+        $this->validate(new FixtureStringable(), $constraint);
         self::assertNoViolation();
     }
 
@@ -46,27 +46,27 @@ final class AbstractConstraintValidatorTest extends ConstraintValidatorTestCase
     {
         $constraint = new Strength();
         self::expectException(UnexpectedTypeException::class);
-        $this->validator->validate('', $constraint);
+        $this->validate('', $constraint);
     }
 
     public function testInvalidObject(): void
     {
         $constraint = new Password();
         self::expectException(UnexpectedTypeException::class);
-        $this->validator->validate(new \stdClass(), $constraint);
+        $this->validate(new \stdClass(), $constraint);
     }
 
     public function testNullIsValid(): void
     {
         $constraint = new Password();
-        $this->validator->validate(null, $constraint);
+        $this->validate(null, $constraint);
         self::assertNoViolation();
     }
 
     public function testStringIsValid(): void
     {
         $constraint = new Password();
-        $this->validator->validate('password', $constraint);
+        $this->validate('password', $constraint);
         self::assertNoViolation();
     }
 

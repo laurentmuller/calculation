@@ -92,7 +92,7 @@ readonly class KernelInfoService
      */
     public function getLogInfo(): array
     {
-        return $this->getDirectoryInfo('Logs', $this->kernel->getLogDir());
+        return $this->getDirectoryInfo('Logs', (string) $this->kernel->getLogDir());
     }
 
     /**

@@ -54,7 +54,7 @@ final class StrengthValidatorTest extends ConstraintValidatorTestCase
     public function testEmptyIsValid(StrengthLevel $level): void
     {
         $constraint = new Strength($level);
-        $this->validator->validate('', $constraint);
+        $this->validate('', $constraint);
         self::assertNoViolation();
     }
 
@@ -70,14 +70,14 @@ final class StrengthValidatorTest extends ConstraintValidatorTestCase
         );
         $this->setObject($object);
         self::expectException(ConstraintDefinitionException::class);
-        $this->validator->validate($object->password, $constraint);
+        $this->validate($object->password, $constraint);
     }
 
     #[DataProvider('getStrengthLevels')]
     public function testNullIsValid(StrengthLevel $level): void
     {
         $constraint = new Strength($level);
-        $this->validator->validate(null, $constraint);
+        $this->validate(null, $constraint);
         self::assertNoViolation();
     }
 
@@ -94,7 +94,7 @@ final class StrengthValidatorTest extends ConstraintValidatorTestCase
             emailPath: 'email'
         );
         $this->setObject($object);
-        $this->validator->validate($object->password, $constraint);
+        $this->validate($object->password, $constraint);
         self::assertNoViolation();
     }
 
@@ -103,7 +103,7 @@ final class StrengthValidatorTest extends ConstraintValidatorTestCase
     {
         $level = StrengthLevel::tryFrom($strength) ?? StrengthLevel::DEFAULT;
         $constraint = new Strength($level);
-        $this->validator->validate($value, $constraint);
+        $this->validate($value, $constraint);
 
         if ($violation) {
             $parameters = [

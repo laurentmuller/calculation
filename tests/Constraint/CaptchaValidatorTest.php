@@ -27,25 +27,25 @@ final class CaptchaValidatorTest extends ConstraintValidatorTestCase
 {
     public function testEmptyIsValid(): void
     {
-        $contraint = $this->createConstraint();
+        $constraint = $this->createConstraint();
         $validator = $this->initValidator();
-        $validator->validate('', $contraint);
+        $validator->validateInContext('', $constraint, $this->context);
         self::assertNoViolation();
     }
 
     public function testNullIsValid(): void
     {
-        $contraint = $this->createConstraint();
+        $constraint = $this->createConstraint();
         $validator = $this->initValidator();
-        $validator->validate(null, $contraint);
+        $validator->validateInContext(null, $constraint, $this->context);
         self::assertNoViolation();
     }
 
     public function testTimeoutInvalid(): void
     {
-        $contraint = $this->createConstraint();
+        $constraint = $this->createConstraint();
         $validator = $this->initValidator(false);
-        $validator->validate('dummy', $contraint);
+        $validator->validateInContext('dummy', $constraint, $this->context);
         $this->buildViolation('captcha.timeout')
             ->setCode(Captcha::TIMEOUT_ERROR)
             ->assertRaised();
@@ -53,9 +53,9 @@ final class CaptchaValidatorTest extends ConstraintValidatorTestCase
 
     public function testTokenInvalid(): void
     {
-        $contraint = $this->createConstraint();
+        $constraint = $this->createConstraint();
         $validator = $this->initValidator(true, false);
-        $validator->validate('dummy', $contraint);
+        $validator->validateInContext('dummy', $constraint, $this->context);
         $this->buildViolation('captcha.invalid')
             ->setCode(Captcha::INVALID_ERROR)
             ->assertRaised();
@@ -89,7 +89,6 @@ final class CaptchaValidatorTest extends ConstraintValidatorTestCase
     {
         $service = $this->createService($validateTimeout, $validateToken);
         $this->validator = new CaptchaValidator($service);
-        $this->validator->initialize($this->context);
 
         return $this->validator;
     }

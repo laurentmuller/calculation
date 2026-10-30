@@ -59,3 +59,11 @@ parameters:
         -
             message: '#Call to static method .* will always evaluate to true.#'
             path: tests/*
+
+        -
+            rawMessage: 'Unreachable statement - code above always terminates.'
+            identifier: deadCode.unreachable
+            paths:
+                - tests/Controller/AdminParametersControllerTest.php
+                - tests/Controller/RegistrationControllerTest.php
+                - tests/Controller/UserParametersControllerTest.php

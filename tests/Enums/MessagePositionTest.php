@@ -14,14 +14,12 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\MessagePosition;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class MessagePositionTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public static function getAngle(): \Generator
     {
         yield [MessagePosition::TOP_LEFT, 315];
@@ -130,7 +128,7 @@ final class MessagePositionTest extends TestCase
     #[DataProvider('getTranslation')]
     public function testTranslate(MessagePosition $position, string $expected): void
     {
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
         $actual = $position->trans($translator);
         self::assertSame($expected, $actual);
     }

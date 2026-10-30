@@ -14,14 +14,12 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\PositionService;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class PositionServiceTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public static function getDirections(): \Generator
     {
         yield [0, 'N'];
@@ -139,7 +137,7 @@ final class PositionServiceTest extends TestCase
 
     private function createService(): PositionService
     {
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
 
         return new PositionService($translator);
     }

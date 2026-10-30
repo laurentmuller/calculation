@@ -14,14 +14,12 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\HelpService;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\NullAdapter;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class HelpServiceTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     private HelpService $service;
 
     #[\Override]
@@ -179,7 +177,7 @@ final class HelpServiceTest extends TestCase
             $jsonPath,
             $imagePath,
             new NullAdapter(),
-            $this->createStubTranslator()
+            new IdentityTranslator()
         );
     }
 }

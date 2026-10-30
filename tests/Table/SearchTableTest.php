@@ -16,15 +16,13 @@ namespace App\Tests\Table;
 use App\Service\SearchService;
 use App\Table\DataQuery;
 use App\Table\SearchTable;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class SearchTableTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public function testEmptyMessage(): void
     {
         $table = $this->createTable(self::createStub(SearchService::class));
@@ -202,7 +200,7 @@ final class SearchTableTest extends TestCase
     {
         $table = new SearchTable($service);
 
-        return $table->setTranslator($this->createStubTranslator())
+        return $table->setTranslator(new IdentityTranslator())
             ->setChecker(self::createStub(AuthorizationCheckerInterface::class));
     }
 }

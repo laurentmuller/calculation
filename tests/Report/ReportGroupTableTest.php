@@ -17,14 +17,12 @@ use App\Interfaces\DocumentHelperInterface;
 use App\Pdf\PdfColumn;
 use App\Report\Table\ReportGroupTable;
 use App\Tests\Fixture\FixtureReport;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Translation\IdentityTranslator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ReportGroupTableTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public function testAddCellTrans(): void
     {
         $report = $this->createReport();
@@ -56,7 +54,7 @@ final class ReportGroupTableTest extends TestCase
 
     private function createReport(): FixtureReport
     {
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
         $helper = self::createStub(DocumentHelperInterface::class);
         $helper->method('getTranslator')
             ->willReturn($translator);

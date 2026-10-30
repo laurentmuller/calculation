@@ -19,7 +19,6 @@ use App\Entity\TaskItem;
 use App\Entity\User;
 use App\Interfaces\EntityInterface;
 use App\Listener\PersistenceListener;
-use App\Tests\TranslatorStubTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\OnFlushEventArgs;
@@ -29,11 +28,10 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class PersistenceListenerTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     private User $user;
 
     #[\Override]
@@ -240,7 +238,7 @@ final class PersistenceListenerTest extends TestCase
     {
         $security = $this->createMockSecurity();
         $listener = new PersistenceListener($security);
-        $listener->setTranslator($this->createStubTranslator());
+        $listener->setTranslator(new IdentityTranslator());
         $listener->setRequestStack($this->createRequestStack());
 
         return $listener;

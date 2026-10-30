@@ -15,7 +15,6 @@ namespace App\Tests\Word;
 
 use App\Interfaces\DocumentHelperInterface;
 use App\Model\CustomerInformation;
-use App\Tests\TranslatorStubTrait;
 use App\Word\AbstractWordDocument;
 use App\Word\HtmlDocument;
 use App\Word\WordFooter;
@@ -23,8 +22,6 @@ use PHPUnit\Framework\TestCase;
 
 final class AbstractWordDocumentTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public function testDefault(): void
     {
         $helper = self::createStub(DocumentHelperInterface::class);

@@ -17,8 +17,8 @@ use App\Faker\Generator;
 use App\Generator\ProductGenerator;
 use App\Service\FakerService;
 use App\Tests\EntityTrait\CategoryTrait;
-use App\Tests\TranslatorStubTrait;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Translation\IdentityTranslator;
 
 /**
  * @extends GeneratorTestCase<ProductGenerator>
@@ -26,7 +26,6 @@ use Doctrine\ORM\EntityManagerInterface;
 final class ProductGeneratorTest extends GeneratorTestCase
 {
     use CategoryTrait;
-    use TranslatorStubTrait;
 
     public function testNegativeCount(): void
     {
@@ -66,7 +65,7 @@ final class ProductGeneratorTest extends GeneratorTestCase
         $service = self::createStub(FakerService::class);
         $service->method('getGenerator')
             ->willReturn($generator);
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
         $logger = $this->createMockLogger();
 
         $productGenerator = new class($service, $manager, $translator, $logger) extends ProductGenerator {
@@ -86,7 +85,7 @@ final class ProductGeneratorTest extends GeneratorTestCase
         return new ProductGenerator(
             service: $this->service,
             manager: $this->manager,
-            translator: $this->createStubTranslator(),
+            translator: new IdentityTranslator(),
             logger: $this->createMockLogger()
         );
     }

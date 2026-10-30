@@ -14,14 +14,12 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\OpenWeatherUnits;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class OpenWeatherUnitsTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public static function getAttributes(): \Generator
     {
         yield [
@@ -129,7 +127,7 @@ final class OpenWeatherUnitsTest extends TestCase
     #[DataProvider('getLabels')]
     public function testTranslate(string $expected, OpenWeatherUnits $unit): void
     {
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
         $actual = $unit->trans($translator);
         self::assertSame($expected, $actual);
     }

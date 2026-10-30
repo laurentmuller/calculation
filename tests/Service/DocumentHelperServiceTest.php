@@ -15,17 +15,15 @@ namespace App\Tests\Service;
 
 use App\Parameter\UserParameters;
 use App\Service\DocumentHelperService;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class DocumentHelperServiceTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public function testService(): void
     {
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
         $parameters = self::createStub(UserParameters::class);
         $security = self::createStub(Security::class);
         $service = new DocumentHelperService($translator, $parameters, $security);

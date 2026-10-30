@@ -21,15 +21,14 @@ use App\Form\Type\SimpleEditorType;
 use App\Form\User\UserCommentType;
 use App\Model\UserComment;
 use App\Tests\Form\PreloadedExtensionsTrait;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Test\TypeTestCase;
+use Symfony\Component\Translation\IdentityTranslator;
 
 #[AllowMockObjectsWithoutExpectations]
 final class UserCommentTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;
-    use TranslatorStubTrait;
 
     public function testSubmitValidData(): void
     {
@@ -51,7 +50,7 @@ final class UserCommentTypeTest extends TypeTestCase
     protected function getPreloadedExtensions(): array
     {
         return [
-            new PlainType($this->createStubTranslator()),
+            new PlainType(new IdentityTranslator()),
             new SimpleEditorType(''),
             new UserCommentType(),
         ];

@@ -15,20 +15,18 @@ namespace App\Tests\Service;
 
 use App\Service\OpenWeatherFormatter;
 use App\Service\PositionService;
-use App\Tests\TranslatorStubTrait;
 use App\Utils\FormatUtils;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class OpenWeatherFormatterTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     private OpenWeatherFormatter $formatter;
 
     #[\Override]
     protected function setUp(): void
     {
-        $service = new PositionService($this->createStubTranslator());
+        $service = new PositionService(new IdentityTranslator());
         $this->formatter = new OpenWeatherFormatter($service);
     }
 

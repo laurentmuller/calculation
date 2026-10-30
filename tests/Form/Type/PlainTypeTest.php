@@ -17,18 +17,17 @@ use App\Entity\User;
 use App\Form\Type\PlainType;
 use App\Interfaces\DateFormatInterface;
 use App\Tests\Form\PreloadedExtensionsTrait;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\Test\TypeTestCase;
+use Symfony\Component\Translation\IdentityTranslator;
 
 #[AllowMockObjectsWithoutExpectations]
 final class PlainTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;
-    use TranslatorStubTrait;
 
     public function testArray(): void
     {
@@ -178,7 +177,7 @@ final class PlainTypeTest extends TypeTestCase
     protected function getPreloadedExtensions(): array
     {
         return [
-            new PlainType($this->createStubTranslator()),
+            new PlainType(new IdentityTranslator()),
         ];
     }
 

@@ -13,17 +13,16 @@ declare(strict_types=1);
 
 namespace App\Tests\Traits;
 
-use App\Tests\TranslatorStubTrait;
 use App\Traits\TranslatorFlashMessageAwareTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Translation\IdentityTranslator;
 
 #[AllowMockObjectsWithoutExpectations]
 final class TranslatorFlashMessageAwareTraitTest extends AwareTraitTestCase
 {
     use TranslatorFlashMessageAwareTrait;
-    use TranslatorStubTrait;
 
     #[\Override]
     protected function setUp(): void
@@ -34,7 +33,7 @@ final class TranslatorFlashMessageAwareTraitTest extends AwareTraitTestCase
         $requestStack->method('getSession')
             ->willReturn($session);
         $this->setRequestStack($requestStack);
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
         $this->setTranslator($translator);
     }
 

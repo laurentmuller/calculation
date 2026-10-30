@@ -15,18 +15,16 @@ namespace App\Tests\Service;
 
 use App\Model\UserComment;
 use App\Service\MailerService;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Translation\IdentityTranslator;
 use Twig\Extra\Markdown\MarkdownInterface;
 
 final class MailerServiceTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     /**
      * @throws TransportExceptionInterface
      */
@@ -135,7 +133,7 @@ final class MailerServiceTest extends TestCase
             self::createStub(UrlGeneratorInterface::class),
             self::createStub(MarkdownInterface::class),
             $this->createMailer($mustSend),
-            $this->createStubTranslator()
+            new IdentityTranslator()
         );
     }
 }

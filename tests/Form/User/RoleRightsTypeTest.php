@@ -23,16 +23,15 @@ use App\Model\Role;
 use App\Service\EntityNameService;
 use App\Service\RoleService;
 use App\Tests\Form\PreloadedExtensionsTrait;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
+use Symfony\Component\Translation\IdentityTranslator;
 
 #[AllowMockObjectsWithoutExpectations]
 final class RoleRightsTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;
-    use TranslatorStubTrait;
 
     public function testSubmitRoleAdmin(): void
     {
@@ -54,14 +53,14 @@ final class RoleRightsTypeTest extends TypeTestCase
         $roleHierarchy = self::createStub(RoleHierarchyInterface::class);
         $roleHierarchy->method('getReachableRoleNames')
             ->willReturn([RoleInterface::ROLE_ADMIN]);
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
         $service = new RoleService($roleHierarchy, $translator);
         $roleRightsType = new RoleRightsType($service);
 
         return [
             $rightsType,
             $roleRightsType,
-            new PlainType($this->createStubTranslator()),
+            new PlainType(new IdentityTranslator()),
         ];
     }
 

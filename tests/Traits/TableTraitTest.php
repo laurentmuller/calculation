@@ -21,7 +21,6 @@ use App\Parameter\DisplayParameter;
 use App\Parameter\UserParameters;
 use App\Table\AbstractTable;
 use App\Table\DataQuery;
-use App\Tests\TranslatorStubTrait;
 use App\Traits\ExceptionContextTrait;
 use App\Traits\TableTrait;
 use App\Traits\TranslatorTrait;
@@ -30,6 +29,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Translation\IdentityTranslator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -39,7 +39,7 @@ final class TableTraitTest extends TestCase
 {
     use ExceptionContextTrait;
     use TableTrait;
-    use TranslatorStubTrait;
+
     use TranslatorTrait;
 
     private bool $denyException;
@@ -51,7 +51,7 @@ final class TableTraitTest extends TestCase
     {
         $this->denyException = false;
         $this->throwException = false;
-        $this->translator = $this->createStubTranslator();
+        $this->translator = new IdentityTranslator();
     }
 
     public function denyAccessUnlessGranted(mixed $attribute, mixed $subject = null): void

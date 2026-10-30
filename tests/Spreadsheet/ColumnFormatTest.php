@@ -15,16 +15,14 @@ namespace App\Tests\Spreadsheet;
 
 use App\Spreadsheet\ColumnFormat;
 use App\Spreadsheet\SpreadsheetDocument;
-use App\Tests\TranslatorStubTrait;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class ColumnFormatTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public static function getAlignments(): \Generator
     {
         yield [Alignment::HORIZONTAL_RIGHT, ColumnFormat::AMOUNT];
@@ -46,7 +44,7 @@ final class ColumnFormatTest extends TestCase
 
     public function testApply(): void
     {
-        $doc = new SpreadsheetDocument($this->createStubTranslator());
+        $doc = new SpreadsheetDocument(new IdentityTranslator());
         $sheet = $doc->getSheet(0);
         $sheet->setCellValue('A1', 0.25);
         ColumnFormat::AMOUNT->apply($sheet, 1);

@@ -22,11 +22,11 @@ use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
 use App\Tests\Form\CalculationState\CalculationStateTrait;
 use App\Tests\Form\EntityTypeTestCase;
-use App\Tests\TranslatorStubTrait;
 use App\Utils\DateUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Translation\IdentityTranslator;
 
 /**
  * @extends EntityTypeTestCase<Calculation, CalculationType>
@@ -35,7 +35,6 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 final class CalculationTypeTest extends EntityTypeTestCase
 {
     use CalculationStateTrait;
-    use TranslatorStubTrait;
 
     #[\Override]
     protected function getData(): array
@@ -67,7 +66,7 @@ final class CalculationTypeTest extends EntityTypeTestCase
     {
         return [
             new EntityType($this->getCalculationStateRegistry()),
-            new CalculationStateListType($this->createStubTranslator()),
+            new CalculationStateListType(new IdentityTranslator()),
             new CalculationGroupType(self::createStub(GroupRepository::class)),
             new CalculationCategoryType(self::createStub(CategoryRepository::class)),
         ];

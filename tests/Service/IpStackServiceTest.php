@@ -16,7 +16,6 @@ namespace App\Tests\Service;
 use App\Model\HttpClientError;
 use App\Service\IpStackService;
 use App\Service\PositionService;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
@@ -24,11 +23,10 @@ use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class IpStackServiceTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     private const int ERROR_CODE = 404;
     private const string ERROR_MESSAGE = 'Error Message';
 
@@ -110,7 +108,7 @@ final class IpStackServiceTest extends TestCase
 
     private function createService(): IpStackService
     {
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
         $service = new PositionService($translator);
 
         return new IpStackService(

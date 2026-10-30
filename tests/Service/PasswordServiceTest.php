@@ -16,17 +16,15 @@ namespace App\Tests\Service;
 use App\Enums\StrengthLevel;
 use App\Model\PasswordQuery;
 use App\Service\PasswordService;
-use App\Tests\TranslatorStubTrait;
 use Createnl\ZxcvbnBundle\ZxcvbnFactory;
 use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Translation\IdentityTranslator;
 use ZxcvbnPhp\Zxcvbn;
 
 final class PasswordServiceTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public static function getScores(): \Generator
     {
         yield ['', StrengthLevel::VERY_WEAK];
@@ -91,7 +89,7 @@ final class PasswordServiceTest extends TestCase
 
     private function createService(?ZxcvbnFactoryInterface $factory = null): PasswordService
     {
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
         $factory ??= new ZxcvbnFactory([], $translator);
 
         return new PasswordService($factory, $translator);

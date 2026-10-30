@@ -22,7 +22,6 @@ use App\Service\CalculationArchiveService;
 use App\Service\SuspendEventListenerService;
 use App\Tests\DateAssertTrait;
 use App\Tests\Entity\IdTrait;
-use App\Tests\TranslatorStubTrait;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\MockObject\Stub;
@@ -33,12 +32,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class CalculationArchiveServiceTest extends TestCase
 {
     use DateAssertTrait;
     use IdTrait;
-    use TranslatorStubTrait;
 
     private Stub&CalculationRepository $calculationRepository;
     private Session $session;
@@ -315,7 +314,7 @@ final class CalculationArchiveServiceTest extends TestCase
             $this->createSuspendEventListenerService()
         );
         $service->setLogger(self::createStub(LoggerInterface::class))
-            ->setTranslator($this->createStubTranslator())
+            ->setTranslator(new IdentityTranslator())
             ->setRequestStack($this->createRequestStack());
 
         return $service;

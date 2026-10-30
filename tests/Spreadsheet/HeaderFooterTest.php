@@ -16,13 +16,11 @@ namespace App\Tests\Spreadsheet;
 use App\Spreadsheet\HeaderFooter;
 use App\Spreadsheet\SpreadsheetDocument;
 use App\Spreadsheet\WorksheetDocument;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class HeaderFooterTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public function testAddCenter(): void
     {
         $header = HeaderFooter::header();
@@ -190,7 +188,7 @@ final class HeaderFooterTest extends TestCase
 
     private function createWorksheet(): WorksheetDocument
     {
-        $document = new SpreadsheetDocument($this->createStubTranslator());
+        $document = new SpreadsheetDocument(new IdentityTranslator());
 
         return $document->getActiveSheet();
     }

@@ -17,7 +17,6 @@ use App\Parameter\ApplicationParameters;
 use App\Parameter\DatesParameter;
 use App\Service\SwissPostService;
 use App\Service\SwissPostUpdater;
-use App\Tests\TranslatorStubTrait;
 use App\Utils\FileUtils;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
@@ -25,10 +24,10 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class SwissPostUpdaterTest extends TestCase
 {
-    use TranslatorStubTrait;
     private string $databaseName;
 
     private Stub&ApplicationParameters $parameters;
@@ -50,7 +49,7 @@ final class SwissPostUpdaterTest extends TestCase
             $service
         );
         $this->service
-            ->setTranslator($this->createStubTranslator())
+            ->setTranslator(new IdentityTranslator())
             ->setLogger(self::createStub(LoggerInterface::class));
     }
 
@@ -140,7 +139,7 @@ final class SwissPostUpdaterTest extends TestCase
         $factory = self::createStub(FormFactoryInterface::class);
         $service = new SwissPostService($this->databaseName);
         $logger = self::createStub(LoggerInterface::class);
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
 
         $this->service = new SwissPostUpdater($this->parameters, $factory, $service);
         $this->service->setTranslator($translator)

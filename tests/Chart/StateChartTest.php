@@ -18,17 +18,15 @@ use App\Model\StateChartData;
 use App\Model\StateChartDataItem;
 use App\Parameter\ApplicationParameters;
 use App\Repository\CalculationStateRepository;
-use App\Tests\TranslatorStubTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Translation\IdentityTranslator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class StateChartTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     private UrlGeneratorInterface $generator;
     private ApplicationParameters $parameters;
     private Stub&CalculationStateRepository $repository;
@@ -40,7 +38,7 @@ final class StateChartTest extends TestCase
         $this->parameters = self::createStub(ApplicationParameters::class);
         $this->repository = self::createStub(CalculationStateRepository::class);
         $this->generator = self::createStub(UrlGeneratorInterface::class);
-        $this->translator = $this->createStubTranslator();
+        $this->translator = new IdentityTranslator();
     }
 
     public function testWithoutData(): void

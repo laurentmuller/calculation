@@ -26,14 +26,12 @@ use App\Entity\User;
 use App\Enums\EntityName;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class EntityNameTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public static function getFormFields(): \Generator
     {
         yield [EntityName::CALCULATION, 'calculation'];
@@ -226,7 +224,7 @@ final class EntityNameTest extends TestCase
     #[DataProvider('getLabel')]
     public function testTranslate(string $expected, EntityName $entity): void
     {
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
         $actual = $entity->trans($translator);
         self::assertSame($expected, $actual);
     }

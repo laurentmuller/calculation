@@ -14,22 +14,20 @@ declare(strict_types=1);
 namespace App\Tests\Twig;
 
 use App\Service\RoleService;
-use App\Tests\TranslatorStubTrait;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
+use Symfony\Component\Translation\IdentityTranslator;
 
 /**
  * @extends RuntimeTestCase<RoleService>
  */
 final class RoleServiceTest extends RuntimeTestCase
 {
-    use TranslatorStubTrait;
-
     #[\Override]
     protected function createService(): RoleService
     {
         return new RoleService(
             self::createStub(RoleHierarchyInterface::class),
-            $this->createStubTranslator()
+            new IdentityTranslator()
         );
     }
 

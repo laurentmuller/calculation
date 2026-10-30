@@ -14,15 +14,14 @@ declare(strict_types=1);
 namespace App\Tests\Traits;
 
 use App\Tests\Fixture\FixtureTranslatable;
-use App\Tests\TranslatorStubTrait;
 use App\Traits\TranslatorTrait;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Translation\IdentityTranslator;
 use Symfony\Component\Translation\Translator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class TranslatorTraitTest extends TestCase
 {
-    use TranslatorStubTrait;
     use TranslatorTrait;
 
     private bool $useInterface = true;
@@ -31,7 +30,7 @@ final class TranslatorTraitTest extends TestCase
     public function getTranslator(): TranslatorInterface
     {
         if ($this->useInterface) {
-            return $this->createStubTranslator();
+            return new IdentityTranslator();
         }
 
         $translator = self::createStub(Translator::class);

@@ -16,15 +16,13 @@ namespace App\Tests\Mime;
 use App\Enums\Importance;
 use App\Mime\NotificationEmail;
 use App\Service\ApplicationService;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Translation\IdentityTranslator;
 use Symfony\Component\Translation\TranslatableMessage;
 
 final class NotificationEmailTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public function testAttachFromUploadedFile(): void
     {
         $email = $this->createNotificationEmail();
@@ -144,7 +142,7 @@ final class NotificationEmailTest extends TestCase
     public function testWithMediumImportance(): void
     {
         $notification = new NotificationEmail(
-            translator: $this->createStubTranslator(),
+            translator: new IdentityTranslator(),
             importance: Importance::MEDIUM
         );
         $notification->from('fake@fake.com')
@@ -168,7 +166,7 @@ final class NotificationEmailTest extends TestCase
 
     private function createNotificationEmail(): NotificationEmail
     {
-        return NotificationEmail::instance($this->createStubTranslator());
+        return NotificationEmail::instance(new IdentityTranslator());
     }
 
     private function createUploadedFile(): UploadedFile

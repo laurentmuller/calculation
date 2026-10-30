@@ -18,22 +18,19 @@ use App\Pdf\PdfColumn;
 use App\Pdf\PdfTable;
 use App\Pdf\Traits\PdfCellTranslatorTrait;
 use App\Tests\Fixture\FixtureReport;
-use App\Tests\TranslatorStubTrait;
 use fpdf\PdfDocument;
-use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Translation\IdentityTranslator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class PdfCellTranslatorTraitTest extends TestCase
 {
-    use TranslatorStubTrait;
-
-    private Stub&TranslatorInterface $translator;
+    private TranslatorInterface $translator;
 
     #[\Override]
     protected function setUp(): void
     {
-        $this->translator = $this->createStubTranslator();
+        $this->translator = new IdentityTranslator();
     }
 
     public function testRender(): void

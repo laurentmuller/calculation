@@ -16,15 +16,13 @@ namespace App\Tests\Spreadsheet;
 use App\Spreadsheet\HeaderFormat;
 use App\Spreadsheet\SpreadsheetDocument;
 use App\Spreadsheet\WorksheetDocument;
-use App\Tests\TranslatorStubTrait;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Style;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class HeaderFormatTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public function testAmount(): void
     {
         $format = HeaderFormat::amount(Alignment::VERTICAL_CENTER);
@@ -137,7 +135,7 @@ final class HeaderFormatTest extends TestCase
 
     private function getActiveSheet(): WorksheetDocument
     {
-        $doc = new SpreadsheetDocument($this->createStubTranslator());
+        $doc = new SpreadsheetDocument(new IdentityTranslator());
         $sheet = $doc->getActiveSheet();
         $sheet->setCellValue('A1', 'fake');
 

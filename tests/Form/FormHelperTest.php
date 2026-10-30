@@ -29,7 +29,6 @@ use App\Pdf\Html\HtmlAttribute;
 use App\Tests\Fixture\FixtureStringable;
 use App\Tests\Form\User\PasswordHasherExtensionTrait;
 use App\Tests\Form\User\VichImageTypeTrait;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -52,6 +51,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
+use Symfony\Component\Translation\IdentityTranslator;
 
 #[AllowMockObjectsWithoutExpectations]
 final class FormHelperTest extends TypeTestCase
@@ -60,7 +60,7 @@ final class FormHelperTest extends TypeTestCase
     use PreloadedExtensionsTrait {
         getExtensions as getExtensionsFromTrait;
     }
-    use TranslatorStubTrait;
+
     use ValidatorExtensionTrait;
     use VichImageTypeTrait;
 
@@ -636,7 +636,7 @@ final class FormHelperTest extends TypeTestCase
     public function testSimulateAndConfirmType(): void
     {
         $form = $this->createFormHelper()
-            ->addSimulateAndConfirmType($this->createStubTranslator(), false)
+            ->addSimulateAndConfirmType(new IdentityTranslator(), false)
             ->createForm();
 
         self::assertTrue($form->has('simulate'));
@@ -894,7 +894,7 @@ final class FormHelperTest extends TypeTestCase
         $colorsPath = __DIR__ . '/../files/json/colors.json';
 
         return [
-            new PlainType($this->createStubTranslator()),
+            new PlainType(new IdentityTranslator()),
             new CustomColorType($colorsPath),
             $this->createVichImageType(),
         ];

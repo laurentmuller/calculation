@@ -20,17 +20,15 @@ use App\Entity\User;
 use App\Interfaces\EntityInterface;
 use App\Interfaces\TimestampableInterface;
 use App\Listener\TimestampableListener;
-use App\Tests\TranslatorStubTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\UnitOfWork;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class TimestampableListenerTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     private const string USER_NAME = 'user_name';
 
     public function testDeleteDiff(): void
@@ -134,7 +132,7 @@ final class TimestampableListenerTest extends TestCase
     private function createListener(bool $createUser = true): TimestampableListener
     {
         $security = $this->createMockSecurity($createUser);
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
 
         return new TimestampableListener($security, $translator);
     }

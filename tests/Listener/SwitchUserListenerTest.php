@@ -16,7 +16,6 @@ namespace App\Tests\Listener;
 use App\Constants\SecurityAttributes;
 use App\Entity\User;
 use App\Listener\SwitchUserListener;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -27,11 +26,10 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Event\SwitchUserEvent;
 use Symfony\Component\Security\Http\Firewall\SwitchUserListener as SecuritySwitchUserListener;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class SwitchUserListenerTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     private const string EXIT_VALUE = SecuritySwitchUserListener::EXIT_VALUE;
     private const string SWITCH_USER_PARAMETER = SwitchUserListener::SWITCH_USER_PARAMETER;
 
@@ -77,7 +75,7 @@ final class SwitchUserListenerTest extends TestCase
     private function createListener(): SwitchUserListener
     {
         $listener = new SwitchUserListener();
-        $listener->setTranslator($this->createStubTranslator())
+        $listener->setTranslator(new IdentityTranslator())
             ->setRequestStack($this->createRequestStack());
 
         return $listener;

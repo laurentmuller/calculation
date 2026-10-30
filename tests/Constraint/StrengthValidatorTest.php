@@ -17,12 +17,12 @@ use App\Constraint\Strength;
 use App\Constraint\StrengthValidator;
 use App\Enums\StrengthLevel;
 use App\Service\PasswordService;
-use App\Tests\TranslatorStubTrait;
 use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use ZxcvbnPhp\Zxcvbn;
 
 /**
@@ -31,8 +31,6 @@ use ZxcvbnPhp\Zxcvbn;
 #[AllowMockObjectsWithoutExpectations]
 final class StrengthValidatorTest extends ConstraintValidatorTestCase
 {
-    use TranslatorStubTrait;
-
     private const string EMPTY_MESSAGE = 'empty';
 
     public static function getStrengthLevels(): \Generator
@@ -122,7 +120,9 @@ final class StrengthValidatorTest extends ConstraintValidatorTestCase
     #[\Override]
     protected function createValidator(): StrengthValidator
     {
-        $translator = $this->createStubTranslator(self::EMPTY_MESSAGE);
+        $translator = self::createStub(TranslatorInterface::class);
+        $translator->method('trans')
+            ->willReturn(self::EMPTY_MESSAGE);
         $factory = self::createStub(ZxcvbnFactoryInterface::class);
         $factory->method('createZxcvbn')
             ->willReturn(new Zxcvbn());

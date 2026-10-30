@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Twig;
 
-use App\Tests\TranslatorStubTrait;
 use App\Twig\FormatExtension;
 use App\Utils\FormatUtils;
+use Symfony\Component\Translation\IdentityTranslator;
 use Twig\Error\Error;
 use Twig\Extension\AttributeExtension;
 
@@ -24,8 +24,6 @@ use Twig\Extension\AttributeExtension;
  */
 final class FormatExtensionTest extends RuntimeTestCase
 {
-    use TranslatorStubTrait;
-
     public function testFormatBoolean(): void
     {
         $extension = $this->createService();
@@ -38,7 +36,7 @@ final class FormatExtensionTest extends RuntimeTestCase
     #[\Override]
     protected function createService(): FormatExtension
     {
-        return new FormatExtension($this->createStubTranslator());
+        return new FormatExtension(new IdentityTranslator());
     }
 
     /**

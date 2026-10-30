@@ -16,16 +16,14 @@ namespace App\Tests\Listener;
 use App\Entity\User;
 use App\Listener\LoginListener;
 use App\Repository\UserRepository;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class LoginListenerTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public function testLogin(): void
     {
         $user = $this->createUser();
@@ -49,7 +47,7 @@ final class LoginListenerTest extends TestCase
     {
         $repository = self::createStub(UserRepository::class);
         $listener = new LoginListener($repository);
-        $listener->setTranslator($this->createStubTranslator());
+        $listener->setTranslator(new IdentityTranslator());
         $listener->setRequestStack($this->createRequestStack());
 
         return $listener;

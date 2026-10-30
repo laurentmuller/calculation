@@ -14,15 +14,13 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\EntityPermission;
-use App\Tests\TranslatorStubTrait;
 use Elao\Enum\FlagBag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class EntityPermissionTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public static function getLabel(): \Generator
     {
         yield [EntityPermission::ADD, 'rights.add'];
@@ -160,7 +158,7 @@ final class EntityPermissionTest extends TestCase
     #[DataProvider('getLabel')]
     public function testTranslate(EntityPermission $permission, string $expected): void
     {
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
         $actual = $permission->trans($translator);
         self::assertSame($expected, $actual);
     }

@@ -40,7 +40,7 @@
         "ext-zip": "*",
         "ext-zlib": "*",
         "beberlei/doctrineextensions": "^v1.0",
-        "createnl/zxcvbn-bundle": "3.2",
+        "createnl/zxcvbn-bundle": "^3.2",
         "doctrine/doctrine-bundle": "^3.0",
         "doctrine/orm": "^3.0",
         "elao/enum": "^3.0",

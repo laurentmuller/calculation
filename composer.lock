@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "47521e10d4b5986201dd43bb07468b5f",
+    "content-hash": "71e98729aaf7ea8c8d01b862105c042f",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -257,7 +257,7 @@
         },
         {
             "name": "createnl/zxcvbn-bundle",
-            "version": "dev-master",
+            "version": "3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/zxcvbn-bundle.git",
@@ -279,7 +279,6 @@
                 "symfony/console": "^5.4|^6.0|^7.0|^8.0",
                 "symfony/framework-bundle": "^5.4|^6.0|^7.0|^8.0"
             },
-            "default-branch": true,
             "type": "symfony-bundle",
             "autoload": {
                 "psr-4": {
@@ -302,7 +301,7 @@
             ],
             "description": "zxcvbn-php symfony bundle",
             "support": {
-                "source": "https://github.com/laurentmuller/zxcvbn-bundle/tree/master"
+                "source": "https://github.com/laurentmuller/zxcvbn-bundle/tree/3.2.0"
             },
             "time": "2026-10-30T05:51:03+00:00"
         },
@@ -11681,9 +11680,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "createnl/zxcvbn-bundle": 20
-    },
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

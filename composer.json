@@ -204,8 +204,8 @@
     },
     "repositories": [
         {
-            "type": "path",
-            "url": "D:/Github/zxcvbn-bundle"
+            "type": "vcs",
+            "url": "https://github.com/laurentmuller/zxcvbn-bundle"
         }
     ]
 }

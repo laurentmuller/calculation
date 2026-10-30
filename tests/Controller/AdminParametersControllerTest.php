@@ -26,7 +26,6 @@ final class AdminParametersControllerTest extends ControllerTestCase
         yield ['/admin/parameters', self::ROLE_WEBMASTER];
     }
 
-
     public function testParametersNoChange(): void
     {
         self::markTestSkipped('Until resolve null arguments.');

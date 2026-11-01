@@ -16,4 +16,5 @@
 /**
  * Specific Files
  */
+<!--#include file="../application/button_themes.js" -->
 <!--#include file="../application/user_register.js" -->

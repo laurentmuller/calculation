@@ -15,6 +15,7 @@ namespace App\Tests\Controller;
 
 use App\Service\EmailVerifier;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\UnexpectedResponseException;
 
@@ -28,8 +29,8 @@ final class RegistrationControllerTest extends ControllerTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->throwOnHandleEmail = false;
         $this->throwOnSendMail = false;
+        $this->throwOnHandleEmail = false;
         $verifier = self::createStub(EmailVerifier::class);
         $verifier->method('sendEmail')
             ->willReturnCallback(fn (): bool => $this->sendMail());
@@ -51,7 +52,6 @@ final class RegistrationControllerTest extends ControllerTestCase
 
     public function testRegister(): void
     {
-        self::markTestSkipped('Until resolve null arguments.');
         $data = [
             'username' => 'user_name_1',
             'email' => 'email_1@email.com',
@@ -64,13 +64,13 @@ final class RegistrationControllerTest extends ControllerTestCase
             id: 'registration.register.submit',
             data: $data,
             userName: self::ROLE_WEBMASTER,
-            disableReboot: true,
+            method: Request::METHOD_GET,
+            disableReboot: true
         );
     }
 
     public function testRegisterWithException(): void
     {
-        self::markTestSkipped('Until resolve null arguments.');
         $this->throwOnSendMail = true;
         $data = [
             'username' => 'user_name_2',
@@ -84,7 +84,8 @@ final class RegistrationControllerTest extends ControllerTestCase
             id: 'registration.register.submit',
             data: $data,
             userName: self::ROLE_WEBMASTER,
-            disableReboot: true,
+            method: Request::METHOD_GET,
+            disableReboot: true
         );
     }
 

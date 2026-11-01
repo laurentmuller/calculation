@@ -26,6 +26,9 @@ trait EnablementValueTrait
     /** The none value. */
     public const string NONE_VALUE = 'None';
 
+    /** The unknown value. */
+    public const string UNKNOWN = 'Unknown';
+
     private const array DISABLED_VALUES = ['false', 'off', 'no', 'disabled', 'not enabled'];
     private const array ENABLED_VALUES = ['true', 'on', 'yes', 'enabled', 'supported', 'active'];
 

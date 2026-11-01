@@ -33,9 +33,8 @@ final class RepeatPasswordTypeTest extends TypeTestCase
     #[\Override]
     protected function getExtensions(): array
     {
-        $extensions = parent::getExtensions();
-        $extensions[] = $this->getPasswordHasherExtension();
-
-        return $extensions;
+        return \array_merge(parent::getExtensions(), [
+            $this->getPasswordHasherExtension(),
+        ]);
     }
 }

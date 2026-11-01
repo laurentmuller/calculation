@@ -50,7 +50,9 @@ abstract class RuntimeTestCase extends IntegrationTestCase implements RuntimeLoa
     #[\Override]
     protected function getExtensions(): array
     {
-        return [new AttributeExtension($this->getServiceClass())];
+        return \array_merge(parent::getExtensions(), [
+            new AttributeExtension($this->getServiceClass()),
+        ]);
     }
 
     #[\Override]

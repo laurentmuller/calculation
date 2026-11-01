@@ -21,7 +21,9 @@ final class SwitchExtensionTest extends IntegrationTestCase
     #[\Override]
     protected function getExtensions(): array
     {
-        return [new SwitchExtension()];
+        return \array_merge(parent::getExtensions(), [
+            new SwitchExtension(),
+        ]);
     }
 
     #[\Override]

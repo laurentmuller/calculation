@@ -164,7 +164,7 @@ class IpStackService extends AbstractHttpClientService
     {
         if (isset($response['error'])) {
             $code = $response['error']['code'] ?? 404;
-            $type = $response['error']['type'] ?? 'unknown';
+            $type = $response['error']['type'] ?? 'Unknown';
             $message = $this->translateError($type);
 
             return $this->setLastError($code, $message, $exception);

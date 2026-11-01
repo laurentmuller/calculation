@@ -21,6 +21,7 @@ use Doctrine\DBAL\Statement;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 final class DatabaseInfoServiceTest extends TestCase
 {
@@ -59,8 +60,7 @@ final class DatabaseInfoServiceTest extends TestCase
     #[DataProvider('getDisabledValues')]
     public function testDisabledValue(string $value, bool $expected): void
     {
-        $manager = self::createStub(EntityManagerInterface::class);
-        $service = new DatabaseInfoService($manager);
+        $service = $this->createService();
         $actual = $service->isDisabledValue($value);
         self::assertSame($expected, $actual);
     }
@@ -68,8 +68,7 @@ final class DatabaseInfoServiceTest extends TestCase
     #[DataProvider('getEnabledValues')]
     public function testEnabledValue(string $value, bool $expected): void
     {
-        $manager = self::createStub(EntityManagerInterface::class);
-        $service = new DatabaseInfoService($manager);
+        $service = $this->createService();
         $actual = $service->isEnabledValue($value);
         self::assertSame($expected, $actual);
     }
@@ -103,7 +102,7 @@ final class DatabaseInfoServiceTest extends TestCase
             ],
         ];
         $manager = $this->createEntityManager($values);
-        $service = new DatabaseInfoService($manager);
+        $service = $this->createService($manager);
         $actual = $service->getConfiguration();
         self::assertCount(5, $actual);
     }
@@ -111,7 +110,7 @@ final class DatabaseInfoServiceTest extends TestCase
     public function testGetConfigurationWithException(): void
     {
         $manager = $this->createEntityManagerWithException();
-        $service = new DatabaseInfoService($manager);
+        $service = $this->createService($manager);
         $actual = $service->getConfiguration();
         self::assertSame([], $actual);
     }
@@ -127,7 +126,7 @@ final class DatabaseInfoServiceTest extends TestCase
             'Charset' => 'utf8mb4',
         ];
         $manager = $this->createEntityManager();
-        $service = new DatabaseInfoService($manager);
+        $service = $this->createService($manager);
         $actual = $service->getDatabase();
         self::assertSame($expected, $actual);
     }
@@ -142,7 +141,7 @@ final class DatabaseInfoServiceTest extends TestCase
         ];
         $expected = '10.11.15';
         $manager = $this->createEntityManager($values);
-        $service = new DatabaseInfoService($manager);
+        $service = $this->createService($manager);
         $actual = $service->getVersion();
         self::assertSame($expected, $actual);
     }
@@ -150,7 +149,7 @@ final class DatabaseInfoServiceTest extends TestCase
     public function testGetVersionWithException(): void
     {
         $manager = $this->createEntityManagerWithException();
-        $service = new DatabaseInfoService($manager);
+        $service = $this->createService($manager);
         $actual = $service->getVersion();
         self::assertSame('Unknown', $actual);
     }
@@ -192,5 +191,14 @@ final class DatabaseInfoServiceTest extends TestCase
             ->willReturn($connection);
 
         return $manager;
+    }
+
+    private function createService(
+        ?EntityManagerInterface $entityManager = null
+    ): DatabaseInfoService {
+        return new DatabaseInfoService(
+            $entityManager ?? self::createStub(EntityManagerInterface::class),
+            new ArrayAdapter()
+        );
     }
 }

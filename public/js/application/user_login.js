@@ -21,6 +21,6 @@ $(function () {
             }
         }
     });
-    // theme
+    // initialize theme switcher
     initThemeInput();
 });

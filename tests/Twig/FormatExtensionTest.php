@@ -59,7 +59,9 @@ final class FormatExtensionTest extends RuntimeTestCase
     #[\Override]
     protected function getExtensions(): array
     {
-        return \array_merge(parent::getExtensions(), [new AttributeExtension(FormatUtils::class)]);
+        return \array_merge(parent::getExtensions(), [
+            new AttributeExtension(FormatUtils::class),
+        ]);
     }
 
     #[\Override]

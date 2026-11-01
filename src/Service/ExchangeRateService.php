@@ -359,7 +359,7 @@ class ExchangeRateService extends AbstractHttpClientService
         if (self::RESPONSE_SUCCESS === $result) {
             return true;
         }
-        $error = $response['error-type'] ?? 'unknown';
+        $error = $response['error-type'] ?? 'Unknown';
         $this->setLastError(404, $this->translateError($error));
 
         return false;

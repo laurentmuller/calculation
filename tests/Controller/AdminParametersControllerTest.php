@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Service\DictionaryService;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class AdminParametersControllerTest extends ControllerTestCase
@@ -28,23 +29,25 @@ final class AdminParametersControllerTest extends ControllerTestCase
 
     public function testParametersNoChange(): void
     {
-        self::markTestSkipped('Until resolve null arguments.');
         $this->checkForm(
             uri: 'admin/parameters',
-            userName: self::ROLE_WEBMASTER
+            userName: self::ROLE_WEBMASTER,
+            method: Request::METHOD_GET,
+            disableReboot: true
         );
     }
 
     public function testParametersWithChanges(): void
     {
-        self::markTestSkipped('Until resolve null arguments.');
         $name = $this->getService(DictionaryService::class)
             ->getRandomWord();
         $data = ['customer[name]' => $name];
         $this->checkForm(
             uri: 'admin/parameters',
             data: $data,
-            userName: self::ROLE_WEBMASTER
+            userName: self::ROLE_WEBMASTER,
+            method: Request::METHOD_GET,
+            disableReboot: true
         );
     }
 }

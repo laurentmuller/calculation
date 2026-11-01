@@ -8,29 +8,31 @@ $(function () {
     $('#captcha').initCaptcha();
 
     // initialize password strength meter
-    $("#plainPassword_first").initPasswordStrength({
-        userField: "#username"
+    $('#plainPassword_first').initPasswordStrength({
+        userField: '#username'
     });
 
     // initialize validator
-    const $form = $("#edit-form");
-    const message = $form.data("equal_to");
+    const $form = $('#edit-form');
+    const message = $form.data('equal_to');
     const options = {
         rules: {
-            "plainPassword[first]": {
+            'plainPassword[first]': {
                 password: 3,
                 notEmail: true,
                 notUsername: '#username'
             },
-            "plainPassword[second]": {
+            'plainPassword[second]': {
                 equalTo: '#plainPassword_first'
             }
         },
         messages: {
-            "plainPassword[second]": {
+            'plainPassword[second]': {
                 equalTo: message
             }
         }
     };
     $form.initValidator(options);
+    // initialize theme switcher
+    initThemeInput();
 });

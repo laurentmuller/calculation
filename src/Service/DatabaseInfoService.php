@@ -52,7 +52,7 @@ class DatabaseInfoService
      */
     public function getConfiguration(): array
     {
-        return $this->cache->get('configuration', fn () => $this->loadConfiguration());
+        return $this->cache->get('configuration', fn (): array => $this->loadConfiguration());
     }
 
     /**
@@ -62,7 +62,7 @@ class DatabaseInfoService
      */
     public function getDatabase(): array
     {
-        return $this->cache->get('database', fn () => $this->loadDatabase());
+        return $this->cache->get('database', fn (): array => $this->loadDatabase());
     }
 
     /**

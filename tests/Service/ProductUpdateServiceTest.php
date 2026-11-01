@@ -22,7 +22,6 @@ use App\Repository\ProductRepository;
 use App\Service\ProductUpdateService;
 use App\Service\SuspendEventListenerService;
 use App\Tests\Entity\IdTrait;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
@@ -32,11 +31,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class ProductUpdateServiceTest extends TestCase
 {
     use IdTrait;
-    use TranslatorStubTrait;
 
     private Category $category;
     private Product $product;
@@ -282,7 +281,7 @@ final class ProductUpdateServiceTest extends TestCase
             $security,
         );
         $productService->setRequestStack($this->createRequestStack());
-        $productService->setTranslator($this->createStubTranslator());
+        $productService->setTranslator(new IdentityTranslator());
         $productService->setLogger(self::createStub(LoggerInterface::class));
 
         $class = new \ReflectionClass(ProductUpdateService::class);

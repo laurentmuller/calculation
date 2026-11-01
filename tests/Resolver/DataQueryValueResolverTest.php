@@ -24,7 +24,6 @@ use App\Table\CategoryTable;
 use App\Table\DataQuery;
 use App\Table\LogTable;
 use App\Table\SearchTable;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,8 +36,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class DataQueryValueResolverTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public function testDefault(): void
     {
         $resolver = $this->createResolver();

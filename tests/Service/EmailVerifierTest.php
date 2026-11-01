@@ -18,7 +18,6 @@ use App\Mime\NotificationEmail;
 use App\Repository\UserRepository;
 use App\Service\EmailVerifier;
 use App\Tests\Entity\IdTrait;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
@@ -27,6 +26,7 @@ use Symfony\Component\HttpFoundation\UriSigner;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Translation\IdentityTranslator;
 use SymfonyCasts\Bundle\VerifyEmail\Generator\VerifyEmailTokenGenerator;
 use SymfonyCasts\Bundle\VerifyEmail\Model\VerifyEmailSignatureComponents;
 use SymfonyCasts\Bundle\VerifyEmail\Util\VerifyEmailQueryUtility;
@@ -36,7 +36,6 @@ use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 final class EmailVerifierTest extends TestCase
 {
     use IdTrait;
-    use TranslatorStubTrait;
 
     public function testHandleEmail(): void
     {
@@ -44,7 +43,7 @@ final class EmailVerifierTest extends TestCase
             $this->createVerifyEmailHelper(),
             self::createStub(MailerInterface::class),
             self::createStub(UserRepository::class),
-            $this->createStubTranslator()
+            new IdentityTranslator()
         );
 
         $user = $this->createUser();
@@ -58,7 +57,7 @@ final class EmailVerifierTest extends TestCase
      */
     public function testSendEmail(): void
     {
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
         $service = new EmailVerifier(
             $this->createMockVerifyEmailHelper(),
             self::createStub(MailerInterface::class),

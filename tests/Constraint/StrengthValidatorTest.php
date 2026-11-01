@@ -17,12 +17,12 @@ use App\Constraint\Strength;
 use App\Constraint\StrengthValidator;
 use App\Enums\StrengthLevel;
 use App\Service\PasswordService;
-use App\Tests\TranslatorStubTrait;
 use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use ZxcvbnPhp\Zxcvbn;
 
 /**
@@ -31,8 +31,6 @@ use ZxcvbnPhp\Zxcvbn;
 #[AllowMockObjectsWithoutExpectations]
 final class StrengthValidatorTest extends ConstraintValidatorTestCase
 {
-    use TranslatorStubTrait;
-
     private const string EMPTY_MESSAGE = 'empty';
 
     public static function getStrengthLevels(): \Generator
@@ -54,7 +52,7 @@ final class StrengthValidatorTest extends ConstraintValidatorTestCase
     public function testEmptyIsValid(StrengthLevel $level): void
     {
         $constraint = new Strength($level);
-        $this->validator->validate('', $constraint);
+        $this->validate('', $constraint);
         self::assertNoViolation();
     }
 
@@ -70,14 +68,14 @@ final class StrengthValidatorTest extends ConstraintValidatorTestCase
         );
         $this->setObject($object);
         self::expectException(ConstraintDefinitionException::class);
-        $this->validator->validate($object->password, $constraint);
+        $this->validate($object->password, $constraint);
     }
 
     #[DataProvider('getStrengthLevels')]
     public function testNullIsValid(StrengthLevel $level): void
     {
         $constraint = new Strength($level);
-        $this->validator->validate(null, $constraint);
+        $this->validate(null, $constraint);
         self::assertNoViolation();
     }
 
@@ -94,7 +92,7 @@ final class StrengthValidatorTest extends ConstraintValidatorTestCase
             emailPath: 'email'
         );
         $this->setObject($object);
-        $this->validator->validate($object->password, $constraint);
+        $this->validate($object->password, $constraint);
         self::assertNoViolation();
     }
 
@@ -103,7 +101,7 @@ final class StrengthValidatorTest extends ConstraintValidatorTestCase
     {
         $level = StrengthLevel::tryFrom($strength) ?? StrengthLevel::DEFAULT;
         $constraint = new Strength($level);
-        $this->validator->validate($value, $constraint);
+        $this->validate($value, $constraint);
 
         if ($violation) {
             $parameters = [
@@ -122,7 +120,9 @@ final class StrengthValidatorTest extends ConstraintValidatorTestCase
     #[\Override]
     protected function createValidator(): StrengthValidator
     {
-        $translator = $this->createStubTranslator(self::EMPTY_MESSAGE);
+        $translator = self::createStub(TranslatorInterface::class);
+        $translator->method('trans')
+            ->willReturn(self::EMPTY_MESSAGE);
         $factory = self::createStub(ZxcvbnFactoryInterface::class);
         $factory->method('createZxcvbn')
             ->willReturn(new Zxcvbn());

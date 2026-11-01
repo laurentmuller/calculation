@@ -16,17 +16,16 @@ namespace App\Tests\Controller;
 use App\Controller\CaptchaController;
 use App\Service\CaptchaImageService;
 use App\Tests\MockStubTrait;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class CaptchaControllerTest extends ControllerTestCase
 {
     use MockStubTrait;
-    use TranslatorStubTrait;
 
     #[\Override]
     public static function getRoutes(): \Generator
@@ -133,7 +132,7 @@ final class CaptchaControllerTest extends ControllerTestCase
     private function getController(): CaptchaController
     {
         $controller = $this->getService(CaptchaController::class);
-        $controller->setTranslator($this->createStubTranslator());
+        $controller->setTranslator(new IdentityTranslator());
 
         return $controller;
     }

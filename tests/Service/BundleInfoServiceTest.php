@@ -16,7 +16,7 @@ namespace App\Tests\Service;
 use App\Service\BundleInfoService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
+use Symfony\Component\DependencyInjection\Kernel\BundleInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 final class BundleInfoServiceTest extends TestCase
@@ -33,9 +33,6 @@ final class BundleInfoServiceTest extends TestCase
     private function createMockBundle(): BundleInterface
     {
         $bundle = self::createMock(BundleInterface::class);
-        $bundle->expects(self::once())
-            ->method('getNamespace')
-            ->willReturn('App\Tests\Service');
         $bundle->expects(self::once())
             ->method('getPath')
             ->willReturn(__DIR__);

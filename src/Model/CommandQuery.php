@@ -26,4 +26,14 @@ class CommandQuery
         public bool $help = false,
     ) {
     }
+
+    public function parameters(): array
+    {
+        return \array_filter([
+            'name' => $this->name,
+            'arguments' => $this->arguments,
+            'options' => $this->options,
+            'help' => $this->help,
+        ]);
+    }
 }

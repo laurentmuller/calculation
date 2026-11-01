@@ -14,14 +14,12 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\EntityAction;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class EntityActionTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public static function getLabel(): \Generator
     {
         yield ['entity_action.edit', EntityAction::EDIT];
@@ -69,7 +67,7 @@ final class EntityActionTest extends TestCase
     #[DataProvider('getLabel')]
     public function testTranslate(string $expected, EntityAction $action): void
     {
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
         $actual = $action->trans($translator);
         self::assertSame($expected, $actual);
     }

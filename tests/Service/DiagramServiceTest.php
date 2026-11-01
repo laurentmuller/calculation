@@ -14,14 +14,12 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\DiagramService;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class DiagramServiceTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     private DiagramService $service;
 
     #[\Override]
@@ -29,7 +27,7 @@ final class DiagramServiceTest extends TestCase
     {
         $path = __DIR__ . '/../files/diagrams';
         $cache = new ArrayAdapter();
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
         $this->service = new DiagramService($path, $cache, $translator);
     }
 

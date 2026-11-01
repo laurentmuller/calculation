@@ -14,14 +14,12 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\Environment;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class EnvironmentTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public static function getIsDevelopment(): \Generator
     {
         yield [Environment::DEVELOPMENT, true];
@@ -95,7 +93,7 @@ final class EnvironmentTest extends TestCase
     #[DataProvider('getLabels')]
     public function testTranslate(Environment $environment, string $expected): void
     {
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
         $actual = $environment->trans($translator);
         self::assertSame($expected, $actual);
     }

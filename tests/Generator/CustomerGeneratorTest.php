@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Generator;
 
 use App\Generator\CustomerGenerator;
+use Symfony\Component\Translation\IdentityTranslator;
 
 /**
  * @extends GeneratorTestCase<CustomerGenerator>
@@ -54,7 +55,7 @@ final class CustomerGeneratorTest extends GeneratorTestCase
         return new CustomerGenerator(
             service: $this->service,
             manager: $this->manager,
-            translator: $this->createStubTranslator(),
+            translator: new IdentityTranslator(),
             logger: $this->createMockLogger()
         );
     }

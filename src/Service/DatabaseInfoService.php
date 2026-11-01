@@ -13,11 +13,14 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Constants\CacheAttributes;
 use App\Traits\EnablementValueTrait;
 use App\Utils\StringUtils;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Contracts\Cache\CacheInterface;
 
 /**
  * Service to get database information.
@@ -35,16 +38,11 @@ class DatabaseInfoService
         'charset' => 'Charset',
     ];
 
-    /** @var array<string, string> */
-    private array $configuration = [];
-
-    /** @var array<string, string> */
-    private array $database = [];
-
-    private ?string $version = null;
-
-    public function __construct(private readonly EntityManagerInterface $manager)
-    {
+    public function __construct(
+        private readonly EntityManagerInterface $manager,
+        #[Target(CacheAttributes::CACHE_SYMFONY)]
+        private readonly CacheInterface $cache,
+    ) {
     }
 
     /**
@@ -54,22 +52,7 @@ class DatabaseInfoService
      */
     public function getConfiguration(): array
     {
-        if ([] === $this->configuration) {
-            try {
-                $variables = $this->getVariables();
-                foreach ($variables as $variable) {
-                    $value = StringUtils::trim($variable['Value']);
-                    if (null === $value) {
-                        continue;
-                    }
-                    $name = $variable['Variable_name'];
-                    $this->configuration[$name] = $this->convertValue($value, $name);
-                }
-            } catch (Exception) {
-            }
-        }
-
-        return $this->configuration;
+        return $this->cache->get('configuration', fn (): array => $this->loadConfiguration());
     }
 
     /**
@@ -79,16 +62,7 @@ class DatabaseInfoService
      */
     public function getDatabase(): array
     {
-        if ([] === $this->database) {
-            $params = $this->getConnection()->getParams();
-            foreach (self::DATABASE_PARAMETERS as $key => $name) {
-                if (isset($params[$key]) && \is_scalar($params[$key])) {
-                    $this->database[$name] = (string) $params[$key];
-                }
-            }
-        }
-
-        return $this->database;
+        return $this->cache->get('database', fn (): array => $this->loadDatabase());
     }
 
     /**
@@ -96,7 +70,7 @@ class DatabaseInfoService
      */
     public function getVersion(): string
     {
-        return $this->version ??= $this->getConfiguration()['version'] ?? 'Unknown';
+        return $this->getConfiguration()['version'] ?? self::UNKNOWN;
     }
 
     private function convertValue(string $value, string $name): string
@@ -140,5 +114,44 @@ class DatabaseInfoService
 
         /** @phpstan-var array<array{Variable_name: string, Value: string}> */
         return $result->fetchAllAssociative();
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function loadConfiguration(): array
+    {
+        $result = [];
+
+        try {
+            $variables = $this->getVariables();
+            foreach ($variables as $variable) {
+                $value = StringUtils::trim($variable['Value']);
+                if (null === $value) {
+                    continue;
+                }
+                $name = $variable['Variable_name'];
+                $result[$name] = $this->convertValue($value, $name);
+            }
+        } catch (Exception) {
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function loadDatabase(): array
+    {
+        $result = [];
+        $params = $this->getConnection()->getParams();
+        foreach (self::DATABASE_PARAMETERS as $key => $name) {
+            if (isset($params[$key]) && \is_scalar($params[$key])) {
+                $result[$name] = (string) $params[$key];
+            }
+        }
+
+        return $result;
     }
 }

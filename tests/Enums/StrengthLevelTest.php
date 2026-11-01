@@ -14,14 +14,12 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\StrengthLevel;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class StrengthLevelTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public static function getLabels(): \Generator
     {
         yield ['strength_level.medium', StrengthLevel::MEDIUM];
@@ -113,7 +111,7 @@ final class StrengthLevelTest extends TestCase
     #[DataProvider('getLabels')]
     public function testTranslate(string $expected, StrengthLevel $level): void
     {
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
         $actual = $level->trans($translator);
         self::assertSame($expected, $actual);
     }

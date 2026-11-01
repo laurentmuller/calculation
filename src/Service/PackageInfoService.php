@@ -45,7 +45,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  *      license?: string[]|null,
  *      homepage?: string,
  *      source?: array{url: string|null},
- *      time: string,
+ *      time?: string,
  *      support?: array{source?: string},
  *      require?: array<string, string>,
  *      require-dev?: array<string, string>}
@@ -280,7 +280,7 @@ readonly class PackageInfoService implements \Countable
      */
     private function parseTime(array $package): string
     {
-        return FormatUtils::formatDate(new DatePoint($package['time']));
+        return FormatUtils::formatDate(new DatePoint($package['time'] ?? 'now'));
     }
 
     /**

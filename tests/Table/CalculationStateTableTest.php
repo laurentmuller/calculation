@@ -18,10 +18,10 @@ use App\Repository\AbstractRepository;
 use App\Repository\CalculationStateRepository;
 use App\Service\IndexService;
 use App\Table\CalculationStateTable;
-use App\Tests\TranslatorStubTrait;
 use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\MockObject\Stub;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Translation\IdentityTranslator;
 use Twig\Environment;
 use Twig\Error\Error;
 
@@ -30,8 +30,6 @@ use Twig\Error\Error;
  */
 final class CalculationStateTableTest extends EntityTableTestCase
 {
-    use TranslatorStubTrait;
-
     /**
      * @throws Error
      */
@@ -46,7 +44,7 @@ final class CalculationStateTableTest extends EntityTableTestCase
             self::createStub(IndexService::class)
         );
         $table->setChecker(self::createStub(AuthorizationCheckerInterface::class));
-        $table->setTranslator($this->createStubTranslator());
+        $table->setTranslator(new IdentityTranslator());
 
         $expected = 'macros/_cell_table_link.html.twig';
         $actual = $table->formatCalculations(1, ['id' => 1]);
@@ -61,7 +59,7 @@ final class CalculationStateTableTest extends EntityTableTestCase
             self::createStub(IndexService::class)
         );
         $table->setChecker(self::createStub(AuthorizationCheckerInterface::class));
-        $table->setTranslator($this->createStubTranslator());
+        $table->setTranslator(new IdentityTranslator());
 
         $actual = $table->formatEditable(true);
         self::assertSame('common.value_true', $actual);
@@ -115,7 +113,7 @@ final class CalculationStateTableTest extends EntityTableTestCase
             $this->createMockIndexService()
         );
         $table->setChecker(self::createStub(AuthorizationCheckerInterface::class))
-            ->setTranslator($this->createStubTranslator());
+            ->setTranslator(new IdentityTranslator());
 
         return $table;
     }

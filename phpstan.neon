@@ -35,6 +35,7 @@ parameters:
         strictArrayFilter: false
 
     dynamicConstantNames:
+        - Symfony\Component\HttpKernel\Kernel::VERSION
         - Symfony\Component\HttpKernel\Kernel::MINOR_VERSION
 
     type_coverage:

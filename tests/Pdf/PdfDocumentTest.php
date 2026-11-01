@@ -17,15 +17,13 @@ use App\Controller\AbstractController;
 use App\Model\CustomerInformation;
 use App\Pdf\PdfFont;
 use App\Tests\Fixture\FixtureReport;
-use App\Tests\TranslatorStubTrait;
 use fpdf\Enums\PdfDestination;
 use fpdf\Enums\PdfPageSize;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class PdfDocumentTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public function testApplyFont(): void
     {
         $doc = $this->createReport();
@@ -104,7 +102,7 @@ final class PdfDocumentTest extends TestCase
 
     private function createReport(): FixtureReport
     {
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
         $controller = self::createStub(AbstractController::class);
         $controller->method('getTranslator')
             ->willReturn($translator);

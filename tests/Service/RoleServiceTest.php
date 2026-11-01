@@ -17,15 +17,13 @@ use App\Entity\User;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Service\RoleService;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class RoleServiceTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public static function getRoleIconAndNames(): \Generator
     {
         yield [RoleInterface::ROLE_USER, '<i class="fa-solid fa-user me-1"></i>user.roles.user'];
@@ -159,7 +157,7 @@ final class RoleServiceTest extends TestCase
     private function createService(?RoleHierarchyInterface $hierarchy = null): RoleService
     {
         $hierarchy ??= self::createStub(RoleHierarchyInterface::class);
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
 
         return new RoleService($hierarchy, $translator);
     }

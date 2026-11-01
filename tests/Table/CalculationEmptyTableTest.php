@@ -17,15 +17,13 @@ use App\Entity\Calculation;
 use App\Repository\CalculationRepository;
 use App\Table\CalculationEmptyTable;
 use App\Table\DataQuery;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class CalculationEmptyTableTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public function testDefault(): void
     {
         $table = $this->createTable();
@@ -71,7 +69,7 @@ final class CalculationEmptyTableTest extends TestCase
     private function createTable(array $entities = []): CalculationEmptyTable
     {
         $repository = $this->createMockRepository($entities);
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
 
         return new CalculationEmptyTable($repository, $translator);
     }

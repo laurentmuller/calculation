@@ -25,11 +25,11 @@ use App\Parameter\SecurityParameter;
 use App\Service\PasswordService;
 use App\Tests\Form\CustomConstraintValidatorFactory;
 use App\Tests\Form\EntityTypeTestCase;
-use App\Tests\TranslatorStubTrait;
 use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
+use Symfony\Component\Translation\IdentityTranslator;
 use Symfony\Component\Validator\Constraints\NotCompromisedPassword;
 use Symfony\Component\Validator\Validation;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -42,7 +42,7 @@ use ZxcvbnPhp\Zxcvbn;
 final class UserChangePasswordTypeTest extends EntityTypeTestCase
 {
     use PasswordHasherExtensionTrait;
-    use TranslatorStubTrait;
+
     use ValidatorExtensionTrait;
 
     private bool $compromisedPassword = false;
@@ -58,7 +58,7 @@ final class UserChangePasswordTypeTest extends EntityTypeTestCase
         $this->password = new Password();
         $this->score = StrengthLevel::VERY_WEAK;
         $this->strength = new Strength(StrengthLevel::WEAK);
-        $this->translator = $this->createStubTranslator();
+        $this->translator = new IdentityTranslator();
 
         $contraint = new NotCompromisedPassword();
         $security = self::createStub(SecurityParameter::class);
@@ -216,7 +216,7 @@ final class UserChangePasswordTypeTest extends EntityTypeTestCase
 
     private function getStrengthValidator(): StrengthValidator
     {
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
         $factory = self::createStub(ZxcvbnFactoryInterface::class);
         $factory->method('createZxcvbn')
             ->willReturn(new Zxcvbn());

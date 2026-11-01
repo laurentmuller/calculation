@@ -23,8 +23,6 @@ use App\Interfaces\EnumSortableInterface;
 use App\Interfaces\UserInterface;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
-use Elao\Enum\Bridge\Symfony\Form\Type\EnumType as ElaoEnumType;
-use Elao\Enum\ReadableEnumInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Event\PreSetDataEvent;
 use Symfony\Component\Form\Event\PreSubmitEvent;
@@ -254,9 +252,6 @@ class FormHelper
         $this->updateOption('class', $class);
         if (\is_a($class, EnumSortableInterface::class, true)) {
             $this->updateOption('choices', $class::sorted());
-        }
-        if (\is_a($class, ReadableEnumInterface::class, true)) {
-            return $this->add(ElaoEnumType::class);
         }
 
         return $this->add(EnumType::class);

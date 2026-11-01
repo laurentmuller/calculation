@@ -18,17 +18,15 @@ use App\Model\MonthChartData;
 use App\Model\MonthChartDataItem;
 use App\Parameter\ApplicationParameters;
 use App\Repository\CalculationRepository;
-use App\Tests\TranslatorStubTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Translation\IdentityTranslator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class MonthChartTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     private UrlGeneratorInterface $generator;
     private Stub&ApplicationParameters $parameters;
     private Stub&CalculationRepository $repository;
@@ -40,7 +38,7 @@ final class MonthChartTest extends TestCase
         $this->parameters = self::createStub(ApplicationParameters::class);
         $this->repository = self::createStub(CalculationRepository::class);
         $this->generator = self::createStub(UrlGeneratorInterface::class);
-        $this->translator = $this->createStubTranslator();
+        $this->translator = new IdentityTranslator();
     }
 
     public function testWithElevenMonths(): void

@@ -1,6 +1,6 @@
 {# macros #}
 {% macro encode_query(name, query) -%}
-    {{- path(name, {name: query.name, arguments: query.arguments, options: query.options, help: query.help}) -}}
+    {{- path(name, query.parameters)|raw -}}
 {%- endmacro encode_query %}
 {% macro outputTitleLine(id) -%}
     <div class="pb-2 mb-1 border-bottom">{{ ('command.list.fields.' ~ id)|trans }}</div>

@@ -6,7 +6,11 @@
 {%- set submit_class = submit_class|default('btn-primary') -%}
 {%- set submit_attributes = submit_attributes|default({}) -%}
 {%- set submit_title = submit_title|default('common.save_data') -%}
-{%- set form_attr = form_attr|default({})|merge({id: 'edit-form', 'data-save': submit_title|trans, class: 'position-relative'}) -%}
+{%- set form_attr = form_attr|default({})|merge({
+    id: 'edit-form',
+    name: 'edit-form',
+    class: 'position-relative',
+    'data-save': submit_title|trans}) -%}
 {%- set cancel_text = cancel_text|default('common.button_cancel') -%}
 {%- if cancel_path is not defined -%}
     {%- set cancel_path = cancel_url(app.request, item|default(null), page_list|default('homepage')) -%}

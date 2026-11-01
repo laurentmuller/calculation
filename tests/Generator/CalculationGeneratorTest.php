@@ -18,6 +18,7 @@ use App\Generator\CalculationGenerator;
 use App\Service\CalculationUpdateService;
 use App\Tests\EntityTrait\CalculationStateTrait;
 use App\Tests\EntityTrait\ProductTrait;
+use Symfony\Component\Translation\IdentityTranslator;
 
 /**
  * @extends GeneratorTestCase<CalculationGenerator>
@@ -86,7 +87,7 @@ final class CalculationGeneratorTest extends GeneratorTestCase
         return new CalculationGenerator(
             service: $this->service,
             manager: $this->manager,
-            translator: $this->createStubTranslator(),
+            translator: new IdentityTranslator(),
             logger: $this->createMockLogger(),
             updateService: $this->updateService
         );

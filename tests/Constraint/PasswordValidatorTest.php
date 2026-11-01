@@ -65,7 +65,7 @@ final class PasswordValidatorTest extends ConstraintValidatorTestCase
             'specialChar' => true,
         ];
         $constraint = $this->createConstraint($options);
-        $this->validator->validate('zTp9F??TvRcG?+Z', $constraint);
+        $this->validate('zTp9F??TvRcG?+Z', $constraint);
         self::assertNoViolation();
     }
 
@@ -88,7 +88,7 @@ final class PasswordValidatorTest extends ConstraintValidatorTestCase
             'specialChar' => true,
         ];
         $constraint = $this->createConstraint($options);
-        $this->validator->validate('zTp9F??TvRcG?+Z', $constraint);
+        $this->validate('zTp9F??TvRcG?+Z', $constraint);
         self::assertNoViolation();
     }
 
@@ -96,7 +96,7 @@ final class PasswordValidatorTest extends ConstraintValidatorTestCase
     public function testEmptyIsValid(string $option): void
     {
         $constraint = $this->createConstraint([$option => true]);
-        $this->validator->validate('', $constraint);
+        $this->validate('', $constraint);
         self::assertNoViolation();
     }
 
@@ -112,7 +112,7 @@ final class PasswordValidatorTest extends ConstraintValidatorTestCase
         array $parameters = []
     ): void {
         $constraint = $this->createConstraint($options);
-        $this->validator->validate($value, $constraint);
+        $this->validate($value, $constraint);
         $this->buildViolation($message)
             ->setParameters($parameters)
             ->setInvalidValue($value)
@@ -132,7 +132,7 @@ final class PasswordValidatorTest extends ConstraintValidatorTestCase
     public function testNullIsValid(string $option): void
     {
         $constraint = $this->createConstraint([$option => true]);
-        $this->validator->validate(null, $constraint);
+        $this->validate(null, $constraint);
         self::assertNoViolation();
     }
 
@@ -157,7 +157,7 @@ final class PasswordValidatorTest extends ConstraintValidatorTestCase
     public function testValidValue(mixed $value, string $option): void
     {
         $constraint = $this->createConstraint([$option => true]);
-        $this->validator->validate($value, $constraint);
+        $this->validate($value, $constraint);
         self::assertNoViolation();
     }
 

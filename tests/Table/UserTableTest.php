@@ -20,7 +20,6 @@ use App\Repository\UserRepository;
 use App\Service\RoleService;
 use App\Table\DataQuery;
 use App\Table\UserTable;
-use App\Tests\TranslatorStubTrait;
 use App\Utils\FormatUtils;
 use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\MockObject\Stub;
@@ -28,6 +27,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Translation\IdentityTranslator;
 use Twig\Environment;
 use Twig\Error\Error;
 
@@ -36,8 +36,6 @@ use Twig\Error\Error;
  */
 final class UserTableTest extends EntityTableTestCase
 {
-    use TranslatorStubTrait;
-
     private const int TOKEN_DEFAULT = 0;
     private const int TOKEN_NO_USER = 1;
     private const int TOKEN_USER = 2;
@@ -160,7 +158,7 @@ final class UserTableTest extends EntityTableTestCase
         return new UserTable(
             $repository,
             self::createStub(RoleService::class),
-            $this->createStubTranslator(),
+            new IdentityTranslator(),
             self::createStub(Environment::class),
             $this->createMockSecurity(),
             $this->createMockIndexService()
@@ -200,7 +198,7 @@ final class UserTableTest extends EntityTableTestCase
         return new UserTable(
             self::createStub(UserRepository::class),
             $roleService ?? self::createStub(RoleService::class),
-            $this->createStubTranslator(),
+            new IdentityTranslator(),
             $twig ?? self::createStub(Environment::class),
             self::createStub(Security::class),
             $this->createMockIndexService(),

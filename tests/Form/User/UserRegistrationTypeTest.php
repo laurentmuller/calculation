@@ -21,11 +21,11 @@ use App\Parameter\ApplicationParameters;
 use App\Parameter\SecurityParameter;
 use App\Service\CaptchaImageService;
 use App\Tests\Form\PreloadedExtensionsTrait;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Translation\IdentityTranslator;
 
 #[AllowMockObjectsWithoutExpectations]
 final class UserRegistrationTypeTest extends TypeTestCase
@@ -34,7 +34,7 @@ final class UserRegistrationTypeTest extends TypeTestCase
     use PreloadedExtensionsTrait {
         getExtensions as getExtensionsFromTrait;
     }
-    use TranslatorStubTrait;
+
     use ValidatorExtensionTrait;
 
     public function testFormView(): void
@@ -97,7 +97,7 @@ final class UserRegistrationTypeTest extends TypeTestCase
             new UserRegistrationType(
                 $service,
                 $parameters,
-                $this->createStubTranslator()
+                new IdentityTranslator()
             ),
             new CaptchaImageType(self::createStub(UrlGeneratorInterface::class)),
         ];

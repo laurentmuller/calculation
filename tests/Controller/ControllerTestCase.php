@@ -33,7 +33,7 @@ abstract class ControllerTestCase extends AuthenticateWebTestCase
     /**
      * Gets the routes to test.
      *
-     * Each entry must contain a URL, a username, an optional expected result, request method and XML http request.
+     * Each entry must contain a URL, a username, an optional expected result, request method, and XML http request.
      */
     abstract public static function getRoutes(): \Generator;
 
@@ -87,7 +87,11 @@ abstract class ControllerTestCase extends AuthenticateWebTestCase
             if ('' !== $userName) {
                 $this->loginUsername($userName);
             }
+
+            $this->client->catchExceptions(false);
             $this->client->request($method, $uri);
+            self::assertResponseIsSuccessful();
+
             $button = $this->getService(TranslatorInterface::class)
                 ->trans($id);
             $this->client->submitForm($button, $data);

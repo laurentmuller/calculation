@@ -19,7 +19,6 @@ use App\Service\ResetPasswordService;
 use App\Service\UserExceptionService;
 use App\Tests\Entity\IdTrait;
 use App\Tests\MockStubTrait;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
@@ -30,6 +29,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\UnexpectedResponseException;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\ResetPassword\Exception\InvalidResetPasswordTokenException;
 use SymfonyCasts\Bundle\ResetPassword\Generator\ResetPasswordTokenGenerator;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordToken;
@@ -43,7 +43,6 @@ final class ResetPasswordServiceTest extends TestCase
 {
     use IdTrait;
     use MockStubTrait;
-    use TranslatorStubTrait;
 
     public function testFlush(): void
     {
@@ -199,7 +198,9 @@ final class ResetPasswordServiceTest extends TestCase
         ?LoggerInterface $logger = null,
     ): ResetPasswordService {
         $repository ??= $this->createRepository(false, $user);
-        $translator = $this->createStubTranslator();
+        $translator = self::createStub(TranslatorInterface::class);
+        $translator->method('trans')
+            ->willReturnArgument(0);
         $service = new UserExceptionService($translator);
         $mailer ??= self::createStub(MailerInterface::class);
         $logger ??= self::createStub(LoggerInterface::class);

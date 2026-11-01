@@ -14,14 +14,12 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\Theme;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class ThemeTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public static function getHelps(): \Generator
     {
         yield [Theme::AUTO, 'theme.auto.help'];
@@ -131,7 +129,7 @@ final class ThemeTest extends TestCase
     #[DataProvider('getTranslates')]
     public function testTranslate(Theme $theme, string $expected): void
     {
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
         $actual = $theme->trans($translator);
         self::assertSame($expected, $actual);
     }

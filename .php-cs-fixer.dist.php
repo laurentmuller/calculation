@@ -32,8 +32,8 @@ $rules = [
     '@auto:risky' => true,
     '@Symfony' => true,
     '@Symfony:risky' => true,
-    '@PHP8x3Migration' => true,
-    '@PHP8x3Migration:risky' => true,
+    '@PHP8x4Migration' => true,
+    '@PHP8x4Migration:risky' => true,
     '@DoctrineAnnotation' => true,
     '@PHPUnit11x0Migration:risky' => true,
 

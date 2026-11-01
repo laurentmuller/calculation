@@ -15,7 +15,6 @@ namespace App\Tests\Service;
 
 use App\Model\HttpClientError;
 use App\Service\AkismetService;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -26,11 +25,10 @@ use Symfony\Component\HttpClient\Response\JsonMockResponse;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class AkismetServiceTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     private const int ERROR_CODE = 1000;
     private const string ERROR_MESSAGE = 'Error Message';
 
@@ -111,7 +109,7 @@ final class AkismetServiceTest extends TestCase
             self::createStub(LoggerInterface::class),
             self::createStub(Security::class),
             $this->requestStack,
-            $this->createStubTranslator()
+            new IdentityTranslator()
         );
     }
 
@@ -299,7 +297,7 @@ final class AkismetServiceTest extends TestCase
             self::createStub(LoggerInterface::class),
             self::createStub(Security::class),
             $this->requestStack,
-            $this->createStubTranslator()
+            new IdentityTranslator()
         );
     }
 

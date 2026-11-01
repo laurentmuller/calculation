@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Enums\MessagePosition;
+use Symfony\Component\HttpFoundation\Request;
 
 final class UserParametersControllerTest extends ControllerTestCase
 {
@@ -27,7 +28,11 @@ final class UserParametersControllerTest extends ControllerTestCase
 
     public function testParametersNoChange(): void
     {
-        $this->checkForm('user/parameters');
+        $this->checkForm(
+            uri: 'user/parameters',
+            method: Request::METHOD_GET,
+            disableReboot: true
+        );
     }
 
     public function testParametersWithChanges(): void
@@ -35,7 +40,9 @@ final class UserParametersControllerTest extends ControllerTestCase
         $data = ['message[position]' => MessagePosition::TOP_LEFT->value];
         $this->checkForm(
             uri: 'user/parameters',
-            data: $data
+            data: $data,
+            method: Request::METHOD_GET,
+            disableReboot: true
         );
     }
 }

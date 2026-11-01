@@ -14,14 +14,12 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\Importance;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class ImportanceTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public static function getLabels(): \Generator
     {
         yield ['importance.high', Importance::HIGH];
@@ -79,7 +77,7 @@ final class ImportanceTest extends TestCase
     #[DataProvider('getLabels')]
     public function testTranslate(string $expected, Importance $importance): void
     {
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
         $actual = $importance->trans($translator);
         self::assertSame($expected, $actual);
     }
@@ -87,7 +85,7 @@ final class ImportanceTest extends TestCase
     #[DataProvider('getLabelsTitle')]
     public function testTranslateTitle(string $expected, Importance $importance): void
     {
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
         $actual = $importance->transTitle($translator);
         self::assertSame($expected, $actual);
     }

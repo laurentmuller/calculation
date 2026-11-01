@@ -15,16 +15,14 @@ namespace App\Tests\Response;
 
 use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\SpreadsheetDocument;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class SpreadsheetResponseTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public function testGetFileExtension(): void
     {
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
         $doc = new SpreadsheetDocument($translator);
         $response = new SpreadsheetResponse($doc);
         self::assertSame('xlsx', $response->getFileExtension());

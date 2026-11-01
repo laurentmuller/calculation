@@ -15,13 +15,11 @@ namespace App\Tests\Model;
 
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class RoleTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public function testGetName(): void
     {
         $role = new Role(RoleInterface::ROLE_USER);
@@ -107,7 +105,7 @@ final class RoleTest extends TestCase
 
     public function testTranslate(): void
     {
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
         $role = new Role(RoleInterface::ROLE_USER);
         $actual = $role->trans($translator);
         self::assertSame('user.roles.user', $actual);

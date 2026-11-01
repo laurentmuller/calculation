@@ -66,7 +66,7 @@ function getParams() {
  */
 function toString(value) {
     'use strict';
-    return Number(value).toString();
+    return Number(value || false).toString();
 }
 
 /**
@@ -166,7 +166,7 @@ $(function () {
     createPopover();
 
     // handle collapse change
-    $('#content').parent().on('shown.bs.collapse hidden.bs.collapse', '.collapse', function () {
+    $('#content').on('shown.bs.collapse hidden.bs.collapse', '.collapse', function () {
         saveCollapse($(this));
     });
 

@@ -14,14 +14,12 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\FlashType;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class FlashTypeTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public static function getColors(): \Generator
     {
         yield [FlashType::DANGER, 'text-danger'];
@@ -100,7 +98,7 @@ final class FlashTypeTest extends TestCase
     #[DataProvider('getLabels')]
     public function testTranslate(FlashType $type, string $expected): void
     {
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
         $actual = $type->trans($translator);
         self::assertSame($expected, $actual);
     }

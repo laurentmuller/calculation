@@ -23,15 +23,13 @@ use App\Pdf\Html\HtmlTag;
 use App\Pdf\Html\HtmlTextChunk;
 use App\Pdf\Html\HtmlUlChunk;
 use App\Report\HtmlReport;
-use App\Tests\TranslatorStubTrait;
 use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfBorder;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class HtmlReportOutputTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public function testHtmlLiChunkNoParent(): void
     {
         $report = $this->createReport();
@@ -119,7 +117,7 @@ final class HtmlReportOutputTest extends TestCase
 
     private function createReport(): HtmlReport
     {
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
         $controller = self::createStub(AbstractController::class);
         $controller->method('getTranslator')
             ->willReturn($translator);

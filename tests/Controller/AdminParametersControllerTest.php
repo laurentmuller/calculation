@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Service\DictionaryService;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class AdminParametersControllerTest extends ControllerTestCase
@@ -30,7 +31,9 @@ final class AdminParametersControllerTest extends ControllerTestCase
     {
         $this->checkForm(
             uri: 'admin/parameters',
-            userName: self::ROLE_WEBMASTER
+            userName: self::ROLE_WEBMASTER,
+            method: Request::METHOD_GET,
+            disableReboot: true
         );
     }
 
@@ -42,7 +45,9 @@ final class AdminParametersControllerTest extends ControllerTestCase
         $this->checkForm(
             uri: 'admin/parameters',
             data: $data,
-            userName: self::ROLE_WEBMASTER
+            userName: self::ROLE_WEBMASTER,
+            method: Request::METHOD_GET,
+            disableReboot: true
         );
     }
 }

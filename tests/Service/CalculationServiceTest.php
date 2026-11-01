@@ -32,15 +32,14 @@ use App\Service\CalculationService;
 use App\Tests\DatabaseTrait;
 use App\Tests\Entity\IdTrait;
 use App\Tests\KernelServiceTestCase;
-use App\Tests\TranslatorStubTrait;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class CalculationServiceTest extends KernelServiceTestCase
 {
     use DatabaseTrait;
     use IdTrait;
-    use TranslatorStubTrait;
 
     private const float MARGIN_PERCENT = 1.1;
     private const float MARGIN_USER = 0.1;
@@ -198,7 +197,7 @@ final class CalculationServiceTest extends KernelServiceTestCase
         $groupMarginRepository = $this->createGroupMarginRepository($groupMargin);
         $groupRepository = $this->createGroupRepository($group);
         $parameters = $this->createApplicationParameters();
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
 
         return new CalculationService(
             $globalMarginRepository,

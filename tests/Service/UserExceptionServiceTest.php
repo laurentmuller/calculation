@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\UserExceptionService;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
@@ -24,6 +23,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
+use Symfony\Component\Translation\IdentityTranslator;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ExpiredResetPasswordTokenException;
 use SymfonyCasts\Bundle\ResetPassword\Exception\InvalidResetPasswordTokenException;
 use SymfonyCasts\Bundle\ResetPassword\Exception\TooManyPasswordRequestsException;
@@ -33,15 +33,13 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\WrongEmailVerifyException;
 
 final class UserExceptionServiceTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     private Request $request;
     private UserExceptionService $service;
 
     #[\Override]
     protected function setUp(): void
     {
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
         $this->service = new UserExceptionService($translator);
         $storage = new MockArraySessionStorage();
         $session = new Session($storage);

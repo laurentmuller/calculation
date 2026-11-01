@@ -154,15 +154,6 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     }
 
     /**
-     * @see UserInterface
-     */
-    #[\Override]
-    #[\Deprecated]
-    public function eraseCredentials(): void
-    {
-    }
-
-    /**
      * Gets email address.
      */
     public function getAddress(): Address

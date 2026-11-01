@@ -14,14 +14,12 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\TableView;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Translation\IdentityTranslator;
 
 final class TableViewTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public static function getValues(): \Generator
     {
         yield [TableView::TABLE, 'table'];
@@ -64,7 +62,7 @@ final class TableViewTest extends TestCase
 
     public function testTranslate(): void
     {
-        $translator = $this->createStubTranslator();
+        $translator = new IdentityTranslator();
         self::assertSame('table_view.custom', TableView::CUSTOM->trans($translator));
         self::assertSame('table_view.table', TableView::TABLE->trans($translator));
     }

@@ -15,13 +15,11 @@ namespace App\Tests\Pivot\Field;
 
 use App\Pivot\Field\PivotField;
 use App\Pivot\Formatter\TranslateFormatter;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class PivotFieldTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public function testConstructor(): void
     {
         $field = new PivotField('name', 'title');
@@ -70,7 +68,9 @@ final class PivotFieldTest extends TestCase
 
     public function testTranslateFormatter(): void
     {
-        $translator = $this->createStubTranslator();
+        $translator = self::createStub(TranslatorInterface::class);
+        $translator->method('trans')
+            ->willReturnArgument(0);
         $formatter = new TranslateFormatter($translator, 'fake', 'fake');
         $field = new PivotField('name', formatter: $formatter);
         $actual = $field->getDisplayValue('value');

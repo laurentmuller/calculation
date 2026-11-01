@@ -17,7 +17,6 @@ use App\Entity\User;
 use App\Listener\VichListener;
 use App\Service\ImageResizer;
 use App\Service\UserNamer;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Vich\UploaderBundle\Event\Event;
@@ -26,8 +25,6 @@ use Vich\UploaderBundle\Mapping\PropertyMappingInterface;
 
 final class VichListenerTest extends TestCase
 {
-    use TranslatorStubTrait;
-
     public function testPreUploadInvalidFile(): void
     {
         $event = $this->createEvent();

@@ -16,17 +16,16 @@ namespace App\Tests\Form\CalculationState;
 use App\Form\CalculationState\CalculationStateListType;
 use App\Tests\Fixture\FixtureDataForm;
 use App\Tests\Form\PreloadedExtensionsTrait;
-use App\Tests\TranslatorStubTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Test\TypeTestCase;
+use Symfony\Component\Translation\IdentityTranslator;
 
 #[AllowMockObjectsWithoutExpectations]
 final class CalculationStateListTypeTest extends TypeTestCase
 {
     use CalculationStateTrait;
     use PreloadedExtensionsTrait;
-    use TranslatorStubTrait;
 
     public function testFormView(): void
     {
@@ -63,7 +62,7 @@ final class CalculationStateListTypeTest extends TypeTestCase
     {
         return [
             $this->getCalculationStateEntityType(),
-            new CalculationStateListType($this->createStubTranslator()),
+            new CalculationStateListType(new IdentityTranslator()),
         ];
     }
 }

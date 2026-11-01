@@ -15,6 +15,7 @@ namespace App\Tests\Controller;
 
 use App\Service\EmailVerifier;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\UnexpectedResponseException;
 
@@ -28,8 +29,8 @@ final class RegistrationControllerTest extends ControllerTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->throwOnHandleEmail = false;
         $this->throwOnSendMail = false;
+        $this->throwOnHandleEmail = false;
         $verifier = self::createStub(EmailVerifier::class);
         $verifier->method('sendEmail')
             ->willReturnCallback(fn (): bool => $this->sendMail());
@@ -63,7 +64,8 @@ final class RegistrationControllerTest extends ControllerTestCase
             id: 'registration.register.submit',
             data: $data,
             userName: self::ROLE_WEBMASTER,
-            disableReboot: true,
+            method: Request::METHOD_GET,
+            disableReboot: true
         );
     }
 
@@ -82,7 +84,8 @@ final class RegistrationControllerTest extends ControllerTestCase
             id: 'registration.register.submit',
             data: $data,
             userName: self::ROLE_WEBMASTER,
-            disableReboot: true,
+            method: Request::METHOD_GET,
+            disableReboot: true
         );
     }
 

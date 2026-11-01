@@ -43,8 +43,6 @@ readonly class SymfonyInfoService
 
     // the release information URL
     private const string RELEASE_URL = 'https://symfony.com/releases/%s.%s.json';
-    // the unknown label
-    private const string UNKNOWN = 'Unknown';
 
     public function __construct(
         #[Target(CacheAttributes::CACHE_SYMFONY)]
@@ -239,7 +237,7 @@ readonly class SymfonyInfoService
 
             return $this->formatMonthYear($content['release_date']);
         } catch (\InvalidArgumentException) {
-            return self::UNKNOWN;
+            return 'Unknown';
         }
     }
 }

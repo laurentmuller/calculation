@@ -57,4 +57,12 @@ enum Environment: string implements TranslatableEnumInterface
     {
         return self::TEST === $this;
     }
+
+    /**
+     * @return string[]
+     */
+    public static function values(): array
+    {
+        return \array_map(static fn (Environment $env): string => $env->value, Environment::cases());
+    }
 }

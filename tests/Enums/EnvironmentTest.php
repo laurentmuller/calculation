@@ -104,4 +104,11 @@ final class EnvironmentTest extends TestCase
         $actual = $environment->value;
         self::assertSame($expected, $actual);
     }
+
+    public function testValues(): void
+    {
+        $expected = ['dev', 'prod', 'test'];
+        $actual = Environment::values();
+        self::assertSame($expected, $actual);
+    }
 }

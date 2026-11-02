@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Constants\CacheAttributes;
+use App\Interfaces\InfoServiceInterface;
 use App\Traits\EnablementValueTrait;
 use App\Utils\StringUtils;
 use Doctrine\DBAL\Connection;
@@ -25,7 +26,7 @@ use Symfony\Contracts\Cache\CacheInterface;
 /**
  * Service to get database information.
  */
-class DatabaseInfoService
+class DatabaseInfoService implements InfoServiceInterface
 {
     use EnablementValueTrait;
 

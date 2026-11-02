@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Interfaces\InfoServiceInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
@@ -164,7 +165,7 @@ class IpStackService extends AbstractHttpClientService
     {
         if (isset($response['error'])) {
             $code = $response['error']['code'] ?? 404;
-            $type = $response['error']['type'] ?? 'Unknown';
+            $type = $response['error']['type'] ?? InfoServiceInterface::UNKNOWN;
             $message = $this->translateError($type);
 
             return $this->setLastError($code, $message, $exception);

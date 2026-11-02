@@ -13,10 +13,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Traits;
 
+use App\Interfaces\InfoServiceInterface;
 use App\Traits\EnablementValueTrait;
 use PHPUnit\Framework\TestCase;
 
-final class EnablementValueTraitTest extends TestCase
+final class EnablementValueTraitTest extends TestCase implements InfoServiceInterface
 {
     use EnablementValueTrait;
 

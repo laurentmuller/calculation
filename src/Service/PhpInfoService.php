@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Interfaces\InfoServiceInterface;
 use App\Traits\EnablementValueTrait;
 use App\Utils\StringUtils;
 use STS\Phpinfo\Info;
@@ -50,7 +51,7 @@ use STS\Phpinfo\PhpInfo;
  *     modules: ModuleType[]
  * }
  */
-class PhpInfoService
+class PhpInfoService implements InfoServiceInterface
 {
     use EnablementValueTrait;
 

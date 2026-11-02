@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Constants\CacheAttributes;
+use App\Interfaces\InfoServiceInterface;
 use App\Utils\DateUtils;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
@@ -30,17 +31,8 @@ use Symfony\Contracts\Cache\CacheInterface;
  * @see https://github.com/symfony/symfony/blob/7.4/src/Symfony/Component/HttpKernel/DataCollector/ConfigDataCollector.php
  * @see https://github.com/EasyCorp/easy-doc-bundle/blob/master/src/Command/DocCommand.php
  */
-readonly class SymfonyInfoService
+readonly class SymfonyInfoService implements InfoServiceInterface
 {
-    /** The disabled label. */
-    public const string LABEL_DISABLED = 'Disabled';
-
-    /** The enabled label. */
-    public const string LABEL_ENABLED = 'Enabled';
-
-    /** The not installed label. */
-    public const string LABEL_NOT_INSTALLED = 'Not installed';
-
     // the release information URL
     private const string RELEASE_URL = 'https://symfony.com/releases/%s.%s.json';
 
@@ -237,7 +229,7 @@ readonly class SymfonyInfoService
 
             return $this->formatMonthYear($content['release_date']);
         } catch (\InvalidArgumentException) {
-            return 'Unknown';
+            return self::UNKNOWN;
         }
     }
 }

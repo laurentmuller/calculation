@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Interfaces\InfoServiceInterface;
 use App\Traits\ArrayTrait;
 use App\Utils\DateUtils;
 use Psr\Log\LoggerInterface;
@@ -359,7 +360,7 @@ class ExchangeRateService extends AbstractHttpClientService
         if (self::RESPONSE_SUCCESS === $result) {
             return true;
         }
-        $error = $response['error-type'] ?? 'Unknown';
+        $error = $response['error-type'] ?? InfoServiceInterface::UNKNOWN;
         $this->setLastError(404, $this->translateError($error));
 
         return false;

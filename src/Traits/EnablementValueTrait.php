@@ -17,19 +17,15 @@ use App\Utils\StringUtils;
 
 /**
  * Trait to validate enabled/disabled values.
+ *
+ * @require-implements InfoServiceInterface
  */
 trait EnablementValueTrait
 {
-    /** The no value. */
-    public const string NO_VALUE = 'No value';
-
-    /** The none value. */
-    public const string NONE_VALUE = 'None';
-
-    /** The unknown value. */
-    public const string UNKNOWN = 'Unknown';
-
+    /** The disabled values. */
     private const array DISABLED_VALUES = ['false', 'off', 'no', 'disabled', 'not enabled'];
+
+    /** The enabled values. */
     private const array ENABLED_VALUES = ['true', 'on', 'yes', 'enabled', 'supported', 'active'];
 
     /**

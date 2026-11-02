@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Constants\CacheAttributes;
+use App\Interfaces\InfoServiceInterface;
 use App\Utils\FileUtils;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
@@ -213,7 +214,7 @@ readonly class PackageInfoService implements \Countable
     {
         $license = $package['license'] ?? [];
 
-        return [] === $license ? ['Unknown'] : $license;
+        return [] === $license ? [InfoServiceInterface::UNKNOWN] : $license;
     }
 
     /**

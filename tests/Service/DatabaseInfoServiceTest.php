@@ -119,7 +119,7 @@ final class DatabaseInfoServiceTest extends TestCase
     {
         $expected = [
             'Name' => 'database',
-            'Version' => '10.11.15',
+            'Full Version' => '10.11.15',
             'Host' => 'localhost',
             'Port' => '3008',
             'Driver' => 'pdo_mysql',

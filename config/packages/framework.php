@@ -58,7 +58,6 @@ return App::config([
             'ide' => 'phpstorm',
             'profiler' => [
                 'only_exceptions' => false,
-                'collect_serializer_data' => true,
             ],
         ],
     ],

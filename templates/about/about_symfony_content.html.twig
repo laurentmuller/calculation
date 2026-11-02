@@ -48,7 +48,9 @@
     <tr {{ html_attr(attrs) }}>
         <td class="e">{{ package.name }}</td>
         <td class="text-id">{{ package.version }}</td>
-        <td class="text" {% if not is_dropdown %} colspan="2"{% endif %}>{{ package.description|default('&nbsp;') }}</td>
+        <td class="text" {% if not is_dropdown %} colspan="2"{% endif %}>
+            {{- package.description|default('&nbsp;') -}}
+        </td>
         {% if is_dropdown %}
             <td class="rowlink-skip d-print-none">
                 {{ dropdownEllipsis() }}
@@ -92,16 +94,16 @@
 {% macro headerRoute() -%}
     <thead>
     <tr>
-        <th class="w-40">Name</th>
-        <th class="w-50">Path</th>
+        <th class="text-customer">Name</th>
+        <th class="text-customer">Path</th>
         <th class="text-category">Method</th>
     </tr>
     </thead>
 {%- endmacro headerRoute %}
 {% macro rowRoute(route) -%}
     <tr>
-        <td class="w-40">{{ route.name }}</td>
-        <td class="w-50">{{ route.path }}</td>
+        <td class="text-customer">{{ route.name }}</td>
+        <td class="text-customer">{{ route.path }}</td>
         <td class="text-category text-wrap">
             {% for method in route.methods %}
                 {% switch method %}
@@ -220,8 +222,12 @@
         {%- set packages = packageService.runtimePackages -%}
         {% if packages|length %}
             {{ _self.headerLinkInfo('Packages', 'runtime-packages', packages) }}
-            <div class="accordion-collapse collapse table-responsive" id="runtime-packages"
-                 aria-labelledby="runtime-packages-header" data-bs-parent="#symfonyAccordion">
+            {% set attrs = {
+                id: 'runtime-packages',
+                class: 'accordion-collapse collapse',
+                'data-bs-parent': '#symfonyAccordion',
+                'aria-labelledby': 'runtime-packages-header'} %}
+            <div {{ html_attr(attrs) }}>
                 <table class="table table-no-end-line table-sm table-hover mb-0">
                     {{ _self.headerPackage() }}
                     <tbody>
@@ -236,8 +242,12 @@
         {%- set packages = packageService.debugPackages -%}
         {% if packages|length %}
             {{ _self.headerLinkInfo('Debug Packages', 'dev-packages', packages) }}
-            <div class="accordion-collapse collapse" id="dev-packages" aria-labelledby="dev-packages-header"
-                 data-bs-parent="#symfonyAccordion">
+            {% set attrs = {
+                id: 'dev-packages',
+                class: 'accordion-collapse collapse',
+                'data-bs-parent': '#symfonyAccordion',
+                'aria-labelledby': 'dev-packages-header'} %}
+            <div {{ html_attr(attrs) }}>
                 <table class="table table-no-end-line table-sm table-hover mb-0">
                     {{ _self.headerPackage() }}
                     <tbody>
@@ -252,8 +262,12 @@
         {%- set routes = routeService.runtimeRoutes -%}
         {% if routes|length %}
             {{ _self.headerLinkInfo('Routes', 'runtime-routes', routes) }}
-            <div class="accordion-collapse collapse" id="runtime-routes" aria-labelledby="runtime-routes-header"
-                 data-bs-parent="#symfonyAccordion">
+            {% set attrs = {
+                id: 'runtime-routes',
+                class: 'accordion-collapse collapse',
+                'data-bs-parent': '#symfonyAccordion',
+                'aria-labelledby': 'runtime-routes-header'} %}
+            <div {{ html_attr(attrs) }}>
                 <table class="table table-no-end-line table-sm table-hover mb-0">
                     {{ _self.headerRoute() }}
                     <tbody>
@@ -268,8 +282,12 @@
         {%- set routes = routeService.debugRoutes -%}
         {% if routes|length %}
             {{ _self.headerLinkInfo('Debug Routes', 'debug-routes', routes) }}
-            <div class="accordion-collapse collapse" id="debug-routes" aria-labelledby="debug-routes-header"
-                 data-bs-parent="#symfonyAccordion">
+            {% set attrs = {
+                id: 'debug-routes',
+                class: 'accordion-collapse collapse',
+                'data-bs-parent': '#symfonyAccordion',
+                'aria-labelledby': 'debug-routes-header'} %}
+            <div {{ html_attr(attrs) }}>
                 <table class="table table-no-end-line table-sm table-hover mb-0">
                     {{ _self.headerRoute() }}
                     <tbody>

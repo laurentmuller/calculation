@@ -32,7 +32,7 @@ class DatabaseInfoService implements InfoServiceInterface
 
     private const array DATABASE_PARAMETERS = [
         'dbname' => 'Name',
-        'serverVersion' => 'Version',
+        'serverVersion' => 'Full Version',
         'host' => 'Host',
         'port' => 'Port',
         'driver' => 'Driver',
@@ -71,22 +71,22 @@ class DatabaseInfoService implements InfoServiceInterface
      */
     public function getVersion(): string
     {
-        return $this->getConfiguration()['version'] ?? self::UNKNOWN;
+        $version = $this->getConfiguration()['version'] ?? self::UNKNOWN;
+        $index = \strpos($version, '-');
+        if (\is_int($index)) {
+            return StringUtils::left($version, $index);
+        }
+
+        return $version;
     }
 
-    private function convertValue(string $value, string $name): string
+    private function convertValue(string $value): string
     {
         if ($this->isDisabledValue($value) || $this->isEnabledValue($value)) {
             return StringUtils::capitalize($value);
         }
         if ($this->isNoneValue($value)) {
             return self::NONE_VALUE;
-        }
-        if ('version' === $name) {
-            $index = \strpos($value, '-');
-            if (\is_int($index)) {
-                return StringUtils::left($value, $index);
-            }
         }
 
         return $value;
@@ -132,7 +132,7 @@ class DatabaseInfoService implements InfoServiceInterface
                     continue;
                 }
                 $name = $variable['Variable_name'];
-                $result[$name] = $this->convertValue($value, $name);
+                $result[$name] = $this->convertValue($value);
             }
         } catch (Exception) {
         }

@@ -54,7 +54,7 @@ return App::config([
                     'enable_csrf' => true,
                 ],
                 'remember_me' => [
-                    'signature_properties' => ['email', 'password'],
+                    'signature_properties' => ['username', 'email', 'password'],
                     'remember_me_parameter' => SecurityAttributes::REMEMBER_FIELD,
                     'secret' => '%env(string:APP_SECRET)%',
                     'path' => '%env(string:COOKIE_PATH)%',

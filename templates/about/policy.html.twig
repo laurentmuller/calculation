@@ -4,7 +4,7 @@
 {%- set title = 'about.policy.title' -%}
 {%- set title_icon = 'fa-solid fa-info-circle' -%}
 {%- set accepted = app.request.cookies.boolean(constant('App\\Controller\\PolicyController::POLICY_ACCEPTED')) -%}
-{%- set navigation_show = is_granted(IS_AUTHENTICATED_REMEMBERED) -%}
+{%- set navigation_show = is_granted(IS_AUTHENTICATED) -%}
 {# navigation #}
 {% block card_container_class navigation_show ? '' : ' mt-3' %}
 {% block cookie_banner -%}{% endblock cookie_banner %}

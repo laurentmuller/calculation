@@ -25,8 +25,6 @@ use App\Parameter\RightsParameter;
 use App\Security\EntityVoter;
 use App\Service\RoleBuilderService;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -37,7 +35,6 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 final class EntityVoterTest extends TestCase
 {
     private RoleBuilderService $builder;
-    private Stub&ApplicationParameters $parameters;
     private EntityVoter $voter;
 
     #[\Override]
@@ -51,19 +48,11 @@ final class EntityVoterTest extends TestCase
             ->willReturn($adminRole);
         $rights->method('getUserRole')
             ->willReturn($userRole);
-        $this->parameters = self::createStub(ApplicationParameters::class);
-        $this->parameters->method('getRights')
+        $parameters = self::createStub(ApplicationParameters::class);
+        $parameters->method('getRights')
             ->willReturn($rights);
 
-        $this->voter = new EntityVoter($this->parameters);
-    }
-
-    public static function getSupportsAttribute(): \Generator
-    {
-        yield ['add', true];
-        yield ['ADD', true];
-        yield ['Fake', false];
-        yield ['', false];
+        $this->voter = new EntityVoter($parameters);
     }
 
     public function testAbstainAttribute(): void
@@ -136,16 +125,9 @@ final class EntityVoterTest extends TestCase
     {
         $token = self::createStub(TokenInterface::class);
         $subject = EntityName::PRODUCT;
-        $attribute = EntityPermission::LIST;
+        $attribute = EntityPermission::LIST->name;
         $actual = $this->voter->vote($token, $subject, [$attribute], new Vote());
         self::assertSame(VoterInterface::ACCESS_DENIED, $actual);
-    }
-
-    #[DataProvider('getSupportsAttribute')]
-    public function testSupportsAttribute(string $value, bool $expected): void
-    {
-        $actual = $this->voter->supportsAttribute($value);
-        self::assertSame($expected, $actual);
     }
 
     public function testUser(): void
@@ -168,27 +150,6 @@ final class EntityVoterTest extends TestCase
         $this->assertVote($user, $subject, $attribute, $expected);
     }
 
-    public function testVoteOnAttribute(): void
-    {
-        $voter = new class($this->parameters) extends EntityVoter {
-            #[\Override]
-            public function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
-            {
-                return parent::voteOnAttribute($attribute, $subject, $token, $vote ?? new Vote());
-            }
-        };
-
-        $role = $this->builder->getUserRole();
-        $user = $this->getDefaultUser($role);
-        $token = $this->getUserToken($user);
-
-        $actual = $voter->voteOnAttribute('fake', EntityName::CALCULATION->name, $token);
-        self::assertFalse($actual);
-
-        $actual = $voter->voteOnAttribute(EntityPermission::ADD->name, 'fake', $token);
-        self::assertFalse($actual);
-    }
-
     public function testWebmaster(): void
     {
         $user = $this->getWebmasterUser();
@@ -199,7 +160,7 @@ final class EntityVoterTest extends TestCase
     }
 
     /**
-     * @param VoterInterface::ACCESS_* $expected
+     * @phpstan-param VoterInterface::ACCESS_* $expected
      */
     protected function assertVote(
         User $user,
@@ -207,6 +168,12 @@ final class EntityVoterTest extends TestCase
         EntityPermission|string $attribute,
         int $expected
     ): void {
+        if ($subject instanceof EntityName) {
+            $subject = $subject->value;
+        }
+        if ($attribute instanceof EntityPermission) {
+            $attribute = $attribute->name;
+        }
         $token = $this->getUserToken($user);
         $actual = $this->voter->vote($token, $subject, [$attribute], new Vote());
         self::assertSame($expected, $actual);

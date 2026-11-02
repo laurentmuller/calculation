@@ -56,7 +56,7 @@
                 {% if is_granted_data and app.current_route != 'search' -%}
                     {{ include('navigation/horizontal/navigation_search.html.twig') }}
                 {% endif %}
-                {% if is_granted(IS_AUTHENTICATED_REMEMBERED) -%}
+                {% if is_granted(IS_AUTHENTICATED) -%}
                     {{ include('navigation/horizontal/navigation_user.html.twig') }}
                 {% endif %}
             </ul>

@@ -9,8 +9,12 @@
     display: none;
 }
 
+body:not:has(form) .page-content {
+    margin-top: 0;
+}
+
 @media (width >= 768px) {
-    .page-content {
+    body:has(form) .page-content {
         margin-top: 5%;
     }
 }

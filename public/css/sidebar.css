@@ -14,7 +14,7 @@
     max-width: var(--sidebar-width);
     padding: 0.5rem 1rem 0.75rem;
     transition: margin-left var(--sidebar-delay) ease-in-out;
-    overflow: hidden auto;
+    overflow: visible;
     flex-flow: column nowrap;
     text-align: left;
     justify-content: initial;

@@ -72,6 +72,16 @@ enum EntityPermission: int implements ConstantsInterface, EnumSortableInterface,
     }
 
     /**
+     * Gets the entity permission from the given name, ignoring case consideration.
+     *
+     * @throws \InvalidArgumentException if the name is not a valid entity permission
+     */
+    public static function fromName(string $name): self
+    {
+        return self::tryFromName($name) ?? throw new \InvalidArgumentException(\sprintf('Invalid entity permission: "%s".', $name));
+    }
+
+    /**
      * Gets a flag bag with all permission.
      *
      * @return FlagBag<EntityPermission>

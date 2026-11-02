@@ -4,7 +4,7 @@
     'data-bs-toggle': 'dropdown',
     'aria-expanded': false,
 } %}
-<button {{ html_attr(button_attrs) }}>
+<button {{ html_attr(button_attrs) }} data-bs-display="static">
     {%- set image = asset_image_user(app.user, 32, {alt: 'user.image.title'|trans, class: 'avatar rounded-circle'}) -%}
     {%- if image -%}
         {{- image|raw -}}
@@ -13,4 +13,4 @@
     {%- endif -%}
     <span{% if not vertical %} class="ms-2 d-lg-none"{% endif %}>{{ app.user.userIdentifier }}</span>
 </button>
-{{ include('navigation/menu/_menu_user.html.twig', {dropdown_class: vertical ? 'dropdown-menu-default' : 'dropdown-menu-end'}) }}
+{{ include('navigation/menu/_menu_user.html.twig', {dropdown_class: vertical ? 'default' : 'end'}) }}

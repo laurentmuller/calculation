@@ -9,7 +9,7 @@
     or is_granted(PERMISSION_LIST, ENTITY_CALCULATION_STATE)
     or is_granted(PERMISSION_LIST, ENTITY_GLOBAL_MARGIN)
 -%}
-<ul class="dropdown-menu {{ dropdown_class }}">
+<ul class="dropdown-menu dropdown-menu-{{ dropdown_class }}">
     {{ include('navigation/menu/_menu_theme.html.twig') }}
     {{ dropdownSeparator() }}
     {{ dropdownItem(path('user_parameters'), 'user.parameters.title', 'fa-solid fa-user-gear') }}

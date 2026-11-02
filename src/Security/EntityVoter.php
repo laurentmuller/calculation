@@ -53,11 +53,8 @@ class EntityVoter extends Voter
             return true;
         }
 
-        /** @phpstan-var EntityPermission $entityPermission */
-        $entityPermission = EntityPermission::tryFromName($attribute);
-        /** @phpstan-var EntityName $entityName */
-        $entityName = EntityName::tryFromMixed($subject);
-
+        $entityName = EntityName::fromMixed($subject);
+        $entityPermission = EntityPermission::fromName($attribute);
         if ($this->isAllowed($user, $entityName, $entityPermission)) {
             $this->addReason(
                 $vote,

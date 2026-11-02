@@ -1,6 +1,6 @@
 # ![Icon](public/images/icons/favicon-36x36.png) Calculation
 
-Programme de calcul basé sur l'environnement de développement Symfony 7.x.
+Programme de calcul basé sur l'environnement de développement Symfony 8.x.
 
 ![Screenshot](public/images/screenshots/home_page.png)
 

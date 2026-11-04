@@ -42,12 +42,12 @@ class CalculationStatesDocument extends AbstractArrayDocument
 
         foreach ($entities as $entity) {
             $sheet->setRowValues($row, [
-                $entity->getCode(),
-                $entity->getDescription(),
-                $entity->isEditable(),
+                $entity->code,
+                $entity->description,
+                $entity->editable,
                 $entity->countCalculations(),
             ]);
-            $color = new Color(\substr($entity->getColor(), 1));
+            $color = new Color(\substr($entity->color, 1));
             $fill = $sheet->getStyle([5, $row])
                 ->getFill();
             $fill->setFillType(Fill::FILL_SOLID)

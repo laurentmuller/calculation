@@ -109,9 +109,9 @@ final class AjaxControllerTest extends ControllerTestCase
     {
         $taskItem = $this->getTaskItem();
         $parameters = [
-            'id' => $taskItem->getParentEntity()?->getId(),
+            'id' => $taskItem->getParentEntity()?->id,
             'quantity' => 1.0,
-            'items' => [$taskItem->getId()],
+            'items' => [$taskItem->id],
         ];
         $this->checkTaskRequest($parameters, Response::HTTP_OK);
     }

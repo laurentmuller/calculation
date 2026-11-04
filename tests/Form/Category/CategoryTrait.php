@@ -38,7 +38,7 @@ trait CategoryTrait
     {
         if (!$this->category instanceof Category) {
             $this->category = new Category();
-            $this->category->setCode('category');
+            $this->category->withCode('category');
             $this->getGroup()->addCategory($this->category);
 
             return self::setId($this->category);

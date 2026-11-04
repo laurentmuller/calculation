@@ -108,7 +108,7 @@ class IndexService
     public function getLastCalculations(int $maxResults, ?User $user = null): array
     {
         return $this->loadData(
-            \sprintf('last.%d.%d', $maxResults, $user?->getId() ?? 0),
+            \sprintf('last.%d.%d', $maxResults, $user->id ?? 0),
             fn (): array => $this->manager->getRepository(Calculation::class)->getLastCalculations($maxResults, $user)
         );
     }

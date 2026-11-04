@@ -45,29 +45,29 @@ class TasksDocument extends AbstractArrayDocument
                 ->getFont()->setBold(true);
             if ($entity->isEmpty()) {
                 $sheet->setRowValues($row++, [
-                    $entity->getName(),
+                    $entity->name,
                     $entity->getGroupCode(),
                     $entity->getCategoryCode(),
-                    $entity->getUnit(),
-                    $entity->getSupplier(),
+                    $entity->unit,
+                    $entity->supplier,
                     $this->trans('task.edit.empty_items'),
                 ])->mergeContent(6, 8, $row - 1);
             } else {
                 $sheet->setRowValues($row++, [
-                    $entity->getName(),
+                    $entity->name,
                     $entity->getGroupCode(),
                     $entity->getCategoryCode(),
-                    $entity->getUnit(),
-                    $entity->getSupplier(),
+                    $entity->unit,
+                    $entity->supplier,
                 ]);
             }
 
-            foreach ($entity->getItems() as $item) {
+            foreach ($entity->items as $item) {
                 $sheet->getStyle([1, $row])
                     ->getAlignment()->setIndent(2);
                 if ($item->isEmpty()) {
                     $sheet->setRowValues($row++, [
-                        $item->getName(),
+                        $item->name,
                         null,
                         null,
                         null,
@@ -75,17 +75,17 @@ class TasksDocument extends AbstractArrayDocument
                     ])->mergeContent(6, 8, $row - 1);
                 } else {
                     $index = 0;
-                    foreach ($item->getMargins() as $margin) {
-                        $text = (0 === $index++) ? $item->getName() : null;
+                    foreach ($item->margins as $margin) {
+                        $text = (0 === $index++) ? $item->name : null;
                         $sheet->setRowValues($row++, [
                             $text,
                             null,
                             null,
                             null,
                             null,
-                            $margin->getMinimum(),
-                            $margin->getMaximum(),
-                            $margin->getValue(),
+                            $margin->minimum,
+                            $margin->maximum,
+                            $margin->value,
                         ]);
                     }
                 }

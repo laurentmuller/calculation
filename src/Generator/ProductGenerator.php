@@ -46,24 +46,22 @@ class ProductGenerator extends AbstractEntityGenerator
     protected function mapEntity(EntityInterface $entity): array
     {
         return [
-            'description' => $entity->getDescription(),
+            'description' => $entity->description,
             'group' => $entity->getGroupCode(),
             'category' => $entity->getCategoryCode(),
-            'price' => FormatUtils::formatAmount($entity->getPrice()),
-            'unit' => $entity->getUnit(),
+            'price' => FormatUtils::formatAmount($entity->price),
+            'unit' => $entity->unit,
         ];
     }
 
     private function createEntity(Generator $generator): Product
     {
-        $entity = new Product();
-        $entity->setDescription($this->getDescription($generator))
-            ->setPrice($generator->randomFloat(2, 1, 50))
-            ->setSupplier($generator->productSupplier())
-            ->setUnit($generator->productUnit())
-            ->setCategory($generator->category());
-
-        return $entity;
+        return new Product()
+            ->withDescription($this->getDescription($generator))
+            ->withPrice($generator->randomFloat(2, 1, 50))
+            ->withSupplier($generator->productSupplier())
+            ->withUnit($generator->productUnit())
+            ->withCategory($generator->category());
     }
 
     /**

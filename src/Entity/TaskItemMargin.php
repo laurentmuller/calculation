@@ -33,40 +33,36 @@ class TaskItemMargin extends AbstractEntity implements MarginInterface, ParentTi
     #[Assert\GreaterThanOrEqual(0)]
     #[Assert\GreaterThan(propertyPath: 'minimum', message: 'margin.maximum_greater_minimum')]
     #[ORM\Column(type: FixedFloatType::NAME)]
-    private float $maximum = 0.0;
+    public float $maximum = 0.0 {
+        get => $this->maximum;
+        set => $this->round($value);
+    }
 
     /** The minimum quantity (inclusive) to apply within this value. */
     #[Assert\GreaterThanOrEqual(0)]
     #[ORM\Column(type: FixedFloatType::NAME)]
-    private float $minimum = 0.0;
+    public float $minimum = 0.0 {
+        get => $this->minimum;
+        set => $this->round($value);
+    }
 
     /** The parent task item. */
     #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'margins')]
     #[ORM\JoinColumn(name: 'task_item_id', nullable: false)]
-    private ?TaskItem $taskItem = null;
+    public ?TaskItem $taskItem = null;
 
     /** The value to use when a quantity is within this range. */
     #[Assert\GreaterThanOrEqual(0)]
     #[ORM\Column(type: FixedFloatType::NAME)]
-    private float $value = 0.0;
+    public float $value = 0.0 {
+        set => $this->round($value);
+    }
 
     #[\Override]
     public function contains(float $value): bool
     {
         return $value >= $this->minimum && $value < $this->maximum;
-    }
-
-    #[\Override]
-    public function getMaximum(): float
-    {
-        return $this->maximum;
-    }
-
-    #[\Override]
-    public function getMinimum(): float
-    {
-        return $this->minimum;
     }
 
     #[\Override]
@@ -76,25 +72,9 @@ class TaskItemMargin extends AbstractEntity implements MarginInterface, ParentTi
     }
 
     /**
-     * Gets the parent task item.
-     */
-    public function getTaskItem(): ?TaskItem
-    {
-        return $this->taskItem;
-    }
-
-    /**
-     * Gets the value (unit price).
-     */
-    public function getValue(): float
-    {
-        return $this->value;
-    }
-
-    /**
      * Sets the maximum.
      */
-    public function setMaximum(float $maximum): self
+    public function withMaximum(float $maximum): self
     {
         $this->maximum = $maximum;
 
@@ -104,7 +84,7 @@ class TaskItemMargin extends AbstractEntity implements MarginInterface, ParentTi
     /**
      * Sets the minimum.
      */
-    public function setMinimum(float $minimum): self
+    public function withMinimum(float $minimum): self
     {
         $this->minimum = $minimum;
 
@@ -114,7 +94,7 @@ class TaskItemMargin extends AbstractEntity implements MarginInterface, ParentTi
     /**
      * Sets the parent task item.
      */
-    public function setTaskItem(?TaskItem $taskItem): self
+    public function withTaskItem(?TaskItem $taskItem): self
     {
         $this->taskItem = $taskItem;
 
@@ -124,7 +104,7 @@ class TaskItemMargin extends AbstractEntity implements MarginInterface, ParentTi
     /**
      * Sets the value (unit price).
      */
-    public function setValue(float $value): self
+    public function withValue(float $value): self
     {
         $this->value = $value;
 

@@ -39,7 +39,7 @@ final class UserCommentTest extends TestCase
         $user = $this->createUser();
         $comment = UserComment::instance($user, $user, $subject);
         self::assertSame('subject', $comment->getSubject());
-        $expected = $user->getAddress();
+        $expected = $user->address;
         self::assertEqualsCanonicalizing($expected, $comment->getFrom());
         self::assertEqualsCanonicalizing($expected, $comment->getTo());
     }
@@ -83,7 +83,7 @@ final class UserCommentTest extends TestCase
         $user = $this->createUser();
         $comment->setFrom($user);
         $actual = $comment->getFrom();
-        $expected = $user->getAddress();
+        $expected = $user->address;
         self::assertEqualsCanonicalizing($expected, $actual);
     }
 
@@ -102,16 +102,14 @@ final class UserCommentTest extends TestCase
         $user = $this->createUser();
         $comment->setTo($user);
         $actual = $comment->getTo();
-        $expected = $user->getAddress();
+        $expected = $user->address;
         self::assertEqualsCanonicalizing($expected, $actual);
     }
 
     private function createUser(): User
     {
-        $user = new User();
-        $user->setEmail('test@test.com')
-            ->setUsername('username');
-
-        return $user;
+        return new User()
+            ->withEmail('test@test.com')
+            ->withUsername('username');
     }
 }

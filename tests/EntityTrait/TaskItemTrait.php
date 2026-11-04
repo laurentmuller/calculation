@@ -41,7 +41,7 @@ trait TaskItemTrait
 
         $task ??= $this->getTask();
         $this->taskItem = new TaskItem();
-        $this->taskItem->setName($name);
+        $this->taskItem->withName($name);
         $task->addItem($this->taskItem);
 
         return $this->addEntity($this->taskItem);

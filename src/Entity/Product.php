@@ -36,18 +36,22 @@ class Product extends AbstractCategoryItemEntity implements ComparableInterface
     #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(name: 'category_id', nullable: false)]
-    protected ?Category $category = null;
+    public ?Category $category = null;
 
     /** The description. */
     #[Assert\NotBlank]
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(unique: true)]
-    private ?string $description = null;
+    public ?string $description = null {
+        set => StringUtils::trim($value);
+    }
 
     /** The price. */
     #[Assert\NotBlank]
     #[ORM\Column(type: FixedFloatType::NAME)]
-    private float $price = 0.0;
+    public float $price = 0.0 {
+        set => $this->round($value);
+    }
 
     /**
      * Clone this product.
@@ -58,7 +62,7 @@ class Product extends AbstractCategoryItemEntity implements ComparableInterface
     {
         $copy = clone $this;
         if (StringUtils::isString($description)) {
-            $copy->setDescription($description);
+            $copy->withDescription($description);
         }
 
         return $copy;
@@ -67,37 +71,21 @@ class Product extends AbstractCategoryItemEntity implements ComparableInterface
     #[\Override]
     public function compare(ComparableInterface $other): int
     {
-        return \strnatcasecmp((string) $this->getDescription(), (string) $other->getDescription());
-    }
-
-    /**
-     * Get description.
-     */
-    public function getDescription(): ?string
-    {
-        return $this->description;
+        return \strnatcasecmp((string) $this->description, (string) $other->description);
     }
 
     #[\Override]
     public function getDisplay(): string
     {
-        return (string) $this->getDescription();
-    }
-
-    /**
-     * Get price.
-     */
-    public function getPrice(): float
-    {
-        return $this->price;
+        return (string) $this->description;
     }
 
     /**
      * Set the description.
      */
-    public function setDescription(?string $description): self
+    public function withDescription(?string $description): self
     {
-        $this->description = StringUtils::trim($description);
+        $this->description = $description;
 
         return $this;
     }
@@ -105,9 +93,9 @@ class Product extends AbstractCategoryItemEntity implements ComparableInterface
     /**
      * Set the price.
      */
-    public function setPrice(float $price): self
+    public function withPrice(float $price): self
     {
-        $this->price = $this->round($price);
+        $this->price = $price;
 
         return $this;
     }

@@ -115,8 +115,8 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
         }
 
         return [
-            'id' => $entity->getId(),
-            'code' => $entity->getCode(),
+            'id' => $entity->id,
+            'code' => $entity->code,
         ];
     }
 
@@ -131,8 +131,8 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
         }
 
         return [
-            'id' => $entity->getId(),
-            'code' => $entity->getCode(),
+            'id' => $entity->id,
+            'code' => $entity->code,
         ];
     }
 

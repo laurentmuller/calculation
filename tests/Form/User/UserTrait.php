@@ -32,9 +32,9 @@ trait UserTrait
     {
         if (!$this->user instanceof User) {
             $this->user = new User();
-            $this->user->setUsername('username')
-                ->setEmail('email@email.com')
-                ->setPassword('password');
+            $this->user->withUsername('username')
+                ->withEmail('email@email.com')
+                ->withPassword('password');
 
             return self::setId($this->user);
         }

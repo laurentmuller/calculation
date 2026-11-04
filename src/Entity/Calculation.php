@@ -40,26 +40,52 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     use MathTrait;
     use TimestampableTrait;
 
+    /** Gets the number of categories. */
+    public int $categoriesCount {
+        get => $this->reduceGroups(static fn (int $carry, CalculationGroup $group): int => $carry + $group->count(), 0);
+    }
+
     /** The customer name. */
     #[Assert\NotBlank]
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column]
-    private ?string $customer = null;
+    public ?string $customer = null {
+        set => StringUtils::trim($value);
+    }
 
     /** The date. */
     #[Assert\NotNull]
     #[ORM\Column(type: DayPointType::NAME)]
-    private DatePoint $date;
+    public DatePoint $date;
 
     /** The description. */
     #[Assert\NotBlank]
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column]
-    private ?string $description = null;
+    public ?string $description = null {
+        set => StringUtils::trim($value);
+    }
+
+    /** Get the formatted date. */
+    public string $formattedDate {
+        get => FormatUtils::formatDate($this->date);
+    }
+
+    /** Get the formatted identifier. */
+    public string $formattedId {
+        get => FormatUtils::formatId((int) $this->id);
+    }
 
     /** The global margin in percent (%). */
     #[ORM\Column(type: FixedFloatType::NAME)]
-    private float $globalMargin = 0.0;
+    public float $globalMargin = 0.0 {
+        set => $this->round($value);
+    }
+
+    /** Get the global margin amount. */
+    public float $globalMarginAmount {
+        get => $this->groupsTotal * ($this->globalMargin - 1.0);
+    }
 
     /**
      * The groups.
@@ -75,25 +101,119 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         orphanRemoval: true
     )]
     #[ORM\OrderBy(['position' => \SortDirection::Ascending])]
-    private Collection $groups;
+    public Collection $groups;
+
+    /** Gets the total amount for all groups. */
+    public float $groupsAmount {
+        get => $this->reduceGroups(
+            static fn (float $carry, CalculationGroup $group): float => $carry + $group->amount,
+            0.0
+        );
+    }
+
+    /** Gets the number of groups. */
+    public int $groupsCount {
+        get => $this->groups->count();
+    }
+
+    /** Gets the margin of all groups. */
+    public float $groupsMargin {
+        get => 1.0 + $this->safeDivide($this->groupsMarginAmount, $this->groupsAmount);
+    }
+
+    /** Gets the total margin amounts for all groups. */
+    public float $groupsMarginAmount {
+        get => $this->reduceGroups(
+            static fn (float $carry, CalculationGroup $group): float => $carry + $group->marginAmount,
+            0.0
+        );
+    }
+
+    /** Gets the total of all groups. */
+    public float $groupsTotal {
+        get => $this->reduceGroups(
+            static fn (float $carry, CalculationGroup $group): float => $carry + $group->total,
+            0.0
+        );
+    }
+
+    /** Gets the number of item lines. */
+    public int $itemsCount {
+        get => $this->reduceGroups(
+            static fn (int $count, CalculationGroup $group): int => $count + $group->itemsCount,
+            0
+        );
+    }
 
     /** The total of all items. */
     #[ORM\Column(type: FixedFloatType::NAME)]
-    private float $itemsTotal = 0.0;
+    public float $itemsTotal = 0.0 {
+        set => $this->round($value);
+    }
+
+    /** Gets the overall margin in percent. */
+    public float $overallMargin {
+        get => $this->getSafeMargin($this->overallTotal, $this->itemsTotal);
+    }
+
+    /** Gets the overall margin amount. */
+    public float $overallMarginAmount {
+        get {
+            if ($this->isFloatZero($this->itemsTotal)) {
+                return 0.0;
+            }
+
+            return $this->overallTotal - $this->itemsTotal;
+        }
+    }
 
     /** The overall total. */
     #[ORM\Column(type: FixedFloatType::NAME)]
-    private float $overallTotal = 0.0;
+    public float $overallTotal = 0.0 {
+        set => $this->round($value);
+    }
 
     /** The state. */
     #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'calculations')]
     #[ORM\JoinColumn(name: 'state_id', nullable: false)]
-    private ?CalculationState $state = null;
+    public ?CalculationState $state = null;
+
+    /** Gets the state code. */
+    public ?string $stateCode {
+        get => $this->state?->code;
+    }
+
+    /** Gets the state color. */
+    public ?string $stateColor {
+        get => $this->state?->color;
+    }
+
+    /** Gets the state identifier. */
+    public ?int $stateId {
+        get => $this->state?->id;
+    }
+
+    /** Get the total net. This is the total of the groups multiplied by the global margin. */
+    public float $totalNet {
+        get => $this->groupsTotal * $this->globalMargin;
+    }
 
     /** The user margin in percent (%). */
     #[ORM\Column(type: FixedFloatType::NAME)]
-    private float $userMargin = 0.0;
+    public float $userMargin = 0.0 {
+        set => $this->round($value);
+    }
+
+    /** Get the user margin amount. */
+    public float $userMarginAmount {
+        get => $this->totalNet * $this->userMargin;
+    }
+
+    /** Get the user total margin amount. */
+    public float $userMarginTotal {
+        get => $this->totalNet * (1.0 + $this->userMargin);
+    }
 
     public function __construct()
     {
@@ -109,7 +229,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         $this->createdAt = DateUtils::createDatePoint();
         $this->updatedAt = $this->createdAt;
         $this->groups = $this->groups->map(
-            fn (CalculationGroup $group): CalculationGroup => (clone $group)->setCalculation($this)
+            fn (CalculationGroup $group): CalculationGroup => (clone $group)->withCalculation($this)
         );
     }
 
@@ -120,7 +240,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     {
         if (!$this->contains($group)) {
             $this->groups->add($group);
-            $group->setCalculation($this);
+            $group->withCalculation($this);
         }
 
         return $this;
@@ -135,8 +255,8 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     public function addProduct(Product $product, float $quantity = 1.0): self
     {
         /** @var Category $category */
-        $category = $product->getCategory();
-        $item = CalculationItem::create($product)->setQuantity($quantity);
+        $category = $product->category;
+        $item = CalculationItem::create($product)->withQuantity($quantity);
         $newCategory = $this->findOrCreateCategory($category);
         $newCategory->addItem($item);
         $newCategory->update();
@@ -154,10 +274,10 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     {
         $copy = clone $this;
         if ($state instanceof CalculationState) {
-            $copy->setState($state);
+            $copy->withState($state);
         }
         if (null !== $description) {
-            return $copy->setDescription($description);
+            return $copy->withDescription($description);
         }
 
         return $copy;
@@ -183,7 +303,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     public function findOrCreateCategory(Category $category): CalculationCategory
     {
         /** @var Group $categoryGroup */
-        $categoryGroup = $category->getGroup();
+        $categoryGroup = $category->group;
         $calculationGroup = $this->findOrCreateGroup($categoryGroup);
 
         return $calculationGroup->findOrCreateCategory($category);
@@ -194,10 +314,10 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function findOrCreateGroup(Group $group): CalculationGroup
     {
-        $code = $group->getCode();
+        $code = $group->code;
         /** @var CalculationGroup|null $calculationGroup */
         $calculationGroup = $this->groups->findFirst(
-            static fn (int $key, CalculationGroup $group): bool => $code === $group->getCode()
+            static fn (int $key, CalculationGroup $group): bool => $code === $group->code
         );
         if ($calculationGroup instanceof CalculationGroup) {
             return $calculationGroup;
@@ -209,49 +329,10 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         return $calculationGroup;
     }
 
-    /**
-     * Gets the number of categories.
-     */
-    public function getCategoriesCount(): int
-    {
-        if ($this->isEmpty()) {
-            return 0;
-        }
-
-        return $this->reduceGroups(
-            static fn (int $carry, CalculationGroup $group): int => $carry + $group->count(),
-            0
-        );
-    }
-
-    /**
-     * Get the customer.
-     */
-    public function getCustomer(): ?string
-    {
-        return $this->customer;
-    }
-
-    /**
-     * Get the date.
-     */
-    public function getDate(): DatePoint
-    {
-        return $this->date;
-    }
-
-    /**
-     * Get the description.
-     */
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
     #[\Override]
     public function getDisplay(): string
     {
-        return $this->getFormattedId();
+        return $this->formattedId;
     }
 
     /**
@@ -313,100 +394,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Get the formatted date.
-     */
-    public function getFormattedDate(): string
-    {
-        return FormatUtils::formatDate($this->date);
-    }
-
-    /**
-     * Get the formatted identifier.
-     */
-    public function getFormattedId(): string
-    {
-        return FormatUtils::formatId((int) $this->getId());
-    }
-
-    /**
-     * Get the global margin.
-     */
-    public function getGlobalMargin(): float
-    {
-        return $this->globalMargin;
-    }
-
-    /**
-     * Get the global margin amount.
-     */
-    public function getGlobalMarginAmount(): float
-    {
-        return $this->getGroupsTotal() * ($this->globalMargin - 1.0);
-    }
-
-    /**
-     * Get groupes.
-     *
-     * @return Collection<int, CalculationGroup>
-     */
-    public function getGroups(): Collection
-    {
-        return $this->groups;
-    }
-
-    /**
-     * Gets the total amount for all groups.
-     */
-    public function getGroupsAmount(): float
-    {
-        return $this->reduceGroups(
-            static fn (float $carry, CalculationGroup $group): float => $carry + $group->getAmount(),
-            0.0
-        );
-    }
-
-    /**
-     * Gets the number of groups.
-     */
-    public function getGroupsCount(): int
-    {
-        return $this->groups->count();
-    }
-
-    /**
-     * Gets the margin of all groups.
-     */
-    public function getGroupsMargin(): float
-    {
-        $divisor = $this->getGroupsAmount();
-        $dividend = $this->getGroupsMarginAmount();
-
-        return 1.0 + $this->safeDivide($dividend, $divisor);
-    }
-
-    /**
-     * Gets the total margin amounts for all groups.
-     */
-    public function getGroupsMarginAmount(): float
-    {
-        return $this->reduceGroups(
-            static fn (float $carry, CalculationGroup $group): float => $carry + $group->getMarginAmount(),
-            0.0
-        );
-    }
-
-    /**
-     * Gets the total of all groups.
-     */
-    public function getGroupsTotal(): float
-    {
-        return $this->reduceGroups(
-            static fn (float $carry, CalculationGroup $group): float => $carry + $group->getTotal(),
-            0.0
-        );
-    }
-
-    /**
      * Gets all calculation items.
      *
      * @return \Generator<CalculationItem>
@@ -414,67 +401,12 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     public function getItems(): \Generator
     {
         foreach ($this->groups as $group) {
-            foreach ($group->getCategories() as $category) {
-                foreach ($category->getItems() as $item) {
+            foreach ($group->categories as $category) {
+                foreach ($category->items as $item) {
                     yield $item;
                 }
             }
         }
-    }
-
-    /**
-     * Gets the number of item lines.
-     */
-    public function getItemsCount(): int
-    {
-        if ($this->isEmpty()) {
-            return 0;
-        }
-
-        $count = 0;
-        foreach ($this->groups as $group) {
-            foreach ($group->getCategories() as $category) {
-                $count += $category->count();
-            }
-        }
-
-        return $count;
-    }
-
-    /**
-     * Gets the items total.
-     */
-    public function getItemsTotal(): float
-    {
-        return $this->itemsTotal;
-    }
-
-    /**
-     * Gets the overall margin in percent.
-     */
-    public function getOverallMargin(): float
-    {
-        return $this->getSafeMargin($this->overallTotal, $this->itemsTotal);
-    }
-
-    /**
-     * Gets the overall margin amount.
-     */
-    public function getOverallMarginAmount(): float
-    {
-        if (0.0 !== $this->itemsTotal) {
-            return $this->overallTotal - $this->itemsTotal;
-        }
-
-        return 0;
-    }
-
-    /**
-     * Get overall total.
-     */
-    public function getOverallTotal(): float
-    {
-        return $this->overallTotal;
     }
 
     /**
@@ -485,70 +417,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     public function getSortedGroups(): array
     {
         return $this->getSortedCollection($this->groups);
-    }
-
-    /**
-     * Get the state.
-     */
-    public function getState(): ?CalculationState
-    {
-        return $this->state;
-    }
-
-    /**
-     * Gets the state code.
-     */
-    public function getStateCode(): ?string
-    {
-        return $this->state?->getCode();
-    }
-
-    /**
-     * Gets the state color.
-     */
-    public function getStateColor(): ?string
-    {
-        return $this->state?->getColor();
-    }
-
-    /**
-     * Gets the state identifier.
-     */
-    public function getStateId(): ?int
-    {
-        return $this->state?->getId();
-    }
-
-    /**
-     * Get the total net. This is the total of the groups multiplied by the global margin.
-     */
-    public function getTotalNet(): float
-    {
-        return $this->getGroupsTotal() * $this->globalMargin;
-    }
-
-    /**
-     * Get the user margin.
-     */
-    public function getUserMargin(): float
-    {
-        return $this->userMargin;
-    }
-
-    /**
-     * Get the user margin amount.
-     */
-    public function getUserMarginAmount(): float
-    {
-        return $this->getTotalNet() * $this->userMargin;
-    }
-
-    /**
-     * Get the user total margin amount.
-     */
-    public function getUserMarginTotal(): float
-    {
-        return $this->getTotalNet() * (1.0 + $this->userMargin);
     }
 
     /**
@@ -607,7 +475,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function isEditable(): bool
     {
-        return $this->isNew() || ($this->state?->isEditable() ?? false);
+        return $this->isNew() || ($this->state->editable ?? false);
     }
 
     /**
@@ -640,7 +508,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
             return false;
         }
 
-        return $this->isBelow($margin, $this->getOverallMargin());
+        return $this->isBelow($margin, $this->overallMargin);
     }
 
     /**
@@ -715,91 +583,11 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     {
         if ($this->groups->removeElement($group)) {
             if ($group->getParentEntity() === $this) {
-                $group->setCalculation(null);
+                $group->withCalculation(null);
             }
 
             return $this->updatePositions();
         }
-
-        return $this;
-    }
-
-    /**
-     * Set customer.
-     */
-    public function setCustomer(?string $customer): self
-    {
-        $this->customer = StringUtils::trim($customer);
-
-        return $this;
-    }
-
-    /**
-     * Set date.
-     */
-    public function setDate(DatePoint $date): self
-    {
-        $this->date = $date;
-
-        return $this;
-    }
-
-    /**
-     * Set description.
-     */
-    public function setDescription(?string $description): self
-    {
-        $this->description = StringUtils::trim($description);
-
-        return $this;
-    }
-
-    /**
-     * Set the global margin.
-     */
-    public function setGlobalMargin(float $globalMargin): self
-    {
-        $this->globalMargin = $this->round($globalMargin);
-
-        return $this;
-    }
-
-    /**
-     * Sets the item's total.
-     */
-    public function setItemsTotal(float $itemsTotal): self
-    {
-        $this->itemsTotal = $this->round($itemsTotal);
-
-        return $this;
-    }
-
-    /**
-     * Set overall total.
-     */
-    public function setOverallTotal(float $overallTotal): self
-    {
-        $this->overallTotal = $this->round($overallTotal);
-
-        return $this;
-    }
-
-    /**
-     * Set state.
-     */
-    public function setState(?CalculationState $state): self
-    {
-        $this->state = $state;
-
-        return $this;
-    }
-
-    /**
-     * Set user margin.
-     */
-    public function setUserMargin(float $userMargin): self
-    {
-        $this->userMargin = $this->round($userMargin);
 
         return $this;
     }
@@ -837,7 +625,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
             if ($group->updateCode()) {
                 ++$total;
             }
-            foreach ($group->getCategories() as $category) {
+            foreach ($group->categories as $category) {
                 if ($category->updateCode()) {
                     ++$total;
                 }
@@ -862,6 +650,86 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
+     * Set customer.
+     */
+    public function withCustomer(?string $customer): self
+    {
+        $this->customer = $customer;
+
+        return $this;
+    }
+
+    /**
+     * Set date.
+     */
+    public function withDate(DatePoint $date): self
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Set description.
+     */
+    public function withDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Set the global margin.
+     */
+    public function withGlobalMargin(float $globalMargin): self
+    {
+        $this->globalMargin = $globalMargin;
+
+        return $this;
+    }
+
+    /**
+     * Sets the item's total.
+     */
+    public function withItemsTotal(float $itemsTotal): self
+    {
+        $this->itemsTotal = $itemsTotal;
+
+        return $this;
+    }
+
+    /**
+     * Set overall total.
+     */
+    public function withOverallTotal(float $overallTotal): self
+    {
+        $this->overallTotal = $overallTotal;
+
+        return $this;
+    }
+
+    /**
+     * Set state.
+     */
+    public function withState(?CalculationState $state): self
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * Set user margin.
+     */
+    public function withUserMargin(float $userMargin): self
+    {
+        $this->userMargin = $userMargin;
+
+        return $this;
+    }
+
+    /**
      * Gets the key for the given item.
      *
      * @param CalculationItem $item the item to get key for
@@ -870,7 +738,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     private function getItemKey(CalculationItem $item): string
     {
-        return \strtolower((string) $item->getDescription());
+        return \strtolower((string) $item->description);
     }
 
     /**
@@ -898,7 +766,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     private function removeItem(CalculationItem $item): bool
     {
-        $category = $item->getCategory();
+        $category = $item->category;
         if (!$category instanceof CalculationCategory || !$category->contains($item)) {
             return false;
         }
@@ -908,7 +776,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
             return true;
         }
 
-        $group = $category->getGroup();
+        $group = $category->group;
         if (!$group instanceof CalculationGroup) {
             return true;
         }

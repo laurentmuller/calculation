@@ -137,7 +137,7 @@ final class CalculationUpdateQueryTest extends TestCase
     private function getState(): CalculationState
     {
         $state = new CalculationState();
-        $state->setCode('code');
+        $state->withCode('code');
 
         return self::setId($state);
     }

@@ -23,11 +23,11 @@ final class CalculationStatesDocumentTest extends TestCase
     public function testRender(): void
     {
         $state1 = new CalculationState();
-        $state1->setCode('Code1');
+        $state1->withCode('Code1');
 
         $state2 = new CalculationState();
-        $state2->setCode('Code2')
-            ->setColor('');
+        $state2->withCode('Code2')
+            ->withColor('');
 
         $helper = self::createStub(DocumentHelperInterface::class);
         $document = new CalculationStatesDocument($helper, [$state1, $state2]);

@@ -24,9 +24,9 @@ final class GlobalMarginsReportTest extends TestCase
     {
         $helper = self::createStub(DocumentHelperInterface::class);
         $margin = new GlobalMargin();
-        $margin->setMinimum(0.0)
-            ->setMaximum(100.0)
-            ->setMargin(1.1);
+        $margin->withMinimum(0.0)
+            ->withMaximum(100.0)
+            ->withMargin(1.1);
         $report = new GlobalMarginsReport($helper, [$margin]);
         $actual = $report->render();
         self::assertTrue($actual);

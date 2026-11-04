@@ -38,8 +38,8 @@ class TaskComputeResult implements \JsonSerializable
 
     public function addItem(TaskItem $item, bool $checked): self
     {
-        $id = (int) $item->getId();
-        $name = (string) $item->getName();
+        $id = (int) $item->id;
+        $name = (string) $item->name;
         $value = $item->findValue($this->quantity);
         $amount = $checked ? $this->quantity * $value : 0.0;
         $this->items[] = [
@@ -81,8 +81,8 @@ class TaskComputeResult implements \JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'id' => $this->task->getId(),
-            'unit' => $this->task->getUnit(),
+            'id' => $this->task->id,
+            'unit' => $this->task->unit,
             'categoryId' => $this->task->getCategoryId(),
             'quantity' => $this->quantity,
             'overall' => $this->overall,

@@ -41,8 +41,8 @@ final class ProfileControllerTest extends ControllerTestCase
         self::assertNotNull($user);
         $data = [
             'username' => 'new_username',
-            'email' => $user->getEmail(),
-            'currentPassword' => $user->getPassword(),
+            'email' => $user->email,
+            'currentPassword' => $user->password,
         ];
         $this->checkForm(
             uri: '/user/profile/edit',
@@ -56,9 +56,9 @@ final class ProfileControllerTest extends ControllerTestCase
         $user = $this->loadUser(self::ROLE_USER);
         self::assertNotNull($user);
         $data = [
-            'username' => $user->getUsername(),
-            'email' => $user->getEmail(),
-            'currentPassword' => $user->getPassword(),
+            'username' => $user->username,
+            'email' => $user->email,
+            'currentPassword' => $user->password,
         ];
         $this->checkForm(
             uri: '/user/profile/edit',
@@ -71,7 +71,7 @@ final class ProfileControllerTest extends ControllerTestCase
     {
         $user = $this->loadUser(self::ROLE_USER);
         self::assertNotNull($user);
-        $password = $user->getPassword();
+        $password = $user->password;
         $data = [
             'currentPassword' => $password,
             'plainPassword[first]' => $password,

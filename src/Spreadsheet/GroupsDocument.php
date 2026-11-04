@@ -42,22 +42,22 @@ class GroupsDocument extends AbstractArrayDocument
 
         foreach ($entities as $entity) {
             $sheet->setRowValues($row, [
-                $entity->getCode(),
-                $entity->getDescription(),
+                $entity->code,
+                $entity->description,
                 $entity->countCategories(),
                 $entity->countProducts(),
                 $entity->countTasks(),
             ]);
-            if ($entity->hasMargins()) {
+            if (!$entity->isEmptyMargins()) {
                 $first = true;
-                foreach ($entity->getMargins() as $margin) {
+                foreach ($entity->margins as $margin) {
                     if (!$first) {
                         ++$row;
                     }
                     $sheet->setRowValues($row, [
-                        $margin->getMinimum(),
-                        $margin->getMaximum(),
-                        $margin->getMargin(),
+                        $margin->minimum,
+                        $margin->maximum,
+                        $margin->margin,
                     ], 6);
                     $first = false;
                 }

@@ -38,11 +38,11 @@ trait CalculationTrait
         }
 
         $this->calculation = new Calculation();
-        $this->calculation->setState($state ?? $this->getCalculationState())
-            ->setCustomer($customer)
-            ->setDescription($description);
+        $this->calculation->withState($state ?? $this->getCalculationState())
+            ->withCustomer($customer)
+            ->withDescription($description);
         if ($date instanceof DatePoint) {
-            $this->calculation->setDate($date);
+            $this->calculation->withDate($date);
         }
 
         return $this->addEntity($this->calculation);

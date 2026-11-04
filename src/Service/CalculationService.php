@@ -77,16 +77,16 @@ class CalculationService
             return $this->createEmptyGroups();
         }
 
-        $groups = $calculation->getGroups()
+        $groups = $calculation->groups
             ->map(fn (CalculationGroup $group): CalculationResultGroup => $this->createResultGroup(
                 id: self::ROW_GROUP,
-                description: $group->getCode(),
-                marginPercent: $group->getMargin(),
-                marginAmount: $group->getMarginAmount(),
-                amount: $group->getAmount(),
-                total: $group->getTotal(),
+                description: $group->code,
+                marginPercent: $group->margin,
+                marginAmount: $group->marginAmount,
+                amount: $group->amount,
+                total: $group->total,
             ));
-        $this->addTotalGroups($groups, $calculation->getUserMargin(), $calculation->getGlobalMargin());
+        $this->addTotalGroups($groups, $calculation->userMargin, $calculation->globalMargin);
 
         return $groups;
     }

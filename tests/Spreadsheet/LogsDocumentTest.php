@@ -46,24 +46,24 @@ final class LogsDocumentTest extends TestCase
         $channel1 = new LogChannel($log1->getChannel());
 
         $log2 = Log::instance(2);
-        $log2->setCreatedAt(DateUtils::add($log1->getCreatedAt(), 'P7D'))
+        $log2->withCreatedAt(DateUtils::add($log1->createdAt, 'P7D'))
             ->setLevel(PsrLevel::ALERT)
             ->setChannel('doctrine');
         $level2 = new LogLevel($log2->getLevel());
         $channel2 = new LogChannel($log2->getChannel());
 
         $log3 = Log::instance(2);
-        $log3->setCreatedAt(DateUtils::add($log2->getCreatedAt(), 'P7D'))
+        $log3->withCreatedAt(DateUtils::add($log2->createdAt, 'P7D'))
             ->setLevel(PsrLevel::ALERT)
             ->setChannel('doctrine');
 
         $log4 = Log::instance(4);
-        $log4->setCreatedAt(DateUtils::add($log1->getCreatedAt(), 'P7D'))
+        $log4->withCreatedAt(DateUtils::add($log1->createdAt, 'P7D'))
             ->setLevel(PsrLevel::WARNING)
             ->setChannel('doctrine');
 
         $log5 = Log::instance(5);
-        $log5->setCreatedAt(DateUtils::add($log1->getCreatedAt(), 'P7D'))
+        $log5->withCreatedAt(DateUtils::add($log1->createdAt, 'P7D'))
             ->setLevel(PsrLevel::DEBUG)
             ->setChannel('doctrine');
 

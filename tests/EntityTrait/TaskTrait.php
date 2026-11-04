@@ -40,7 +40,7 @@ trait TaskTrait
         }
 
         $this->task = new Task();
-        $this->task->setName($name);
+        $this->task->withName($name);
 
         $category ??= $this->getCategory();
         $category->addTask($this->task);

@@ -57,7 +57,7 @@ class CalculationArchiveQuery extends AbstractSimulateQuery
 
     public function getSourcesCode(): string
     {
-        $sources = \array_map(static fn (CalculationState $state): string => (string) $state->getCode(), $this->sources);
+        $sources = \array_map(static fn (CalculationState $state): string => (string) $state->code, $this->sources);
 
         return \implode(', ', $sources);
     }
@@ -67,7 +67,7 @@ class CalculationArchiveQuery extends AbstractSimulateQuery
      */
     public function getSourcesId(): array
     {
-        return \array_map(static fn (CalculationState $state): int => (int) $state->getId(), $this->sources);
+        return \array_map(static fn (CalculationState $state): int => (int) $state->id, $this->sources);
     }
 
     public function getTarget(): ?CalculationState
@@ -77,12 +77,12 @@ class CalculationArchiveQuery extends AbstractSimulateQuery
 
     public function getTargetCode(): ?string
     {
-        return $this->target?->getCode();
+        return $this->target?->code;
     }
 
     public function getTargetId(): ?int
     {
-        return $this->target?->getId();
+        return $this->target?->id;
     }
 
     /**

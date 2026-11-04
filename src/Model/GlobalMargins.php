@@ -24,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class GlobalMargins implements \Countable
 {
-    /** @use ValidateMarginsTrait<int, GlobalMargin> */
+    /** @use ValidateMarginsTrait<GlobalMargin> */
     use ValidateMarginsTrait;
 
     /**
@@ -32,7 +32,9 @@ class GlobalMargins implements \Countable
      */
     public function __construct(
         #[Assert\Valid]
-        private readonly Collection $margins
+        public Collection $margins {
+            get => $this->margins;
+        }
     ) {
     }
 
@@ -52,17 +54,6 @@ class GlobalMargins implements \Countable
     public function count(): int
     {
         return $this->margins->count();
-    }
-
-    /**
-     * Get margins.
-     *
-     * @return Collection<int, GlobalMargin>
-     */
-    #[\Override]
-    public function getMargins(): Collection
-    {
-        return $this->margins;
     }
 
     /**

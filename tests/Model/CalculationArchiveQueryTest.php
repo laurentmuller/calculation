@@ -79,15 +79,15 @@ final class CalculationArchiveQueryTest extends TestCase
         $query->setTarget($target);
 
         self::assertSame($target, $query->getTarget());
-        self::assertSame($target->getId(), $query->getTargetId());
-        self::assertSame($target->getCode(), $query->getTargetCode());
+        self::assertSame($target->id, $query->getTargetId());
+        self::assertSame($target->code, $query->getTargetCode());
     }
 
     private function createState(int $id, string $code, bool $editable): CalculationState
     {
-        $state = new CalculationState();
-        $state->setCode($code)
-            ->setEditable($editable);
+        $state = new CalculationState()
+            ->withCode($code)
+            ->withEditable($editable);
 
         return self::setId($state, $id);
     }

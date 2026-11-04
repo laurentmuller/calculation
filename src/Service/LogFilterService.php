@@ -105,7 +105,7 @@ readonly class LogFilterService
 
     private function acceptDate(Log $log): bool
     {
-        return $this->acceptValue($log->getFormattedDate());
+        return $this->acceptValue($log->formattedDate);
     }
 
     private function acceptLevel(Log $log): bool
@@ -115,12 +115,12 @@ readonly class LogFilterService
 
     private function acceptMessage(Log $log): bool
     {
-        return $this->acceptValue($log->getMessage());
+        return $this->acceptValue($log->message);
     }
 
     private function acceptUser(Log $log): bool
     {
-        return $this->acceptValue($log->getUser());
+        return $this->acceptValue($log->user);
     }
 
     private function acceptValue(?string $value): bool

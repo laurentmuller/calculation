@@ -108,7 +108,7 @@ readonly class TimelineService
         /** @var array<string, Calculation[]> $grouped */
         $grouped = $this->groupBy(
             $calculations,
-            static fn (Calculation $c): string => FormatUtils::formatDate($c->getDate(), \IntlDateFormatter::LONG)
+            static fn (Calculation $c): string => FormatUtils::formatDate($c->date, \IntlDateFormatter::LONG)
         );
 
         return [$count, $grouped];

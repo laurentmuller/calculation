@@ -45,10 +45,10 @@ final class TimelineControllerTest extends ControllerTestCase
     {
         $product = $this->getProduct();
         $this->getCalculation()
-            ->setOverallTotal(100.0)
-            ->setItemsTotal(100.0)
-            ->setGlobalMargin(1.1)
-            ->setUserMargin(0.1)
+            ->withOverallTotal(100.0)
+            ->withItemsTotal(100.0)
+            ->withGlobalMargin(1.1)
+            ->withUserMargin(0.1)
             ->addProduct($product);
     }
 

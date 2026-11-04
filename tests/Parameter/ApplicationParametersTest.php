@@ -42,7 +42,7 @@ final class ApplicationParametersTest extends TestCase
     {
         $date = new DatePoint();
         $property = ApplicationProperty::instance('last_import')
-            ->setValue($date);
+            ->withValue($date);
         $parameters = $this->createApplicationParameters([$property]);
         $parameters->getDates()
             ->setArchiveCalculations($date);
@@ -53,7 +53,7 @@ final class ApplicationParametersTest extends TestCase
     public function testEnumInt(): void
     {
         $property = ApplicationProperty::instance('security_level')
-            ->setValue(StrengthLevel::NONE);
+            ->withValue(StrengthLevel::NONE);
         $parameters = $this->createApplicationParameters([$property]);
         $parameters->getSecurity()
             ->setLevel(StrengthLevel::MEDIUM);
@@ -64,7 +64,7 @@ final class ApplicationParametersTest extends TestCase
     public function testEnumString(): void
     {
         $property = ApplicationProperty::instance('edit_action')
-            ->setValue(EntityAction::EDIT);
+            ->withValue(EntityAction::EDIT);
         $parameters = $this->createApplicationParameters([$property]);
         $parameters->getDisplay()
             ->setEditAction(EntityAction::NONE);
@@ -83,11 +83,11 @@ final class ApplicationParametersTest extends TestCase
     {
         $id = 10;
         $category = new Category();
-        $category->setCode('fake');
+        $category->withCode('fake');
         self::setId($category, $id);
 
         $property = ApplicationProperty::instance('default_category')
-            ->setValue($id);
+            ->withValue($id);
 
         $parameters = $this->createApplicationParameters([$property], $category);
         $actual = $parameters->getDefaultCategory();
@@ -105,11 +105,11 @@ final class ApplicationParametersTest extends TestCase
     {
         $id = 10;
         $product = new Product();
-        $product->setDescription('fake');
+        $product->withDescription('fake');
         self::setId($product, $id);
 
         $property = ApplicationProperty::instance('default_product')
-            ->setValue($id);
+            ->withValue($id);
 
         $parameters = $this->createApplicationParameters([$property], product: $product);
         $actual = $parameters->getDefaultProduct();
@@ -127,11 +127,11 @@ final class ApplicationParametersTest extends TestCase
     {
         $id = 10;
         $state = new CalculationState();
-        $state->setCode('fake');
+        $state->withCode('fake');
         self::setId($state, $id);
 
         $property = ApplicationProperty::instance('default_state')
-            ->setValue($id);
+            ->withValue($id);
 
         $parameters = $this->createApplicationParameters([$property], state: $state);
         $actual = $parameters->getDefaultState();
@@ -220,7 +220,7 @@ final class ApplicationParametersTest extends TestCase
     public function testWithDefaultValue(): void
     {
         $property = ApplicationProperty::instance('security_captcha')
-            ->setValue(false);
+            ->withValue(false);
         $parameters = $this->createApplicationParameters([$property]);
         $parameters->getSecurity()
             ->setCaptcha(true);
@@ -231,10 +231,10 @@ final class ApplicationParametersTest extends TestCase
     public function testWithEntity(): void
     {
         $category = new Category();
-        $category->setCode('fake');
+        $category->withCode('fake');
         self::setId($category);
         $property = ApplicationProperty::instance('default_category')
-            ->setValue(10);
+            ->withValue(10);
         $parameters = $this->createApplicationParameters([$property]);
         $parameters->getDefault()
             ->setCategoryId(1);
@@ -245,7 +245,7 @@ final class ApplicationParametersTest extends TestCase
     public function testWithExistingProperty(): void
     {
         $property = ApplicationProperty::instance('security_captcha');
-        $property->setValue(true);
+        $property->withValue(true);
         $parameters = $this->createApplicationParameters([$property]);
         $parameters->getSecurity()
             ->setCaptcha(false);

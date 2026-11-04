@@ -66,7 +66,7 @@ final class TimelineServiceTest extends TestCase
         if ($calculation instanceof Calculation) {
             $repository->method('getByInterval')
                 ->willReturn([$calculation]);
-            $date = $calculation->getDate();
+            $date = $calculation->date;
         }
 
         $repository->method('getMinMaxDates')

@@ -167,10 +167,10 @@ final class TestControllerTest extends ControllerTestCase
     public function testTree(): void
     {
         $category = new Category();
-        $category->setCode('category');
+        $category->withCode('category');
 
         $group = new Group();
-        $group->setCode('group');
+        $group->withCode('group');
         $group->addCategory($category);
 
         $repository = self::createStub(GroupRepository::class);
@@ -188,11 +188,11 @@ final class TestControllerTest extends ControllerTestCase
     private function createCustomer(): Customer
     {
         $customer = new Customer();
-        $customer->setCompany('company')
-            ->setFirstName('firstname')
-            ->setLastName('lastname')
-            ->setCity('city')
-            ->setZipCode('1234');
+        $customer->withCompany('company')
+            ->withFirstName('firstname')
+            ->withLastName('lastname')
+            ->withCity('city')
+            ->withZipCode('1234');
 
         return $customer;
     }

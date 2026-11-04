@@ -43,7 +43,7 @@ final class TimestampableListenerTest extends TestCase
 
         $listener = $this->createListener();
         $listener->onFlush($event);
-        self::assertNull($task->getCreatedBy());
+        self::assertNull($task->createdBy);
     }
 
     public function testDisabled(): void
@@ -111,12 +111,12 @@ final class TimestampableListenerTest extends TestCase
         TimestampableInterface $entity,
         string $userName = self::USER_NAME
     ): void {
-        self::assertNotNull($entity->getCreatedAt());
-        self::assertNotNull($entity->getCreatedBy());
-        self::assertNotNull($entity->getUpdatedAt());
-        self::assertNotNull($entity->getUpdatedBy());
-        self::assertSame($userName, $entity->getCreatedBy());
-        self::assertSame($userName, $entity->getUpdatedBy());
+        self::assertNotNull($entity->createdAt);
+        self::assertNotNull($entity->createdBy);
+        self::assertNotNull($entity->updatedAt);
+        self::assertNotNull($entity->updatedBy);
+        self::assertSame($userName, $entity->createdBy);
+        self::assertSame($userName, $entity->updatedBy);
     }
 
     /**
@@ -160,7 +160,7 @@ final class TimestampableListenerTest extends TestCase
         $security = self::createStub(Security::class);
         if ($createUser) {
             $user = new User();
-            $user->setUsername(self::USER_NAME);
+            $user->withUsername(self::USER_NAME);
             $security->method('getUser')
                 ->willReturn($user);
         }

@@ -28,18 +28,18 @@ final class UserPropertyRepositoryTest extends AbstractRepositoryTestCase
     public function testFindByUser(): void
     {
         $user = new User();
-        $user->setUsername('test')
-            ->setEmail('email@email.com')
-            ->setPassword('password');
+        $user->withUsername('test')
+            ->withEmail('email@email.com')
+            ->withPassword('password');
         $this->addEntity($user);
 
         $actual = $this->repository->findByUser($user);
         self::assertEmpty($actual);
 
         $property = new UserProperty();
-        $property->setUser($user)
-            ->setName('name')
-            ->setValue('value');
+        $property->withUser($user)
+            ->withName('name')
+            ->withValue('value');
         $this->addEntity($property);
 
         $actual = $this->repository->findByUser($user);
@@ -49,18 +49,18 @@ final class UserPropertyRepositoryTest extends AbstractRepositoryTestCase
     public function testFindOneByUserAndName(): void
     {
         $user = new User();
-        $user->setUsername('test')
-            ->setEmail('email@email.com')
-            ->setPassword('password');
+        $user->withUsername('test')
+            ->withEmail('email@email.com')
+            ->withPassword('password');
         $this->addEntity($user);
 
         $actual = $this->repository->findOneByUserAndName($user, 'name');
         self::assertNull($actual);
 
         $property = new UserProperty();
-        $property->setUser($user)
-            ->setName('name')
-            ->setValue('value');
+        $property->withUser($user)
+            ->withName('name')
+            ->withValue('value');
         $this->addEntity($property);
         $actual = $this->repository->findOneByUserAndName($user, 'name');
         self::assertNotNull($actual);

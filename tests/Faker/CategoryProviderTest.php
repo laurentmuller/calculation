@@ -25,7 +25,7 @@ final class CategoryProviderTest extends TestCase
     public function testWithEntity(): void
     {
         $entity = new Category();
-        $entity->setCode('code');
+        $entity->withCode('code');
         $provider = $this->createProvider($entity);
 
         $actual = \count($provider);

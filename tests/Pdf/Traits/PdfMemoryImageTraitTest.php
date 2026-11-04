@@ -115,10 +115,7 @@ final class PdfMemoryImageTraitTest extends TestCase
 
     private function createDocument(): FixturePdfImageDocument
     {
-        $doc = new FixturePdfImageDocument();
-        $doc->addPage();
-
-        return $doc;
+        return new FixturePdfImageDocument()->addPage();
     }
 
     private function createGdImage(): \GdImage

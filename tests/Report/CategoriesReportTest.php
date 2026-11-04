@@ -25,9 +25,9 @@ final class CategoriesReportTest extends TestCase
     {
         $helper = self::createStub(DocumentHelperInterface::class);
         $group = new Group();
-        $group->setCode('Group');
+        $group->withCode('Group');
         $category = new Category();
-        $category->setCode('Category');
+        $category->withCode('Category');
         $group->addCategory($category);
 
         $report = new CategoriesReport($helper, [$category]);

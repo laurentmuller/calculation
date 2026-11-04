@@ -58,7 +58,7 @@ class CategoryRepository extends AbstractRepository
             ->select('DISTINCT COUNT(g.id)')
             ->innerJoin('e.group', 'g')
             ->where('e.group = :group')
-            ->setParameter('group', $group->getId(), Types::INTEGER)
+            ->setParameter('group', $group->id, Types::INTEGER)
             ->getQuery()
             ->getSingleScalarResult();
     }

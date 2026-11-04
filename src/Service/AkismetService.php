@@ -273,7 +273,7 @@ class AkismetService extends AbstractHttpClientService
             'comment_content' => $content,
             'comment_type' => 'contact-form',
             'comment_author' => $user?->getUserIdentifier(),
-            'comment_author_email' => $user?->getEmail(),
+            'comment_author_email' => $user?->email,
             'blog' => $request->getSchemeAndHttpHost(),
             'blog_lang' => $request->getLocale(),
             'blog_charset' => 'UTF-8',

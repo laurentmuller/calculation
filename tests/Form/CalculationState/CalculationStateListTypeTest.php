@@ -45,7 +45,7 @@ final class CalculationStateListTypeTest extends TypeTestCase
     {
         $state = $this->getNotEditableState();
         $formData = [
-            'value' => $state->getId(),
+            'value' => $state->id,
         ];
         $model = FixtureDataForm::instance($state);
         $form = $this->factory->createBuilder(FormType::class, $model)

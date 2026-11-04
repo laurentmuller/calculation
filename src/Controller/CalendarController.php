@@ -168,7 +168,7 @@ class CalendarController extends AbstractController
     private function merge(Calendar $calendar, array $calculations): void
     {
         foreach ($calculations as $calculation) {
-            $date = $calculation->getDate();
+            $date = $calculation->date;
 
             $day = $calendar->getDay($date);
             if ($day instanceof CalculationsDay) {

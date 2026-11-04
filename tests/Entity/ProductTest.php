@@ -36,9 +36,9 @@ final class ProductTest extends EntityValidatorTestCase
     public function testCategoryAndGroup(): void
     {
         $product = new Product();
-        $product->setDescription('product');
+        $product->withDescription('product');
 
-        self::assertNull($product->getCategory());
+        self::assertNull($product->category);
         self::assertSame('', $product->getCategoryCode());
         self::assertNull($product->getCategoryId());
 
@@ -47,9 +47,9 @@ final class ProductTest extends EntityValidatorTestCase
 
         $group = $this->getGroup();
         $category = $this->getCategory($group);
-        $product->setCategory($category);
+        $product->withCategory($category);
 
-        self::assertNotNull($product->getCategory());
+        self::assertNotNull($product->category);
         self::assertNotNull($product->getCategoryCode());
         self::assertSame('category', $product->getCategoryCode());
 
@@ -61,22 +61,22 @@ final class ProductTest extends EntityValidatorTestCase
     public function testClone(): void
     {
         $product = new Product();
-        $product->setDescription('product');
+        $product->withDescription('product');
 
         $clone = $product->clone();
-        self::assertSame($product->getDescription(), $clone->getDescription());
+        self::assertSame($product->description, $clone->description);
 
         $clone = $product->clone('new-product');
-        self::assertNotSame($product->getDescription(), $clone->getDescription());
-        self::assertSame('new-product', $clone->getDescription());
+        self::assertNotSame($product->description, $clone->description);
+        self::assertSame('new-product', $clone->description);
     }
 
     public function testCompare(): void
     {
         $item1 = new Product();
-        $item1->setDescription('Product1');
+        $item1->withDescription('Product1');
         $item2 = new Product();
-        $item2->setDescription('Product2');
+        $item2->withDescription('Product2');
         $actual = $item1->compare($item2);
         self::assertSame(-1, $actual);
     }
@@ -86,16 +86,16 @@ final class ProductTest extends EntityValidatorTestCase
         $group = $this->getGroup();
         $category = $this->getCategory($group);
         $first = new Product();
-        $first->setDescription('My Product')
-            ->setCategory($category);
+        $first->withDescription('My Product')
+            ->withCategory($category);
 
         try {
             $this->saveEntity($group);
             $this->saveEntity($category);
             $this->saveEntity($first);
             $second = new Product();
-            $second->setDescription('My Product')
-                ->setCategory($category);
+            $second->withDescription('My Product')
+                ->withCategory($category);
             $results = $this->validate($second, 1);
             $this->validatePaths($results, 'description');
         } finally {
@@ -115,7 +115,7 @@ final class ProductTest extends EntityValidatorTestCase
     public function testInvalidCategory(): void
     {
         $product = new Product();
-        $product->setDescription('My Product');
+        $product->withDescription('My Product');
         $results = $this->validate($product, 1);
         $this->validatePaths($results, 'category');
     }
@@ -125,7 +125,7 @@ final class ProductTest extends EntityValidatorTestCase
         $group = $this->getGroup();
         $category = $this->getCategory($group);
         $product = new Product();
-        $product->setCategory($category);
+        $product->withCategory($category);
         $results = $this->validate($product, 1);
         $this->validatePaths($results, 'description');
     }
@@ -134,18 +134,18 @@ final class ProductTest extends EntityValidatorTestCase
     {
         $group = $this->getGroup();
         $category = $this->getCategory($group);
-        $category->setGroup($group);
+        $category->withGroup($group);
         $first = new Product();
-        $first->setDescription('My Product')
-            ->setCategory($category);
+        $first->withDescription('My Product')
+            ->withCategory($category);
 
         try {
             $this->saveEntity($group);
             $this->saveEntity($category);
             $this->saveEntity($first);
             $second = new Product();
-            $second->setDescription('My Product 2')
-                ->setCategory($category);
+            $second->withDescription('My Product 2')
+                ->withCategory($category);
             $this->validate($second);
         } finally {
             $this->deleteEntity($first);
@@ -158,24 +158,24 @@ final class ProductTest extends EntityValidatorTestCase
     public function testPrice(float $price, float $expected): void
     {
         $product = new Product();
-        $product->setPrice($price);
-        self::assertSame($expected, $product->getPrice());
+        $product->withPrice($price);
+        self::assertSame($expected, $product->price);
     }
 
     public function testSupplier(): void
     {
         $product = new Product();
-        self::assertNull($product->getSupplier());
-        $product->setSupplier('supplier');
-        self::assertSame('supplier', $product->getSupplier());
+        self::assertNull($product->supplier);
+        $product->withSupplier('supplier');
+        self::assertSame('supplier', $product->supplier);
     }
 
     public function testUnit(): void
     {
         $product = new Product();
-        self::assertNull($product->getUnit());
-        $product->setUnit('unit');
-        self::assertSame('unit', $product->getUnit());
+        self::assertNull($product->unit);
+        $product->withUnit('unit');
+        self::assertSame('unit', $product->unit);
     }
 
     public function testValid(): void
@@ -183,16 +183,16 @@ final class ProductTest extends EntityValidatorTestCase
         $group = $this->getGroup();
         $category = $this->getCategory($group);
         $product = new Product();
-        $product->setDescription('product')
-            ->setCategory($category);
+        $product->withDescription('product')
+            ->withCategory($category);
         $this->validate($product);
     }
 
     private function getCategory(Group $group): Category
     {
         $category = new Category();
-        $category->setCode('category');
-        $category->setGroup($group);
+        $category->withCode('category');
+        $category->withGroup($group);
 
         return $category;
     }
@@ -200,7 +200,7 @@ final class ProductTest extends EntityValidatorTestCase
     private function getGroup(): Group
     {
         $group = new Group();
-        $group->setCode('group');
+        $group->withCode('group');
 
         return $group;
     }

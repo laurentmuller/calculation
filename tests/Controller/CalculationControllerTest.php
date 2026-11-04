@@ -78,8 +78,8 @@ final class CalculationControllerTest extends EntityControllerTestCase
     public function testAdd(): void
     {
         $service = self::getService(ApplicationParameters::class);
-        $service->getDefault()->setStateId($this->getCalculationState()->getId());
-        $service->getProduct()->setProductId($this->getProduct()->getId());
+        $service->getDefault()->setStateId($this->getCalculationState()->id);
+        $service->getProduct()->setProductId($this->getProduct()->id);
         $service->save();
 
         $data = [
@@ -92,9 +92,9 @@ final class CalculationControllerTest extends EntityControllerTestCase
     public function testEditState(): void
     {
         $this->addEntities();
-        $uri = \sprintf('/calculation/state/%d', (int) $this->getCalculation()->getId());
+        $uri = \sprintf('/calculation/state/%d', (int) $this->getCalculation()->id);
         $data = [
-            'calculation_edit_state[state]' => $this->getCalculationState()->getId(),
+            'calculation_edit_state[state]' => $this->getCalculationState()->id,
         ];
         $this->checkEditEntity($uri, $data);
     }
@@ -119,7 +119,7 @@ final class CalculationControllerTest extends EntityControllerTestCase
 
         try {
             $calculation = $this->getCalculation();
-            $uri = \sprintf('/calculation/pdf/%d', (int) $calculation->getId());
+            $uri = \sprintf('/calculation/pdf/%d', (int) $calculation->id);
             $this->checkRoute($uri, self::ROLE_USER);
         } finally {
             $service = self::getService(ApplicationParameters::class);
@@ -133,10 +133,10 @@ final class CalculationControllerTest extends EntityControllerTestCase
     {
         $product = $this->getProduct();
         $this->getCalculation()
-            ->setOverallTotal(100.0)
-            ->setItemsTotal(100.0)
-            ->setGlobalMargin(1.1)
-            ->setUserMargin(0.1)
+            ->withOverallTotal(100.0)
+            ->withItemsTotal(100.0)
+            ->withGlobalMargin(1.1)
+            ->withUserMargin(0.1)
             ->addProduct($product);
         $this->addEntity($this->getCalculation());
     }

@@ -26,14 +26,14 @@ final class GroupsReportTest extends TestCase
         $helper = self::createStub(DocumentHelperInterface::class);
 
         $group1 = new Group();
-        $group1->setCode('Group1');
+        $group1->withCode('Group1');
         $margin1 = new GroupMargin();
         $group1->addMargin($margin1);
         $margin2 = new GroupMargin();
         $group1->addMargin($margin2);
 
         $group2 = new Group();
-        $group2->setCode('Group2');
+        $group2->withCode('Group2');
 
         $report = new GroupsReport($helper, [$group1, $group2]);
         $actual = $report->render();

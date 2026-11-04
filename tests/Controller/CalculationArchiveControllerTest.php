@@ -91,14 +91,14 @@ final class CalculationArchiveControllerTest extends ControllerTestCase
             ->setMaxResults(1)
             ->getQuery()
             ->getSingleResult();
-        $data['form[sources][0]'] = $editState?->getId();
+        $data['form[sources][0]'] = $editState?->id;
 
         /** @var ?CalculationState $noEditable */
         $noEditable = $repository->getNotEditableQueryBuilder()
             ->setMaxResults(1)
             ->getQuery()
             ->getSingleResult();
-        $data['form[target]'] = $noEditable?->getId();
+        $data['form[target]'] = $noEditable?->id;
 
         $this->checkForm(
             uri: '/admin/archive',
@@ -128,7 +128,7 @@ final class CalculationArchiveControllerTest extends ControllerTestCase
             return;
         }
         $this->editState = new CalculationState();
-        $this->editState->setCode('Editable')->setEditable(true);
+        $this->editState->withCode('Editable')->withEditable(true);
         $this->addEntity($this->editState);
     }
 
@@ -138,7 +138,7 @@ final class CalculationArchiveControllerTest extends ControllerTestCase
             return;
         }
         $this->notEditSate = new CalculationState();
-        $this->notEditSate->setCode('NotEditable')->setEditable(false);
+        $this->notEditSate->withCode('NotEditable')->withEditable(false);
         $this->addEntity($this->notEditSate);
     }
 }

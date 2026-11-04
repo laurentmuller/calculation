@@ -23,21 +23,21 @@ final class CategoryTest extends EntityValidatorTestCase
     public function testClone(): void
     {
         $object = new Category();
-        $object->setCode('code');
+        $object->withCode('code');
 
         $clone = $object->clone();
-        self::assertSame($object->getCode(), $clone->getCode());
+        self::assertSame($object->code, $clone->code);
 
         $clone = $object->clone('new-code');
-        self::assertNotSame($object->getCode(), $clone->getCode());
+        self::assertNotSame($object->code, $clone->code);
     }
 
     public function testCompare(): void
     {
         $item1 = new Category();
-        $item1->setCode('Code1');
+        $item1->withCode('Code1');
         $item2 = new Category();
-        $item2->setCode('Code2');
+        $item2->withCode('Code2');
         $actual = $item1->compare($item2);
         self::assertSame(-1, $actual);
     }
@@ -50,8 +50,8 @@ final class CategoryTest extends EntityValidatorTestCase
         self::assertSame(0, $object->countItems());
         self::assertEmpty($object->getProducts());
         self::assertEmpty($object->getTasks());
-        self::assertFalse($object->hasProducts());
-        self::assertFalse($object->hasTasks());
+        self::assertTrue($object->isEmptyProducts());
+        self::assertTrue($object->isEmptyTasks());
 
         $product = new Product();
         $object->addProduct($product);
@@ -60,8 +60,8 @@ final class CategoryTest extends EntityValidatorTestCase
         self::assertSame(1, $object->countItems());
         self::assertCount(1, $object->getProducts());
         self::assertEmpty($object->getTasks());
-        self::assertTrue($object->hasProducts());
-        self::assertFalse($object->hasTasks());
+        self::assertFalse($object->isEmptyProducts());
+        self::assertTrue($object->isEmptyTasks());
 
         $task = new Task();
         $object->addTask($task);
@@ -70,8 +70,8 @@ final class CategoryTest extends EntityValidatorTestCase
         self::assertSame(2, $object->countItems());
         self::assertCount(1, $object->getProducts());
         self::assertCount(1, $object->getTasks());
-        self::assertTrue($object->hasProducts());
-        self::assertTrue($object->hasTasks());
+        self::assertFalse($object->isEmptyProducts());
+        self::assertFalse($object->isEmptyTasks());
 
         $object->removeProduct($product);
         self::assertSame(0, $object->countProducts());
@@ -79,8 +79,8 @@ final class CategoryTest extends EntityValidatorTestCase
         self::assertSame(1, $object->countItems());
         self::assertEmpty($object->getProducts());
         self::assertCount(1, $object->getTasks());
-        self::assertFalse($object->hasProducts());
-        self::assertTrue($object->hasTasks());
+        self::assertTrue($object->isEmptyProducts());
+        self::assertFalse($object->isEmptyTasks());
 
         $object->removeTask($task);
         self::assertSame(0, $object->countProducts());
@@ -88,31 +88,31 @@ final class CategoryTest extends EntityValidatorTestCase
         self::assertSame(0, $object->countItems());
         self::assertEmpty($object->getProducts());
         self::assertEmpty($object->getTasks());
-        self::assertFalse($object->hasProducts());
-        self::assertFalse($object->hasTasks());
+        self::assertTrue($object->isEmptyProducts());
+        self::assertTrue($object->isEmptyTasks());
     }
 
     public function testDescription(): void
     {
         $object = new Category();
-        $object->setDescription('description');
-        self::assertSame('description', $object->getDescription());
+        $object->withDescription('description');
+        self::assertSame('description', $object->description);
     }
 
     public function testDuplicate(): void
     {
         $group = new Group();
-        $group->setCode('group');
+        $group->withCode('group');
         $first = new Category();
-        $first->setCode('code')
-            ->setGroup($group);
+        $first->withCode('code')
+            ->withGroup($group);
 
         try {
             $this->saveEntity($group);
             $this->saveEntity($first);
             $second = new Category();
-            $second->setCode('code')
-                ->setGroup($group);
+            $second->withCode('code')
+                ->withGroup($group);
             $results = $this->validate($second, 1);
             $this->validatePaths($results, 'code');
         } finally {
@@ -124,23 +124,23 @@ final class CategoryTest extends EntityValidatorTestCase
     public function testGroup(): void
     {
         $category = new Category();
-        self::assertNull($category->getGroup());
+        self::assertNull($category->group);
         self::assertNull($category->getGroupId());
         self::assertNull($category->getGroupCode());
 
         $group = new Group();
-        $group->setCode('group');
-        $category->setGroup($group);
-        self::assertNotNull($category->getGroup());
+        $group->withCode('group');
+        $category->withGroup($group);
+        self::assertNotNull($category->group);
         self::assertSame('group', $category->getGroupCode());
     }
 
     public function testInvalidCode(): void
     {
         $group = new Group();
-        $group->setCode('group');
+        $group->withCode('group');
         $object = new Category();
-        $object->setGroup($group);
+        $object->withGroup($group);
         $results = $this->validate($object, 1);
         $this->validatePaths($results, 'code');
     }
@@ -148,18 +148,18 @@ final class CategoryTest extends EntityValidatorTestCase
     public function testNotDuplicate(): void
     {
         $group = new Group();
-        $group->setCode('group');
+        $group->withCode('group');
         $first = new Category();
-        $first->setCode('code')
-            ->setGroup($group);
+        $first->withCode('code')
+            ->withGroup($group);
 
         try {
             $this->saveEntity($group);
             $this->saveEntity($first);
 
             $second = new Category();
-            $second->setCode('code2')
-                ->setGroup($group);
+            $second->withCode('code2')
+                ->withGroup($group);
 
             $this->validate($second);
         } finally {
@@ -170,11 +170,11 @@ final class CategoryTest extends EntityValidatorTestCase
     public function testValid(): void
     {
         $group = new Group();
-        $group->setCode('group');
+        $group->withCode('group');
         $object = new Category();
-        $object->setCode('code');
-        $object->setDescription('description');
-        $object->setGroup($group);
+        $object->withCode('code');
+        $object->withDescription('description');
+        $object->withGroup($group);
         $this->validate($object);
     }
 }

@@ -36,7 +36,7 @@ class CalculationArchiveResult implements \Countable
      */
     public function addCalculation(CalculationState $state, Calculation $calculation): self
     {
-        $key = (string) $state->getCode();
+        $key = (string) $state->code;
         $this->results[$key]['state'] = $state;
         $this->results[$key]['calculations'][] = $calculation;
         ++$this->count;

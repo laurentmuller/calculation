@@ -73,11 +73,11 @@ class TaskController extends AbstractEntityController
     #[CloneEntityRoute]
     public function clone(Request $request, Task $item): Response
     {
-        $name = $this->trans('common.clone_description', ['%description%' => $item->getName()]);
+        $name = $this->trans('common.clone_description', ['%description%' => $item->name]);
         $clone = $item->clone($name);
         $parameters = [
             'title' => 'task.clone.title',
-            'params' => ['id' => $item->getId()],
+            'params' => ['id' => $item->id],
         ];
 
         return $this->editEntity($request, $clone, $parameters);
@@ -195,7 +195,7 @@ class TaskController extends AbstractEntityController
         $task = new Task();
         $category = $this->getApplicationParameters()->getDefaultCategory();
         if ($category instanceof Category) {
-            $task->setCategory($category);
+            $task->withCategory($category);
         }
 
         return $task;

@@ -33,329 +33,139 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 #[UniqueEntity(fields: 'email', message: 'customer.unique_email')]
 class Customer extends AbstractEntity
 {
+    /** The address. */
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
-    private ?string $address = null;
+    public ?string $address = null {
+        set => StringUtils::trim($value);
+    }
 
+    /** Get contact age or null if the birthday is null. */
+    public ?int $age {
+        get {
+            if (!$this->birthday instanceof DatePoint) {
+                return null;
+            }
+
+            $today = DateUtils::createDate();
+            $age = DateUtils::getYear($today) - DateUtils::getYear($this->birthday);
+            $previous = DateUtils::sub($today, \sprintf('P%dY', $age));
+
+            return $this->birthday > $previous ? --$age : $age;
+        }
+    }
+
+    /** The contact birthday. */
     #[ORM\Column(type: DayPointType::NAME, nullable: true)]
-    private ?DatePoint $birthday = null;
+    public ?DatePoint $birthday = null {
+        set(?DatePoint $birthday) {
+            if ($birthday instanceof DatePoint) {
+                $birthday = DateUtils::removeTime($birthday);
+            }
+            $this->birthday = $birthday;
+        }
+    }
 
+    /** The city. */
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
-    private ?string $city = null;
+    public ?string $city = null {
+        set => StringUtils::trim($value);
+    }
 
+    /** The company. */
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
-    private ?string $company = null;
+    public ?string $company = null {
+        set => StringUtils::trim($value);
+    }
 
+    /** The country. */
     #[Assert\Length(max: 100)]
     #[ORM\Column(length: 100, nullable: true)]
-    private ?string $country = 'CH';
+    public ?string $country = 'CH' {
+        set => StringUtils::trim($value);
+    }
 
+    /** Get the country name. */
+    public string $countryName {
+        get => Countries::getNames()[$this->country ?? 'CH'];
+    }
+
+    /** The contact or company email. */
     #[Assert\Email]
     #[Assert\Length(max: 100)]
     #[ORM\Column(length: 100, nullable: true)]
-    private ?string $email = null;
+    public ?string $email = null {
+        set => StringUtils::trim($value);
+    }
 
+    /** The contact first name. */
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
-    private ?string $firstName = null;
+    public ?string $firstName = null {
+        set => StringUtils::trim($value);
+    }
 
+    /** Gets the last name and the first name separate by a space character. */
+    public ?string $fullName {
+        get => $this->concat($this->lastName, $this->firstName);
+    }
+
+    /** The contact last name. */
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
-    private ?string $lastName = null;
+    public ?string $lastName = null {
+        set => StringUtils::trim($value);
+    }
 
+    /** Gets the full name and the company separate by a comma character. */
+    public ?string $nameAndCompany {
+        get => $this->concat($this->fullName, $this->company, ', ');
+    }
+
+    /** Gets the full name, if applicable; the company otherwise. */
+    public ?string $nameOrCompany {
+        get => $this->fullName ?? $this->company;
+    }
+
+    /** The contact title. */
     #[Assert\Length(max: 50)]
     #[ORM\Column(length: 50, nullable: true)]
-    private ?string $title = null;
+    public ?string $title = null {
+        set => StringUtils::trim($value);
+    }
 
+    /** Gets the title, the last name, and the first name separate by a space character. */
+    public ?string $titleAndFullName {
+        get => $this->concat($this->title, $this->fullName);
+    }
+
+    /** The website. */
     #[Assert\Url(requireTld: true)]
     #[Assert\Length(max: 100)]
     #[ORM\Column(length: 100, nullable: true)]
-    private ?string $webSite = null;
+    public ?string $webSite = null {
+        set => $this->trimWebSite($value);
+    }
 
+    /** Gets the zip code and the city separate by a space character. */
+    public ?string $zipCity {
+        get => $this->concat($this->zipCode, $this->city);
+    }
+
+    /** The zip code. */
     #[Assert\Length(max: 10)]
     #[Assert\Regex(pattern: '/^[1-9]\d{3}$/', message: 'customer.zip_code')]
     #[ORM\Column(length: 10, nullable: true)]
-    private ?string $zipCode = null;
-
-    /**
-     * Get address.
-     */
-    public function getAddress(): ?string
-    {
-        return $this->address;
-    }
-
-    /**
-     * Get age or null if the birthday is null.
-     */
-    public function getAge(): ?int
-    {
-        if (!$this->birthday instanceof DatePoint) {
-            return null;
-        }
-
-        $today = DateUtils::createDate();
-        $age = DateUtils::getYear($today) - DateUtils::getYear($this->birthday);
-        $previous = DateUtils::sub($today, \sprintf('P%dY', $age));
-
-        return $this->birthday > $previous ? --$age : $age;
-    }
-
-    /**
-     * Get birthday.
-     */
-    public function getBirthday(): ?DatePoint
-    {
-        return $this->birthday;
-    }
-
-    /**
-     * Get city.
-     */
-    public function getCity(): ?string
-    {
-        return $this->city;
-    }
-
-    /**
-     * Get company.
-     */
-    public function getCompany(): ?string
-    {
-        return $this->company;
-    }
-
-    /**
-     * Get country.
-     */
-    public function getCountry(): ?string
-    {
-        return $this->country;
-    }
-
-    /**
-     * Get the country name.
-     */
-    public function getCountryName(): ?string
-    {
-        return Countries::getNames()[$this->country ?? 'CH'];
+    public ?string $zipCode = null {
+        set => StringUtils::trim($value);
     }
 
     #[\Override]
     public function getDisplay(): string
     {
-        return $this->getNameAndCompany() ?? parent::getDisplay();
-    }
-
-    /**
-     * Get email.
-     */
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    /**
-     * Get firstName.
-     */
-    public function getFirstName(): ?string
-    {
-        return $this->firstName;
-    }
-
-    /**
-     * Gets the last name and the first name separate by a space character.
-     */
-    public function getFullName(): ?string
-    {
-        return $this->concat($this->lastName, $this->firstName);
-    }
-
-    /**
-     * Get lastName.
-     */
-    public function getLastName(): ?string
-    {
-        return $this->lastName;
-    }
-
-    /**
-     * Gets the full name and the company separate by a comma character.
-     *
-     * @see Customer::getFullName()
-     */
-    public function getNameAndCompany(): ?string
-    {
-        return $this->concat($this->getFullName(), $this->company, ', ');
-    }
-
-    /**
-     * Gets the full name, if applicable; the company otherwise.
-     */
-    public function getNameOrCompany(): ?string
-    {
-        $fullName = $this->getFullName();
-
-        return '' === $fullName ? $this->getCompany() : $fullName;
-    }
-
-    /**
-     * Get title.
-     */
-    public function getTitle(): ?string
-    {
-        return $this->title;
-    }
-
-    /**
-     * Gets the title, the last name, and the first name separate by a space character.
-     */
-    public function getTitleAndFullName(): ?string
-    {
-        return $this->concat($this->title, $this->getFullName());
-    }
-
-    /**
-     * Get the website.
-     */
-    public function getWebSite(): ?string
-    {
-        return $this->webSite;
-    }
-
-    /**
-     * Gets the zip code and the city separate by a space character.
-     */
-    public function getZipCity(): ?string
-    {
-        return $this->concat($this->zipCode, $this->city);
-    }
-
-    /**
-     * Get zip code.
-     */
-    public function getZipCode(): ?string
-    {
-        return $this->zipCode;
-    }
-
-    /**
-     * Set the address.
-     */
-    public function setAddress(?string $address): self
-    {
-        $this->address = StringUtils::trim($address);
-
-        return $this;
-    }
-
-    /**
-     * Set birthday.
-     */
-    public function setBirthday(?DatePoint $birthday): self
-    {
-        if ($birthday instanceof DatePoint) {
-            $birthday = DateUtils::removeTime($birthday);
-        }
-        $this->birthday = $birthday;
-
-        return $this;
-    }
-
-    /**
-     * Set city.
-     */
-    public function setCity(?string $city): self
-    {
-        $this->city = StringUtils::trim($city);
-
-        return $this;
-    }
-
-    /**
-     * Set company.
-     */
-    public function setCompany(?string $company): self
-    {
-        $this->company = StringUtils::trim($company);
-
-        return $this;
-    }
-
-    /**
-     * Set country.
-     */
-    public function setCountry(?string $country): self
-    {
-        $this->country = StringUtils::trim($country);
-
-        return $this;
-    }
-
-    /**
-     * Set email.
-     */
-    public function setEmail(?string $email): self
-    {
-        $this->email = StringUtils::trim($email);
-
-        return $this;
-    }
-
-    /**
-     * Set the first name.
-     */
-    public function setFirstName(?string $firstName): self
-    {
-        $this->firstName = StringUtils::trim($firstName);
-
-        return $this;
-    }
-
-    /**
-     * Set the last name.
-     */
-    public function setLastName(?string $lastName): self
-    {
-        $this->lastName = StringUtils::trim($lastName);
-
-        return $this;
-    }
-
-    /**
-     * Set title.
-     */
-    public function setTitle(?string $title): self
-    {
-        $this->title = StringUtils::trim($title);
-
-        return $this;
-    }
-
-    /**
-     * Set the website.
-     */
-    public function setWebSite(?string $webSite): self
-    {
-        $webSite = StringUtils::trim($webSite);
-        if (StringUtils::isString($webSite) && !StringUtils::startWith($webSite, 'http')) {
-            $webSite = 'https://' . $webSite;
-        }
-        $this->webSite = $webSite;
-
-        return $this;
-    }
-
-    /**
-     * Set zip code.
-     */
-    public function setZipCode(?string $zipCode): self
-    {
-        $this->zipCode = StringUtils::trim($zipCode);
-
-        return $this;
+        return $this->nameAndCompany ?? parent::getDisplay();
     }
 
     #[Assert\Callback]
@@ -368,6 +178,116 @@ class Customer extends AbstractEntity
             $context->buildViolation('customer.empty')
                 ->addViolation();
         }
+    }
+
+    /**
+     * Set the address.
+     */
+    public function withAddress(?string $address): self
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * Set birthday.
+     */
+    public function withBirthday(?DatePoint $birthday): self
+    {
+        $this->birthday = $birthday;
+
+        return $this;
+    }
+
+    /**
+     * Set city.
+     */
+    public function withCity(?string $city): self
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * Set company.
+     */
+    public function withCompany(?string $company): self
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    /**
+     * Set country.
+     */
+    public function withCountry(?string $country): self
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * Set email.
+     */
+    public function withEmail(?string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Set the first name.
+     */
+    public function withFirstName(?string $firstName): self
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    /**
+     * Set the last name.
+     */
+    public function withLastName(?string $lastName): self
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * Set title.
+     */
+    public function withTitle(?string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Set the website.
+     */
+    public function withWebSite(?string $webSite): self
+    {
+        $this->webSite = $webSite;
+
+        return $this;
+    }
+
+    /**
+     * Set zip code.
+     */
+    public function withZipCode(?string $zipCode): self
+    {
+        $this->zipCode = $zipCode;
+
+        return $this;
     }
 
     /**
@@ -388,5 +308,15 @@ class Customer extends AbstractEntity
         }
 
         return null;
+    }
+
+    private function trimWebSite(?string $value): ?string
+    {
+        $value = StringUtils::trim($value);
+        if (StringUtils::isString($value) && !StringUtils::startWith($value, 'http')) {
+            $value = 'https://' . $value;
+        }
+
+        return $value;
     }
 }

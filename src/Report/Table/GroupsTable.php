@@ -40,7 +40,7 @@ class GroupsTable extends ReportTable
     {
         $this->createColumns();
         $calculation = $this->calculation;
-        foreach ($calculation->getGroups() as $group) {
+        foreach ($calculation->groups as $group) {
             $this->outputGroup($group);
         }
         $this->outputTotal($calculation);
@@ -89,11 +89,11 @@ class GroupsTable extends ReportTable
     private function outputGroup(CalculationGroup $group): void
     {
         $this->startRow()
-            ->add($group->getCode())
-            ->addCellAmount($group->getAmount())
-            ->addCellPercent($group->getMargin())
-            ->addCellAmount($group->getMarginAmount())
-            ->addCellAmount($group->getTotal())
+            ->add($group->code)
+            ->addCellAmount($group->amount)
+            ->addCellPercent($group->margin)
+            ->addCellAmount($group->marginAmount)
+            ->addCellAmount($group->total)
             ->endRow();
     }
 
@@ -102,10 +102,10 @@ class GroupsTable extends ReportTable
         $style = PdfStyle::getHeaderStyle()->setFontRegular();
         $this->startHeaderRow()
             ->addCellTrans('calculation.fields.marginTotal')
-            ->addCellAmount($calculation->getGroupsAmount(), style: $style)
-            ->addCellPercent($calculation->getGroupsMargin(), style: $style)
-            ->addCellAmount($calculation->getGroupsMarginAmount(), style: $style)
-            ->addCellAmount($calculation->getGroupsTotal())
+            ->addCellAmount($calculation->groupsAmount, style: $style)
+            ->addCellPercent($calculation->groupsMargin, style: $style)
+            ->addCellAmount($calculation->groupsMarginAmount, style: $style)
+            ->addCellAmount($calculation->groupsTotal)
             ->endRow();
     }
 }

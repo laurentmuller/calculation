@@ -43,13 +43,13 @@ class OverallTable extends ReportTable
     public function output(): void
     {
         $calculation = $this->calculation;
-        $totalItems = $calculation->getGroupsAmount();
-        $totalMargins = $calculation->getGroupsMarginAmount();
+        $totalItems = $calculation->groupsAmount;
+        $totalMargins = $calculation->groupsMarginAmount;
         $totalBrut = $totalItems + $totalMargins;
-        $globalMargin = $calculation->getGlobalMargin();
+        $globalMargin = $calculation->globalMargin;
         $globalAmount = $this->round($totalBrut * ($globalMargin - 1.0));
         $totalNet = $totalBrut + $globalAmount;
-        $userMargin = $calculation->getUserMargin();
+        $userMargin = $calculation->userMargin;
         $userAmount = $this->round($totalNet * $userMargin);
 
         $this->createColumns()
@@ -109,9 +109,9 @@ class OverallTable extends ReportTable
         $this->startHeaderRow()
             ->addCellTrans('calculation.fields.overallTotal')
             ->addCellAmount($totalItems)
-            ->addCellPercent($calculation->getOverallMargin(), style: $style)
-            ->addCellAmount($calculation->getOverallMarginAmount())
-            ->addCellAmount($calculation->getOverallTotal())
+            ->addCellPercent($calculation->overallMargin, style: $style)
+            ->addCellAmount($calculation->overallMarginAmount)
+            ->addCellAmount($calculation->overallTotal)
             ->endRow();
     }
 

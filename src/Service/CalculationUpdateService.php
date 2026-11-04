@@ -79,7 +79,7 @@ class CalculationUpdateService implements ServiceSubscriberInterface
 
         $calculations = $this->getCalculations($query);
         foreach ($calculations as $calculation) {
-            $oldTotal = $calculation->getOverallTotal();
+            $oldTotal = $calculation->overallTotal;
             if ($this->updateCalculation($calculation)) {
                 $result->addCalculation($oldTotal, $calculation);
             }
@@ -100,17 +100,17 @@ class CalculationUpdateService implements ServiceSubscriberInterface
     public function updateCalculation(Calculation $calculation): bool
     {
         // save old values
-        $oldItemsTotal = $this->round($calculation->getItemsTotal());
-        $oldOverallTotal = $this->round($calculation->getOverallTotal());
-        $oldGlobalMargin = $this->round($calculation->getGlobalMargin());
+        $oldItemsTotal = $this->round($calculation->itemsTotal);
+        $oldOverallTotal = $this->round($calculation->overallTotal);
+        $oldGlobalMargin = $this->round($calculation->globalMargin);
 
         // 1. update each group and compute item and overall totals
         $newItemsTotal = 0.0;
         $newOverallTotal = 0.0;
-        foreach ($calculation->getGroups() as $group) {
+        foreach ($calculation->groups as $group) {
             $group->update();
-            $newItemsTotal += $group->getAmount();
-            $newOverallTotal += $group->getTotal();
+            $newItemsTotal += $group->amount;
+            $newOverallTotal += $group->total;
         }
         $newItemsTotal = $this->round($newItemsTotal);
         $newOverallTotal = $this->round($newOverallTotal);
@@ -118,7 +118,7 @@ class CalculationUpdateService implements ServiceSubscriberInterface
         // 2. update global margin, net total and overall total
         $newGlobalMargin = $this->round($this->getGlobalMargin($newOverallTotal));
         $newOverallTotal = $this->round($newOverallTotal * $newGlobalMargin);
-        $newOverallTotal = $this->round($newOverallTotal * (1.0 + $calculation->getUserMargin()));
+        $newOverallTotal = $this->round($newOverallTotal * (1.0 + $calculation->userMargin));
 
         // 3. equal?
         if ($this->isFloatEquals($oldItemsTotal, $newItemsTotal)
@@ -128,9 +128,9 @@ class CalculationUpdateService implements ServiceSubscriberInterface
         }
 
         // 4. update
-        $calculation->setItemsTotal($newItemsTotal)
-            ->setGlobalMargin($newGlobalMargin)
-            ->setOverallTotal($newOverallTotal);
+        $calculation->withItemsTotal($newItemsTotal)
+            ->withGlobalMargin($newGlobalMargin)
+            ->withOverallTotal($newOverallTotal);
 
         return true;
     }
@@ -188,7 +188,7 @@ class CalculationUpdateService implements ServiceSubscriberInterface
             /** @var int[] $ids */
             $ids = $this->getSessionValue(self::KEY_STATES, []);
             if ([] !== $ids) {
-                return \array_filter($sources, static fn (CalculationState $state): bool => \in_array($state->getId(), $ids, true));
+                return \array_filter($sources, static fn (CalculationState $state): bool => \in_array($state->id, $ids, true));
             }
         }
 

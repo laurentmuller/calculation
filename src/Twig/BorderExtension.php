@@ -71,8 +71,8 @@ final class BorderExtension implements DisableListenerInterface
     private function replace(CalculationState $state): string
     {
         return \strtr(self::TEMPLATE, [
-            '#id' => $state->getId(),
-            '#color' => $state->getColor(),
+            '#id' => $state->id,
+            '#color' => $state->color,
         ]);
     }
 }

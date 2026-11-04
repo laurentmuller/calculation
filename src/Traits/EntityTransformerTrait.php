@@ -60,7 +60,7 @@ trait EntityTransformerTrait
             throw new UnexpectedTypeException($value, $this->getClassName());
         }
 
-        return $value->getId();
+        return $value->id;
     }
 
     /**

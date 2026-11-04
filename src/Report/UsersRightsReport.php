@@ -210,7 +210,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
 
     private function getUserDescription(User $user): string
     {
-        return $user->isEnabled()
+        return $user->enabled
             ? $this->roleService->translateRole($user)
             : $this->trans('common.value_disabled');
     }

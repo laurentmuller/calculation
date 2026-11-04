@@ -31,20 +31,20 @@ final class CustomerTest extends ConstraintValidatorTestCase
     public function testAge(): void
     {
         $customer = new Customer();
-        self::assertNull($customer->getAge());
+        self::assertNull($customer->age);
 
         $currentDate = DateUtils::createDate();
         $birthday = DateUtils::sub($currentDate, 'P1Y');
-        $customer->setBirthday(clone $birthday);
+        $customer->withBirthday(clone $birthday);
         /** @var int|null $actual */
-        $actual = $customer->getAge();
+        $actual = $customer->age;
         self::assertIsInt($actual);
         self::assertSame(1, $actual);
 
         $birthday = DateUtils::add($birthday, 'P1D');
-        $customer->setBirthday(clone $birthday);
+        $customer->withBirthday(clone $birthday);
         /** @var int|null $actual */
-        $actual = $customer->getAge();
+        $actual = $customer->age;
         self::assertIsInt($actual);
         self::assertSame(0, $actual);
     }
@@ -53,20 +53,20 @@ final class CustomerTest extends ConstraintValidatorTestCase
     {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
         $customer = new Customer();
-        self::assertNull($customer->getId());
-        self::assertNull($customer->getAddress());
-        self::assertNull($customer->getAge());
-        self::assertNull($customer->getBirthday());
-        self::assertNull($customer->getCity());
-        self::assertNull($customer->getCompany());
-        self::assertSame('CH', $customer->getCountry());
-        self::assertSame('Suisse', $customer->getCountryName());
-        self::assertNull($customer->getEmail());
-        self::assertNull($customer->getFirstName());
-        self::assertNull($customer->getLastName());
-        self::assertNull($customer->getTitle());
-        self::assertNull($customer->getWebSite());
-        self::assertNull($customer->getZipCode());
+        self::assertNull($customer->id);
+        self::assertNull($customer->address);
+        self::assertNull($customer->age);
+        self::assertNull($customer->birthday);
+        self::assertNull($customer->city);
+        self::assertNull($customer->company);
+        self::assertSame('CH', $customer->country);
+        self::assertSame('Suisse', $customer->countryName);
+        self::assertNull($customer->email);
+        self::assertNull($customer->firstName);
+        self::assertNull($customer->lastName);
+        self::assertNull($customer->title);
+        self::assertNull($customer->webSite);
+        self::assertNull($customer->zipCode);
     }
 
     public function testDisplay(): void
@@ -76,75 +76,75 @@ final class CustomerTest extends ConstraintValidatorTestCase
         self::setId($customer, 10);
         self::assertSame('10', $customer->getDisplay());
 
-        $customer->setFirstName('John');
+        $customer->withFirstName('John');
         self::assertSame('John', $customer->getDisplay());
 
-        $customer->setCompany('company');
+        $customer->withCompany('company');
         self::assertSame('John, company', $customer->getDisplay());
     }
 
     public function testFullName(): void
     {
         $customer = new Customer();
-        self::assertNull($customer->getFullName());
+        self::assertNull($customer->fullName);
 
         $customer = new Customer();
-        $customer->setFirstName('John');
-        self::assertSame('John', $customer->getFullName());
+        $customer->withFirstName('John');
+        self::assertSame('John', $customer->fullName);
 
         $customer = new Customer();
-        $customer->setLastName('Doe');
-        self::assertSame('Doe', $customer->getFullName());
+        $customer->withLastName('Doe');
+        self::assertSame('Doe', $customer->fullName);
 
         $customer = new Customer();
-        $customer->setLastName('Doe');
-        $customer->setFirstName('John');
-        self::assertSame('Doe John', $customer->getFullName());
+        $customer->withLastName('Doe');
+        $customer->withFirstName('John');
+        self::assertSame('Doe John', $customer->fullName);
     }
 
     public function testId(): void
     {
         $customer = new Customer();
-        self::assertNull($customer->getId());
+        self::assertNull($customer->id);
         self::setId($customer, 10);
-        self::assertSame(10, $customer->getId());
+        self::assertSame(10, $customer->id);
     }
 
     public function testNameOrCompany(): void
     {
         $customer = new Customer();
-        self::assertNull($customer->getNameOrCompany());
+        self::assertNull($customer->nameOrCompany);
     }
 
     public function testSetProperties(): void
     {
         $customer = new Customer();
-        $customer->setAddress('address');
-        self::assertSame('address', $customer->getAddress());
-        $customer->setTitle('title');
-        self::assertSame('title', $customer->getTitle());
-        $customer->setWebSite('website');
-        self::assertSame('https://website', $customer->getWebSite());
-        $customer->setWebSite('https://www.example.com');
-        self::assertSame('https://www.example.com', $customer->getWebSite());
-        $customer->setZipCode('zipCode');
-        self::assertSame('zipCode', $customer->getZipCode());
-        $customer->setCountry('country');
-        self::assertSame('country', $customer->getCountry());
-        $customer->setEmail('email@example.com');
-        self::assertSame('email@example.com', $customer->getEmail());
+        $customer->withAddress('address');
+        self::assertSame('address', $customer->address);
+        $customer->withTitle('title');
+        self::assertSame('title', $customer->title);
+        $customer->withWebSite('website');
+        self::assertSame('https://website', $customer->webSite);
+        $customer->withWebSite('https://www.example.com');
+        self::assertSame('https://www.example.com', $customer->webSite);
+        $customer->withZipCode('zipCode');
+        self::assertSame('zipCode', $customer->zipCode);
+        $customer->withCountry('country');
+        self::assertSame('country', $customer->country);
+        $customer->withEmail('email@example.com');
+        self::assertSame('email@example.com', $customer->email);
     }
 
     public function testTitleAndFullName(): void
     {
         $customer = new Customer();
-        self::assertNull($customer->getTitleAndFullName());
+        self::assertNull($customer->titleAndFullName);
     }
 
     public function testValidateNoViolation(): void
     {
         $customer = new Customer();
-        $customer->setFirstName('John');
+        $customer->withFirstName('John');
         $customer->validate($this->context);
         $this->assertNoViolation();
     }
@@ -160,11 +160,11 @@ final class CustomerTest extends ConstraintValidatorTestCase
     public function testZipCity(): void
     {
         $customer = new Customer();
-        self::assertNull($customer->getZipCity());
-        $customer->setZipCode('zipCode');
-        self::assertSame('zipCode', $customer->getZipCity());
-        $customer->setCity('city');
-        self::assertSame('zipCode city', $customer->getZipCity());
+        self::assertNull($customer->zipCity);
+        $customer->withZipCode('zipCode');
+        self::assertSame('zipCode', $customer->zipCity);
+        $customer->withCity('city');
+        self::assertSame('zipCode city', $customer->zipCity);
     }
 
     #[\Override]

@@ -174,6 +174,6 @@ class UrlGeneratorService
 
     private function getEntityId(EntityInterface|int|null $id): int
     {
-        return (int) ($id instanceof EntityInterface ? $id->getId() : $id);
+        return (int) ($id instanceof EntityInterface ? $id->id : $id);
     }
 }

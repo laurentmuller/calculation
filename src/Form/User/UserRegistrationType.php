@@ -76,9 +76,9 @@ class UserRegistrationType extends AbstractUserCaptchaType
     {
         /** @var User $user */
         $user = $event->getData();
-        if (!StringUtils::isString($user->getPassword())) {
+        if (!StringUtils::isString($user->password)) {
             // the password must be set, if not; the form is not valid
-            $user->setPassword('123456');
+            $user->withPassword('123456');
             $event->setData($user);
         }
     }

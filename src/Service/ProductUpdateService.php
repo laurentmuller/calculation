@@ -118,13 +118,13 @@ class ProductUpdateService implements ServiceSubscriberInterface
         $user = $this->getUser();
 
         foreach ($products as $product) {
-            $oldPrice = $product->getPrice();
+            $oldPrice = $product->price;
             $newPrice = $this->computePrice($oldPrice, $percent, $value, $round);
             if ($oldPrice !== $newPrice) {
-                $product->setPrice($newPrice)
+                $product->withPrice($newPrice)
                     ->updateTimestampable($date, $user);
                 $result->addProduct([
-                    'description' => $product->getDescription(),
+                    'description' => $product->description,
                     'oldPrice' => $oldPrice,
                     'newPrice' => $newPrice,
                     'delta' => $newPrice - $oldPrice,

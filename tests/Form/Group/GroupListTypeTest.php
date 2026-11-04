@@ -44,7 +44,7 @@ final class GroupListTypeTest extends TypeTestCase
     {
         $group = $this->getGroup();
         $formData = [
-            'value' => $group->getId(),
+            'value' => $group->id,
         ];
         $model = FixtureDataForm::instance($group);
         $form = $this->factory->createBuilder(FormType::class, $model)

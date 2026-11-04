@@ -171,7 +171,7 @@ class LogsReport extends AbstractReport
 
     private function getRoundedDate(Log $log): int
     {
-        return (int) \ceil($log->getTimestamp() / self::DELTA_DATE) * self::DELTA_DATE;
+        return (int) \ceil($log->timestamp / self::DELTA_DATE) * self::DELTA_DATE;
     }
 
     private function renderCards(): self
@@ -239,11 +239,11 @@ class LogsReport extends AbstractReport
                 $this->addDateBookmark($date);
             }
             $table->addRow(
-                $log->getFormattedDate(),
-                $log->getMessage(),
+                $log->formattedDate,
+                $log->message,
                 $this->getCellLevel($log),
                 $this->getCellChannel($log),
-                $log->getUser()
+                $log->user
             );
         }
 

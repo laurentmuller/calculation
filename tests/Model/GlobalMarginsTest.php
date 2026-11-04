@@ -52,10 +52,10 @@ final class GlobalMarginsTest extends TestCase
     public function testGetMargins(): void
     {
         $margins = GlobalMargins::instance();
-        $actual = $margins->getMargins();
+        $actual = $margins->margins;
         self::assertCount(0, $actual);
         $margins->addMargin($this->createMargin());
-        $actual = $margins->getMargins();
+        $actual = $margins->margins;
         self::assertCount(1, $actual);
     }
 
@@ -74,10 +74,10 @@ final class GlobalMarginsTest extends TestCase
 
     private function createMargin(): GlobalMargin
     {
-        $margin = new GlobalMargin();
-        $margin->setMinimum(0.0)
-            ->setMaximum(100.0)
-            ->setMargin(1.0);
+        $margin = new GlobalMargin()
+            ->withMinimum(0.0)
+            ->withMaximum(100.0)
+            ->withMargin(1.0);
 
         return self::setId($margin);
     }

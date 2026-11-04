@@ -30,12 +30,12 @@ final class CalculationReportTest extends TestCase
     public function testEmpty(): void
     {
         $calculation = new Calculation();
-        $calculation->setDescription('description')
-            ->setCustomer('customer')
-            ->setOverallTotal(1000.0)
-            ->setGlobalMargin(1.0)
-            ->setItemsTotal(1000.0)
-            ->setUserMargin(0.1);
+        $calculation->withDescription('description')
+            ->withCustomer('customer')
+            ->withOverallTotal(1000.0)
+            ->withGlobalMargin(1.0)
+            ->withItemsTotal(1000.0)
+            ->withUserMargin(0.1);
         $helper = self::createStub(DocumentHelperInterface::class);
         $report = new CalculationReport($helper, $calculation, 1.1, '');
         $actual = $report->render();
@@ -48,15 +48,15 @@ final class CalculationReportTest extends TestCase
     public function testEmptyGroup(): void
     {
         $calculation = new Calculation();
-        $calculation->setDescription('description')
-            ->setCustomer('customer')
-            ->setOverallTotal(1000.0)
-            ->setGlobalMargin(1.2)
-            ->setItemsTotal(800.0)
-            ->setUserMargin(0.1);
+        $calculation->withDescription('description')
+            ->withCustomer('customer')
+            ->withOverallTotal(1000.0)
+            ->withGlobalMargin(1.2)
+            ->withItemsTotal(800.0)
+            ->withUserMargin(0.1);
 
         $group = new CalculationGroup();
-        $group->setCode('Group');
+        $group->withCode('Group');
         $calculation->addGroup($group);
 
         $helper = self::createStub(DocumentHelperInterface::class);
@@ -71,23 +71,23 @@ final class CalculationReportTest extends TestCase
     public function testRender(): void
     {
         $calculation = new Calculation();
-        $calculation->setDescription('description')
-            ->setCustomer('customer')
-            ->setOverallTotal(1000.0)
-            ->setGlobalMargin(1.2)
-            ->setItemsTotal(800.0)
-            ->setUserMargin(0.1);
+        $calculation->withDescription('description')
+            ->withCustomer('customer')
+            ->withOverallTotal(1000.0)
+            ->withGlobalMargin(1.2)
+            ->withItemsTotal(800.0)
+            ->withUserMargin(0.1);
 
         $group = new CalculationGroup();
-        $group->setCode('Group');
+        $group->withCode('Group');
 
         $category = new CalculationCategory();
-        $category->setCode('Category');
+        $category->withCode('Category');
 
         $item = new CalculationItem();
-        $item->setDescription('Description')
-            ->setPrice(100.0)
-            ->setQuantity(0.0);
+        $item->withDescription('Description')
+            ->withPrice(100.0)
+            ->withQuantity(0.0);
         $category->addItem($item);
         $group->addCategory($category);
         $calculation->addGroup($group);
@@ -104,23 +104,23 @@ final class CalculationReportTest extends TestCase
     public function testRenderWithoutQrCode(): void
     {
         $calculation = new Calculation();
-        $calculation->setDescription('description')
-            ->setCustomer('customer')
-            ->setOverallTotal(1000.0)
-            ->setGlobalMargin(1.2)
-            ->setItemsTotal(800.0)
-            ->setUserMargin(0.1);
+        $calculation->withDescription('description')
+            ->withCustomer('customer')
+            ->withOverallTotal(1000.0)
+            ->withGlobalMargin(1.2)
+            ->withItemsTotal(800.0)
+            ->withUserMargin(0.1);
 
         $group = new CalculationGroup();
-        $group->setCode('Group');
+        $group->withCode('Group');
 
         $category = new CalculationCategory();
-        $category->setCode('Category');
+        $category->withCode('Category');
 
         $item = new CalculationItem();
-        $item->setDescription('Description')
-            ->setPrice(100.0)
-            ->setQuantity(0.0);
+        $item->withDescription('Description')
+            ->withPrice(100.0)
+            ->withQuantity(0.0);
         $category->addItem($item);
         $group->addCategory($category);
         $calculation->addGroup($group);

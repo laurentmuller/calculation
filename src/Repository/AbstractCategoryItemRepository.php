@@ -39,7 +39,7 @@ abstract class AbstractCategoryItemRepository extends AbstractRepository
         return (int) $this->createQueryBuilder('e')
             ->select('COUNT(e.id)')
             ->where('e.category = :category')
-            ->setParameter('category', $category->getId(), Types::INTEGER)
+            ->setParameter('category', $category->id, Types::INTEGER)
             ->getQuery()
             ->getSingleScalarResult();
     }
@@ -51,7 +51,7 @@ abstract class AbstractCategoryItemRepository extends AbstractRepository
             ->innerJoin('e.category', 'c')
             ->innerJoin('c.group', 'g')
             ->where('g.id = :group')
-            ->setParameter('group', $group->getId(), Types::INTEGER)
+            ->setParameter('group', $group->id, Types::INTEGER)
             ->getQuery()
             ->getSingleScalarResult();
     }

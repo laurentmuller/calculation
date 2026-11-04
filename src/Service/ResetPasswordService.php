@@ -174,7 +174,7 @@ readonly class ResetPasswordService implements TranslatorProviderInterface
         )->translatedSubject('resetting.request.title')
             ->importance(Importance::HIGH)
             ->from(ApplicationService::getOwnerAddress())
-            ->to($user->getAddress())
+            ->to($user->address)
             ->action($this->getResetText(), $this->getResetAction($token))
             ->context([
                 'token' => $token->getToken(),

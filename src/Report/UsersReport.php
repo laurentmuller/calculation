@@ -153,17 +153,17 @@ class UsersReport extends AbstractArrayReport
 
     private function outputEntity(PdfTable $table, User $entity): void
     {
-        $enabled = $entity->isEnabled();
+        $enabled = $entity->enabled;
         $editableText = $this->formatEditable($enabled);
         $editableStyle = $enabled ? $this->enabledStyle : $this->disabledStyle;
 
         $table->startRow()
             ->addCell($this->getImageCell($entity))
             ->add($entity->getUserIdentifier())
-            ->add($entity->getEmail())
+            ->add($entity->email)
             ->addCell($this->getRoleCell($entity))
             ->add(text: $editableText, style: $editableStyle)
-            ->add($this->formatLastLogin($entity->getLastLogin()))
+            ->add($this->formatLastLogin($entity->lastLogin))
             ->endRow();
     }
 }

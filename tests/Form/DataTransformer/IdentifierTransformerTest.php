@@ -36,7 +36,7 @@ final class IdentifierTransformerTest extends EntityTransformerTestCase
         yield [null, null];
 
         $group = self::setId(new Group());
-        yield [$group, $group->getId()];
+        yield [$group, $group->id];
     }
 
     public static function getTransformInvalid(): \Generator
@@ -68,7 +68,7 @@ final class IdentifierTransformerTest extends EntityTransformerTestCase
         $group = $this->createGroup();
         $transformer = $this->createTransformer($group);
         $actual = $transformer->reverseTransform($group);
-        self::assertSame($group->getId(), $actual);
+        self::assertSame($group->id, $actual);
     }
 
     /**
@@ -87,7 +87,7 @@ final class IdentifierTransformerTest extends EntityTransformerTestCase
     {
         $group = $this->createGroup();
         $transformer = $this->createTransformer($group);
-        $actual = $transformer->transform($group->getId());
+        $actual = $transformer->transform($group->id);
         self::assertSame($group, $actual);
     }
 

@@ -49,7 +49,7 @@ final class EntityTransformerTest extends EntityTransformerTestCase
         yield [null, null];
 
         $group = self::setId(new Group());
-        yield [$group, $group->getId()];
+        yield [$group, $group->id];
     }
 
     /**
@@ -67,7 +67,7 @@ final class EntityTransformerTest extends EntityTransformerTestCase
     {
         $group = $this->createGroup();
         $transformer = $this->createTransformer($group);
-        $value = $group->getId();
+        $value = $group->id;
         $actual = $transformer->reverseTransform($value);
         self::assertSame($group, $actual);
     }
@@ -89,7 +89,7 @@ final class EntityTransformerTest extends EntityTransformerTestCase
         $group = $this->createGroup();
         $transformer = $this->createTransformer($group);
         $actual = $transformer->transform($group);
-        $expected = $group->getId();
+        $expected = $group->id;
         self::assertSame($expected, $actual);
     }
 

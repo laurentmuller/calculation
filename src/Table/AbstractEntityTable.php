@@ -227,7 +227,7 @@ abstract class AbstractEntityTable extends AbstractTable
      */
     private function getEntityId(array|EntityInterface $entity): ?int
     {
-        return \is_array($entity) ? $entity['id'] : $entity->getId();
+        return \is_array($entity) ? $entity['id'] : $entity->id;
     }
 
     /**

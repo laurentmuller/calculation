@@ -74,11 +74,11 @@ class CategoryController extends AbstractEntityController
     #[CloneEntityRoute]
     public function clone(Request $request, Category $item): Response
     {
-        $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
+        $code = $this->trans('common.clone_description', ['%description%' => $item->code]);
         $clone = $item->clone($code);
         $parameters = [
             'title' => 'category.clone.title',
-            'params' => ['id' => $item->getId()],
+            'params' => ['id' => $item->id],
         ];
 
         return $this->editEntity($request, $clone, $parameters);
@@ -169,7 +169,7 @@ class CategoryController extends AbstractEntityController
     {
         $application = $this->getApplicationParameters();
         $defaultParameter = $application->getDefault();
-        if ($defaultParameter->getCategoryId() === $item->getId()) {
+        if ($defaultParameter->getCategoryId() === $item->id) {
             $defaultParameter->resetCategoryId();
             $application->save();
         }

@@ -46,8 +46,8 @@ final class TaskComputeQueryTest extends TestCase
 
     private function createTask(): Task
     {
-        $task = new Task();
-        $task->setName('name');
+        $task = new Task()
+            ->withName('name');
 
         return self::setId($task);
     }

@@ -29,7 +29,6 @@ use Symfony\Bridge\Doctrine\Types\DatePointType;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Serializer\Attribute\Ignore;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -55,34 +54,59 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     use RoleTrait;
     use TimestampableTrait;
 
+    /** Gets email address. */
+    public Address $address {
+        get => new Address((string) $this->email, $this->getUserIdentifier());
+    }
+
+    /** The email. */
     #[Assert\Email]
     #[Assert\NotBlank]
     #[Assert\Length(max: self::MAX_USERNAME_LENGTH)]
     #[ORM\Column(length: self::MAX_USERNAME_LENGTH, unique: true)]
-    private ?string $email = null;
+    public ?string $email = null {
+        set => StringUtils::trim($value);
+    }
 
+    /** The enable state. */
     #[ORM\Column(options: ['default' => true])]
-    private bool $enabled = true;
+    public bool $enabled = true;
 
     /** The image file. NB: This is not a mapped field of entity metadata, just a simple property. */
     #[Assert\Image(maxSize: 10_485_760)]
     #[Vich\UploadableField(mapping: 'user_image', fileNameProperty: 'imageName')]
-    private ?File $imageFile = null;
+    public ?File $imageFile = null;
 
     /** The image file name. */
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
-    private ?string $imageName = null;
+    public ?string $imageName = null;
 
+    /** Gets the initials (2 first upper letters). */
+    public string $initials {
+        get => \strtoupper(StringUtils::left($this->getUserIdentifier(), 2));
+    }
+
+    /** The last login. */
     #[ORM\Column(type: DatePointType::NAME, nullable: true)]
-    private ?DatePoint $lastLogin = null;
+    public ?DatePoint $lastLogin = null;
 
+    /** Gets the username and e-mail. */
+    public string $nameAndEmail {
+        get => \sprintf('%s (%s)', $this->getUserIdentifier(), $this->email);
+    }
+
+    /** The password. */
     #[Ignore]
     #[Assert\NotBlank]
     #[ORM\Column]
-    private ?string $password = null;
+    public ?string $password = null;
 
-    /** @var Collection<int, UserProperty> */
+    /**
+     * The user properties.
+     *
+     * @var Collection<int, UserProperty>
+     */
     #[ORM\OneToMany(
         targetEntity: UserProperty::class,
         mappedBy: 'user',
@@ -90,16 +114,20 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
         fetch: self::EXTRA_LAZY,
         orphanRemoval: true
     )]
-    private Collection $properties;
+    public Collection $properties;
 
+    /** The username. */
     #[Assert\NotBlank]
     #[Assert\NoSuspiciousCharacters]
     #[Assert\Length(min: self::MIN_USERNAME_LENGTH, max: self::MAX_USERNAME_LENGTH)]
     #[ORM\Column(length: self::MAX_USERNAME_LENGTH, unique: true)]
-    private ?string $username = null;
+    public ?string $username = null {
+        set => StringUtils::trim($value);
+    }
 
+    /** The verified state. */
     #[ORM\Column(options: ['default' => false])]
-    private bool $verified = false;
+    public bool $verified = false;
 
     public function __construct()
     {
@@ -129,7 +157,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     {
         if (!$this->contains($property)) {
             $this->properties->add($property);
-            $property->setUser($this);
+            $property->withUser($this);
         }
 
         return $this;
@@ -153,44 +181,10 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
         return $this->properties->contains($property);
     }
 
-    /**
-     * Gets email address.
-     */
-    public function getAddress(): Address
-    {
-        return new Address((string) $this->email, $this->getUsername());
-    }
-
     #[\Override]
     public function getDisplay(): string
     {
-        return $this->getUsername();
-    }
-
-    /**
-     * Gets the e-mail.
-     */
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    /**
-     * Gets the image file.
-     *
-     * @return File|UploadedFile
-     */
-    public function getImageFile(): ?File
-    {
-        return $this->imageFile;
-    }
-
-    /**
-     * Gets the image name.
-     */
-    public function getImageName(): ?string
-    {
-        return $this->imageName;
+        return $this->getUserIdentifier();
     }
 
     /**
@@ -210,44 +204,10 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
         return null;
     }
 
-    /**
-     * Gets the initials (2 first upper letters).
-     */
-    public function getInitials(): string
-    {
-        return \strtoupper(StringUtils::left($this->getUsername(), 2));
-    }
-
-    /**
-     * Gets the date of the last login.
-     */
-    public function getLastLogin(): ?DatePoint
-    {
-        return $this->lastLogin;
-    }
-
-    /**
-     * Gets the username and e-mail.
-     */
-    public function getNameAndEmail(): string
-    {
-        return \sprintf('%s (%s)', $this->getUserIdentifier(), $this->getEmail());
-    }
-
     #[\Override]
     public function getPassword(): ?string
     {
         return $this->password;
-    }
-
-    /**
-     * Get the properties.
-     *
-     * @return Collection<int, UserProperty>
-     */
-    public function getProperties(): Collection
-    {
-        return $this->properties;
     }
 
     /**
@@ -260,34 +220,8 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     #[\Override]
     public function getUserIdentifier(): string
     {
-        return $this->getUsername();
-    }
-
-    /**
-     * Gets username.
-     *
-     * @return non-empty-string
-     */
-    public function getUsername(): string
-    {
         /** @phpstan-var non-empty-string */
         return (string) $this->username;
-    }
-
-    /**
-     * Returns a value indicating if this user is enabled.
-     */
-    public function isEnabled(): bool
-    {
-        return $this->enabled;
-    }
-
-    /**
-     * Returns a value indicating if this user is verified.
-     */
-    public function isVerified(): bool
-    {
-        return $this->verified;
     }
 
     /**
@@ -295,9 +229,19 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
      */
     public function removeProperty(UserProperty $property): self
     {
-        if ($this->properties->removeElement($property) && $property->getUser() === $this) {
-            $property->setUser(null);
+        if ($this->properties->removeElement($property) && $property->user === $this) {
+            $property->withUser(null);
         }
+
+        return $this;
+    }
+
+    /**
+     * Sets the last login date as now.
+     */
+    public function updateLastLogin(): self
+    {
+        $this->lastLogin = DateUtils::createDatePoint();
 
         return $this;
     }
@@ -305,7 +249,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     /**
      * Sets the e-mail.
      */
-    public function setEmail(string $email): self
+    public function withEmail(string $email): self
     {
         $this->email = $email;
 
@@ -315,7 +259,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     /**
      * Sets the enabled state.
      */
-    public function setEnabled(bool $enabled): self
+    public function withEnabled(bool $enabled): self
     {
         $this->enabled = $enabled;
 
@@ -328,7 +272,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
      * @param ?File $imageFile the file
      * @param bool  $update    true to update the modification date
      */
-    public function setImageFile(?File $imageFile = null, bool $update = true): self
+    public function withImageFile(?File $imageFile = null, bool $update = true): self
     {
         $this->imageFile = $imageFile;
         if ($update) {
@@ -341,7 +285,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     /**
      * Sets the image name.
      */
-    public function setImageName(?string $imageName): self
+    public function withImageName(?string $imageName): self
     {
         $this->imageName = $imageName;
 
@@ -351,7 +295,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     /**
      * Sets the password.
      */
-    public function setPassword(string $password): self
+    public function withPassword(string $password): self
     {
         $this->password = $password;
 
@@ -361,7 +305,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     /**
      * Sets the username.
      */
-    public function setUsername(string $username): self
+    public function withUsername(string $username): self
     {
         $this->username = $username;
 
@@ -371,19 +315,9 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     /**
      * Sets the verified state.
      */
-    public function setVerified(bool $verified): self
+    public function withVerified(bool $verified): self
     {
         $this->verified = $verified;
-
-        return $this;
-    }
-
-    /**
-     * Sets the last login date as now.
-     */
-    public function updateLastLogin(): self
-    {
-        $this->lastLogin = DateUtils::createDatePoint();
 
         return $this;
     }

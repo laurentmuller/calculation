@@ -26,18 +26,18 @@ final class UserTest extends EntityValidatorTestCase
     public function testAddProperty(): void
     {
         $user = new User();
-        self::assertEmpty($user->getProperties());
+        self::assertEmpty($user->properties);
         $property = new UserProperty();
         $user->addProperty($property);
-        self::assertCount(1, $user->getProperties());
+        self::assertCount(1, $user->properties);
     }
 
     public function testCompare(): void
     {
         $item1 = new User();
-        $item1->setUsername('User1');
+        $item1->withUsername('User1');
         $item2 = new User();
-        $item2->setUsername('User2');
+        $item2->withUsername('User2');
         $actual = $item1->compare($item2);
         self::assertSame(-1, $actual);
     }
@@ -53,16 +53,16 @@ final class UserTest extends EntityValidatorTestCase
     public function testDuplicateBoth(): void
     {
         $first = new User();
-        $first->setUsername('user')
-            ->setPassword('password')
-            ->setEmail('email@email.com');
+        $first->withUsername('user')
+            ->withPassword('password')
+            ->withEmail('email@email.com');
 
         try {
             $this->saveEntity($first);
             $second = new User();
-            $second->setUsername('user')
-                ->setPassword('password')
-                ->setEmail('email@email.com');
+            $second->withUsername('user')
+                ->withPassword('password')
+                ->withEmail('email@email.com');
             $results = $this->validate($second, 2);
             $this->validatePaths($results, 'email', 'username');
         } finally {
@@ -73,16 +73,16 @@ final class UserTest extends EntityValidatorTestCase
     public function testDuplicateEmail(): void
     {
         $first = new User();
-        $first->setUsername('user')
-            ->setPassword('password')
-            ->setEmail('email@email.com');
+        $first->withUsername('user')
+            ->withPassword('password')
+            ->withEmail('email@email.com');
 
         try {
             $this->saveEntity($first);
             $second = new User();
-            $second->setUsername('other')
-                ->setPassword('password')
-                ->setEmail('email@email.com');
+            $second->withUsername('other')
+                ->withPassword('password')
+                ->withEmail('email@email.com');
             $results = $this->validate($second, 1);
             $this->validatePaths($results, 'email');
         } finally {
@@ -93,16 +93,16 @@ final class UserTest extends EntityValidatorTestCase
     public function testDuplicateUserName(): void
     {
         $first = new User();
-        $first->setUsername('user')
-            ->setPassword('password')
-            ->setEmail('email@email.com');
+        $first->withUsername('user')
+            ->withPassword('password')
+            ->withEmail('email@email.com');
 
         try {
             $this->saveEntity($first);
             $second = new User();
-            $second->setUsername('user')
-                ->setPassword('password')
-                ->setEmail('other@email.com');
+            $second->withUsername('user')
+                ->withPassword('password')
+                ->withEmail('other@email.com');
             $results = $this->validate($second, 1);
             $this->validatePaths($results, 'username');
         } finally {
@@ -113,14 +113,14 @@ final class UserTest extends EntityValidatorTestCase
     public function testEmailAndAddress(): void
     {
         $user = new User();
-        $user->setUsername('user')
-            ->setEmail('user@mail.com');
-        self::assertSame('user', $user->getUsername());
+        $user->withUsername('user')
+            ->withEmail('user@mail.com');
+        self::assertSame('user', $user->username);
         self::assertSame('user', $user->getUserIdentifier());
-        self::assertSame('user@mail.com', $user->getEmail());
-        self::assertSame('user (user@mail.com)', $user->getNameAndEmail());
+        self::assertSame('user@mail.com', $user->email);
+        self::assertSame('user (user@mail.com)', $user->nameAndEmail);
 
-        $address = $user->getAddress();
+        $address = $user->address;
         self::assertSame('user', $address->getName());
         self::assertSame('user@mail.com', $address->getAddress());
     }
@@ -128,20 +128,20 @@ final class UserTest extends EntityValidatorTestCase
     public function testEnabled(): void
     {
         $user = new User();
-        self::assertTrue($user->isEnabled());
-        $user->setEnabled(false);
-        self::assertFalse($user->isEnabled());
+        self::assertTrue($user->enabled);
+        $user->withEnabled(false);
+        self::assertFalse($user->enabled);
     }
 
     public function testImageFile(): void
     {
         $user = new User();
-        $user->setImageFile();
-        self::assertNull($user->getImageFile());
+        $user->withImageFile();
+        self::assertNull($user->imageFile);
 
         $file = new File(__FILE__, false);
-        $user->setImageFile($file);
-        self::assertSame($file, $user->getImageFile());
+        $user->withImageFile($file);
+        self::assertSame($file, $user->imageFile);
     }
 
     public function testImagePath(): void
@@ -152,7 +152,7 @@ final class UserTest extends EntityValidatorTestCase
             ->willReturn(null);
         self::assertNull($user->getImagePath($storage));
 
-        $user->setImageName('file');
+        $user->withImageName('file');
         self::assertNull($user->getImagePath($storage));
 
         $storage = self::createStub(StorageInterface::class);
@@ -170,12 +170,10 @@ final class UserTest extends EntityValidatorTestCase
     public function testInitials(): void
     {
         $user = new User();
-        $actual = $user->getInitials();
-        self::assertSame('', $actual);
+        self::assertSame('', $user->initials);
 
-        $user->setUsername('username');
-        $actual = $user->getInitials();
-        self::assertSame('US', $actual);
+        $user->withUsername('username');
+        self::assertSame('US', $user->initials);
     }
 
     public function testInvalidAll(): void
@@ -188,10 +186,10 @@ final class UserTest extends EntityValidatorTestCase
     public function testInvalidEmail(): void
     {
         $user = new User();
-        $user->setUsername('user')
-            ->setPassword('password');
+        $user->withUsername('user')
+            ->withPassword('password');
         $this->validate($user, 1);
-        $user->setEmail('invalid-email');
+        $user->withEmail('invalid-email');
         $results = $this->validate($user, 1);
         $this->validatePaths($results, 'email');
     }
@@ -199,8 +197,8 @@ final class UserTest extends EntityValidatorTestCase
     public function testInvalidPassword(): void
     {
         $user = new User();
-        $user->setUsername('user')
-            ->setEmail('email@email.com');
+        $user->withUsername('user')
+            ->withEmail('email@email.com');
         $results = $this->validate($user, 1);
         $this->validatePaths($results, 'password');
     }
@@ -208,8 +206,8 @@ final class UserTest extends EntityValidatorTestCase
     public function testInvalidUserName(): void
     {
         $user = new User();
-        $user->setPassword('password')
-            ->setEmail('email@email.com');
+        $user->withPassword('password')
+            ->withEmail('email@email.com');
         $results = $this->validate($user, 1);
         $this->validatePaths($results, 'username');
     }
@@ -234,16 +232,16 @@ final class UserTest extends EntityValidatorTestCase
     public function testNotDuplicate(): void
     {
         $first = new User();
-        $first->setUsername('user')
-            ->setPassword('password')
-            ->setEmail('email@email.com');
+        $first->withUsername('user')
+            ->withPassword('password')
+            ->withEmail('email@email.com');
 
         try {
             $this->saveEntity($first);
             $second = new User();
-            $second->setUsername('user 2')
-                ->setPassword('password 2')
-                ->setEmail('email2@email.com');
+            $second->withUsername('user 2')
+                ->withPassword('password 2')
+                ->withEmail('email2@email.com');
             $this->validate($second);
         } finally {
             $this->deleteEntity($first);
@@ -278,16 +276,16 @@ final class UserTest extends EntityValidatorTestCase
         $user = new User();
         $property = new UserProperty();
         $user->addProperty($property);
-        self::assertCount(1, $user->getProperties());
+        self::assertCount(1, $user->properties);
         $user->removeProperty($property);
-        self::assertEmpty($user->getProperties());
+        self::assertEmpty($user->properties);
     }
 
     public function testSerialize(): void
     {
         $user = new User();
-        $user->setUsername('user')
-            ->setPassword('password');
+        $user->withUsername('user')
+            ->withPassword('password');
         $values = $user->__serialize();
         self::assertCount(3, $values);
         self::assertNull($values[0]);
@@ -300,33 +298,33 @@ final class UserTest extends EntityValidatorTestCase
         $values = [1, 'user', 'password'];
         $user = new User();
         $user->__unserialize($values);
-        self::assertSame(1, $user->getId());
-        self::assertSame('user', $user->getUsername());
-        self::assertSame('password', $user->getPassword());
+        self::assertSame(1, $user->id);
+        self::assertSame('user', $user->username);
+        self::assertSame('password', $user->password);
     }
 
     public function testUpdateLastLogin(): void
     {
         $user = new User();
-        self::assertNull($user->getLastLogin());
+        self::assertNull($user->lastLogin);
         $user->updateLastLogin();
-        self::assertNotNull($user->getLastLogin());
+        self::assertNotNull($user->lastLogin);
     }
 
     public function testValid(): void
     {
         $user = new User();
-        $user->setUsername('user')
-            ->setPassword('password')
-            ->setEmail('email@email.com');
+        $user->withUsername('user')
+            ->withPassword('password')
+            ->withEmail('email@email.com');
         $this->validate($user);
     }
 
     public function testVerified(): void
     {
         $user = new User();
-        self::assertFalse($user->isVerified());
-        $user->setVerified(true);
-        self::assertTrue($user->isVerified());
+        self::assertFalse($user->verified);
+        $user->withVerified(true);
+        self::assertTrue($user->verified);
     }
 }

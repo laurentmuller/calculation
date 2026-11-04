@@ -46,20 +46,36 @@ class Log extends AbstractEntity implements ComparableInterface
     // the doctrine prefix message
     private const string DOCTRINE_PREFIX = 'executing ';
 
+    /** The context. */
     #[ORM\Column(nullable: true)]
-    private ?array $context = null;
+    public ?array $context = null;
 
+    /** The creation date. */
     #[Assert\NotNull]
     #[ORM\Column(type: DatePointType::NAME)]
-    private DatePoint $createdAt;
+    public DatePoint $createdAt;
 
-    private ?string $formattedDate = null;
+    /** The formatted date. */
+    public string $formattedDate = '' {
+        get => '' !== $this->formattedDate
+            ? $this->formattedDate
+            : $this->formattedDate = self::formatDate($this->createdAt);
+    }
 
+    /** The message. */
     #[ORM\Column(type: Types::TEXT)]
-    private string $message = '';
+    public string $message = '';
 
+    /** Gets the creation date as the Unix timestamp. */
+    public int $timestamp {
+        get => $this->createdAt->getTimestamp();
+    }
+
+    /** The username. */
     #[ORM\Column(length: UserInterface::MAX_USERNAME_LENGTH, nullable: true)]
-    private ?string $user = null;
+    public ?string $user = null {
+        set => StringUtils::trim($value);
+    }
 
     public function __construct()
     {
@@ -87,7 +103,7 @@ class Log extends AbstractEntity implements ComparableInterface
      */
     public function formatMessage(SqlFormatter $formatter): string
     {
-        $message = $this->getMessage();
+        $message = $this->message;
         if ($this->isDoctrineMessage()) {
             $message = $formatter->format($message);
         }
@@ -95,52 +111,16 @@ class Log extends AbstractEntity implements ComparableInterface
             $message .= "\nUser:\n" . $this->user;
         }
         if (null !== $this->context && [] !== $this->context) {
-            $message .= "\nContext:\n" . StringUtils::exportVar($this->getContext());
+            $message .= "\nContext:\n" . StringUtils::exportVar($this->context);
         }
 
         return $message;
     }
 
-    public function getContext(): ?array
-    {
-        return $this->context;
-    }
-
-    public function getCreatedAt(): DatePoint
-    {
-        return $this->createdAt;
-    }
-
     #[\Override]
     public function getDisplay(): string
     {
-        return $this->getMessage();
-    }
-
-    public function getFormattedDate(): string
-    {
-        return $this->formattedDate ??= self::formatDate($this->createdAt);
-    }
-
-    public function getMessage(): string
-    {
         return $this->message;
-    }
-
-    /**
-     * Gets the creation date as the Unix timestamp.
-     */
-    public function getTimestamp(): int
-    {
-        return $this->createdAt->getTimestamp();
-    }
-
-    /**
-     * Gets the user identifier.
-     */
-    public function getUser(): ?string
-    {
-        return $this->user;
     }
 
     /**
@@ -162,30 +142,30 @@ class Log extends AbstractEntity implements ComparableInterface
             && StringUtils::startWith($this->message, self::DOCTRINE_PREFIX);
     }
 
-    public function setContext(?array $context): self
+    public function withContext(?array $context): self
     {
         $this->context = $context;
 
         return $this;
     }
 
-    public function setCreatedAt(DatePoint $createdAt): self
+    public function withCreatedAt(DatePoint $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function setMessage(string $message): self
+    public function withMessage(string $message): self
     {
         $this->message = $message;
 
         return $this;
     }
 
-    public function setUser(?string $user): self
+    public function withUser(?string $user): self
     {
-        $this->user = StringUtils::trim($user);
+        $this->user = $user;
 
         return $this;
     }

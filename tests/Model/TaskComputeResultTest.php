@@ -85,21 +85,21 @@ final class TaskComputeResultTest extends TestCase
 
     private function createTask(): Task
     {
-        $task = new Task();
-        $task->setName('task');
+        $task = new Task()
+            ->withName('task');
 
         return self::setId($task);
     }
 
     private function createTaskItem(?Task $task = null): TaskItem
     {
-        $item = new TaskItem();
-        $item->setName('item');
+        $item = new TaskItem()
+            ->withName('item');
 
         $margin = new TaskItemMargin();
-        $margin->setMinimum(0)
-            ->setMaximum(1000)
-            ->setValue(10);
+        $margin->withMinimum(0)
+            ->withMaximum(1000)
+            ->withValue(10);
         self::setId($margin);
         $item->addMargin($margin);
 

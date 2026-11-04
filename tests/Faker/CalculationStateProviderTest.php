@@ -25,7 +25,7 @@ final class CalculationStateProviderTest extends TestCase
     public function testWithEntity(): void
     {
         $entity = new CalculationState();
-        $entity->setCode('code');
+        $entity->withCode('code');
         $provider = $this->createProvider($entity);
 
         $actual = \count($provider);

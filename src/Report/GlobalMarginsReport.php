@@ -31,10 +31,10 @@ class GlobalMarginsReport extends AbstractArrayReport
         $table = $this->createTable();
         foreach ($entities as $entity) {
             $table->startRow()
-                ->addCellAmount($entity->getMinimum())
-                ->addCellAmount($entity->getMaximum())
+                ->addCellAmount($entity->minimum)
+                ->addCellAmount($entity->maximum)
                 ->addCellAmount($entity->getDelta())
-                ->addCellPercent($entity->getMargin())
+                ->addCellPercent($entity->margin)
                 ->endRow();
         }
 

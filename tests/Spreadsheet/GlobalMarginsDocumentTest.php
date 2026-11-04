@@ -23,8 +23,8 @@ final class GlobalMarginsDocumentTest extends TestCase
     public function testRender(): void
     {
         $margins = new GlobalMargin();
-        $margins->setMaximum(100.0)
-            ->setMargin(1.1);
+        $margins->withMaximum(100.0)
+            ->withMargin(1.1);
 
         $helper = self::createStub(DocumentHelperInterface::class);
         $document = new GlobalMarginsDocument($helper, [$margins]);

@@ -39,8 +39,8 @@ class CategoriesDocument extends AbstractArrayDocument
 
         foreach ($entities as $entity) {
             $sheet->setRowValues($row++, [
-                $entity->getCode(),
-                $entity->getDescription(),
+                $entity->code,
+                $entity->description,
                 $entity->getGroupCode(),
                 $entity->countProducts(),
                 $entity->countTasks(),

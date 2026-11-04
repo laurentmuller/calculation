@@ -68,7 +68,7 @@ class CalculationStateController extends AbstractEntityController
     #[CloneEntityRoute]
     public function clone(Request $request, CalculationState $item): Response
     {
-        $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
+        $code = $this->trans('common.clone_description', ['%description%' => $item->code]);
         $clone = $item->clone($code);
         $parameters = [
             'title' => 'calculationstate.clone.title',
@@ -162,7 +162,7 @@ class CalculationStateController extends AbstractEntityController
     {
         $application = $this->getApplicationParameters();
         $defaultParameter = $application->getDefault();
-        if ($defaultParameter->getStateId() === $item->getId()) {
+        if ($defaultParameter->getStateId() === $item->id) {
             $defaultParameter->resetStateId();
             $application->save();
         }

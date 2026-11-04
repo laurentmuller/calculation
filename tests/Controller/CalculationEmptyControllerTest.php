@@ -48,7 +48,7 @@ final class CalculationEmptyControllerTest extends ControllerTestCase
     protected function addEntities(): void
     {
         $product = $this->getProduct()
-            ->setPrice(0.0);
+            ->withPrice(0.0);
         $this->addEntity($product);
         $calculation = $this->getCalculation()
             ->addProduct($product);

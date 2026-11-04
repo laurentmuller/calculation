@@ -49,7 +49,7 @@ final class GroupRepositoryTest extends AbstractRepositoryTestCase
         self::assertNull($actual);
 
         $group = $this->getGroup();
-        $actual = $this->repository->findGroupCode((int) $group->getId());
+        $actual = $this->repository->findGroupCode((int) $group->id);
         self::assertNotNull($actual);
     }
 
@@ -63,12 +63,12 @@ final class GroupRepositoryTest extends AbstractRepositoryTestCase
         self::assertEmpty($actual);
 
         $group = new Group();
-        $group->setCode('My Code');
+        $group->withCode('My Code');
         $this->addEntity($group);
 
         $category = new Category();
-        $category->setCode('My Code')
-            ->setGroup($group);
+        $category->withCode('My Code')
+            ->withGroup($group);
         $this->addEntity($category);
 
         try {

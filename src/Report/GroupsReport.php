@@ -108,22 +108,22 @@ class GroupsReport extends AbstractArrayReport
     {
         $emptyValue = \array_fill(0, 5, '');
         $table->startRow()
-            ->add($group->getCode())
-            ->add($group->getDescription())
+            ->add($group->code)
+            ->add($group->description)
             ->add($this->formatInt($group->countCategories()))
             ->add($this->formatInt($group->countProducts()))
             ->add($this->formatInt($group->countTasks()));
-        if ($group->hasMargins()) {
+        if (!$group->isEmptyMargins()) {
             $skip = false;
-            $margins = $group->getMargins();
+            $margins = $group->margins;
             foreach ($margins as $margin) {
                 if ($skip) {
                     $table->startRow()
                         ->addValues(...$emptyValue);
                 }
-                $table->addCellAmount($margin->getMinimum())
-                    ->addCellAmount($margin->getMaximum())
-                    ->addCellPercent($margin->getMargin())
+                $table->addCellAmount($margin->minimum)
+                    ->addCellAmount($margin->maximum)
+                    ->addCellPercent($margin->margin)
                     ->endRow();
                 $skip = true;
             }

@@ -50,9 +50,9 @@ final class CalculationBelowControllerTest extends ControllerTestCase
         $product = $this->getProduct();
         $calculation = $this->getCalculation()
             ->addProduct($product)
-            ->setItemsTotal(1.0)
-            ->setGlobalMargin(2.0)
-            ->setOverallTotal(1.0);
+            ->withItemsTotal(1.0)
+            ->withGlobalMargin(2.0)
+            ->withOverallTotal(1.0);
         $this->addEntity($calculation);
     }
 

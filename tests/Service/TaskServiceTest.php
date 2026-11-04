@@ -40,7 +40,7 @@ final class TaskServiceTest extends TestCase
         self::assertEmpty($actual->getItems());
         self::assertSame($quantity, $actual->getQuantity());
         self::assertSame(0.0, $actual->getOverall());
-        self::assertSame($task->getId(), $actual->getTask()->getId());
+        self::assertSame($task->id, $actual->getTask()->id);
     }
 
     public function testComputeQueryNoTask(): void
@@ -69,7 +69,7 @@ final class TaskServiceTest extends TestCase
         self::assertNotNull($actual);
         self::assertCount(1, $actual->getItems());
         self::assertSame($quantity, $actual->getQuantity());
-        self::assertSame($task->getId(), $actual->getTask()->getId());
+        self::assertSame($task->id, $actual->getTask()->id);
     }
 
     public function testGetSortedTasks(): void
@@ -80,7 +80,7 @@ final class TaskServiceTest extends TestCase
         $tasks = $service->getSortedTasks();
         self::assertCount(1, $tasks);
         $actual = $tasks[0];
-        self::assertSame($task->getName(), $actual->getName());
+        self::assertSame($task->name, $actual->name);
     }
 
     public function testResultSerialize(): void
@@ -89,8 +89,8 @@ final class TaskServiceTest extends TestCase
         $result = new TaskComputeResult($task, 1.0);
 
         $expected = [
-            'id' => $task->getId(),
-            'unit' => $task->getUnit(),
+            'id' => $task->id,
+            'unit' => $task->unit,
             'categoryId' => $task->getCategoryId(),
             'quantity' => 1.0,
             'overall' => 0.0,
@@ -115,10 +115,10 @@ final class TaskServiceTest extends TestCase
 
     private function createTask(): Task
     {
-        $task = new Task();
-        $task->setName('task');
-        $category = new Category();
-        $category->setCode('code');
+        $task = new Task()
+            ->withName('task');
+        $category = new Category()
+            ->withCode('code');
         $category->addTask($task);
         self::setId($category);
 
@@ -127,8 +127,8 @@ final class TaskServiceTest extends TestCase
 
     private function createTaskItem(Task $task): TaskItem
     {
-        $item = new TaskItem();
-        $item->setName('taskitem');
+        $item = new TaskItem()
+            ->withName('taskitem');
         $task->addItem($item);
 
         return self::setId($item);

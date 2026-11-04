@@ -51,7 +51,7 @@ final class LogsReportTest extends TestCase
         $logChannel1 = new LogChannel($log1->getChannel());
 
         $log2 = Log::instance(2);
-        $log2->setCreatedAt(DateUtils::add($log1->getCreatedAt(), 'P7D'))
+        $log2->withCreatedAt(DateUtils::add($log1->createdAt, 'P7D'))
             ->setLevel(PsrLevel::ALERT)
             ->setChannel('doctrine');
         $logLevel2 = new LogLevel($log2->getLevel());

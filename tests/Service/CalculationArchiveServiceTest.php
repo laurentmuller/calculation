@@ -66,8 +66,8 @@ final class CalculationArchiveServiceTest extends TestCase
     {
         $expected = new DatePoint('2024-02-01');
         $stateEditable = new CalculationState();
-        $stateEditable->setCode('editable')
-            ->setEditable(true);
+        $stateEditable->withCode('editable')
+            ->withEditable(true);
         $this->setCalculationStates([$stateEditable]);
         $this->setCalculationDate('2024-03-01');
         $service = $this->createService();
@@ -89,8 +89,8 @@ final class CalculationArchiveServiceTest extends TestCase
     public function testCreateQueryWithSessionSources(): void
     {
         $expected = new CalculationState();
-        $expected->setCode('not_editable')
-            ->setEditable(false);
+        $expected->withCode('not_editable')
+            ->withEditable(false);
         self::setId($expected);
         $this->setCalculationStates([$expected]);
 
@@ -105,8 +105,8 @@ final class CalculationArchiveServiceTest extends TestCase
     public function testCreateQueryWithSessionTarget(): void
     {
         $expected = new CalculationState();
-        $expected->setCode('not_editable')
-            ->setEditable(false);
+        $expected->withCode('not_editable')
+            ->withEditable(false);
         self::setId($expected);
         $this->setCalculationStates([$expected]);
 
@@ -124,8 +124,8 @@ final class CalculationArchiveServiceTest extends TestCase
     public function testCreateQueryWithSources(): void
     {
         $stateEditable = new CalculationState();
-        $stateEditable->setCode('editable')
-            ->setEditable(true);
+        $stateEditable->withCode('editable')
+            ->withEditable(true);
         $this->setCalculationStates([$stateEditable]);
 
         $service = $this->createService();
@@ -229,15 +229,15 @@ final class CalculationArchiveServiceTest extends TestCase
     public function testUpdateWithNotSimulate(): void
     {
         $stateEditable = new CalculationState();
-        $stateEditable->setCode('editable')
-            ->setEditable(true);
+        $stateEditable->withCode('editable')
+            ->withEditable(true);
         $stateNotEditable = new CalculationState();
-        $stateNotEditable->setCode('not_editable')
-            ->setEditable(false);
+        $stateNotEditable->withCode('not_editable')
+            ->withEditable(false);
         $this->setCalculationStates([$stateEditable, $stateNotEditable]);
 
         $calculation = new Calculation();
-        $calculation->setState($stateEditable);
+        $calculation->withState($stateEditable);
         $this->setCalculations([$calculation]);
 
         $query = new CalculationArchiveQuery();
@@ -253,15 +253,15 @@ final class CalculationArchiveServiceTest extends TestCase
     public function testUpdateWithSimulate(): void
     {
         $stateEditable = new CalculationState();
-        $stateEditable->setCode('editable')
-            ->setEditable(true);
+        $stateEditable->withCode('editable')
+            ->withEditable(true);
         $stateNotEditable = new CalculationState();
-        $stateNotEditable->setCode('not_editable')
-            ->setEditable(false);
+        $stateNotEditable->withCode('not_editable')
+            ->withEditable(false);
         $this->setCalculationStates([$stateEditable, $stateNotEditable]);
 
         $calculation = new Calculation();
-        $calculation->setState($stateEditable);
+        $calculation->withState($stateEditable);
         $this->setCalculations([$calculation]);
 
         $query = new CalculationArchiveQuery();
@@ -276,12 +276,12 @@ final class CalculationArchiveServiceTest extends TestCase
     public function testWithSameState(): void
     {
         $state = new CalculationState();
-        $state->setCode('editable')
-            ->setEditable(true);
+        $state->withCode('editable')
+            ->withEditable(true);
         $this->setCalculationStates([$state]);
 
         $calculation = new Calculation();
-        $calculation->setState($state);
+        $calculation->withState($state);
         $this->setCalculations([$calculation]);
 
         $query = new CalculationArchiveQuery();

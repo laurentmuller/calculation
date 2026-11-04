@@ -42,7 +42,7 @@ class LogFile implements \Countable
      */
     public function addLog(Log $log): self
     {
-        $this->logs[(int) $log->getId()] = $log;
+        $this->logs[(int) $log->id] = $log;
         $this->updateLevels($log->getLevel());
         $this->updateChannels($log->getChannel());
 

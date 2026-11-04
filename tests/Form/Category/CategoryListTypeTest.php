@@ -44,7 +44,7 @@ final class CategoryListTypeTest extends TypeTestCase
     {
         $category = $this->getCategory();
         $formData = [
-            'value' => $category->getId(),
+            'value' => $category->id,
         ];
         $model = FixtureDataForm::instance($category);
         $form = $this->factory->createBuilder(FormType::class, $model)

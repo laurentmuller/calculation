@@ -36,7 +36,7 @@ class UserListType extends AbstractListEntityType
     {
         parent::configureOptions($resolver);
         $resolver->setDefaults([
-            'choice_label' => 'NameAndEmail',
+            'choice_label' => 'nameAndEmail',
             'prepend_icon' => 'fa-regular fa-user',
             'query_builder' => static fn (UserRepository $repository): QueryBuilder => $repository->getSortedBuilder(),
         ]);

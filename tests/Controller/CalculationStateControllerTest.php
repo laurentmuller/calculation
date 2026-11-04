@@ -74,7 +74,7 @@ final class CalculationStateControllerTest extends EntityControllerTestCase
     public function testDelete(): void
     {
         $this->addEntities();
-        $uri = \sprintf('/calculationstate/delete/%d', (int) $this->getCalculationState()->getId());
+        $uri = \sprintf('/calculationstate/delete/%d', (int) $this->getCalculationState()->id);
         $this->checkDeleteEntity($uri);
     }
 
@@ -84,7 +84,7 @@ final class CalculationStateControllerTest extends EntityControllerTestCase
         $state = $this->getCalculationState();
 
         $userName = self::ROLE_ADMIN;
-        $uri = \sprintf('/calculationstate/delete/%d', (int) $state->getId());
+        $uri = \sprintf('/calculationstate/delete/%d', (int) $state->id);
 
         $this->loginUsername($userName);
         $crawler = $this->client->request(Request::METHOD_GET, $uri);
@@ -100,7 +100,7 @@ final class CalculationStateControllerTest extends EntityControllerTestCase
     public function testEdit(): void
     {
         $this->addEntities();
-        $uri = \sprintf('/calculationstate/edit/%d', (int) $this->getCalculationState()->getId());
+        $uri = \sprintf('/calculationstate/edit/%d', (int) $this->getCalculationState()->id);
         $data = [
             'calculation_state[code]' => 'New Code',
             'calculation_state[description]' => 'New Description',

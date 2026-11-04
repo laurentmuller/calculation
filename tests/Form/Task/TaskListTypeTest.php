@@ -44,7 +44,7 @@ final class TaskListTypeTest extends TypeTestCase
     {
         $task = $this->getTask();
         $formData = [
-            'value' => $task->getId(),
+            'value' => $task->id,
         ];
         $model = FixtureDataForm::instance($task);
         $form = $this->factory->createBuilder(FormType::class, $model)

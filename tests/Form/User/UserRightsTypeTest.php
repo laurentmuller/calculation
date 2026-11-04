@@ -36,7 +36,7 @@ final class UserRightsTypeTest extends TypeTestCase
     public function testFormView(): void
     {
         $user = new User();
-        $user->setUsername('username')
+        $user->withUsername('username')
             ->setRole(RoleInterface::ROLE_ADMIN);
         $data = [
             'username' => 'username',

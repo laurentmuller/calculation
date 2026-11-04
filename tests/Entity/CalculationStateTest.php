@@ -29,31 +29,31 @@ final class CalculationStateTest extends EntityValidatorTestCase
     public function testClone(): void
     {
         $state = new CalculationState();
-        $state->setCode('code');
+        $state->withCode('code');
 
         $clone = $state->clone();
-        self::assertSame($state->getCode(), $clone->getCode());
+        self::assertSame($state->code, $clone->code);
 
         $clone = $state->clone('new-state');
-        self::assertNotSame($state->getCode(), $clone->getCode());
-        self::assertSame('new-state', $clone->getCode());
+        self::assertNotSame($state->code, $clone->code);
+        self::assertSame('new-state', $clone->code);
     }
 
     public function testColor(): void
     {
         $state = new CalculationState();
-        self::assertSame('#000000', $state->getColor());
+        self::assertSame('#000000', $state->color);
 
-        $state->setColor('#010203');
-        self::assertSame('#010203', $state->getColor());
+        $state->withColor('#010203');
+        self::assertSame('#010203', $state->color);
     }
 
     public function testCompare(): void
     {
         $item1 = new CalculationState();
-        $item1->setCode('Code1');
+        $item1->withCode('Code1');
         $item2 = new CalculationState();
-        $item2->setCode('Code2');
+        $item2->withCode('Code2');
         $actual = $item1->compare($item2);
         self::assertSame(-1, $actual);
     }
@@ -61,21 +61,21 @@ final class CalculationStateTest extends EntityValidatorTestCase
     public function testDescription(): void
     {
         $state = new CalculationState();
-        self::assertNull($state->getDescription());
+        self::assertNull($state->description);
 
-        $state->setDescription('description');
-        self::assertSame('description', $state->getDescription());
+        $state->withDescription('description');
+        self::assertSame('description', $state->description);
     }
 
     public function testDuplicate(): void
     {
         $first = new CalculationState();
-        $first->setCode('code');
+        $first->withCode('code');
 
         try {
             $this->saveEntity($first);
             $second = new CalculationState();
-            $second->setCode('code');
+            $second->withCode('code');
             $results = $this->validate($second, 1);
             $this->validatePaths($results, 'code');
         } finally {
@@ -86,10 +86,10 @@ final class CalculationStateTest extends EntityValidatorTestCase
     public function testEditable(): void
     {
         $state = new CalculationState();
-        self::assertTrue($state->isEditable());
+        self::assertTrue($state->editable);
 
-        $state->setEditable(false);
-        self::assertFalse($state->isEditable());
+        $state->withEditable(false);
+        self::assertFalse($state->editable);
     }
 
     public function testInvalidCode(): void
@@ -102,12 +102,12 @@ final class CalculationStateTest extends EntityValidatorTestCase
     public function testNotDuplicate(): void
     {
         $first = new CalculationState();
-        $first->setCode('code');
+        $first->withCode('code');
 
         try {
             $this->saveEntity($first);
             $second = new CalculationState();
-            $second->setCode('code 2');
+            $second->withCode('code 2');
             $this->validate($second);
         } finally {
             $this->deleteEntity($first);
@@ -122,7 +122,7 @@ final class CalculationStateTest extends EntityValidatorTestCase
         self::assertInstanceOf(PdfRgbColor::class, $actual);
         self::assertTrue($expected->equals($actual));
 
-        $state->setColor('#010203');
+        $state->withColor('#010203');
         $expected = new PdfRgbColor(1, 2, 3);
         $actual = $state->getRgbColor();
         self::assertInstanceOf(PdfRgbColor::class, $actual);
@@ -132,7 +132,7 @@ final class CalculationStateTest extends EntityValidatorTestCase
     public function testValid(): void
     {
         $state = new CalculationState();
-        $state->setCode('code');
+        $state->withCode('code');
         $this->validate($state);
     }
 }

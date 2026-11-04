@@ -40,9 +40,9 @@ final class ProductProviderTest extends TestCase
     public function testProductsWithOneProduct(): void
     {
         $entity = new Product();
-        $entity->setDescription('description')
-            ->setSupplier('supplier')
-            ->setUnit('unit');
+        $entity->withDescription('description')
+            ->withSupplier('supplier')
+            ->withUnit('unit');
         $provider = $this->createProvider($entity);
         $actual = $provider->products();
         self::assertCount(1, $actual);
@@ -51,16 +51,16 @@ final class ProductProviderTest extends TestCase
     public function testProductsWithTwoCategories(): void
     {
         $category1 = new Category();
-        $category1->setCode('code 1');
+        $category1->withCode('code 1');
         $entity1 = new Product();
-        $entity1->setDescription('description 1')
-            ->setCategory($category1);
+        $entity1->withDescription('description 1')
+            ->withCategory($category1);
 
         $category2 = new Category();
-        $category2->setCode('code 2');
+        $category2->withCode('code 2');
         $entity2 = new Product();
-        $entity2->setDescription('description 2')
-            ->setCategory($category2);
+        $entity2->withDescription('description 2')
+            ->withCategory($category2);
 
         $provider = $this->createProvider($entity1, $entity2);
         $actual = $provider->products(2);
@@ -70,14 +70,14 @@ final class ProductProviderTest extends TestCase
     public function testProductsWithTwoProducts(): void
     {
         $category = new Category();
-        $category->setCode('code');
+        $category->withCode('code');
 
         $entity1 = new Product();
-        $entity1->setDescription('description 1')
-            ->setCategory($category);
+        $entity1->withDescription('description 1')
+            ->withCategory($category);
         $entity2 = new Product();
-        $entity2->setDescription('description 2')
-            ->setCategory($category);
+        $entity2->withDescription('description 2')
+            ->withCategory($category);
 
         $provider = $this->createProvider($entity1, $entity2);
         $actual = $provider->products(2);
@@ -87,9 +87,9 @@ final class ProductProviderTest extends TestCase
     public function testWithEntity(): void
     {
         $entity = new Product();
-        $entity->setDescription('description')
-            ->setSupplier('supplier')
-            ->setUnit('unit');
+        $entity->withDescription('description')
+            ->withSupplier('supplier')
+            ->withUnit('unit');
         $provider = $this->createProvider($entity);
 
         $actual = \count($provider);
@@ -127,7 +127,7 @@ final class ProductProviderTest extends TestCase
         $entity = [] === $entities ? null : $entities[0];
         $values = [] === $entities ? [] : \array_map(static fn (
             Product $product
-        ): string => (string) $product->getDescription(), $entities);
+        ): string => (string) $product->description, $entities);
 
         $repository = self::createStub(ProductRepository::class);
         $repository->method('findBy')

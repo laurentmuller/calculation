@@ -100,7 +100,7 @@ class AnonymousCommand
     private function updateCalculation(Generator $generator, Calculation $calculation, bool $company): void
     {
         $customer = $company ? $generator->company() : $generator->name();
-        $calculation->setCustomer($customer)
-            ->setDescription($generator->catchPhrase());
+        $calculation->withCustomer($customer)
+            ->withDescription($generator->catchPhrase());
     }
 }

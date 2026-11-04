@@ -114,9 +114,9 @@ final class GlobalMarginRepositoryTest extends AbstractRepositoryTestCase
     public function testPersist(): void
     {
         $margin = new GlobalMargin();
-        $margin->setMinimum(0.0)
-            ->setMaximum(100.0)
-            ->setMargin(1.1);
+        $margin->withMinimum(0.0)
+            ->withMaximum(100.0)
+            ->withMargin(1.1);
 
         try {
             $this->repository->persist($margin);

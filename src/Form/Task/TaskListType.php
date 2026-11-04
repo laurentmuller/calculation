@@ -42,7 +42,7 @@ class TaskListType extends AbstractListEntityType
             'choice_attr' => static fn (Task $task): array => [
                 'data-category-code' => $task->getCategoryCode(),
                 'data-category-id' => $task->getCategoryId(),
-                'data-unit' => $task->getUnit(),
+                'data-unit' => $task->unit,
             ],
             'query_builder' => $this->getSortedBuilder(...),
             'prepend_icon' => 'fa-solid fa-tasks',

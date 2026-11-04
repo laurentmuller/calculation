@@ -28,24 +28,20 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity implements Time
     use TimestampableTrait;
 
     /** The parent's category. */
-    protected ?Category $category = null;
+    public ?Category $category = null;
 
     /** The supplier. */
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
-    private ?string $supplier = null;
+    public ?string $supplier = null {
+        set => StringUtils::trim($value);
+    }
 
     /** The unit. */
     #[Assert\Length(max: 15)]
     #[ORM\Column(length: 15, nullable: true)]
-    private ?string $unit = null;
-
-    /**
-     * Get category.
-     */
-    public function getCategory(): ?Category
-    {
-        return $this->category;
+    public ?string $unit = null {
+        set => StringUtils::trim($value);
     }
 
     /**
@@ -53,7 +49,7 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity implements Time
      */
     public function getCategoryCode(): string
     {
-        return $this->getCategory()?->getCode() ?? '';
+        return $this->category->code ?? '';
     }
 
     /**
@@ -61,7 +57,7 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity implements Time
      */
     public function getCategoryId(): ?int
     {
-        return $this->getCategory()?->getId();
+        return $this->category?->id;
     }
 
     /**
@@ -69,7 +65,7 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity implements Time
      */
     public function getGroup(): ?Group
     {
-        return $this->getCategory()?->getGroup();
+        return $this->category?->group;
     }
 
     /**
@@ -77,29 +73,13 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity implements Time
      */
     public function getGroupCode(): string
     {
-        return $this->getGroup()?->getCode() ?? '';
-    }
-
-    /**
-     * Gets the supplier.
-     */
-    public function getSupplier(): ?string
-    {
-        return $this->supplier;
-    }
-
-    /**
-     * Get unit.
-     */
-    public function getUnit(): ?string
-    {
-        return $this->unit;
+        return $this->getGroup()->code ?? '';
     }
 
     /**
      * Set category.
      */
-    public function setCategory(?Category $category): static
+    public function withCategory(?Category $category): static
     {
         $this->category = $category;
 
@@ -109,9 +89,9 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity implements Time
     /**
      * Sets the supplier.
      */
-    public function setSupplier(?string $supplier): static
+    public function withSupplier(?string $supplier): static
     {
-        $this->supplier = StringUtils::trim($supplier);
+        $this->supplier = $supplier;
 
         return $this;
     }
@@ -119,9 +99,9 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity implements Time
     /**
      * Set unit.
      */
-    public function setUnit(?string $unit): static
+    public function withUnit(?string $unit): static
     {
-        $this->unit = StringUtils::trim($unit);
+        $this->unit = $unit;
 
         return $this;
     }

@@ -27,17 +27,13 @@ interface EntityInterface extends \Stringable
     /** The maximum length for a string property. */
     public const int MAX_STRING_LENGTH = 255;
 
+    /** Get the primary key identifier value or null if new entity. */
+    public ?int $id{get; set; }
+
     /**
      * Gets a string used to display in the user interface (UI).
      */
     public function getDisplay(): string;
-
-    /**
-     * Get the primary key identifier value.
-     *
-     * @return int|null the key identifier value or null if is a new entity
-     */
-    public function getId(): ?int;
 
     /**
      * Returns if this entity is new.

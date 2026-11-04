@@ -119,13 +119,13 @@ final class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         $date = $this->getDate();
         $state = $this->getCalculationState();
         $calculation = $this->getCalculation($state);
-        $calculation->setDate($date)
-            ->setOverallTotal(100.0);
+        $calculation->withDate($date)
+            ->withOverallTotal(100.0);
         $this->addEntity($calculation);
 
         $this->loginUsername(self::ROLE_ADMIN);
         $session = $this->getRequestStack()->getSession();
-        $session->set('calculation.update.states', [$state->getId()]);
+        $session->set('calculation.update.states', [$state->id]);
         $service = $this->getService(CalculationUpdateService::class);
         $query = $service->createQuery();
 
@@ -140,8 +140,8 @@ final class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         $date = $this->getDate();
         $state = $this->getCalculationState();
         $calculation = $this->getCalculation($state);
-        $calculation->setDate($date)
-            ->setOverallTotal(0.0);
+        $calculation->withDate($date)
+            ->withOverallTotal(0.0);
         $this->addEntity($calculation);
 
         $this->loginUsername(self::ROLE_ADMIN);
@@ -159,8 +159,8 @@ final class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         $date = $this->getDate();
         $state = $this->getCalculationState();
         $calculation = $this->getCalculation($state);
-        $calculation->setDate($date)
-            ->setOverallTotal(100.0);
+        $calculation->withDate($date)
+            ->withOverallTotal(100.0);
         $this->addEntity($calculation);
 
         $this->loginUsername(self::ROLE_ADMIN);
@@ -177,29 +177,29 @@ final class CalculationUpdateServiceTest extends AuthenticateWebTestCase
     public function testUpdateTotalNotEmpty(): void
     {
         $group = new Group();
-        $group->setCode('code');
+        $group->withCode('code');
         $this->addEntity($group);
         $groupMargin = new GroupMargin();
-        $groupMargin->setMaximum(1000.0)
-            ->setMargin(1.0);
+        $groupMargin->withMaximum(1000.0)
+            ->withMargin(1.0);
         $group->addMargin($groupMargin);
 
         $category = new Category();
-        $category->setCode('code');
-        $category->setGroup($group);
+        $category->withCode('code');
+        $category->withGroup($group);
         $this->addEntity($category);
 
         $product = new Product();
-        $product->setDescription('Product Test')
-            ->setPrice(100.0)
-            ->setCategory($category);
+        $product->withDescription('Product Test')
+            ->withPrice(100.0)
+            ->withCategory($category);
         $this->addEntity($product);
 
         $date = $this->getDate();
         $state = $this->getCalculationState();
         $calculation = $this->getCalculation($state)
             ->addProduct($product)
-            ->setDate($date);
+            ->withDate($date);
         $this->addEntity($calculation);
 
         $this->loginUsername(self::ROLE_ADMIN);

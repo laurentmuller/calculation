@@ -43,8 +43,8 @@ class CategoriesReport extends AbstractArrayReport
             $table->setGroupKey($key);
             foreach ($items as $item) {
                 $table->startRow()
-                    ->add($item->getCode(), 1, $style)
-                    ->add($item->getDescription())
+                    ->add($item->code, 1, $style)
+                    ->add($item->description)
                     ->add($this->formatInt($item->countProducts()))
                     ->add($this->formatInt($item->countTasks()))
                     ->endRow();

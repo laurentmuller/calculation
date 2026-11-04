@@ -58,7 +58,7 @@ final class ClosureSortTraitTest extends TestCase
         $product1 = $this->createProduct('Description1');
         $product2 = $this->createProduct('Description2', 2);
         $array = [$product1, $product2];
-        $closure = static fn (Product $a, Product $b): int => $a->getId() <=> $b->getId();
+        $closure = static fn (Product $a, Product $b): int => $a->id <=> $b->id;
         $actual = $this->sortByClosures($array, $closure);
         self::assertSame([$product1, $product2], $array);
         self::assertTrue($actual);
@@ -77,8 +77,8 @@ final class ClosureSortTraitTest extends TestCase
 
     private function createProduct(string $description = 'Description', int $id = 1): Product
     {
-        $product = new Product();
-        $product->setDescription($description);
+        $product = new Product()
+            ->withDescription($description);
 
         return self::setId($product, $id);
     }

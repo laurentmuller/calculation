@@ -26,21 +26,21 @@ final class CalculationDocumentTest extends TestCase
     public function testRender(): void
     {
         $calculation = new Calculation();
-        $calculation->setDescription('description')
-            ->setCustomer('customer')
-            ->setOverallTotal(1000.0)
-            ->setGlobalMargin(1.0)
-            ->setItemsTotal(1000.0)
-            ->setUserMargin(0.1);
+        $calculation->withDescription('description')
+            ->withCustomer('customer')
+            ->withOverallTotal(1000.0)
+            ->withGlobalMargin(1.0)
+            ->withItemsTotal(1000.0)
+            ->withUserMargin(0.1);
 
         $group = new CalculationGroup();
-        $group->setCode('Group');
+        $group->withCode('Group');
 
         $category = new CalculationCategory();
-        $category->setCode('Category');
+        $category->withCode('Category');
 
         $item = new CalculationItem();
-        $item->setDescription('Description');
+        $item->withDescription('Description');
         $group->addCategory($category);
         $category->addItem($item);
         $calculation->addGroup($group);
@@ -54,12 +54,12 @@ final class CalculationDocumentTest extends TestCase
     public function testRenderEmpty(): void
     {
         $calculation = new Calculation();
-        $calculation->setDescription('description')
-            ->setCustomer('customer')
-            ->setOverallTotal(1000.0)
-            ->setGlobalMargin(1.0)
-            ->setItemsTotal(1000.0)
-            ->setUserMargin(0.1);
+        $calculation->withDescription('description')
+            ->withCustomer('customer')
+            ->withOverallTotal(1000.0)
+            ->withGlobalMargin(1.0)
+            ->withItemsTotal(1000.0)
+            ->withUserMargin(0.1);
 
         $helper = self::createStub(DocumentHelperInterface::class);
         $document = new CalculationDocument($helper, $calculation);
@@ -70,20 +70,20 @@ final class CalculationDocumentTest extends TestCase
     public function testRenderUserMarginZero(): void
     {
         $calculation = new Calculation();
-        $calculation->setDescription('description')
-            ->setCustomer('customer')
-            ->setOverallTotal(1000.0)
-            ->setGlobalMargin(1.0)
-            ->setItemsTotal(1000.0);
+        $calculation->withDescription('description')
+            ->withCustomer('customer')
+            ->withOverallTotal(1000.0)
+            ->withGlobalMargin(1.0)
+            ->withItemsTotal(1000.0);
 
         $group = new CalculationGroup();
-        $group->setCode('Group');
+        $group->withCode('Group');
 
         $category = new CalculationCategory();
-        $category->setCode('Category');
+        $category->withCode('Category');
 
         $item = new CalculationItem();
-        $item->setDescription('Description');
+        $item->withDescription('Description');
         $group->addCategory($category);
         $category->addItem($item);
         $calculation->addGroup($group);

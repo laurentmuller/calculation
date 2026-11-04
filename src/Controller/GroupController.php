@@ -74,11 +74,11 @@ class GroupController extends AbstractEntityController
     #[CloneEntityRoute]
     public function clone(Request $request, Group $item): Response
     {
-        $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
+        $code = $this->trans('common.clone_description', ['%description%' => $item->code]);
         $clone = $item->clone($code);
         $parameters = [
             'title' => 'group.clone.title',
-            'params' => ['id' => $item->getId()],
+            'params' => ['id' => $item->id],
         ];
 
         return $this->editEntity($request, $clone, $parameters);

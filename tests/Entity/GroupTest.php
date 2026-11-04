@@ -26,19 +26,19 @@ final class GroupTest extends EntityValidatorTestCase
     public function testCategory(): void
     {
         $group = new Group();
-        self::assertFalse($group->hasCategories());
-        self::assertEmpty($group->getCategories());
-        self::assertEmpty($group->countCategories());
+        self::assertTrue($group->isEmptyCategories());
+        self::assertEmpty($group->categories);
+        self::assertSame(0, $group->countCategories());
 
         $category = new Category();
         $group->addCategory($category);
-        self::assertTrue($group->hasCategories());
-        self::assertCount(1, $group->getCategories());
+        self::assertFalse($group->isEmptyCategories());
+        self::assertCount(1, $group->categories);
         self::assertSame(1, $group->countCategories());
 
         $group->removeCategory($category);
-        self::assertFalse($group->hasCategories());
-        self::assertEmpty($group->getCategories());
+        self::assertTrue($group->isEmptyCategories());
+        self::assertEmpty($group->categories);
         self::assertSame(0, $group->countCategories());
     }
 
@@ -50,23 +50,23 @@ final class GroupTest extends EntityValidatorTestCase
         $group->addMargin($margin);
 
         $clone = clone $group;
-        foreach ($clone->getMargins() as $currentMargin) {
-            self::assertNull($currentMargin->getId());
+        foreach ($clone->margins as $currentMargin) {
+            self::assertNull($currentMargin->id);
         }
 
         $clone = $group->clone();
-        self::assertNull($clone->getCode());
+        self::assertNull($clone->code);
 
         $clone = $group->clone('new-code');
-        self::assertSame('new-code', $clone->getCode());
+        self::assertSame('new-code', $clone->code);
     }
 
     public function testCompare(): void
     {
         $item1 = new Group();
-        $item1->setCode('Code1');
+        $item1->withCode('Code1');
         $item2 = new Group();
-        $item2->setCode('Code2');
+        $item2->withCode('Code2');
         $actual = $item1->compare($item2);
         self::assertSame(-1, $actual);
     }
@@ -80,10 +80,10 @@ final class GroupTest extends EntityValidatorTestCase
         self::assertSame(0, $group->countProducts());
         self::assertSame(0, $group->countTasks());
 
-        self::assertFalse($group->hasCategories());
-        self::assertFalse($group->hasMargins());
-        self::assertFalse($group->hasProducts());
-        self::assertFalse($group->hasTasks());
+        self::assertTrue($group->isEmptyCategories());
+        self::assertTrue($group->isEmptyMargins());
+        self::assertTrue($group->isEmptyProducts());
+        self::assertTrue($group->isEmptyTasks());
 
         $group->addMargin(new GroupMargin());
         self::assertSame(0, $group->countCategories());
@@ -92,10 +92,10 @@ final class GroupTest extends EntityValidatorTestCase
         self::assertSame(0, $group->countProducts());
         self::assertSame(0, $group->countTasks());
 
-        self::assertFalse($group->hasCategories());
-        self::assertTrue($group->hasMargins());
-        self::assertFalse($group->hasProducts());
-        self::assertFalse($group->hasTasks());
+        self::assertTrue($group->isEmptyCategories());
+        self::assertFalse($group->isEmptyMargins());
+        self::assertTrue($group->isEmptyProducts());
+        self::assertTrue($group->isEmptyTasks());
 
         $category = new Category();
         $group->addCategory($category);
@@ -104,10 +104,10 @@ final class GroupTest extends EntityValidatorTestCase
         self::assertSame(0, $group->countProducts());
         self::assertSame(0, $group->countTasks());
 
-        self::assertTrue($group->hasCategories());
-        self::assertTrue($group->hasMargins());
-        self::assertFalse($group->hasProducts());
-        self::assertFalse($group->hasTasks());
+        self::assertFalse($group->isEmptyCategories());
+        self::assertFalse($group->isEmptyMargins());
+        self::assertTrue($group->isEmptyProducts());
+        self::assertTrue($group->isEmptyTasks());
 
         $category->addProduct(new Product());
         self::assertSame(1, $group->countItems());
@@ -115,10 +115,10 @@ final class GroupTest extends EntityValidatorTestCase
         self::assertSame(1, $group->countProducts());
         self::assertSame(0, $group->countTasks());
 
-        self::assertTrue($group->hasCategories());
-        self::assertTrue($group->hasMargins());
-        self::assertTrue($group->hasProducts());
-        self::assertFalse($group->hasTasks());
+        self::assertFalse($group->isEmptyCategories());
+        self::assertFalse($group->isEmptyMargins());
+        self::assertFalse($group->isEmptyProducts());
+        self::assertTrue($group->isEmptyTasks());
 
         $category->addTask(new Task());
         self::assertSame(2, $group->countItems());
@@ -126,21 +126,21 @@ final class GroupTest extends EntityValidatorTestCase
         self::assertSame(1, $group->countProducts());
         self::assertSame(1, $group->countTasks());
 
-        self::assertTrue($group->hasCategories());
-        self::assertTrue($group->hasMargins());
-        self::assertTrue($group->hasProducts());
-        self::assertTrue($group->hasTasks());
+        self::assertFalse($group->isEmptyCategories());
+        self::assertFalse($group->isEmptyMargins());
+        self::assertFalse($group->isEmptyProducts());
+        self::assertFalse($group->isEmptyTasks());
     }
 
     public function testDuplicate(): void
     {
         $first = new Group();
-        $first->setCode('code');
+        $first->withCode('code');
 
         try {
             $this->saveEntity($first);
             $second = new Group();
-            $second->setCode('code');
+            $second->withCode('code');
             $results = $this->validate($second, 1);
             $this->validatePaths($results, 'code');
         } finally {
@@ -151,9 +151,9 @@ final class GroupTest extends EntityValidatorTestCase
     public function testFields(): void
     {
         $group = new Group();
-        self::assertNull($group->getDescription());
-        $group->setDescription('description');
-        self::assertSame('description', $group->getDescription());
+        self::assertNull($group->description);
+        $group->withDescription('description');
+        self::assertSame('description', $group->description);
     }
 
     public function testFindMargin(): void
@@ -176,19 +176,19 @@ final class GroupTest extends EntityValidatorTestCase
     public function testGroupMargin(): void
     {
         $group = new Group();
-        self::assertFalse($group->hasMargins());
-        self::assertEmpty($group->getMargins());
+        self::assertTrue($group->isEmptyMargins());
+        self::assertEmpty($group->margins);
         self::assertSame(0, $group->countMargins());
 
         $margin = $this->createMargin();
         $group->addMargin($margin);
-        self::assertTrue($group->hasMargins());
-        self::assertCount(1, $group->getMargins());
+        self::assertFalse($group->isEmptyMargins());
+        self::assertCount(1, $group->margins);
         self::assertSame(1, $group->countMargins());
 
         $group->removeMargin($margin);
-        self::assertFalse($group->hasMargins());
-        self::assertEmpty($group->getMargins());
+        self::assertTrue($group->isEmptyMargins());
+        self::assertEmpty($group->margins);
         self::assertSame(0, $group->countMargins());
     }
 
@@ -202,12 +202,12 @@ final class GroupTest extends EntityValidatorTestCase
     public function testNotDuplicate(): void
     {
         $first = new Group();
-        $first->setCode('code1');
+        $first->withCode('code1');
 
         try {
             $this->saveEntity($first);
             $second = new Group();
-            $second->setCode('code2');
+            $second->withCode('code2');
             $this->validate($second);
         } finally {
             $this->deleteEntity($first);
@@ -217,17 +217,15 @@ final class GroupTest extends EntityValidatorTestCase
     public function testValid(): void
     {
         $object = new Group();
-        $object->setCode('code');
+        $object->withCode('code');
         $this->validate($object);
     }
 
     private function createMargin(): GroupMargin
     {
-        $margin = new GroupMargin();
-        $margin->setMinimum(0)
-            ->setMaximum(100)
-            ->setMargin(1.1);
-
-        return $margin;
+        return new GroupMargin()
+            ->withMinimum(0)
+            ->withMaximum(100)
+            ->withMargin(1.1);
     }
 }

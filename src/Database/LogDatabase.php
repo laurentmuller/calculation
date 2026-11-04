@@ -55,13 +55,13 @@ class LogDatabase extends AbstractDatabase
         $stmt = $this->getStatement(self::SQL_INSERT);
 
         // parameters
-        $stmt->bindValue(':id', $log->getId(), \SQLITE3_INTEGER);
-        $stmt->bindValue(':created_at', $this->dateToInt($log->getCreatedAt()), \SQLITE3_INTEGER);
+        $stmt->bindValue(':id', $log->id, \SQLITE3_INTEGER);
+        $stmt->bindValue(':created_at', $this->dateToInt($log->createdAt), \SQLITE3_INTEGER);
         $stmt->bindValue(':channel', $log->getChannel());
         $stmt->bindValue(':level', $log->getLevel());
-        $stmt->bindValue(':user', $log->getUser());
-        $stmt->bindValue(':message', $log->getMessage());
-        $stmt->bindValue(':context', $this->arrayToString($log->getContext()));
+        $stmt->bindValue(':user', $log->user);
+        $stmt->bindValue(':message', $log->message);
+        $stmt->bindValue(':context', $this->arrayToString($log->context));
 
         // execute
         return false !== $stmt->execute();

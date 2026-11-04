@@ -51,7 +51,7 @@ final class EditItemDialogTypeTest extends TypeTestCase
         $formData = [
             'description' => 'Description',
             'unit' => 'Unit',
-            'category' => $category->getId(),
+            'category' => $category->id,
             'price' => 1.00,
             'quantity' => 1.00,
         ];

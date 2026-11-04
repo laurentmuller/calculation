@@ -24,10 +24,10 @@ final class LogFilterServiceTest extends TestCase
     public function testByChannel(): void
     {
         $log1 = Log::instance(1)
-            ->setCreatedAt(new DatePoint('2024-01-01'))
+            ->withCreatedAt(new DatePoint('2024-01-01'))
             ->setChannel('channel1');
         $log2 = Log::instance(1)
-            ->setCreatedAt(new DatePoint('2024-02-02'))
+            ->withCreatedAt(new DatePoint('2024-02-02'))
             ->setChannel('channel2');
         $filter = LogFilterService::instance(channel: 'channel1');
         self::assertSameLogs($filter, [$log1, $log2], $log1);
@@ -36,10 +36,10 @@ final class LogFilterServiceTest extends TestCase
     public function testByLevel(): void
     {
         $log1 = Log::instance(1)
-            ->setCreatedAt(new DatePoint('2024-01-01'))
+            ->withCreatedAt(new DatePoint('2024-01-01'))
             ->setLevel(PsrLevel::ALERT);
         $log2 = Log::instance(1)
-            ->setCreatedAt(new DatePoint('2024-02-02'))
+            ->withCreatedAt(new DatePoint('2024-02-02'))
             ->setLevel(PsrLevel::INFO);
         $filter = LogFilterService::instance(level: PsrLevel::ALERT);
         self::assertSameLogs($filter, [$log1, $log2], $log1);
@@ -48,11 +48,11 @@ final class LogFilterServiceTest extends TestCase
     public function testByNone(): void
     {
         $log1 = Log::instance(1)
-            ->setCreatedAt(new DatePoint('2024-01-01'))
-            ->setMessage('message');
+            ->withCreatedAt(new DatePoint('2024-01-01'))
+            ->withMessage('message');
         $log2 = Log::instance(1)
-            ->setCreatedAt(new DatePoint('2024-02-02'))
-            ->setMessage('message');
+            ->withCreatedAt(new DatePoint('2024-02-02'))
+            ->withMessage('message');
         $filter = LogFilterService::instance();
         self::assertSameLogs($filter, [$log1, $log2], $log1, $log2);
     }
@@ -60,11 +60,11 @@ final class LogFilterServiceTest extends TestCase
     public function testByUser(): void
     {
         $log1 = Log::instance(1)
-            ->setCreatedAt(new DatePoint('2024-01-01'))
-            ->setUser('user1');
+            ->withCreatedAt(new DatePoint('2024-01-01'))
+            ->withUser('user1');
         $log2 = Log::instance(1)
-            ->setCreatedAt(new DatePoint('2024-02-02'))
-            ->setUser('user2');
+            ->withCreatedAt(new DatePoint('2024-02-02'))
+            ->withUser('user2');
         $filter = LogFilterService::instance(value: 'user1');
         self::assertSameLogs($filter, [$log1, $log2], $log1);
     }
@@ -72,11 +72,11 @@ final class LogFilterServiceTest extends TestCase
     public function testByValue(): void
     {
         $log1 = Log::instance(1)
-            ->setCreatedAt(new DatePoint('2024-01-01'))
-            ->setMessage('message1');
+            ->withCreatedAt(new DatePoint('2024-01-01'))
+            ->withMessage('message1');
         $log2 = Log::instance(1)
-            ->setCreatedAt(new DatePoint('2024-02-02'))
-            ->setMessage('message2');
+            ->withCreatedAt(new DatePoint('2024-02-02'))
+            ->withMessage('message2');
         $filter = LogFilterService::instance(value: 'message1');
         self::assertSameLogs($filter, [$log1, $log2], $log1);
     }

@@ -39,9 +39,9 @@ trait GlobalMarginTrait
         }
 
         $this->globalMargin = new GlobalMargin();
-        $this->globalMargin->setMinimum($minimum)
-            ->setMaximum($maximum)
-            ->setMargin($margin);
+        $this->globalMargin->withMinimum($minimum)
+            ->withMaximum($maximum)
+            ->withMargin($margin);
 
         return $this->addEntity($this->globalMargin);
     }

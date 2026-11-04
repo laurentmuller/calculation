@@ -33,6 +33,17 @@ class CalculationState extends AbstractCodeEntity
     /** The default color (black). */
     public const string DEFAULT_COLOR = '#000000';
 
+    /** The color used in the user interface (UI). */
+    #[Assert\CssColor]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 10)]
+    #[ORM\Column(length: 10, options: ['default' => self::DEFAULT_COLOR])]
+    public string $color = self::DEFAULT_COLOR;
+
+    /** The editable state. */
+    #[ORM\Column(options: ['default' => true])]
+    public bool $editable = true;
+
     /**
      * The calculations.
      *
@@ -40,17 +51,6 @@ class CalculationState extends AbstractCodeEntity
      */
     #[ORM\OneToMany(targetEntity: Calculation::class, mappedBy: 'state', fetch: self::EXTRA_LAZY)]
     private Collection $calculations;
-
-    /** The color used in the user interface (UI). */
-    #[Assert\CssColor]
-    #[Assert\NotBlank]
-    #[Assert\Length(max: 10)]
-    #[ORM\Column(length: 10, options: ['default' => self::DEFAULT_COLOR])]
-    private string $color = self::DEFAULT_COLOR;
-
-    /** The editable state. */
-    #[ORM\Column(options: ['default' => true])]
-    private bool $editable = true;
 
     public function __construct()
     {
@@ -76,14 +76,6 @@ class CalculationState extends AbstractCodeEntity
     }
 
     /**
-     * Get color as a hexadecimal value.
-     */
-    public function getColor(): string
-    {
-        return $this->color;
-    }
-
-    /**
      * Gets this color as a PdfRgbColor object.
      */
     public function getRgbColor(): ?PdfRgbColor
@@ -100,17 +92,9 @@ class CalculationState extends AbstractCodeEntity
     }
 
     /**
-     * Get a value indicating if calculations are editable.
-     */
-    public function isEditable(): bool
-    {
-        return $this->editable;
-    }
-
-    /**
      * Set color as a hexadecimal value.
      */
-    public function setColor(string $color): self
+    public function withColor(string $color): self
     {
         $this->color = $color;
 
@@ -120,7 +104,7 @@ class CalculationState extends AbstractCodeEntity
     /**
      * Set a value indicating if calculations are editable.
      */
-    public function setEditable(bool $editable): self
+    public function withEditable(bool $editable): self
     {
         $this->editable = $editable;
 

@@ -23,19 +23,19 @@ final class CustomersReportTest extends TestCase
     public function testRender(): void
     {
         $customer1 = new Customer();
-        $customer1->setFirstName('First Name')
-            ->setLastName('A Last Name')
-            ->setEmail('email@email.com');
+        $customer1->withFirstName('First Name')
+            ->withLastName('A Last Name')
+            ->withEmail('email@email.com');
 
         $customer2 = new Customer();
-        $customer2->setFirstName('First Name')
-            ->setLastName('B Last Name')
-            ->setEmail('email@email.com');
+        $customer2->withFirstName('First Name')
+            ->withLastName('B Last Name')
+            ->withEmail('email@email.com');
 
         $customer3 = new Customer();
-        $customer3->setFirstName('')
-            ->setLastName('')
-            ->setEmail('email@email.com');
+        $customer3->withFirstName('')
+            ->withLastName('')
+            ->withEmail('email@email.com');
 
         $helper = self::createStub(DocumentHelperInterface::class);
         $report = new CustomersReport($helper, [$customer1, $customer2, $customer3]);

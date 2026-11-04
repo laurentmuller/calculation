@@ -96,49 +96,49 @@ final class LogTest extends TestCase
     {
         $date = new DatePoint();
         $log1 = new Log();
-        $log1->setCreatedAt($date);
+        $log1->withCreatedAt($date);
         $log2 = new Log();
-        $log2->setCreatedAt($date);
+        $log2->withCreatedAt($date);
         self::assertSame(0, $log1->compare($log2));
         $date = DateUtils::sub($date, 'PT1H');
-        $log2->setCreatedAt($date);
+        $log2->withCreatedAt($date);
         self::assertSame(1, $log1->compare($log2));
     }
 
     public function testContext(): void
     {
         $log = new Log();
-        self::assertNull($log->getContext());
+        self::assertNull($log->context);
 
         $expected = ['key' => 'value'];
-        $log->setContext($expected);
-        self::assertSame($expected, $log->getContext());
+        $log->withContext($expected);
+        self::assertSame($expected, $log->context);
     }
 
     public function testDisplayAndMessage(): void
     {
         $log = new Log();
         self::assertSame('', $log->getDisplay());
-        self::assertSame('', $log->getMessage());
+        self::assertSame('', $log->message);
 
-        $log->setMessage('message');
+        $log->withMessage('message');
         self::assertSame('message', $log->getDisplay());
-        self::assertSame('message', $log->getMessage());
+        self::assertSame('message', $log->message);
     }
 
     public function testDoctrineMessage(): void
     {
         $log = new Log();
-        $log->setMessage('message');
+        $log->withMessage('message');
         $log->setChannel('doctrine');
         $actual = $log->isDoctrineMessage();
         self::assertFalse($actual);
 
-        $log->setMessage('Executing statement: SELECT * FROM table');
+        $log->withMessage('Executing statement: SELECT * FROM table');
         $actual = $log->isDoctrineMessage();
         self::assertTrue($actual);
 
-        $log->setMessage('Executing query: SELECT * FROM table');
+        $log->withMessage('Executing query: SELECT * FROM table');
         $actual = $log->isDoctrineMessage();
         self::assertTrue($actual);
     }
@@ -146,7 +146,7 @@ final class LogTest extends TestCase
     public function testFormatMessageDefault(): void
     {
         $log = new Log();
-        $log->setMessage('message');
+        $log->withMessage('message');
         $formatter = $this->createSqlFormatter();
         $actual = $log->formatMessage($formatter);
         self::assertSame('message', $actual);
@@ -155,8 +155,8 @@ final class LogTest extends TestCase
     public function testFormatMessageWithContext(): void
     {
         $log = new Log();
-        $log->setMessage('message');
-        $log->setContext(['key' => 'value']);
+        $log->withMessage('message');
+        $log->withContext(['key' => 'value']);
         $formatter = $this->createSqlFormatter();
         $actual = $log->formatMessage($formatter);
         self::assertSame("message\nContext:\n[\n  'key' => 'value'\n]", $actual);
@@ -166,7 +166,7 @@ final class LogTest extends TestCase
     {
         $log = new Log();
         $log->setChannel('doctrine');
-        $log->setMessage('Executing statement');
+        $log->withMessage('Executing statement');
         $formatter = $this->createSqlFormatter();
         $actual = $log->formatMessage($formatter);
         self::assertSame('Executing statement', $actual);
@@ -175,8 +175,8 @@ final class LogTest extends TestCase
     public function testFormatMessageWithUser(): void
     {
         $log = new Log();
-        $log->setMessage('message');
-        $log->setUser('username');
+        $log->withMessage('message');
+        $log->withUser('username');
         $formatter = $this->createSqlFormatter();
         $actual = $log->formatMessage($formatter);
         self::assertSame("message\nUser:\nusername", $actual);
@@ -186,20 +186,20 @@ final class LogTest extends TestCase
     {
         $date = new DatePoint();
         $log = new Log();
-        $log->setCreatedAt($date);
-        $actual = $log->getCreatedAt();
+        $log->withCreatedAt($date);
+        $actual = $log->createdAt;
         self::assertTimestampEquals($date, $actual);
         $expected = FormatUtils::formatDateTime($date, \IntlDateFormatter::SHORT, \IntlDateFormatter::MEDIUM);
-        $actual = $log->getFormattedDate();
+        $actual = $log->formattedDate;
         self::assertSame($expected, $actual);
     }
 
     public function testInstance(): void
     {
         $log = Log::instance();
-        self::assertNull($log->getId());
+        self::assertNull($log->id);
         $log = Log::instance(15);
-        self::assertSame(15, $log->getId());
+        self::assertSame(15, $log->id);
     }
 
     public function testLevel(): void
@@ -238,19 +238,19 @@ final class LogTest extends TestCase
     {
         $expected = new DatePoint();
         $log = new Log();
-        $log->setCreatedAt($expected);
-        $actual = $log->getTimestamp();
+        $log->withCreatedAt($expected);
+        $actual = $log->timestamp;
         self::assertTimestampEquals($expected, $actual);
     }
 
     public function testUser(): void
     {
         $log = new Log();
-        self::assertNull($log->getUser());
+        self::assertNull($log->user);
 
         $expected = 'my_user_name';
-        $log->setUser($expected);
-        self::assertSame($expected, $log->getUser());
+        $log->withUser($expected);
+        self::assertSame($expected, $log->user);
     }
 
     private function createSqlFormatter(): SqlFormatter

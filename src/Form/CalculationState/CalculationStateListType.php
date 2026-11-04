@@ -46,6 +46,6 @@ class CalculationStateListType extends AbstractListEntityType
 
     private function translateEditable(CalculationState $entity): string
     {
-        return $this->translator->trans(\sprintf('calculationstate.list.editable_%d', (int) $entity->isEditable()));
+        return $this->translator->trans(\sprintf('calculationstate.list.editable_%d', (int) $entity->editable));
     }
 }

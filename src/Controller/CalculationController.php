@@ -80,12 +80,12 @@ class CalculationController extends AbstractEntityController
     #[CloneEntityRoute]
     public function clone(Request $request, Calculation $item): Response
     {
-        $description = $this->trans('common.clone_description', ['%description%' => $item->getDescription()]);
+        $description = $this->trans('common.clone_description', ['%description%' => $item->description]);
         $state = $this->getApplicationParameters()->getDefaultState();
         $clone = $item->clone($state, $description);
         $parameters = [
             'title' => 'calculation.clone.title',
-            'params' => ['id' => $item->getId()],
+            'params' => ['id' => $item->id],
             'overall_below' => $this->isMarginBelow($clone),
         ];
 
@@ -219,9 +219,9 @@ class CalculationController extends AbstractEntityController
         $parameters['groups'] = $this->calculationService->createGroups($item);
         $parameters['editable'] = $item->isEditable();
         if ($item->isEditable()) {
-            $parameters['groupIndex'] = $item->getGroupsCount();
-            $parameters['categoryIndex'] = $item->getCategoriesCount();
-            $parameters['itemIndex'] = $item->getItemsCount();
+            $parameters['groupIndex'] = $item->groupsCount;
+            $parameters['categoryIndex'] = $item->categoriesCount;
+            $parameters['itemIndex'] = $item->itemsCount;
         }
 
         return parent::editEntity($request, $item, $parameters);
@@ -243,7 +243,7 @@ class CalculationController extends AbstractEntityController
         $application = $this->getApplicationParameters();
         $state = $application->getDefaultState();
         if ($state instanceof CalculationState) {
-            $calculation->setState($state);
+            $calculation->withState($state);
         }
         $product = $application->getDefaultProduct();
         if ($product instanceof Product) {
@@ -279,7 +279,7 @@ class CalculationController extends AbstractEntityController
 
         return $this->generateUrl(
             'calculation_show',
-            ['id' => $calculation->getId()],
+            ['id' => $calculation->id],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
     }

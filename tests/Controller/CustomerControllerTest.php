@@ -64,13 +64,13 @@ final class CustomerControllerTest extends EntityControllerTestCase
 
     public function testDelete(): void
     {
-        $uri = \sprintf('/customer/delete/%d', (int) $this->getCustomer()->getId());
+        $uri = \sprintf('/customer/delete/%d', (int) $this->getCustomer()->id);
         $this->checkDeleteEntity($uri);
     }
 
     public function testEdit(): void
     {
-        $uri = \sprintf('/customer/edit/%d', (int) $this->getCustomer()->getId());
+        $uri = \sprintf('/customer/edit/%d', (int) $this->getCustomer()->id);
         $data = [
             'customer[company]' => 'New Company',
             'customer[firstName]' => 'New First Name',
@@ -108,7 +108,7 @@ final class CustomerControllerTest extends EntityControllerTestCase
         }
 
         $this->customer = new Customer();
-        $this->customer->setCompany('Test Company');
+        $this->customer->withCompany('Test Company');
 
         return $this->addEntity($this->customer);
     }

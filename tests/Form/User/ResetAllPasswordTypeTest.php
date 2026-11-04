@@ -34,8 +34,8 @@ final class ResetAllPasswordTypeTest extends TypeTestCase
     protected function setUp(): void
     {
         $this->user = new User();
-        $this->user->setUsername('username')
-            ->setEmail('email@email.com');
+        $this->user->withUsername('username')
+            ->withEmail('email@email.com');
         self::setId($this->user);
         parent::setUp();
     }
@@ -51,7 +51,7 @@ final class ResetAllPasswordTypeTest extends TypeTestCase
     public function testSubmitValidData(): void
     {
         $form = $this->factory->create(ResetAllPasswordType::class);
-        $form->submit([$this->user->getId()]);
+        $form->submit([$this->user->id]);
         self::assertTrue($form->isSynchronized());
         self::assertTrue($form->isValid());
     }

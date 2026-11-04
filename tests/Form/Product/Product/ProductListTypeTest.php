@@ -44,7 +44,7 @@ final class ProductListTypeTest extends TypeTestCase
     {
         $product = $this->getProduct();
         $formData = [
-            'value' => $product->getId(),
+            'value' => $product->id,
         ];
         $model = FixtureDataForm::instance($product);
         $form = $this->factory->createBuilder(FormType::class, $model)

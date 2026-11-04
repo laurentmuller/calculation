@@ -172,9 +172,9 @@ final class UserRepositoryTest extends AbstractRepositoryTestCase
     public function testUpgradePassword(): void
     {
         $user = $this->getUser();
-        $oldPassword = $user->getPassword();
+        $oldPassword = $user->password;
         $this->repository->upgradePassword($user, (string) $oldPassword);
-        $newPassword = $user->getPassword();
+        $newPassword = $user->password;
         self::assertSame($oldPassword, $newPassword);
     }
 

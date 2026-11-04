@@ -98,8 +98,8 @@ final class LogFileTest extends TestCase
 
     private function createLog(): Log
     {
-        $log = new Log();
-        $log->setChannel('channel')
+        $log = new Log()
+            ->setChannel('channel')
             ->setLevel(LogLevel::INFO);
 
         return self::setId($log);

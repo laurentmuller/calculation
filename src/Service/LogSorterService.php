@@ -150,7 +150,7 @@ readonly class LogSorterService
      */
     private function getMessageSorter(): array
     {
-        return $this->createSorter(static fn (Log $log): string => $log->getMessage());
+        return $this->createSorter(static fn (Log $log): string => $log->message);
     }
 
     /**
@@ -160,6 +160,6 @@ readonly class LogSorterService
      */
     private function getUserSorter(): array
     {
-        return $this->createSorter(static fn (Log $log): ?string => $log->getUser());
+        return $this->createSorter(static fn (Log $log): ?string => $log->user);
     }
 }

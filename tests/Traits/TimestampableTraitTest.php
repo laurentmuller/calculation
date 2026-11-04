@@ -22,6 +22,8 @@ final class TimestampableTraitTest extends TestCase implements \Stringable, Time
 {
     use TimestampableTrait;
 
+    public ?int $id = null;
+
     #[\Override]
     public function __toString(): string
     {
@@ -41,12 +43,6 @@ final class TimestampableTraitTest extends TestCase implements \Stringable, Time
     public function getDisplay(): string
     {
         return 'Fake';
-    }
-
-    #[\Override]
-    public function getId(): ?int
-    {
-        return null;
     }
 
     #[\Override]
@@ -101,10 +97,10 @@ final class TimestampableTraitTest extends TestCase implements \Stringable, Time
 
     public function testDefault(): void
     {
-        self::assertNull($this->getCreatedAt());
-        self::assertNull($this->getCreatedBy());
-        self::assertNull($this->getUpdatedAt());
-        self::assertNull($this->getUpdatedBy());
+        self::assertNull($this->createdAt);
+        self::assertNull($this->createdBy);
+        self::assertNull($this->updatedAt);
+        self::assertNull($this->updatedBy);
     }
 
     public function testUpdatedMessage(): void
@@ -157,9 +153,9 @@ final class TimestampableTraitTest extends TestCase implements \Stringable, Time
         $actual = $this->updateTimestampable($date, $user);
 
         self::assertTrue($actual);
-        self::assertSame($date, $this->getCreatedAt());
-        self::assertSame($user, $this->getCreatedBy());
-        self::assertSame($date, $this->getUpdatedAt());
-        self::assertSame($user, $this->getUpdatedBy());
+        self::assertSame($date, $this->createdAt);
+        self::assertSame($user, $this->createdBy);
+        self::assertSame($date, $this->updatedAt);
+        self::assertSame($user, $this->updatedBy);
     }
 }

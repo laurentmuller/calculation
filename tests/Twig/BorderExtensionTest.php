@@ -50,7 +50,7 @@ final class BorderExtensionTest extends RuntimeTestCase
     private function createRepository(): CalculationStateRepository
     {
         $state = new CalculationState();
-        $state->setColor('#000000');
+        $state->withColor('#000000');
         self::setId($state);
 
         $repository = self::createStub(CalculationStateRepository::class);

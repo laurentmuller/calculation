@@ -36,7 +36,7 @@ trait GroupTrait
     {
         if (!$this->group instanceof Group) {
             $this->group = new Group();
-            $this->group->setCode('group');
+            $this->group->withCode('group');
 
             return self::setId($this->group);
         }

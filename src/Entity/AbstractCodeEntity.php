@@ -34,12 +34,16 @@ abstract class AbstractCodeEntity extends AbstractEntity implements ComparableIn
     #[Assert\NotBlank]
     #[Assert\Length(max: self::MAX_CODE_LENGTH)]
     #[ORM\Column(length: self::MAX_CODE_LENGTH, unique: true)]
-    protected ?string $code = null;
+    public ?string $code = null {
+        set => StringUtils::trim($value);
+    }
 
     /** The description. */
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
-    protected ?string $description = null;
+    public ?string $description = null {
+        set => StringUtils::trim($value);
+    }
 
     /**
      * Clone this entity.
@@ -50,7 +54,7 @@ abstract class AbstractCodeEntity extends AbstractEntity implements ComparableIn
     {
         $copy = clone $this;
         if (StringUtils::isString($code)) {
-            $copy->setCode($code);
+            $copy->withCode($code);
         }
 
         return $copy;
@@ -59,35 +63,19 @@ abstract class AbstractCodeEntity extends AbstractEntity implements ComparableIn
     #[\Override]
     public function compare(ComparableInterface $other): int
     {
-        return \strnatcasecmp((string) $this->getCode(), (string) $other->getCode());
-    }
-
-    /**
-     * Get code.
-     */
-    public function getCode(): ?string
-    {
-        return $this->code;
-    }
-
-    /**
-     * Get description.
-     */
-    public function getDescription(): ?string
-    {
-        return $this->description;
+        return \strnatcasecmp((string) $this->code, (string) $other->code);
     }
 
     #[\Override]
     public function getDisplay(): string
     {
-        return (string) $this->getCode();
+        return (string) $this->code;
     }
 
     /**
      * Set code.
      */
-    public function setCode(string $code): static
+    public function withCode(string $code): static
     {
         $this->code = $code;
 
@@ -97,7 +85,7 @@ abstract class AbstractCodeEntity extends AbstractEntity implements ComparableIn
     /**
      * Set description.
      */
-    public function setDescription(?string $description): static
+    public function withDescription(?string $description): static
     {
         $this->description = $description;
 

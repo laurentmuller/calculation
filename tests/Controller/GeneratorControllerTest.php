@@ -46,28 +46,28 @@ final class GeneratorControllerTest extends ControllerTestCase
     {
         if (!self::$state instanceof CalculationState) {
             self::$state = new CalculationState();
-            self::$state->setCode('Test Code');
+            self::$state->withCode('Test Code');
             $this->addEntity(self::$state);
         }
 
         if (!self::$group instanceof Group) {
             self::$group = new Group();
-            self::$group->setCode('Test Group');
+            self::$group->withCode('Test Group');
             $this->addEntity(self::$group);
         }
 
         if (!self::$category instanceof Category) {
             self::$category = new Category();
-            self::$category->setCode('Test Category')
-                ->setGroup(self::$group);
+            self::$category->withCode('Test Category')
+                ->withGroup(self::$group);
             $this->addEntity(self::$category);
         }
 
         if (null === self::$products) {
             for ($i = 0; $i < 15; ++$i) {
                 $product = new Product();
-                $product->setDescription('Test Product ' . $i)
-                    ->setCategory(self::$category);
+                $product->withDescription('Test Product ' . $i)
+                    ->withCategory(self::$category);
                 $this->addEntity($product);
                 self::$products[] = $product;
             }

@@ -25,11 +25,11 @@ abstract class AbstractEntity implements \Stringable, EntityInterface
 {
     use MathTrait;
 
-    /** The primary key identifier. */
+    /** The unique identifier. */
     #[ORM\Id]
     #[ORM\Column]
     #[ORM\GeneratedValue]
-    protected ?int $id = null;
+    public ?int $id = null;
 
     public function __clone()
     {
@@ -46,12 +46,6 @@ abstract class AbstractEntity implements \Stringable, EntityInterface
     public function getDisplay(): string
     {
         return \sprintf('%d', $this->id ?? 0);
-    }
-
-    #[\Override]
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     #[\Override]

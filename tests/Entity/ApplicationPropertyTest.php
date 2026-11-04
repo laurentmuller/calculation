@@ -20,14 +20,14 @@ final class ApplicationPropertyTest extends EntityValidatorTestCase
     public function testDuplicate(): void
     {
         $first = new ApplicationProperty();
-        $first->setName('name')
-            ->setValue('value');
+        $first->withName('name')
+            ->withValue('value');
 
         try {
             $this->saveEntity($first);
             $second = new ApplicationProperty();
-            $second->setName('name')
-                ->setValue('value');
+            $second->withName('name')
+                ->withValue('value');
             $results = $this->validate($second, 1);
             $this->validatePaths($results, 'name');
         } finally {
@@ -38,7 +38,7 @@ final class ApplicationPropertyTest extends EntityValidatorTestCase
     public function testInstance(): void
     {
         $object = ApplicationProperty::instance('name');
-        self::assertSame('name', $object->getName());
+        self::assertSame('name', $object->name);
     }
 
     public function testInvalidBoth(): void
@@ -51,7 +51,7 @@ final class ApplicationPropertyTest extends EntityValidatorTestCase
     public function testInvalidName(): void
     {
         $object = new ApplicationProperty();
-        $object->setValue('value');
+        $object->withValue('value');
         $results = $this->validate($object, 1);
         $this->validatePaths($results, 'name');
     }
@@ -59,7 +59,7 @@ final class ApplicationPropertyTest extends EntityValidatorTestCase
     public function testInvalidValue(): void
     {
         $object = new ApplicationProperty();
-        $object->setName('name');
+        $object->withName('name');
         $results = $this->validate($object, 1);
         $this->validatePaths($results, 'value');
     }
@@ -67,14 +67,14 @@ final class ApplicationPropertyTest extends EntityValidatorTestCase
     public function testNotDuplicate(): void
     {
         $first = new ApplicationProperty();
-        $first->setName('name')
-            ->setValue('value');
+        $first->withName('name')
+            ->withValue('value');
 
         try {
             $this->saveEntity($first);
             $second = new ApplicationProperty();
-            $second->setName('name2')
-                ->setValue('value');
+            $second->withName('name2')
+                ->withValue('value');
             $this->validate($second);
         } finally {
             $this->deleteEntity($first);

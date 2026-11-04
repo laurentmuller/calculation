@@ -28,18 +28,26 @@ abstract class AbstractMargin extends AbstractEntity implements MarginInterface
     /** The margin in percent (1.0 = 100%) to use when an amount is within this range. */
     #[Assert\GreaterThanOrEqual(1.0)]
     #[ORM\Column(type: FixedFloatType::NAME)]
-    private float $margin = 1.0;
+    public float $margin = 1.0 {
+        set => $this->round($value);
+    }
 
     /** The maximum amount (exclusive) to apply within this margin. */
     #[Assert\GreaterThanOrEqual(0)]
     #[Assert\GreaterThan(propertyPath: 'minimum', message: 'margin.maximum_greater_minimum')]
     #[ORM\Column(type: FixedFloatType::NAME)]
-    private float $maximum = 0.0;
+    public float $maximum = 0.0 {
+        get => $this->maximum;
+        set => $this->round($value);
+    }
 
     /** The minimum amount (inclusive) to apply within this margin. */
     #[Assert\GreaterThanOrEqual(0)]
     #[ORM\Column(type: FixedFloatType::NAME)]
-    private float $minimum = 0.0;
+    public float $minimum = 0.0 {
+        get => $this->minimum;
+        set => $this->round($value);
+    }
 
     #[\Override]
     public function contains(float $value): bool
@@ -60,17 +68,9 @@ abstract class AbstractMargin extends AbstractEntity implements MarginInterface
     {
         return \sprintf(
             '%s - %s',
-            FormatUtils::formatAmount($this->getMinimum()),
-            FormatUtils::formatAmount($this->getMaximum())
+            FormatUtils::formatAmount($this->minimum),
+            FormatUtils::formatAmount($this->maximum)
         );
-    }
-
-    /**
-     * Get margin in percent (1.0 = 100%).
-     */
-    public function getMargin(): float
-    {
-        return $this->margin;
     }
 
     /**
@@ -81,24 +81,12 @@ abstract class AbstractMargin extends AbstractEntity implements MarginInterface
         return $this->margin * $amount;
     }
 
-    #[\Override]
-    public function getMaximum(): float
-    {
-        return $this->maximum;
-    }
-
-    #[\Override]
-    public function getMinimum(): float
-    {
-        return $this->minimum;
-    }
-
     /**
      * Set the margin in percent (1.0 = 100%).
      */
-    public function setMargin(float $margin): static
+    public function withMargin(float $margin): static
     {
-        $this->margin = $this->round($margin);
+        $this->margin = $margin;
 
         return $this;
     }
@@ -106,9 +94,9 @@ abstract class AbstractMargin extends AbstractEntity implements MarginInterface
     /**
      * Set the maximum.
      */
-    public function setMaximum(float $maximum): static
+    public function withMaximum(float $maximum): static
     {
-        $this->maximum = $this->round($maximum);
+        $this->maximum = $maximum;
 
         return $this;
     }
@@ -116,9 +104,9 @@ abstract class AbstractMargin extends AbstractEntity implements MarginInterface
     /**
      * Set the minimum.
      */
-    public function setMinimum(float $minimum): static
+    public function withMinimum(float $minimum): static
     {
-        $this->minimum = $this->round($minimum);
+        $this->minimum = $minimum;
 
         return $this;
     }

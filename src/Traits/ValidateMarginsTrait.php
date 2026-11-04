@@ -14,42 +14,33 @@ declare(strict_types=1);
 namespace App\Traits;
 
 use App\Interfaces\MarginInterface;
-use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * Trait to validate margins within a callback.
  *
- * @template TMarginKey of array-key
  * @template TMarginValue of MarginInterface
  */
 trait ValidateMarginsTrait
 {
-    /**
-     * Get margins.
-     *
-     * @return Collection<TMarginKey, TMarginValue>
-     */
-    abstract public function getMargins(): Collection;
-
     #[Assert\Callback]
     public function validateMargins(ExecutionContextInterface $context): void
     {
-        $margins = $this->getMargins();
+        $margins = $this->margins;
         if ($margins->isEmpty()) {
             return;
         }
 
         $values = $margins->toArray();
         if (\count($values) > 1) {
-            \uasort($values, static fn (MarginInterface $a, MarginInterface $b): int => $a->getMinimum() <=> $b->getMinimum());
+            \uasort($values, static fn (MarginInterface $a, MarginInterface $b): int => $a->minimum <=> $b->minimum);
         }
 
         $lastMax = null;
         foreach ($values as $key => $margin) {
-            $min = $margin->getMinimum();
-            $max = $margin->getMaximum();
+            $min = $margin->minimum;
+            $max = $margin->maximum;
             if ($max <= $min) {
                 $context->buildViolation('margin.maximum_greater_minimum')
                     ->atPath(\sprintf('margins[%s].maximum', $key))

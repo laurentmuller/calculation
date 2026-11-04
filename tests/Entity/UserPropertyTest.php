@@ -22,14 +22,14 @@ final class UserPropertyTest extends EntityValidatorTestCase
     public function testDuplicate(): void
     {
         $first = new UserProperty('name');
-        $first->setString('value');
-        $first->setUser($this->getUser());
+        $first->withString('value');
+        $first->withUser($this->getUser());
 
         try {
             $this->saveEntity($first);
             $second = new UserProperty('name');
-            $second->setValue('value');
-            $first->setUser($this->getUser());
+            $second->withValue('value');
+            $first->withUser($this->getUser());
             $results = $this->validate($second, 1);
             $this->validatePaths($results, 'user');
         } finally {
@@ -42,16 +42,16 @@ final class UserPropertyTest extends EntityValidatorTestCase
         $user = $this->getUser();
         self::assertNotNull($user);
         $expected = new UserProperty('name');
-        $expected->setString('value');
-        $expected->setUser($user);
+        $expected->withString('value');
+        $expected->withUser($user);
 
         try {
             $this->saveEntity($expected);
             $actual = $this->getRepository()->findOneByUserAndName($user, 'name');
             self::assertNotNull($actual);
-            self::assertSame($expected->getName(), $actual->getName());
-            self::assertSame($expected->getValue(), $actual->getValue());
-            self::assertSame($expected->getUser(), $actual->getUser());
+            self::assertSame($expected->name, $actual->name);
+            self::assertSame($expected->value, $actual->value);
+            self::assertSame($expected->user, $actual->user);
         } finally {
             $this->deleteEntity($expected);
         }
@@ -62,8 +62,8 @@ final class UserPropertyTest extends EntityValidatorTestCase
         $user = $this->getUser();
         self::assertNotNull($user);
         $expected = new UserProperty('name');
-        $expected->setString('value');
-        $expected->setUser($user);
+        $expected->withString('value');
+        $expected->withUser($user);
 
         try {
             $actual = $this->getRepository()->findByUser($user);
@@ -81,9 +81,9 @@ final class UserPropertyTest extends EntityValidatorTestCase
         $user = $this->getUser();
         self::assertNotNull($user);
         $property = UserProperty::instance('name', $user);
-        $property->setValue('value');
-        self::assertSame('name', $property->getName());
-        self::assertSame('value', $property->getValue());
+        $property->withValue('value');
+        self::assertSame('name', $property->name);
+        self::assertSame('value', $property->value);
     }
 
     public function testInvalidAll(): void
@@ -96,8 +96,8 @@ final class UserPropertyTest extends EntityValidatorTestCase
     public function testInvalidName(): void
     {
         $object = new UserProperty();
-        $object->setString('value');
-        $object->setUser($this->getUser());
+        $object->withString('value');
+        $object->withUser($this->getUser());
         $results = $this->validate($object, 1);
         $this->validatePaths($results, 'name');
     }
@@ -105,7 +105,7 @@ final class UserPropertyTest extends EntityValidatorTestCase
     public function testInvalidUser(): void
     {
         $object = new UserProperty('name');
-        $object->setString('value');
+        $object->withString('value');
         $results = $this->validate($object, 1);
         $this->validatePaths($results, 'user');
     }
@@ -113,7 +113,7 @@ final class UserPropertyTest extends EntityValidatorTestCase
     public function testInvalidValue(): void
     {
         $object = new UserProperty('name');
-        $object->setUser($this->getUser());
+        $object->withUser($this->getUser());
         $results = $this->validate($object, 1);
         $this->validatePaths($results, 'value');
     }
@@ -122,14 +122,14 @@ final class UserPropertyTest extends EntityValidatorTestCase
     {
         $user = $this->getUser();
         $first = new UserProperty('name1');
-        $first->setString('value');
-        $first->setUser($user);
+        $first->withString('value');
+        $first->withUser($user);
 
         try {
             $this->saveEntity($first);
             $second = new UserProperty('name2');
-            $second->setValue('value');
-            $second->setUser($user);
+            $second->withValue('value');
+            $second->withUser($user);
             $this->validate($second);
         } finally {
             $this->deleteEntity($first);
@@ -139,8 +139,8 @@ final class UserPropertyTest extends EntityValidatorTestCase
     public function testValid(): void
     {
         $object = new UserProperty('name');
-        $object->setString('value');
-        $object->setUser($this->getUser());
+        $object->withString('value');
+        $object->withUser($this->getUser());
         $this->validate($object);
     }
 

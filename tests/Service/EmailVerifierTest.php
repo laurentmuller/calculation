@@ -49,7 +49,7 @@ final class EmailVerifierTest extends TestCase
         $user = $this->createUser();
         $request = new Request(['expires' => \time() + 3600]);
         $service->handleEmail($request, $user);
-        self::assertTrue($user->isVerified());
+        self::assertTrue($user->verified);
     }
 
     /**
@@ -68,7 +68,7 @@ final class EmailVerifierTest extends TestCase
         $user = $this->createUser();
         $email = NotificationEmail::instance($translator);
         $service->sendEmail('route', $user, $email);
-        self::assertFalse($user->isVerified());
+        self::assertFalse($user->verified);
     }
 
     private function createMockVerifyEmailHelper(): Stub&VerifyEmailHelperInterface
@@ -84,9 +84,9 @@ final class EmailVerifierTest extends TestCase
 
     private function createUser(): User
     {
-        $user = new User();
-        $user->setUsername('username')
-            ->setEmail('email@example.com');
+        $user = new User()
+            ->withUsername('username')
+            ->withEmail('email@example.com');
 
         return self::setId($user);
     }

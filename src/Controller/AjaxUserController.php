@@ -72,7 +72,7 @@ class AjaxUserController extends AbstractController
             $message = 'email.long';
         } else {
             $user = $this->findByEmail($email);
-            if ($user instanceof User && $id !== $user->getId()) {
+            if ($user instanceof User && $id !== $user->id) {
                 $message = 'user.unique_email';
             }
         }
@@ -100,7 +100,7 @@ class AjaxUserController extends AbstractController
             $message = 'username.long';
         } else {
             $user = $this->findByUsername($username);
-            if ($user instanceof User && $id !== $user->getId()) {
+            if ($user instanceof User && $id !== $user->id) {
                 $message = 'user.unique_username';
             }
         }

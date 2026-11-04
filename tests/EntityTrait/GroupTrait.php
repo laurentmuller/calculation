@@ -30,11 +30,11 @@ trait GroupTrait
         }
 
         $this->group = new Group();
-        $this->group->setCode($code);
+        $this->group->withCode($code);
         $margin = new GroupMargin();
-        $margin->setMinimum(0)
-            ->setMaximum(1_000_000)
-            ->setMargin(1.1);
+        $margin->withMinimum(0)
+            ->withMaximum(1_000_000)
+            ->withMargin(1.1);
         $this->group->addMargin($margin);
 
         return $this->addEntity($this->group);

@@ -119,17 +119,17 @@ class LogsReport extends AbstractReport
     private function getCellChannel(Log $log): PdfFontAwesomeCell|string
     {
         return $this->getCell(
-            $log->getChannelTitle(),
-            $log->getChannelFontAwesomeIcon()
+            $log->channelTitle,
+            $log->channelFontAwesomeIcon
         );
     }
 
     private function getCellLevel(Log $log): PdfFontAwesomeCell|string
     {
         return $this->getCell(
-            $log->getLevelTitle(),
-            $log->getLevelFontAwesomeIcon(),
-            $this->getLevelColor($log->getLevel())
+            $log->levelTitle,
+            $log->levelFontAwesomeIcon,
+            $this->getLevelColor($log->level)
         );
     }
 
@@ -137,10 +137,10 @@ class LogsReport extends AbstractReport
     {
         $color = null;
         if ($value instanceof LogLevel) {
-            $icon = $value->getLevelFontAwesomeIcon();
-            $color = $this->getLevelColor($value->getLevel());
+            $icon = $value->levelFontAwesomeIcon;
+            $color = $this->getLevelColor($value->level);
         } else {
-            $icon = $value->getChannelFontAwesomeIcon();
+            $icon = $value->channelFontAwesomeIcon;
         }
 
         $alignment = PdfTextAlignment::CENTER;
@@ -163,7 +163,7 @@ class LogsReport extends AbstractReport
             return $this->colors[$level];
         }
         $color = LogLevel::instance($level)
-            ->getLevelBootstrapColor()
+            ->levelBootstrapColor
             ->asHex('#');
 
         return $this->colors[$level] = $color;
@@ -171,7 +171,7 @@ class LogsReport extends AbstractReport
 
     private function getRoundedDate(Log $log): int
     {
-        return (int) \ceil($log->getTimestamp() / self::DELTA_DATE) * self::DELTA_DATE;
+        return (int) \ceil($log->timestamp / self::DELTA_DATE) * self::DELTA_DATE;
     }
 
     private function renderCards(): self
@@ -239,11 +239,11 @@ class LogsReport extends AbstractReport
                 $this->addDateBookmark($date);
             }
             $table->addRow(
-                $log->getFormattedDate(),
-                $log->getMessage(),
+                $log->formattedDate,
+                $log->message,
                 $this->getCellLevel($log),
                 $this->getCellChannel($log),
-                $log->getUser()
+                $log->user
             );
         }
 

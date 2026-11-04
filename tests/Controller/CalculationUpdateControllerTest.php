@@ -35,7 +35,7 @@ final class CalculationUpdateControllerTest extends ControllerTestCase
         $data = [
             'form[date]' => '2024-06-01',
             'form[interval]' => 'P1M',
-            'form[states][0]' => $calculation->getState()?->getId(),
+            'form[states][0]' => $calculation->state?->id,
             'form[simulate]' => '1',
             'form[confirm]' => '1',
         ];

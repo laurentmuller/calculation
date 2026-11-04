@@ -110,12 +110,11 @@ final class VichListenerTest extends TestCase
     private function createUser(?UploadedFile $file = null): User
     {
         $file ??= new UploadedFile(path: 'fake', originalName: 'fake', error: -1);
-        $user = new User();
-        $user->setUsername('user_name')
-            ->setImageName($file->getBasename())
-            ->setImageFile($file);
 
-        return $user;
+        return new User()
+            ->withUsername('user_name')
+            ->withImageName($file->getBasename())
+            ->withImageFile($file);
     }
 
     private function getImagesPath(): string

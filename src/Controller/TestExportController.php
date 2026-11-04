@@ -86,16 +86,16 @@ class TestExportController extends AbstractController
         $boldStyle = PdfStyle::getNoBorderStyle()
             ->setFontBold();
         foreach ($customers as $customer) {
-            $isSeparator = StringUtils::isString($customer->getCompany())
-                && StringUtils::isString($customer->getFullName());
+            $isSeparator = StringUtils::isString($customer->company)
+                && StringUtils::isString($customer->fullName);
             $values = [
-                PdfLabelItem::instance($customer->getCompany(), $boldStyle),
+                PdfLabelItem::instance($customer->company, $boldStyle),
                 $isSeparator ? StringUtils::NEW_LINE : null,
-                $customer->getTitle(),
-                PdfLabelItem::instance($customer->getFullName(), $boldStyle),
+                $customer->title,
+                PdfLabelItem::instance($customer->fullName, $boldStyle),
                 StringUtils::NEW_LINE,
-                $customer->getAddress(),
-                PdfLabelItem::instance($customer->getZipCity(), $boldStyle),
+                $customer->address,
+                PdfLabelItem::instance($customer->zipCity, $boldStyle),
             ];
             $report->outputLabel($values);
         }

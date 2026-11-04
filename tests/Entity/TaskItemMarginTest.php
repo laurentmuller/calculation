@@ -43,13 +43,13 @@ final class TaskItemMarginTest extends EntityValidatorTestCase
     public function testParent(): void
     {
         $entity = new TaskItemMargin();
-        self::assertNull($entity->getTaskItem());
+        self::assertNull($entity->taskItem);
         self::assertNull($entity->getParentEntity());
 
         $item = new TaskItem();
-        $entity->setTaskItem($item);
-        self::assertNotNull($entity->getTaskItem());
-        self::assertSame($item, $entity->getTaskItem());
+        $entity->withTaskItem($item);
+        self::assertNotNull($entity->taskItem);
+        self::assertSame($item, $entity->taskItem);
         self::assertNull($entity->getParentEntity());
 
         $task = new Task();
@@ -74,9 +74,9 @@ final class TaskItemMarginTest extends EntityValidatorTestCase
     public function testValues(): void
     {
         $margin = $this->getTaskItemMargin(0, 100, 10);
-        self::assertSame(0.0, $margin->getMinimum());
-        self::assertSame(100.0, $margin->getMaximum());
-        self::assertSame(10.0, $margin->getValue());
+        self::assertSame(0.0, $margin->minimum);
+        self::assertSame(100.0, $margin->maximum);
+        self::assertSame(10.0, $margin->value);
         self::assertFalse($margin->contains(-1));
         self::assertTrue($margin->contains(0));
         self::assertTrue($margin->contains(99));
@@ -86,10 +86,10 @@ final class TaskItemMarginTest extends EntityValidatorTestCase
     private function getTaskItemMargin(float $minimum, float $maximum, float $value): TaskItemMargin
     {
         $entity = new TaskItemMargin();
-        $entity->setTaskItem(new TaskItem())
-            ->setMinimum($minimum)
-            ->setMaximum($maximum)
-            ->setValue($value);
+        $entity->withTaskItem(new TaskItem())
+            ->withMinimum($minimum)
+            ->withMaximum($maximum)
+            ->withValue($value);
 
         return $entity;
     }

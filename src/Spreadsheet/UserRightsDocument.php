@@ -103,7 +103,7 @@ class UserRightsDocument extends AbstractArrayDocument
         $role = $this->roleService->translateRole($entity);
         if ($entity instanceof User) {
             $text = $entity->getUserIdentifier();
-            $description = $entity->isEnabled() ? $role : $this->trans('common.value_disabled');
+            $description = $entity->enabled ? $role : $this->trans('common.value_disabled');
             $richText = new RichText();
             $richText->createTextRun($text)->getFont()?->setBold(true);
             $richText->createTextRun(' - ' . $description)->getFont()?->setBold(false);

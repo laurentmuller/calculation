@@ -70,12 +70,12 @@ final class TaskControllerTest extends EntityControllerTestCase
     {
         $category = $this->getCategory();
         $service = self::getService(ApplicationParameters::class);
-        $service->getDefault()->setCategoryId($category->getId());
+        $service->getDefault()->setCategoryId($category->id);
         $service->save();
 
         $data = [
             'task[name]' => 'Name',
-            'task[category]' => $category->getId(),
+            'task[category]' => $category->id,
             'task[unit]' => 'm2',
             'task[supplier]' => 'Supplier',
         ];
@@ -91,17 +91,17 @@ final class TaskControllerTest extends EntityControllerTestCase
     public function testDelete(): void
     {
         $this->addEntities();
-        $uri = \sprintf('/task/delete/%d', (int) $this->getTask()->getId());
+        $uri = \sprintf('/task/delete/%d', (int) $this->getTask()->id);
         $this->checkDeleteEntity($uri);
     }
 
     public function testEdit(): void
     {
         $this->addEntities();
-        $uri = \sprintf('/task/edit/%d', (int) $this->getTask()->getId());
+        $uri = \sprintf('/task/edit/%d', (int) $this->getTask()->id);
         $data = [
             'task[name]' => 'New Name',
-            'task[category]' => $this->getCategory()->getId(),
+            'task[category]' => $this->getCategory()->id,
             'task[unit]' => 'km',
             'task[supplier]' => 'New Supplier',
         ];

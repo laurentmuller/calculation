@@ -54,12 +54,12 @@ class ProductsReport extends AbstractArrayReport
                 $table->setGroupKey($key);
             }
 
-            $style = $this->isFloatZero($entity->getPrice()) ? $redStyle : null;
+            $style = $this->isFloatZero($entity->price) ? $redStyle : null;
             $table->startRow()
-                ->add($entity->getDescription())
-                ->addCellAmount($entity->getPrice(), style: $style)
-                ->add($entity->getUnit())
-                ->add($entity->getSupplier())
+                ->add($entity->description)
+                ->addCellAmount($entity->price, style: $style)
+                ->add($entity->unit)
+                ->add($entity->supplier)
                 ->endRow();
         }
         $this->renderCount($table, $entities, 'counters.products');

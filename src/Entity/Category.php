@@ -33,7 +33,7 @@ class Category extends AbstractCodeEntity
     #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'categories')]
     #[ORM\JoinColumn(name: 'group_id', nullable: false)]
-    private ?Group $group = null;
+    public ?Group $group = null;
 
     /**
      * The products that belong to this category.
@@ -64,7 +64,7 @@ class Category extends AbstractCodeEntity
     {
         if (!$this->products->contains($product)) {
             $this->products->add($product);
-            $product->setCategory($this);
+            $product->category = $this;
         }
 
         return $this;
@@ -74,7 +74,7 @@ class Category extends AbstractCodeEntity
     {
         if (!$this->tasks->contains($task)) {
             $this->tasks->add($task);
-            $task->setCategory($this);
+            $task->category = $this;
         }
 
         return $this;
@@ -105,19 +105,11 @@ class Category extends AbstractCodeEntity
     }
 
     /**
-     * Gets the group.
-     */
-    public function getGroup(): ?Group
-    {
-        return $this->group;
-    }
-
-    /**
      * Gets the group code.
      */
     public function getGroupCode(): ?string
     {
-        return $this->group?->getCode();
+        return $this->group?->code;
     }
 
     /**
@@ -125,7 +117,7 @@ class Category extends AbstractCodeEntity
      */
     public function getGroupId(): ?int
     {
-        return $this->group?->getId();
+        return $this->group?->id;
     }
 
     /**
@@ -147,19 +139,19 @@ class Category extends AbstractCodeEntity
     }
 
     /**
-     * Returns if this category contains one or more products.
+     * Returns if this category contains no product.
      */
-    public function hasProducts(): bool
+    public function isEmptyProducts(): bool
     {
-        return 0 !== $this->products->count();
+        return $this->products->isEmpty();
     }
 
     /**
-     * Returns if this category contains one or more tasks.
+     * Returns if this category contains no task.
      */
-    public function hasTasks(): bool
+    public function isEmptyTasks(): bool
     {
-        return 0 !== $this->tasks->count();
+        return $this->tasks->isEmpty();
     }
 
     /**
@@ -167,8 +159,8 @@ class Category extends AbstractCodeEntity
      */
     public function removeProduct(Product $product): self
     {
-        if ($this->products->removeElement($product) && $product->getCategory() === $this) {
-            $product->setCategory(null);
+        if ($this->products->removeElement($product) && $product->category === $this) {
+            $product->category = null;
         }
 
         return $this;
@@ -179,8 +171,8 @@ class Category extends AbstractCodeEntity
      */
     public function removeTask(Task $task): self
     {
-        if ($this->tasks->removeElement($task) && $task->getCategory() === $this) {
-            $task->setCategory(null);
+        if ($this->tasks->removeElement($task) && $task->category === $this) {
+            $task->category = null;
         }
 
         return $this;
@@ -189,7 +181,7 @@ class Category extends AbstractCodeEntity
     /**
      * Sets the group.
      */
-    public function setGroup(?Group $group): self
+    public function withGroup(?Group $group): self
     {
         $this->group = $group;
 

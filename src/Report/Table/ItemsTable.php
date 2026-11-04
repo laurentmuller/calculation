@@ -73,17 +73,17 @@ class ItemsTable extends ReportGroupTable implements PdfGroupListenerInterface
 
         $this->createColumns();
         $this->setGroupListener($this);
-        foreach ($calculation->getGroups() as $group) {
+        foreach ($calculation->groups as $group) {
             $this->setGroupKey($group);
-            foreach ($group->getCategories() as $category) {
+            foreach ($group->categories as $category) {
                 $this->setGroupKey($category);
-                foreach ($category->getItems() as $item) {
+                foreach ($category->items as $item) {
                     $this->renderItem($item, $duplicateItems, $defaultStyle, $errorStyle);
                 }
             }
         }
         $this->setInProgress(true);
-        $this->renderTotal($calculation->getItemsTotal());
+        $this->renderTotal($calculation->itemsTotal);
         $this->setInProgress(false);
         $this->getParent()->lineBreak(3);
     }
@@ -112,7 +112,7 @@ class ItemsTable extends ReportGroupTable implements PdfGroupListenerInterface
         PdfStyle $errorStyle
     ): self {
         $style = \in_array($item, $duplicateItems, true) ? $errorStyle : $defaultStyle;
-        $this->add($item->getDescription(), style: $style);
+        $this->add($item->description, style: $style);
 
         return $this;
     }
@@ -145,7 +145,7 @@ class ItemsTable extends ReportGroupTable implements PdfGroupListenerInterface
         $this->checkLines(2);
         $this->groupStyle->setIndent(self::INDENT / 2);
         $this->startRow($this->groupStyle)
-            ->add($category->getCode())
+            ->add($category->code)
             ->completeRow();
 
         return true;
@@ -156,7 +156,7 @@ class ItemsTable extends ReportGroupTable implements PdfGroupListenerInterface
         $this->checkLines(3);
         $this->groupStyle->resetIndent();
         $this->startRow($this->groupStyle)
-            ->add($group->getCode())
+            ->add($group->code)
             ->completeRow();
 
         return true;
@@ -173,10 +173,10 @@ class ItemsTable extends ReportGroupTable implements PdfGroupListenerInterface
     ): void {
         $this->startRow()
             ->addDescription($item, $duplicateItems, $defaultStyle, $errorStyle)
-            ->add($item->getUnit())
-            ->addStyledAmount($item->getPrice(), $errorStyle)
-            ->addStyledAmount($item->getQuantity(), $errorStyle)
-            ->addStyledAmount($item->getTotal())
+            ->add($item->unit)
+            ->addStyledAmount($item->price, $errorStyle)
+            ->addStyledAmount($item->quantity, $errorStyle)
+            ->addStyledAmount($item->total)
             ->endRow();
     }
 

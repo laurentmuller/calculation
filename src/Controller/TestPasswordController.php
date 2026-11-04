@@ -67,7 +67,7 @@ class TestPasswordController extends AbstractController
         };
         $data = [
             'user_name' => $user->getDisplay(),
-            'user_email' => $user->getEmail(),
+            'user_email' => $user->email,
             'input' => 'aB123456#*/82568A',
             'level' => $strengthLevel,
         ];

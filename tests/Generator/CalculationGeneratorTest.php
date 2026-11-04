@@ -48,7 +48,7 @@ final class CalculationGeneratorTest extends GeneratorTestCase
     {
         $this->getCalculationState();
         $product = $this->getProduct();
-        $product->setPrice(0.0);
+        $product->withPrice(0.0);
         $this->manager->flush();
 
         $generator = $this->createGenerator();

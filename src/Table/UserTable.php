@@ -134,7 +134,7 @@ class UserTable extends AbstractEntityTable
             return 0;
         }
 
-        return (int) $user->getId();
+        return (int) $user->id;
     }
 
     private function isResettableUsers(): bool

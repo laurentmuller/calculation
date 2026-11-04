@@ -31,17 +31,17 @@ final class TaskItemTest extends EntityValidatorTestCase
         $item->addMargin($margin);
 
         $clone = clone $item;
-        foreach ($clone->getMargins() as $currentMargin) {
-            self::assertNull($currentMargin->getId());
+        foreach ($clone->margins as $currentMargin) {
+            self::assertNull($currentMargin->id);
         }
     }
 
     public function testCompare(): void
     {
         $item1 = new TaskItem();
-        $item1->setName('TaskItem1');
+        $item1->withName('TaskItem1');
         $item2 = new TaskItem();
-        $item2->setName('TaskItem2');
+        $item2->withName('TaskItem2');
         $actual = $item1->compare($item2);
         self::assertSame(-1, $actual);
     }
@@ -52,14 +52,14 @@ final class TaskItemTest extends EntityValidatorTestCase
         $category = $this->createCategory($group);
         $task = $this->createTask($category);
         $item = $this->createTaskItem($task);
-        $item->setName('name');
+        $item->withName('name');
         $task->addItem($item);
 
         try {
             $this->saveEntity($group);
             $this->saveEntity($category);
             $this->saveEntity($task);
-            $second = $this->createTaskItem($task)->setName('name');
+            $second = $this->createTaskItem($task)->withName('name');
             $results = $this->validate($second, 1);
             $this->validatePaths($results, 'name');
         } finally {
@@ -89,11 +89,11 @@ final class TaskItemTest extends EntityValidatorTestCase
     public function testNameAndDisplay(): void
     {
         $item = new TaskItem();
-        self::assertNull($item->getName());
+        self::assertNull($item->name);
         self::assertSame('', $item->getDisplay());
 
-        $item->setName('name');
-        self::assertSame('name', $item->getName());
+        $item->withName('name');
+        self::assertSame('name', $item->name);
         self::assertSame('name', $item->getDisplay());
     }
 
@@ -103,14 +103,14 @@ final class TaskItemTest extends EntityValidatorTestCase
         $category = $this->createCategory($group);
         $task = $this->createTask($category);
         $item = $this->createTaskItem($task);
-        $item->setName('name1');
+        $item->withName('name1');
         $task->addItem($item);
 
         try {
             $this->saveEntity($group);
             $this->saveEntity($category);
             $this->saveEntity($task);
-            $second = $this->createTaskItem($task)->setName('name2');
+            $second = $this->createTaskItem($task)->withName('name2');
             $this->validate($second);
         } finally {
             $this->deleteEntity($task);
@@ -123,13 +123,13 @@ final class TaskItemTest extends EntityValidatorTestCase
     {
         $item = new TaskItem();
         self::assertCount(0, $item);
-        self::assertEmpty($item->getMargins());
+        self::assertEmpty($item->margins);
         self::assertTrue($item->isEmpty());
 
         $margin = $this->createMargin(0);
         $item->addMargin($margin);
         self::assertCount(1, $item);
-        self::assertCount(1, $item->getMargins());
+        self::assertCount(1, $item->margins);
         self::assertFalse($item->isEmpty());
 
         // not add duplicate
@@ -138,7 +138,7 @@ final class TaskItemTest extends EntityValidatorTestCase
 
         $item->removeMargin($margin);
         self::assertCount(0, $item);
-        self::assertEmpty($item->getMargins());
+        self::assertEmpty($item->margins);
         self::assertTrue($item->isEmpty());
     }
 
@@ -148,43 +148,35 @@ final class TaskItemTest extends EntityValidatorTestCase
         $category = $this->createCategory($group);
         $task = $this->createTask($category);
         $item = $this->createTaskItem($task);
-        $item->setName('name');
+        $item->withName('name');
         $this->validate($task);
     }
 
     private function createCategory(Group $group): Category
     {
-        $category = new Category();
-        $category->setCode('code');
-        $category->setGroup($group);
-
-        return $category;
+        return new Category()
+            ->withCode('code')
+            ->withGroup($group);
     }
 
     private function createGroup(): Group
     {
-        $group = new Group();
-        $group->setCode('code');
-
-        return $group;
+        return new Group()->withCode('code');
     }
 
     private function createMargin(float $value): TaskItemMargin
     {
-        $margin = new TaskItemMargin();
-        $margin->setMinimum(0)
-            ->setMaximum(100)
-            ->setValue($value);
-
-        return $margin;
+        return new TaskItemMargin()
+            ->withMinimum(0)
+            ->withMaximum(100)
+            ->withValue($value);
     }
 
     private function createTask(Category $category): Task
     {
-        $task = new Task();
-        $task->setName('name')->setCategory($category);
-
-        return $task;
+        return new Task()
+            ->withName('name')
+            ->withCategory($category);
     }
 
     private function createTaskItem(Task $task): TaskItem

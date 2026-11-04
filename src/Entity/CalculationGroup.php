@@ -41,13 +41,15 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
 
     /** The total amount. */
     #[ORM\Column(type: FixedFloatType::NAME)]
-    private float $amount = 0.0;
+    public float $amount = 0.0 {
+        set => $this->round($value);
+    }
 
     /** The parent's calculation. */
     #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'groups')]
     #[ORM\JoinColumn(name: 'calculation_id', nullable: false, onDelete: 'cascade')]
-    private ?Calculation $calculation = null;
+    public ?Calculation $calculation = null;
 
     /**
      * The categories.
@@ -62,22 +64,48 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
         orphanRemoval: true
     )]
     #[ORM\OrderBy(['position' => \SortDirection::Ascending])]
-    private Collection $categories;
+    public Collection $categories;
 
     /** The code. */
     #[Assert\NotBlank]
     #[Assert\Length(max: self::MAX_CODE_LENGTH)]
     #[ORM\Column(length: self::MAX_CODE_LENGTH)]
-    private ?string $code = null;
+    public ?string $code = null {
+        set => StringUtils::trim($value);
+    }
 
     /** The parent's group. */
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(name: 'group_id', nullable: false)]
-    private ?Group $group = null;
+    public ?Group $group = null;
+
+    /** Gets the number of item lines. */
+    public int $itemsCount {
+        get => $this->categories->reduce(
+            static fn (int $count, CalculationCategory $category): int => $count + $category->count(),
+            0
+        );
+    }
 
     /** The margin in percent (%). */
     #[ORM\Column(type: FixedFloatType::NAME)]
-    private float $margin = 0.0;
+    public float $margin = 0.0 {
+        set => $this->round($value);
+    }
+
+    /** Gets the margin amount. */
+    public float $marginAmount {
+        get => $this->amount * ($this->margin - 1.0);
+    }
+
+    /**
+     * Gets the total.
+     *
+     * This is the sum of the amount and the margin amount.
+     */
+    public float $total {
+        get => $this->amount * $this->margin;
+    }
 
     public function __construct()
     {
@@ -89,7 +117,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
     {
         parent::__clone();
         $this->categories = $this->categories->map(
-            fn (CalculationCategory $category): CalculationCategory => (clone $category)->setGroup($this)
+            fn (CalculationCategory $category): CalculationCategory => (clone $category)->withGroup($this)
         );
     }
 
@@ -100,7 +128,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
     {
         if (!$this->contains($category)) {
             $this->categories->add($category);
-            $category->setGroup($this);
+            $category->group = $this;
         }
 
         return $this;
@@ -109,7 +137,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
     #[\Override]
     public function compare(ComparableInterface $other): int
     {
-        return \strnatcasecmp((string) $this->getCode(), (string) $other->getCode());
+        return \strnatcasecmp((string) $this->code, (string) $other->code);
     }
 
     /**
@@ -138,7 +166,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
      */
     public static function create(Group $group): self
     {
-        return new self()->setGroup($group);
+        return new self()->withGroup($group);
     }
 
     /**
@@ -146,10 +174,10 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
      */
     public function findOrCreateCategory(Category $category): CalculationCategory
     {
-        $code = $category->getCode();
+        $code = $category->code;
         /** @var CalculationCategory|null $calculationCategory */
         $calculationCategory = $this->categories->findFirst(
-            static fn (int $key, CalculationCategory $category): bool => $code === $category->getCode()
+            static fn (int $key, CalculationCategory $category): bool => $code === $category->code
         );
         if ($calculationCategory instanceof CalculationCategory) {
             return $calculationCategory;
@@ -161,76 +189,16 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
         return $calculationCategory;
     }
 
-    /**
-     * Get the total amount.
-     */
-    public function getAmount(): float
-    {
-        return $this->amount;
-    }
-
-    /**
-     * Get the calculation categories.
-     *
-     * @return Collection<int, CalculationCategory>
-     */
-    public function getCategories(): Collection
-    {
-        return $this->categories;
-    }
-
-    /**
-     * Get the code.
-     */
-    public function getCode(): ?string
-    {
-        return $this->code;
-    }
-
     #[\Override]
     public function getDisplay(): string
     {
-        return (string) $this->getCode();
-    }
-
-    /**
-     * Get the group.
-     */
-    public function getGroup(): ?Group
-    {
-        return $this->group;
-    }
-
-    /**
-     * Get the margin.
-     */
-    public function getMargin(): float
-    {
-        return $this->margin;
-    }
-
-    /**
-     * Gets the margin amount.
-     */
-    public function getMarginAmount(): float
-    {
-        return $this->amount * ($this->margin - 1.0);
+        return (string) $this->code;
     }
 
     #[\Override]
     public function getParentEntity(): ?Calculation
     {
         return $this->calculation;
-    }
-
-    /**
-     * Gets the total.
-     *
-     * This is the sum of the amount and the margin amount.
-     */
-    public function getTotal(): float
-    {
-        return $this->amount * $this->margin;
     }
 
     /**
@@ -265,71 +233,12 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
     public function removeCategory(CalculationCategory $category): self
     {
         if ($this->categories->removeElement($category)) {
-            if ($category->getGroup() === $this) {
-                $category->setGroup(null);
+            if ($category->group === $this) {
+                $category->group = null;
             }
 
             return $this->updatePositions();
         }
-
-        return $this;
-    }
-
-    /**
-     * Set the total amount.
-     */
-    public function setAmount(float $amount): self
-    {
-        $this->amount = $this->round($amount);
-
-        return $this;
-    }
-
-    /**
-     * Set the parent's calculation.
-     */
-    public function setCalculation(?Calculation $calculation): self
-    {
-        $this->calculation = $calculation;
-
-        return $this;
-    }
-
-    /**
-     * Set code.
-     */
-    public function setCode(?string $code): self
-    {
-        $this->code = StringUtils::trim($code);
-
-        return $this;
-    }
-
-    /**
-     * Set the group.
-     *
-     * @param Group $group  the group to copy values from
-     * @param bool  $update true to update the total amount and the margin
-     */
-    public function setGroup(Group $group, bool $update = false): self
-    {
-        // copy
-        $this->group = $group;
-        $this->code = $group->getCode();
-
-        if ($update) {
-            return $this->update();
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the margin.
-     */
-    public function setMargin(float $margin): self
-    {
-        $this->margin = $this->round($margin);
 
         return $this;
     }
@@ -352,8 +261,8 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
         $position = 0;
         $changed = false;
         foreach ($categories as $category) {
-            if ($position !== $category->getPosition()) {
-                $category->setPosition($position);
+            if ($position !== $category->position) {
+                $category->position = $position;
                 $changed = true;
             }
             if ($category->sort()) {
@@ -373,15 +282,15 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
         // update categories
         $amount = 0.0;
         foreach ($this->categories as $category) {
-            $category->update()->setGroup($this);
-            $amount += $category->getAmount();
+            $category->update()->withGroup($this);
+            $amount += $category->amount;
         }
 
         // margin
         $margin = $this->group?->findPercent($amount) ?? 0.0;
 
-        return $this->setAmount($amount)
-            ->setMargin($margin);
+        return $this->withAmount($amount)
+            ->withMargin($margin);
     }
 
     /**
@@ -389,8 +298,8 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
      */
     public function updateCode(): bool
     {
-        if ($this->group instanceof Group && $this->code !== $this->group->getCode()) {
-            $this->code = $this->group->getCode();
+        if ($this->group instanceof Group && $this->code !== $this->group->code) {
+            $this->code = $this->group->code;
 
             return true;
         }
@@ -405,9 +314,68 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
     {
         $position = 0;
         foreach ($this->categories as $category) {
-            $category->setPosition($position++)
-                ->updatePositions();
+            $category->position = $position++;
+            $category->updatePositions();
         }
+
+        return $this;
+    }
+
+    /**
+     * Set the total amount.
+     */
+    public function withAmount(float $amount): self
+    {
+        $this->amount = $amount;
+
+        return $this;
+    }
+
+    /**
+     * Set the parent's calculation.
+     */
+    public function withCalculation(?Calculation $calculation): self
+    {
+        $this->calculation = $calculation;
+
+        return $this;
+    }
+
+    /**
+     * Set code.
+     */
+    public function withCode(?string $code): self
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Set the group.
+     *
+     * @param Group $group  the group to copy values from
+     * @param bool  $update true to update the total amount and the margin
+     */
+    public function withGroup(Group $group, bool $update = false): self
+    {
+        // copy
+        $this->group = $group;
+        $this->code = $group->code;
+
+        if ($update) {
+            return $this->update();
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the margin.
+     */
+    public function withMargin(float $margin): self
+    {
+        $this->margin = $margin;
 
         return $this;
     }

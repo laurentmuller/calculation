@@ -186,7 +186,7 @@ final class CalculationTableTest extends EntityTableTestCase
         }
 
         $state = new CalculationState();
-        $state->setCode('code');
+        $state->withCode('code');
         self::setId($state);
         $repository->method('find')
             ->willReturn($state);

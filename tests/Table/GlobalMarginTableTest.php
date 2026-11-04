@@ -48,9 +48,9 @@ final class GlobalMarginTableTest extends EntityTableTestCase
     protected function createEntities(): array
     {
         $entity = new GlobalMargin();
-        $entity->setMinimum(0.0)
-            ->setMaximum(100.0)
-            ->setMargin(1.1);
+        $entity->withMinimum(0.0)
+            ->withMaximum(100.0)
+            ->withMargin(1.1);
 
         return [$entity];
     }

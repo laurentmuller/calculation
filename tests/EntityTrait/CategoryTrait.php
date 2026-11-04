@@ -32,7 +32,7 @@ trait CategoryTrait
         }
 
         $this->category = new Category();
-        $this->category->setCode($code);
+        $this->category->withCode($code);
         $group ??= $this->getGroup();
         $group->addCategory($this->category);
 

@@ -329,7 +329,7 @@ class UserController extends AbstractEntityController
         if ($this->handleRequestForm($request, $form)) {
             if ($item->getRights() === $defaultRole->getRights()) {
                 $item->setRights(null);
-                if ($item->isEnabled()) {
+                if ($item->enabled) {
                     $item->setOverwrite(false);
                 }
             }
@@ -486,7 +486,7 @@ class UserController extends AbstractEntityController
                 ->getRights()
                 ->getAdminRole();
         }
-        if ($user->isEnabled()) {
+        if ($user->enabled) {
             return $this->getApplicationParameters()
                 ->getRights()
                 ->getUserRole();
@@ -529,7 +529,7 @@ class UserController extends AbstractEntityController
      */
     private function isSameUser(User $user, ?UserInterface $value): bool
     {
-        return $value instanceof User && $value->getId() === $user->getId();
+        return $value instanceof User && $value->id === $user->id;
     }
 
     /**

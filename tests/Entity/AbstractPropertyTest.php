@@ -29,34 +29,34 @@ final class AbstractPropertyTest extends TestCase
     public function testBoolean(): void
     {
         $entity = $this->getEntity();
-        self::assertFalse($entity->getBoolean());
-        $entity->setBoolean(true);
-        self::assertTrue($entity->getBoolean());
+        self::assertFalse($entity->asBoolean());
+        $entity->withBoolean(true);
+        self::assertTrue($entity->asBoolean());
     }
 
     public function testConstructor(): void
     {
         $entity = $this->getEntity();
-        self::assertNull($entity->getId());
+        self::assertNull($entity->id);
         self::assertSame('0', $entity->getDisplay());
-        self::assertSame('', $entity->getName());
-        self::assertFalse($entity->getBoolean());
-        self::assertNull($entity->getDatePoint());
-        self::assertSame(0, $entity->getInteger());
-        self::assertNull($entity->getValue());
+        self::assertSame('', $entity->name);
+        self::assertFalse($entity->asBoolean());
+        self::assertNull($entity->asDatePoint());
+        self::assertSame(0, $entity->asInteger());
+        self::assertNull($entity->value);
 
-        $entity->setName('name');
-        self::assertSame('name', $entity->getName());
+        $entity->withName('name');
+        self::assertSame('name', $entity->name);
     }
 
     public function testDatePoint(): void
     {
         $date = new DatePoint();
         $entity = $this->getEntity();
-        self::assertNull($entity->getDatePoint());
-        $entity->setDate($date);
+        self::assertNull($entity->asDatePoint());
+        $entity->withDate($date);
         /** @var DatePoint|null $actual */
-        $actual = $entity->getDatePoint();
+        $actual = $entity->asDatePoint();
         self::assertNotNull($actual);
         self::assertTimestampEquals($date, $actual);
     }
@@ -64,44 +64,44 @@ final class AbstractPropertyTest extends TestCase
     public function testFloat(): void
     {
         $entity = $this->getEntity();
-        self::assertSame(0.0, $entity->getFloat());
-        $entity->setFloat(1.0);
-        self::assertSame(1.0, $entity->getFloat());
+        self::assertSame(0.0, $entity->asFloat());
+        $entity->withFloat(1.0);
+        self::assertSame(1.0, $entity->asFloat());
     }
 
     public function testInteger(): void
     {
         $entity = $this->getEntity();
-        self::assertSame(0, $entity->getInteger());
-        $entity->setInteger(1);
-        self::assertSame(1, $entity->getInteger());
+        self::assertSame(0, $entity->asInteger());
+        $entity->withInteger(1);
+        self::assertSame(1, $entity->asInteger());
     }
 
     public function testIntEnum(): void
     {
         $entity = $this->getEntity();
-        self::assertNull($entity->getIntEnum(EntityPermission::class));
-        $entity->setBackedEnum(EntityPermission::ADD);
+        self::assertNull($entity->asIntEnum(EntityPermission::class));
+        $entity->withBackedEnum(EntityPermission::ADD);
         /** @var EntityPermission|null $actual */
-        $actual = $entity->getIntEnum(EntityPermission::class);
+        $actual = $entity->asIntEnum(EntityPermission::class);
         self::assertSame(EntityPermission::ADD, $actual);
     }
 
     public function testString(): void
     {
         $entity = $this->getEntity();
-        self::assertNull($entity->getValue());
-        $entity->setString('string');
-        self::assertSame('string', $entity->getValue());
+        self::assertNull($entity->value);
+        $entity->withString('string');
+        self::assertSame('string', $entity->value);
     }
 
     public function testStringEnum(): void
     {
         $entity = $this->getEntity();
-        self::assertNull($entity->getStringEnum(TableView::class));
-        $entity->setBackedEnum(TableView::CUSTOM);
+        self::assertNull($entity->asStringEnum(TableView::class));
+        $entity->withBackedEnum(TableView::CUSTOM);
         /** @var TableView|null $actual */
-        $actual = $entity->getStringEnum(TableView::class);
+        $actual = $entity->asStringEnum(TableView::class);
         self::assertSame(TableView::CUSTOM, $actual);
     }
 
@@ -110,37 +110,37 @@ final class AbstractPropertyTest extends TestCase
         $entity = $this->getEntity();
 
         $permission = EntityPermission::ADD;
-        $entity->setValue($permission);
-        self::assertSame($permission, $entity->getIntEnum(EntityPermission::class));
-        self::assertSame($permission->value, $entity->getInteger());
+        $entity->withValue($permission);
+        self::assertSame($permission, $entity->asIntEnum(EntityPermission::class));
+        self::assertSame($permission->value, $entity->asInteger());
 
         $view = TableView::CUSTOM;
-        $entity->setValue($view);
-        self::assertSame($view, $entity->getStringEnum(TableView::class));
-        self::assertSame($view->value, $entity->getValue());
+        $entity->withValue($view);
+        self::assertSame($view, $entity->asStringEnum(TableView::class));
+        self::assertSame($view->value, $entity->value);
 
-        $entity->setValue(true);
-        self::assertTrue($entity->getBoolean());
+        $entity->withValue(true);
+        self::assertTrue($entity->asBoolean());
 
         $date = new DatePoint();
-        $entity->setValue($date);
-        $actual = $entity->getDatePoint();
+        $entity->withValue($date);
+        $actual = $entity->asDatePoint();
         self::assertNotNull($actual);
         self::assertTimestampEquals($date, $actual);
 
-        $entity->setValue(12);
-        self::assertSame(12, $entity->getInteger());
+        $entity->withValue(12);
+        self::assertSame(12, $entity->asInteger());
 
-        $entity->setValue(1.5);
-        self::assertSame(1.5, $entity->getFloat());
+        $entity->withValue(1.5);
+        self::assertSame(1.5, $entity->asFloat());
 
         $category = new Category();
         self::setId($category, 10);
-        $entity->setValue($category);
-        self::assertSame(10, $entity->getInteger());
+        $entity->withValue($category);
+        self::assertSame(10, $entity->asInteger());
 
-        $entity->setValue(null);
-        self::assertSame('', $entity->getValue());
+        $entity->withValue(null);
+        self::assertSame('', $entity->value);
     }
 
     private function getEntity(?int $id = null): AbstractProperty

@@ -41,31 +41,48 @@ class CalculationItem extends AbstractEntity implements ComparableInterface, Par
     #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'items')]
     #[ORM\JoinColumn(name: 'category_id', nullable: false, onDelete: 'cascade')]
-    private ?CalculationCategory $category = null;
+    public ?CalculationCategory $category = null;
 
     /** The description. */
     #[Assert\NotBlank]
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column]
-    private ?string $description = null;
+    public ?string $description = null {
+        set => StringUtils::trim($value);
+    }
 
     /** The price. */
     #[ORM\Column(type: FixedFloatType::NAME)]
-    private float $price = 0.0;
+    public float $price = 0.0 {
+        set => $this->round($value);
+    }
 
     /** The quantity. */
     #[ORM\Column(type: FixedFloatType::NAME)]
-    private float $quantity = 0.0;
+    public float $quantity = 0.0 {
+        set => $this->round($value);
+    }
+
+    /**
+     * Gets the total.
+     *
+     * This is the quantity multiplied by the price.
+     */
+    public float $total {
+        get => $this->round($this->quantity * $this->price);
+    }
 
     /** The unit. */
     #[Assert\Length(max: 15)]
     #[ORM\Column(length: 15, nullable: true)]
-    private ?string $unit = null;
+    public ?string $unit = null {
+        set => StringUtils::trim($value);
+    }
 
     #[\Override]
     public function compare(ComparableInterface $other): int
     {
-        return \strnatcasecmp((string) $this->getDescription(), (string) $other->getDescription());
+        return \strnatcasecmp((string) $this->description, (string) $other->description);
     }
 
     /**
@@ -76,71 +93,21 @@ class CalculationItem extends AbstractEntity implements ComparableInterface, Par
     public static function create(Product $product): self
     {
         return new self()
-            ->setDescription($product->getDescription())
-            ->setPrice($product->getPrice())
-            ->setUnit($product->getUnit());
-    }
-
-    /**
-     * Get the parent's category.
-     */
-    public function getCategory(): ?CalculationCategory
-    {
-        return $this->category;
-    }
-
-    /**
-     * Get description.
-     */
-    public function getDescription(): ?string
-    {
-        return $this->description;
+            ->withDescription($product->description)
+            ->withPrice($product->price)
+            ->withUnit($product->unit);
     }
 
     #[\Override]
     public function getDisplay(): string
     {
-        return (string) $this->getDescription();
+        return (string) $this->description;
     }
 
     #[\Override]
     public function getParentEntity(): ?Calculation
     {
         return $this->category?->getParentEntity();
-    }
-
-    /**
-     * Get price.
-     */
-    public function getPrice(): float
-    {
-        return $this->price;
-    }
-
-    /**
-     * Get quantity.
-     */
-    public function getQuantity(): float
-    {
-        return $this->quantity;
-    }
-
-    /**
-     * Gets the total.
-     *
-     * This is the quantity multiplied by the price.
-     */
-    public function getTotal(): float
-    {
-        return $this->round($this->quantity * $this->price);
-    }
-
-    /**
-     * Get unit.
-     */
-    public function getUnit(): ?string
-    {
-        return $this->unit;
     }
 
     /**
@@ -170,7 +137,7 @@ class CalculationItem extends AbstractEntity implements ComparableInterface, Par
     /**
      * Set the parent's category.
      */
-    public function setCategory(?CalculationCategory $category): self
+    public function withCategory(?CalculationCategory $category): self
     {
         $this->category = $category;
 
@@ -180,9 +147,9 @@ class CalculationItem extends AbstractEntity implements ComparableInterface, Par
     /**
      * Set description.
      */
-    public function setDescription(?string $description): self
+    public function withDescription(?string $description): self
     {
-        $this->description = StringUtils::trim($description);
+        $this->description = $description;
 
         return $this;
     }
@@ -190,9 +157,9 @@ class CalculationItem extends AbstractEntity implements ComparableInterface, Par
     /**
      * Set price.
      */
-    public function setPrice(float $price): self
+    public function withPrice(float $price): self
     {
-        $this->price = $this->round($price);
+        $this->price = $price;
 
         return $this;
     }
@@ -200,9 +167,9 @@ class CalculationItem extends AbstractEntity implements ComparableInterface, Par
     /**
      * Set quantity.
      */
-    public function setQuantity(float $quantity): self
+    public function withQuantity(float $quantity): self
     {
-        $this->quantity = $this->round($quantity);
+        $this->quantity = $quantity;
 
         return $this;
     }
@@ -210,9 +177,9 @@ class CalculationItem extends AbstractEntity implements ComparableInterface, Par
     /**
      * Set unit.
      */
-    public function setUnit(?string $unit): self
+    public function withUnit(?string $unit): self
     {
-        $this->unit = StringUtils::trim($unit);
+        $this->unit = $unit;
 
         return $this;
     }

@@ -25,13 +25,13 @@ final class ProductsDocumentTest extends TestCase
     public function testRender(): void
     {
         $group = new Group();
-        $group->setCode('Group');
+        $group->withCode('Group');
 
         $category = new Category();
-        $category->setCode('Category');
+        $category->withCode('Category');
 
         $product = new Product();
-        $product->setDescription('Description');
+        $product->withDescription('Description');
 
         $group->addCategory($category);
         $category->addProduct($product);

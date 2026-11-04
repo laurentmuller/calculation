@@ -23,10 +23,10 @@ final class AbstractEntityTest extends TestCase
     public function testClone(): void
     {
         $entity = $this->getEntity(1);
-        self::assertSame(1, $entity->getId());
+        self::assertSame(1, $entity->id);
 
         $clone = clone $entity;
-        self::assertNull($clone->getId());
+        self::assertNull($clone->id);
     }
 
     public function testDisplay(): void

@@ -30,7 +30,7 @@ final class LoginListenerTest extends TestCase
         $event = $this->createEvent($user);
         $listener = $this->createListener();
         $listener->onLoginSuccess($event);
-        self::assertNotNull($user->getLastLogin());
+        self::assertNotNull($user->lastLogin);
     }
 
     private function createEvent(User $user): LoginSuccessEvent
@@ -66,9 +66,7 @@ final class LoginListenerTest extends TestCase
 
     private function createUser(): User
     {
-        $user = new User();
-        $user->setUsername('user_name');
-
-        return $user;
+        return new User()
+            ->withUsername('user_name');
     }
 }

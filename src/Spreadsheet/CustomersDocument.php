@@ -40,12 +40,12 @@ class CustomersDocument extends AbstractArrayDocument
 
         foreach ($entities as $entity) {
             $sheet->setRowValues($row++, [
-                $entity->getLastName(),
-                $entity->getFirstName(),
-                $entity->getCompany(),
-                $entity->getAddress(),
-                $entity->getZipCode(),
-                $entity->getCity(),
+                $entity->lastName,
+                $entity->firstName,
+                $entity->company,
+                $entity->address,
+                $entity->zipCode,
+                $entity->city,
             ]);
         }
         $sheet->finish();

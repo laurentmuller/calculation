@@ -148,7 +148,7 @@ final class ResetPasswordServiceTest extends TestCase
             user: $user
         );
         $request = new Request();
-        $actual = $service->sendEmail($request, $user->getUsername());
+        $actual = $service->sendEmail($request, $user->getUserIdentifier());
         self::assertInstanceOf(ResetPasswordToken::class, $actual);
     }
 
@@ -218,9 +218,9 @@ final class ResetPasswordServiceTest extends TestCase
 
     private function createUser(): User
     {
-        $user = new User();
-        $user->setUsername('username')
-            ->setEmail('email@example.com');
+        $user = new User()
+            ->withUsername('username')
+            ->withEmail('email@example.com');
 
         return self::setId($user);
     }

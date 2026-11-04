@@ -54,7 +54,7 @@ final class TaskServiceTypeTest extends TypeTestCase
 
         self::assertArrayHasKey('task', $children);
         self::assertArrayHasKey('quantity', $children);
-        self::assertSame((string) $data['task']->getId(), $children['task']->vars['value']);
+        self::assertSame((string) $data['task']->id, $children['task']->vars['value']);
         self::assertSame((string) $data['quantity'], $children['quantity']->vars['value']);
     }
 
@@ -62,7 +62,7 @@ final class TaskServiceTypeTest extends TypeTestCase
     {
         $task = $this->getTask();
         $formData = [
-            'task' => $task->getId(),
+            'task' => $task->id,
             'quantity' => 1.0,
         ];
         $model = [

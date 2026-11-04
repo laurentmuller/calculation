@@ -31,7 +31,7 @@ class GroupMargin extends AbstractMargin implements ParentTimestampableInterface
     #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'margins')]
     #[ORM\JoinColumn(name: 'group_id', nullable: false, onDelete: 'cascade')]
-    private ?Group $group = null;
+    public ?Group $group = null;
 
     #[\Override]
     public function getParentEntity(): ?Group
@@ -42,7 +42,7 @@ class GroupMargin extends AbstractMargin implements ParentTimestampableInterface
     /**
      * Set the group.
      */
-    public function setGroup(?Group $group): self
+    public function withGroup(?Group $group): self
     {
         $this->group = $group;
 

@@ -112,7 +112,7 @@ class CalculationEditStateType extends AbstractEntityType
     private function translateMarginBelow(Calculation $data): string
     {
         $minimum = $this->parameters->getMinMargin();
-        $margin = $data->getOverallMargin();
+        $margin = $data->overallMargin;
 
         return $this->translator
             ->trans('calculation.list.margin_below', [

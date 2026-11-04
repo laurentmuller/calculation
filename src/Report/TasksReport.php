@@ -37,9 +37,9 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
         $task = $event->getGroupKey();
         $category = $this->implode($task->getGroupCode(), $task->getCategoryCode());
         $table->startRow()
-            ->add($task->getName(), style: $event->group->getStyle())
+            ->add($task->name, style: $event->group->getStyle())
             ->add($category)
-            ->add($task->getUnit());
+            ->add($task->unit);
         if ($task->isEmpty()) {
             $table->addCellTrans('task.edit.empty_items', cols: 3);
         }
@@ -64,7 +64,7 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
                 $table->setGroupKey($entity);
                 continue;
             }
-            foreach ($entity->getItems() as $item) {
+            foreach ($entity->items as $item) {
                 $count = 1 + \max($item->count(), 1);
                 $height = (float) $count * self::LINE_HEIGHT;
                 if ($this->isPrintable($height)) {
@@ -75,26 +75,26 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
                 }
                 if ($item->isEmpty()) {
                     $table->startRow()
-                        ->add($item->getName(), style: $itemStyle)
+                        ->add($item->name, style: $itemStyle)
                         ->add()
                         ->add()
                         ->addCellTrans('taskitem.edit.empty_items', cols: 3)
                         ->endRow();
                 } else {
                     $index = 0;
-                    foreach ($item->getMargins() as $margin) {
+                    foreach ($item->margins as $margin) {
                         $table->startRow();
                         if (0 === $index++) {
-                            $table->add($item->getName(), style: $itemStyle);
+                            $table->add($item->name, style: $itemStyle);
                         } else {
                             $table->add();
                         }
-                        $style = $this->isFloatZero($margin->getValue()) ? $emptyStyle : null;
+                        $style = $this->isFloatZero($margin->value) ? $emptyStyle : null;
                         $table->add()
                             ->add()
-                            ->addCellAmount($margin->getMinimum())
-                            ->addCellAmount($margin->getMaximum())
-                            ->addCellAmount($margin->getValue(), style: $style)
+                            ->addCellAmount($margin->minimum)
+                            ->addCellAmount($margin->maximum)
+                            ->addCellAmount($margin->value, style: $style)
                             ->endRow();
                     }
                 }

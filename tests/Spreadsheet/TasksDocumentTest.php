@@ -27,42 +27,42 @@ final class TasksDocumentTest extends TestCase
     public function testRender(): void
     {
         $group = new Group();
-        $group->setCode('Group');
+        $group->withCode('Group');
 
         $category = new Category();
-        $category->setCode('Category');
+        $category->withCode('Category');
         $group->addCategory($category);
 
         $taskItemMargin1 = new TaskItemMargin();
-        $taskItemMargin1->setMinimum(0.0)
-            ->setMaximum(100.0)
-            ->setValue(10.0);
+        $taskItemMargin1->withMinimum(0.0)
+            ->withMaximum(100.0)
+            ->withValue(10.0);
 
         $taskItemMargin2 = new TaskItemMargin();
-        $taskItemMargin2->setMinimum(0.0)
-            ->setMaximum(100.0)
-            ->setValue(10.0);
+        $taskItemMargin2->withMinimum(0.0)
+            ->withMaximum(100.0)
+            ->withValue(10.0);
 
         $taskItem1 = new TaskItem();
-        $taskItem1->setName('TaskItem1');
+        $taskItem1->withName('TaskItem1');
         $taskItem1->addMargin($taskItemMargin1)
             ->addMargin($taskItemMargin2);
 
         $task1 = new Task();
-        $task1->setName('Task1');
+        $task1->withName('Task1');
         $task1->addItem($taskItem1);
         $category->addTask($task1);
 
         $taskItem2 = new TaskItem();
-        $taskItem2->setName('TaskItem2');
+        $taskItem2->withName('TaskItem2');
 
         $task2 = new Task();
-        $task2->setName('Task2')
+        $task2->withName('Task2')
             ->addItem($taskItem2);
         $category->addTask($task2);
 
         $task3 = new Task();
-        $task3->setName('Task3');
+        $task3->withName('Task3');
         $category->addTask($task3);
 
         $helper = self::createStub(DocumentHelperInterface::class);

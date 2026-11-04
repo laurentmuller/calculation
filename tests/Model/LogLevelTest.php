@@ -83,9 +83,9 @@ final class LogLevelTest extends TestCase
     {
         $expected = PsrLevel::WARNING;
         $logLevel = LogLevel::instance($expected);
-        self::assertSame($expected, $logLevel->getLevel());
+        self::assertSame($expected, $logLevel->level);
         self::assertSame($expected, (string) $logLevel);
-        self::assertSame('Warning', $logLevel->getLevelTitle());
+        self::assertSame('Warning', $logLevel->levelTitle);
         self::assertCount(0, $logLevel);
     }
 
@@ -96,7 +96,7 @@ final class LogLevelTest extends TestCase
     public function testLevelBootstrapColor(string $level, HtmlBootstrapColor $expected): void
     {
         $logLevel = LogLevel::instance($level);
-        $actual = $logLevel->getLevelBootstrapColor();
+        $actual = $logLevel->levelBootstrapColor;
         self::assertSame($expected, $actual);
     }
 
@@ -107,7 +107,7 @@ final class LogLevelTest extends TestCase
     public function testLevelBorder(string $level, string $expected): void
     {
         $logLevel = LogLevel::instance($level);
-        $actual = $logLevel->getLevelBorder();
+        $actual = $logLevel->levelBorder;
         self::assertSame($expected, $actual);
     }
 
@@ -118,7 +118,7 @@ final class LogLevelTest extends TestCase
     public function testLevelColor(string $level, string $expected): void
     {
         $logLevel = LogLevel::instance($level);
-        $actual = $logLevel->getLevelColor();
+        $actual = $logLevel->levelColor;
         self::assertSame($expected, $actual);
     }
 
@@ -129,7 +129,7 @@ final class LogLevelTest extends TestCase
     public function testLevelIcon(string $level, string $expected): void
     {
         $logLevel = LogLevel::instance($level);
-        $actual = $logLevel->getLevelIcon();
+        $actual = $logLevel->levelIcon;
         self::assertSame($expected, $actual);
     }
 }

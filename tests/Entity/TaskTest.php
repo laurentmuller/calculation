@@ -25,22 +25,22 @@ final class TaskTest extends EntityValidatorTestCase
     public function testClone(): void
     {
         $task = new Task();
-        $task->setName('name');
+        $task->withName('name');
 
         $clone = $task->clone();
-        self::assertSame($task->getName(), $clone->getName());
+        self::assertSame($task->name, $clone->name);
 
         $clone = $task->clone('clone');
-        self::assertNotSame($task->getName(), $clone->getName());
-        self::assertSame('clone', $clone->getName());
+        self::assertNotSame($task->name, $clone->name);
+        self::assertSame('clone', $clone->name);
     }
 
     public function testCompare(): void
     {
         $item1 = new Task();
-        $item1->setName('Task1');
+        $item1->withName('Task1');
         $item2 = new Task();
-        $item2->setName('Task2');
+        $item2->withName('Task2');
         $actual = $item1->compare($item2);
         self::assertSame(-1, $actual);
     }
@@ -86,7 +86,7 @@ final class TaskTest extends EntityValidatorTestCase
         $group = $this->createGroup();
         $category = $this->createCategory($group);
         $task = $this->createTask($category, 'name');
-        $task->setCategory(null);
+        $task->withCategory(null);
         $results = $this->validate($task, 1);
         $this->validatePaths($results, 'category');
     }
@@ -125,7 +125,7 @@ final class TaskTest extends EntityValidatorTestCase
         self::assertTrue($task->isEmpty());
         self::assertCount(0, $task);
         self::assertSame(0, $task->countMargins());
-        self::assertEmpty($task->getItems());
+        self::assertEmpty($task->items);
 
         $item = new TaskItem();
         $task->removeItem($item);
@@ -135,7 +135,7 @@ final class TaskTest extends EntityValidatorTestCase
         self::assertFalse($task->isEmpty());
         self::assertCount(1, $task);
         self::assertSame(0, $task->countMargins());
-        self::assertCount(1, $task->getItems());
+        self::assertCount(1, $task->items);
 
         // not add duplicate
         $task->addItem($item);
@@ -145,7 +145,7 @@ final class TaskTest extends EntityValidatorTestCase
         self::assertTrue($task->isEmpty());
         self::assertCount(0, $task);
         self::assertSame(0, $task->countMargins());
-        self::assertEmpty($task->getItems());
+        self::assertEmpty($task->items);
     }
 
     public function testUpdatePosition(): void
@@ -153,17 +153,17 @@ final class TaskTest extends EntityValidatorTestCase
         $task = new Task();
 
         $item0 = new TaskItem();
-        $item0->setPosition(-1);
+        $item0->position = -1;
 
         $item1 = new TaskItem();
-        $item1->setPosition(-2);
+        $item1->position = -2;
 
         $task->addItem($item0);
         $task->addItem($item1);
         $task->updatePositions();
 
-        self::assertSame(0, $item0->getPosition());
-        self::assertSame(1, $item1->getPosition());
+        self::assertSame(0, $item0->position);
+        self::assertSame(1, $item1->position);
     }
 
     public function testValid(): void
@@ -176,27 +176,22 @@ final class TaskTest extends EntityValidatorTestCase
 
     private function createCategory(Group $group): Category
     {
-        $category = new Category();
-        $category->setCode('code');
-        $category->setGroup($group);
-
-        return $category;
+        return new Category()
+            ->withCode('code')
+            ->withGroup($group);
     }
 
     private function createGroup(): Group
     {
-        $group = new Group();
-        $group->setCode('code');
-
-        return $group;
+        return new Group()->withCode('code');
     }
 
     private function createTask(Category $category, ?string $name = null): Task
     {
-        $task = new Task();
-        $task->setCategory($category);
+        $task = new Task()
+            ->withCategory($category);
         if (null !== $name) {
-            $task->setName($name);
+            $task->withName($name);
         }
 
         return $task;

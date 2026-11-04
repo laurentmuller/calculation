@@ -31,14 +31,14 @@ class CalculationUpdateResult implements \Countable
     public function addCalculation(float $oldTotal, Calculation $calculation): self
     {
         $this->results[] = [
-            'id' => $calculation->getId(),
-            'stateId' => $calculation->getStateId(),
-            'date' => $calculation->getDate(),
-            'customer' => $calculation->getCustomer(),
-            'description' => $calculation->getDescription(),
+            'id' => $calculation->id,
+            'stateId' => $calculation->stateId,
+            'date' => $calculation->date,
+            'customer' => $calculation->customer,
+            'description' => $calculation->description,
             'old_value' => $oldTotal,
-            'new_value' => $calculation->getOverallTotal(),
-            'delta' => $oldTotal - $calculation->getOverallTotal(),
+            'new_value' => $calculation->overallTotal,
+            'delta' => $oldTotal - $calculation->overallTotal,
         ];
 
         return $this;

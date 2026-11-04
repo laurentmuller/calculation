@@ -121,7 +121,7 @@ final class PlainTypeTest extends TypeTestCase
     public function testEntity(): void
     {
         $data = new User();
-        $data->setUsername('username');
+        $data->withUsername('username');
         $expected = 'username';
         $this->validateViewValue($data, $expected);
     }

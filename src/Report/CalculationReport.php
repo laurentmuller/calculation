@@ -50,7 +50,7 @@ class CalculationReport extends AbstractReport
         parent::__construct($helper);
         $this->setTranslatedTitle(
             'calculation.edit.title',
-            ['%id%' => $calculation->getFormattedId()],
+            ['%id%' => $calculation->formattedId],
             true
         );
     }
@@ -106,9 +106,9 @@ class CalculationReport extends AbstractReport
     private function checkEndHeight(Calculation $calculation): void
     {
         // header + groups + footer
-        $lines = $calculation->getGroupsCount() + 2;
+        $lines = $calculation->groupsCount + 2;
         // net total + user margin
-        if (!$this->isFloatZero($calculation->getUserMargin())) {
+        if (!$this->isFloatZero($calculation->userMargin)) {
             $lines += 2;
         }
         // global margin + overall total + timestampable
@@ -171,12 +171,12 @@ class CalculationReport extends AbstractReport
                 $this->rightColumn('', 40, true)
             )
             ->startHeaderRow()
-            ->add($calculation->getCustomer(), style: $leftStyle)
-            ->add($calculation->getStateCode(), style: $rightStyle)
+            ->add($calculation->customer, style: $leftStyle)
+            ->add($calculation->stateCode, style: $rightStyle)
             ->endRow()
             ->startHeaderRow()
-            ->add($calculation->getDescription(), style: $leftStyle)
-            ->add($calculation->getFormattedDate(), style: $rightStyle)
+            ->add($calculation->description, style: $leftStyle)
+            ->add($calculation->formattedDate, style: $rightStyle)
             ->endRow();
         $this->lineBreak(3);
     }

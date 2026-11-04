@@ -38,10 +38,10 @@ class GlobalMarginsDocument extends AbstractArrayDocument
 
         foreach ($entities as $entity) {
             $sheet->setRowValues($row++, [
-                $entity->getMinimum(),
-                $entity->getMaximum(),
+                $entity->minimum,
+                $entity->maximum,
                 $entity->getDelta(),
-                $entity->getMargin(),
+                $entity->margin,
             ]);
         }
 

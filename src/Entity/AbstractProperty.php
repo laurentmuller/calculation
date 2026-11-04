@@ -34,33 +34,33 @@ abstract class AbstractProperty extends AbstractEntity
     #[Assert\NotBlank]
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
-    protected ?string $value = null;
+    public ?string $value = null;
 
     /**
-     * @param ?string $name the property name
+     * @param string $name the property name
      */
     public function __construct(
         #[Assert\NotBlank]
         #[Assert\Length(max: 50)]
         #[ORM\Column(length: 50)]
-        protected ?string $name = null
+        public string $name = ''
     ) {
     }
 
     /**
      * Gets this property value as boolean.
      */
-    public function getBoolean(): bool
+    public function asBoolean(): bool
     {
-        return self::FALSE_VALUE !== $this->getInteger();
+        return self::FALSE_VALUE !== $this->asInteger();
     }
 
     /**
      * Gets this property value as a date point.
      */
-    public function getDatePoint(): ?DatePoint
+    public function asDatePoint(): ?DatePoint
     {
-        $timestamp = $this->getInteger();
+        $timestamp = $this->asInteger();
         if (self::FALSE_VALUE !== $timestamp) {
             return DatePoint::createFromTimestamp($timestamp);
         }
@@ -68,16 +68,10 @@ abstract class AbstractProperty extends AbstractEntity
         return null;
     }
 
-    #[\Override]
-    public function getDisplay(): string
-    {
-        return $this->name ?? parent::getDisplay();
-    }
-
     /**
      * Gets this property value as float.
      */
-    public function getFloat(): float
+    public function asFloat(): float
     {
         return (float) ($this->value ?? 0.0);
     }
@@ -85,7 +79,7 @@ abstract class AbstractProperty extends AbstractEntity
     /**
      * Gets this property value as integer.
      */
-    public function getInteger(): int
+    public function asInteger(): int
     {
         return (int) ($this->value ?? self::FALSE_VALUE);
     }
@@ -99,17 +93,9 @@ abstract class AbstractProperty extends AbstractEntity
      *
      * @return T|null
      */
-    public function getIntEnum(string $type): ?\BackedEnum
+    public function asIntEnum(string $type): ?\BackedEnum
     {
-        return $type::tryFrom($this->getInteger());
-    }
-
-    /**
-     * Gets the property name.
-     */
-    public function getName(): string
-    {
-        return (string) $this->name;
+        return $type::tryFrom($this->asInteger());
     }
 
     /**
@@ -121,63 +107,61 @@ abstract class AbstractProperty extends AbstractEntity
      *
      * @return T|null
      */
-    public function getStringEnum(string $type): ?\BackedEnum
+    public function asStringEnum(string $type): ?\BackedEnum
     {
-        return $type::tryFrom((string) $this->getValue());
+        return $type::tryFrom((string) $this->value);
     }
 
-    /**
-     * Gets the property value as string.
-     */
-    public function getValue(): ?string
+    #[\Override]
+    public function getDisplay(): string
     {
-        return $this->value;
+        return '' !== $this->name ? $this->name : parent::getDisplay();
     }
 
     /**
      * Sets the property value as a backed enum.
      */
-    public function setBackedEnum(\BackedEnum $value): static
+    public function withBackedEnum(\BackedEnum $value): static
     {
-        return $this->setString((string) $value->value);
+        return $this->withString((string) $value->value);
     }
 
     /**
      * Sets the property value as boolean.
      */
-    public function setBoolean(bool $value): static
+    public function withBoolean(bool $value): static
     {
-        return $this->setInteger($value ? self::TRUE_VALUE : self::FALSE_VALUE);
+        return $this->withInteger($value ? self::TRUE_VALUE : self::FALSE_VALUE);
     }
 
     /**
      * Sets the property value as date.
      */
-    public function setDate(?DatePoint $value): static
+    public function withDate(?DatePoint $value): static
     {
-        return $this->setInteger($value instanceof DatePoint ? $value->getTimestamp() : self::FALSE_VALUE);
+        return $this->withInteger($value instanceof DatePoint ? $value->getTimestamp() : self::FALSE_VALUE);
     }
 
     /**
      * Sets the property value as float.
      */
-    public function setFloat(float $value): static
+    public function withFloat(float $value): static
     {
-        return $this->setString((string) $value);
+        return $this->withString((string) $value);
     }
 
     /**
      * Sets the property value as integer.
      */
-    public function setInteger(int $value): static
+    public function withInteger(int $value): static
     {
-        return $this->setString((string) $value);
+        return $this->withString((string) $value);
     }
 
     /**
      * Sets the property name.
      */
-    public function setName(string $name): static
+    public function withName(string $name): static
     {
         $this->name = $name;
 
@@ -187,7 +171,7 @@ abstract class AbstractProperty extends AbstractEntity
     /**
      * Sets the property value as string.
      */
-    public function setString(?string $value): static
+    public function withString(?string $value): static
     {
         $this->value = $value;
 
@@ -199,27 +183,27 @@ abstract class AbstractProperty extends AbstractEntity
      *
      * This function tries first to convert the value to an appropriate type (bool, int, etc...).
      */
-    public function setValue(mixed $value): static
+    public function withValue(mixed $value): static
     {
         if ($value instanceof \BackedEnum) {
-            return $this->setBackedEnum($value);
+            return $this->withBackedEnum($value);
         }
         if (\is_bool($value)) {
-            return $this->setBoolean($value);
+            return $this->withBoolean($value);
         }
         if ($value instanceof DatePoint) {
-            return $this->setDate($value);
+            return $this->withDate($value);
         }
         if (\is_float($value)) {
-            return $this->setFloat($value);
+            return $this->withFloat($value);
         }
         if (\is_int($value)) {
-            return $this->setInteger($value);
+            return $this->withInteger($value);
         }
         if ($value instanceof EntityInterface) {
-            return $this->setInteger((int) $value->getId());
+            return $this->withInteger((int) $value->id);
         }
 
-        return $this->setString((string) $value);
+        return $this->withString((string) $value);
     }
 }

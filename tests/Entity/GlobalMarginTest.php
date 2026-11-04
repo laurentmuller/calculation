@@ -36,9 +36,9 @@ final class GlobalMarginTest extends EntityValidatorTestCase
     public function testDefaultValues(): void
     {
         $margin = new GlobalMargin();
-        self::assertSame(1.0, $margin->getMargin());
-        self::assertSame(0.0, $margin->getMinimum());
-        self::assertSame(0.0, $margin->getMaximum());
+        self::assertSame(1.0, $margin->margin);
+        self::assertSame(0.0, $margin->minimum);
+        self::assertSame(0.0, $margin->maximum);
     }
 
     public function testMarginAmount(): void
@@ -79,9 +79,9 @@ final class GlobalMarginTest extends EntityValidatorTestCase
     private function getGlobalMargin(float $minimum, float $maximum, float $margin = 1.0): GlobalMargin
     {
         $entity = new GlobalMargin();
-        $entity->setMinimum($minimum)
-            ->setMaximum($maximum)
-            ->setMargin($margin);
+        $entity->withMinimum($minimum)
+            ->withMaximum($maximum)
+            ->withMargin($margin);
 
         return $entity;
     }

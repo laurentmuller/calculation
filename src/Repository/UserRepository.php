@@ -205,7 +205,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
             throw new UnsupportedUserException(\sprintf('Instances of "%s" are not supported.', StringUtils::getDebugType($user)));
         }
 
-        return $this->loadUserByIdentifier($user->getUsername());
+        return $this->loadUserByIdentifier($user->getUserIdentifier());
     }
 
     /**
@@ -273,7 +273,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
         if (!$user instanceof User) {
             throw new UnsupportedUserException(\sprintf('Instances of "%s" are not supported.', StringUtils::getDebugType($user)));
         }
-        $user->setPassword($newHashedPassword);
+        $user->withPassword($newHashedPassword);
         $this->persist($user);
     }
 

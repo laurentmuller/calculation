@@ -36,9 +36,9 @@ trait ProductTrait
         }
 
         $this->product = new Product();
-        $this->product->setPrice($price)
-            ->setDescription($description)
-            ->setSupplier($supplier);
+        $this->product->withPrice($price)
+            ->withDescription($description)
+            ->withSupplier($supplier);
         $category ??= $this->getCategory();
         $category->addProduct($this->product);
 

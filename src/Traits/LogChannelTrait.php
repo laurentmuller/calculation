@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Trait to handle channel icons.
+ * Trait to handle log channel.
  */
 trait LogChannelTrait
 {
@@ -28,25 +28,20 @@ trait LogChannelTrait
     // the short application channel name
     private const string APP_CHANNEL_SHORT = 'app';
 
+    /** The channel. */
     #[Assert\NotBlank]
     #[Assert\Length(max: 20)]
     #[ORM\Column(length: 20)]
-    private string $channel = self::APP_CHANNEL_LONG;
-
-    /**
-     * Gets the channel's icon.
-     */
-    public function getChannel(): string
-    {
-        return $this->channel;
+    public string $channel = self::APP_CHANNEL_LONG {
+        set {
+            $value = \strtolower($value);
+            $this->channel = self::APP_CHANNEL_SHORT === $value ? self::APP_CHANNEL_LONG : $value;
+        }
     }
 
-    /**
-     * Get the channel FontAwesome icon.
-     */
-    public function getChannelFontAwesomeIcon(): FontAwesomeIcon
-    {
-        return match ($this->channel) {
+    /** Get the channel FontAwesome icon. */
+    public FontAwesomeIcon $channelFontAwesomeIcon {
+        get => match ($this->channel) {
             'application' => new FontAwesomeIcon(FontAwesomePath::SOLID, 'laptop-code'),
             'cache' => new FontAwesomeIcon(FontAwesomePath::SOLID, 'hard-drive'),
             'console' => new FontAwesomeIcon(FontAwesomePath::SOLID, 'keyboard'),
@@ -60,27 +55,19 @@ trait LogChannelTrait
         };
     }
 
-    /**
-     * Get the channel icon class.
-     */
-    public function getChannelIcon(): string
-    {
-        return $this->getChannelFontAwesomeIcon()
-            ->asHtml('fa-fw');
+    /** Get the channel icon class. */
+    public string $channelIcon {
+        get => $this->channelFontAwesomeIcon->asHtml('fa-fw');
     }
 
-    /**
-     * Gets the channel with the first character uppercase.
-     */
-    public function getChannelTitle(): string
-    {
-        return \ucfirst($this->channel);
+    /** Gets the channel with the first character uppercase. */
+    public string $channelTitle {
+        get => \ucfirst($this->channel);
     }
 
-    public function setChannel(string $channel): self
+    public function withChannel(string $channel): static
     {
-        $channel = \strtolower($channel);
-        $this->channel = self::APP_CHANNEL_SHORT === $channel ? self::APP_CHANNEL_LONG : $channel;
+        $this->channel = $channel;
 
         return $this;
     }

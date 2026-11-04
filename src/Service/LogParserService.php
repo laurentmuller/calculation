@@ -62,12 +62,12 @@ class LogParserService
                 continue;
             }
             $log = Log::instance($key)
-                ->setCreatedAt($date)
-                ->setChannel($values[1])
-                ->setLevel($values[2])
-                ->setUser($values[3])
-                ->setMessage(\trim($values[4]))
-                ->setContext($this->parseContext($values[5]));
+                ->withCreatedAt($date)
+                ->withChannel($values[1])
+                ->withLevel($values[2])
+                ->withUser($values[3])
+                ->withMessage(\trim($values[4]))
+                ->withContext($this->parseContext($values[5]));
             $file->addLog($log);
         }
 

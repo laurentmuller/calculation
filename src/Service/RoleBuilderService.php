@@ -48,7 +48,7 @@ class RoleBuilderService
      */
     public function getRole(User $user): Role
     {
-        if (!$user->isEnabled()) {
+        if (!$user->enabled) {
             return $this->getDisabledRole();
         }
         if ($user->isWebmaster()) {

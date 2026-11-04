@@ -68,11 +68,11 @@ class ProductController extends AbstractEntityController
     #[CloneEntityRoute]
     public function clone(Request $request, Product $item): Response
     {
-        $description = $this->trans('common.clone_description', ['%description%' => $item->getDescription()]);
+        $description = $this->trans('common.clone_description', ['%description%' => $item->description]);
         $clone = $item->clone($description);
         $parameters = [
             'title' => 'product.clone.title',
-            'params' => ['id' => $item->getId()],
+            'params' => ['id' => $item->id],
         ];
 
         return $this->editEntity($request, $clone, $parameters);
@@ -154,7 +154,7 @@ class ProductController extends AbstractEntityController
     {
         $application = $this->getApplicationParameters();
         $productParameter = $application->getProduct();
-        if ($productParameter->getProductId() === $item->getId()) {
+        if ($productParameter->getProductId() === $item->id) {
             $productParameter->setProductId(null);
             $application->save();
         }
@@ -166,7 +166,7 @@ class ProductController extends AbstractEntityController
         $product = new Product();
         $category = $this->getApplicationParameters()->getDefaultCategory();
         if ($category instanceof Category) {
-            $product->setCategory($category);
+            $product->withCategory($category);
         }
 
         return $product;

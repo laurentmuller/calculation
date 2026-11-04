@@ -65,17 +65,14 @@ final class GroupMarginsTest extends EntityValidatorTestCase
     private function addMargin(Group $group, float $minimum, float $maximum, float $margin): void
     {
         $groupMargin = new GroupMargin();
-        $groupMargin->setMinimum($minimum)
-            ->setMaximum($maximum)
-            ->setMargin($margin);
+        $groupMargin->withMinimum($minimum)
+            ->withMaximum($maximum)
+            ->withMargin($margin);
         $group->addMargin($groupMargin);
     }
 
     private function createGroup(): Group
     {
-        $group = new Group();
-        $group->setCode('code');
-
-        return $group;
+        return new Group()->withCode('code');
     }
 }

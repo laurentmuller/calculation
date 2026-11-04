@@ -57,8 +57,8 @@ trait CalculationStateTrait
     {
         if (!$this->editableState instanceof CalculationState) {
             $this->editableState = new CalculationState();
-            $this->editableState->setCode('Editable')
-                ->setEditable(true);
+            $this->editableState->withCode('Editable')
+                ->withEditable(true);
 
             return self::setId($this->editableState, 11);
         }
@@ -70,8 +70,8 @@ trait CalculationStateTrait
     {
         if (!$this->notEditableState instanceof CalculationState) {
             $this->notEditableState = new CalculationState();
-            $this->notEditableState->setCode('NotEditable')
-                ->setEditable(false);
+            $this->notEditableState->withCode('NotEditable')
+                ->withEditable(false);
 
             return self::setId($this->notEditableState);
         }

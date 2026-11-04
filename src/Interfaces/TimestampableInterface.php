@@ -21,15 +21,17 @@ use Symfony\Component\Translation\TranslatableMessage;
  */
 interface TimestampableInterface extends EntityInterface
 {
-    /**
-     * Gets the creation date.
-     */
-    public function getCreatedAt(): ?DatePoint;
+    /** Gets the creation date. */
+    public ?DatePoint $createdAt {get; }
 
-    /**
-     * Gets the creation username.
-     */
-    public function getCreatedBy(): ?string;
+    /** Gets the creation username. */
+    public ?string $createdBy {get; }
+
+    /** Gets the updated date. */
+    public ?DatePoint $updatedAt {get; }
+
+    /** Gets the updated username. */
+    public ?string $updatedBy {get; }
 
     /**
      * Gets the translatable message for the created date and the created user.
@@ -37,16 +39,6 @@ interface TimestampableInterface extends EntityInterface
      * @param bool $short <code>false</code> to get only data and user; <code>true</code> to get with a label prefix
      */
     public function getCreatedMessage(bool $short = false): TranslatableMessage;
-
-    /**
-     * Gets the updated date.
-     */
-    public function getUpdatedAt(): ?DatePoint;
-
-    /**
-     * Gets the updated username.
-     */
-    public function getUpdatedBy(): ?string;
 
     /**
      * Gets the translatable message for the updated date and the updated user.

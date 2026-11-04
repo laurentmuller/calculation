@@ -26,11 +26,11 @@ final class ProductsReportTest extends TestCase
     {
         $helper = self::createStub(DocumentHelperInterface::class);
         $group = new Group();
-        $group->setCode('Group');
+        $group->withCode('Group');
         $category = new Category();
-        $category->setCode('Category');
+        $category->withCode('Category');
         $product = new Product();
-        $product->setDescription('description');
+        $product->withDescription('description');
 
         $group->addCategory($category);
         $category->addProduct($product);

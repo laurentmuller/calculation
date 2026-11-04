@@ -32,8 +32,8 @@ final class EditTaskDialogTypeTest extends TypeTestCase
         $task = $this->getTask();
         $category = $this->getCategory();
         $formData = [
-            'task' => $task->getId(),
-            'category' => $category->getId(),
+            'task' => $task->id,
+            'category' => $category->id,
             'unit' => 'Unit',
             'quantity' => 1.0,
         ];

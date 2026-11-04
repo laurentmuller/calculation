@@ -48,13 +48,13 @@ final class CategoryRepositoryTest extends AbstractRepositoryTestCase
         self::assertEmpty($actual);
 
         $category = new Category();
-        $category->setCode('My Code')
-            ->setGroup($this->getGroup());
+        $category->withCode('My Code')
+            ->withGroup($this->getGroup());
         $this->addEntity($category);
 
         $product = new Product();
-        $product->setDescription('My Description')
-            ->setCategory($category);
+        $product->withDescription('My Description')
+            ->withCategory($category);
         $this->addEntity($product);
 
         try {
@@ -76,13 +76,13 @@ final class CategoryRepositoryTest extends AbstractRepositoryTestCase
         self::assertEmpty($actual);
 
         $category = new Category();
-        $category->setCode('My Code')
-            ->setGroup($this->getGroup());
+        $category->withCode('My Code')
+            ->withGroup($this->getGroup());
         $this->addEntity($category);
 
         $task = new Task();
-        $task->setName('My Name')
-            ->setCategory($category);
+        $task->withName('My Name')
+            ->withCategory($category);
         $this->addEntity($task);
 
         try {

@@ -70,7 +70,7 @@ final class CategoryControllerTest extends EntityControllerTestCase
         $data = [
             'category[code]' => 'Code',
             'category[description]' => 'Description',
-            'category[group]' => $this->getGroup()->getId(),
+            'category[group]' => $this->getGroup()->id,
         ];
         $this->checkAddEntity('/category/add', $data);
     }
@@ -78,7 +78,7 @@ final class CategoryControllerTest extends EntityControllerTestCase
     public function testDelete(): void
     {
         $this->addEntities();
-        $uri = \sprintf('/category/delete/%d', (int) $this->getCategory()->getId());
+        $uri = \sprintf('/category/delete/%d', (int) $this->getCategory()->id);
         $this->checkDeleteEntity($uri);
     }
 
@@ -92,7 +92,7 @@ final class CategoryControllerTest extends EntityControllerTestCase
         $this->addEntity($calculation);
 
         $userName = self::ROLE_ADMIN;
-        $uri = \sprintf('/category/delete/%d', (int) $category->getId());
+        $uri = \sprintf('/category/delete/%d', (int) $category->id);
 
         $this->loginUsername($userName);
         $crawler = $this->client->request(Request::METHOD_GET, $uri);
@@ -108,11 +108,11 @@ final class CategoryControllerTest extends EntityControllerTestCase
     public function testEdit(): void
     {
         $this->addEntities();
-        $uri = \sprintf('/category/edit/%d', (int) $this->getCategory()->getId());
+        $uri = \sprintf('/category/edit/%d', (int) $this->getCategory()->id);
         $data = [
             'category[code]' => 'New Code',
             'category[description]' => 'New Description',
-            'category[group]' => $this->getGroup()->getId(),
+            'category[group]' => $this->getGroup()->id,
         ];
         $this->checkEditEntity($uri, $data);
     }

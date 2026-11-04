@@ -54,9 +54,9 @@ class CustomerGenerator extends AbstractEntityGenerator
     protected function mapEntity(EntityInterface $entity): array
     {
         return [
-            'nameAndCompany' => $entity->getNameAndCompany(),
-            'address' => $entity->getAddress(),
-            'zipCity' => $entity->getZipCity(),
+            'nameAndCompany' => $entity->nameAndCompany,
+            'address' => $entity->address,
+            'zipCity' => $entity->zipCity,
         ];
     }
 
@@ -66,23 +66,23 @@ class CustomerGenerator extends AbstractEntityGenerator
      */
     private function createEntity(int $style, string $gender, Generator $generator): Customer
     {
-        $entity = new Customer();
-        $entity->setAddress($generator->streetAddress())
-            ->setZipCode($generator->postcode())
-            ->setCity($generator->city());
+        $entity = new Customer()
+            ->withAddress($generator->streetAddress())
+            ->withZipCode($generator->postcode())
+            ->withCity($generator->city());
 
         return match ($style) {
-            self::STYLE_COMPANY => $entity->setCompany($generator->company())
-                ->setEmail($generator->companyEmail()),
-            self::STYLE_CONTACT => $entity->setTitle($generator->title($gender))
-                ->setFirstName($generator->firstName($gender))
-                ->setLastName($generator->lastName())
-                ->setEmail($generator->email()),
-            default => $entity->setCompany($generator->company())
-                ->setFirstName($generator->firstName($gender))
-                ->setTitle($generator->title($gender))
-                ->setLastName($generator->lastName())
-                ->setEmail($generator->email())
+            self::STYLE_COMPANY => $entity->withCompany($generator->company())
+                ->withEmail($generator->companyEmail()),
+            self::STYLE_CONTACT => $entity->withTitle($generator->title($gender))
+                ->withFirstName($generator->firstName($gender))
+                ->withLastName($generator->lastName())
+                ->withEmail($generator->email()),
+            default => $entity->withCompany($generator->company())
+                ->withFirstName($generator->firstName($gender))
+                ->withTitle($generator->title($gender))
+                ->withLastName($generator->lastName())
+                ->withEmail($generator->email())
         };
     }
 

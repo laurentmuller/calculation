@@ -28,7 +28,7 @@ final class LogDatabaseTest extends TestCase
         self::assertSame(0, $actual);
 
         $log = Log::instance(1)
-            ->setMessage('Message');
+            ->withMessage('Message');
         $actual = $database->insertLog($log);
         self::assertTrue($actual);
 

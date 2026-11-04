@@ -85,7 +85,7 @@ class CustomersReport extends AbstractArrayReport
     {
         $result = [];
         foreach ($entities as $entity) {
-            $key = $this->getFirstChar($entity->getNameAndCompany());
+            $key = $this->getFirstChar($entity->nameAndCompany);
             $result[$key][] = $entity;
         }
         \uksort($result, function (string $str1, string $str2): int {
@@ -105,9 +105,9 @@ class CustomersReport extends AbstractArrayReport
     private function outputCustomer(PdfGroupTable $table, Customer $customer): void
     {
         $table->addRow(
-            $customer->getNameAndCompany(),
-            $customer->getAddress(),
-            $customer->getZipCity()
+            $customer->nameAndCompany,
+            $customer->address,
+            $customer->zipCity
         );
     }
 }

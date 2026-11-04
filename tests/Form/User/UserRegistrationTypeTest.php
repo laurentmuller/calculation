@@ -40,8 +40,8 @@ final class UserRegistrationTypeTest extends TypeTestCase
     public function testFormView(): void
     {
         $user = new User();
-        $user->setUsername('username')
-            ->setEmail('email@email.com');
+        $user->withUsername('username')
+            ->withEmail('email@email.com');
         $data = [
             'username' => 'username',
             'email' => 'email@email.com',

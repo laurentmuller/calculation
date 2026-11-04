@@ -15,6 +15,7 @@ namespace App\Entity;
 
 use App\Interfaces\ComparableInterface;
 use App\Repository\TaskRepository;
+use App\Utils\StringUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -36,7 +37,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
     #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'tasks')]
     #[ORM\JoinColumn(name: 'category_id', nullable: false)]
-    protected ?Category $category = null;
+    public ?Category $category = null;
 
     /**
      * The children's items.
@@ -51,13 +52,15 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
         orphanRemoval: true
     )]
     #[ORM\OrderBy(['position' => \SortDirection::Ascending])]
-    private Collection $items;
+    public Collection $items;
 
     /** The name. */
     #[Assert\NotBlank]
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column]
-    private ?string $name = null;
+    public ?string $name = null {
+        set => StringUtils::trim($value);
+    }
 
     public function __construct()
     {
@@ -69,7 +72,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
     {
         parent::__clone();
         $this->items = $this->items->map(
-            fn (TaskItem $item): TaskItem => (clone $item)->setTask($this)
+            fn (TaskItem $item): TaskItem => (clone $item)->withTask($this)
         );
     }
 
@@ -80,7 +83,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
     {
         if (!$this->items->contains($item)) {
             $this->items->add($item);
-            $item->setTask($this);
+            $item->task = $this;
         }
 
         return $this;
@@ -95,7 +98,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
     {
         $copy = clone $this;
         if (null !== $name) {
-            $copy->setName($name);
+            $copy->withName($name);
         }
 
         return $copy;
@@ -104,7 +107,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
     #[\Override]
     public function compare(ComparableInterface $other): int
     {
-        return \strnatcasecmp((string) $this->getName(), (string) $other->getName());
+        return \strnatcasecmp((string) $this->name, (string) $other->name);
     }
 
     /**
@@ -141,20 +144,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
             return [];
         }
 
-        return $this->items->map(static fn (TaskItem $item): int => (int) $item->getId())->toArray();
-    }
-
-    /**
-     * @return Collection<int, TaskItem>
-     */
-    public function getItems(): Collection
-    {
-        return $this->items;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
+        return $this->items->map(static fn (TaskItem $item): int => (int) $item->id)->toArray();
     }
 
     /**
@@ -171,19 +161,12 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
     public function removeItem(TaskItem $item): self
     {
         if ($this->items->removeElement($item)) {
-            if ($item->getParentEntity() === $this) {
-                $item->setTask(null);
+            if ($item->task === $this) {
+                $item->task = null;
             }
 
             return $this->updatePositions();
         }
-
-        return $this;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
 
         return $this;
     }
@@ -195,8 +178,15 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
     {
         $position = 0;
         foreach ($this->items as $item) {
-            $item->setPosition($position++);
+            $item->position = $position++;
         }
+
+        return $this;
+    }
+
+    public function withName(string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }

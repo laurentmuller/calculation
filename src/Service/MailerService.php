@@ -43,7 +43,7 @@ readonly class MailerService implements TranslatorProviderInterface
      */
     public static function convertAddress(string|Address|User $address): Address
     {
-        return $address instanceof User ? $address->getAddress() : Address::create($address);
+        return $address instanceof User ? $address->address : Address::create($address);
     }
 
     #[\Override]

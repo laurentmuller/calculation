@@ -36,7 +36,7 @@ trait CalculationStateTrait
         }
 
         $this->calculationState = new CalculationState();
-        $this->calculationState->setCode($code);
+        $this->calculationState->withCode($code);
 
         return $this->addEntity($this->calculationState);
     }

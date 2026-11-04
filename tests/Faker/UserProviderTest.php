@@ -25,7 +25,7 @@ final class UserProviderTest extends TestCase
     public function testWithEntity(): void
     {
         $entity = new User();
-        $entity->setUsername('user_name');
+        $entity->withUsername('user_name');
         $provider = $this->createProvider($entity);
 
         $actual = \count($provider);

@@ -70,10 +70,10 @@ class UsersDocument extends AbstractArrayDocument
             $sheet->setRowValues($row, [
                 null,
                 $entity->getUserIdentifier(),
-                $entity->getEmail(),
+                $entity->email,
                 $this->roleService->translateRole($entity),
-                $entity->isEnabled(),
-                $this->formatLastLogin($entity->getLastLogin()),
+                $entity->enabled,
+                $this->formatLastLogin($entity->lastLogin),
             ]);
             $path = $entity->getImagePath($this->storage);
             if (null !== $path && \file_exists($path)) {

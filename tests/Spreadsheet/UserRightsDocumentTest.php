@@ -34,7 +34,7 @@ final class UserRightsDocumentTest extends TestCase
         $users = [];
         foreach (\range(1, 5) as $index) {
             $users[] = new User()
-                ->setUsername(\sprintf('User %d', $index))
+                ->withUsername(\sprintf('User %d', $index))
                 ->setRole(RoleInterface::ROLE_WEBMASTER);
         }
 

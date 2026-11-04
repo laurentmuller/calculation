@@ -25,23 +25,23 @@ final class AbstractCategoryItemEntityTest extends TestCase
     public function testCategoryAndGroup(): void
     {
         $entity = $this->getEntity();
-        self::assertNull($entity->getCategory());
+        self::assertNull($entity->category);
         self::assertNull($entity->getCategoryId());
         self::assertSame('', $entity->getCategoryCode());
         self::assertNull($entity->getGroup());
         self::assertSame('', $entity->getGroupCode());
 
         $category = new Category();
-        $category->setCode('code');
+        $category->withCode('code');
         self::setId($category);
-        $entity->setCategory($category);
-        self::assertSame($category, $entity->getCategory());
+        $entity->withCategory($category);
+        self::assertSame($category, $entity->category);
         self::assertSame(1, $entity->getCategoryId());
         self::assertSame('code', $entity->getCategoryCode());
         self::assertNull($entity->getGroup());
 
         $group = new Group();
-        $group->setCode('group');
+        $group->withCode('group');
         $group->addCategory($category);
 
         self::assertNotNull($entity->getGroup());
@@ -51,13 +51,13 @@ final class AbstractCategoryItemEntityTest extends TestCase
     public function testFields(): void
     {
         $entity = $this->getEntity();
-        self::assertNull($entity->getUnit());
-        self::assertNull($entity->getSupplier());
+        self::assertNull($entity->unit);
+        self::assertNull($entity->supplier);
 
-        $entity->setUnit('unit');
-        $entity->setSupplier('supplier');
-        self::assertSame('unit', $entity->getUnit());
-        self::assertSame('supplier', $entity->getSupplier());
+        $entity->withUnit('unit');
+        $entity->withSupplier('supplier');
+        self::assertSame('unit', $entity->unit);
+        self::assertSame('supplier', $entity->supplier);
     }
 
     private function getEntity(?int $id = null): AbstractCategoryItemEntity

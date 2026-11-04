@@ -64,7 +64,7 @@ class CalculationUpdateQuery extends AbstractSimulateQuery
     {
         return \implode(
             ', ',
-            $this->mapStates(static fn (CalculationState $state): string => (string) $state->getCode())
+            $this->mapStates(static fn (CalculationState $state): string => (string) $state->code)
         );
     }
 
@@ -73,7 +73,7 @@ class CalculationUpdateQuery extends AbstractSimulateQuery
      */
     public function getStatesId(): array
     {
-        return $this->mapStates(static fn (CalculationState $state): int => (int) $state->getId());
+        return $this->mapStates(static fn (CalculationState $state): int => (int) $state->id);
     }
 
     /**

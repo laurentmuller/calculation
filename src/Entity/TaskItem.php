@@ -19,6 +19,7 @@ use App\Interfaces\PositionInterface;
 use App\Repository\TaskItemRepository;
 use App\Traits\PositionTrait;
 use App\Traits\ValidateMarginsTrait;
+use App\Utils\StringUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -28,8 +29,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represents an item of a task.
  *
- * @implements ParentTimestampableInterface<Task>
  * @implements ComparableInterface<TaskItem>
+ * @implements ParentTimestampableInterface<Task>
  */
 #[ORM\Table(name: 'sy_TaskItem')]
 #[ORM\Entity(repositoryClass: TaskItemRepository::class)]
@@ -39,7 +40,7 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
 {
     use PositionTrait;
 
-    /** @use ValidateMarginsTrait<int, TaskItemMargin> */
+    /** @use ValidateMarginsTrait<TaskItemMargin> */
     use ValidateMarginsTrait;
 
     /**
@@ -55,17 +56,23 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
         orphanRemoval: true
     )]
     #[ORM\OrderBy(['minimum' => \SortDirection::Ascending])]
-    private Collection $margins;
+    public Collection $margins {
+        get => $this->margins;
+    }
 
+    /** The name. */
     #[Assert\NotBlank]
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column]
-    private ?string $name = null;
+    public ?string $name = null {
+        set => StringUtils::trim($value);
+    }
 
+    /** The parent's task. */
     #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'items')]
     #[ORM\JoinColumn(name: 'task_id', nullable: false)]
-    private ?Task $task = null;
+    public ?Task $task = null;
 
     public function __construct()
     {
@@ -77,7 +84,7 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
     {
         parent::__clone();
         $this->margins = $this->margins->map(
-            fn (TaskItemMargin $margin): TaskItemMargin => (clone $margin)->setTaskItem($this)
+            fn (TaskItemMargin $margin): TaskItemMargin => (clone $margin)->withTaskItem($this)
         );
     }
 
@@ -88,7 +95,7 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
     {
         if (!$this->margins->contains($margin)) {
             $this->margins->add($margin);
-            $margin->setTaskItem($this);
+            $margin->taskItem = $this;
         }
 
         return $this;
@@ -97,7 +104,7 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
     #[\Override]
     public function compare(ComparableInterface $other): int
     {
-        return \strnatcasecmp((string) $this->getName(), (string) $other->getName());
+        return \strnatcasecmp((string) $this->name, (string) $other->name);
     }
 
     /**
@@ -134,30 +141,13 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
      */
     public function findValue(float $quantity): float
     {
-        return $this->findMargin($quantity)?->getValue() ?? 0.0;
+        return $this->findMargin($quantity)->value ?? 0.0;
     }
 
     #[\Override]
     public function getDisplay(): string
     {
         return (string) $this->name;
-    }
-
-    /**
-     * @return Collection<int, TaskItemMargin>
-     */
-    #[\Override]
-    public function getMargins(): Collection
-    {
-        return $this->margins;
-    }
-
-    /**
-     * Gets the name.
-     */
-    public function getName(): ?string
-    {
-        return $this->name;
     }
 
     #[\Override]
@@ -179,8 +169,8 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
      */
     public function removeMargin(TaskItemMargin $margin): self
     {
-        if ($this->margins->removeElement($margin) && $margin->getTaskItem() === $this) {
-            $margin->setTaskItem(null);
+        if ($this->margins->removeElement($margin) && $margin->taskItem === $this) {
+            $margin->taskItem = null;
         }
 
         return $this;
@@ -189,7 +179,7 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
     /**
      * Sets the name.
      */
-    public function setName(string $name): self
+    public function withName(string $name): self
     {
         $this->name = $name;
 
@@ -199,7 +189,7 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
     /**
      * Sets the parent's task.
      */
-    public function setTask(?Task $task): self
+    public function withTask(?Task $task): self
     {
         $this->task = $task;
 

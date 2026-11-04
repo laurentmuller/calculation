@@ -40,8 +40,8 @@ readonly class TaskService
         $quantity = $query->quantity;
         $selectedItems = $query->items;
         $result = new TaskComputeResult($task, $quantity);
-        foreach ($task->getItems() as $item) {
-            $result->addItem($item, \in_array($item->getId(), $selectedItems, true));
+        foreach ($task->items as $item) {
+            $result->addItem($item, \in_array($item->id, $selectedItems, true));
         }
 
         return $result;

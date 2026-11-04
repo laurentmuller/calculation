@@ -94,7 +94,7 @@ final class CalculationRepositoryTest extends AbstractRepositoryTestCase
 
     public function testFindOneByIdFound(): void
     {
-        $id = $this->getCalculation()->getId();
+        $id = $this->getCalculation()->id;
         $actual = $this->repository->findOneById((int) $id);
         self::assertNotNull($actual);
     }
@@ -204,7 +204,7 @@ final class CalculationRepositoryTest extends AbstractRepositoryTestCase
         self::assertEmpty($actual);
 
         $user = new User();
-        $user->setUsername('fake');
+        $user->withUsername('fake');
         self::setId($user);
         $actual = $this->repository->getLastCalculations(6, $user);
         self::assertEmpty($actual);
@@ -223,10 +223,10 @@ final class CalculationRepositoryTest extends AbstractRepositoryTestCase
 
         $date = new DatePoint('2024-01-01');
         $calculation = $this->getCalculation();
-        $calculation->setDate($date);
+        $calculation->withDate($date);
         $this->addEntity($calculation);
 
-        $expected = $calculation->getDate();
+        $expected = $calculation->date;
 
         $actual = $this->repository->getMinMaxDates();
         self::assertCount(2, $actual);

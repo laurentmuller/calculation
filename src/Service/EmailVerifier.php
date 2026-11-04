@@ -43,7 +43,7 @@ readonly class EmailVerifier
     public function handleEmail(Request $request, User $user): void
     {
         $this->validateEmail($request, $user);
-        $user->setVerified(true);
+        $user->withVerified(true);
         $this->repository->persist($user);
     }
 
@@ -68,8 +68,8 @@ readonly class EmailVerifier
 
     private function generateSignature(string $routeName, User $user): VerifyEmailSignatureComponents
     {
-        $id = (string) $user->getId();
-        $email = (string) $user->getEmail();
+        $id = (string) $user->id;
+        $email = (string) $user->email;
         $parameters = ['id' => $id];
 
         return $this->helper->generateSignature($routeName, $id, $email, $parameters);
@@ -96,8 +96,8 @@ readonly class EmailVerifier
 
     private function validateEmail(Request $request, User $user): void
     {
-        $id = (string) $user->getId();
-        $email = (string) $user->getEmail();
+        $id = (string) $user->id;
+        $email = (string) $user->email;
         $this->helper->validateEmailConfirmationFromRequest($request, $id, $email);
     }
 }

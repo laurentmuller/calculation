@@ -50,7 +50,7 @@ class ResetAllPasswordType extends AbstractType
             'multiple' => true,
             'label' => 'user.list.title',
             'choice_value' => 'id',
-            'choice_label' => 'NameAndEmail',
+            'choice_label' => 'nameAndEmail',
             'choice_translation_domain' => false,
             'choices' => $this->repository->getResettableUsers(),
             'row_attr' => ['class' => 'ms-5 mb-3'],

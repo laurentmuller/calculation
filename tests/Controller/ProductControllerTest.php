@@ -62,12 +62,12 @@ final class ProductControllerTest extends EntityControllerTestCase
     {
         $category = $this->getCategory();
         $service = self::getService(ApplicationParameters::class);
-        $service->getDefault()->setCategoryId($category->getId());
+        $service->getDefault()->setCategoryId($category->id);
         $service->save();
 
         $data = [
             'product[description]' => 'Description',
-            'product[category]' => $category->getId(),
+            'product[category]' => $category->id,
             'product[price]' => 1.0,
             'product[unit]' => 'm2',
             'product[supplier]' => 'Supplier',
@@ -78,17 +78,17 @@ final class ProductControllerTest extends EntityControllerTestCase
     public function testDelete(): void
     {
         $this->addEntities();
-        $uri = \sprintf('/product/delete/%d', (int) $this->getProduct()->getId());
+        $uri = \sprintf('/product/delete/%d', (int) $this->getProduct()->id);
         $this->checkDeleteEntity($uri);
     }
 
     public function testEdit(): void
     {
         $this->addEntities();
-        $uri = \sprintf('/product/edit/%d', (int) $this->getProduct()->getId());
+        $uri = \sprintf('/product/edit/%d', (int) $this->getProduct()->id);
         $data = [
             'product[description]' => 'New Description',
-            'product[category]' => $this->getCategory()->getId(),
+            'product[category]' => $this->getCategory()->id,
             'product[price]' => 2.0,
             'product[unit]' => 'km',
             'product[supplier]' => 'New Supplier',

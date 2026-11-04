@@ -68,13 +68,13 @@ final class CalculationStateRepositoryTest extends AbstractRepositoryTestCase
         self::assertEmpty($actual);
 
         $state = new CalculationState();
-        $state->setCode('My Code');
+        $state->withCode('My Code');
         $this->addEntity($state);
 
         $calculation = new Calculation();
-        $calculation->setState($state)
-            ->setCustomer('customer')
-            ->setDescription('description');
+        $calculation->withState($state)
+            ->withCustomer('customer')
+            ->withDescription('description');
         $this->addEntity($calculation);
 
         try {
@@ -105,7 +105,7 @@ final class CalculationStateRepositoryTest extends AbstractRepositoryTestCase
         $actual = $this->repository->getEditableCount();
         self::assertSame(1, $actual);
 
-        $state->setEditable(false);
+        $state->withEditable(false);
         $this->addEntity($state);
         $actual = $this->repository->getEditableCount();
         self::assertSame(0, $actual);
@@ -120,7 +120,7 @@ final class CalculationStateRepositoryTest extends AbstractRepositoryTestCase
         $actual = $this->repository->getNotEditableCount();
         self::assertSame(0, $actual);
 
-        $state->setEditable(false);
+        $state->withEditable(false);
         $this->addEntity($state);
         $actual = $this->repository->getNotEditableCount();
         self::assertSame(1, $actual);

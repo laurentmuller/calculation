@@ -16,7 +16,6 @@ namespace App\Entity;
 use App\Repository\UserPropertyRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -29,25 +28,17 @@ use Symfony\Component\Validator\Constraints as Assert;
 class UserProperty extends AbstractProperty
 {
     /**
-     * @param ?string $name the property name
-     * @param ?User   $user the parent's user
+     * @param string $name the property name
+     * @param ?User  $user the parent's user
      */
     public function __construct(
-        ?string $name = null,
+        string $name = '',
         #[Assert\NotNull]
         #[ORM\ManyToOne(inversedBy: 'properties')]
         #[ORM\JoinColumn(name: 'user_id', nullable: false, onDelete: 'cascade')]
-        private ?User $user = null
+        public ?User $user = null
     ) {
         parent::__construct($name);
-    }
-
-    /**
-     * Gets the parent's user.
-     */
-    public function getUser(): ?UserInterface
-    {
-        return $this->user;
     }
 
     /**
@@ -61,7 +52,7 @@ class UserProperty extends AbstractProperty
     /**
      * Sets the parent's user.
      */
-    public function setUser(?User $user): self
+    public function withUser(?User $user): self
     {
         $this->user = $user;
 

@@ -76,16 +76,16 @@ final class PivotControllerTest extends ControllerTestCase
     protected function addEntities(): void
     {
         $margin = new GroupMargin();
-        $margin->setMinimum(0)
-            ->setMaximum(1000)
-            ->setMargin(0.1);
+        $margin->withMinimum(0)
+            ->withMaximum(1000)
+            ->withMargin(0.1);
         $group = $this->getGroup()
             ->addMargin($margin);
         $this->addEntity($group);
 
         $category = $this->getCategory($group);
         $product = $this->getProduct($category)
-            ->setPrice(10.0);
+            ->withPrice(10.0);
         $this->addEntity($product);
 
         $calculation = $this->getCalculation()

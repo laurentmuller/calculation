@@ -110,7 +110,7 @@ final class TaskTableTest extends EntityTableTestCase
         $categoryRepository = self::createStub(CategoryRepository::class);
         if (0 !== $this->categoryId) {
             $category = new Category();
-            $category->setCode('code');
+            $category->withCode('code');
             self::setId($category);
             $categoryRepository->method('find')
                 ->willReturn($category);
@@ -119,7 +119,7 @@ final class TaskTableTest extends EntityTableTestCase
         $groupRepository = self::createStub(GroupRepository::class);
         if (0 !== $this->groupId) {
             $category = new Group();
-            $category->setCode('code');
+            $category->withCode('code');
             self::setId($category);
             $groupRepository->method('find')
                 ->willReturn($category);

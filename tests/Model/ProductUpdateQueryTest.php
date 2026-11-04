@@ -114,23 +114,23 @@ final class ProductUpdateQueryTest extends TestCase
 
     private function createCategory(): Category
     {
-        $group = new Group();
-        $group->setCode('group');
+        $group = new Group()
+            ->withCode('group');
         self::setId($group);
 
-        $category = new Category();
-        $category->setCode('code')
-            ->setGroup($group);
+        $category = new Category()
+            ->withCode('code')
+            ->withGroup($group);
 
         return self::setId($category);
     }
 
     private function createProduct(): Product
     {
-        $product = new Product();
-        $product->setCategory($this->createCategory())
-            ->setDescription('description')
-            ->setPrice(1.0);
+        $product = new Product()
+            ->withCategory($this->createCategory())
+            ->withDescription('description')
+            ->withPrice(1.0);
 
         return self::setId($product);
     }

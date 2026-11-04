@@ -30,7 +30,7 @@ trait CalculationsTrait
      */
     public function addCalculation(Calculation $calculation): self
     {
-        $this->calculations[(int) $calculation->getId()] = $calculation;
+        $this->calculations[(int) $calculation->id] = $calculation;
 
         return $this;
     }

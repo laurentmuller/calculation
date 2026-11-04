@@ -87,7 +87,7 @@ class ProductUpdateController extends AbstractController
                 'choice_label' => 'description',
                 'choices' => $service->getAllProducts(),
                 'choice_attr' => static fn (Product $product): array => [
-                    'data-price' => $product->getPrice(),
+                    'data-price' => $product->price,
                     'data-category' => $product->getCategoryId(),
                 ],
             ])

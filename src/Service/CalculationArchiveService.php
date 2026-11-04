@@ -127,7 +127,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
         $calculations = $this->getCalculations($query);
         foreach ($calculations as $calculation) {
             /** @phpstan-var CalculationState $oldState */
-            $oldState = $calculation->getState();
+            $oldState = $calculation->state;
             if ($this->updateCalculation($calculation, $target)) {
                 $result->addCalculation($oldState, $calculation);
             }
@@ -246,7 +246,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
             return $sources;
         }
 
-        return \array_filter($sources, static fn (CalculationState $state): bool => \in_array($state->getId(), $ids, true));
+        return \array_filter($sources, static fn (CalculationState $state): bool => \in_array($state->id, $ids, true));
     }
 
     private function getTarget(): ?CalculationState
@@ -273,11 +273,11 @@ class CalculationArchiveService implements ServiceSubscriberInterface
 
     private function updateCalculation(Calculation $calculation, CalculationState $target): bool
     {
-        if ($calculation->getState() === $target) {
+        if ($calculation->state === $target) {
             return false;
         }
 
-        $calculation->setState($target);
+        $calculation->withState($target);
 
         return true;
     }

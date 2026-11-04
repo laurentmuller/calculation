@@ -22,7 +22,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Represents a group of categories.
+ * Represents a group of categories and margins.
  */
 #[ORM\Table(name: 'sy_Group')]
 #[ORM\Entity(repositoryClass: GroupRepository::class)]
@@ -30,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[UniqueEntity(fields: 'code', message: 'group.unique_code')]
 class Group extends AbstractCodeEntity
 {
-    /** @use ValidateMarginsTrait<int, GroupMargin> */
+    /** @use ValidateMarginsTrait<GroupMargin> */
     use ValidateMarginsTrait;
 
     /**
@@ -46,7 +46,7 @@ class Group extends AbstractCodeEntity
         orphanRemoval: true
     )]
     #[ORM\OrderBy(['code' => \SortDirection::Ascending])]
-    private Collection $categories;
+    public Collection $categories;
 
     /**
      * The children margins.
@@ -62,7 +62,9 @@ class Group extends AbstractCodeEntity
         orphanRemoval: true
     )]
     #[ORM\OrderBy(['minimum' => \SortDirection::Ascending])]
-    private Collection $margins;
+    public Collection $margins {
+        get => $this->margins;
+    }
 
     public function __construct()
     {
@@ -75,7 +77,7 @@ class Group extends AbstractCodeEntity
     {
         parent::__clone();
         $this->margins = $this->margins->map(
-            fn (GroupMargin $margin): GroupMargin => (clone $margin)->setGroup($this)
+            fn (GroupMargin $margin): GroupMargin => (clone $margin)->withGroup($this)
         );
     }
 
@@ -86,7 +88,7 @@ class Group extends AbstractCodeEntity
     {
         if (!$this->categories->contains($category)) {
             $this->categories->add($category);
-            $category->setGroup($this);
+            $category->group = $this;
         }
 
         return $this;
@@ -99,7 +101,7 @@ class Group extends AbstractCodeEntity
     {
         if (!$this->margins->contains($margin)) {
             $this->margins->add($margin);
-            $margin->setGroup($this);
+            $margin->group = $this;
         }
 
         return $this;
@@ -176,71 +178,50 @@ class Group extends AbstractCodeEntity
      */
     public function findPercent(float $amount): float
     {
-        return $this->findMargin($amount)?->getMargin() ?? 0.0;
+        return $this->findMargin($amount)->margin ?? 0.0;
     }
 
     /**
-     * Get categories.
-     *
-     * @return Collection<int, Category>
+     * Returns if this group contains no category.
      */
-    public function getCategories(): Collection
+    public function isEmptyCategories(): bool
     {
-        return $this->categories;
+        return $this->categories->isEmpty();
     }
 
     /**
-     * Get margins.
-     *
-     * @return Collection<int, GroupMargin>
+     * Returns if this group contains no margin.
      */
-    #[\Override]
-    public function getMargins(): Collection
+    public function isEmptyMargins(): bool
     {
-        return $this->margins;
+        return $this->margins->isEmpty();
     }
 
     /**
-     * Returns if this group contains one or more categories.
+     * Returns if this group contains no product.
      */
-    public function hasCategories(): bool
+    public function isEmptyProducts(): bool
     {
-        return !$this->categories->isEmpty();
-    }
-
-    /**
-     * Returns if this group contains one or more margins.
-     */
-    public function hasMargins(): bool
-    {
-        return !$this->margins->isEmpty();
-    }
-
-    /**
-     * Returns if this group contains one or more products.
-     */
-    public function hasProducts(): bool
-    {
-        if (!$this->hasCategories()) {
-            return false;
+        if ($this->isEmptyCategories()) {
+            return true;
         }
 
-        return $this->categories->exists(
-            static fn (int $key, Category $category): bool => $category->hasProducts()
+        return $this->categories->forAll(
+            static fn (int $key, Category $category): bool => $category->isEmptyProducts()
         );
     }
 
     /**
-     * Returns if this category contains one or more tasks.
+     * Returns if this category contains no task.
      */
-    public function hasTasks(): bool
+    public function isEmptyTasks(): bool
     {
-        if (!$this->hasCategories()) {
-            return false;
+        if ($this->isEmptyCategories()) {
+            return true;
         }
 
-        return $this->categories->exists(
-            static fn (int $key, Category $category): bool => $category->hasTasks()
+        return $this->categories->forAll(
+            static fn (int $key, Category $category): bool => $category->isEmptyTasks()
         );
     }
 
@@ -249,8 +230,8 @@ class Group extends AbstractCodeEntity
      */
     public function removeCategory(Category $category): self
     {
-        if ($this->categories->removeElement($category) && $category->getGroup() === $this) {
-            $category->setGroup(null);
+        if ($this->categories->removeElement($category) && $category->group === $this) {
+            $category->group = null;
         }
 
         return $this;
@@ -262,7 +243,7 @@ class Group extends AbstractCodeEntity
     public function removeMargin(GroupMargin $margin): self
     {
         if ($this->margins->removeElement($margin) && $margin->getParentEntity() === $this) {
-            $margin->setGroup(null);
+            $margin->group = null;
         }
 
         return $this;

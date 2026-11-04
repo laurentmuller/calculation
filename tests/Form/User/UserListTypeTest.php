@@ -44,7 +44,7 @@ final class UserListTypeTest extends TypeTestCase
     {
         $user = $this->getUser();
         $formData = [
-            'value' => $user->getId(),
+            'value' => $user->id,
         ];
         $model = FixtureDataForm::instance($user);
         $form = $this->factory->createBuilder(FormType::class, $model)

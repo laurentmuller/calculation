@@ -168,12 +168,6 @@ final class EntityVoterTest extends TestCase
         EntityPermission|string $attribute,
         int $expected
     ): void {
-        if ($subject instanceof EntityName) {
-            $subject = $subject->value;
-        }
-        if ($attribute instanceof EntityPermission) {
-            $attribute = $attribute->name;
-        }
         $token = $this->getUserToken($user);
         $actual = $this->voter->vote($token, $subject, [$attribute], new Vote());
         self::assertSame($expected, $actual);
@@ -201,7 +195,7 @@ final class EntityVoterTest extends TestCase
 
     private function getDisableUser(): User
     {
-        return $this->getDefaultUser()->setEnabled(false);
+        return $this->getDefaultUser()->withEnabled(false);
     }
 
     /**
@@ -211,7 +205,7 @@ final class EntityVoterTest extends TestCase
     {
         $user = new User();
 
-        return $user->setUsername($role)
+        return $user->withUsername($role)
             ->setRole($role);
     }
 

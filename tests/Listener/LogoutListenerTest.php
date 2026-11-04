@@ -69,9 +69,6 @@ final class LogoutListenerTest extends TestCase
 
     private function createUser(): User
     {
-        $user = new User();
-        $user->setUsername('user_name');
-
-        return $user;
+        return new User()->withUsername('user_name');
     }
 }

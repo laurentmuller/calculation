@@ -36,8 +36,8 @@ class CalculationStatesReport extends AbstractArrayReport
         $total = 0;
         foreach ($entities as $entity) {
             $table->startRow()
-                ->add($entity->getCode())
-                ->add($entity->getDescription())
+                ->add($entity->code)
+                ->add($entity->description)
                 ->add($this->formatEditable($entity))
                 ->addCell($this->getColorCell($entity))
                 ->addCellInt($entity->countCalculations())
@@ -67,7 +67,7 @@ class CalculationStatesReport extends AbstractArrayReport
 
     private function formatEditable(CalculationState $entity): string
     {
-        return $this->trans($entity->isEditable() ? 'common.value_true' : 'common.value_false');
+        return $this->trans($entity->editable ? 'common.value_true' : 'common.value_false');
     }
 
     private function getColorCell(CalculationState $state): PdfBackgroundCell

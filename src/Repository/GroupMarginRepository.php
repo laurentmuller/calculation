@@ -42,7 +42,7 @@ class GroupMarginRepository extends AbstractRepository
     public function getGroupMargin(Group|int $group, float $amount): float
     {
         if ($group instanceof Group) {
-            $group = $group->getId();
+            $group = $group->id;
         }
         $builder = $this->createQueryBuilder('e')
             ->select('e.margin')

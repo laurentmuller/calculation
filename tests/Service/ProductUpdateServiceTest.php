@@ -46,17 +46,17 @@ final class ProductUpdateServiceTest extends TestCase
     protected function setUp(): void
     {
         $this->category = new Category();
-        $this->category->setCode('category');
+        $this->category->withCode('category');
         self::setId($this->category);
 
         $this->product = new Product();
-        $this->product->setDescription('description')
-            ->setCategory($this->category)
-            ->setPrice(1.0);
+        $this->product->withDescription('description')
+            ->withCategory($this->category)
+            ->withPrice(1.0);
         self::setId($this->product);
 
         $this->user = new User();
-        $this->user->setUsername('system');
+        $this->user->withUsername('system');
 
         $this->session = new Session(new MockArraySessionStorage());
         $this->session->set('product.update.type', ProductUpdateQuery::UPDATE_PERCENT);
@@ -118,7 +118,7 @@ final class ProductUpdateServiceTest extends TestCase
     #[DataProvider('getFixedRounded')]
     public function testFixedRounded(float $price, float $expected, float $fixed = 1.0): void
     {
-        $this->product->setPrice($price);
+        $this->product->withPrice($price);
 
         $query = $this->createQuery(ProductUpdateQuery::UPDATE_FIXED, $this->product)
             ->setSimulate(false)
@@ -141,7 +141,7 @@ final class ProductUpdateServiceTest extends TestCase
         $fixed = 1.0;
         $expected = $price + $fixed;
 
-        $this->product->setPrice($price);
+        $this->product->withPrice($price);
 
         $query = $this->createQuery(ProductUpdateQuery::UPDATE_FIXED, $this->product)
             ->setFixed($fixed);
@@ -166,7 +166,7 @@ final class ProductUpdateServiceTest extends TestCase
     #[DataProvider('getPercentRounded')]
     public function testPercentRounded(float $price, float $percent, float $expected): void
     {
-        $this->product->setPrice($price);
+        $this->product->withPrice($price);
 
         $query = $this->createQuery(ProductUpdateQuery::UPDATE_PERCENT, $this->product)
             ->setRound(true)
@@ -188,7 +188,7 @@ final class ProductUpdateServiceTest extends TestCase
         $percent = 0.1;
         $expected = $price * (1.0 + $percent);
 
-        $this->product->setPrice($price);
+        $this->product->withPrice($price);
 
         $query = $this->createQuery(ProductUpdateQuery::UPDATE_PERCENT, $this->product)
             ->setPercent($percent);

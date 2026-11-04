@@ -18,13 +18,6 @@ namespace App\Interfaces;
  */
 interface PositionInterface
 {
-    /**
-     * Gets the position index in the collection.
-     */
-    public function getPosition(): int;
-
-    /**
-     * Sets the position index in the collection.
-     */
-    public function setPosition(int $position): static;
+    /** The position index in the collection. */
+    public int $position {get; }
 }

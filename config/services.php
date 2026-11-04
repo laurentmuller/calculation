@@ -57,6 +57,7 @@ return App::config([
                 $path . 'Kernel.php',
                 $path . 'Calendar',
                 $path . 'Entity',
+                $path . 'Enums',
                 $path . 'Faker',
                 $path . 'Model',
                 $path . 'Pdf',
@@ -76,8 +77,7 @@ return App::config([
             ],
             'calls' => [
                 [
-                    'setBasePath' => ['%kernel.project_dir%'],
-                ],
+                    'setBasePath' => ['%kernel.project_dir%']],
             ],
         ],
     ],

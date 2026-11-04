@@ -314,7 +314,7 @@ abstract class AbstractEntityController extends AbstractController
         $params = \array_merge($request->query->all(), $parameters['params'] ?? []);
         if (!isset($params['id'])) {
             if ($id instanceof EntityInterface) {
-                $id = $id->getId();
+                $id = $id->id;
             }
             if (null !== $id && 0 !== $id) {
                 $params['id'] = $id;
@@ -328,7 +328,7 @@ abstract class AbstractEntityController extends AbstractController
      */
     private function getDeleteToken(EntityInterface $entity): string
     {
-        return \sprintf('delete_%d', (int) $entity->getId());
+        return \sprintf('delete_%d', (int) $entity->id);
     }
 
     private function getMessageId(string $suffix, string $default): string

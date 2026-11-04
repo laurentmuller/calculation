@@ -50,8 +50,8 @@ final class LogTableTest extends TestCase
     {
         $log = Log::instance();
         $table = $this->createTableWithoutData();
-        $expected = $log->getFormattedDate();
-        $actual = $table->formatCreatedAt($log->getCreatedAt());
+        $expected = $log->formattedDate;
+        $actual = $table->formatCreatedAt($log->createdAt);
         self::assertSame($expected, $actual);
     }
 
@@ -179,11 +179,11 @@ final class LogTableTest extends TestCase
 
     private function createLevels(): array
     {
-        $level1 = new LogLevel(PsrLevel::INFO);
-        $level1->increment();
+        $level1 = new LogLevel(PsrLevel::INFO)
+            ->increment();
 
-        $level2 = new LogLevel(PsrLevel::ALERT);
-        $level2->increment();
+        $level2 = new LogLevel(PsrLevel::ALERT)
+            ->increment();
 
         return [$level1, $level2];
     }
@@ -191,11 +191,11 @@ final class LogTableTest extends TestCase
     private function createLogs(): array
     {
         $log1 = Log::instance(1)
-            ->setMessage('Message1');
+            ->withMessage('Message1');
         $log2 = Log::instance(2)
-            ->setMessage('Message2')
-            ->setLevel(PsrLevel::ALERT)
-            ->setChannel('doctrine');
+            ->withMessage('Message2')
+            ->withLevel(PsrLevel::ALERT)
+            ->withChannel('doctrine');
 
         return [$log1, $log2];
     }

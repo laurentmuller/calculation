@@ -24,7 +24,7 @@ final class GroupsDocumentTest extends TestCase
     public function testRenderWithMargins(): void
     {
         $group = new Group();
-        $group->setCode('Group');
+        $group->withCode('Group');
         $group->addMargin(new GroupMargin())
             ->addMargin(new GroupMargin());
 
@@ -37,7 +37,7 @@ final class GroupsDocumentTest extends TestCase
     public function testRenderWithoutMargin(): void
     {
         $group = new Group();
-        $group->setCode('Group');
+        $group->withCode('Group');
 
         $helper = self::createStub(DocumentHelperInterface::class);
         $document = new GroupsDocument($helper, [$group]);

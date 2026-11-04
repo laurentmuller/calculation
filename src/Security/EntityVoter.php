@@ -36,6 +36,18 @@ class EntityVoter extends Voter
     }
 
     #[\Override]
+    public function vote(TokenInterface $token, mixed $subject, array $attributes, ?Vote $vote = null): int
+    {
+        foreach ($attributes as &$attribute) {
+            if ($attribute instanceof EntityPermission) {
+                $attribute = $attribute->name;
+            }
+        }
+
+        return parent::vote($token, $subject, $attributes, $vote);
+    }
+
+    #[\Override]
     protected function supports(string $attribute, mixed $subject): bool
     {
         return EntityPermission::tryFromName($attribute) instanceof EntityPermission
@@ -103,7 +115,7 @@ class EntityVoter extends Voter
         if (!$user instanceof User) {
             return $this->addReason($vote, 'The authentication token does not contains an instance of User.');
         }
-        if (!$user->isEnabled()) {
+        if (!$user->enabled) {
             return $this->addReason($vote, 'The logged in user is disabled.');
         }
 

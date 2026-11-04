@@ -120,7 +120,7 @@ class RegistrationController extends AbstractController
         )->translatedSubject('registration.subject')
             ->importance(Importance::MEDIUM)
             ->from(ApplicationService::getOwnerAddress())
-            ->to($user->getAddress());
+            ->to($user->address);
     }
 
     private function findUser(Request $request): ?User

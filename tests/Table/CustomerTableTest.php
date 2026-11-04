@@ -29,12 +29,12 @@ final class CustomerTableTest extends EntityTableTestCase
     protected function createEntities(): array
     {
         $entity = new Customer();
-        $entity->setCompany('Company')
-            ->setFirstName('First Name')
-            ->setLastName('Last Name')
-            ->setAddress('Address')
-            ->setZipCode('ZipCode')
-            ->setCity('City');
+        $entity->withCompany('Company')
+            ->withFirstName('First Name')
+            ->withLastName('Last Name')
+            ->withAddress('Address')
+            ->withZipCode('ZipCode')
+            ->withCity('City');
 
         return [$entity];
     }

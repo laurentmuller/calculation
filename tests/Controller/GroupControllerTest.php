@@ -73,7 +73,7 @@ final class GroupControllerTest extends EntityControllerTestCase
     public function testDelete(): void
     {
         $this->addEntities();
-        $uri = \sprintf('/group/delete/%d', (int) $this->getGroup()->getId());
+        $uri = \sprintf('/group/delete/%d', (int) $this->getGroup()->id);
         $this->checkDeleteEntity($uri);
     }
 
@@ -86,7 +86,7 @@ final class GroupControllerTest extends EntityControllerTestCase
         $this->addEntity($calculation);
 
         $userName = self::ROLE_ADMIN;
-        $uri = \sprintf('/group/delete/%d', (int) $group->getId());
+        $uri = \sprintf('/group/delete/%d', (int) $group->id);
 
         $this->loginUsername($userName);
         $crawler = $this->client->request(Request::METHOD_GET, $uri);
@@ -102,7 +102,7 @@ final class GroupControllerTest extends EntityControllerTestCase
     public function testEdit(): void
     {
         $this->addEntities();
-        $uri = \sprintf('/group/edit/%d', (int) $this->getGroup()->getId());
+        $uri = \sprintf('/group/edit/%d', (int) $this->getGroup()->id);
         $data = [
             'group[code]' => 'New Code',
             'group[description]' => 'New Description',

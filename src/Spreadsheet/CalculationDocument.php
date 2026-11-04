@@ -51,7 +51,7 @@ class CalculationDocument extends AbstractDocument
     public function render(): bool
     {
         $calculation = $this->calculation;
-        $id = $calculation->getFormattedId();
+        $id = $calculation->formattedId;
         $title = $this->trans('calculation.edit.title', ['%id%' => $id]);
         $this->start($title);
 
@@ -226,9 +226,9 @@ class CalculationDocument extends AbstractDocument
     private function renderGlobalMargin(WorksheetDocument $sheet, Calculation $calculation, int &$row): void
     {
         $this->cellText($sheet, 1, $row, $this->trans('calculation.fields.globalMargin'))
-            ->cellPercent($sheet, $row, $calculation->getGlobalMargin())
+            ->cellPercent($sheet, $row, $calculation->globalMargin)
             ->setLeftRightBorders($sheet, $row);
-        $this->cellAmount($sheet, 5, $row, $calculation->getGlobalMarginAmount())
+        $this->cellAmount($sheet, 5, $row, $calculation->globalMarginAmount)
             ->setLeftRightBorders($sheet, $row);
         ++$row;
     }
@@ -247,22 +247,22 @@ class CalculationDocument extends AbstractDocument
         $this->setAllBorders($sheet, $row);
         ++$row;
 
-        foreach ($calculation->getGroups() as $group) {
-            $this->cellBold($sheet, 1, $row, $group->getCode())
+        foreach ($calculation->groups as $group) {
+            $this->cellBold($sheet, 1, $row, $group->code)
                 ->setLeftRightBorders($sheet, $row);
             ++$row;
 
-            foreach ($group->getCategories() as $category) {
-                $this->cellBold($sheet, 1, $row, $category->getCode(), 1)
+            foreach ($group->categories as $category) {
+                $this->cellBold($sheet, 1, $row, $category->code, 1)
                     ->setLeftRightBorders($sheet, $row);
                 ++$row;
 
-                foreach ($category->getItems() as $item) {
-                    $this->cellText($sheet, 1, $row, $item->getDescription(), 1)
-                        ->cellText($sheet, 2, $row, $item->getUnit())
-                        ->cellAmount($sheet, 3, $row, $item->getPrice())
-                        ->cellAmount($sheet, 4, $row, $item->getQuantity())
-                        ->cellAmount($sheet, 5, $row, $item->getTotal())
+                foreach ($category->items as $item) {
+                    $this->cellText($sheet, 1, $row, $item->description, 1)
+                        ->cellText($sheet, 2, $row, $item->unit)
+                        ->cellAmount($sheet, 3, $row, $item->price)
+                        ->cellAmount($sheet, 4, $row, $item->quantity)
+                        ->cellAmount($sheet, 5, $row, $item->total)
                         ->setLeftRightBorders($sheet, $row);
                     ++$row;
                 }
@@ -270,7 +270,7 @@ class CalculationDocument extends AbstractDocument
         }
 
         $this->cellBold($sheet, 1, $row, $this->trans('calculation.fields.itemsTotal'))
-            ->cellAmount($sheet, 5, $row, $calculation->getItemsTotal(), true)
+            ->cellAmount($sheet, 5, $row, $calculation->itemsTotal, true)
             ->fillBackground($sheet, $row)
             ->setAllBorders($sheet, $row);
         ++$row;
@@ -279,10 +279,10 @@ class CalculationDocument extends AbstractDocument
     private function renderMarginsTotal(WorksheetDocument $sheet, Calculation $calculation, int &$row): void
     {
         $this->cellBold($sheet, 1, $row, $this->trans('calculation.fields.marginTotal'))
-            ->cellAmount($sheet, 2, $row, $calculation->getItemsTotal())
-            ->cellPercent($sheet, $row, $calculation->getGroupsMargin())
-            ->cellAmount($sheet, 4, $row, $calculation->getGroupsMarginAmount())
-            ->cellAmount($sheet, 5, $row, $calculation->getGroupsTotal(), true)
+            ->cellAmount($sheet, 2, $row, $calculation->itemsTotal)
+            ->cellPercent($sheet, $row, $calculation->groupsMargin)
+            ->cellAmount($sheet, 4, $row, $calculation->groupsMarginAmount)
+            ->cellAmount($sheet, 5, $row, $calculation->groupsTotal, true)
             ->fillBackground($sheet, $row)
             ->setAllBorders($sheet, $row);
         ++$row;
@@ -292,10 +292,10 @@ class CalculationDocument extends AbstractDocument
     {
         $marginFormat = $this->getMarginFormat($sheet, $this->minMargin);
         $this->cellBold($sheet, 1, $row, $this->trans('calculation.fields.overallTotal'))
-            ->cellAmount($sheet, 2, $row, $calculation->getItemsTotal(), true)
-            ->cellPercent($sheet, $row, $calculation->getOverallMargin(), true, $marginFormat)
-            ->cellAmount($sheet, 4, $row, $calculation->getOverallMarginAmount(), true)
-            ->cellAmount($sheet, 5, $row, $calculation->getOverallTotal(), true)
+            ->cellAmount($sheet, 2, $row, $calculation->itemsTotal, true)
+            ->cellPercent($sheet, $row, $calculation->overallMargin, true, $marginFormat)
+            ->cellAmount($sheet, 4, $row, $calculation->overallMarginAmount, true)
+            ->cellAmount($sheet, 5, $row, $calculation->overallTotal, true)
             ->fillBackground($sheet, $row)
             ->setAllBorders($sheet, $row);
     }
@@ -335,17 +335,17 @@ class CalculationDocument extends AbstractDocument
         ++$row;
 
         $sheet->mergeContent(1, 3, $row);
-        $this->cellBold($sheet, 1, $row, $calculation->getCustomer());
+        $this->cellBold($sheet, 1, $row, $calculation->customer);
         $sheet->mergeContent(4, 5, $row);
-        $this->cellBold($sheet, 4, $row, $calculation->getStateCode(), 0, Alignment::HORIZONTAL_RIGHT)
+        $this->cellBold($sheet, 4, $row, $calculation->stateCode, 0, Alignment::HORIZONTAL_RIGHT)
             ->fillBackground($sheet, $row)
             ->setAllBorders($sheet, $row);
         ++$row;
 
         $sheet->mergeContent(1, 3, $row);
-        $this->cellBold($sheet, 1, $row, $calculation->getDescription());
+        $this->cellBold($sheet, 1, $row, $calculation->description);
         $sheet->mergeContent(4, 5, $row);
-        $this->cellBold($sheet, 4, $row, $calculation->getDate(), 0, Alignment::HORIZONTAL_RIGHT, NumberFormat::FORMAT_DATE_DDMMYYYY)
+        $this->cellBold($sheet, 4, $row, $calculation->date, 0, Alignment::HORIZONTAL_RIGHT, NumberFormat::FORMAT_DATE_DDMMYYYY)
             ->fillBackground($sheet, $row)
             ->setAllBorders($sheet, $row);
         ++$row;
@@ -364,12 +364,12 @@ class CalculationDocument extends AbstractDocument
             ->setAllBorders($sheet, $row);
         ++$row;
 
-        foreach ($calculation->getGroups() as $group) {
-            $this->cellText($sheet, 1, $row, $group->getCode())
-                ->cellAmount($sheet, 2, $row, $group->getAmount())
-                ->cellPercent($sheet, $row, $group->getMargin())
-                ->cellAmount($sheet, 4, $row, $group->getMarginAmount())
-                ->cellAmount($sheet, 5, $row, $group->getTotal())
+        foreach ($calculation->groups as $group) {
+            $this->cellText($sheet, 1, $row, $group->code)
+                ->cellAmount($sheet, 2, $row, $group->amount)
+                ->cellPercent($sheet, $row, $group->margin)
+                ->cellAmount($sheet, 4, $row, $group->marginAmount)
+                ->cellAmount($sheet, 5, $row, $group->total)
                 ->setLeftRightBorders($sheet, $row);
             ++$row;
         }
@@ -380,19 +380,19 @@ class CalculationDocument extends AbstractDocument
      */
     private function renderUserMargin(WorksheetDocument $sheet, Calculation $calculation, int &$row): void
     {
-        if ($this->isFloatZero($calculation->getUserMargin())) {
+        if ($this->isFloatZero($calculation->userMargin)) {
             return;
         }
 
         $this->cellBold($sheet, 1, $row, $this->trans('calculation.fields.totalNet'))
-            ->cellAmount($sheet, 5, $row, $calculation->getTotalNet(), true)
+            ->cellAmount($sheet, 5, $row, $calculation->totalNet, true)
             ->fillBackground($sheet, $row)
             ->setAllBorders($sheet, $row);
         ++$row;
 
         $this->cellText($sheet, 1, $row, $this->trans('calculation.fields.userMargin'))
-            ->cellPercent($sheet, $row, $calculation->getUserMargin());
-        $this->cellAmount($sheet, 5, $row, $calculation->getUserMarginAmount())
+            ->cellPercent($sheet, $row, $calculation->userMargin);
+        $this->cellAmount($sheet, 5, $row, $calculation->userMarginAmount)
             ->setLeftRightBorders($sheet, $row);
         ++$row;
     }

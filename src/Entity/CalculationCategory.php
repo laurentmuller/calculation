@@ -41,24 +41,28 @@ class CalculationCategory extends AbstractEntity implements \Countable, Comparab
 
     /** The total amount. */
     #[ORM\Column(type: FixedFloatType::NAME)]
-    private float $amount = 0.0;
+    public float $amount = 0.0 {
+        set => $this->round($value);
+    }
 
     /** The parent's category. */
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(name: 'category_id', nullable: false)]
-    private ?Category $category = null;
+    public ?Category $category = null;
 
     /** The code. */
     #[Assert\NotBlank]
     #[Assert\Length(max: self::MAX_CODE_LENGTH)]
     #[ORM\Column(length: self::MAX_CODE_LENGTH)]
-    private ?string $code = null;
+    public ?string $code = null {
+        set => StringUtils::trim($value);
+    }
 
     /** The parent's group. */
     #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'categories')]
     #[ORM\JoinColumn(name: 'group_id', nullable: false, onDelete: 'cascade')]
-    private ?CalculationGroup $group = null;
+    public ?CalculationGroup $group = null;
 
     /**
      * The items.
@@ -73,7 +77,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, Comparab
         orphanRemoval: true
     )]
     #[ORM\OrderBy(['position' => \SortDirection::Ascending])]
-    private Collection $items;
+    public Collection $items;
 
     public function __construct()
     {
@@ -85,7 +89,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, Comparab
     {
         parent::__clone();
         $this->items = $this->items->map(
-            fn (CalculationItem $item): CalculationItem => (clone $item)->setCategory($this)
+            fn (CalculationItem $item): CalculationItem => (clone $item)->withCategory($this)
         );
     }
 
@@ -96,7 +100,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, Comparab
     {
         if (!$this->contains($item)) {
             $this->items->add($item);
-            $item->setCategory($this);
+            $item->category = $this;
         }
 
         return $this;
@@ -105,7 +109,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, Comparab
     #[\Override]
     public function compare(ComparableInterface $other): int
     {
-        return \strnatcasecmp((string) $this->getCode(), (string) $other->getCode());
+        return \strnatcasecmp((string) $this->code, (string) $other->code);
     }
 
     /**
@@ -134,55 +138,13 @@ class CalculationCategory extends AbstractEntity implements \Countable, Comparab
      */
     public static function create(Category $category): self
     {
-        return new self()->setCategory($category);
-    }
-
-    /**
-     * Get the total amount.
-     */
-    public function getAmount(): float
-    {
-        return $this->amount;
-    }
-
-    /**
-     * Get the category.
-     */
-    public function getCategory(): ?Category
-    {
-        return $this->category;
-    }
-
-    /**
-     * Get code.
-     */
-    public function getCode(): ?string
-    {
-        return $this->code;
+        return new self()->withCategory($category);
     }
 
     #[\Override]
     public function getDisplay(): string
     {
-        return (string) $this->getCode();
-    }
-
-    /**
-     * Get the parent's group.
-     */
-    public function getGroup(): ?CalculationGroup
-    {
-        return $this->group;
-    }
-
-    /**
-     * Get calculation items.
-     *
-     * @return Collection<int, CalculationItem>
-     */
-    public function getItems(): Collection
-    {
-        return $this->items;
+        return (string) $this->code;
     }
 
     #[\Override]
@@ -217,61 +179,12 @@ class CalculationCategory extends AbstractEntity implements \Countable, Comparab
     public function removeItem(CalculationItem $item): self
     {
         if ($this->items->removeElement($item)) {
-            if ($item->getCategory() === $this) {
-                $item->setCategory(null);
+            if ($item->category === $this) {
+                $item->category = null;
             }
 
             return $this->updatePositions();
         }
-
-        return $this;
-    }
-
-    /**
-     * Set the total amount.
-     */
-    public function setAmount(float $amount): self
-    {
-        $this->amount = $this->round($amount);
-
-        return $this;
-    }
-
-    /**
-     * Set the category.
-     *
-     * @param Category $category the category to copy values from
-     * @param bool     $update   true to update the amount and the margin
-     */
-    public function setCategory(Category $category, bool $update = false): self
-    {
-        // copy
-        $this->category = $category;
-        $this->code = $category->getCode();
-
-        if ($update) {
-            return $this->update();
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the code.
-     */
-    public function setCode(?string $code): self
-    {
-        $this->code = StringUtils::trim($code);
-
-        return $this;
-    }
-
-    /**
-     * Set the parent's group.
-     */
-    public function setGroup(?CalculationGroup $group): self
-    {
-        $this->group = $group;
 
         return $this;
     }
@@ -294,8 +207,8 @@ class CalculationCategory extends AbstractEntity implements \Countable, Comparab
         $position = 0;
         $changed = false;
         foreach ($items as $item) {
-            if ($position !== $item->getPosition()) {
-                $item->setPosition($position);
+            if ($position !== $item->position) {
+                $item->position = $position;
                 $changed = true;
             }
             ++$position;
@@ -312,11 +225,11 @@ class CalculationCategory extends AbstractEntity implements \Countable, Comparab
         // update items
         $amount = 0.0;
         foreach ($this->items as $item) {
-            $item->setCategory($this);
-            $amount += $item->getTotal();
+            $item->withCategory($this);
+            $amount += $item->total;
         }
 
-        return $this->setAmount($amount);
+        return $this->withAmount($amount);
     }
 
     /**
@@ -324,8 +237,8 @@ class CalculationCategory extends AbstractEntity implements \Countable, Comparab
      */
     public function updateCode(): bool
     {
-        if ($this->category instanceof Category && $this->code !== $this->category->getCode()) {
-            $this->code = $this->category->getCode();
+        if ($this->category instanceof Category && $this->code !== $this->category->code) {
+            $this->code = $this->category->code;
 
             return true;
         }
@@ -340,8 +253,57 @@ class CalculationCategory extends AbstractEntity implements \Countable, Comparab
     {
         $position = 0;
         foreach ($this->items as $item) {
-            $item->setPosition($position++);
+            $item->position = $position++;
         }
+
+        return $this;
+    }
+
+    /**
+     * Set the total amount.
+     */
+    public function withAmount(float $amount): self
+    {
+        $this->amount = $amount;
+
+        return $this;
+    }
+
+    /**
+     * Set the category.
+     *
+     * @param Category $category the category to copy values from
+     * @param bool     $update   true to update the amount and the margin
+     */
+    public function withCategory(Category $category, bool $update = false): self
+    {
+        // copy
+        $this->category = $category;
+        $this->code = $category->code;
+
+        if ($update) {
+            return $this->update();
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the code.
+     */
+    public function withCode(?string $code): self
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Set the parent's group.
+     */
+    public function withGroup(?CalculationGroup $group): self
+    {
+        $this->group = $group;
 
         return $this;
     }

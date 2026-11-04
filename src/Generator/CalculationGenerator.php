@@ -66,13 +66,13 @@ class CalculationGenerator extends AbstractEntityGenerator
     protected function mapEntity(EntityInterface $entity): array
     {
         return [
-            'date' => $entity->getFormattedDate(),
-            'state' => $entity->getStateCode(),
-            'customer' => $entity->getCustomer(),
-            'description' => $entity->getDescription(),
-            'margin' => FormatUtils::formatPercent($entity->getOverallMargin()),
-            'total' => FormatUtils::formatAmount($entity->getOverallTotal()),
-            'color' => $entity->getStateColor(),
+            'date' => $entity->formattedDate,
+            'state' => $entity->stateCode,
+            'customer' => $entity->customer,
+            'description' => $entity->description,
+            'margin' => FormatUtils::formatPercent($entity->overallMargin),
+            'total' => FormatUtils::formatAmount($entity->overallTotal),
+            'color' => $entity->stateColor,
         ];
     }
 
@@ -80,11 +80,11 @@ class CalculationGenerator extends AbstractEntityGenerator
     {
         $date = DateUtils::toDatePoint($generator->dateTimeBetween('today', 'last day of next month'));
         $entity = $this->generateEntity($min, $max, $generator)
-            ->setDescription($generator->catchPhrase())
-            ->setUserMargin($generator->randomFloat(2, 0, 0.1))
-            ->setCustomer($generator->name())
-            ->setState($generator->state())
-            ->setDate($date);
+            ->withDescription($generator->catchPhrase())
+            ->withUserMargin($generator->randomFloat(2, 0, 0.1))
+            ->withCustomer($generator->name())
+            ->withState($generator->state())
+            ->withDate($date);
         $this->updateService->updateCalculation($entity);
 
         return $entity;
@@ -95,11 +95,12 @@ class CalculationGenerator extends AbstractEntityGenerator
         $entity = new Calculation();
         $products = $generator->products($generator->numberBetween($min, $max));
         foreach ($products as $product) {
-            $item = CalculationItem::create($product)->setQuantity($generator->numberBetween(1, 10));
+            $item = CalculationItem::create($product)
+                ->withQuantity($generator->numberBetween(1, 10));
             if ($item->isEmptyPrice()) {
-                $item->setPrice($generator->randomFloat(2, 1, 10));
+                $item->withPrice($generator->randomFloat(2, 1, 10));
             }
-            $category = $product->getCategory();
+            $category = $product->category;
             if ($category instanceof Category) {
                 $entity->findOrCreateCategory($category)->addItem($item);
             }

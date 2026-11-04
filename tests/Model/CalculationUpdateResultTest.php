@@ -35,16 +35,16 @@ final class CalculationUpdateResultTest extends TestCase
     public function testOne(): void
     {
         $state = new CalculationState();
-        $state->setCode('code');
+        $state->withCode('code');
         self::setId($state);
 
         $date = DateUtils::createDate();
         $calculation = new Calculation();
-        $calculation->setState($state)
-            ->setDate($date)
-            ->setCustomer('customer')
-            ->setDescription('description')
-            ->setOverallTotal(100.0);
+        $calculation->withState($state)
+            ->withDate($date)
+            ->withCustomer('customer')
+            ->withDescription('description')
+            ->withOverallTotal(100.0);
         self::setId($calculation);
 
         $result = new CalculationUpdateResult();

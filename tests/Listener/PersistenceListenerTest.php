@@ -38,7 +38,7 @@ final class PersistenceListenerTest extends TestCase
     protected function setUp(): void
     {
         $this->user = new User();
-        $this->user->setUsername('user_name');
+        $this->user->withUsername('user_name');
     }
 
     public function testCollectionDeletions(): void
@@ -74,7 +74,7 @@ final class PersistenceListenerTest extends TestCase
     public function testDelete(): void
     {
         $task = new Task();
-        $task->setName('Task');
+        $task->withName('Task');
         $event = $this->createEvent(['getScheduledEntityDeletions' => $task]);
 
         $listener = $this->createListener();
@@ -110,7 +110,7 @@ final class PersistenceListenerTest extends TestCase
     public function testInsert(): void
     {
         $task = new Task();
-        $task->setName('Task');
+        $task->withName('Task');
         $event = $this->createEvent(['getScheduledEntityInsertions' => $task]);
 
         $listener = $this->createListener();
@@ -140,7 +140,7 @@ final class PersistenceListenerTest extends TestCase
     public function testUpdate(): void
     {
         $task = new Task();
-        $task->setName('Task');
+        $task->withName('Task');
         $event = $this->createEvent(['getScheduledEntityUpdates' => $task]);
 
         $listener = $this->createListener();
@@ -151,7 +151,7 @@ final class PersistenceListenerTest extends TestCase
     public function testUpdateUserLastLogin(): void
     {
         $user = new User();
-        $user->setUsername('user_name');
+        $user->withUsername('user_name');
         $event = $this->createEvent(
             ['getScheduledEntityUpdates' => $user],
             [],
@@ -166,7 +166,7 @@ final class PersistenceListenerTest extends TestCase
     public function testUpdateUserPassword(): void
     {
         $user = new User();
-        $user->setUsername('user_name');
+        $user->withUsername('user_name');
         $event = $this->createEvent(
             ['getScheduledEntityUpdates' => $user],
             [],
@@ -181,7 +181,7 @@ final class PersistenceListenerTest extends TestCase
     public function testUpdateUserReset(): void
     {
         $user = new User();
-        $user->setUsername('user_name');
+        $user->withUsername('user_name');
         $event = $this->createEvent(
             ['getScheduledEntityUpdates' => $user],
             [],
@@ -196,7 +196,7 @@ final class PersistenceListenerTest extends TestCase
     public function testUpdateUserRights(): void
     {
         $user = new User();
-        $user->setUsername('user_name');
+        $user->withUsername('user_name');
         $event = $this->createEvent(
             ['getScheduledEntityUpdates' => $user],
             [],
@@ -211,7 +211,7 @@ final class PersistenceListenerTest extends TestCase
     public function testUserNotChange(): void
     {
         $user = new User();
-        $user->setUsername('fake');
+        $user->withUsername('fake');
         $event = $this->createEvent(['getScheduledEntityUpdates' => $user]);
 
         $listener = $this->createListener();

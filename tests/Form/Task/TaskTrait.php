@@ -38,7 +38,7 @@ trait TaskTrait
     {
         if (!$this->task instanceof Task) {
             $this->task = new Task();
-            $this->task->setName('task');
+            $this->task->withName('task');
             $this->getCategory()->addTask($this->task);
 
             return self::setId($this->task);

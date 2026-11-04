@@ -30,9 +30,9 @@ final class LogSorterServiceTest extends TestCase
     public function testSortByChannel(): void
     {
         $log1 = Log::instance(1)
-            ->setChannel('ChannelA');
+            ->withChannel('ChannelA');
         $log2 = Log::instance(1)
-            ->setChannel('ChannelB');
+            ->withChannel('ChannelB');
         $logs = [$log1, $log2];
 
         $sorter = LogSorterService::instance('channel', true);
@@ -43,11 +43,11 @@ final class LogSorterServiceTest extends TestCase
     public function testSortByChannelAndDate(): void
     {
         $log1 = Log::instance(1)
-            ->setCreatedAt(new DatePoint('2024-02-01'))
-            ->setChannel('ChannelA');
+            ->withCreatedAt(new DatePoint('2024-02-01'))
+            ->withChannel('ChannelA');
         $log2 = Log::instance(1)
-            ->setCreatedAt(new DatePoint('2024-01-02'))
-            ->setChannel('ChannelA');
+            ->withCreatedAt(new DatePoint('2024-01-02'))
+            ->withChannel('ChannelA');
         $logs = [$log1, $log2];
 
         $sorter = LogSorterService::instance('channel', true);
@@ -58,9 +58,9 @@ final class LogSorterServiceTest extends TestCase
     public function testSortByDate(): void
     {
         $log1 = Log::instance(1)
-            ->setCreatedAt(new DatePoint('2024-01-01'));
+            ->withCreatedAt(new DatePoint('2024-01-01'));
         $log2 = Log::instance(1)
-            ->setCreatedAt(new DatePoint('2024-02-02'));
+            ->withCreatedAt(new DatePoint('2024-02-02'));
         $logs = [$log1, $log2];
 
         $sorter = LogSorterService::instance('createdAt', true);
@@ -71,9 +71,9 @@ final class LogSorterServiceTest extends TestCase
     public function testSortByLevel(): void
     {
         $log1 = Log::instance(1)
-            ->setLevel(LogLevel::ALERT);
+            ->withLevel(LogLevel::ALERT);
         $log2 = Log::instance(1)
-            ->setLevel(LogLevel::DEBUG);
+            ->withLevel(LogLevel::DEBUG);
         $logs = [$log1, $log2];
 
         $sorter = LogSorterService::instance('level', true);
@@ -84,9 +84,9 @@ final class LogSorterServiceTest extends TestCase
     public function testSortByMessage(): void
     {
         $log1 = Log::instance(1)
-            ->setMessage('Message 1');
+            ->withMessage('Message 1');
         $log2 = Log::instance(2)
-            ->setMessage('Message 2');
+            ->withMessage('Message 2');
         $logs = [$log1, $log2];
 
         $sorter = LogSorterService::instance('message', true);
@@ -97,9 +97,9 @@ final class LogSorterServiceTest extends TestCase
     public function testSortByUser(): void
     {
         $log1 = Log::instance(1)
-            ->setUser('user1');
+            ->withUser('user1');
         $log2 = Log::instance(2)
-            ->setUser('user2');
+            ->withUser('user2');
         $logs = [$log1, $log2];
 
         $sorter = LogSorterService::instance('user', true);
@@ -118,7 +118,7 @@ final class LogSorterServiceTest extends TestCase
     public function testSortSameLogs(): void
     {
         $log = Log::instance(1)
-            ->setCreatedAt(new DatePoint());
+            ->withCreatedAt(new DatePoint());
         $logs = [$log, $log];
 
         $sorter = LogSorterService::instance('channel', false);

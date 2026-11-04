@@ -187,7 +187,7 @@ final class UserControllerTest extends EntityControllerTestCase
     public function testResetSuccess(): void
     {
         $user = $this->setResetPasswordRequest(self::ROLE_USER);
-        $uri = \sprintf('/user/reset/%d', (int) $user->getId());
+        $uri = \sprintf('/user/reset/%d', (int) $user->id);
         $this->checkForm(
             uri: $uri,
             id: 'common.button_delete'
@@ -310,6 +310,7 @@ final class UserControllerTest extends EntityControllerTestCase
     {
         $user = $this->loadUser($username);
         self::assertNotNull($user);
+
         $expiresAt = new DatePoint();
         $user->setResetPasswordRequest($expiresAt, 'selector', 'hashedToken');
         $this->addEntity($user);

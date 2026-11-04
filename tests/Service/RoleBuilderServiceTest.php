@@ -42,7 +42,7 @@ final class RoleBuilderServiceTest extends FlagBagTestCase
     public function testGetRoleDisabled(): void
     {
         $user = new User();
-        $user->setEnabled(false);
+        $user->withEnabled(false);
         $role = $this->service->getRole($user);
         self::assertRoleDisabled($role);
     }

@@ -55,8 +55,8 @@ final class CalculationServiceTest extends KernelServiceTestCase
         );
 
         $groupMargin = new GroupMargin();
-        $groupMargin->setMaximum(1000.0)
-            ->setMargin(0.02);
+        $groupMargin->withMaximum(1000.0)
+            ->withMargin(0.02);
         $group = $this->createGroup();
         $group->addMargin($groupMargin);
         $service = $this->createCalculationService($group, 1.0, 1.1);
@@ -106,7 +106,7 @@ final class CalculationServiceTest extends KernelServiceTestCase
 
         $calculation = new Calculation();
         $calculation->addProduct($product, self::QUANTITY)
-            ->setUserMargin(self::MARGIN_USER);
+            ->withUserMargin(self::MARGIN_USER);
         $groups = $service->createGroups($calculation);
         self::assertCount(6, $groups);
     }
@@ -219,8 +219,8 @@ final class CalculationServiceTest extends KernelServiceTestCase
 
     private function createGroup(): Group
     {
-        $group = new Group();
-        $group->setCode('Fake Code');
+        $group = new Group()
+            ->withCode('Fake Code');
 
         return self::setId($group);
     }
@@ -238,7 +238,7 @@ final class CalculationServiceTest extends KernelServiceTestCase
     {
         $repository = self::createStub(GroupRepository::class);
         $repository->method('findGroupCode')
-            ->willReturn($group?->getCode());
+            ->willReturn($group?->code);
 
         return $repository;
     }
@@ -267,17 +267,17 @@ final class CalculationServiceTest extends KernelServiceTestCase
         $this->initRepository($manager, Group::class);
 
         $group = new Group();
-        $group->setCode('Test');
+        $group->withCode('Test');
 
         $margin = new GroupMargin();
-        $margin->setMinimum(0)
-            ->setMaximum(1_000_000)
-            ->setMargin(self::MARGIN_PERCENT);
+        $margin->withMinimum(0)
+            ->withMaximum(1_000_000)
+            ->withMargin(self::MARGIN_PERCENT);
         $group->addMargin($margin);
 
         $category = new Category();
-        $category->setCode('Test')
-            ->setGroup($group);
+        $category->withCode('Test')
+            ->withGroup($group);
 
         $manager->persist($group);
         $manager->persist($margin);
@@ -292,9 +292,9 @@ final class CalculationServiceTest extends KernelServiceTestCase
         $this->initRepository($manager, GlobalMargin::class);
 
         $margin = new GlobalMargin();
-        $margin->setMinimum(0)
-            ->setMaximum(1_000_000)
-            ->setMargin(self::MARGIN_PERCENT);
+        $margin->withMinimum(0)
+            ->withMaximum(1_000_000)
+            ->withMargin(self::MARGIN_PERCENT);
         $manager->persist($margin);
 
         $manager->flush();
@@ -305,9 +305,9 @@ final class CalculationServiceTest extends KernelServiceTestCase
         $this->initRepository($manager, Product::class);
 
         $product = new Product();
-        $product->setDescription('Product Test')
-            ->setPrice(self::PRODUCT_PRICE)
-            ->setCategory($category);
+        $product->withDescription('Product Test')
+            ->withPrice(self::PRODUCT_PRICE)
+            ->withCategory($category);
 
         $manager->persist($product);
         $manager->flush();

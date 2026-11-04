@@ -31,7 +31,7 @@ class UserNamer implements NamerInterface
         if (!$object instanceof User) {
             throw new \InvalidArgumentException(\sprintf('Expected argument of type "%s", "%s" given.', User::class, \get_debug_type($object)));
         }
-        $id = $object->getId() ?? 0;
+        $id = $object->id ?? 0;
         $name = \sprintf('USER_%06d_%03d', $id, ImageResizer::IMAGE_SIZE);
 
         return ImageExtension::DEFAULT->changeExtension($name);

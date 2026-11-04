@@ -32,48 +32,48 @@ final class CalculationTest extends EntityValidatorTestCase
     public function testAddProduct(): void
     {
         $product1 = new Product();
-        $product1->setDescription('product2')
-            ->setPrice(1.0);
+        $product1->withDescription('product2')
+            ->withPrice(1.0);
         $product2 = new Product();
-        $product2->setDescription('product1')
-            ->setPrice(2.0);
+        $product2->withDescription('product1')
+            ->withPrice(2.0);
 
         $category = new Category();
-        $category->setCode('category')
+        $category->withCode('category')
             ->addProduct($product1)
             ->addProduct($product2);
         $margin = new GroupMargin();
-        $margin->setMinimum(0.0)
-            ->setMaximum(1000.0)
-            ->setMargin(1.1);
+        $margin->withMinimum(0.0)
+            ->withMaximum(1000.0)
+            ->withMargin(1.1);
         $group = new Group();
-        $group->setCode('group')
+        $group->withCode('group')
             ->addCategory($category)
             ->addMargin($margin);
 
         $calculation = new Calculation();
         $calculation->addProduct($product1);
-        self::assertSame(1, $calculation->getItemsCount());
+        self::assertSame(1, $calculation->itemsCount);
         $calculation->addProduct($product2);
-        self::assertSame(2, $calculation->getItemsCount());
+        self::assertSame(2, $calculation->itemsCount);
 
-        $calculation->setGlobalMargin(1.0);
-        foreach ($calculation->getGroups() as $currentGroup) {
+        $calculation->withGlobalMargin(1.0);
+        foreach ($calculation->groups as $currentGroup) {
             $currentGroup->update();
         }
         $calculation->updatePositions();
         $calculation->getSortedGroups();
 
         $calculation->updateCodes();
-        $group->setCode('group1');
-        $category->setCode('category1');
+        $group->withCode('group1');
+        $category->withCode('category1');
         $calculation->updateCodes();
-        self::assertSame(0.0, $calculation->getOverallMarginAmount());
+        self::assertSame(0.0, $calculation->overallMarginAmount);
 
-        self::assertSame(1.1, $calculation->getGroupsMargin());
-        self::assertSame(0.3, \round($calculation->getGroupsMarginAmount(), 2));
-        self::assertSame(3.3, \round($calculation->getGroupsTotal(), 2));
-        self::assertSame(1, $calculation->getCategoriesCount());
+        self::assertSame(1.1, $calculation->groupsMargin);
+        self::assertSame(0.3, \round($calculation->groupsMarginAmount, 2));
+        self::assertSame(3.3, \round($calculation->groupsTotal, 2));
+        self::assertSame(1, $calculation->categoriesCount);
 
         self::assertTrue($calculation->isSortable());
         $calculation->sort();
@@ -82,20 +82,20 @@ final class CalculationTest extends EntityValidatorTestCase
     public function testCalculationCategory(): void
     {
         $entity = new CalculationCategory();
-        self::assertNull($entity->getCode());
-        self::assertNull($entity->getGroup());
+        self::assertNull($entity->code);
+        self::assertNull($entity->group);
         self::assertNull($entity->getParentEntity());
         self::assertTrue($entity->isEmpty());
         self::assertFalse($entity->isSortable());
 
-        $entity->setCode('code');
-        self::assertSame('code', $entity->getCode());
+        $entity->withCode('code');
+        self::assertSame('code', $entity->code);
         self::assertSame('code', $entity->getDisplay());
 
         $category = new Category();
-        $category->setCode('code');
-        $entity->setCategory($category, true);
-        self::assertNotNull($entity->getCategory());
+        $category->withCode('code');
+        $entity->withCategory($category, true);
+        self::assertNotNull($entity->category);
 
         self::assertCount(0, $entity);
         $item = new CalculationItem();
@@ -106,20 +106,20 @@ final class CalculationTest extends EntityValidatorTestCase
     public function testCalculationGroup(): void
     {
         $entity = new CalculationGroup();
-        self::assertNull($entity->getCode());
-        self::assertNull($entity->getGroup());
+        self::assertNull($entity->code);
+        self::assertNull($entity->group);
         self::assertNull($entity->getParentEntity());
-        self::assertSame(0.0, $entity->getMargin());
-        self::assertSame(0.0, $entity->getAmount());
+        self::assertSame(0.0, $entity->margin);
+        self::assertSame(0.0, $entity->amount);
 
-        $entity->setCode('code');
-        self::assertSame('code', $entity->getCode());
+        $entity->withCode('code');
+        self::assertSame('code', $entity->code);
         self::assertSame('code', $entity->getDisplay());
 
         $group = new Group();
-        $group->setCode('code');
-        $entity->setGroup($group, true);
-        self::assertNotNull($entity->getGroup());
+        $group->withCode('code');
+        $entity->withGroup($group, true);
+        self::assertNotNull($entity->group);
 
         $category = new CalculationCategory();
         self::assertCount(0, $entity);
@@ -127,19 +127,19 @@ final class CalculationTest extends EntityValidatorTestCase
         self::assertCount(0, $entity);
 
         $calculation = new Calculation();
-        self::assertEmpty($calculation->getGroups());
-        self::assertSame(0, $calculation->getGroupsCount());
-        self::assertSame(0, $calculation->getCategoriesCount());
+        self::assertEmpty($calculation->groups);
+        self::assertSame(0, $calculation->groupsCount);
+        self::assertSame(0, $calculation->categoriesCount);
         self::assertFalse($calculation->contains($entity));
 
         $calculation->addGroup($entity);
-        self::assertCount(1, $calculation->getGroups());
-        self::assertSame(1, $calculation->getGroupsCount());
+        self::assertCount(1, $calculation->groups);
+        self::assertSame(1, $calculation->groupsCount);
         self::assertTrue($calculation->contains($entity));
 
         $calculation->removeGroup($entity);
-        self::assertEmpty($calculation->getGroups());
-        self::assertSame(0, $calculation->getGroupsCount());
+        self::assertEmpty($calculation->groups);
+        self::assertSame(0, $calculation->groupsCount);
         self::assertFalse($calculation->contains($entity));
     }
 
@@ -149,27 +149,27 @@ final class CalculationTest extends EntityValidatorTestCase
         self::assertTrue($entity->isEmpty());
         self::assertTrue($entity->isEmptyPrice());
         self::assertTrue($entity->isEmptyQuantity());
-        self::assertNull($entity->getCategory());
+        self::assertNull($entity->category);
         self::assertNull($entity->getParentEntity());
 
         $expected = 1.0;
-        $entity->setPrice($expected);
-        self::assertSame($expected, $entity->getPrice());
+        $entity->withPrice($expected);
+        self::assertSame($expected, $entity->price);
         self::assertFalse($entity->isEmptyPrice());
 
-        $entity->setQuantity($expected);
-        self::assertSame($expected, $entity->getQuantity());
+        $entity->withQuantity($expected);
+        self::assertSame($expected, $entity->quantity);
         self::assertFalse($entity->isEmptyQuantity());
 
         $expected = 'description';
-        $entity->setDescription($expected);
-        self::assertSame($expected, $entity->getDescription());
+        $entity->withDescription($expected);
+        self::assertSame($expected, $entity->description);
         self::assertSame($expected, $entity->getDisplay());
 
         $expected = 'unit';
-        self::assertNull($entity->getUnit());
-        $entity->setUnit($expected);
-        self::assertSame($expected, $entity->getUnit());
+        self::assertNull($entity->unit);
+        $entity->withUnit($expected);
+        self::assertSame($expected, $entity->unit);
     }
 
     public function testClone(): void
@@ -190,61 +190,61 @@ final class CalculationTest extends EntityValidatorTestCase
         $calculation->addGroup($group);
 
         $clone = clone $calculation;
-        foreach ($clone->getGroups() as $currentGroup) {
-            self::assertNull($currentGroup->getId());
-            foreach ($currentGroup->getCategories() as $currentCategory) {
-                self::assertNull($currentCategory->getId());
-                foreach ($currentCategory->getItems() as $currentItem) {
-                    self::assertNull($currentItem->getId());
+        foreach ($clone->groups as $currentGroup) {
+            self::assertNull($currentGroup->id);
+            foreach ($currentGroup->categories as $currentCategory) {
+                self::assertNull($currentCategory->id);
+                foreach ($currentCategory->items as $currentItem) {
+                    self::assertNull($currentItem->id);
                 }
             }
         }
 
         foreach ($clone->getItems() as $currentItem) {
-            self::assertNull($currentItem->getId());
+            self::assertNull($currentItem->id);
         }
 
         $state = new CalculationState();
         $calculation = new Calculation();
-        $calculation->setState($state);
-        $calculation->setDescription('description');
+        $calculation->withState($state);
+        $calculation->withDescription('description');
 
         $clone = $calculation->clone();
-        self::assertSame($calculation->getState(), $clone->getState());
-        self::assertSame($calculation->getDescription(), $clone->getDescription());
+        self::assertSame($calculation->state, $clone->state);
+        self::assertSame($calculation->description, $clone->description);
 
         $newState = new CalculationState();
         $clone = $calculation->clone($newState);
-        self::assertSame($newState, $clone->getState());
+        self::assertSame($newState, $clone->state);
 
         $clone = $calculation->clone(description: 'new-description');
-        self::assertSame('new-description', $clone->getDescription());
+        self::assertSame('new-description', $clone->description);
     }
 
     public function testCompare(): void
     {
         $item1 = new CalculationGroup();
-        $item1->setCode('Code1');
+        $item1->withCode('Code1');
         self::assertFalse($item1->isSortable());
         $item1->sort();
         $item2 = new CalculationGroup();
-        $item2->setCode('Code2');
+        $item2->withCode('Code2');
         $actual = $item1->compare($item2);
         self::assertSame(-1, $actual);
 
         $item1 = new CalculationCategory();
-        $item1->setCode('Code1');
+        $item1->withCode('Code1');
         self::assertFalse($item1->isSortable());
         $item1->sort();
         $item2 = new CalculationCategory();
-        $item2->setCode('Code2');
+        $item2->withCode('Code2');
         $actual = $item1->compare($item2);
         self::assertSame(-1, $actual);
 
         $item1 = new CalculationItem();
-        $item1->setDescription('Description1');
+        $item1->withDescription('Description1');
         $item2 = new CalculationItem();
-        $item2->setDescription('Description2');
+        $item2->withDescription('Description2');
         $actual = $item1->compare($item2);
         self::assertSame(-1, $actual);
     }
@@ -253,28 +253,28 @@ final class CalculationTest extends EntityValidatorTestCase
     {
         $calculation = new Calculation();
         self::assertSame('000000', $calculation->getDisplay());
-        self::assertSame($calculation->getFormattedId(), $calculation->getDisplay());
+        self::assertSame($calculation->formattedId, $calculation->getDisplay());
 
         self::setId($calculation, 112233);
         self::assertSame('112233', $calculation->getDisplay());
-        self::assertSame($calculation->getFormattedId(), $calculation->getDisplay());
+        self::assertSame($calculation->formattedId, $calculation->getDisplay());
     }
 
     public function testDuplicateItems(): void
     {
         $product = new Product();
-        $product->setDescription('product')
-            ->setPrice(1.0);
+        $product->withDescription('product')
+            ->withPrice(1.0);
 
         $category = new Category();
-        $category->setCode('category')
+        $category->withCode('category')
             ->addProduct($product);
         $margin = new GroupMargin();
-        $margin->setMinimum(0.0)
-            ->setMaximum(1000.0)
-            ->setMargin(1.1);
+        $margin->withMinimum(0.0)
+            ->withMaximum(1000.0)
+            ->withMargin(1.1);
         $group = new Group();
-        $group->setCode('group')
+        $group->withCode('group')
             ->addCategory($category)
             ->addMargin($margin);
 
@@ -294,18 +294,18 @@ final class CalculationTest extends EntityValidatorTestCase
     public function testEmptyItems(): void
     {
         $product = new Product();
-        $product->setDescription('product')
-            ->setPrice(0.0);
+        $product->withDescription('product')
+            ->withPrice(0.0);
 
         $category = new Category();
-        $category->setCode('category')
+        $category->withCode('category')
             ->addProduct($product);
         $margin = new GroupMargin();
-        $margin->setMinimum(0.0)
-            ->setMaximum(1000.0)
-            ->setMargin(1.1);
+        $margin->withMinimum(0.0)
+            ->withMaximum(1000.0)
+            ->withMargin(1.1);
         $group = new Group();
-        $group->setCode('group')
+        $group->withCode('group')
             ->addCategory($category)
             ->addMargin($margin);
 
@@ -332,28 +332,28 @@ final class CalculationTest extends EntityValidatorTestCase
     public function testFields(): void
     {
         $calculation = new Calculation();
-        self::assertSame(1.0, $calculation->getGroupsMargin());
-        self::assertSame(0.0, $calculation->getGroupsMarginAmount());
-        self::assertSame(0.0, $calculation->getGroupsTotal());
+        self::assertSame(1.0, $calculation->groupsMargin);
+        self::assertSame(0.0, $calculation->groupsMarginAmount);
+        self::assertSame(0.0, $calculation->groupsTotal);
 
-        self::assertSame(0.0, $calculation->getItemsTotal());
-        self::assertSame(0, $calculation->getItemsCount());
+        self::assertSame(0.0, $calculation->itemsTotal);
+        self::assertSame(0, $calculation->itemsCount);
 
-        self::assertSame(0.0, $calculation->getOverallMargin());
-        self::assertSame(0.0, $calculation->getOverallMarginAmount());
-        self::assertSame(0.0, $calculation->getOverallTotal());
+        self::assertSame(0.0, $calculation->overallMargin);
+        self::assertSame(0.0, $calculation->overallMarginAmount);
+        self::assertSame(0.0, $calculation->overallTotal);
 
-        self::assertSame(0.0, $calculation->getTotalNet());
+        self::assertSame(0.0, $calculation->totalNet);
 
-        self::assertSame(0.0, $calculation->getUserMargin());
-        self::assertSame(0.0, $calculation->getUserMarginAmount());
-        self::assertSame(0.0, $calculation->getUserMarginTotal());
+        self::assertSame(0.0, $calculation->userMargin);
+        self::assertSame(0.0, $calculation->userMarginAmount);
+        self::assertSame(0.0, $calculation->userMarginTotal);
 
-        self::assertSame(1.0, $calculation->getGroupsMargin());
-        self::assertSame(0.0, $calculation->getGroupsMarginAmount());
+        self::assertSame(1.0, $calculation->groupsMargin);
+        self::assertSame(0.0, $calculation->groupsMarginAmount);
 
-        self::assertSame(0.0, $calculation->getGlobalMargin());
-        self::assertSame(0.0, $calculation->getGlobalMarginAmount());
+        self::assertSame(0.0, $calculation->globalMargin);
+        self::assertSame(0.0, $calculation->globalMarginAmount);
 
         self::assertFalse($calculation->hasDuplicateItems());
         self::assertFalse($calculation->hasEmptyItems());
@@ -363,39 +363,39 @@ final class CalculationTest extends EntityValidatorTestCase
         self::assertTrue($calculation->isEmpty());
 
         $date = new DatePoint();
-        $calculation->setDate($date);
-        self::assertSame($date, $calculation->getDate());
+        $calculation->withDate($date);
+        self::assertSame($date, $calculation->date);
 
         $description = 'description';
-        self::assertNull($calculation->getDescription());
-        $calculation->setDescription($description);
-        self::assertSame($description, $calculation->getDescription());
+        self::assertNull($calculation->description);
+        $calculation->withDescription($description);
+        self::assertSame($description, $calculation->description);
 
         $customer = 'customer';
-        $calculation->setCustomer($customer);
-        self::assertSame($customer, $calculation->getCustomer());
+        $calculation->withCustomer($customer);
+        self::assertSame($customer, $calculation->customer);
 
         $calculation->removeEmptyItems();
         self::assertFalse($calculation->hasEmptyItems());
         $calculation->removeDuplicateItems();
         self::assertFalse($calculation->hasDuplicateItems());
 
-        $calculation->setUserMargin(100);
-        self::assertSame(100.0, $calculation->getUserMargin());
+        $calculation->withUserMargin(100);
+        self::assertSame(100.0, $calculation->userMargin);
 
-        $calculation->setItemsTotal(100.0);
-        self::assertSame(100.0, $calculation->getItemsTotal());
+        $calculation->withItemsTotal(100.0);
+        self::assertSame(100.0, $calculation->itemsTotal);
 
-        $calculation->setOverallTotal(200.0);
-        self::assertSame(200.0, $calculation->getOverallTotal());
+        $calculation->withOverallTotal(200.0);
+        self::assertSame(200.0, $calculation->overallTotal);
     }
 
     public function testFormattedDate(): void
     {
         $date = new DatePoint('2000-01-01');
         $calculation = new Calculation();
-        $calculation->setDate($date);
-        $actual = $calculation->getFormattedDate();
+        $calculation->withDate($date);
+        $actual = $calculation->formattedDate;
         $expected = FormatUtils::formatDate($date);
         self::assertSame($expected, $actual);
     }
@@ -410,16 +410,16 @@ final class CalculationTest extends EntityValidatorTestCase
     public function testInvalidCustomer(): void
     {
         $calculation = new Calculation();
-        $calculation->setDescription('my description')
-            ->setState($this->getState());
+        $calculation->withDescription('my description')
+            ->withState($this->getState());
         $this->validate($calculation, 1);
     }
 
     public function testInvalidDescription(): void
     {
         $calculation = new Calculation();
-        $calculation->setCustomer('my customer')
-            ->setState($this->getState());
+        $calculation->withCustomer('my customer')
+            ->withState($this->getState());
         $results = $this->validate($calculation, 1);
         $this->validatePaths($results, 'description');
     }
@@ -427,8 +427,8 @@ final class CalculationTest extends EntityValidatorTestCase
     public function testInvalidState(): void
     {
         $calculation = new Calculation();
-        $calculation->setDescription('my description')
-            ->setCustomer('my customer');
+        $calculation->withDescription('my description')
+            ->withCustomer('my customer');
         $results = $this->validate($calculation, 1);
         $this->validatePaths($results, 'state');
     }
@@ -439,33 +439,33 @@ final class CalculationTest extends EntityValidatorTestCase
         self::assertFalse($calculation->isMarginBelow(0.0));
 
         $product = new Product();
-        $product->setDescription('product1')
-            ->setPrice(1.0);
+        $product->withDescription('product1')
+            ->withPrice(1.0);
 
         $category = new Category();
-        $category->setCode('category')
+        $category->withCode('category')
             ->addProduct($product);
 
         $margin = new GroupMargin();
-        $margin->setMinimum(0.0)
-            ->setMaximum(1000.0)
-            ->setMargin(1.1);
+        $margin->withMinimum(0.0)
+            ->withMaximum(1000.0)
+            ->withMargin(1.1);
         $group = new Group();
-        $group->setCode('group')
+        $group->withCode('group')
             ->addCategory($category);
 
         $calculation->addProduct($product);
-        $calculation->setItemsTotal(100);
-        $calculation->setOverallTotal(130);
+        $calculation->withItemsTotal(100);
+        $calculation->withOverallTotal(130);
         self::assertTrue($calculation->isMarginBelow(3.0));
     }
 
     public function testOverallMarginAmount(): void
     {
         $calculation = new Calculation();
-        $calculation->setItemsTotal(100.0);
-        $calculation->setOverallTotal(200.0);
-        self::assertSame(100.0, $calculation->getOverallMarginAmount());
+        $calculation->withItemsTotal(100.0);
+        $calculation->withOverallTotal(200.0);
+        self::assertSame(100.0, $calculation->overallMarginAmount);
     }
 
     public function testRemoveEmptyItems(): void
@@ -478,10 +478,10 @@ final class CalculationTest extends EntityValidatorTestCase
         $category->addItem($item);
         $group->addCategory($category);
         $calculation->addGroup($group);
-        self::assertCount(1, $calculation->getGroups());
+        self::assertCount(1, $calculation->groups);
 
         $calculation->removeEmptyItems();
-        self::assertEmpty($calculation->getGroups());
+        self::assertEmpty($calculation->groups);
     }
 
     public function testRemoveEmptyItemsWithoutCategory(): void
@@ -494,11 +494,11 @@ final class CalculationTest extends EntityValidatorTestCase
         $category->addItem($item);
         $group->addCategory($category);
         $calculation->addGroup($group);
-        self::assertCount(1, $calculation->getGroups());
+        self::assertCount(1, $calculation->groups);
 
-        $item->setCategory(null);
+        $item->withCategory(null);
         $calculation->removeEmptyItems();
-        self::assertCount(1, $calculation->getGroups());
+        self::assertCount(1, $calculation->groups);
     }
 
     public function testRemoveEmptyItemsWithoutGroup(): void
@@ -511,26 +511,26 @@ final class CalculationTest extends EntityValidatorTestCase
         $category->addItem($item);
         $group->addCategory($category);
         $calculation->addGroup($group);
-        self::assertCount(1, $calculation->getGroups());
+        self::assertCount(1, $calculation->groups);
 
-        $category->setGroup(null);
+        $category->withGroup(null);
         $calculation->removeEmptyItems();
-        self::assertCount(1, $calculation->getGroups());
+        self::assertCount(1, $calculation->groups);
     }
 
     public function testRemoveGroup(): void
     {
         $calculation = new Calculation();
-        self::assertEmpty($calculation->getGroups());
+        self::assertEmpty($calculation->groups);
         $group = new CalculationGroup();
         $calculation->removeGroup($group);
-        self::assertEmpty($calculation->getGroups());
+        self::assertEmpty($calculation->groups);
     }
 
     public function testSortable(): void
     {
         $group = new CalculationGroup();
-        $group->setCode('group');
+        $group->withCode('group');
         $calculation = new Calculation();
         $calculation->addGroup($group);
         self::assertFalse($calculation->isSortable());
@@ -541,24 +541,24 @@ final class CalculationTest extends EntityValidatorTestCase
     {
         $group = new CalculationGroup();
         $category1 = new CalculationCategory();
-        $category1->setCode('category1');
+        $category1->withCode('category1');
 
         $item1 = new CalculationItem();
-        $item1->setDescription('description1');
+        $item1->withDescription('description1');
         $category1->addItem($item1);
 
         $item2 = new CalculationItem();
-        $item2->setDescription('description2');
+        $item2->withDescription('description2');
         $category1->addItem($item2);
 
         $category2 = new CalculationCategory();
-        $category2->setCode('category2');
+        $category2->withCode('category2');
 
         $group->addCategory($category1);
         $group->addCategory($category2);
 
-        $category1->setPosition(-1);
-        $category2->setPosition(-1);
+        $category1->position = -1;
+        $category2->position = -1;
 
         $actual = $group->sort();
         self::assertTrue($actual);
@@ -567,24 +567,24 @@ final class CalculationTest extends EntityValidatorTestCase
     public function testState(): void
     {
         $calculation = new Calculation();
-        self::assertNull($calculation->getState());
-        self::assertNull($calculation->getStateId());
-        self::assertNull($calculation->getStateCode());
-        self::assertNull($calculation->getStateColor());
+        self::assertNull($calculation->state);
+        self::assertNull($calculation->stateId);
+        self::assertNull($calculation->stateCode);
+        self::assertNull($calculation->stateColor);
 
-        $calculation->setState($this->getState());
-        self::assertNotNull($calculation->getState());
-        self::assertSame(1, $calculation->getStateId());
-        self::assertSame('code', $calculation->getStateCode());
-        self::assertSame('color', $calculation->getStateColor());
+        $calculation->withState($this->getState());
+        self::assertNotNull($calculation->state);
+        self::assertSame(1, $calculation->stateId);
+        self::assertSame('code', $calculation->stateCode);
+        self::assertSame('color', $calculation->stateColor);
     }
 
     public function testValid(): void
     {
         $calculation = new Calculation();
-        $calculation->setDescription('my description')
-            ->setCustomer('my customer')
-            ->setState($this->getState());
+        $calculation->withDescription('my description')
+            ->withCustomer('my customer')
+            ->withState($this->getState());
         $this->validate($calculation);
     }
 
@@ -603,8 +603,8 @@ final class CalculationTest extends EntityValidatorTestCase
     private function getState(): CalculationState
     {
         $state = new CalculationState();
-        $state->setCode('code')
-            ->setColor('color');
+        $state->withCode('code')
+            ->withColor('color');
 
         return self::setId($state);
     }

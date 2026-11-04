@@ -80,9 +80,7 @@ final class CollectionTraitTest extends TestCase
 
     private function createProduct(string $description): Product
     {
-        $product = new Product();
-        $product->setDescription($description);
-
-        return $product;
+        return new Product()
+            ->withDescription($description);
     }
 }

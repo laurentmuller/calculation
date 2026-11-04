@@ -208,7 +208,7 @@ abstract class AbstractParameters
     {
         return \array_reduce(
             $this->loadProperties(),
-            static fn (array $carry, AbstractProperty $property): array => $carry + [$property->getName() => $property],
+            static fn (array $carry, AbstractProperty $property): array => $carry + [$property->name => $property],
             []
         );
     }
@@ -372,13 +372,13 @@ abstract class AbstractParameters
     private function getPropertyValue(MetaData $metaData, AbstractProperty $property): mixed
     {
         return match ($metaData->type) {
-            PropertyType::BOOL => $property->getBoolean(),
-            PropertyType::FLOAT => $property->getFloat(),
-            PropertyType::INTEGER => $property->getInteger(),
-            PropertyType::STRING => $property->getValue(),
-            PropertyType::DATE_POINT => $property->getDatePoint(),
-            PropertyType::ENUM_INT => $property->getIntEnum($metaData->getEnum()),
-            PropertyType::ENUM_STRING => $property->getStringEnum($metaData->getEnum()),
+            PropertyType::BOOL => $property->asBoolean(),
+            PropertyType::FLOAT => $property->asFloat(),
+            PropertyType::INTEGER => $property->asInteger(),
+            PropertyType::STRING => $property->value,
+            PropertyType::DATE_POINT => $property->asDatePoint(),
+            PropertyType::ENUM_INT => $property->asIntEnum($metaData->getEnum()),
+            PropertyType::ENUM_STRING => $property->asStringEnum($metaData->getEnum()),
         };
     }
 
@@ -448,9 +448,9 @@ abstract class AbstractParameters
     private function updateProperty(?AbstractProperty $property, string $name, mixed $value): bool
     {
         $property ??= $this->createProperty($name);
-        $oldValue = $property->getValue();
-        $property->setValue($value);
-        if ($oldValue === $property->getValue()) {
+        $oldValue = $property->value;
+        $property->withValue($value);
+        if ($oldValue === $property->value) {
             return false;
         }
         $this->manager->persist($property);

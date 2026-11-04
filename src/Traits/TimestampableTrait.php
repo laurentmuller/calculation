@@ -32,31 +32,21 @@ trait TimestampableTrait
 {
     /** The creation date. */
     #[ORM\Column(type: DatePointType::NAME, nullable: true)]
-    private ?DatePoint $createdAt = null;
+    public ?DatePoint $createdAt = null;
 
     /** The creation username. */
     #[Assert\Length(max: UserInterface::MAX_USERNAME_LENGTH)]
     #[ORM\Column(length: UserInterface::MAX_USERNAME_LENGTH, nullable: true)]
-    private ?string $createdBy = null;
+    public ?string $createdBy = null;
 
     /** The updated date. */
     #[ORM\Column(type: DatePointType::NAME, nullable: true)]
-    private ?DatePoint $updatedAt = null;
+    public ?DatePoint $updatedAt = null;
 
     /** The updated username. */
     #[Assert\Length(max: UserInterface::MAX_USERNAME_LENGTH)]
     #[ORM\Column(length: UserInterface::MAX_USERNAME_LENGTH, nullable: true)]
-    private ?string $updatedBy = null;
-
-    public function getCreatedAt(): ?DatePoint
-    {
-        return $this->createdAt;
-    }
-
-    public function getCreatedBy(): ?string
-    {
-        return $this->createdBy;
-    }
+    public ?string $updatedBy = null;
 
     public function getCreatedMessage(bool $short = false): TranslatableMessage
     {
@@ -66,16 +56,6 @@ trait TimestampableTrait
         }
 
         return new TranslatableMessage('common.entity_created', ['%content%' => $content]);
-    }
-
-    public function getUpdatedAt(): ?DatePoint
-    {
-        return $this->updatedAt;
-    }
-
-    public function getUpdatedBy(): ?string
-    {
-        return $this->updatedBy;
     }
 
     public function getUpdatedMessage(bool $short = false): TranslatableMessage

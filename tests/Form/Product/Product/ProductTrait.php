@@ -47,7 +47,7 @@ trait ProductTrait
     {
         if (!$this->product instanceof Product) {
             $this->product = new Product();
-            $this->product->setDescription('Description');
+            $this->product->withDescription('Description');
 
             return self::setId($this->product);
         }

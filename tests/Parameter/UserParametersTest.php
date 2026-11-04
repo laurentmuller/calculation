@@ -133,10 +133,7 @@ final class UserParametersTest extends TestCase
 
     private function createUser(): User
     {
-        $user = new User();
-        $user->setUsername('fake');
-
-        return $user;
+        return new User()->withUsername('fake');
     }
 
     private function createUserParameters(array $properties = [], ?User $user = null): UserParameters

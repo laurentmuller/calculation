@@ -177,16 +177,16 @@ class TestController extends AbstractController
             $groups = $repository->findByCode();
             foreach ($groups as $group) {
                 $node = [
-                    'id' => \sprintf('group-%d', (int) $group->getId()),
-                    'text' => $group->getCode(),
+                    'id' => \sprintf('group-%d', (int) $group->id),
+                    'text' => $group->code,
                     'icon' => 'fa-solid fa-code-branch fa-fw',
                     'badgeValue' => $group->countItems(),
                 ];
-                foreach ($group->getCategories() as $category) {
+                foreach ($group->categories as $category) {
                     $count += $category->countItems();
                     $node['nodes'][] = [
-                        'id' => \sprintf('category-%d', (int) $category->getId()),
-                        'text' => $category->getCode(),
+                        'id' => \sprintf('category-%d', (int) $category->id),
+                        'text' => $category->code,
                         'icon' => 'fa-regular fa-folder fa-fw',
                         'badgeValue' => $category->countItems(),
                     ];
@@ -261,7 +261,7 @@ class TestController extends AbstractController
 
     private function mapCalculationState(CalculationState $state): string
     {
-        return \sprintf('calculationstate.list.editable_%d', (int) $state->isEditable());
+        return \sprintf('calculationstate.list.editable_%d', (int) $state->editable);
     }
 
     private function mapCategory(Category $category): string

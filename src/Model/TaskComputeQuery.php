@@ -42,6 +42,6 @@ class TaskComputeQuery
      */
     public static function instance(Task $task, float $quantity = 1.0): self
     {
-        return new self((int) $task->getId(), $quantity, $task->getIdentifiers());
+        return new self((int) $task->id, $quantity, $task->getIdentifiers());
     }
 }

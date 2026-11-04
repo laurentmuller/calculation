@@ -62,17 +62,17 @@ final class CalculationArchiveResultTest extends TestCase
 
     private function createCalculation(CalculationState $state): Calculation
     {
-        $calculation = new Calculation();
-        $calculation->setState($state);
+        $calculation = new Calculation()
+            ->withState($state);
 
         return self::setId($calculation);
     }
 
     private function createState(int $id, string $code, bool $editable): CalculationState
     {
-        $state = new CalculationState();
-        $state->setCode($code)
-            ->setEditable($editable);
+        $state = new CalculationState()
+            ->withCode($code)
+            ->withEditable($editable);
 
         return self::setId($state, $id);
     }

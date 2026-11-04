@@ -39,12 +39,12 @@ class ProductsDocument extends AbstractArrayDocument
 
         foreach ($entities as $entity) {
             $sheet->setRowValues($row++, [
-                $entity->getDescription(),
+                $entity->description,
                 $entity->getGroupCode(),
                 $entity->getCategoryCode(),
-                $entity->getPrice(),
-                $entity->getUnit(),
-                $entity->getSupplier(),
+                $entity->price,
+                $entity->unit,
+                $entity->supplier,
             ]);
         }
         $sheet->finish();

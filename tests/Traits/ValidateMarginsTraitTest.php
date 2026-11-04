@@ -94,10 +94,8 @@ final class ValidateMarginsTraitTest extends ConstraintValidatorTestCase
 
     private function createMargin(float $minimum = 0.0, float $maximum = 1.0): GlobalMargin
     {
-        $margin = new GlobalMargin();
-        $margin->setMinimum($minimum)
-            ->setMaximum($maximum);
-
-        return $margin;
+        return new GlobalMargin()
+            ->withMinimum($minimum)
+            ->withMaximum($maximum);
     }
 }

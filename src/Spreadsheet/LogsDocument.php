@@ -64,13 +64,13 @@ class LogsDocument extends AbstractDocument
         $logs = $logFile->getLogs();
         foreach ($logs as $log) {
             $sheet->setRowValues($row, [
-                $log->getCreatedAt(),
-                $log->getMessage(),
-                $log->getLevelTitle(),
-                $log->getChannelTitle(),
-                $log->getUser(),
+                $log->createdAt,
+                $log->message,
+                $log->levelTitle,
+                $log->channelTitle,
+                $log->user,
             ]);
-            $this->setBorderStyle($sheet, $row, $log->getLevel());
+            $this->setBorderStyle($sheet, $row, $log->level);
             ++$row;
         }
         $sheet->finish();

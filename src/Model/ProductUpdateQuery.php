@@ -51,7 +51,7 @@ class ProductUpdateQuery extends AbstractSimulateQuery
      */
     public function getCategoryCode(): ?string
     {
-        return $this->category?->getCode();
+        return $this->category?->code;
     }
 
     /**
@@ -59,7 +59,7 @@ class ProductUpdateQuery extends AbstractSimulateQuery
      */
     public function getCategoryId(): int
     {
-        return (int) $this->category?->getId();
+        return (int) $this->category?->id;
     }
 
     /**

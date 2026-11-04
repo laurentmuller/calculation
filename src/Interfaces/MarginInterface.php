@@ -18,18 +18,14 @@ namespace App\Interfaces;
  */
 interface MarginInterface
 {
+    /** Get the maximum. */
+    public float $maximum{get; }
+
+    /** Get the minimum. */
+    public float $minimum{get; }
+
     /**
      * Returns if the given value is between this minimum (inclusive) and this maximum (exclusive).
      */
     public function contains(float $value): bool;
-
-    /**
-     * Get the maximum.
-     */
-    public function getMaximum(): float;
-
-    /**
-     * Get the minimum.
-     */
-    public function getMinimum(): float;
 }

@@ -27,8 +27,8 @@ final class ApplicationPropertyRepositoryTest extends AbstractRepositoryTestCase
         self::assertNull($actual);
 
         $property = new ApplicationProperty();
-        $property->setName('name')
-            ->setValue('value');
+        $property->withName('name')
+            ->withValue('value');
         $this->repository->persist($property);
 
         $actual = $this->repository->findOneByName('fake');

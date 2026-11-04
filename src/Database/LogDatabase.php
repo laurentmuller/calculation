@@ -57,8 +57,8 @@ class LogDatabase extends AbstractDatabase
         // parameters
         $stmt->bindValue(':id', $log->id, \SQLITE3_INTEGER);
         $stmt->bindValue(':created_at', $this->dateToInt($log->createdAt), \SQLITE3_INTEGER);
-        $stmt->bindValue(':channel', $log->getChannel());
-        $stmt->bindValue(':level', $log->getLevel());
+        $stmt->bindValue(':channel', $log->channel);
+        $stmt->bindValue(':level', $log->level);
         $stmt->bindValue(':user', $log->user);
         $stmt->bindValue(':message', $log->message);
         $stmt->bindValue(':context', $this->arrayToString($log->context));

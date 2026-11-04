@@ -68,27 +68,27 @@ final class LogTest extends TestCase
     public function testChannel(): void
     {
         $log = new Log();
-        $log->setChannel('channel');
-        self::assertSame('channel', $log->getChannel());
-        self::assertSame('Channel', $log->getChannelTitle());
+        $log->withChannel('channel');
+        self::assertSame('channel', $log->channel);
+        self::assertSame('Channel', $log->channelTitle);
     }
 
     public function testChannelApplication(): void
     {
         $log = new Log();
-        self::assertSame('application', $log->getChannel());
-        $log->setChannel('channel');
-        self::assertSame('channel', $log->getChannel());
-        $log->setChannel('app');
-        self::assertSame('application', $log->getChannel());
+        self::assertSame('application', $log->channel);
+        $log->withChannel('channel');
+        self::assertSame('channel', $log->channel);
+        $log->withChannel('app');
+        self::assertSame('application', $log->channel);
     }
 
     #[DataProvider('getChannelIcons')]
     public function testChannelIcon(string $channel, string $expected): void
     {
         $log = new Log();
-        $log->setChannel($channel);
-        $actual = $log->getChannelIcon();
+        $log->withChannel($channel);
+        $actual = $log->channelIcon;
         self::assertSame($expected, $actual);
     }
 
@@ -130,7 +130,7 @@ final class LogTest extends TestCase
     {
         $log = new Log();
         $log->withMessage('message');
-        $log->setChannel('doctrine');
+        $log->withChannel('doctrine');
         $actual = $log->isDoctrineMessage();
         self::assertFalse($actual);
 
@@ -165,7 +165,7 @@ final class LogTest extends TestCase
     public function testFormatMessageWithDoctrine(): void
     {
         $log = new Log();
-        $log->setChannel('doctrine');
+        $log->withChannel('doctrine');
         $log->withMessage('Executing statement');
         $formatter = $this->createSqlFormatter();
         $actual = $log->formatMessage($formatter);
@@ -205,9 +205,9 @@ final class LogTest extends TestCase
     public function testLevel(): void
     {
         $log = new Log();
-        $log->setLevel(PsrLevel::ALERT);
-        self::assertSame('alert', $log->getLevel());
-        self::assertSame('Alert', $log->getLevelTitle());
+        $log->withLevel(PsrLevel::ALERT);
+        self::assertSame('alert', $log->level);
+        self::assertSame('Alert', $log->levelTitle);
     }
 
     /**
@@ -217,8 +217,8 @@ final class LogTest extends TestCase
     public function testLevelColor(string $level, string $expected): void
     {
         $log = new Log();
-        $log->setLevel($level);
-        $actual = $log->getLevelColor();
+        $log->withLevel($level);
+        $actual = $log->levelColor;
         self::assertSame($expected, $actual);
     }
 
@@ -229,8 +229,8 @@ final class LogTest extends TestCase
     public function testLevelIcon(string $level, string $expected): void
     {
         $log = new Log();
-        $log->setLevel($level);
-        $actual = $log->getLevelIcon();
+        $log->withLevel($level);
+        $actual = $log->levelIcon;
         self::assertSame($expected, $actual);
     }
 

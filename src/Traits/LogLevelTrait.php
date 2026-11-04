@@ -21,40 +21,29 @@ use Psr\Log\LogLevel as PsrLevel;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Trait to handle log level icons and colors.
+ * Trait to handle log level.
  */
 trait LogLevelTrait
 {
-    /** @phpstan-var PsrLevel::* */
+    /** Get the icon and color classes. */
+    public string $fullLevelIcon {
+        get => $this->levelIcon . ' ' . $this->levelColor;
+    }
+    /**
+     * The level.
+     *
+     * @phpstan-var PsrLevel::*
+     */
     #[Assert\NotBlank]
     #[Assert\Length(max: 20)]
     #[ORM\Column(length: 20)]
-    private string $level = PsrLevel::INFO;
-
-    /**
-     * Get the icon and color classes.
-     */
-    public function getFullLevelIcon(): string
-    {
-        return $this->getLevelIcon() . ' ' . $this->getLevelColor();
+    public string $level = PsrLevel::INFO {
+        set => \strtolower($value);
     }
 
-    /**
-     * Get the level.
-     *
-     * @return PsrLevel::*
-     */
-    public function getLevel(): string
-    {
-        return $this->level;
-    }
-
-    /**
-     * Get the level boostrap color.
-     */
-    public function getLevelBootstrapColor(): HtmlBootstrapColor
-    {
-        return match ($this->level) {
+    /** Get the level boostrap color. */
+    public HtmlBootstrapColor $levelBootstrapColor {
+        get => match ($this->level) {
             PsrLevel::ALERT,
             PsrLevel::CRITICAL,
             PsrLevel::EMERGENCY,
@@ -65,28 +54,19 @@ trait LogLevelTrait
         };
     }
 
-    /**
-     * Get the level border color class.
-     */
-    public function getLevelBorder(): string
-    {
-        return $this->getColor('text-border-');
+    /** Get the level border color class. */
+    public string $levelBorder {
+        get => $this->getColor('text-border-');
     }
 
-    /**
-     * Get the level color class.
-     */
-    public function getLevelColor(): string
-    {
-        return $this->getColor('text-');
+    /** Get the level color class. */
+    public string $levelColor {
+        get => $this->getColor('text-');
     }
 
-    /**
-     * Get the level FontAwesome icon.
-     */
-    public function getLevelFontAwesomeIcon(): FontAwesomeIcon
-    {
-        return match ($this->level) {
+    /** Get the level FontAwesome icon. */
+    public FontAwesomeIcon $levelFontAwesomeIcon {
+        get => match ($this->level) {
             PsrLevel::ALERT,
             PsrLevel::CRITICAL,
             PsrLevel::EMERGENCY,
@@ -96,29 +76,22 @@ trait LogLevelTrait
         };
     }
 
-    /**
-     * Get the level icon class.
-     */
-    public function getLevelIcon(): string
-    {
-        return $this->getLevelFontAwesomeIcon()
-            ->asHtml('fa-fw');
+    /** Get the level icon class. */
+    public string $levelIcon {
+        get => $this->levelFontAwesomeIcon->asHtml('fa-fw');
     }
 
-    /**
-     * Gets the level with the first character uppercase.
-     */
-    public function getLevelTitle(): string
-    {
-        return \ucfirst($this->level);
+    /** Gets the level with the first character uppercase. */
+    public string $levelTitle {
+        get => \ucfirst($this->level);
     }
 
     /**
      * @phpstan-param PsrLevel::* $level
      */
-    public function setLevel(string $level): self
+    public function withLevel(string $level): self
     {
-        $this->level = \strtolower($level);
+        $this->level = $level;
 
         return $this;
     }

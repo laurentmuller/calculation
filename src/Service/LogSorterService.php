@@ -120,7 +120,7 @@ readonly class LogSorterService
      */
     private function getChannelSorter(): array
     {
-        return $this->createSorter(static fn (Log $log): string => $log->getChannel());
+        return $this->createSorter(static fn (Log $log): string => $log->channel);
     }
 
     /**
@@ -140,7 +140,7 @@ readonly class LogSorterService
      */
     private function getLevelSorter(): array
     {
-        return $this->createSorter(static fn (Log $log): string => $log->getLevel());
+        return $this->createSorter(static fn (Log $log): string => $log->level);
     }
 
     /**

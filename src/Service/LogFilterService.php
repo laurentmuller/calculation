@@ -100,7 +100,7 @@ readonly class LogFilterService
 
     private function acceptChannel(Log $log): bool
     {
-        return $this->acceptValue($log->getChannel());
+        return $this->acceptValue($log->channel);
     }
 
     private function acceptDate(Log $log): bool
@@ -110,7 +110,7 @@ readonly class LogFilterService
 
     private function acceptLevel(Log $log): bool
     {
-        return $this->acceptValue($log->getLevel());
+        return $this->acceptValue($log->level);
     }
 
     private function acceptMessage(Log $log): bool
@@ -130,12 +130,12 @@ readonly class LogFilterService
 
     private function matchChannel(Log $log): bool
     {
-        return StringUtils::equalIgnoreCase($this->searchChannel, $log->getChannel());
+        return StringUtils::equalIgnoreCase($this->searchChannel, $log->channel);
     }
 
     private function matchLevel(Log $log): bool
     {
-        return StringUtils::equalIgnoreCase($this->searchLevel, $log->getLevel());
+        return StringUtils::equalIgnoreCase($this->searchLevel, $log->level);
     }
 
     private function matchValue(Log $log): bool

@@ -169,7 +169,7 @@ class MemoryImageReport extends AbstractReport
         $cells = [];
         foreach ($channels as $channel) {
             $logChannel = new LogChannel($channel);
-            $logIcon = $logChannel->getChannelFontAwesomeIcon();
+            $logIcon = $logChannel->channelFontAwesomeIcon;
             $logCell = $this->service?->getCell(
                 icon: $logIcon,
                 text: \ucfirst($channel)
@@ -191,12 +191,12 @@ class MemoryImageReport extends AbstractReport
         $levels = Level::cases();
         foreach ($levels as $level) {
             $logLevel = new LogLevel($level->toPsrLogLevel());
-            $logIcon = $logLevel->getLevelFontAwesomeIcon();
-            $logColor = $logLevel->getLevelBootstrapColor()->asHex('#');
+            $logIcon = $logLevel->levelFontAwesomeIcon;
+            $logColor = $logLevel->levelBootstrapColor->asHex('#');
             $logCell = $this->service?->getCell(
                 icon: $logIcon,
                 color: $logColor,
-                text: \ucfirst($logLevel->getLevel())
+                text: \ucfirst($logLevel->level)
             );
             if ($logCell instanceof PdfFontAwesomeCell) {
                 $cells[] = $logCell;

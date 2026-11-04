@@ -194,8 +194,8 @@ final class LogTableTest extends TestCase
             ->withMessage('Message1');
         $log2 = Log::instance(2)
             ->withMessage('Message2')
-            ->setLevel(PsrLevel::ALERT)
-            ->setChannel('doctrine');
+            ->withLevel(PsrLevel::ALERT)
+            ->withChannel('doctrine');
 
         return [$log1, $log2];
     }

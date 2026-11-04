@@ -47,15 +47,15 @@ final class LogsReportTest extends TestCase
     public function testRender(): void
     {
         $log1 = Log::instance(1);
-        $logLevel1 = new LogLevel($log1->getLevel());
-        $logChannel1 = new LogChannel($log1->getChannel());
+        $logLevel1 = new LogLevel($log1->level);
+        $logChannel1 = new LogChannel($log1->channel);
 
         $log2 = Log::instance(2);
         $log2->withCreatedAt(DateUtils::add($log1->createdAt, 'P7D'))
-            ->setLevel(PsrLevel::ALERT)
-            ->setChannel('doctrine');
-        $logLevel2 = new LogLevel($log2->getLevel());
-        $logChannel2 = new LogChannel($log2->getChannel());
+            ->withLevel(PsrLevel::ALERT)
+            ->withChannel('doctrine');
+        $logLevel2 = new LogLevel($log2->level);
+        $logChannel2 = new LogChannel($log2->channel);
 
         $log3 = Log::instance(3);
 
@@ -71,8 +71,8 @@ final class LogsReportTest extends TestCase
             ]);
         $logFile->method('getChannels')
             ->willReturn([
-                $log1->getChannel() => $logChannel1,
-                $log2->getChannel() => $logChannel2,
+                $log1->channel => $logChannel1,
+                $log2->channel => $logChannel2,
             ]);
         $cell = new PdfFontAwesomeCell($this->getImage());
         $service = self::createStub(FontAwesomeCellService::class);

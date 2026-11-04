@@ -42,30 +42,30 @@ final class LogsDocumentTest extends TestCase
         $helper = self::createStub(DocumentHelperInterface::class);
 
         $log1 = Log::instance(1);
-        $level1 = new LogLevel($log1->getLevel());
-        $channel1 = new LogChannel($log1->getChannel());
+        $level1 = new LogLevel($log1->level);
+        $channel1 = new LogChannel($log1->channel);
 
         $log2 = Log::instance(2);
         $log2->withCreatedAt(DateUtils::add($log1->createdAt, 'P7D'))
-            ->setLevel(PsrLevel::ALERT)
-            ->setChannel('doctrine');
-        $level2 = new LogLevel($log2->getLevel());
-        $channel2 = new LogChannel($log2->getChannel());
+            ->withLevel(PsrLevel::ALERT)
+            ->withChannel('doctrine');
+        $level2 = new LogLevel($log2->level);
+        $channel2 = new LogChannel($log2->channel);
 
         $log3 = Log::instance(2);
         $log3->withCreatedAt(DateUtils::add($log2->createdAt, 'P7D'))
-            ->setLevel(PsrLevel::ALERT)
-            ->setChannel('doctrine');
+            ->withLevel(PsrLevel::ALERT)
+            ->withChannel('doctrine');
 
         $log4 = Log::instance(4);
         $log4->withCreatedAt(DateUtils::add($log1->createdAt, 'P7D'))
-            ->setLevel(PsrLevel::WARNING)
-            ->setChannel('doctrine');
+            ->withLevel(PsrLevel::WARNING)
+            ->withChannel('doctrine');
 
         $log5 = Log::instance(5);
         $log5->withCreatedAt(DateUtils::add($log1->createdAt, 'P7D'))
-            ->setLevel(PsrLevel::DEBUG)
-            ->setChannel('doctrine');
+            ->withLevel(PsrLevel::DEBUG)
+            ->withChannel('doctrine');
 
         $logFile = self::createStub(LogFile::class);
         $logFile->method('isEmpty')
@@ -79,8 +79,8 @@ final class LogsDocumentTest extends TestCase
             ]);
         $logFile->method('getChannels')
             ->willReturn([
-                $log1->getChannel() => $channel1,
-                $log2->getChannel() => $channel2,
+                $log1->channel => $channel1,
+                $log2->channel => $channel2,
             ]);
 
         $report = new LogsDocument($helper, $logFile, __DIR__);

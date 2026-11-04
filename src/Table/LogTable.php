@@ -160,7 +160,7 @@ class LogTable extends AbstractTable implements \Countable
     {
         return \array_combine(
             \array_keys($channels),
-            \array_map(static fn (LogChannel $channel): string => $channel->getChannelIcon(), $channels)
+            \array_map(static fn (LogChannel $channel): string => $channel->channelIcon, $channels)
         );
     }
 
@@ -171,7 +171,7 @@ class LogTable extends AbstractTable implements \Countable
     {
         return \array_combine(
             \array_keys($levels),
-            \array_map(static fn (LogLevel $level): string => $level->getFullLevelIcon(), $levels)
+            \array_map(static fn (LogLevel $level): string => $level->fullLevelIcon, $levels)
         );
     }
 

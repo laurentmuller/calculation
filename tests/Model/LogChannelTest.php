@@ -36,8 +36,8 @@ final class LogChannelTest extends TestCase
     public function testChannelIcon(string $channel, string $expected): void
     {
         $logChannel = LogChannel::instance('channel');
-        $logChannel->setChannel($channel);
-        $actual = $logChannel->getChannelIcon();
+        $logChannel->withChannel($channel);
+        $actual = $logChannel->channelIcon;
         self::assertSame($expected, $actual);
     }
 
@@ -54,9 +54,9 @@ final class LogChannelTest extends TestCase
     public function testInstance(): void
     {
         $logChannel = LogChannel::instance('channel');
-        self::assertSame('channel', $logChannel->getChannel());
+        self::assertSame('channel', $logChannel->channel);
         self::assertSame('channel', (string) $logChannel);
-        self::assertSame('Channel', $logChannel->getChannelTitle());
+        self::assertSame('Channel', $logChannel->channelTitle);
         self::assertCount(0, $logChannel);
     }
 }

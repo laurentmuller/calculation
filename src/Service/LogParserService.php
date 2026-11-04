@@ -63,8 +63,8 @@ class LogParserService
             }
             $log = Log::instance($key)
                 ->withCreatedAt($date)
-                ->setChannel($values[1])
-                ->setLevel($values[2])
+                ->withChannel($values[1])
+                ->withLevel($values[2])
                 ->withUser($values[3])
                 ->withMessage(\trim($values[4]))
                 ->withContext($this->parseContext($values[5]));

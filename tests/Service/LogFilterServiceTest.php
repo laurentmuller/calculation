@@ -25,10 +25,10 @@ final class LogFilterServiceTest extends TestCase
     {
         $log1 = Log::instance(1)
             ->withCreatedAt(new DatePoint('2024-01-01'))
-            ->setChannel('channel1');
+            ->withChannel('channel1');
         $log2 = Log::instance(1)
             ->withCreatedAt(new DatePoint('2024-02-02'))
-            ->setChannel('channel2');
+            ->withChannel('channel2');
         $filter = LogFilterService::instance(channel: 'channel1');
         self::assertSameLogs($filter, [$log1, $log2], $log1);
     }
@@ -37,10 +37,10 @@ final class LogFilterServiceTest extends TestCase
     {
         $log1 = Log::instance(1)
             ->withCreatedAt(new DatePoint('2024-01-01'))
-            ->setLevel(PsrLevel::ALERT);
+            ->withLevel(PsrLevel::ALERT);
         $log2 = Log::instance(1)
             ->withCreatedAt(new DatePoint('2024-02-02'))
-            ->setLevel(PsrLevel::INFO);
+            ->withLevel(PsrLevel::INFO);
         $filter = LogFilterService::instance(level: PsrLevel::ALERT);
         self::assertSameLogs($filter, [$log1, $log2], $log1);
     }

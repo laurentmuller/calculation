@@ -30,13 +30,13 @@ class LogLevel extends AbstractLogCounter
      */
     public function __construct(string $level)
     {
-        $this->setLevel($level);
+        $this->level = $level;
     }
 
     #[\Override]
     public function __toString(): string
     {
-        return $this->getLevel();
+        return $this->level;
     }
 
     #[\Override]

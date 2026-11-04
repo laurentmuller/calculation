@@ -66,11 +66,11 @@ class LogsDocument extends AbstractDocument
             $sheet->setRowValues($row, [
                 $log->createdAt,
                 $log->message,
-                $log->getLevelTitle(),
-                $log->getChannelTitle(),
+                $log->levelTitle,
+                $log->channelTitle,
                 $log->user,
             ]);
-            $this->setBorderStyle($sheet, $row, $log->getLevel());
+            $this->setBorderStyle($sheet, $row, $log->level);
             ++$row;
         }
         $sheet->finish();

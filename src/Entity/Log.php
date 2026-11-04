@@ -136,7 +136,7 @@ class Log extends AbstractEntity implements ComparableInterface
 
     public function isDoctrineMessage(): bool
     {
-        return self::DOCTRINE_CHANNEL === $this->getChannel()
+        return self::DOCTRINE_CHANNEL === $this->channel
             && StringUtils::startWith($this->message, self::DOCTRINE_PREFIX);
     }
 

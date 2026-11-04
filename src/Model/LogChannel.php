@@ -25,19 +25,19 @@ class LogChannel extends AbstractLogCounter
 
     public function __construct(string $channel)
     {
-        $this->setChannel($channel);
+        $this->channel = $channel;
     }
 
     #[\Override]
     public function __toString(): string
     {
-        return $this->getChannel();
+        return $this->channel;
     }
 
     #[\Override]
     public function compare(ComparableInterface $other): int
     {
-        return $this->getChannel() <=> $other->getChannel();
+        return $this->channel <=> $other->channel;
     }
 
     public static function instance(string $channel): self

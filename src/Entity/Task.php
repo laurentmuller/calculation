@@ -178,7 +178,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
     {
         $position = 0;
         foreach ($this->items as $item) {
-            $item->setPosition($position++);
+            $item->position = $position++;
         }
 
         return $this;

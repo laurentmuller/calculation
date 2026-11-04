@@ -261,8 +261,8 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
         $position = 0;
         $changed = false;
         foreach ($categories as $category) {
-            if ($position !== $category->getPosition()) {
-                $category->setPosition($position);
+            if ($position !== $category->position) {
+                $category->position = $position;
                 $changed = true;
             }
             if ($category->sort()) {
@@ -314,8 +314,8 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
     {
         $position = 0;
         foreach ($this->categories as $category) {
-            $category->setPosition($position++)
-                ->updatePositions();
+            $category->position = $position++;
+            $category->updatePositions();
         }
 
         return $this;

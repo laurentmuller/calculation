@@ -24,25 +24,5 @@ trait PositionTrait
 {
     /** The position index. */
     #[ORM\Column(options: ['default' => 0])]
-    private int $position = 0;
-
-    /**
-     * Gets the position index in the collection.
-     */
-    public function getPosition(): int
-    {
-        return $this->position;
-    }
-
-    /**
-     * Sets the position index in the collection.
-     */
-    public function setPosition(int $position): static
-    {
-        if ($this->position !== $position) {
-            $this->position = $position;
-        }
-
-        return $this;
-    }
+    public int $position = 0;
 }

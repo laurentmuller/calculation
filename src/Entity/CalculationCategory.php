@@ -207,8 +207,8 @@ class CalculationCategory extends AbstractEntity implements \Countable, Comparab
         $position = 0;
         $changed = false;
         foreach ($items as $item) {
-            if ($position !== $item->getPosition()) {
-                $item->setPosition($position);
+            if ($position !== $item->position) {
+                $item->position = $position;
                 $changed = true;
             }
             ++$position;
@@ -253,7 +253,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, Comparab
     {
         $position = 0;
         foreach ($this->items as $item) {
-            $item->setPosition($position++);
+            $item->position = $position++;
         }
 
         return $this;

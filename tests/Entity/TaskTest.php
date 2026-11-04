@@ -153,17 +153,17 @@ final class TaskTest extends EntityValidatorTestCase
         $task = new Task();
 
         $item0 = new TaskItem();
-        $item0->setPosition(-1);
+        $item0->position = -1;
 
         $item1 = new TaskItem();
-        $item1->setPosition(-2);
+        $item1->position = -2;
 
         $task->addItem($item0);
         $task->addItem($item1);
         $task->updatePositions();
 
-        self::assertSame(0, $item0->getPosition());
-        self::assertSame(1, $item1->getPosition());
+        self::assertSame(0, $item0->position);
+        self::assertSame(1, $item1->position);
     }
 
     public function testValid(): void

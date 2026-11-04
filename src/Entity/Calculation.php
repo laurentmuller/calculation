@@ -642,8 +642,8 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     {
         $position = 0;
         foreach ($this->groups as $group) {
-            $group->setPosition($position++)
-                ->updatePositions();
+            $group->position = $position++;
+            $group->updatePositions();
         }
 
         return $this;

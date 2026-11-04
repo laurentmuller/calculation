@@ -557,8 +557,8 @@ final class CalculationTest extends EntityValidatorTestCase
         $group->addCategory($category1);
         $group->addCategory($category2);
 
-        $category1->setPosition(-1);
-        $category2->setPosition(-1);
+        $category1->position = -1;
+        $category2->position = -1;
 
         $actual = $group->sort();
         self::assertTrue($actual);

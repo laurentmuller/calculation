@@ -83,7 +83,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
     {
         if (!$this->items->contains($item)) {
             $this->items->add($item);
-            $item->withTask($this);
+            $item->task = $this;
         }
 
         return $this;
@@ -161,8 +161,8 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
     public function removeItem(TaskItem $item): self
     {
         if ($this->items->removeElement($item)) {
-            if ($item->getParentEntity() === $this) {
-                $item->withTask(null);
+            if ($item->task === $this) {
+                $item->task = null;
             }
 
             return $this->updatePositions();

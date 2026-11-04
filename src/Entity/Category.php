@@ -64,7 +64,7 @@ class Category extends AbstractCodeEntity
     {
         if (!$this->products->contains($product)) {
             $this->products->add($product);
-            $product->withCategory($this);
+            $product->category = $this;
         }
 
         return $this;
@@ -74,7 +74,7 @@ class Category extends AbstractCodeEntity
     {
         if (!$this->tasks->contains($task)) {
             $this->tasks->add($task);
-            $task->withCategory($this);
+            $task->category = $this;
         }
 
         return $this;
@@ -160,7 +160,7 @@ class Category extends AbstractCodeEntity
     public function removeProduct(Product $product): self
     {
         if ($this->products->removeElement($product) && $product->category === $this) {
-            $product->withCategory(null);
+            $product->category = null;
         }
 
         return $this;
@@ -172,7 +172,7 @@ class Category extends AbstractCodeEntity
     public function removeTask(Task $task): self
     {
         if ($this->tasks->removeElement($task) && $task->category === $this) {
-            $task->withCategory(null);
+            $task->category = null;
         }
 
         return $this;

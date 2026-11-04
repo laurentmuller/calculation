@@ -95,7 +95,7 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
     {
         if (!$this->margins->contains($margin)) {
             $this->margins->add($margin);
-            $margin->withTaskItem($this);
+            $margin->taskItem = $this;
         }
 
         return $this;
@@ -170,7 +170,7 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
     public function removeMargin(TaskItemMargin $margin): self
     {
         if ($this->margins->removeElement($margin) && $margin->taskItem === $this) {
-            $margin->withTaskItem(null);
+            $margin->taskItem = null;
         }
 
         return $this;

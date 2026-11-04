@@ -240,7 +240,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     {
         if (!$this->contains($group)) {
             $this->groups->add($group);
-            $group->withCalculation($this);
+            $group->calculation = $this;
         }
 
         return $this;
@@ -582,8 +582,8 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     public function removeGroup(CalculationGroup $group): self
     {
         if ($this->groups->removeElement($group)) {
-            if ($group->getParentEntity() === $this) {
-                $group->withCalculation(null);
+            if ($group->calculation === $this) {
+                $group->calculation = null;
             }
 
             return $this->updatePositions();

@@ -100,7 +100,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, Comparab
     {
         if (!$this->contains($item)) {
             $this->items->add($item);
-            $item->withCategory($this);
+            $item->category = $this;
         }
 
         return $this;
@@ -180,7 +180,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, Comparab
     {
         if ($this->items->removeElement($item)) {
             if ($item->category === $this) {
-                $item->withCategory(null);
+                $item->category = null;
             }
 
             return $this->updatePositions();

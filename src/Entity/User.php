@@ -147,6 +147,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
      */
     public function __unserialize(array $data): void
     {
+        // @phpstan-ignore assign.propertyReadOnly
         [$this->id, $this->username, $this->password] = $data;
     }
 
@@ -157,7 +158,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     {
         if (!$this->contains($property)) {
             $this->properties->add($property);
-            $property->withUser($this);
+            $property->user = $this;
         }
 
         return $this;
@@ -230,7 +231,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     public function removeProperty(UserProperty $property): self
     {
         if ($this->properties->removeElement($property) && $property->user === $this) {
-            $property->withUser(null);
+            $property->user = null;
         }
 
         return $this;

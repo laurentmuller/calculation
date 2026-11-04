@@ -77,8 +77,9 @@ class Log extends AbstractEntity implements ComparableInterface
         set => StringUtils::trim($value);
     }
 
-    public function __construct()
+    public function __construct(?int $id = null)
     {
+        $this->id = $id;
         $this->createdAt = DateUtils::createDatePoint();
     }
 
@@ -126,14 +127,11 @@ class Log extends AbstractEntity implements ComparableInterface
     /**
      * Create an instance of Log.
      *
-     * @param int|null $id the optional primary key identifier
+     * @param ?int $id the optional primary key identifier
      */
     public static function instance(?int $id = null): self
     {
-        $log = new self();
-        $log->id = $id;
-
-        return $log;
+        return new self($id);
     }
 
     public function isDoctrineMessage(): bool

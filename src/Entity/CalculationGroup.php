@@ -128,7 +128,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
     {
         if (!$this->contains($category)) {
             $this->categories->add($category);
-            $category->withGroup($this);
+            $category->group = $this;
         }
 
         return $this;
@@ -234,7 +234,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
     {
         if ($this->categories->removeElement($category)) {
             if ($category->group === $this) {
-                $category->withGroup(null);
+                $category->group = null;
             }
 
             return $this->updatePositions();

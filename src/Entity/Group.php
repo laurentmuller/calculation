@@ -88,7 +88,7 @@ class Group extends AbstractCodeEntity
     {
         if (!$this->categories->contains($category)) {
             $this->categories->add($category);
-            $category->withGroup($this);
+            $category->group = $this;
         }
 
         return $this;
@@ -101,7 +101,7 @@ class Group extends AbstractCodeEntity
     {
         if (!$this->margins->contains($margin)) {
             $this->margins->add($margin);
-            $margin->withGroup($this);
+            $margin->group = $this;
         }
 
         return $this;
@@ -231,7 +231,7 @@ class Group extends AbstractCodeEntity
     public function removeCategory(Category $category): self
     {
         if ($this->categories->removeElement($category) && $category->group === $this) {
-            $category->withGroup(null);
+            $category->group = null;
         }
 
         return $this;
@@ -243,7 +243,7 @@ class Group extends AbstractCodeEntity
     public function removeMargin(GroupMargin $margin): self
     {
         if ($this->margins->removeElement($margin) && $margin->getParentEntity() === $this) {
-            $margin->withGroup(null);
+            $margin->group = null;
         }
 
         return $this;

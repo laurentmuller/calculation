@@ -19,10 +19,10 @@ namespace App\Interfaces;
 interface MarginInterface
 {
     /** Get the maximum. */
-    public float $maximum{get; set; }
+    public float $maximum{get; }
 
     /** Get the minimum. */
-    public float $minimum{get; set; }
+    public float $minimum{get; }
 
     /**
      * Returns if the given value is between this minimum (inclusive) and this maximum (exclusive).

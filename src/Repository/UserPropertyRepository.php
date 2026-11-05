@@ -38,12 +38,4 @@ class UserPropertyRepository extends AbstractRepository
     {
         return $this->findBy(['user' => $user]);
     }
-
-    /**
-     * Gets a property for the given user and name.
-     */
-    public function findOneByUserAndName(UserInterface $user, string $name): ?UserProperty
-    {
-        return $this->findOneBy(['user' => $user, 'name' => $name]);
-    }
 }

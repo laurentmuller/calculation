@@ -23,9 +23,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 trait LogChannelTrait
 {
-    // the long application channel name
+    // The long application channel name.
     private const string APP_CHANNEL_LONG = 'application';
-    // the short application channel name
+    // The short application channel name.
     private const string APP_CHANNEL_SHORT = 'app';
 
     /** The channel. */
@@ -74,7 +74,7 @@ trait LogChannelTrait
 
     private function sanitizeChannel(string $value): string
     {
-        $value = \strtolower($value);
+        $value = \strtolower(\trim($value));
 
         return self::APP_CHANNEL_SHORT === $value ? self::APP_CHANNEL_LONG : $value;
     }

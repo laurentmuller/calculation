@@ -30,20 +30,19 @@ abstract class AbstractProperty extends AbstractEntity
     /** The value used for TRUE value. */
     private const int TRUE_VALUE = 1;
 
-    /** The property value. */
-    #[Assert\NotBlank]
-    #[Assert\Length(max: self::MAX_STRING_LENGTH)]
-    #[ORM\Column(nullable: true)]
-    public ?string $value = null;
-
     /**
-     * @param string $name the property name
+     * @param string  $name  the property name
+     * @param ?string $value the property value
      */
     public function __construct(
         #[Assert\NotBlank]
         #[Assert\Length(max: 50)]
         #[ORM\Column(length: 50)]
-        public string $name = ''
+        public string $name = '',
+        #[Assert\NotBlank]
+        #[Assert\Length(max: self::MAX_STRING_LENGTH)]
+        #[ORM\Column]
+        public ?string $value = null
     ) {
     }
 

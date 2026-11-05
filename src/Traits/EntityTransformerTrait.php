@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Traits;
 
 use App\Interfaces\EntityInterface;
+use App\Repository\AbstractRepository;
 use Symfony\Component\Form\Exception\InvalidArgumentException;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 
@@ -24,6 +25,13 @@ use Symfony\Component\Form\Exception\UnexpectedTypeException;
  */
 trait EntityTransformerTrait
 {
+    /**
+     * @param AbstractRepository<TEntity> $repository
+     */
+    public function __construct(private readonly AbstractRepository $repository)
+    {
+    }
+
     /**
      * @param int|string|null $value
      *

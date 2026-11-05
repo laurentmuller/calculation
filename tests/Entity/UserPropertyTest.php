@@ -37,26 +37,6 @@ final class UserPropertyTest extends EntityValidatorTestCase
         }
     }
 
-    public function testFindByName(): void
-    {
-        $user = $this->getUser();
-        self::assertNotNull($user);
-        $expected = new UserProperty('name');
-        $expected->withString('value');
-        $expected->withUser($user);
-
-        try {
-            $this->saveEntity($expected);
-            $actual = $this->getRepository()->findOneByUserAndName($user, 'name');
-            self::assertNotNull($actual);
-            self::assertSame($expected->name, $actual->name);
-            self::assertSame($expected->value, $actual->value);
-            self::assertSame($expected->user, $actual->user);
-        } finally {
-            $this->deleteEntity($expected);
-        }
-    }
-
     public function testFindByUser(): void
     {
         $user = $this->getUser();

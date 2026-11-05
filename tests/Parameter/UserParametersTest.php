@@ -99,7 +99,7 @@ final class UserParametersTest extends TestCase
         self::assertTrue($actual);
     }
 
-    private function createApplication(): ApplicationParameters
+    private function createApplicationParameters(): ApplicationParameters
     {
         $cache = new TagAwareAdapter(new ArrayAdapter());
         $repository = self::createStub(ApplicationPropertyRepository::class);
@@ -107,7 +107,11 @@ final class UserParametersTest extends TestCase
         $manager->method('getRepository')
             ->willReturn($repository);
 
-        return new ApplicationParameters($cache, $manager, false);
+        return new ApplicationParameters(
+            cache: $cache,
+            manager: $manager,
+            debug: false
+        );
     }
 
     private function createMockManager(array $properties = []): EntityManagerInterface
@@ -142,7 +146,7 @@ final class UserParametersTest extends TestCase
             cache: new TagAwareAdapter(new ArrayAdapter()),
             manager: $this->createMockManager($properties),
             security: $this->createMockSecurity($user),
-            application: $this->createApplication()
+            application: $this->createApplicationParameters()
         );
     }
 }

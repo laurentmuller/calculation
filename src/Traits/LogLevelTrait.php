@@ -32,12 +32,13 @@ trait LogLevelTrait
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 20)]
+    // #[Assert\Choice(callback: 'getAllowedLevels')]
     #[ORM\Column(length: 20)]
     public string $level = PsrLevel::INFO {
-        set => \strtolower($value);
+        set => $this->sanitizeLevel($value);
     }
 
-    /** Get the level boostrap color. */
+    /** Get the level Boostrap color. */
     public HtmlBootstrapColor $levelBootstrapColor {
         get => match ($this->level) {
             PsrLevel::ALERT,
@@ -97,16 +98,33 @@ trait LogLevelTrait
         return $this;
     }
 
+    /**
+     * @return string[]
+     */
+    protected static function getAllowedLevels(): array
+    {
+        return new \ReflectionClass(PsrLevel::class)->getConstants();
+    }
+
     private function getColor(string $prefix): string
     {
         return $prefix . match ($this->level) {
+            PsrLevel::EMERGENCY,
             PsrLevel::ALERT,
             PsrLevel::CRITICAL,
-            PsrLevel::EMERGENCY,
             PsrLevel::ERROR => 'danger',
             PsrLevel::WARNING => 'warning',
             PsrLevel::DEBUG => 'secondary',
             default => 'info'
         };
+    }
+
+    /**
+     * @phpstan-return PsrLevel::*
+     */
+    private function sanitizeLevel(string $value): string
+    {
+        /** @phpstan-var PsrLevel::* */
+        return \strtolower(\trim($value));
     }
 }

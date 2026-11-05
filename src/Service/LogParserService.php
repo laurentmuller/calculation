@@ -66,7 +66,7 @@ class LogParserService
                 ->withChannel($values[1])
                 ->withLevel($values[2])
                 ->withUser($values[3])
-                ->withMessage(\trim($values[4]))
+                ->withMessage($this->parseMessage($values[4]))
                 ->withContext($this->parseContext($values[5]));
             $file->addLog($log);
         }
@@ -94,5 +94,10 @@ class LogParserService
         } catch (\DateMalformedStringException) {
             return null;
         }
+    }
+
+    private function parseMessage(string $value): string
+    {
+        return \mb_convert_encoding(\trim($value), 'UTF-8', 'UTF-8');
     }
 }

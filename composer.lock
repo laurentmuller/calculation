@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "76f2dd34fbd19c5f74aa143e05f96f4c",
+    "content-hash": "55f4a17beece51ec4666ac9d1556e95f",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -257,16 +257,16 @@
         },
         {
             "name": "createnl/zxcvbn-bundle",
-            "version": "dev-master",
+            "version": "3.2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/laurentmuller/zxcvbn-bundle.git",
-                "reference": "6876ad463bf7bce6fda1039e45e001331aaaa980"
+                "url": "https://github.com/createnl/zxcvbn-bundle.git",
+                "reference": "45c0b0a658ea090e370ca4c894ccd15c319fa192"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/zxcvbn-bundle/zipball/6876ad463bf7bce6fda1039e45e001331aaaa980",
-                "reference": "6876ad463bf7bce6fda1039e45e001331aaaa980",
+                "url": "https://api.github.com/repos/createnl/zxcvbn-bundle/zipball/45c0b0a658ea090e370ca4c894ccd15c319fa192",
+                "reference": "45c0b0a658ea090e370ca4c894ccd15c319fa192",
                 "shasum": ""
             },
             "require": {
@@ -279,18 +279,13 @@
                 "symfony/console": "^5.4|^6.0|^7.0|^8.0",
                 "symfony/framework-bundle": "^5.4|^6.0|^7.0|^8.0"
             },
-            "default-branch": true,
             "type": "symfony-bundle",
             "autoload": {
                 "psr-4": {
                     "Createnl\\ZxcvbnBundle\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Createnl\\ZxcvbnBundle\\Tests\\": "tests/"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -302,9 +297,10 @@
             ],
             "description": "zxcvbn-php symfony bundle",
             "support": {
-                "source": "https://github.com/laurentmuller/zxcvbn-bundle/tree/master"
+                "issues": "https://github.com/createnl/zxcvbn-bundle/issues",
+                "source": "https://github.com/createnl/zxcvbn-bundle/tree/3.2.0"
             },
-            "time": "2026-10-30T05:51:03+00:00"
+            "time": "2026-11-05T08:49:00+00:00"
         },
         {
             "name": "dasprid/enum",
@@ -11686,18 +11682,9 @@
             "time": "2026-10-30T12:52:48+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "createnl/zxcvbn-bundle",
-            "version": "9999999-dev",
-            "alias": "3.0",
-            "alias_normalized": "3.0.0.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "createnl/zxcvbn-bundle": 20
-    },
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

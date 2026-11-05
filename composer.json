@@ -40,7 +40,7 @@
         "ext-zip": "*",
         "ext-zlib": "*",
         "beberlei/doctrineextensions": "^v1.0",
-        "createnl/zxcvbn-bundle": "dev-master as 3.0",
+        "createnl/zxcvbn-bundle": "^3.0",
         "doctrine/doctrine-bundle": "^3.0",
         "doctrine/orm": "^3.0",
         "elao/enum": "^3.0",
@@ -201,12 +201,5 @@
             "@app-twig-space",
             "@app-test"
         ]
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/laurentmuller/zxcvbn-bundle",
-            "canonical": false
-        }
-    ]
+    }
 }

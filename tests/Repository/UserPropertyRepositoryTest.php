@@ -46,26 +46,6 @@ final class UserPropertyRepositoryTest extends AbstractRepositoryTestCase
         self::assertCount(1, $actual);
     }
 
-    public function testFindOneByUserAndName(): void
-    {
-        $user = new User();
-        $user->withUsername('test')
-            ->withEmail('email@email.com')
-            ->withPassword('password');
-        $this->addEntity($user);
-
-        $actual = $this->repository->findOneByUserAndName($user, 'name');
-        self::assertNull($actual);
-
-        $property = new UserProperty();
-        $property->withUser($user)
-            ->withName('name')
-            ->withValue('value');
-        $this->addEntity($property);
-        $actual = $this->repository->findOneByUserAndName($user, 'name');
-        self::assertNotNull($actual);
-    }
-
     #[\Override]
     protected function getRepositoryClass(): string
     {

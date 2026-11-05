@@ -24,18 +24,20 @@
     {% endblock stylesheets %}
 </head>
 {# body #}
-{% set body_attrs = {
-    class: [
-        sidebar_show ? 'sidebar-show' : null,
-        statusbar_show ? 'statusbar-show' : null,
-    ],
-    'data-cookie-path': cookie_path,
-    'data-vertical-url': path('navigation_vertical'),
-    'data-horizontal-url': path('navigation_horizontal'),
-    'data-show-menu': 'index.menu_show'|trans,
-    'data-hide-menu': 'index.menu_hide'|trans,
-} %}
-<body {{ html_attr(body_attrs) }}>
+{% if navigation_show %}
+    {% set body_attrs = {
+        class: [
+            sidebar_show ? 'sidebar-show' : null,
+            statusbar_show ? 'statusbar-show' : null,
+        ],
+        'data-cookie-path': cookie_path,
+        'data-vertical-url': path('navigation_vertical'),
+        'data-horizontal-url': path('navigation_horizontal'),
+        'data-show-menu': 'index.menu_show'|trans,
+        'data-hide-menu': 'index.menu_hide'|trans,
+    } %}
+{% endif %}
+<body {{ html_attr(body_attrs|default({})) }}>
 {# navigation #}
 {% if navigation_show %}
     {% if sidebar_show %}
@@ -45,7 +47,7 @@
     {% endif %}
 {% endif %}
 {# main content #}
-<div class="page-content">
+<div class="page-content{% block page_content_class '' %}">
     {# container #}
     <div role="main" class="{% block container_class 'container' %}">
         <div class="row g-0">

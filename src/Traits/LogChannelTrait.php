@@ -33,16 +33,13 @@ trait LogChannelTrait
     #[Assert\Length(max: 20)]
     #[ORM\Column(length: 20)]
     public string $channel = self::APP_CHANNEL_LONG {
-        set {
-            $value = \strtolower($value);
-            $this->channel = self::APP_CHANNEL_SHORT === $value ? self::APP_CHANNEL_LONG : $value;
-        }
+        set => $this->sanitizeChannel($value);
     }
 
     /** Get the channel FontAwesome icon. */
     public FontAwesomeIcon $channelFontAwesomeIcon {
         get => match ($this->channel) {
-            'application' => new FontAwesomeIcon(FontAwesomePath::SOLID, 'laptop-code'),
+            self::APP_CHANNEL_LONG => new FontAwesomeIcon(FontAwesomePath::SOLID, 'laptop-code'),
             'cache' => new FontAwesomeIcon(FontAwesomePath::SOLID, 'hard-drive'),
             'console' => new FontAwesomeIcon(FontAwesomePath::SOLID, 'keyboard'),
             'doctrine' => new FontAwesomeIcon(FontAwesomePath::SOLID, 'database'),
@@ -65,10 +62,20 @@ trait LogChannelTrait
         get => \ucfirst($this->channel);
     }
 
+    /**
+     * Sets the channel.
+     */
     public function withChannel(string $channel): static
     {
         $this->channel = $channel;
 
         return $this;
+    }
+
+    private function sanitizeChannel(string $value): string
+    {
+        $value = \strtolower($value);
+
+        return self::APP_CHANNEL_SHORT === $value ? self::APP_CHANNEL_LONG : $value;
     }
 }

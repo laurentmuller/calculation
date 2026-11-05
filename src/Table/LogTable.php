@@ -171,7 +171,7 @@ class LogTable extends AbstractTable implements \Countable
     {
         return \array_combine(
             \array_keys($levels),
-            \array_map(static fn (LogLevel $level): string => $level->fullLevelIcon, $levels)
+            \array_map(static fn (LogLevel $level): string => $level->levelIconAndColor, $levels)
         );
     }
 

@@ -25,10 +25,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 trait LogLevelTrait
 {
-    /** Get the icon and color classes. */
-    public string $fullLevelIcon {
-        get => $this->levelIcon . ' ' . $this->levelColor;
-    }
     /**
      * The level.
      *
@@ -79,6 +75,11 @@ trait LogLevelTrait
     /** Get the level icon class. */
     public string $levelIcon {
         get => $this->levelFontAwesomeIcon->asHtml('fa-fw');
+    }
+
+    /** Get the level icon and color classes. */
+    public string $levelIconAndColor {
+        get => $this->levelIcon . ' ' . $this->levelColor;
     }
 
     /** Gets the level with the first character uppercase. */

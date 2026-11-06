@@ -25,6 +25,20 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
  * The table column.
  *
  * @phpstan-type EntityType = EntityInterface|array{id: int, ...}
+ * @phpstan-type ColumnType = array{
+ *     field: string,
+ *     alias?: string,
+ *     title?: string,
+ *     class?: string,
+ *     order?: string,
+ *     default?: bool,
+ *     numeric?: bool,
+ *     visible?: bool,
+ *     sortable?: bool,
+ *     searchable?: bool,
+ *     fieldFormatter?: string,
+ *     cellFormatter?: string,
+ *     styleFormatter?: string}
  */
 class Column implements \Stringable
 {
@@ -113,7 +127,7 @@ class Column implements \Stringable
      */
     public static function fromJson(AbstractTable $parent, string $path): array
     {
-        /** @var array<array<string, string|bool>> $definitions */
+        /** @var ColumnType[] $definitions */
         $definitions = FileUtils::decodeJson($path);
         if ([] === $definitions) {
             throw new \InvalidArgumentException(\sprintf('The file "%s" contains no definition.', $path));
@@ -241,8 +255,8 @@ class Column implements \Stringable
      */
     public function mapValue(EntityInterface|array $objectOrArray): string
     {
-        $property = \is_array($objectOrArray) ? $this->property : $this->field;
-        $value = self::getAccessor()->getValue($objectOrArray, $property);
+        $propertyPath = $this->getPropertyPath($objectOrArray);
+        $value = self::getAccessor()->getValue($objectOrArray, $propertyPath);
 
         return $this->formatValue($objectOrArray, $value);
     }
@@ -365,8 +379,13 @@ class Column implements \Stringable
         return self::$accessor ??= PropertyAccess::createPropertyAccessor();
     }
 
+    private function getPropertyPath(EntityInterface|array $objectOrArray): string
+    {
+        return \is_object($objectOrArray) ? $this->field : $this->property;
+    }
+
     /**
-     * @param array<string, string|bool> $definition
+     * @param ColumnType $definition
      *
      * @throws \InvalidArgumentException if a property cannot be set
      */
@@ -379,7 +398,7 @@ class Column implements \Stringable
         foreach ($definition as $key => $value) {
             try {
                 if (self::FIELD_ORDER === $key) {
-                    $accessor->setValue($column, $key, SortMode::from((string) $value));
+                    $accessor->setValue($column, $key, SortMode::from($value));
                     continue;
                 }
                 if (self::FIELD_FORMATTER === $key) {

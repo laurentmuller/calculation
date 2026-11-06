@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Table;
 
+use App\Entity\Product;
 use App\Enums\SortMode;
 use App\Repository\GlobalMarginRepository;
 use App\Service\IndexService;
@@ -31,6 +32,26 @@ final class ColumnTest extends TestCase
         self::assertFalse($column->isSearchable());
         self::assertSame('renderActions', $column->getCellFormatter());
         self::assertSame('actions rowlink-skip d-print-none', $column->getClass());
+    }
+
+    public function testDefaultProperties(): void
+    {
+        $column = Column::instance();
+        self::assertSame('', $column->getField());
+        self::assertSame('', $column->getAlias());
+        self::assertSame('user-select-none cursor-pointer', $column->getClass());
+        self::assertSame(SortMode::DEFAULT, $column->getOrder());
+
+        self::assertNull($column->getCellFormatter());
+        self::assertNull($column->getFieldFormatter());
+        self::assertNull($column->getStyleFormatter());
+        self::assertNull($column->getTitle());
+
+        self::assertFalse($column->isDefault());
+        self::assertFalse($column->isNumeric());
+        self::assertTrue($column->isSearchable());
+        self::assertTrue($column->isSortable());
+        self::assertTrue($column->isVisible());
     }
 
     public function testFromJsonEmpty(): void
@@ -109,14 +130,6 @@ final class ColumnTest extends TestCase
         self::assertSame('class user-select-none cursor-pointer', $actual);
     }
 
-    public function testGetProperties(): void
-    {
-        $column = Column::instance();
-        self::assertNull($column->getFieldFormatter());
-        self::assertNull($column->getStyleFormatter());
-        self::assertNull($column->getTitle());
-    }
-
     public function testMapValueBool(): void
     {
         $data = [
@@ -159,6 +172,15 @@ final class ColumnTest extends TestCase
             ->setFieldFormatter($callback);
         $actual = $column->mapValue($data);
         self::assertSame('prefix.value', $actual);
+    }
+
+    public function testMapValueObject(): void
+    {
+        $data = new Product()
+            ->withDescription('fake');
+        $column = Column::instance('description');
+        $actual = $column->mapValue($data);
+        self::assertSame('fake', $actual);
     }
 
     public function testToString(): void

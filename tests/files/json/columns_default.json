@@ -10,7 +10,8 @@
         "searchable": true,
         "fieldFormatter": "formatAmount",
         "class": "text-currency w-35",
-        "numeric": true
+        "numeric": true,
+        "order": "desc"
     },
     {
         "field": "maximum",

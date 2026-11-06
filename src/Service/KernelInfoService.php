@@ -112,6 +112,16 @@ readonly class KernelInfoService
     }
 
     /**
+     * Gets the share directory path and the formatted size.
+     *
+     * @phpstan-return DirectoryType
+     */
+    public function getShareInfo(): array
+    {
+        return $this->getDirectoryInfo('Share', (string) $this->kernel->getShareDir());
+    }
+
+    /**
      * Gets the kernel type.
      *
      * @return class-string<KernelInterface>

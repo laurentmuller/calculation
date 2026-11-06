@@ -219,6 +219,7 @@ class SymfonyReport extends AbstractReport implements PdfDrawCellTextInterface
         $this->outputRow($table, 'Project', $kernel->getProjectDir())
             ->outputDirectoryRow($table, $kernel->getCacheInfo())
             ->outputDirectoryRow($table, $kernel->getBuildInfo())
+            ->outputDirectoryRow($table, $kernel->getShareInfo())
             ->outputDirectoryRow($table, $kernel->getLogInfo());
     }
 

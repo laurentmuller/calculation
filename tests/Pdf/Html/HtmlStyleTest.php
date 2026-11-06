@@ -62,24 +62,24 @@ final class HtmlStyleTest extends TestCase
     #[DataProvider('getAlignments')]
     public function testAlignment(string $class, PdfTextAlignment $expected): void
     {
-        $actual = HtmlStyle::default();
-        $actual->update($class);
+        $actual = HtmlStyle::default()
+            ->update($class);
         self::assertSame($expected, $actual->getAlignment());
     }
 
     #[DataProvider('getBorders')]
     public function testBorder(string $class, PdfBorder $expected): void
     {
-        $actual = HtmlStyle::default();
-        $actual->update($class);
+        $actual = HtmlStyle::default()
+            ->update($class);
         self::assertEqualsCanonicalizing($expected, $actual->getBorder());
     }
 
     public function testMargins(): void
     {
-        $actual = HtmlStyle::default();
         $expected = 15.0;
-        $actual->setMargins($expected);
+        $actual = HtmlStyle::default()
+            ->setMargins($expected);
         self::assertSameMargins($actual, $expected);
     }
 
@@ -122,22 +122,22 @@ final class HtmlStyleTest extends TestCase
 
     public function testUpdateAlignment(): void
     {
-        $actual = HtmlStyle::default();
-        $actual->update('text-justify');
+        $actual = HtmlStyle::default()
+            ->update('text-justify');
         self::assertSame(PdfTextAlignment::JUSTIFIED, $actual->getAlignment());
     }
 
     public function testUpdateBorder(): void
     {
-        $actual = HtmlStyle::default();
-        $actual->update('border');
+        $actual = HtmlStyle::default()
+            ->update('border');
         self::assertEqualsCanonicalizing(PdfBorder::all(), $actual->getBorder());
     }
 
     public function testUpdateColor(): void
     {
-        $actual = HtmlStyle::default();
-        $actual->update('primary');
+        $actual = HtmlStyle::default()
+            ->update('primary');
 
         $rgb = HtmlBootstrapColor::PRIMARY->asRGB();
         $color = new PdfTextColor($rgb[0], $rgb[1], $rgb[2]);
@@ -152,70 +152,70 @@ final class HtmlStyleTest extends TestCase
 
     public function testUpdateEmpty(): void
     {
-        $actual = HtmlStyle::default();
-        $actual->update('');
+        $actual = HtmlStyle::default()
+            ->update('');
         self::assertSameMargins($actual);
     }
 
     public function testUpdateFont(): void
     {
-        $style = HtmlStyle::default();
-        $style->update('fw-bold');
+        $style = HtmlStyle::default()
+            ->update('fw-bold');
         $actual = $style->getFont()->getStyle();
         self::assertSame(PdfFontStyle::BOLD, $actual);
 
-        $style = HtmlStyle::default();
-        $style->update('fst-normal');
+        $style = HtmlStyle::default()
+            ->update('fst-normal');
         $actual = $style->getFont()->getStyle();
         self::assertSame(PdfFontStyle::REGULAR, $actual);
 
-        $style = HtmlStyle::default();
-        $style->update('fst-italic');
+        $style = HtmlStyle::default()
+            ->update('fst-italic');
         $actual = $style->getFont()->getStyle();
         self::assertSame(PdfFontStyle::ITALIC, $actual);
 
-        $style = HtmlStyle::default();
-        $style->update('text-decoration-underline');
+        $style = HtmlStyle::default()
+            ->update('text-decoration-underline');
         $actual = $style->getFont()->getStyle();
         self::assertSame(PdfFontStyle::UNDERLINE, $actual);
 
-        $style = HtmlStyle::default();
-        $style->update('text-decoration-none');
+        $style = HtmlStyle::default()
+            ->update('text-decoration-none');
         $actual = $style->getFont()->getStyle();
         self::assertSame(PdfFontStyle::REGULAR, $actual);
 
-        $style = HtmlStyle::default();
-        $style->update('font-monospace');
+        $style = HtmlStyle::default()
+            ->update('font-monospace');
         $actual = $style->getFont()->getName();
         self::assertSame(PdfFontName::COURIER, $actual);
 
-        $style = HtmlStyle::default();
-        $style->update('fs-1');
+        $style = HtmlStyle::default()
+            ->update('fs-1');
         $actual = $style->getFont()->getSize();
         self::assertSame(22.5, $actual);
 
-        $style = HtmlStyle::default();
-        $style->update('fs-2');
+        $style = HtmlStyle::default()
+            ->update('fs-2');
         $actual = $style->getFont()->getSize();
         self::assertSame(18.0, $actual);
 
-        $style = HtmlStyle::default();
-        $style->update('fs-3');
+        $style = HtmlStyle::default()
+            ->update('fs-3');
         $actual = $style->getFont()->getSize();
         self::assertSame(15.75, $actual);
 
-        $style = HtmlStyle::default();
-        $style->update('fs-4');
+        $style = HtmlStyle::default()
+            ->update('fs-4');
         $actual = $style->getFont()->getSize();
         self::assertSame(13.5, $actual);
 
-        $style = HtmlStyle::default();
-        $style->update('fs-5');
+        $style = HtmlStyle::default()
+            ->update('fs-5');
         $actual = $style->getFont()->getSize();
         self::assertSame(11.25, $actual);
 
-        $style = HtmlStyle::default();
-        $style->update('fs-6');
+        $style = HtmlStyle::default()
+            ->update('fs-6');
         $actual = $style->getFont()->getSize();
         self::assertSame(9.9, $actual);
     }

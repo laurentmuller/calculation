@@ -32,7 +32,7 @@ trait LogLevelTrait
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 20)]
-    // #[Assert\Choice(callback: 'getAllowedLevels')]
+    #[Assert\Choice(callback: 'getAllowedLevels')]
     #[ORM\Column(length: 20)]
     public string $level = PsrLevel::INFO {
         set => $this->sanitizeLevel($value);
@@ -51,17 +51,17 @@ trait LogLevelTrait
         };
     }
 
-    /** Get the level border color class. */
+    /** Get the border color class. */
     public string $levelBorder {
         get => $this->getColor('text-border-');
     }
 
-    /** Get the level color class. */
+    /** Get the text color class. */
     public string $levelColor {
         get => $this->getColor('text-');
     }
 
-    /** Get the level FontAwesome icon. */
+    /** Get the FontAwesome icon. */
     public FontAwesomeIcon $levelFontAwesomeIcon {
         get => match ($this->level) {
             PsrLevel::ALERT,
@@ -73,12 +73,12 @@ trait LogLevelTrait
         };
     }
 
-    /** Get the level icon class. */
+    /** Get the icon class. */
     public string $levelIcon {
         get => $this->levelFontAwesomeIcon->asHtml('fa-fw');
     }
 
-    /** Get the level icon and color classes. */
+    /** Get the icon and color classes. */
     public string $levelIconAndColor {
         get => $this->levelIcon . ' ' . $this->levelColor;
     }
@@ -89,6 +89,16 @@ trait LogLevelTrait
     }
 
     /**
+     * @return string[]
+     */
+    public static function getAllowedLevels(): array
+    {
+        return new \ReflectionClass(PsrLevel::class)->getConstants();
+    }
+
+    /**
+     * Sets the level.
+     *
      * @phpstan-param PsrLevel::* $level
      */
     public function withLevel(string $level): self
@@ -96,14 +106,6 @@ trait LogLevelTrait
         $this->level = $level;
 
         return $this;
-    }
-
-    /**
-     * @return string[]
-     */
-    protected static function getAllowedLevels(): array
-    {
-        return new \ReflectionClass(PsrLevel::class)->getConstants();
     }
 
     private function getColor(string $prefix): string

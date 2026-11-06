@@ -82,6 +82,13 @@ final class KernelInfoServiceTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    public function testGetShareInfo(): void
+    {
+        $service = $this->createService();
+        $actual = $service->getShareInfo();
+        self::assertSame('Share', $actual['name']);
+    }
+
     public function testIsDebug(): void
     {
         $service = $this->createService();
@@ -109,6 +116,8 @@ final class KernelInfoServiceTest extends TestCase
         $kernel->method('getProjectDir')
             ->willReturn($dir);
         $kernel->method('getBuildDir')
+            ->willReturn($dir);
+        $kernel->method('getShareDir')
             ->willReturn($dir);
         $kernel->method('getCacheDir')
             ->willReturn($dir);

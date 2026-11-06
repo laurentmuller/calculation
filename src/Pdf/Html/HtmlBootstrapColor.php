@@ -42,7 +42,7 @@ enum HtmlBootstrapColor: string implements PdfColorInterface
      */
     public static function parseDrawColor(string $class): ?PdfDrawColor
     {
-        return HtmlBootstrapColor::parseClass($class)?->getDrawColor();
+        return self::parseClass($class)?->getDrawColor();
     }
 
     /**
@@ -50,7 +50,7 @@ enum HtmlBootstrapColor: string implements PdfColorInterface
      */
     public static function parseFillColor(string $class): ?PdfFillColor
     {
-        return HtmlBootstrapColor::parseClass($class)?->getFillColor();
+        return self::parseClass($class)?->getFillColor();
     }
 
     /**
@@ -58,23 +58,16 @@ enum HtmlBootstrapColor: string implements PdfColorInterface
      */
     public static function parseTextColor(string $class): ?PdfTextColor
     {
-        return HtmlBootstrapColor::parseClass($class)?->getTextColor();
+        return self::parseClass($class)?->getTextColor();
     }
 
     private static function parseClass(string $class): ?HtmlBootstrapColor
     {
-        $values = \explode('-', \strtolower($class));
+        $value = \array_last(\explode('-', \strtoupper($class)));
 
-        return match (\end($values)) {
-            'primary' => HtmlBootstrapColor::PRIMARY,
-            'secondary' => HtmlBootstrapColor::SECONDARY,
-            'success' => HtmlBootstrapColor::SUCCESS,
-            'danger' => HtmlBootstrapColor::DANGER,
-            'warning' => HtmlBootstrapColor::WARNING,
-            'info' => HtmlBootstrapColor::INFO,
-            'light' => HtmlBootstrapColor::LIGHT,
-            'dark' => HtmlBootstrapColor::DARK,
-            default => null,
-        };
+        return \array_find(
+            self::cases(),
+            static fn (HtmlBootstrapColor $color): bool => $color->name === $value
+        );
     }
 }

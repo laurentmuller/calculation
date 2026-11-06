@@ -15,9 +15,11 @@ namespace App\Tests\Model;
 
 use App\Model\LogLevel;
 use App\Pdf\Html\HtmlBootstrapColor;
+use Monolog\Level;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel as PsrLevel;
+use Symfony\Component\Validator\Validation;
 
 final class LogLevelTest extends TestCase
 {
@@ -67,6 +69,14 @@ final class LogLevelTest extends TestCase
         yield [PsrLevel::NOTICE, 'fa-solid fa-circle-info fa-fw'];
         yield [PsrLevel::INFO, 'fa-solid fa-circle-info fa-fw'];
         yield [PsrLevel::DEBUG, 'fa-solid fa-circle-info fa-fw'];
+    }
+
+    public function testCompare(): void
+    {
+        $logLevel1 = LogLevel::instance(PsrLevel::WARNING);
+        $logLevel2 = LogLevel::instance(PsrLevel::ERROR);
+        $actual = $logLevel1->compare($logLevel2);
+        self::assertSame(-1, $actual);
     }
 
     public function testIncrement(): void
@@ -131,5 +141,35 @@ final class LogLevelTest extends TestCase
         $logLevel = LogLevel::instance($level);
         $actual = $logLevel->levelIcon;
         self::assertSame($expected, $actual);
+    }
+
+    public function testLevelIndex(): void
+    {
+        $logLevel = LogLevel::instance(PsrLevel::WARNING);
+        $actual = $logLevel->getLevelIndex();
+        self::assertSame(Level::Warning->value, $actual);
+    }
+
+    public function testValidation(): void
+    {
+        $validator = Validation::createValidatorBuilder()
+            ->enableAttributeMapping()
+            ->getValidator();
+
+        $logLevel = LogLevel::instance(PsrLevel::WARNING);
+        $violations = $validator->validate($logLevel);
+        self::assertCount(0, $violations);
+
+        /** @phpstan-ignore argument.type  */
+        $logLevel = LogLevel::instance('fake');
+        $violations = $validator->validate($logLevel);
+        self::assertCount(1, $violations);
+    }
+
+    public function testWithLevel(): void
+    {
+        $logLevel = LogLevel::instance(PsrLevel::WARNING);
+        $actual = $logLevel->withLevel(PsrLevel::ERROR);
+        self::assertSame(PsrLevel::ERROR, $actual->level);
     }
 }

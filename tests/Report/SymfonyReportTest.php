@@ -124,6 +124,8 @@ final class SymfonyReportTest extends TestCase
             ->willReturn($directory);
         $kernelService->method('getBuildInfo')
             ->willReturn($directory);
+        $kernelService->method('getShareInfo')
+            ->willReturn($directory);
         $kernelService->method('getLogInfo')
             ->willReturn($directory);
 

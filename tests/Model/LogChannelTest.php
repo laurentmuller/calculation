@@ -16,6 +16,7 @@ namespace App\Tests\Model;
 use App\Model\LogChannel;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Validator\Validation;
 
 final class LogChannelTest extends TestCase
 {
@@ -41,6 +42,14 @@ final class LogChannelTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    public function testCompare(): void
+    {
+        $logChannel1 = LogChannel::instance('a');
+        $logChannel2 = LogChannel::instance('b');
+        $actual = $logChannel1->compare($logChannel2);
+        self::assertSame(-1, $actual);
+    }
+
     public function testIncrement(): void
     {
         $logChannel = LogChannel::instance('channel');
@@ -58,5 +67,20 @@ final class LogChannelTest extends TestCase
         self::assertSame('channel', (string) $logChannel);
         self::assertSame('Channel', $logChannel->channelTitle);
         self::assertCount(0, $logChannel);
+    }
+
+    public function testValidation(): void
+    {
+        $validator = Validation::createValidatorBuilder()
+            ->enableAttributeMapping()
+            ->getValidator();
+
+        $logChannel = LogChannel::instance('channel');
+        $errors = $validator->validate($logChannel);
+        self::assertCount(0, $errors);
+
+        $logChannel = LogChannel::instance('');
+        $errors = $validator->validate($logChannel);
+        self::assertCount(1, $errors);
     }
 }

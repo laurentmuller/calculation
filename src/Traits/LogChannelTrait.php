@@ -36,7 +36,7 @@ trait LogChannelTrait
         set => $this->sanitizeChannel($value);
     }
 
-    /** Get the channel FontAwesome icon. */
+    /** Get the FontAwesome icon. */
     public FontAwesomeIcon $channelFontAwesomeIcon {
         get => match ($this->channel) {
             self::APP_CHANNEL_LONG => new FontAwesomeIcon(FontAwesomePath::SOLID, 'laptop-code'),
@@ -52,7 +52,7 @@ trait LogChannelTrait
         };
     }
 
-    /** Get the channel icon class. */
+    /** Get the icon class. */
     public string $channelIcon {
         get => $this->channelFontAwesomeIcon->asHtml('fa-fw');
     }

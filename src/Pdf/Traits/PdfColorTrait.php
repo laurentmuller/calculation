@@ -57,14 +57,14 @@ trait PdfColorTrait
 
     public function getDrawColor(): PdfDrawColor
     {
-        /** @phpstan-var PdfDrawColor */
-        return PdfDrawColor::create($this->value);
+        return PdfDrawColor::create($this->value)
+            ?? throw new \LogicException(\sprintf('Invalid color value: "%s".', $this->value));
     }
 
     public function getFillColor(): PdfFillColor
     {
-        /** @phpstan-var PdfFillColor */
-        return PdfFillColor::create($this->value);
+        return PdfFillColor::create($this->value)
+            ?? throw new \LogicException(\sprintf('Invalid color value: "%s".', $this->value));
     }
 
     public function getPhpOfficeColor(): string
@@ -74,8 +74,8 @@ trait PdfColorTrait
 
     public function getTextColor(): PdfTextColor
     {
-        /** @phpstan-var PdfTextColor */
-        return PdfTextColor::create($this->value);
+        return PdfTextColor::create($this->value)
+            ?? throw new \LogicException(\sprintf('Invalid color value: "%s".', $this->value));
     }
 
     /**

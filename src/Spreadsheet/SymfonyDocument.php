@@ -170,6 +170,7 @@ class SymfonyDocument extends AbstractDocument
             ->outputRow($sheet, $row++, 'Project', $kernel->getProjectDir())
             ->outputDirectoryRow($sheet, $row++, $kernel->getCacheInfo())
             ->outputDirectoryRow($sheet, $row++, $kernel->getBuildInfo())
+            ->outputDirectoryRow($sheet, $row++, $kernel->getShareInfo())
             ->outputDirectoryRow($sheet, $row, $kernel->getLogInfo());
 
         $sheet->setAutoSize(1, 2)

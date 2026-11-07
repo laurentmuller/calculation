@@ -101,8 +101,13 @@ class FixtureDatabase extends AbstractDatabase
      * @return array<array<string, string|int|float|null>>
      */
     #[\Override]
-    public function search(string $query, string $value, int $limit): array
-    {
+    public function search(
+        string $query,
+        string $value,
+        int $limit,
+        string $valueParameter = ':value',
+        string $limitParameter = ':limit'
+    ): array {
         return parent::search($query, $value, $limit);
     }
 

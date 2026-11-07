@@ -18,6 +18,8 @@ use App\Utils\StringUtils;
 
 /**
  * Extended the SQLite3 database with transaction support and caching SQL statements.
+ *
+ * All table and column names are restricted to [a-zA-Z0-9_] characters.
  */
 abstract class AbstractDatabase extends \SQLite3 implements \Stringable
 {
@@ -48,17 +50,13 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      */
     public function __construct(protected string $filename, bool $readonly = false, string $encryptionKey = '')
     {
-        // check creation state
+        // flags
         $create = self::IN_MEMORY === $filename || FileUtils::empty($filename);
-
-        if ($create) {
-            $flags = \SQLITE3_OPEN_READWRITE | \SQLITE3_OPEN_CREATE;
-        } elseif ($readonly) {
-            $flags = \SQLITE3_OPEN_READONLY;
-        } else {
-            $flags = \SQLITE3_OPEN_READWRITE;
-        }
-
+        $flags = match (true) {
+            $create => \SQLITE3_OPEN_READWRITE | \SQLITE3_OPEN_CREATE,
+            $readonly => \SQLITE3_OPEN_READONLY,
+            default => \SQLITE3_OPEN_READWRITE,
+        };
         parent::__construct($filename, $flags, $encryptionKey);
 
         // create schema
@@ -140,8 +138,9 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
     /**
      * Compact the database.
      *
-     * <b>NB:</b> Make sure there is no transaction open when the command is executed. For more information
-     * see: <a href="https://www.sqlitetutorial.net/sqlite-vacuum/" target="_blank">SQLite VACUUM</a>
+     * <b>NB:</b> Make sure there is no transaction open when the command is executed.
+     *
+     * @see https://sqlite.org/lang_vacuum.html
      *
      * @return bool true if success
      */
@@ -167,9 +166,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      */
     public function getRecordsCount(string $table): int
     {
-        if (!StringUtils::pregMatch('/^\w+$/', $table)) {
-            throw new \InvalidArgumentException(\sprintf('Invalid table name: "%s".', $table));
-        }
+        $this->validateInput($table);
 
         /** @phpstan-var non-negative-int */
         return $this->querySingle(\sprintf('SELECT COUNT(1) FROM %s;', $table)) ?? 0;
@@ -188,18 +185,22 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
     /**
      * Set a pragma statement.
      *
-     * @param string     $name  the pragma name
-     * @param mixed|null $value the optional pragma value
+     * @param string          $name  the pragma name
+     * @param string|int|null $value the optional pragma value
      *
      * @return bool true if succeeded; false on failure
      */
-    public function pragma(string $name, mixed $value = null): bool
+    public function pragma(string $name, string|int|null $value = null): bool
     {
-        if (null !== $value) {
-            return $this->exec(\sprintf('PRAGMA %s = %s', $name, $value));
+        $this->validateInput($name);
+        if (null === $value) {
+            return $this->exec('PRAGMA ' . $name);
+        }
+        if (\is_string($value)) {
+            $this->validateInput($value);
         }
 
-        return $this->exec('PRAGMA ' . $name);
+        return $this->exec(\sprintf('PRAGMA %s = %s', $name, $value));
     }
 
     /**
@@ -231,9 +232,10 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      */
     protected function createIndex(string $table, string ...$columns): bool
     {
+        $this->validateInput($table, ...$columns);
         $name = \sprintf('idx_%s_%s', $table, \implode('_', $columns));
-        $columns = \implode(',', $columns);
-        $query = \sprintf('CREATE INDEX IF NOT EXISTS %s ON %s(%s)', $name, $table, $columns);
+        $sqlColumns = \implode(',', $columns);
+        $query = \sprintf('CREATE INDEX IF NOT EXISTS %s ON %s(%s)', $name, $table, $sqlColumns);
 
         return $this->exec($query);
     }
@@ -264,6 +266,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
             $rows[] = $row;
         }
         $result->finalize();
+        $stmt->reset();
 
         return $rows;
     }
@@ -307,27 +310,36 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
 
     /**
      * Search data.
-     * <p>
-     * <b>NB</b>: The SQL query must contain 2 parameters:
-     * <ul>
-     * <li>"<code>:value</code>" - The search parameter.</li>
-     * <li>"<code>:limit</code>" - The limit parameter.</li>
-     * </ul>
-     * </p>.
      *
-     * @param string $query the SQL query to prepare
-     * @param string $value the value to search for
-     * @param int    $limit the maximum number of rows to return
+     * @param string $query          the SQL query to prepare
+     * @param string $value          the value to search for
+     * @param int    $limit          the maximum number of rows to return
+     * @param string $valueParameter the name of the value parameter
+     * @param string $limitParameter the name of the limit parameter
      *
      * @return array<array<string, string|int|float|null>>
      */
-    protected function search(string $query, string $value, int $limit): array
-    {
+    protected function search(
+        string $query,
+        string $value,
+        int $limit,
+        string $valueParameter = ':value',
+        string $limitParameter = ':limit'
+    ): array {
         /** @var \SQLite3Stmt $stmt */
         $stmt = $this->getStatement($query);
-        $stmt->bindValue(':value', $this->likeValue($value));
-        $stmt->bindValue(':limit', $limit, \SQLITE3_INTEGER);
+        $stmt->bindValue($valueParameter, $this->likeValue($value));
+        $stmt->bindValue($limitParameter, $limit, \SQLITE3_INTEGER);
 
         return $this->executeAndFetch($stmt);
+    }
+
+    protected function validateInput(string ...$values): void
+    {
+        foreach ($values as $value) {
+            if (!StringUtils::pregMatch('/^[a-zA-Z0-9_]+$/', $value)) {
+                throw new \InvalidArgumentException(\sprintf('Invalid SQLite3 value: "%s".', $value));
+            }
+        }
     }
 }

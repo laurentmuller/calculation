@@ -41,6 +41,7 @@ use STS\Phpinfo\PhpInfo;
  *     note: string|null
  * }
  * @phpstan-type ModuleType = array{
+ *     id: string,
  *     name: string,
  *     groups: GroupType[],
  *     url: string|null,
@@ -154,6 +155,11 @@ class PhpInfoService implements InfoServiceInterface
         );
     }
 
+    private function getModuleId(string $name): string
+    {
+        return \str_replace(' ', '-', \strtolower($name));
+    }
+
     private function getModuleUrl(string $name): ?string
     {
         if (\in_array($name, self::URLS_EXCLUDED, true)) {
@@ -233,7 +239,7 @@ class PhpInfoService implements InfoServiceInterface
     private function parseGroup(Group $group): ?array
     {
         $configs = $this->parseConfigs($group);
-        $note = StringUtils::trim($group->note());
+        $note = $this->parseNote($group->note());
         if ([] === $configs && null === $note) {
             return null;
         }
@@ -276,10 +282,13 @@ class PhpInfoService implements InfoServiceInterface
         if ([] === $groups) {
             return null;
         }
+
+        $name = $module->name();
         $module = [
-            'name' => $module->name(),
+            'name' => $name,
             'groups' => $groups,
-            'url' => $this->getModuleUrl(\strtolower($module->name())),
+            'id' => $this->getModuleId($name),
+            'url' => $this->getModuleUrl(\strtolower($name)),
         ];
         $module['size'] = \array_reduce(
             $module['groups'],
@@ -287,11 +296,11 @@ class PhpInfoService implements InfoServiceInterface
             0
         );
 
-        if (StringUtils::equalIgnoreCase('PHP Variables', $module['name'])) {
+        if (StringUtils::equalIgnoreCase('PHP Variables', $name)) {
             return $this->parseVariables($module);
         }
 
-        if (StringUtils::equalIgnoreCase('xdebug', $module['name'])) {
+        if (StringUtils::equalIgnoreCase('xdebug', $name)) {
             return $this->parseXdebug($module);
         }
 
@@ -312,6 +321,18 @@ class PhpInfoService implements InfoServiceInterface
         $this->moveCoreModule($modules);
 
         return $modules;
+    }
+
+    private function parseNote(?string $note): ?string
+    {
+        if (!StringUtils::isString($note)) {
+            return null;
+        }
+
+        $lines = StringUtils::explodeNewLines($note);
+        $lines = \array_filter(\array_map(StringUtils::trim(...), $lines));
+
+        return [] === $lines ? null : StringUtils::implodeNewLines($lines);
     }
 
     /**

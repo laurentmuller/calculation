@@ -62,8 +62,7 @@ final class BorderExtension implements DisableListenerInterface
 
     private function loadTemplate(): string
     {
-        return \implode(
-            StringUtils::NEW_LINE,
+        return StringUtils::implodeNewLines(
             \array_map($this->replace(...), $this->repository->findAll())
         );
     }

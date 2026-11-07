@@ -138,6 +138,16 @@ final class StringUtils
     }
 
     /**
+     * Explode the given string by new lines.
+     *
+     * @return string[]
+     */
+    public static function explodeNewLines(string $string): array
+    {
+        return \explode(self::NEW_LINE, $string);
+    }
+
+    /**
      * Returns a parsable string representation of a variable.
      *
      * @param mixed $expression the variable to export
@@ -187,6 +197,16 @@ final class StringUtils
         } catch (\ReflectionException $e) {
             throw new \RuntimeException(\sprintf('Unable to get short name for "%s".', self::getDebugType($objectOrClass)), $e->getCode(), $e);
         }
+    }
+
+    /**
+     * Implode the given strings by new lines.
+     *
+     * @param string[] $strings
+     */
+    public static function implodeNewLines(array $strings): string
+    {
+        return \implode(self::NEW_LINE, $strings);
     }
 
     /**

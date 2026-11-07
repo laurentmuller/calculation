@@ -72,7 +72,8 @@ class CommandController extends AbstractController
             'command' => $command,
             'query' => $query,
         ]);
-        $lines = \array_map(\trim(...), \explode(StringUtils::NEW_LINE, \trim($view)));
+        $lines = StringUtils::explodeNewLines(\trim($view));
+        $lines = \array_map(\trim(...), $lines);
         $view = \implode('', \array_filter($lines));
 
         return $this->jsonTrue([

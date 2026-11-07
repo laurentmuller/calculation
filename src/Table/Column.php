@@ -25,20 +25,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
  * The table column.
  *
  * @phpstan-type EntityType = EntityInterface|array{id: int, ...}
- * @phpstan-type ColumnType = array{
- *     field: string,
- *     alias?: string,
- *     title?: string,
- *     class?: string,
- *     order?: string,
- *     default?: bool,
- *     numeric?: bool,
- *     visible?: bool,
- *     sortable?: bool,
- *     searchable?: bool,
- *     fieldFormatter?: string,
- *     cellFormatter?: string,
- *     styleFormatter?: string}
+ * @phpstan-type ColumnType = array{order?: string, ...}
  */
 class Column implements \Stringable
 {

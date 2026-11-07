@@ -77,7 +77,8 @@ return App::config([
             ],
             'calls' => [
                 [
-                    'setBasePath' => ['%kernel.project_dir%']],
+                    'setBasePath' => ['%kernel.project_dir%'],
+                ],
             ],
         ],
     ],

@@ -40,6 +40,7 @@ final class PhpReportTest extends TestCase
             'version' => \PHP_VERSION,
             'modules' => [
                 [
+                    'id' => 'module',
                     'name' => 'Module',
                     'url' => 'https://www.php.net/manual/en/module.core.php',
                     'size' => 8,

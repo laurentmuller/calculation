@@ -230,6 +230,14 @@ final class StringUtilsTest extends TestCase
         self::assertSame($actual, $expected);
     }
 
+    public function testExplodeNewLines(): void
+    {
+        $value = "line 1\nline 2\nline 3";
+        $expected = \explode("\n", $value);
+        $actual = StringUtils::explodeNewLines($value);
+        self::assertSame($expected, $actual);
+    }
+
     #[DataProvider('getExportVar')]
     public function testExportVar(mixed $var, mixed $expected): void
     {
@@ -259,6 +267,14 @@ final class StringUtilsTest extends TestCase
     public function testGetShortNameValid(object|string $objectOrClass, string $expected): void
     {
         $actual = StringUtils::getShortName($objectOrClass);
+        self::assertSame($expected, $actual);
+    }
+
+    public function testImplodeNewLines(): void
+    {
+        $lines = ['line 1', 'line 2', 'line 3'];
+        $expected = \implode("\n", $lines);
+        $actual = StringUtils::implodeNewLines($lines);
         self::assertSame($expected, $actual);
     }
 

@@ -163,7 +163,7 @@ class HeaderNameCommand
             return false;
         }
 
-        $lines = \explode(StringUtils::NEW_LINE, $content);
+        $lines = StringUtils::explodeNewLines($content);
         $line = \str_replace('%path%', $path, $header);
         if ($lines[0] === $line) {
             return false;
@@ -176,7 +176,7 @@ class HeaderNameCommand
             \array_unshift($lines, $line);
         }
 
-        return \implode(StringUtils::NEW_LINE, $lines);
+        return StringUtils::implodeNewLines($lines);
     }
 
     /**

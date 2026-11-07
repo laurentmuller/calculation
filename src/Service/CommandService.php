@@ -469,8 +469,10 @@ class CommandService implements \Countable
     {
         $output = $this->replaceConsole($output);
         $output = $this->replaceCarriageReturn($output);
-        $lines = \array_map(\rtrim(...), \explode(StringUtils::NEW_LINE, \rtrim($output)));
 
-        return \implode(StringUtils::NEW_LINE, $lines);
+        $lines = StringUtils::explodeNewLines(\rtrim($output));
+        $lines = \array_map(\rtrim(...), $lines);
+
+        return StringUtils::implodeNewLines($lines);
     }
 }

@@ -89,6 +89,13 @@ final class AbstractDatabaseTest extends TestCase
         self::assertEmpty($actual);
     }
 
+    public function testInvalidPragma(): void
+    {
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessageIsOrContains('Invalid SQLite3 value: "?*".');
+        $this->database->pragma('auto_vacuum', '?*');
+    }
+
     public function testInvalidStatement(): void
     {
         $query = 'SELECT * FROM sy_NotFound';
@@ -130,7 +137,7 @@ final class AbstractDatabaseTest extends TestCase
     public function testRecordsCountInvalidName(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessageIsOrContains('Invalid table name: "?*".');
+        self::expectExceptionMessageIsOrContains('Invalid SQLite3 value: "?*".');
         $this->database->getRecordsCount('?*');
     }
 

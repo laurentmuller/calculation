@@ -302,7 +302,7 @@ class CommandsReport extends AbstractArrayReport
             ->indent()
             ->styledCell(
                 style: $this->getFixedStyle(9.5),
-                text: \implode(StringUtils::NEW_LINE, $usage),
+                text: StringUtils::implodeNewLines($usage),
                 move: PdfMove::NEW_LINE
             )
             ->lineBreak(1.0);

@@ -45,3 +45,11 @@ hr {
     border: 0;
     border-top: 1px solid #ddd;
 }
+
+.pb-0 {
+    padding-bottom: 0 !important;
+}
+
+.pb-4 {
+    padding-bottom: 4px !important;
+}

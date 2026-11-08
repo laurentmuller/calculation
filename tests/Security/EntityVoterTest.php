@@ -86,8 +86,8 @@ final class EntityVoterTest extends TestCase
     public function testAdminOverwrite(): void
     {
         $role = $this->builder->getAdminRole();
-        $user = $this->getAdminUser($role)
-            ->setOverwrite(true);
+        $user = $this->getAdminUser($role);
+        $user->overwrite = true;
         $subject = User::class;
         $attribute = EntityPermission::ADD;
         $expected = VoterInterface::ACCESS_GRANTED;

@@ -97,7 +97,7 @@ class EntityVoter extends Voter
 
     private function getRights(User $user): int
     {
-        if ($user->isOverwrite()) {
+        if ($user->overwrite) {
             return $user->getRights();
         }
 

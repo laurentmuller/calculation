@@ -29,7 +29,7 @@ abstract class AbstractEntity implements \Stringable, EntityInterface
     #[ORM\Id]
     #[ORM\Column]
     #[ORM\GeneratedValue]
-    public ?int $id = null;
+    public protected(set) ?int $id = null;
 
     public function __clone()
     {

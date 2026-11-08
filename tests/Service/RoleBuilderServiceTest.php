@@ -92,7 +92,7 @@ final class RoleBuilderServiceTest extends FlagBagTestCase
         $entities = EntityName::cases();
         $permission = EntityPermission::getAllPermission();
 
-        self::assertFalse($role->isOverwrite());
+        self::assertFalse($role->overwrite);
         self::assertSame(RoleInterface::ROLE_ADMIN, $role->getName());
 
         foreach ($entities as $entity) {
@@ -105,7 +105,7 @@ final class RoleBuilderServiceTest extends FlagBagTestCase
         $entities = EntityName::cases();
         $permission = EntityPermission::getNonePermission();
 
-        self::assertTrue($role->isOverwrite());
+        self::assertTrue($role->overwrite);
         self::assertSame(RoleInterface::ROLE_USER, $role->getName());
 
         foreach ($entities as $entity) {
@@ -119,7 +119,7 @@ final class RoleBuilderServiceTest extends FlagBagTestCase
         $none = EntityPermission::getNonePermission();
         $default = EntityPermission::getDefaultPermission();
 
-        self::assertFalse($role->isOverwrite());
+        self::assertFalse($role->overwrite);
         self::assertSame(RoleInterface::ROLE_USER, $role->getName());
 
         self::assertSameFlagBag($all, $role->getPermission(EntityName::CALCULATION));
@@ -141,7 +141,7 @@ final class RoleBuilderServiceTest extends FlagBagTestCase
         $entities = EntityName::cases();
         $permission = EntityPermission::getAllPermission();
 
-        self::assertFalse($role->isOverwrite());
+        self::assertFalse($role->overwrite);
         self::assertSame(RoleInterface::ROLE_WEBMASTER, $role->getName());
 
         foreach ($entities as $entity) {

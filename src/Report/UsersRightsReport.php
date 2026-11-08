@@ -273,7 +273,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     {
         $this->addBookmark($this->trans('user.list.title'));
         foreach ($users as $user) {
-            if (!$user->isOverwrite()) {
+            if (!$user->overwrite) {
                 $rights = $this->roleBuilderService->getRole($user)->getRights();
                 $user->setRights($rights);
             }

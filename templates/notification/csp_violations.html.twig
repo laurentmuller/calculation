@@ -2,8 +2,8 @@
 
 {% macro output_row(key, value) %}
     <row class="collapse">
-        <columns small="6" large="3" style="padding-bottom: 4px;">{{ key }}</columns>
-        <columns small="6" large="9" style="padding-bottom: 4px;">{{ value }}</columns>
+        <columns small="6" large="3" class="pb-4">{{ key }}</columns>
+        <columns small="6" large="9" class="pb-4">{{ value }}</columns>
     </row>
 {% endmacro output_row %}
 
@@ -15,7 +15,7 @@
     </container>
     <container>
         <row class="collapse">
-            <columns style="padding-bottom: 0;"><b>Violations :</b></columns>
+            <columns class="pb-0"><b>Violations :</b></columns>
         </row>
     </container>
     {% for entry in entries %}

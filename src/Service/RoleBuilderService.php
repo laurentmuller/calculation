@@ -38,7 +38,7 @@ class RoleBuilderService
     public function getDisabledRole(): Role
     {
         $role = new Role(RoleInterface::ROLE_USER);
-        $role->setOverwrite(true);
+        $role->overwrite = true;
 
         return $role;
     }

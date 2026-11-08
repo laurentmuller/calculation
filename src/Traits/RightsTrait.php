@@ -30,7 +30,7 @@ trait RightsTrait
 {
     /** The overwritten rights flag. */
     #[ORM\Column(options: ['default' => false])]
-    private bool $overwrite = false;
+    public bool $overwrite = false;
 
     /** The rights. */
     #[Assert\PositiveOrZero]
@@ -69,26 +69,6 @@ trait RightsTrait
     public function getRights(): int
     {
         return $this->rights ?? 0;
-    }
-
-    /**
-     * Gets a value indicating if this right overwrites the default rights.
-     *
-     * @return bool true if overwritten, false to use the default rights
-     */
-    public function isOverwrite(): bool
-    {
-        return $this->overwrite;
-    }
-
-    /**
-     * Sets a value indicating if this right overwrites the default rights.
-     */
-    public function setOverwrite(bool $overwrite): static
-    {
-        $this->overwrite = $overwrite;
-
-        return $this;
     }
 
     /**

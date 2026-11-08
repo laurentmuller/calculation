@@ -330,7 +330,7 @@ class UserController extends AbstractEntityController
             if ($item->getRights() === $defaultRole->getRights()) {
                 $item->setRights(null);
                 if ($item->enabled) {
-                    $item->setOverwrite(false);
+                    $item->overwrite = false;
                 }
             }
             $this->getRepository()->flush();
@@ -341,8 +341,8 @@ class UserController extends AbstractEntityController
         return $this->render('user/user_rights.html.twig', [
             'form' => $form,
             'permissions' => $defaultRole->getPermissions(),
-            'default_overwrite' => $defaultRole->isOverwrite(),
-            'overwrite' => $item->isOverwrite(),
+            'default_overwrite' => $defaultRole->overwrite,
+            'overwrite' => $item->overwrite,
         ]);
     }
 

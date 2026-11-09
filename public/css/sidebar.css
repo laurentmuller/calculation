@@ -57,12 +57,14 @@ body.sidebar-show .navbar-horizontal {
 }
 
 .navbar-vertical ul ul {
-    padding-left: 0.75rem;
+    padding-left: 0.5rem;
 }
 
+/*
 .navbar-vertical .nav-item {
-    padding-left: var(--bs-navbar-nav-link-padding-x);
+    padding-left: 0.25rem;
 }
+*/
 
 /* toggle menu with drop-down arrow on the right */
 .navbar-vertical .nav-link-toggle {
@@ -72,6 +74,7 @@ body.sidebar-show .navbar-horizontal {
     white-space: normal;
     text-align: start;
     width: 100%;
+    column-gap: 0.15rem;
 }
 
 .navbar-vertical .nav-link-toggle::after {
@@ -125,14 +128,14 @@ html[data-bs-theme=dark] .navbar-vertical::-webkit-scrollbar-thumb {
 
 .navbar-vertical ul:not(.dropdown-menu-default) .dropdown-item {
     display: flex;
-    align-items: first baseline;
+    align-items: baseline;
     inline-size: 100%;
     color: var(--bs-navbar-color);
     white-space: normal;
-    padding-left: 0.25rem;
     padding-right: 0.25rem;
     text-align: start;
     width: 100%;
+    column-gap: 0.15rem;
 }
 
 .navbar-vertical ul:not(.dropdown-menu-default) .dropdown-item:active {

@@ -5,6 +5,7 @@
 {%- set title_icon = ICON_CATEGORY -%}
 {%- set object_type = ENTITY_CATEGORY -%}
 {%- set category_param = constant('App\\Table\\AbstractCategoryItemTable::PARAM_CATEGORY') -%}
+{%- set attributes = attributes|default({})|merge({'allow-xxl': true}) -%}
 {# header actions #}
 {% block header_actions -%}
 {% if allow_add %}

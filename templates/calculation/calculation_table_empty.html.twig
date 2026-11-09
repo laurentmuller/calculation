@@ -5,6 +5,7 @@
 {%- set title_description = 'empty.description' -%}
 {%- set object_type = ENTITY_CALCULATION -%}
 {%- set allow_add = false -%}
+{%- set attributes = attributes|default({})|merge({'allow-xxl': true}) -%}
 {% block card_header_class '' %}
 {# global actions #}
 {% block global_actions -%}

@@ -6,6 +6,7 @@
 {%- set title_icon = ICON_GROUP -%}
 {%- set object_type = ENTITY_GROUP -%}
 {%- set group_param = constant('App\\Table\\CategoryTable::PARAM_GROUP') -%}
+{%- set attributes = attributes|default({})|merge({'allow-xxl': true}) -%}
 {# header actions #}
 {% block header_actions -%}
 {% if allow_add %}

@@ -2,8 +2,11 @@
 {% macro dropdownItemCount(route, icon, text, count) %}
     {% from 'macros/_icons.html.twig' import icon %}
     <li>
-        <a href="{{ path(route) }}" class="dropdown-item d-flex-center rowlink-skip">
-            {{ icon(icon, text) }}<span class="ms-auto badge rounded-pill text-bg-secondary">{{ count|integer }}</span>
+        <a href="{{ path(route) }}" class="dropdown-item rowlink-skip">
+            {{- icon(icon, text) -}}
+            {%- if count -%}
+                <span class="ms-auto badge rounded-pill text-bg-secondary">{{ count|integer }}</span>
+            {%- endif -%}
         </a>
     </li>
 {% endmacro dropdownItemCount %}

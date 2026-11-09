@@ -44,7 +44,11 @@ window.customViewFormatter = function (data) {
         return carry + html;
     }, '');
 
-    return `<div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 my-0 mx-n1">${content}</div>`;
+    let className = 'row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 my-0 mx-n1';
+    if ($table.data('allow-xxl')) {
+        className += ' row-cols-xxl-4';
+    }
+    return `<div class="${className}">${content}</div>`;
 };
 
 /**

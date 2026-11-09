@@ -135,8 +135,8 @@ abstract class AbstractTable
     {
         $columns = $this->getColumns();
 
-        return $this->findFirst($columns, static fn (Column $column): bool => $column->isDefault())
-            ?? $this->findFirst($columns, static fn (Column $column): bool => $column->isVisible())
+        return $this->findFirst($columns, static fn (Column $column): bool => $column->default)
+            ?? $this->findFirst($columns, static fn (Column $column): bool => $column->visible)
             ?? throw new \LogicException('No default column found.');
     }
 
@@ -179,8 +179,8 @@ abstract class AbstractTable
         }
 
         $column = $this->getDefaultColumn();
-        $query->sort = $column->getField();
-        $query->order = $column->getOrder();
+        $query->sort = $column->field;
+        $query->order = $column->order;
     }
 
     /**
@@ -214,7 +214,7 @@ abstract class AbstractTable
      */
     protected function validateSort(string $field): void
     {
-        $this->findFirst($this->getColumns(), static fn (Column $column): bool => $column->getField() === $field)
+        $this->findFirst($this->getColumns(), static fn (Column $column): bool => $column->field === $field)
             ?? throw new \InvalidArgumentException(\sprintf('Invalid sorted field: "%s".', $field));
     }
 
@@ -244,7 +244,7 @@ abstract class AbstractTable
     {
         return $this->mapToKeyValue(
             $columns,
-            static fn (Column $column): array => [$column->getAlias() => $column->mapValue($objectOrArray)]
+            static fn (Column $column): array => [(string) $column->alias => $column->mapValue($objectOrArray)]
         );
     }
 }

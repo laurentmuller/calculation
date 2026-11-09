@@ -165,7 +165,7 @@ abstract class AbstractEntityTable extends AbstractTable
             $this->updateOrderBy($orderBy, $alias, $query->sort, $query->order);
         }
         $column = $this->getDefaultColumn();
-        $this->updateOrderBy($orderBy, $alias, $column->getField(), $column->getOrder());
+        $this->updateOrderBy($orderBy, $alias, $column->field, $column->order);
         foreach ($orderBy as $sort => $order) {
             $builder->addOrderBy($sort, $order);
         }
@@ -238,10 +238,10 @@ abstract class AbstractEntityTable extends AbstractTable
     private function getSearchFields(): array
     {
         return \array_map(
-            static fn (Column $c): string => $c->getField(),
+            static fn (Column $c): string => $c->field,
             \array_filter(
                 $this->getColumns(),
-                static fn (Column $c): bool => $c->isSearchable()
+                static fn (Column $c): bool => $c->searchable
             )
         );
     }

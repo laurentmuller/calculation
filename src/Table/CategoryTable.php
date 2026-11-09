@@ -65,11 +65,11 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
         $route = $this->isGrantedList(Product::class) ? 'product_index' : false;
 
         return $this->renderCell(
-            $value,
-            $entity,
-            'category.list.product_title',
-            $route,
-            AbstractCategoryItemTable::PARAM_CATEGORY
+            value: $value,
+            entity: $entity,
+            title: 'category.list.product_title',
+            route: $route,
+            parameter: AbstractCategoryItemTable::PARAM_CATEGORY
         );
     }
 
@@ -87,9 +87,9 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
         return $this->renderCell(
             $value,
             $entity,
-            'category.list.task_title',
-            $route,
-            AbstractCategoryItemTable::PARAM_CATEGORY
+            title: 'category.list.task_title',
+            route: $route,
+            parameter: AbstractCategoryItemTable::PARAM_CATEGORY
         );
     }
 

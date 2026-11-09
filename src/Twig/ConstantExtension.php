@@ -54,7 +54,7 @@ final class ConstantExtension extends AbstractExtension implements ConstantsInte
             'ICON_LOG' => 'fa-solid fa-book',
             'ICON_PRODUCT' => 'fa-regular fa-file-alt',
             'ICON_TASK' => 'fa-solid fa-tasks',
-            'ICON_USER' => 'fa-regular fa-user',
+            'ICON_USER' => 'fa-solid fa-users',
             // action
             'ICON_SHOW' => 'fa-solid fa-wrench',
             'ICON_ADD' => 'fa-regular fa-file',

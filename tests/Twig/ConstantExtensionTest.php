@@ -76,7 +76,7 @@ final class ConstantExtensionTest extends TestCase
         yield ['ICON_LOG', 'fa-solid fa-book'];
         yield ['ICON_PRODUCT', 'fa-regular fa-file-alt'];
         yield ['ICON_TASK', 'fa-solid fa-tasks'];
-        yield ['ICON_USER', 'fa-regular fa-user'];
+        yield ['ICON_USER', 'fa-solid fa-users'];
         // action
         yield ['ICON_SHOW', 'fa-solid fa-wrench'];
         yield ['ICON_ADD', 'fa-regular fa-file'];

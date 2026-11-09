@@ -59,11 +59,11 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
         $route = $this->isGrantedList(Category::class) ? 'category_index' : false;
 
         return $this->renderCell(
-            $value,
-            $entity,
-            'group.list.category_title',
-            $route,
-            CategoryTable::PARAM_GROUP
+            value: $value,
+            entity: $entity,
+            title: 'group.list.category_title',
+            route: $route,
+            parameter: CategoryTable::PARAM_GROUP
         );
     }
 
@@ -79,11 +79,11 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
         $route = $this->isGrantedList(Product::class) ? 'product_index' : false;
 
         return $this->renderCell(
-            $value,
-            $entity,
-            'group.list.product_title',
-            $route,
-            CategoryTable::PARAM_GROUP
+            value: $value,
+            entity: $entity,
+            title: 'group.list.product_title',
+            route: $route,
+            parameter: CategoryTable::PARAM_GROUP
         );
     }
 
@@ -99,11 +99,11 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
         $route = $this->isGrantedList(Task::class) ? 'task_index' : false;
 
         return $this->renderCell(
-            $value,
-            $entity,
-            'group.list.task_title',
-            $route,
-            CategoryTable::PARAM_GROUP
+            value: $value,
+            entity: $entity,
+            title: 'group.list.task_title',
+            route: $route,
+            parameter: CategoryTable::PARAM_GROUP
         );
     }
 

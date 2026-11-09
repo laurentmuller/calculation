@@ -47,7 +47,7 @@ class FixtureTable extends AbstractTable
     protected function getDefaultColumn(): Column
     {
         $column = new Column();
-        $column->setVisible(false);
+        $column->withVisible(false);
 
         return $column;
     }

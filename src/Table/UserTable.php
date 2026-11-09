@@ -61,7 +61,10 @@ class UserTable extends AbstractEntityTable
      */
     public function formatImage(?string $image, array $user): string
     {
-        return $this->twig->render('macros/_cell_user_image.html.twig', ['user' => $user]);
+        return $this->twig->render('macros/_cell_user_image.html.twig', [
+            'image' => $image,
+            'user' => $user,
+        ]);
     }
 
     /**

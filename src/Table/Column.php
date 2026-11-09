@@ -16,7 +16,6 @@ namespace App\Table;
 use App\Enums\SortMode;
 use App\Interfaces\EntityInterface;
 use App\Utils\FileUtils;
-use App\Utils\StringUtils;
 use Symfony\Component\PropertyAccess\Exception\ExceptionInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
@@ -34,54 +33,70 @@ class Column implements \Stringable
     /** The property name of the field order. */
     private const string FIELD_ORDER = 'order';
 
-    /** The shared property accessor to map JSON columns or values. */
-    private static ?PropertyAccessorInterface $accessor = null;
-
     /** The field alias name. */
-    private ?string $alias = null;
+    public ?string $alias = null {
+        get => $this->alias ?? $this->field;
+    }
 
     /** The cell formatter (client side). */
-    private ?string $cellFormatter = null;
+    public ?string $cellFormatter = null;
 
     /** The cell class. */
-    private ?string $class = null;
+    public ?string $class = null {
+        get {
+            $class = (string) $this->class;
+            if ($this->sortable && !\str_contains($class, 'rowlink-skip')) {
+                return \trim($class . ' user-select-none cursor-pointer');
+            }
+
+            return $class;
+        }
+    }
 
     /** The default sorted column. */
-    private bool $default = false;
+    public bool $default = false;
 
     /** The field name. */
-    private string $field = '';
+    public string $field = '' {
+        set {
+            $this->field = $value;
+            $this->property = '[' . \str_replace('.', '].[', $value) . ']';
+        }
+    }
 
     /**
      * The field formatter (server side).
      *
      * @var ?callable(mixed, EntityType): string
      */
-    private $fieldFormatter;
+    public $fieldFormatter;
 
     /** The value indicating if this column is displayed as a numeric value. */
-    private bool $numeric = false;
+    public bool $numeric = false;
 
     /** The sort order. */
-    private SortMode $order = SortMode::DEFAULT;
+    public SortMode $order = SortMode::DEFAULT;
+
+    /** The searchable behavior. */
+    public bool $searchable = true;
+
+    /** The sortable behavior. */
+    public bool $sortable = true;
+
+    /** The style formatter (client side). */
+    public ?string $styleFormatter = null;
+
+    /** The column title to be translated. */
+    public ?string $title = null;
+
+    /** The visible behavior. */
+    public bool $visible = true;
+
+    /** The shared property accessor to map JSON columns or values. */
+    private static ?PropertyAccessorInterface $accessor = null;
 
     /** The property path for an array object. */
     private string $property = '';
-
-    /** The searchable behavior. */
-    private bool $searchable = true;
-
-    /** The sortable behavior. */
-    private bool $sortable = true;
-
-    /** The style formatter (client side). */
-    private ?string $styleFormatter = null;
-
-    /** The column title to be translated. */
-    private ?string $title = null;
-
-    /** The visible behavior. */
-    private bool $visible = true;
 
     #[\Override]
     public function __toString(): string
@@ -90,16 +105,38 @@ class Column implements \Stringable
     }
 
     /**
+     * Gets the attributes used to output the column to the Twig template.
+     */
+    public function attributes(): array
+    {
+        return \array_filter(
+            [
+                'class' => $this->class,
+                'field' => $this->alias,
+                'sort-order' => $this->order->value,
+                'visible' => $this->visible,
+                'numeric' => $this->numeric,
+                'sortable' => $this->sortable,
+                'searchable' => $this->searchable,
+                'default' => $this->default,
+                'formatter' => $this->cellFormatter,
+                'cell-style' => $this->styleFormatter,
+            ],
+            static fn (mixed $value): bool => null !== $value
+        );
+    }
+
+    /**
      * Create the action column.
      */
     public static function createColumnAction(): self
     {
         return self::instance('id')
-            ->setAlias('action')
-            ->setSortable(false)
-            ->setSearchable(false)
-            ->setCellFormatter('renderActions')
-            ->setClass('actions rowlink-skip d-print-none');
+            ->withAlias('action')
+            ->withSortable(false)
+            ->withSearchable(false)
+            ->withCellFormatter('renderActions')
+            ->withClass('actions rowlink-skip d-print-none');
     }
 
     /**
@@ -126,113 +163,12 @@ class Column implements \Stringable
         );
     }
 
-    public function getAlias(): string
-    {
-        return $this->alias ?? $this->field;
-    }
-
-    /**
-     * Gets the attributes used to output the column to the Twig template.
-     */
-    public function getAttributes(): array
-    {
-        $result = [
-            'class' => $this->getClass(),
-            'field' => $this->getAlias(),
-            'sort-order' => $this->getOrder()->value,
-            'visible' => $this->isVisible(),
-            'numeric' => $this->isNumeric(),
-            'sortable' => $this->isSortable(),
-            'searchable' => $this->isSearchable(),
-            'default' => $this->isDefault(),
-        ];
-        if (StringUtils::isString($this->cellFormatter)) {
-            $result['formatter'] = $this->cellFormatter;
-        }
-        if (StringUtils::isString($this->styleFormatter)) {
-            $result['cell-style'] = $this->styleFormatter;
-        }
-
-        return $result;
-    }
-
-    public function getCellFormatter(): ?string
-    {
-        return $this->cellFormatter;
-    }
-
-    public function getClass(): string
-    {
-        $class = (string) $this->class;
-        if ($this->isSortable() && !\str_contains($class, 'rowlink-skip')) {
-            return \trim($class . ' user-select-none cursor-pointer');
-        }
-
-        return $class;
-    }
-
-    public function getField(): string
-    {
-        return $this->field;
-    }
-
-    /**
-     * @return ?callable(mixed, EntityType): string
-     */
-    public function getFieldFormatter(): ?callable
-    {
-        return $this->fieldFormatter;
-    }
-
-    /**
-     * Gets the default sorting order.
-     */
-    public function getOrder(): SortMode
-    {
-        return $this->order;
-    }
-
-    public function getStyleFormatter(): ?string
-    {
-        return $this->styleFormatter;
-    }
-
-    public function getTitle(): ?string
-    {
-        return $this->title;
-    }
-
     /**
      * Create a new instance with the given field.
      */
     public static function instance(string $field = ''): self
     {
-        return new self()->setField($field);
-    }
-
-    public function isDefault(): bool
-    {
-        return $this->default;
-    }
-
-    public function isNumeric(): bool
-    {
-        return $this->numeric;
-    }
-
-    public function isSearchable(): bool
-    {
-        return $this->visible && $this->searchable;
-    }
-
-    public function isSortable(): bool
-    {
-        return $this->visible && $this->sortable;
-    }
-
-    public function isVisible(): bool
-    {
-        return $this->visible;
+        return new self()->withField($field);
     }
 
     /**
@@ -248,38 +184,37 @@ class Column implements \Stringable
         return $this->formatValue($objectOrArray, $value);
     }
 
-    public function setAlias(?string $alias): self
+    public function withAlias(?string $alias): self
     {
         $this->alias = $alias;
 
         return $this;
     }
 
-    public function setCellFormatter(?string $cellFormatter): self
+    public function withCellFormatter(?string $cellFormatter): self
     {
         $this->cellFormatter = $cellFormatter;
 
         return $this;
     }
 
-    public function setClass(?string $class): self
+    public function withClass(?string $class): self
     {
         $this->class = $class;
 
         return $this;
     }
 
-    public function setDefault(bool $default): self
+    public function withDefault(bool $default): self
     {
         $this->default = $default;
 
         return $this;
     }
 
-    public function setField(string $field): self
+    public function withField(string $field): self
     {
         $this->field = $field;
-        $this->property = '[' . \str_replace('.', '].[', $field) . ']';
 
         return $this;
     }
@@ -287,14 +222,14 @@ class Column implements \Stringable
     /**
      * @param ?callable(mixed, EntityType): string $fieldFormatter
      */
-    public function setFieldFormatter(?callable $fieldFormatter): self
+    public function withFieldFormatter(?callable $fieldFormatter): self
     {
         $this->fieldFormatter = $fieldFormatter;
 
         return $this;
     }
 
-    public function setNumeric(bool $numeric): self
+    public function withNumeric(bool $numeric): self
     {
         $this->numeric = $numeric;
 
@@ -304,42 +239,42 @@ class Column implements \Stringable
     /**
      * Sets the default sorting order.
      */
-    public function setOrder(SortMode $order): self
+    public function withOrder(SortMode $order): self
     {
         $this->order = $order;
 
         return $this;
     }
 
-    public function setSearchable(bool $searchable): self
+    public function withSearchable(bool $searchable): self
     {
         $this->searchable = $searchable;
 
         return $this;
     }
 
-    public function setSortable(bool $sortable): self
+    public function withSortable(bool $sortable): self
     {
         $this->sortable = $sortable;
 
         return $this;
     }
 
-    public function setStyleFormatter(?string $styleFormatter): self
+    public function withStyleFormatter(?string $styleFormatter): self
     {
         $this->styleFormatter = $styleFormatter;
 
         return $this;
     }
 
-    public function setTitle(?string $title): self
+    public function withTitle(?string $title): self
     {
         $this->title = $title;
 
         return $this;
     }
 
-    public function setVisible(bool $visible): self
+    public function withVisible(bool $visible): self
     {
         $this->visible = $visible;
 
@@ -389,7 +324,11 @@ class Column implements \Stringable
                     continue;
                 }
                 if (self::FIELD_FORMATTER === $key) {
-                    $accessor->setValue($column, $key, [$parent, $value]);
+                    $callable = [$parent, $value];
+                    if (!\is_callable($callable)) {
+                        throw new \ValueError(\sprintf('Invalid callable: "%s".', $value));
+                    }
+                    $accessor->setValue($column, $key, $callable);
                     continue;
                 }
                 $accessor->setValue($column, $key, $value);

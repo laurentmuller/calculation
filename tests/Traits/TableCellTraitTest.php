@@ -38,11 +38,11 @@ final class TableCellTraitTest extends KernelServiceTestCase
     {
         $expected = '10';
         $actual = $this->renderCell(
-            10,
-            ['id' => 1],
-            'title',
-            false,
-            'parameter'
+            value: 10,
+            entity: ['id' => 1],
+            title: 'title',
+            route: false,
+            parameter: 'parameter'
         );
         self::assertSame($expected, $actual);
     }
@@ -54,11 +54,11 @@ final class TableCellTraitTest extends KernelServiceTestCase
     {
         $expected = '<a class="rowlink-skip" href="/?id=1">10</a>';
         $actual = $this->renderCell(
-            10,
-            ['id' => 1],
-            '',
-            'homepage',
-            'id'
+            value: 10,
+            entity: ['id' => 1],
+            title: '',
+            route: 'homepage',
+            parameter: 'id'
         );
         self::assertSame($expected, $actual);
     }
@@ -70,11 +70,11 @@ final class TableCellTraitTest extends KernelServiceTestCase
     {
         $expected = '<a class="rowlink-skip" href="/?id=1" title="My Title">10</a>';
         $actual = $this->renderCell(
-            10,
-            ['id' => 1],
-            'My Title',
-            'homepage',
-            'id'
+            value: 10,
+            entity: ['id' => 1],
+            title: 'My Title',
+            route: 'homepage',
+            parameter: 'id'
         );
         self::assertSame($expected, $actual);
     }

@@ -17,6 +17,7 @@ use App\Utils\DateUtils;
 use App\Utils\StringUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\DatePointType;
+use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Serializer\Attribute\Ignore;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -87,7 +88,8 @@ trait ResetPasswordRequestTrait
     #[\Override]
     public function isExpired(): bool
     {
-        return !$this->expiresAt instanceof DatePoint || $this->expiresAt->getTimestamp() <= \time();
+        return !$this->expiresAt instanceof DatePoint
+            || $this->expiresAt->getTimestamp() <= Clock::get()->now()->getTimestamp();
     }
 
     /**

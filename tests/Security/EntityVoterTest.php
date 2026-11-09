@@ -177,7 +177,7 @@ final class EntityVoterTest extends TestCase
     {
         $user = $this->getUser(RoleInterface::ROLE_ADMIN);
         if ($role instanceof Role) {
-            $user->setRights($role->getRights());
+            $user->rights = $role->rights;
         }
 
         return $user;
@@ -187,7 +187,7 @@ final class EntityVoterTest extends TestCase
     {
         $user = $this->getUser(RoleInterface::ROLE_USER);
         if ($role instanceof Role) {
-            $user->setRights($role->getRights());
+            $user->rights = $role->rights;
         }
 
         return $user;

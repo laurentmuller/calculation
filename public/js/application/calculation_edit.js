@@ -1225,7 +1225,7 @@
         getContextMenuItems: function () {
             const $elements = $(this).getParentRow().find('.dropdown-menu').children();
             return new MenuBuilder({
-                classSelector: 'btn-default',
+                classSelector: 'btn-',
                 elements: $elements
             }).getItems();
         },

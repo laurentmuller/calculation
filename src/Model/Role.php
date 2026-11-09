@@ -35,7 +35,7 @@ class Role implements \Stringable, RoleInterface, TranslatableInterface
     public function __construct(string $role, protected ?string $name = null, ?int $rights = null)
     {
         $this->role = $role;
-        $this->setRights($rights);
+        $this->rights = $rights;
     }
 
     #[\Override]

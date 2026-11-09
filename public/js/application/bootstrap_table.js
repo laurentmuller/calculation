@@ -476,7 +476,7 @@ function showSortDialog($table, $button) {
             const $parent = $this.parents('.custom-item, tr');
             const $elements = $parent.find('.dropdown-menu').children();
             return new MenuBuilder({
-                classSelector: 'btn-default',
+                classSelector: 'btn-',
                 elements: $elements
             }).getItems();
         }

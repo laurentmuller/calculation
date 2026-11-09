@@ -590,13 +590,16 @@ table.table-fixed-header th {
     }
 }
 
-/* bold font for default action */
-.dropdown-menu .btn-default {
+/* default action */
+.dropdown-menu .btn-default,
+.context-menu-item.btn-default {
     font-weight: bolder !important;
 }
 
-.context-menu-item.btn-default {
-    font-weight: bolder !important;
+/* delete action */
+.dropdown-item.btn-delete,
+.context-menu-item.btn-delete {
+    color: var(--bs-danger);
 }
 
 .card-footer hr.card-footer-line {

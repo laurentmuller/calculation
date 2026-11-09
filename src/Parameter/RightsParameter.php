@@ -93,13 +93,13 @@ class RightsParameter implements ParameterInterface
     private function cleanRights(Role|int|null $rights, Role $default): ?int
     {
         if ($rights instanceof Role) {
-            $rights = $rights->getRights();
+            $rights = $rights->rights;
         }
         if (null === $rights || $rights <= 0) {
             return null;
         }
 
-        return $rights === $default->getRights() ? null : $rights;
+        return $rights === $default->rights ? null : $rights;
     }
 
     private function getService(): RoleBuilderService
@@ -109,6 +109,10 @@ class RightsParameter implements ParameterInterface
 
     private function updateRole(Role $role, ?int $rights): Role
     {
-        return null !== $rights ? $role->setRights($rights) : $role;
+        if (null !== $rights) {
+            $role->rights = $rights;
+        }
+
+        return $role;
     }
 }

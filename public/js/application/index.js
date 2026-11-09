@@ -133,7 +133,7 @@
             const $elements = $(this).parents('.row-item:first')
                 .find('.dropdown-menu').children();
             return new MenuBuilder({
-                classSelector: 'btn-default',
+                classSelector: 'btn-',
                 elements: $elements
             }).getItems();
         },

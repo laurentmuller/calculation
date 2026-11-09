@@ -98,15 +98,15 @@ class EntityVoter extends Voter
     private function getRights(User $user): int
     {
         if ($user->overwrite) {
-            return $user->getRights();
+            return $user->rights ?? 0;
         }
 
         $rights = $this->parameters->getRights();
         if ($user->isAdmin()) {
-            return $rights->getAdminRole()->getRights();
+            return $rights->getAdminRole()->rights ?? 0;
         }
 
-        return $rights->getUserRole()->getRights();
+        return $rights->getUserRole()->rights ?? 0;
     }
 
     private function getUser(TokenInterface $token, ?Vote $vote): ?User

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Enums\Environment;
+use App\Interfaces\InfoServiceInterface;
 use App\Utils\FileUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -74,7 +75,7 @@ readonly class KernelInfoService
      */
     public function getDebugStatus(): string
     {
-        return $this->isDebug() ? SymfonyInfoService::LABEL_ENABLED : SymfonyInfoService::LABEL_DISABLED;
+        return $this->isDebug() ? InfoServiceInterface::LABEL_ENABLED : InfoServiceInterface::LABEL_DISABLED;
     }
 
     /**

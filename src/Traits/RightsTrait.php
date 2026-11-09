@@ -35,7 +35,9 @@ trait RightsTrait
     /** The rights. */
     #[Assert\PositiveOrZero]
     #[ORM\Column(type: Types::BIGINT, nullable: true)]
-    private ?int $rights = null; // @phpstan-ignore doctrine.columnType
+    public ?int $rights = null {
+        set => $this->sanitizeRights($value);
+    }
 
     /**
      * Gets the permission for the given entity name.
@@ -44,7 +46,7 @@ trait RightsTrait
      */
     public function getPermission(EntityName $entity): FlagBag
     {
-        $value = $entity->getOffsetValue($this->getRights());
+        $value = $entity->getOffsetValue($this->rights ?? 0);
 
         return new FlagBag(EntityPermission::class, $value);
     }
@@ -64,14 +66,6 @@ trait RightsTrait
     }
 
     /**
-     * Gets the rights.
-     */
-    public function getRights(): int
-    {
-        return $this->rights ?? 0;
-    }
-
-    /**
      * Sets the permission for the given entity name.
      *
      * @param FlagBag<EntityPermission> $permission
@@ -80,8 +74,9 @@ trait RightsTrait
     {
         $rights = $this->rights ?? 0;
         $rights |= $entity->getShiftedValue($permission->getValue());
+        $this->rights = $rights;
 
-        return $this->setRights($rights);
+        return $this;
     }
 
     /**
@@ -98,13 +93,8 @@ trait RightsTrait
         return $this;
     }
 
-    /**
-     * Sets the rights.
-     */
-    public function setRights(?int $rights): static
+    private function sanitizeRights(?int $value): ?int
     {
-        $this->rights = ($rights ?? 0) === 0 ? null : $rights;
-
-        return $this;
+        return null === $value || $value <= 0 ? null : $value;
     }
 }

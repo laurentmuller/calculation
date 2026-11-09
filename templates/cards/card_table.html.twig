@@ -294,13 +294,13 @@
             {{- _self.item_separator('edit-divider') }}
             {% block edit_actions -%}{%- endblock edit_actions %}
         {% endif %}
-        {% if allow_delete %}
-            {{- _self.item_separator('delete-divider') }}
-            {% block delete_actions -%}{%- endblock delete_actions %}
-        {% endif %}
         {% if allow_add %}
             {{- _self.item_separator('add-divider') }}
             {% block add_actions -%}{%- endblock add_actions %}
+        {% endif %}
+        {% if allow_delete %}
+            {{- _self.item_separator('delete-divider') }}
+            {% block delete_actions -%}{%- endblock delete_actions %}
         {% endif %}
         {% if allow_show %}
             {{- _self.item_separator('show-divider') }}

@@ -79,18 +79,16 @@ class CommandsReport extends AbstractArrayReport
      */
     private function getMaxWidth(array $command): float
     {
-        $width = 0.0;
-        $this->useStyle(
-            style: $this->getFixedStyle(),
-            callable: function () use (&$width, $command): void {
-                foreach ($command['arguments'] as $argument) {
-                    $width = \max($width, $this->getStringWidth($argument['name']));
-                }
-                foreach ($command['options'] as $option) {
-                    $width = \max($width, $this->getStringWidth($option['shortcutName']));
-                }
-            }
+        $values = \array_merge(
+            \array_column($command['arguments'], 'name'),
+            \array_column($command['options'], 'shortcutName'),
         );
+        if ([] === $values) {
+            return 0.0;
+        }
+        $this->getFixedStyle()->updateDocument($this);
+        $width = \max(\array_map($this->getStringWidth(...), $values));
+        $this->resetStyle();
 
         return \ceil($width) + 1.0;
     }

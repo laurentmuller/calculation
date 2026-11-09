@@ -152,8 +152,8 @@ class UserRightsDocument extends AbstractArrayDocument
     private function outputUser(WorksheetDocument $sheet, User $user, int &$row): void
     {
         if (!$user->overwrite) {
-            $rights = $this->roleBuilderService->getRole($user)->getRights();
-            $user->setRights($rights);
+            $rights = $this->roleBuilderService->getRole($user)->rights;
+            $user->rights = $rights;
         }
         $this->outputRole($sheet, $user, $row);
     }

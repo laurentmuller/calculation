@@ -25,8 +25,13 @@ const MenuBuilder = class { /* exported MenuBuilder */
      */
     addItem($link) {
         const key = 'entry_' + this.index++;
-        const selector = this.options.classSelector || false;
-        const className = (selector && $link.hasClass(selector)) ? selector : '';
+        const classSelector = this.options.classSelector;
+        let className = '';
+        if (classSelector) {
+            className = $link.attr('class').split(' ')
+                .filter(name => name.startsWith(classSelector))
+                .join(' ');
+        }
         this.items[key] = {
             link: $link,
             isHtmlName: true,
@@ -265,7 +270,7 @@ const MenuBuilder = class { /* exported MenuBuilder */
                             return false;
                         },
                         events: {
-                            preShow:  $.hideDropDownMenus(),
+                            preShow: $.hideDropDownMenus(),
                             show: fnShow || $.noop,
                             hide: fnHide || $.noop
                         }

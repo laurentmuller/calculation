@@ -327,8 +327,8 @@ class UserController extends AbstractEntityController
         $defaultRole = $this->getDefaultRole($builder, $item);
         $form = $this->createForm(UserRightsType::class, $item);
         if ($this->handleRequestForm($request, $form)) {
-            if ($item->getRights() === $defaultRole->getRights()) {
-                $item->setRights(null);
+            if ($item->rights === $defaultRole->rights) {
+                $item->rights = null;
                 if ($item->enabled) {
                     $item->overwrite = false;
                 }

@@ -15,10 +15,7 @@ namespace App\Tests\Table;
 
 use App\Entity\Product;
 use App\Enums\SortMode;
-use App\Repository\GlobalMarginRepository;
-use App\Service\IndexService;
 use App\Table\Column;
-use App\Table\GlobalMarginTable;
 use PHPUnit\Framework\TestCase;
 
 final class ColumnTest extends TestCase
@@ -83,42 +80,6 @@ final class ColumnTest extends TestCase
         self::assertTrue($column->searchable);
         self::assertTrue($column->sortable);
         self::assertTrue($column->visible);
-    }
-
-    public function testFromJsonEmpty(): void
-    {
-        $path = __DIR__ . '/../files/json/columns_empty.json';
-        $message = 'The file "' . $path . '" contains no definition.';
-        self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessageIsOrContains($message);
-        $table = $this->createTable();
-        Column::fromJson($table, $path);
-    }
-
-    public function testFromJsonInvalidFile(): void
-    {
-        $path = __FILE__;
-        self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessageIsOrContains('Unable to decode value.');
-        $table = $this->createTable();
-        Column::fromJson($table, $path);
-    }
-
-    public function testFromJsonInvalidFormatter(): void
-    {
-        self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessageIsOrContains('Unable set the property "fieldFormatter".');
-        $path = __DIR__ . '/../files/json/columns_invalid_formatter.json';
-        $table = $this->createTable();
-        Column::fromJson($table, $path);
-    }
-
-    public function testFromJsonValid(): void
-    {
-        $table = $this->createTable();
-        $path = __DIR__ . '/../files/json/columns_default.json';
-        $columns = Column::fromJson($table, $path);
-        self::assertCount(5, $columns);
     }
 
     public function testGetClass(): void
@@ -226,21 +187,5 @@ final class ColumnTest extends TestCase
         $column = Column::instance('field');
         $actual = (string) $column;
         self::assertSame('field', $actual);
-    }
-
-    private function createTable(): GlobalMarginTable
-    {
-        $catalog = \array_combine(
-            \array_keys(IndexService::CATALOG),
-            \array_fill(0, \count(IndexService::CATALOG), 1)
-        );
-        $service = self::createStub(IndexService::class);
-        $service->method('getCatalog')
-            ->willReturn($catalog);
-
-        return new GlobalMarginTable(
-            self::createStub(GlobalMarginRepository::class),
-            $service
-        );
     }
 }

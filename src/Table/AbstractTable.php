@@ -198,8 +198,9 @@ abstract class AbstractTable
      */
     private function createColumns(): array
     {
+        $loader = new ColumnLoader();
         $path = $this->getColumnDefinitions();
-        $columns = Column::fromJson($this, $path);
+        $columns = $loader->load($this, $path);
         $columns[] = Column::createColumnAction();
 
         return $columns;

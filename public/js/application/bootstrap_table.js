@@ -392,9 +392,10 @@ function initializeKeyHandler($table) {
  */
 function initializeContextMenus($table) {
     'use strict';
-    const tableClass = ['.bootstrap-table', 'table', '.table-primary', 'td:not(:has(.rowlink-skip))'].join(' ');
-    const cardClass = ['.bootstrap-table', '.fixed-table-custom-view', '.table-primary', 'div:not(:has(.rowlink-skip, .item-link))'].join(' ');
-    const selector = [tableClass, cardClass].join(',');
+    // selector
+    const rowSelector = 'tr.table-primary td:not(:has(.rowlink-skip))';
+    const viewSelector = '.custom-view-body div:not(:has(.rowlink-skip))';
+    const selector = [rowSelector, viewSelector].join(',');
     $table.getTableContainer().initContextMenu(selector);
 
     // key handler

@@ -313,15 +313,14 @@
 <template id="custom-view-template">
     <div class="col col-custom-view mb-2 px-1">
         <div class="custom-item item-hover cursor-default border h-100 p-2{% block custom_view_card_class %}{%- endblock custom_view_card_class %}">
-            <div class="d-flex-no-wrap-center">
-                <div class="custom-view-header d-flex-no-wrap-center">
-                    {% block custom_view_header -%}{%- endblock custom_view_header %}
-
-                </div>
+            <div class="custom-view-header d-flex-no-wrap-center">
+                {% block custom_view_header -%}{%- endblock custom_view_header %}
                 <div class="d-print-none custom-view-actions"></div>
             </div>
-            <hr class="my-1">
-            {% block custom_view_body -%}{%- endblock custom_view_body %}
+            <div class="custom-view-body">
+                <hr class="my-1">
+                {% block custom_view_body -%}{%- endblock custom_view_body %}
+            </div>
         </div>
     </div>
 </template>

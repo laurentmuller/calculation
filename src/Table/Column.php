@@ -105,7 +105,7 @@ class Column implements \Stringable
     }
 
     /**
-     * Gets the attributes used to output the column to the Twig template.
+     * Gets the data attributes used to output the column to the Twig template.
      */
     public function attributes(): array
     {
@@ -113,7 +113,7 @@ class Column implements \Stringable
             [
                 'class' => $this->class,
                 'field' => $this->alias,
-                'sort-order' => $this->order->value,
+                'sort-order' => $this->order,
                 'visible' => $this->visible,
                 'numeric' => $this->numeric,
                 'sortable' => $this->sortable,

@@ -40,7 +40,7 @@ final class ColumnTest extends TestCase
         $actual = $column->attributes();
         self::assertSame('class', $actual['class']);
         self::assertSame('field', $actual['field']);
-        self::assertSame('desc', $actual['sort-order']);
+        self::assertSame(SortMode::DESC, $actual['sort-order']);
         self::assertFalse($actual['visible']);
         self::assertTrue($actual['numeric']);
         self::assertFalse($actual['sortable']);

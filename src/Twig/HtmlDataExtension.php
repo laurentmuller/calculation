@@ -19,7 +19,7 @@ use Twig\Error\RuntimeError;
 use Twig\Extra\Html\HtmlExtension;
 
 /**
- * Twig extension to render data attributes.
+ * Twig extension to render data-attributes.
  */
 class HtmlDataExtension
 {
@@ -30,9 +30,8 @@ class HtmlDataExtension
     public static function htmlDataAttributes(Environment $env, iterable|string|false|null ...$args): string
     {
         $attributes = [];
-        /** @var array<string, mixed> $args */
-        $args = HtmlExtension::htmlAttrMerge(...$args);
-        foreach ($args as $name => $value) {
+        $values = HtmlExtension::htmlAttrMerge(...$args);
+        foreach ($values as $name => $value) {
             if (!\str_starts_with($name, 'data-')) {
                 $name = 'data-' . $name;
             }

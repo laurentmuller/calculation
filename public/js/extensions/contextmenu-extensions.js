@@ -36,7 +36,13 @@ const MenuBuilder = class { /* exported MenuBuilder */
             link: $link,
             isHtmlName: true,
             name: $link.html(),
-            className: className
+            className: className,
+            // callback: function(itemKey, opt, e) {
+            //     e.preventDefault();
+            //     if ($link.length) {
+            //         $link.get(0).click();
+            //     }
+            // }
         };
         return this;
     }

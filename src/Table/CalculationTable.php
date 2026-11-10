@@ -15,6 +15,7 @@ namespace App\Table;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
+use App\Enums\SortMode;
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
@@ -116,6 +117,12 @@ class CalculationTable extends AbstractEntityTable
     protected function getDropDownValues(): array
     {
         return $this->stateRepository->getDropDown();
+    }
+
+    #[\Override]
+    protected function getRequiredOrderBy(): array
+    {
+        return ['id' => SortMode::DESC];
     }
 
     #[\Override]

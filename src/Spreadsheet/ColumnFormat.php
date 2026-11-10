@@ -22,12 +22,8 @@ enum ColumnFormat
 {
     /** The amount format ("#,##0.00"). */
     case AMOUNT;
-    /**
-     * The amount format ("#,##0.00") and the red foreground color when values
-     * are smaller than or equal to 0.
-     */
+    /** The amount format ("#,##0.00") and the red foreground color when values are smaller than or equal to 0. */
     case AMOUNT_ZERO;
-
     /** The date format ("dd/mm/yyyy"). */
     case DATE;
     /** The date and time format ("dd/mm/yyyy hh:mm"). */

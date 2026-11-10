@@ -9,7 +9,7 @@
         "default": true,
         "order": "desc",
         "class": "date text-border",
-        "fieldFormatter": "formatCreatedAt",
+        "fieldFormatter": "Log::formatDate",
         "styleFormatter": "styleBorderColor"
     },
     {

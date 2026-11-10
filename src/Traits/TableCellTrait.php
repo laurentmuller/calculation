@@ -29,7 +29,7 @@ trait TableCellTrait
      *
      * @throws \Twig\Error\Error
      */
-    protected function renderCell(
+    protected function renderCellLink(
         int $value,
         array $entity,
         string $title,

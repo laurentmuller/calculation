@@ -21,7 +21,6 @@ use App\Model\LogLevel;
 use App\Service\LogFilterService;
 use App\Service\LogService;
 use App\Service\LogSorterService;
-use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
@@ -53,14 +52,6 @@ class LogTable extends AbstractTable implements \Countable
     public function formatChannel(string $value, Log $log): string
     {
         return $this->twig->render('macros/_cell_log_channel.html.twig', ['value' => $value, 'log' => $log]);
-    }
-
-    /**
-     * Formats the date.
-     */
-    public function formatCreatedAt(DatePoint $value): string
-    {
-        return Log::formatDate($value);
     }
 
     /**

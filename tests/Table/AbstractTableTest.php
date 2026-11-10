@@ -16,9 +16,7 @@ namespace App\Tests\Table;
 use App\Interfaces\TableInterface;
 use App\Table\DataQuery;
 use App\Tests\Fixture\FixtureTable;
-use App\Utils\FormatUtils;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Clock\DatePoint;
 
 final class AbstractTableTest extends TestCase
 {
@@ -31,31 +29,6 @@ final class AbstractTableTest extends TestCase
 
         $expected = \array_slice(TableInterface::PAGE_LIST, 0, 3);
         $actual = $table->getAllowedPageList(11);
-        self::assertSame($expected, $actual);
-    }
-
-    public function testFormats(): void
-    {
-        $table = new FixtureTable();
-        $expected = FormatUtils::formatAmount(1.0);
-        $actual = $table->formatAmount(1.0);
-        self::assertSame($expected, $actual);
-
-        $date = new DatePoint();
-        $expected = FormatUtils::formatDate($date);
-        $actual = $table->formatDate($date);
-        self::assertSame($expected, $actual);
-
-        $expected = FormatUtils::formatId(1);
-        $actual = $table->formatId(1);
-        self::assertSame($expected, $actual);
-
-        $expected = FormatUtils::formatInt(1);
-        $actual = $table->formatInt(1);
-        self::assertSame($expected, $actual);
-
-        $expected = FormatUtils::formatPercent(1);
-        $actual = $table->formatPercent(1);
         self::assertSame($expected, $actual);
     }
 

@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace App\Table;
 
+use App\Entity\Log;
 use App\Enums\SortMode;
 use App\Interfaces\EntityInterface;
 use App\Utils\FileUtils;
+use App\Utils\FormatUtils;
 use Symfony\Component\PropertyAccess\Exception\ExceptionInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
@@ -28,8 +30,15 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
  */
 class Column implements \Stringable
 {
+    /** The mapping of class names to their respective classes. */
+    private const array CLASSES_MAPPING = [
+        'FormatUtils' => FormatUtils::class,
+        'Log' => Log::class,
+    ];
+
     /** The property name of the field formatter. */
     private const string FIELD_FORMATTER = 'fieldFormatter';
+
     /** The property name of the field order. */
     private const string FIELD_ORDER = 'order';
 
@@ -67,9 +76,15 @@ class Column implements \Stringable
     /**
      * The field formatter (server side).
      *
-     * @var ?callable(mixed, EntityType): string
+     * @var ?callable(mixed, EntityType=): string
      */
-    public $fieldFormatter;
+    public $fieldFormatter {
+        /** @throws \ReflectionException */
+        set {
+            $this->fieldFormatter = $value;
+            $this->requiredParameters = $this->getRequiredParameters($value);
+        }
+    }
 
     /** The value indicating if this column is displayed as a numeric value. */
     public bool $numeric = false;
@@ -78,10 +93,14 @@ class Column implements \Stringable
     public SortMode $order = SortMode::DEFAULT;
 
     /** The searchable behavior. */
-    public bool $searchable = true;
+    public bool $searchable = true {
+        get => $this->visible && $this->searchable;
+    }
 
     /** The sortable behavior. */
-    public bool $sortable = true;
+    public bool $sortable = true {
+        get => $this->visible && $this->sortable;
+    }
 
     /** The style formatter (client side). */
     public ?string $styleFormatter = null;
@@ -97,6 +116,9 @@ class Column implements \Stringable
 
     /** The property path for an array object. */
     private string $property = '';
+
+    /** The number of required parameters for the formatter callable. */
+    private int $requiredParameters = 2;
 
     #[\Override]
     public function __toString(): string
@@ -220,7 +242,7 @@ class Column implements \Stringable
     }
 
     /**
-     * @param ?callable(mixed, EntityType): string $fieldFormatter
+     * @param ?callable(mixed, EntityType=): string $fieldFormatter
      */
     public function withFieldFormatter(?callable $fieldFormatter): self
     {
@@ -281,14 +303,27 @@ class Column implements \Stringable
         return $this;
     }
 
+    private static function createCallable(AbstractTable $parent, string $value): array
+    {
+        $values = \explode('::', $value, 2);
+        $owner = self::CLASSES_MAPPING[$values[0]] ?? null;
+
+        return null !== $owner ? [$owner, $values[1]] : [$parent, $value];
+    }
+
     /**
      * @phpstan-param EntityType $objectOrArray
      */
     private function formatValue(EntityInterface|array $objectOrArray, mixed $value): string
     {
         if (\is_callable($this->fieldFormatter)) {
+            if (1 === $this->requiredParameters) {
+                return \call_user_func($this->fieldFormatter, $value);
+            }
+
             return \call_user_func($this->fieldFormatter, $value, $objectOrArray);
         }
+
         if (\is_bool($value)) {
             return $value ? '1' : '0';
         }
@@ -304,6 +339,18 @@ class Column implements \Stringable
     private function getPropertyPath(EntityInterface|array $objectOrArray): string
     {
         return \is_object($objectOrArray) ? $this->field : $this->property;
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    private function getRequiredParameters(?callable $value): int
+    {
+        if (\is_callable($value)) {
+            return new \ReflectionFunction($value(...))->getNumberOfRequiredParameters();
+        }
+
+        return 2;
     }
 
     /**
@@ -324,7 +371,7 @@ class Column implements \Stringable
                     continue;
                 }
                 if (self::FIELD_FORMATTER === $key) {
-                    $callable = [$parent, $value];
+                    $callable = self::createCallable($parent, $value);
                     if (!\is_callable($callable)) {
                         throw new \ValueError(\sprintf('Invalid callable: "%s".', $value));
                     }

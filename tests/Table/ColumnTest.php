@@ -118,7 +118,7 @@ final class ColumnTest extends TestCase
         $table = $this->createTable();
         $path = __DIR__ . '/../files/json/columns_default.json';
         $columns = Column::fromJson($table, $path);
-        self::assertCount(4, $columns);
+        self::assertCount(5, $columns);
     }
 
     public function testGetClass(): void
@@ -185,6 +185,32 @@ final class ColumnTest extends TestCase
         $column = Column::instance('description');
         $actual = $column->mapValue($data);
         self::assertSame('fake', $actual);
+    }
+
+    public function testSearchable(): void
+    {
+        $column = Column::instance('field');
+        self::assertTrue($column->searchable);
+
+        $column->withSearchable(false);
+        self::assertFalse($column->searchable);
+
+        $column->withSearchable(true)
+            ->withVisible(false);
+        self::assertFalse($column->searchable);
+    }
+
+    public function testSortable(): void
+    {
+        $column = Column::instance('field');
+        self::assertTrue($column->sortable);
+
+        $column->withSortable(false);
+        self::assertFalse($column->sortable);
+
+        $column->withSortable(true)
+            ->withVisible(false);
+        self::assertFalse($column->sortable);
     }
 
     public function testTitle(): void

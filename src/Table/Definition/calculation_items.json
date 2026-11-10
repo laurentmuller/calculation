@@ -4,7 +4,7 @@
         "title": "calculation.fields.id",
         "order": "desc",
         "class": "text-id text-border",
-        "fieldFormatter": "formatId",
+        "fieldFormatter": "FormatUtils::formatId",
         "styleFormatter": "styleStateBorderClass",
         "numeric": true
     },
@@ -14,7 +14,7 @@
         "default": true,
         "order": "desc",
         "class": "text-date",
-        "fieldFormatter": "formatDate"
+        "fieldFormatter": "FormatUtils::formatDate"
     },
     {
         "field": "stateCode",

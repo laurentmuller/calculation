@@ -38,9 +38,10 @@ readonly class PasswordTooltipService
         $security = $this->parameters->getSecurity();
         $level = $security->getLevel();
         if (StrengthLevel::DEFAULT !== $level) {
-            $prefix = $this->trans('strengthLevel');
-            $suffix = $level->trans($this->translator);
-            $results[] = \sprintf('%s : %s', $prefix, $suffix);
+            $results[] = $this->trans('strengthLevel_label', [
+                '%label%' => $level->trans($this->translator),
+                '%level%' => $level->value,
+            ]);
         }
 
         $constraint = $security->getPasswordConstraint();
@@ -57,8 +58,8 @@ readonly class PasswordTooltipService
         return $results;
     }
 
-    private function trans(string $id): string
+    private function trans(string $id, array $parameters = []): string
     {
-        return $this->translator->trans('password.' . $id);
+        return $this->translator->trans('password.' . $id, $parameters);
     }
 }

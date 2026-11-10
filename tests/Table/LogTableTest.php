@@ -46,15 +46,6 @@ final class LogTableTest extends TestCase
         self::assertStringContainsString($expected, $actual);
     }
 
-    public function testFormatCreatedAt(): void
-    {
-        $log = Log::instance();
-        $table = $this->createTableWithoutData();
-        $expected = $log->formattedDate;
-        $actual = $table->formatCreatedAt($log->createdAt);
-        self::assertSame($expected, $actual);
-    }
-
     /**
      * @throws Error
      */

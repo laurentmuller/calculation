@@ -16,8 +16,6 @@ namespace App\Table;
 use App\Interfaces\EntityInterface;
 use App\Interfaces\TableInterface;
 use App\Traits\ArrayTrait;
-use App\Utils\FormatUtils;
-use Symfony\Component\Clock\DatePoint;
 
 /**
  * The abstract table.
@@ -34,31 +32,6 @@ abstract class AbstractTable
      * @var Column[]|null
      */
     private ?array $columns = null;
-
-    public function formatAmount(float $value): string
-    {
-        return FormatUtils::formatAmount($value);
-    }
-
-    public function formatDate(DatePoint $value): string
-    {
-        return FormatUtils::formatDate($value);
-    }
-
-    public function formatId(int $value): string
-    {
-        return FormatUtils::formatId($value);
-    }
-
-    public function formatInt(\Countable|array|int $value): string
-    {
-        return FormatUtils::formatInt($value);
-    }
-
-    public function formatPercent(float $value): string
-    {
-        return FormatUtils::formatPercent($value);
-    }
 
     /**
      * Gets the column definitions.
@@ -130,6 +103,8 @@ abstract class AbstractTable
 
     /**
      * Gets the default sorting column.
+     *
+     * @throws \LogicException if no default column is found
      */
     protected function getDefaultColumn(): Column
     {
@@ -209,8 +184,6 @@ abstract class AbstractTable
      * @param non-empty-string $field the sorted field to validate
      *
      * @throws \LogicException if the sorted field is not found
-     *
-     * @see Column::getField()
      */
     protected function validateSort(string $field): void
     {

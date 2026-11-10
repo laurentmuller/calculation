@@ -64,7 +64,7 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
     {
         $route = $this->isGrantedList(Product::class) ? 'product_index' : false;
 
-        return $this->renderCell(
+        return $this->renderCellLink(
             value: $value,
             entity: $entity,
             title: 'category.list.product_title',
@@ -84,9 +84,9 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
     {
         $route = $this->isGrantedList(Task::class) ? 'task_index' : false;
 
-        return $this->renderCell(
-            $value,
-            $entity,
+        return $this->renderCellLink(
+            value: $value,
+            entity: $entity,
             title: 'category.list.task_title',
             route: $route,
             parameter: AbstractCategoryItemTable::PARAM_CATEGORY

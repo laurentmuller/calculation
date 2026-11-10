@@ -111,6 +111,16 @@ abstract class AbstractEntityTable extends AbstractTable
         return $this->repository;
     }
 
+    /**
+     * Gets the required order by clause to always add to the order clause.
+     *
+     * @return array<string, SortMode>
+     */
+    protected function getRequiredOrderBy(): array
+    {
+        return [];
+    }
+
     #[\Override]
     protected function handleQuery(DataQuery $query): DataResults
     {
@@ -161,11 +171,23 @@ abstract class AbstractEntityTable extends AbstractTable
     private function addOrderBy(DataQuery $query, QueryBuilder $builder, string $alias): void
     {
         $orderBy = [];
+
+        // query order
         if ($query->isSort()) {
             $this->updateOrderBy($orderBy, $alias, $query->sort, $query->order);
         }
+
+        // default order
         $column = $this->getDefaultColumn();
         $this->updateOrderBy($orderBy, $alias, $column->field, $column->order);
+
+        // required order
+        $requiredOrderBy = $this->getRequiredOrderBy();
+        foreach ($requiredOrderBy as $sort => $order) {
+            $this->updateOrderBy($orderBy, $alias, $sort, $order);
+        }
+
+        // update order
         foreach ($orderBy as $sort => $order) {
             $builder->addOrderBy($sort, $order);
         }

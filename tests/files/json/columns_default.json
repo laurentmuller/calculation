@@ -1,14 +1,14 @@
 [
     {
         "field": "id",
-        "visible": false
+        "fieldFormatter": "FormatUtils::formatId"
     },
     {
         "field": "minimum",
         "title": "globalmargin.fields.minimum",
         "default": true,
         "searchable": true,
-        "fieldFormatter": "formatAmount",
+        "fieldFormatter": "FormatUtils::formatDate",
         "class": "text-currency w-35",
         "numeric": true,
         "order": "desc"
@@ -17,7 +17,7 @@
         "field": "maximum",
         "title": "globalmargin.fields.maximum",
         "searchable": true,
-        "fieldFormatter": "formatAmount",
+        "fieldFormatter": "FormatUtils::formatAmount",
         "class": "text-currency w-35",
         "numeric": true
     },
@@ -25,7 +25,15 @@
         "field": "margin",
         "title": "globalmargin.fields.margin",
         "searchable": true,
-        "fieldFormatter": "formatPercent",
+        "fieldFormatter": "FormatUtils::formatPercent",
+        "class": "text-currency w-30",
+        "numeric": true
+    },
+    {
+        "field": "marge",
+        "title": "globalmargin.fields.margin",
+        "searchable": true,
+        "fieldFormatter": "FormatUtils::formatInt",
         "class": "text-currency w-30",
         "numeric": true
     }

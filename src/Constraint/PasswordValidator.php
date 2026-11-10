@@ -65,11 +65,11 @@ class PasswordValidator extends AbstractConstraintValidator
      */
     private function checkAll(string $value, Password $constraint): void
     {
-        $this->checkLetters($constraint, $value);
-        $this->checkCaseDiff($constraint, $value);
-        $this->checkNumber($constraint, $value);
-        $this->checkSpecialChar($constraint, $value);
-        $this->checkEmail($constraint, $value);
+        $this->checkLetters($value, $constraint);
+        $this->checkCaseDiff($value, $constraint);
+        $this->checkNumber($value, $constraint);
+        $this->checkSpecialChar($value, $constraint);
+        $this->checkEmail($value, $constraint);
     }
 
     /**
@@ -77,18 +77,25 @@ class PasswordValidator extends AbstractConstraintValidator
      */
     private function checkAny(string $value, Password $constraint): void
     {
-        if (!($this->checkLetters($constraint, $value)
-            || $this->checkCaseDiff($constraint, $value)
-            || $this->checkNumber($constraint, $value)
-            || $this->checkSpecialChar($constraint, $value))) {
-            $this->checkEmail($constraint, $value);
+        if ($this->checkLetters($value, $constraint)) {
+            return;
         }
+        if ($this->checkCaseDiff($value, $constraint)) {
+            return;
+        }
+        if ($this->checkNumber($value, $constraint)) {
+            return;
+        }
+        if ($this->checkSpecialChar($value, $constraint)) {
+            return;
+        }
+        $this->checkEmail($value, $constraint);
     }
 
     /**
      * Checks the presence of lower/upper character.
      */
-    private function checkCaseDiff(Password $constraint, string $value): bool
+    private function checkCaseDiff(string $value, Password $constraint): bool
     {
         return $this->validateRegex(
             $constraint->caseDiff,
@@ -102,7 +109,7 @@ class PasswordValidator extends AbstractConstraintValidator
     /**
      * Checks if the value is an e-mail.
      */
-    private function checkEmail(Password $constraint, string $value): void
+    private function checkEmail(string $value, Password $constraint): void
     {
         if ($constraint->email && false !== \filter_var($value, \FILTER_VALIDATE_EMAIL)) {
             $this->addViolation($constraint->emailMessage, $value, Password::EMAIL_ERROR);
@@ -112,7 +119,7 @@ class PasswordValidator extends AbstractConstraintValidator
     /**
      * Checks the presence of letter character.
      */
-    private function checkLetters(Password $constraint, string $value): bool
+    private function checkLetters(string $value, Password $constraint): bool
     {
         return $this->validateRegex(
             $constraint->letter,
@@ -126,7 +133,7 @@ class PasswordValidator extends AbstractConstraintValidator
     /**
      * Checks the presence of one or more numbers characters.
      */
-    private function checkNumber(Password $constraint, string $value): bool
+    private function checkNumber(string $value, Password $constraint): bool
     {
         return $this->validateRegex(
             $constraint->number,
@@ -140,7 +147,7 @@ class PasswordValidator extends AbstractConstraintValidator
     /**
      * Checks the presence of one or more special characters.
      */
-    private function checkSpecialChar(Password $constraint, string $value): bool
+    private function checkSpecialChar(string $value, Password $constraint): bool
     {
         return $this->validateRegex(
             $constraint->specialChar,

@@ -20,7 +20,7 @@
         "sortable": false,
         "searchable": false,
         "class": "text-currency",
-        "fieldFormatter": "formatInt"
+        "fieldFormatter": "FormatUtils::formatInt"
     },
     {
         "field": "categories",

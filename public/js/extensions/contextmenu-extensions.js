@@ -33,16 +33,15 @@ const MenuBuilder = class { /* exported MenuBuilder */
                 .join(' ');
         }
         this.items[key] = {
-            link: $link,
             isHtmlName: true,
             name: $link.html(),
             className: className,
-            // callback: function(itemKey, opt, e) {
-            //     e.preventDefault();
-            //     if ($link.length) {
-            //         $link.get(0).click();
-            //     }
-            // }
+            callback: function (itemKey, opt, e) {
+                if ($link.length) {
+                    e.preventDefault();
+                    $link.get(0).click();
+                }
+            }
         };
         return this;
     }
@@ -265,15 +264,6 @@ const MenuBuilder = class { /* exported MenuBuilder */
                         autoHide: true,
                         animation: {
                             duration: 0
-                        },
-                        callback: function (key, options, e) {
-                            const item = options.items[key];
-                            if (item && item.link && item.link.length) {
-                                e.preventDefault();
-                                item.link.get(0).click();
-                                return true;
-                            }
-                            return false;
                         },
                         events: {
                             preShow: $.hideDropDownMenus(),

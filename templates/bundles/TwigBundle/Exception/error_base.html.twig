@@ -18,19 +18,19 @@
     <tr>
         <td>{{ index }}</td>
         <td>
-            {%- if trace.file -%}
+            {%- if trace.file|default(false) -%}
                 <span class="me-1">{{ trace.file|relative_path }}</span>
             {%- endif -%}
-            {%- if trace.short_class|default -%}
+            {%- if trace.short_class|default(false) -%}
                 <span class="text-warning">{{ trace.short_class }}</span>
             {%- endif -%}
-            {%- if trace.type|default -%}
+            {%- if trace.type|default(false) -%}
                 <span class="text-body-secondary">{{ trace.type }}</span>
             {%- endif -%}
-            {%- if trace.function|default -%}
+            {%- if trace.function|default(false) -%}
                 <span class="text-danger me-1">{{ trace.function }}</span>
             {%- endif -%}
-            {%- if trace.line|default -%}
+            {%- if trace.line|default(false) -%}
                 <span class="text-body-secondary">
                     {{- 'error_page.fields.line_number'|trans({'%line%': trace.line}) -}}
                 </span>

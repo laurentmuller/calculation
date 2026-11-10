@@ -37,7 +37,7 @@ final class TableCellTraitTest extends KernelServiceTestCase
     public function testWithoutRoute(): void
     {
         $expected = '10';
-        $actual = $this->renderCell(
+        $actual = $this->renderCellLink(
             value: 10,
             entity: ['id' => 1],
             title: 'title',
@@ -53,7 +53,7 @@ final class TableCellTraitTest extends KernelServiceTestCase
     public function testWithRoute(): void
     {
         $expected = '<a class="rowlink-skip" href="/?id=1">10</a>';
-        $actual = $this->renderCell(
+        $actual = $this->renderCellLink(
             value: 10,
             entity: ['id' => 1],
             title: '',
@@ -69,7 +69,7 @@ final class TableCellTraitTest extends KernelServiceTestCase
     public function testWithRouteAndTitle(): void
     {
         $expected = '<a class="rowlink-skip" href="/?id=1" title="My Title">10</a>';
-        $actual = $this->renderCell(
+        $actual = $this->renderCellLink(
             value: 10,
             entity: ['id' => 1],
             title: 'My Title',

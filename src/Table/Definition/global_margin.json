@@ -8,7 +8,7 @@
         "title": "globalmargin.fields.minimum",
         "default": true,
         "searchable": true,
-        "fieldFormatter": "formatAmount",
+        "fieldFormatter": "FormatUtils::formatAmount",
         "class": "text-currency w-35",
         "numeric": true
     },
@@ -16,7 +16,7 @@
         "field": "maximum",
         "title": "globalmargin.fields.maximum",
         "searchable": true,
-        "fieldFormatter": "formatAmount",
+        "fieldFormatter": "FormatUtils::formatAmount",
         "class": "text-currency w-35",
         "numeric": true
     },
@@ -25,7 +25,7 @@
         "title": "globalmargin.fields.delta",
         "sortable": false,
         "searchable": false,
-        "fieldFormatter": "formatAmount",
+        "fieldFormatter": "FormatUtils::formatAmount",
         "class": "text-currency w-35",
         "numeric": true
     },
@@ -33,7 +33,7 @@
         "field": "margin",
         "title": "globalmargin.fields.margin",
         "searchable": true,
-        "fieldFormatter": "formatPercent",
+        "fieldFormatter": "FormatUtils::formatPercent",
         "class": "text-currency w-30",
         "numeric": true
     }

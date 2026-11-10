@@ -411,23 +411,13 @@ class CalculationRepository extends AbstractRepository
 
             ->having('item_count > 1');
         $this->updateOrder($builder, $orderColumn, $orderDirection);
-        $items = $builder->getQuery()->getArrayResult();
+        // add identifier order
+        if ('id' !== $orderColumn) {
+            $this->updateOrder($builder, 'id', \SortDirection::Descending);
+        }
 
-        /** @phpstan-var CalculationItemType[] $result */
         $result = [];
-
-        /** @phpstan-var array{
-         *      calculation_id: int,
-         *      calculation_date: DatePoint,
-         *      calculation_customer: string,
-         *      calculation_description: string,
-         *      calculation_state_id: int,
-         *      calculation_state: string,
-         *      calculation_color: string,
-         *      calculation_editable: bool,
-         *      item_description: string,
-         *      item_count: int
-         * } $item */
+        $items = $builder->getQuery()->getArrayResult();
         foreach ($items as $item) {
             $this->updateResult($result, $item, [
                 'description' => $item['item_description'],
@@ -478,26 +468,13 @@ class CalculationRepository extends AbstractRepository
             ->having('item_price = 0')
             ->orHaving('item_quantity = 0');
         $this->updateOrder($builder, $orderColumn, $orderDirection);
-        $items = $builder->getQuery()->getArrayResult();
+        // add identifier order
+        if ('id' !== $orderColumn) {
+            $this->updateOrder($builder, 'id', \SortDirection::Descending);
+        }
 
-        /** @phpstan-var CalculationItemType[] $result */
         $result = [];
-
-        /** @phpstan-var array{
-         *      calculation_id: int,
-         *      calculation_date: DatePoint,
-         *      calculation_customer: string,
-         *      calculation_description: string,
-         *      calculation_state_id: int,
-         *      calculation_state: string,
-         *      calculation_color: string,
-         *      calculation_editable: bool,
-         *      item_description: string,
-         *      item_count: int,
-         *      item_description: string,
-         *      item_quantity: float,
-         *      item_price: float,
-         * } $item */
+        $items = $builder->getQuery()->getArrayResult();
         foreach ($items as $item) {
             $this->updateResult($result, $item, [
                 'description' => $item['item_description'],
@@ -638,6 +615,7 @@ class CalculationRepository extends AbstractRepository
         return match ($field) {
             'date' => \sprintf("DATE_FORMAT(%s.%s, '%%d.%%m.%%Y')", $alias, $field),
             'overallMargin' => $this->getOverallMargin($alias),
+            'stateId',
             'state.id' => parent::getSearchFields('id', self::STATE_ALIAS),
             'stateCode',
             'state.code' => parent::getSearchFields('code', self::STATE_ALIAS),

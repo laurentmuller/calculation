@@ -75,7 +75,14 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     /** The image file. NB: This is not a mapped field of entity metadata, just a simple property. */
     #[Assert\Image(maxSize: 10_485_760)]
     #[Vich\UploadableField(mapping: 'user_image', fileNameProperty: 'imageName')]
-    public ?File $imageFile = null;
+    public ?File $imageFile = null {
+        set {
+            $this->imageFile = $value;
+            if ($value instanceof File) {
+                $this->updatedAt = DateUtils::createDatePoint();
+            }
+        }
+    }
 
     /** The image file name. */
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
@@ -269,16 +276,10 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
 
     /**
      * Sets image file.
-     *
-     * @param ?File $imageFile the file
-     * @param bool  $update    true to update the modification date
      */
-    public function withImageFile(?File $imageFile = null, bool $update = true): self
+    public function withImageFile(?File $imageFile = null): self
     {
         $this->imageFile = $imageFile;
-        if ($update) {
-            $this->updatedAt = DateUtils::createDatePoint();
-        }
 
         return $this;
     }

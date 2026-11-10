@@ -23,7 +23,7 @@
         "field": "price",
         "title": "product.fields.price",
         "class": "text-currency",
-        "fieldFormatter": "formatAmount",
+        "fieldFormatter": "FormatUtils::formatAmount",
         "styleFormatter": "styleProductPrice",
         "numeric": true
     },

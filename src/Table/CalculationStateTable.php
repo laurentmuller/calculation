@@ -58,7 +58,7 @@ class CalculationStateTable extends AbstractEntityTable implements ServiceSubscr
     {
         $route = $this->isGrantedList(Calculation::class) ? 'calculation_index' : false;
 
-        return $this->renderCell(
+        return $this->renderCellLink(
             value: $value,
             entity: $entity,
             title: 'calculationstate.list.calculation_title',

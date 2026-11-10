@@ -182,15 +182,16 @@ html[data-bs-theme=dark] .bootstrap-table .custom-item.table-primary hr {
 
 /* custom view header */
 .custom-view-header {
-    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    column-gap: 0.5rem;
     font-weight: 600;
     overflow: hidden;
 }
 
 .custom-view-header a.item-link {
-    display: inline-block;
-    width: 100% !important;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    width: 100%;
 }

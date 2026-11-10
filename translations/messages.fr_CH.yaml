@@ -932,6 +932,7 @@ password:
     email: Le mot de passe ne doit pas être une adresse e-mail
     compromisedPassword: Le mot de passe ne doit pas être compromis
     strengthLevel: Force du mot de passe
+    strengthLevel_label: 'Force du mot de passe : %label% (%level%/4)'
 pivot:
     title: Tableau croisé dynamique
     line: Ligne

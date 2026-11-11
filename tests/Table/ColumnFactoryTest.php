@@ -15,12 +15,24 @@ namespace App\Tests\Table;
 
 use App\Repository\GlobalMarginRepository;
 use App\Service\IndexService;
-use App\Table\ColumnLoader;
+use App\Table\ColumnFactory;
 use App\Table\GlobalMarginTable;
 use PHPUnit\Framework\TestCase;
 
-final class ColumnLoaderTest extends TestCase
+final class ColumnFactoryTest extends TestCase
 {
+    public function testCreateColumnAction(): void
+    {
+        $factory = new ColumnFactory();
+        $column = $factory->createColumnAction();
+        self::assertSame('id', $column->field);
+        self::assertSame('action', $column->alias);
+        self::assertFalse($column->sortable);
+        self::assertFalse($column->searchable);
+        self::assertSame('renderActions', $column->cellFormatter);
+        self::assertSame('actions rowlink-skip d-print-none', $column->class);
+    }
+
     public function testFromJsonEmpty(): void
     {
         $path = __DIR__ . '/../files/json/columns_empty.json';
@@ -28,8 +40,8 @@ final class ColumnLoaderTest extends TestCase
         self::expectException(\InvalidArgumentException::class);
         self::expectExceptionMessageIsOrContains($message);
         $table = $this->createTable();
-        $loader = new ColumnLoader();
-        $loader->load($table, $path);
+        $factory = new ColumnFactory();
+        $factory->load($table, $path);
     }
 
     public function testFromJsonInvalidFile(): void
@@ -38,8 +50,8 @@ final class ColumnLoaderTest extends TestCase
         self::expectException(\InvalidArgumentException::class);
         self::expectExceptionMessageIsOrContains('Unable to decode value.');
         $table = $this->createTable();
-        $loader = new ColumnLoader();
-        $loader->load($table, $path);
+        $factory = new ColumnFactory();
+        $factory->load($table, $path);
     }
 
     public function testFromJsonInvalidFormatter(): void
@@ -48,16 +60,16 @@ final class ColumnLoaderTest extends TestCase
         self::expectExceptionMessageIsOrContains('Unable set the property "fieldFormatter".');
         $path = __DIR__ . '/../files/json/columns_invalid_formatter.json';
         $table = $this->createTable();
-        $loader = new ColumnLoader();
-        $loader->load($table, $path);
+        $factory = new ColumnFactory();
+        $factory->load($table, $path);
     }
 
     public function testFromJsonValid(): void
     {
         $table = $this->createTable();
         $path = __DIR__ . '/../files/json/columns_default.json';
-        $loader = new ColumnLoader();
-        $columns = $loader->load($table, $path);
+        $factory = new ColumnFactory();
+        $columns = $factory->load($table, $path);
         self::assertCount(5, $columns);
     }
 

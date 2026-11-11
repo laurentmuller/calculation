@@ -51,17 +51,6 @@ final class ColumnTest extends TestCase
         self::assertSame('alias', $actual['field']);
     }
 
-    public function testCreateColumnAction(): void
-    {
-        $column = Column::createColumnAction();
-        self::assertSame('id', $column->field);
-        self::assertSame('action', $column->alias);
-        self::assertFalse($column->sortable);
-        self::assertFalse($column->searchable);
-        self::assertSame('renderActions', $column->cellFormatter);
-        self::assertSame('actions rowlink-skip d-print-none', $column->class);
-    }
-
     public function testDefaultProperties(): void
     {
         $column = Column::instance();

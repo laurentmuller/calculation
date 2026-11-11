@@ -11,7 +11,7 @@ Ce programme est distribué avec une [licence propriétaire](LICENSE.md) et une
 
 ## Versions
 
-[![Application](https://img.shields.io/badge/Application-3.2.0-blue)](https://github.com/laurentmuller/calculation)
+[![Application](https://img.shields.io/badge/Application-3.2.1-blue)](https://github.com/laurentmuller/calculation)
 [![Symfony](https://img.shields.io/badge/Symfony-8.1.11-informational?logo=symfony)](https://symfony.com)
 [![PHP](https://img.shields.io/badge/PHP-8.4.27-informational?logo=php)](https://www.php.net)
 [![MariaDB](https://img.shields.io/badge/mariadb-10.11.19-informational?logo=mariadb)](https://mariadb.org/)

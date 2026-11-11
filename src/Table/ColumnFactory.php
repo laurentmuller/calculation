@@ -26,7 +26,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
  *
  * @phpstan-type ColumnType = array{order?: string, ...}
  */
-class ColumnLoader
+class ColumnFactory
 {
     /** The mapping of class names to their respective classes. */
     private const array CLASSES_MAPPING = [
@@ -44,14 +44,27 @@ class ColumnLoader
     private static ?PropertyAccessorInterface $accessor = null;
 
     /**
+     * Create the action column.
+     */
+    public function createColumnAction(): Column
+    {
+        return Column::instance('id')
+            ->withAlias('action')
+            ->withSortable(false)
+            ->withSearchable(false)
+            ->withCellFormatter('renderActions')
+            ->withClass('actions rowlink-skip d-print-none');
+    }
+
+    /**
      * Creates columns from the given JSON file definitions.
      *
      * @param AbstractTable $parent the table owner
      * @param string        $path   the path to the JSON file definitions
      *
-     * @return Column[] the column definitions
+     * @return Column[] the columns
      *
-     * @throws \InvalidArgumentException if the given file contains no definition, or if columns cannot be loaded
+     * @throws \InvalidArgumentException if the given file contains no definition, or if columns cannot be created
      */
     public function load(AbstractTable $parent, string $path): array
     {

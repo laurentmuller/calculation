@@ -198,10 +198,10 @@ abstract class AbstractTable
      */
     private function createColumns(): array
     {
-        $loader = new ColumnLoader();
+        $factory = new ColumnFactory();
         $path = $this->getColumnDefinitions();
-        $columns = $loader->load($this, $path);
-        $columns[] = Column::createColumnAction();
+        $columns = $factory->load($this, $path);
+        $columns[] = $factory->createColumnAction();
 
         return $columns;
     }

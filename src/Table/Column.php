@@ -133,19 +133,6 @@ class Column implements \Stringable
     }
 
     /**
-     * Create the action column.
-     */
-    public static function createColumnAction(): self
-    {
-        return self::instance('id')
-            ->withAlias('action')
-            ->withSortable(false)
-            ->withSearchable(false)
-            ->withCellFormatter('renderActions')
-            ->withClass('actions rowlink-skip d-print-none');
-    }
-
-    /**
      * Create a new instance with the given field.
      */
     public static function instance(string $field = ''): self

@@ -1,7 +1,7 @@
 @import 'style.css';
 
 :root {
-    --spy-content-height: 308px;
+    --spy-content-height: 340px;
 }
 
 .about table {

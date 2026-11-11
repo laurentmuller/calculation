@@ -9,7 +9,6 @@
          * -------------- jQuery Extensions --------------
          */
         $.fn.extend({
-
             /**
              * Finds the image input container within the current element.
              */
@@ -17,7 +16,6 @@
                 const $parent = $(this).parents('.image-input');
                 return $parent.findExists('.image-input-preview');
             },
-
             /**
              * Initialize an image input.
              * @param {jQuery} [$delete] the delete checkbox
@@ -30,7 +28,7 @@
                         if ($delete && $delete.length) {
                             const source = $that.data('src') || '';
                             const target = $that.parents('.form-group').find('img').attr('src') || '';
-                            $delete.setChecked(source !== target);
+                            $delete.val(source !== target ? 1 : 0);
                         }
                     });
                 });

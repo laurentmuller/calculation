@@ -261,7 +261,7 @@ abstract class AbstractEntityTable extends AbstractTable
     {
         return \array_map(
             static fn (Column $c): string => $c->field,
-            \array_filter(
+            $this->getFiltered(
                 $this->getColumns(),
                 static fn (Column $c): bool => $c->searchable
             )

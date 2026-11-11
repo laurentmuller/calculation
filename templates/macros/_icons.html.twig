@@ -164,11 +164,11 @@
         inline: true) -}}
 {%- endmacro button_ok %}
 
-{% macro button_cancel(href, text = 'common.button_cancel', class = 'btn btn-cancel btn-form btn-secondary') -%}
+{% macro button_cancel(href, text = 'common.button_cancel', class = 'btn btn-cancel btn-form btn-secondary', icon = 'fa-solid fa-xmark') -%}
     {{- _self.link(
         href: href,
         text: text,
-        icon: 'fa-solid fa-xmark',
+        icon: icon,
         class: class,
         inline: true) -}}
 {%- endmacro button_cancel %}

@@ -29,7 +29,7 @@ abstract class AbstractTable
     /**
      * The column definitions.
      *
-     * @var Column[]|null
+     * @var array<int, Column>|null
      */
     private ?array $columns = null;
 

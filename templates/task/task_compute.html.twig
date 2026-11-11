@@ -33,7 +33,11 @@
 {# actions #}
 {% block actions_form -%}
 {% if form.vars['simple_widget'] %}
-    {{ button_cancel(cancel_path, 'common.button_back_list') }}
+    {{ button_cancel(
+        href: cancel_path,
+        text: 'common.button_back_list',
+        icon: 'fa-solid fa-chevron-left',
+        class: 'btn btn-cancel btn-form btn-primary') }}
 {% else %}
     {{ homepage() }}
     {{ sitemap() }}

@@ -70,6 +70,10 @@
     </table>
 {% endmacro output_group_configs %}
 
+{% macro output_module_title(title) -%}
+    <div class="sticky-top px-2 py-1 fw-bold bg-secondary text-white">{{ title }}</div>
+{%- endmacro output_module_title %}
+
 {% macro output_entry_attr(entry, master = null) -%}
     {{- html_attr({
         colspan: master ? null : 2,
@@ -90,26 +94,32 @@
 {# content #}
 <div class="about">
     {{ headerLink('php.net', info.version, 'php') }}
-    <div class="row g-2">
-        <div class="col-md-4 col-lg-2 col-12 php-list-spy border-end d-print-none">
-            <table class="table table-sm table-hover">
-                <tbody>
-                {% for module in info.modules %}
-                    {{ _self.output_module_entry(module) }}
-                {% endfor %}
-                </tbody>
-            </table>
+    <div class="row g-0">
+        <div class="col-md-4 col-lg-2 col-12 position-relative border-end d-print-none">
+            {{ _self.output_module_title('Modules') }}
+            <div class="php-list-spy">
+                <table class="table table-sm table-hover">
+                    <tbody>
+                    {% for module in info.modules %}
+                        {{ _self.output_module_entry(module) }}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-        {%- set attrs = {
-            class: 'col-md-8 col-lg-10 col-12 php-content-spy php-spy-content',
-            'data-bs-target': '.php-list-spy',
-            'data-bs-spy': 'scroll',
-            tabindex: 0,
-        } -%}
-        <div {{ html_attr(attrs) }}>
-            {% for module in info.modules %}
-                {{ _self.output_module_content(module) }}
-            {% endfor %}
+        <div class="col-md-8 col-lg-10 col-12 position-relative">
+            {{ _self.output_module_title('Configuration') }}
+            {%- set attrs = {
+                class: 'php-content-spy ps-1',
+                'data-bs-target': '.php-list-spy',
+                'data-bs-spy': 'scroll',
+                tabindex: 0,
+            } -%}
+            <div {{ html_attr(attrs) }}>
+                {% for module in info.modules %}
+                    {{ _self.output_module_content(module) }}
+                {% endfor %}
+            </div>
         </div>
     </div>
 </div>

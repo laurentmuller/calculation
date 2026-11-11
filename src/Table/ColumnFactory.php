@@ -62,7 +62,7 @@ class ColumnFactory
      * @param AbstractTable $parent the table owner
      * @param string        $path   the path to the JSON file definitions
      *
-     * @return Column[] the columns
+     * @return non-empty-array<int, Column> the columns
      *
      * @throws \InvalidArgumentException if the given file contains no definition, or if columns cannot be created
      */
@@ -84,8 +84,12 @@ class ColumnFactory
     {
         $values = \explode('::', $value, 2);
         $owner = self::CLASSES_MAPPING[$values[0]] ?? null;
+        $callable = null !== $owner ? [$owner, $values[1]] : [$parent, $value];
+        if (!\is_callable($callable)) {
+            throw new \ValueError(\sprintf('Invalid callable: "%s".', $value));
+        }
 
-        return null !== $owner ? [$owner, $values[1]] : [$parent, $value];
+        return $callable;
     }
 
     private function getAccessor(): PropertyAccessorInterface
@@ -104,18 +108,11 @@ class ColumnFactory
         $accessor = $this->getAccessor();
         foreach ($definition as $key => $value) {
             try {
-                if (self::FIELD_ORDER === $key) {
-                    $accessor->setValue($column, $key, SortMode::from($value));
-                    continue;
-                }
-                if (self::FIELD_FORMATTER === $key) {
-                    $callable = $this->createCallable($parent, $value);
-                    if (!\is_callable($callable)) {
-                        throw new \ValueError(\sprintf('Invalid callable: "%s".', $value));
-                    }
-                    $accessor->setValue($column, $key, $callable);
-                    continue;
-                }
+                $value = match ($key) {
+                    self::FIELD_ORDER => SortMode::from($value),
+                    self::FIELD_FORMATTER => $this->createCallable($parent, $value),
+                    default => $value
+                };
                 $accessor->setValue($column, $key, $value);
             } catch (\ValueError|ExceptionInterface $e) {
                 throw new \InvalidArgumentException(\sprintf('Unable set the property "%s".', $key), $e->getCode(), $e);

@@ -121,11 +121,11 @@ class TwigSpaceCommand
         foreach (\array_reverse($matches) as $match) {
             $offset = $match[1] + 1;
             $length = \strlen($match[0]) - 2;
-            $replace = \sprintf('<bg=red>%s</>', \str_repeat('·', $length));
+            $replace = \sprintf('<fg=red>%s</>', \str_repeat('·', $length));
             $line = \substr_replace($line, $replace, $offset, $length);
         }
 
-        return \sprintf('  - Line %3d, Count %d: %s', $key + 1, \count($matches), \trim($line));
+        return \sprintf('- Line %3d, Count %d: %s', $key + 1, \count($matches), \trim($line));
     }
 
     private function outputContent(SymfonyStyle $io, string $content): void

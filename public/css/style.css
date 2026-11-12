@@ -689,6 +689,7 @@ a.disabled {
     min-width: 8rem;
 }
 
+.dropdown-item:has(.badge),
 .dropdown-item-checked-right {
     display: inline-flex;
     align-items: center;

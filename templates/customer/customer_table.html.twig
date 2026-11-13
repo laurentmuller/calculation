@@ -4,6 +4,7 @@
 {%- set title = 'customer.list.title' -%}
 {%- set title_icon = ICON_CUSTOMER -%}
 {%- set object_type = ENTITY_CUSTOMER -%}
+{%- set attributes = attributes|default({})|merge({'allow-xxl': true}) -%}
 
 {% block header_actions -%}
 {% if allow_add %}

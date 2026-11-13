@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace App\Doctrine;
 
+use Doctrine\Bundle\DoctrineBundle\Attribute\AsDbalType;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 
 /**
- * Type that maps an SQL DOUBLE to a PHP float with 2 decimals and 0.00 as the default value.
+ * Type that maps an SQL DOUBLE PRECISION to a PHP float with 2 decimals and 0.00 as the default value.
  */
+#[AsDbalType(name: self::NAME)]
 class FixedFloatType extends Type
 {
     public const string NAME = 'fixed_float';
@@ -30,23 +32,20 @@ class FixedFloatType extends Type
     }
 
     #[\Override]
-    public function convertToPHPValue($value, AbstractPlatform $platform): float
+    public function convertToPHPValue(mixed $value, AbstractPlatform $platform): float
     {
         return $this->convertToFloat($value);
-    }
-
-    public function getName(): string
-    {
-        return self::NAME;
     }
 
     #[\Override]
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         $column['scale'] = 2;
-        $declaration = $platform->getFloatDeclarationSQL($column);
+        $column['default'] = 0.0;
+        $floatDeclaration = $platform->getFloatDeclarationSQL($column);
+        $defaultDeclaration = $platform->getDefaultValueDeclarationSQL($column);
 
-        return \sprintf("%s DEFAULT '0'", $declaration);
+        return $floatDeclaration . $defaultDeclaration;
     }
 
     private function convertToFloat(mixed $value): float

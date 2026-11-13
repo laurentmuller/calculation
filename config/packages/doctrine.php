@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use App\Doctrine\CalculationBelowFilter;
-use App\Doctrine\FixedFloatType;
 use App\Doctrine\WebmasterFilter;
 
 return App::config([
@@ -22,9 +21,6 @@ return App::config([
         'dbal' => [
             'url' => '%env(resolve:DATABASE_URL)%',
             'profiling_collect_backtrace' => '%kernel.debug%',
-            'types' => [
-                FixedFloatType::NAME => FixedFloatType::class,
-            ],
         ],
         'orm' => [
             'naming_strategy' => 'doctrine.orm.naming_strategy.underscore_number_aware',
@@ -33,7 +29,6 @@ return App::config([
                     'type' => 'attribute',
                     'dir' => '%kernel.project_dir%/src/Entity',
                     'prefix' => 'App\Entity',
-                    'alias' => 'App',
                 ],
             ],
             'filters' => [

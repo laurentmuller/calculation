@@ -23,6 +23,7 @@ use App\Interfaces\EnumSortableInterface;
 use App\Interfaces\UserInterface;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
+use Symfony\Bridge\Doctrine\Types\DatePointType;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Event\PreSetDataEvent;
 use Symfony\Component\Form\Event\PreSubmitEvent;
@@ -223,7 +224,7 @@ class FormHelper
      */
     public function addDatePointType(): self
     {
-        return $this->updateOption('input', 'date_point')
+        return $this->updateOption('input', DatePointType::NAME)
             ->add(DateType::class);
     }
 

@@ -9,6 +9,7 @@
     'data-expand': 'common.expand'|trans} -%}
 {# container_class #}
 {% block container_class 'container mb-5' %}
+{% block page_content_class navigation_show ? '' : ' page-content-center' %}
 {# body #}
 {% block body -%}
     {% if navigation_show %}

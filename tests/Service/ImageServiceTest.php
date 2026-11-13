@@ -27,6 +27,22 @@ final class ImageServiceTest extends TestCase
         self::assertNonNegative($service->allocate(255, 255, 255));
     }
 
+    public function testAllocateAlpha(): void
+    {
+        $service = $this->createService();
+        $alpha = $service->allocateAlpha(255, 255, 255, 127);
+        self::assertNonNegative($alpha);
+    }
+
+    public function testAlphaBlending(): void
+    {
+        $service = $this->createService();
+        $actual = $service->alphaBlending(false);
+        self::assertTrue($actual);
+        $actual = $service->alphaBlending(true);
+        self::assertTrue($actual);
+    }
+
     public function testFill(): void
     {
         $service = $this->createService();
@@ -64,6 +80,13 @@ final class ImageServiceTest extends TestCase
         ImageService::fromFile($file);
     }
 
+    public function testFromGdImage(): void
+    {
+        $image = \imagecreatetruecolor(100, 100);
+        $service = ImageService::fromGdImage($image);
+        self::assertSame($image, $service->getImage());
+    }
+
     public function testFromTrueColor(): void
     {
         $service = $this->createService();
@@ -82,6 +105,13 @@ final class ImageServiceTest extends TestCase
         self::assertTrue($service->line(0, 0, 10, 15, $black));
     }
 
+    public function testPaletteToTrueColor(): void
+    {
+        $service = $this->createService();
+        $actual = $service->paletteToTrueColor();
+        self::assertTrue($actual);
+    }
+
     public function testRectangle(): void
     {
         $service = $this->createService();
@@ -89,11 +119,39 @@ final class ImageServiceTest extends TestCase
         self::assertTrue($service->rectangle(0, 0, 10, 15, $black));
     }
 
+    public function testRGBA(): void
+    {
+        $path = __DIR__ . '/../files/images/image_rgba.png';
+        $service = ImageService::fromFile($path);
+        $rgba = $service->getRGBA(0, 0);
+        self::assertSame(254, $rgba['red']);
+        self::assertSame(254, $rgba['green']);
+        self::assertSame(254, $rgba['blue']);
+        self::assertSame(127, $rgba['alpha']);
+    }
+
+    public function testSaveAlpha(): void
+    {
+        $service = $this->createService();
+        $actual = $service->saveAlpha(false);
+        self::assertTrue($actual);
+        $actual = $service->saveAlpha(true);
+        self::assertTrue($actual);
+    }
+
     public function testSetPixel(): void
     {
         $service = $this->createService();
         $black = $service->allocateBlack();
         self::assertTrue($service->setPixel(1, 1, $black));
+    }
+
+    public function testSize(): void
+    {
+        $path = __DIR__ . '/../files/images/example.png';
+        $service = ImageService::fromFile($path);
+        self::assertSame(124, $service->getWidth());
+        self::assertSame(147, $service->getHeight());
     }
 
     public function testTtfBox(): void

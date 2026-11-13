@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Enums\ImageExtension;
+use BaconQrCode\Renderer\Color\Alpha;
 
 /**
  * Service to manipulate an image.
@@ -39,6 +40,7 @@ class ImageService
         foreach ($this->colors as $color) {
             \imagecolordeallocate($this->image, $color);
         }
+        $this->colors = [];
         \imagedestroy($this->image);
     }
 
@@ -61,6 +63,24 @@ class ImageService
     }
 
     /**
+     * Allocate a color for an image.
+     *
+     * @param int<0, 255> $red   value of red component
+     * @param int<0, 255> $green value of green component
+     * @param int<0, 255> $blue  value of blue component
+     * @param int<0, 127> $alpha A value between 0 and 127. 0 indicates completely opaque while 127 indicates
+     *                           completely transparent.
+     *
+     * @return int the color identifier
+     */
+    public function allocateAlpha(int $red, int $green, int $blue, int $alpha): int
+    {
+        $key = \sprintf('%d-%d-%d-%d', $red, $green, $blue, $alpha);
+
+        return $this->colors[$key] ??= (int) \imagecolorallocatealpha($this->image, $red, $green, $blue, $alpha);
+    }
+
+    /**
      * Allocate the black color (red: 0, green: 0, blue: 0) for this image.
      *
      * @return int the color identifier
@@ -78,6 +98,19 @@ class ImageService
     public function allocateWhite(): int
     {
         return $this->allocate(255, 255, 255);
+    }
+
+    /**
+     * Set the blending mode.
+     *
+     * @param bool $enable Whether to enable the blending mode or not. On true color images the default value is true
+     *                     otherwise the default value is false
+     *
+     * @return bool true on success or false on failure
+     */
+    public function alphaBlending(bool $enable): bool
+    {
+        return \imagealphablending($this->image, $enable);
     }
 
     /**
@@ -144,6 +177,14 @@ class ImageService
     }
 
     /**
+     * Create a new image handler from a GD image.
+     */
+    public static function fromGdImage(\GdImage $image): self
+    {
+        return new self($image);
+    }
+
+    /**
      * Create a new true color image handler.
      *
      * @param positive-int $width  the image width
@@ -151,7 +192,6 @@ class ImageService
      */
     public static function fromTrueColor(int $width, int $height): self
     {
-        /** @var \GdImage $image */
         $image = \imagecreatetruecolor($width, $height);
 
         return new self($image);
@@ -166,11 +206,47 @@ class ImageService
     }
 
     /**
+     * Gets the image height.
+     *
+     * @return positive-int the image height
+     */
+    public function getHeight(): int
+    {
+        return \imagesy($this->image);
+    }
+
+    /**
      * Gets the underlying image.
      */
     public function getImage(): \GdImage
     {
         return $this->image;
+    }
+
+    /**
+     * Gets the RGBA color at the given position.
+     *
+     * @param int $x the x-coordinate of the point
+     * @param int $y the y-coordinate of the point
+     *
+     * @return array{red: int<0, 255>, green: int<0, 255>, blue: int<0, 255>, alpha: int<0, 127>}
+     */
+    public function getRGBA(int $x, int $y): array
+    {
+        /** @var int<0, max> $color */
+        $color = \imagecolorat($this->image, $x, $y);
+
+        return \imagecolorsforindex($this->image, $color);
+    }
+
+    /**
+     * Gets the image width.
+     *
+     * @return positive-int the image width
+     */
+    public function getWidth(): int
+    {
+        return \imagesx($this->image);
     }
 
     /**
@@ -189,6 +265,17 @@ class ImageService
     public function line(int $x1, int $y1, int $x2, int $y2, int $color): bool
     {
         return \imageline($this->image, $x1, $y1, $x2, $y2, $color);
+    }
+
+    /**
+     * Converts a palette based image to true color.
+     *
+     * @return bool true if the convertion was complete, or if the underlaying image already is a true color
+     *              image, otherwise false
+     */
+    public function paletteToTrueColor(): bool
+    {
+        return \imagepalettetotruecolor($this->image);
     }
 
     /**
@@ -212,6 +299,19 @@ class ImageService
             y2: $y + $height,
             color: $color
         );
+    }
+
+    /**
+     * Set the flag to save full alpha channel information (as opposed to single-color transparency)
+     * when saving PNG images.
+     *
+     * @param bool $enable Whether to save the alpha channel or not. Default to false.
+     *
+     * @return bool true on success or false on failure
+     */
+    public function saveAlpha(bool $enable): bool
+    {
+        return \imagesavealpha($this->image, $enable);
     }
 
     /**

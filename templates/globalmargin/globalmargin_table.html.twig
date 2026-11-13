@@ -4,7 +4,7 @@
 {%- set title = 'globalmargin.list.title' -%}
 {%- set title_icon = ICON_GLOBAL_MARGIN -%}
 {%- set object_type = ENTITY_GLOBAL_MARGIN -%}
-{% block card_container_class ' col col-xl-8 offset-xl-2' %}
+{%- set attributes = attributes|default({})|merge({'allow-xxl': true}) -%}
 {# display mode #}
 {% block display_mode %}
 {% if allow_edit -%}

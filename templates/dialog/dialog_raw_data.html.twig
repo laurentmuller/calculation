@@ -17,7 +17,7 @@
                     {% if description ?? false %}
                         <span class="form-label">{{ description }}</span>
                     {% endif %}
-                    <div class="border pre-scrollable pre-scrollable-highlight-php scrollbar-thin font-monospace">
+                    <div class="border pre-scrollable pre-scrollable-highlight-php font-monospace">
                         {{- raw_data|var_export_php(raw_data_id) -}}
                     </div>
                 {%- else -%}

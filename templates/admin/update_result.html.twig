@@ -43,7 +43,7 @@
                     {{ modal_title(id: 'modal-result-title', title_icon: title_icon, title_text: title) }}
                     <div class="modal-body">
                         <span class="form-label">{{ 'calculation.list.title'|trans }}</span>
-                        <div class="overflow-auto table-fixed-header scrollbar-thin border">
+                        <div class="overflow-auto table-fixed-header border">
                             <table class="table table-hover table-fixed-header table-no-end-line table-sm mb-0">
                                 <thead>
                                 <tr>
@@ -61,8 +61,8 @@
                                     <tr>
                                         <td class="text-id text-border state-border-{{ value.stateId }}">{{ value.id|identifier }}</td>
                                         <td class="text-date">{{ value.date|locale_date }}</td>
-                                        <td class="mv-150 text-truncate" style="max-width: 150px;">{{ value.customer }}</td>
-                                        <td class="mv-150 text-truncate" style="max-width: 150px;">{{ value.description }}</td>
+                                        <td class="mv-150 text-truncate">{{ value.customer }}</td>
+                                        <td class="mv-150 text-truncate">{{ value.description }}</td>
                                         <td class="text-currency">{{ value.old_value|amount }}</td>
                                         <td class="text-currency">{{ value.new_value|amount }}</td>
                                         <td class="text-currency">{{ value.delta|amount }}</td>

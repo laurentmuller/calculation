@@ -45,6 +45,12 @@
     ],
     "screenshots": [
         {
+            "src": "images/screenshots/home_page.png",
+            "sizes": "1296x876",
+            "type": "image/png",
+            "form_factor": "wide"
+        },
+        {
             "src": "images/screenshots/home_light.png",
             "sizes": "1296x876",
             "type": "image/png",

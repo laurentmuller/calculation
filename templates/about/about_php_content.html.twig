@@ -70,8 +70,8 @@
     </table>
 {% endmacro output_group_configs %}
 
-{% macro output_module_title(title) -%}
-    <div class="sticky-top px-2 py-1 fw-bold bg-secondary text-white">{{ title }}</div>
+{% macro output_module_title(title, class) -%}
+    <div class="sticky-top px-2 py-1 card-header {{ class }}">{{ title }}</div>
 {%- endmacro output_module_title %}
 
 {% macro output_entry_attr(entry, master = null) -%}
@@ -96,7 +96,7 @@
     {{ headerLink('php.net', info.version, 'php') }}
     <div class="row g-0">
         <div class="col-md-4 col-lg-2 col-12 position-relative border-end d-print-none">
-            {{ _self.output_module_title('Modules') }}
+            {{ _self.output_module_title('Module', 'border-start') }}
             <div class="php-list-spy">
                 <table class="table table-sm table-hover">
                     <tbody>
@@ -108,7 +108,7 @@
             </div>
         </div>
         <div class="col-md-8 col-lg-10 col-12 position-relative">
-            {{ _self.output_module_title('Configuration') }}
+            {{ _self.output_module_title('Configuration', 'border-end') }}
             {%- set attrs = {
                 class: 'php-content-spy ps-1',
                 'data-bs-target': '.php-list-spy',

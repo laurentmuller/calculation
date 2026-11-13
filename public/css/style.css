@@ -889,10 +889,6 @@ body.statusbar-show .grecaptcha-badge {
     scrollbar-width: none;
 }
 
-.scrollbar-thin {
-    scrollbar-width: thin;
-}
-
 /* help */
 #help-search {
     width: 8rem;

@@ -10,7 +10,7 @@
 {%- endmacro button_view %}
 {% macro button_counter(value, selection) %}
 <li>
-    <button class="dropdown-item dropdown-item-counter{% if value == selection %} dropdown-item-checked-right{% endif %}" data-value="{{ value }}" >
+    <button type="button" class="dropdown-item dropdown-item-counter{% if value == selection %} dropdown-item-checked-right{% endif %}" data-value="{{ value }}" >
         {{- 'counters.calculations'|trans({count: value}) -}}
     </button>
 </li>
@@ -32,7 +32,7 @@
                 <i class="fa-solid fa-pen-to-square"></i>
             </a>
         {%- endif -%}
-        <button class="btn btn-outline-secondary dropdown-toggle" type="button" title="{{- 'common.actions'|trans -}}" data-bs-toggle="dropdown" aria-expanded="false">
+        <button type="button" class="btn btn-outline-secondary dropdown-toggle" title="{{- 'common.actions'|trans -}}" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa-solid fa-bars"></i>
         </button>
         <ul class="dropdown-menu dropdown-menu-end">

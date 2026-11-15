@@ -15,6 +15,7 @@ namespace App\Tests\Controller;
 
 use App\Tests\Web\AuthenticateWebTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -29,6 +30,8 @@ abstract class ControllerTestCase extends AuthenticateWebTestCase
         self::ROLE_ADMIN,
         self::ROLE_WEBMASTER,
     ];
+
+    protected bool $mustCheckButtons = false;
 
     /**
      * Gets the routes to test.
@@ -69,6 +72,31 @@ abstract class ControllerTestCase extends AuthenticateWebTestCase
      */
     protected function addEntities(): void
     {
+    }
+
+    protected function checkButtons(Crawler $crawler, string $url): void
+    {
+        $buttons = $crawler->filter('button');
+        if (0 === $buttons->count()) {
+            return;
+        }
+
+        foreach ($buttons as $button) {
+            if (!$button->hasAttributes()) {
+                self::fail(\sprintf('No button attribute found in "%s".', $url));
+            }
+            $type = $button->attributes->getNamedItem('type');
+            if (!$type instanceof \DOMNode) {
+                self::fail(\sprintf('No button type attribute found in "%s".', $url));
+            }
+            $value = $type->nodeValue;
+            if (!\is_string($value)) {
+                self::fail(\sprintf('No button value found in "%s".', $url));
+            }
+            if (!\in_array(\strtolower($value), ['submit', 'reset', 'button'], true)) {
+                self::fail(\sprintf('Invalid button type "%s" found in "%s".', $value, $url));
+            }
+        }
     }
 
     protected function checkForm(
@@ -133,14 +161,14 @@ abstract class ControllerTestCase extends AuthenticateWebTestCase
         }
 
         if ($xmlHttpRequest) {
-            $this->client->xmlHttpRequest(
+            $crawler = $this->client->xmlHttpRequest(
                 method: $method,
                 uri: $url,
                 parameters: $parameters,
                 content: $content
             );
         } else {
-            $this->client->request(
+            $crawler = $this->client->request(
                 method: $method,
                 uri: $url,
                 parameters: $parameters,
@@ -149,6 +177,10 @@ abstract class ControllerTestCase extends AuthenticateWebTestCase
         }
         if ($outputBuffer) {
             \ob_get_clean();
+        }
+
+        if ($this->mustCheckButtons) {
+            $this->checkButtons($crawler, $url);
         }
 
         return $this->checkResponse($url, $username, $expected);

@@ -16,23 +16,11 @@ namespace App\Tests\Doctrine;
 use App\Doctrine\FixedFloatType;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Platforms\MariaDBPlatform;
-use Doctrine\DBAL\Types\Type;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class FixedFloatTypeTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
-    #[\Override]
-    public static function setUpBeforeClass(): void
-    {
-        if (!Type::hasType(FixedFloatType::NAME)) {
-            Type::addType(FixedFloatType::NAME, FixedFloatType::class);
-        }
-    }
-
     public static function getValues(): \Generator
     {
         yield [null, 0.0];
@@ -54,7 +42,7 @@ final class FixedFloatTypeTest extends TestCase
     public function testConvertToDatabaseValue(mixed $value, float $expected): void
     {
         $platform = new MariaDBPlatform();
-        $type = $this->getFixedFloatType();
+        $type = new FixedFloatType();
         $actual = $type->convertToDatabaseValue($value, $platform);
         self::assertSame($expected, $actual);
     }
@@ -66,28 +54,17 @@ final class FixedFloatTypeTest extends TestCase
     public function testConvertToPHPValue(mixed $value, float $expected): void
     {
         $platform = new MariaDBPlatform();
-        $type = $this->getFixedFloatType();
+        $type = new FixedFloatType();
         $actual = $type->convertToPHPValue($value, $platform);
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testSQLDeclaration(): void
     {
         $platform = new MariaDBPlatform();
-        $type = $this->getFixedFloatType();
+        $type = new FixedFloatType();
         $actual = $type->getSQLDeclaration([], $platform);
         $expected = "DOUBLE PRECISION DEFAULT '0'";
         self::assertSame($expected, $actual);
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function getFixedFloatType(): Type
-    {
-        return Type::getType(FixedFloatType::NAME);
     }
 }

@@ -339,13 +339,13 @@ common:
     entity_date_user: '%date% - %user%'
     entity_created: 'Création : %content%'
     entity_updated: 'Mise à jour : %content%'
-    hide_password: Masquer le mot de passe
     id: Numéro
     no_script_support: Votre navigateur ne supporte pas JavaScript !
     other_actions: Autre actions
     global_actions: Actions globales
     required: '= Valeur requise'
     show_password: Afficher le mot de passe
+    hide_password: Masquer le mot de passe
     toggle_password: Afficher/Masquer le mot de passe
     top_of_page: Haut de la page
     value_disabled: Désactivé

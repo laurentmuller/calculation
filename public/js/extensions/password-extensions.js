@@ -15,24 +15,24 @@ $(function () {
             return this.each(function () {
                 /** @var {jQuery|any} */
                 const $element = $(this);
-                const $button = $element.parents('.input-group').find('.btn-password');
-                if ($button.length) {
-                    const $icon = $button.find('i');
-                    $button.on('mousedown', function (e) {
-                        if (e.button === 0 && $element.prop('type') === 'password' && String($element.val()).length > 0) {
-                            $element.prop('type', 'text');
-                            $icon.toggleClass('fa-eye-slash fa-eye');
-                        }
-                    }).on('mouseup mouseout', function () {
-                        if ($element.prop('type') === 'text') {
-                            $element.prop('type', 'password').trigger('focus');
-                            $icon.toggleClass('fa-eye-slash fa-eye');
-                        }
-                    });
-                    $element.on('input', function () {
-                        $button.toggleClass('disabled', String($element.val()).length === 0);
-                    });
+                const $button = $element.siblings('.btn-password');
+                if (!$button.length) {
+                    return true;
                 }
+                const $icon = $button.find('i');
+                $button.on('click', function (e) {
+                    e.stopPropagation();
+                    if ($element.prop('type') === 'password') {
+                        $element.prop('type', 'text');
+                        $icon.attr('class', $element.data('hide-icon'));
+                        $button.attr('title', $element.data('hide-title'));
+                    } else {
+                        $element.prop('type', 'password');
+                        $icon.attr('class', $element.data('show-icon'));
+                        $button.attr('title', $element.data('show-title'));
+                    }
+                    $element.selectFocus();
+                });
             });
         },
 

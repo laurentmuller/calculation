@@ -10,8 +10,8 @@
 {% macro output_dropdown_menu(id, icon, text, title, value, default) -%}
 {% set html_icon = icon(icon) %}
 {%- set attrs = {
-    id: id,
     type: 'button',
+    id: id,
     title: title|trans,
     class: ['btn', 'btn-outline-secondary', 'dropdown-toggle', 'dropdown-input'],
     'aria-expanded': false,
@@ -195,7 +195,7 @@
         <div class="input-group input-group-sm input-group-search search">
             <input class="form-control form-control-search" id="control-search" placeholder="{{ 'datatable.search'|trans }}" aria-label="{{ 'datatable.search'|trans }}" autocomplete="off" type="text">
             {% block toolbar_actions -%}{%- endblock toolbar_actions %}
-            <button id="clear_search" name="clear_search" type="button" class="btn btn-outline-secondary" title="{{ 'datatable.clear'|trans }}">
+            <button type="button" id="clear_search" name="clear_search" class="btn btn-outline-secondary" title="{{ 'datatable.clear'|trans }}">
                 <i class="{{ ICON_DELETE }}"></i>
             </button>
          </div>
@@ -209,8 +209,8 @@
                 <div class="btn-group btn-group-sm dropdown" role="group">
                     {# menu is created on the prebody event #}
                     {% set list_attrs = {
-                        id: 'button_page',
                         type: 'button',
+                        id: 'button_page',
                         title: 'list.limit_title'|trans,
                         class: 'btn btn-outline-secondary dropdown-toggle',
                         'data-value': limit,

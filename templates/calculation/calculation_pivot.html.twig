@@ -192,8 +192,8 @@
                 </button>
                 <ul id="actions" class="dropdown-menu">
                     {%- set button_attrs = {
-                        id: 'popover',
                         type: 'button',
+                        id: 'popover',
                         class: ['dropdown-item', popover ? 'dropdown-item-checked-right']} -%}
                     <li>
                         <button {{ html_attr(button_attrs) }}>
@@ -201,8 +201,8 @@
                         </button>
                     </li>
                     {%- set button_attrs = {
-                        id: 'highlight',
                         type: 'button',
+                        id: 'highlight',
                         class: ['dropdown-item', highlight ? 'dropdown-item-checked-right']} -%}
                     <li>
                         <button {{ html_attr(button_attrs) }}>

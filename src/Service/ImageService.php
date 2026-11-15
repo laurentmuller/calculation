@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Enums\ImageExtension;
-use BaconQrCode\Renderer\Color\Alpha;
 
 /**
  * Service to manipulate an image.
@@ -63,7 +62,7 @@ class ImageService
     }
 
     /**
-     * Allocate a color for an image.
+     * Allocate an alpha color for this image.
      *
      * @param int<0, 255> $red   value of red component
      * @param int<0, 255> $green value of green component

@@ -50,6 +50,13 @@ class FixedFloatType extends Type
 
     private function convertToFloat(mixed $value): float
     {
-        return null === $value ? 0.0 : (float) $value;
+        if (\is_float($value)) {
+            return $value;
+        }
+        if (null === $value) {
+            return 0.0;
+        }
+
+        return (float) $value;
     }
 }

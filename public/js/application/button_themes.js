@@ -21,9 +21,8 @@ function getPreferredTheme() {
 /**
  * Add the theme input handler.
  */
-function handleThemeInput() {
-    $('.dropdown-theme-entry').on('click', function (e) {
-        e.preventDefault();
+function initThemeInput() {
+    $('.dropdown-theme-entry').on('click', function () {
         // get values
         const $this = $(this);
         const path = document.body.dataset.cookiePath || '/';
@@ -72,18 +71,6 @@ function handleThemeInput() {
 }
 
 /**
- * Handle theme input change.
- */
-function initThemeInput() {
-    'use strict';
-    $('.btn-theme-dropdown').on('show.bs.dropdown', function () {
-        handleThemeInput();
-    }).on('hide.bs.dropdown', function () {
-        $('.dropdown-theme-entry').off('click');
-    });
-}
-
-/**
  * Handle theme changed event.
  */
 function initThemeChanged() {
@@ -101,6 +88,9 @@ function initThemeChanged() {
     });
 }
 
+/**
+ * Initialize theme buttons.
+ */
 function initThemeButtons() {
     'use strict';
     initThemeInput();

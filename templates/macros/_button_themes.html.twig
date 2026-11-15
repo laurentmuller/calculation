@@ -16,6 +16,7 @@
     <ul class="dropdown-menu dropdown-menu-end">
         {% for theme in themes() %}
             {% set attrs = {
+                type: 'button',
                 class: ['dropdown-item', 'dropdown-theme-entry', theme == current ? 'dropdown-item-checked-right' : null],
                 'data-success': theme.success|trans,
                 'data-value': theme.value,
@@ -28,6 +29,7 @@
         {% if include_dialog %}
             <li><hr class="dropdown-divider"></li>
             {% set attrs = {
+                type: 'button',
                 class: ['dropdown-item', 'dropdown-theme-dialog', 'theme-switcher'],
                 'data-title': 'theme.title'|trans,
                 'data-url': path('theme_dialog'),

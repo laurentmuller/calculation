@@ -248,7 +248,7 @@ abstract class AbstractEntityController extends AbstractController
         ?TranslatableFlashMessage $message = null
     ): RedirectResponse {
         if ($message instanceof TranslatableFlashMessage) {
-            $this->addFlashMessage($message->getType(), $this->trans($message));
+            $this->addFlash($message->getType(), $message);
         }
 
         return $this->getUrlGenerator()

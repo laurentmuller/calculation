@@ -12,7 +12,7 @@
                 {% block help_home -%}{{ home_button() }}{%- endblock help_home %}
                 {% block help_search %}
                     <input id="help-search" class="form-control" type="text" placeholder="{{ 'datatable.search'|trans }}" aria-label="{{ 'datatable.search'|trans }}">
-                    <button class="btn btn-outline-secondary btn-help-search" type="button" disabled title="{{ 'datatable.clear'|trans }}">
+                    <button type="button" class="btn btn-outline-secondary btn-help-search" disabled title="{{ 'datatable.clear'|trans }}">
                         <i class="{{ ICON_DELETE }}"></i>
                     </button>
                 {% endblock help_search %}

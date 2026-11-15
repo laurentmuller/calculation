@@ -25,7 +25,7 @@
         <ul class="dropdown-menu dropdown-menu-end">
             {% for type in enum_sorted('App\\Enums\\FlashType') %}
                 <li>
-                    <button class="dropdown-item dropdown-notify" type="button" data-value="{{ type.value }}">
+                    <button type="button" class="dropdown-item dropdown-notify" type="button" data-value="{{ type.value }}">
                         <i class="me-1 {{ type.icon }} {{ type.color }}"></i>{{- type|trans -}}
                     </button>
                 </li>

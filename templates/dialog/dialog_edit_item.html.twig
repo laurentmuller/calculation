@@ -22,9 +22,9 @@
                     'aria-label': 'list.search_placeholder'|trans} -%}
                 <input {{ html_attr(attrs) }}>
                 {%- set attrs = {
-                    class: 'btn btn-outline-secondary',
                     type: 'button',
                     id: 'item_search_clear',
+                    class: 'btn btn-outline-secondary',
                     name: 'item_search_clear',
                     title: 'help.actions.clear'|trans,
                     disabled: true} -%}

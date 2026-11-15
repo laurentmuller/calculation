@@ -1,4 +1,5 @@
 {% set button_attrs = {
+    type: 'button',
     class: ['nav-link', 'dropdown-toggle']|merge(button_class|default([])),
     title: vertical ? app.user.role|role_name : app.user.userIdentifier ~ ' - ' ~ app.user.role|role_name,
     'data-bs-toggle': 'dropdown',

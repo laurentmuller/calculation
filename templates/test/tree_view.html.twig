@@ -2,7 +2,7 @@
 {% from 'macros/_icons.html.twig' import icon %}
 {# macros #}
 {% macro side_bar_collapse(text, target, expanded = false, icon = false) %}
-<button class="btn btn-toggle border-0" data-bs-toggle="collapse" data-bs-target="{{ target }}" aria-expanded="{{ expanded|json_encode }}">
+<button type="button" class="btn btn-toggle border-0" data-bs-toggle="collapse" data-bs-target="{{ target }}" aria-expanded="{{ expanded|json_encode }}">
     {%- if icon -%}{{- icon(icon ~ ' me-1') -}}{%- endif %}{{- text -}}
 </button>
 {% endmacro side_bar_collapse %}
@@ -98,10 +98,10 @@
                                 </optgroup>
                             {%- endfor %}
                         </select>
-                        <button class="btn btn-outline-secondary btn-search" type="button" title="Ajouter un statut">
+                        <button type="button" class="btn btn-outline-secondary btn-search" title="Ajouter un statut">
                             <i class="fa-solid fa-plus"></i>
                         </button>
-                        <button class="btn btn-outline-secondary btn-clear" type="button" title="Supprimer tous les statuts">
+                        <button type="button" class="btn btn-outline-secondary btn-clear" title="Supprimer tous les statuts">
                             <i class="fa-regular fa-trash-alt"></i>
                         </button>
                     </div>
@@ -125,10 +125,10 @@
                                 </optgroup>
                             {%- endfor %}
                         </select>
-                        <button class="btn btn-outline-secondary btn-search" type="button" title="Ajouter une catégorie">
+                        <button type="button" class="btn btn-outline-secondary btn-search" title="Ajouter une catégorie">
                             <i class="fa-solid fa-plus"></i>
                         </button>
-                        <button class="btn btn-outline-secondary btn-clear" type="button" title="Supprimer toutes les catégories">
+                        <button type="button" class="btn btn-outline-secondary btn-clear" title="Supprimer toutes les catégories">
                             <i class="fa-regular fa-trash-alt"></i>
                         </button>
                     </div>
@@ -219,10 +219,12 @@
                 <label class="form-label" for="search">Drop-down menu</label>
                 <div class="input-group">
                     <input class="form-control" type="search" id="search" name="search" autocomplete="off">
-                    <button class="btn btn-outline-secondary dropdown-toggle ps-2" type="button" data-bs-toggle="dropdown" data-bs-reference="parent" aria-expanded="false"></button>
+                    <button type="button" class="btn btn-outline-secondary dropdown-toggle ps-2" data-bs-toggle="dropdown" data-bs-reference="parent" aria-expanded="false"></button>
                     <ul class="dropdown-menu">
                     {% for i in range(0, 100, 20) %}
-                        <li><button class="dropdown-item dropdown-item-gradient" data-value="{{ i }}">{{ (i / 100)|percent }}</button></li>
+                        <li>
+                            <button type="button" class="dropdown-item dropdown-item-gradient" data-value="{{ i }}">{{ (i / 100)|percent }}</button>
+                        </li>
                     {% endfor %}
                     </ul>
                 </div>

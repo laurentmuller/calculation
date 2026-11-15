@@ -34,6 +34,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Translation\TranslatableMessage;
 use Symfony\Contracts\Translation\TranslatableInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Attribute\AsTwigFilter;
@@ -173,6 +174,18 @@ abstract class AbstractController extends BaseController implements DocumentHelp
         }
     }
 
+    #[\Override]
+    protected function addFlash(FlashType|string $type, mixed $message): void
+    {
+        if ($type instanceof FlashType) {
+            $type = $type->value;
+        }
+        if ($message instanceof TranslatableMessage) {
+            $message = $this->trans($message);
+        }
+        parent::addFlash($type, $message);
+    }
+
     /**
      * Creates and returns a form helper instance.
      *
@@ -254,7 +267,7 @@ abstract class AbstractController extends BaseController implements DocumentHelp
     {
         if (null !== $message) {
             $type = \is_string($message) ? FlashType::DEFAULT : $message->getType();
-            $this->addFlashMessage($type, $this->trans($message));
+            $this->addFlash($type, $this->trans($message));
         }
         $request = $this->getRequestStack()->getCurrentRequest();
         if ($request instanceof Request) {

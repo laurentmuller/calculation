@@ -45,10 +45,14 @@ return App::config([
                 'entry_point' => LoginFormAuthenticator::class,
                 'custom_authenticators' => [LoginFormAuthenticator::class],
                 'login_throttling' => [], // allows 5 login attempts per minute
+                'form_login' => [
+                    'enable_csrf' => true,
+                ],
                 'switch_user' => [
                     'role' => RoleInterface::ROLE_WEBMASTER,
                     'parameter' => SwitchUserListener::SWITCH_USER_PARAMETER,
                 ],
+
                 'logout' => [
                     'csrf_parameter' => SecurityAttributes::LOGOUT_TOKEN,
                     'enable_csrf' => true,

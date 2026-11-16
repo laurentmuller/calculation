@@ -18,14 +18,12 @@ use App\Entity\User;
 use App\Enums\Environment;
 use App\Interfaces\DisableListenerInterface;
 use App\Traits\DisableListenerTrait;
-use App\Utils\StringUtils;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Events;
 use Symfony\Component\Asset\VersionStrategy\StaticVersionStrategy;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Filesystem\Path;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Contracts\Cache\CacheInterface;
 
@@ -33,8 +31,8 @@ use Symfony\Contracts\Cache\CacheInterface;
  * Apply the following strategy for assets:
  * <ul>
  * <li>In production mode, use the modification time of the deployment file ('.htdeployment').</li>
- * <li>In debug and test mode, use the modification time of the composer lock file ('composer.lock').</li>
- * <li>For user images folder ('images/users'), use the modification time of the image.</li>
+ * <li>In debug or test mode, use the modification time of the composer lock file ('composer.lock').</li>
+ * <li>For user images, use the modification time of the 'images/users' folder.</li>
  * </ul>
  */
 #[AsEntityListener(event: Events::postPersist, method: 'deleteCache', lazy: true, entity: User::class)]
@@ -45,9 +43,7 @@ class AssetVersionService extends StaticVersionStrategy implements DisableListen
     use DisableListenerTrait;
 
     private const string IMAGES_PATH = 'images/users/';
-    private const string KEY_IMAGES = 'key_asset_images';
 
-    private readonly string $imagesPath;
     private readonly string $imagesVersion;
 
     public function __construct(
@@ -58,32 +54,27 @@ class AssetVersionService extends StaticVersionStrategy implements DisableListen
         #[Target(CacheAttributes::CACHE_ASSET)]
         private readonly CacheInterface $cache,
     ) {
-        $version = $this->cache->get(
-            'key_asset_version',
+        $baseVersion = $this->cache->get(
+            'asset_base_version',
             fn (): string => $this->getBaseVersion($projectDir, $environment)
         );
-        $this->imagesPath = $this->cache->get(
-            'key_images_path',
-            static fn (): string => Path::join($projectDir, 'public', self::IMAGES_PATH)
-        );
         $this->imagesVersion = $this->cache->get(
-            'key_images_version',
-            fn (): string => $this->getFileTime($this->imagesPath, $version)
+            'asset_images_version',
+            fn (): string => $this->getImagesVersion($projectDir, $baseVersion)
         );
-
-        parent::__construct($version);
+        parent::__construct($baseVersion);
     }
 
     public function deleteCache(): bool
     {
-        return $this->cache->delete(self::KEY_IMAGES);
+        return $this->cache->delete('asset_images_version');
     }
 
     #[\Override]
     public function getVersion(string $path): string
     {
-        if (StringUtils::startWith($path, self::IMAGES_PATH)) {
-            return $this->getUserImages()[\basename($path)] ?? $this->imagesVersion;
+        if (\str_starts_with($path, self::IMAGES_PATH)) {
+            return $this->imagesVersion;
         }
 
         return parent::getVersion($path);
@@ -93,29 +84,18 @@ class AssetVersionService extends StaticVersionStrategy implements DisableListen
     {
         $file = $environment->isProduction() ? '.htdeployment' : 'composer.lock';
 
-        return $this->getFileTime(Path::join($projectDir, $file), Kernel::VERSION);
+        return $this->getFileTime(Path::join($projectDir, $file));
     }
 
-    private function getFileTime(string $path, string $default): string
+    private function getFileTime(string $path, string $default = Kernel::VERSION): string
     {
         return \file_exists($path) ? (string) \filemtime($path) : $default;
     }
 
-    /**
-     * @return array<string, string>
-     */
-    private function getUserImages(): array
+    private function getImagesVersion(string $projectDir, string $baseVersion): string
     {
-        return $this->cache->get(self::KEY_IMAGES, function (): array {
-            $images = [];
-            $finder = Finder::create()
-                ->in($this->imagesPath)
-                ->files();
-            foreach ($finder as $file) {
-                $images[$file->getFilename()] = (string) $file->getMTime();
-            }
+        $path = Path::join($projectDir, 'public', self::IMAGES_PATH);
 
-            return $images;
-        });
+        return $this->getFileTime($path, $baseVersion);
     }
 }

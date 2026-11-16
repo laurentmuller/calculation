@@ -181,6 +181,7 @@ calculationgroup:
         items: Articles
     name: Groupe
 calculationitem:
+    name: Article
     add:
         title: Nouvel article
     edit:
@@ -192,7 +193,6 @@ calculationitem:
         quantity: Quantité
         total: Total
         unit: Unité
-    name: Article
 calculationstate:
     add:
         title: Nouveau statut

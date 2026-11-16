@@ -23,6 +23,11 @@ jobs:
         with:
             php-version: '8.4'
 
+    audit-composer:
+        use: laurentmuller/.github/.github/workflows/audit-composer.yaml@main
+        with:
+            php-version: '8.4'
+
     validate-composer:
         uses: laurentmuller/.github/.github/workflows/validate-composer.yaml@main
         with:

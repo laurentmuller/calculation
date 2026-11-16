@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Group;
-use App\Enums\SortMode;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\QueryBuilder;
@@ -42,7 +41,7 @@ class GroupRepository extends AbstractRepository
      */
     public function findByCode(): array
     {
-        return $this->findBy([], ['code' => SortMode::ASC->value]);
+        return $this->findBy([], ['code' => \SortDirection::Ascending]);
     }
 
     /**

@@ -60,3 +60,7 @@ parameters:
         -
             message: '#Call to static method .* will always evaluate to true.#'
             path: tests/*
+        - # Must be removed when https://github.com/phpstan/phpstan-doctrine/issues/816 is accepted
+            message: '#\$orderBy of method Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository#'
+            identifier: argument.type
+            path: src/Repository/*

@@ -23,6 +23,7 @@ return App::config([
         'http_method_override' => true,
         'default_locale' => FormatUtils::DEFAULT_LOCALE,
         'enabled_locales' => [FormatUtils::DEFAULT_LOCALE],
+        'csrf_protection' => true,
         'session' => [
             'name' => 'CALCULATION_SESSION_ID',
             'cookie_path' => '%env(COOKIE_PATH)%',
@@ -47,6 +48,7 @@ return App::config([
         'form' => [
             'csrf_protection' => [
                 'field_name' => 'csrf_token',
+                'field_attr' => [],
             ],
         ],
         'property_info' => [
@@ -55,7 +57,6 @@ return App::config([
     ],
     'when@dev' => [
         'framework' => [
-            'ide' => 'phpstorm',
             'profiler' => [
                 'only_exceptions' => false,
             ],

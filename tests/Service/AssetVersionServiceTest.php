@@ -34,8 +34,8 @@ final class AssetVersionServiceTest extends TestCase
         if (!\file_exists($imagesDir)) {
             \mkdir($imagesDir, recursive: true);
         }
-        $this->defaultVersion = (string) \filemtime($projectDir . '/composer.lock');
         $this->imagesVersion = (string) \filemtime($imagesDir);
+        $this->defaultVersion = (string) \filemtime($projectDir . '/composer.lock');
         $this->service = new AssetVersionService($projectDir, Environment::TEST, new ArrayAdapter());
     }
 
@@ -44,19 +44,17 @@ final class AssetVersionServiceTest extends TestCase
         yield [''];
         yield ['/'];
         yield ['/fake'];
+        yield ['images'];
         yield ['/images'];
         yield ['/images/'];
         yield ['images/users/', true];
-
-        $path = __DIR__ . '/../files/lock/public/images/users/fake.png';
-        $value = (int) \filemtime($path);
-        yield ['images/users/fake.png', $value];
+        yield ['images/users/fake.png', true];
     }
 
     #[DataProvider('getPaths')]
-    public function testApplyVersion(string $path, bool|int $value = false): void
+    public function testApplyVersion(string $path, bool $useImageVersion = false): void
     {
-        $version = $this->getVersion($value);
+        $version = $this->getVersion($useImageVersion);
         $expected = \sprintf('%s?%s', $path, $version);
         $actual = $this->service->applyVersion($path);
         self::assertSame($expected, $actual);
@@ -69,19 +67,15 @@ final class AssetVersionServiceTest extends TestCase
     }
 
     #[DataProvider('getPaths')]
-    public function testPath(string $path, bool|int $value = false): void
+    public function testPath(string $path, bool $useImageVersion = false): void
     {
-        $expected = $this->getVersion($value);
+        $expected = $this->getVersion($useImageVersion);
         $actual = $this->service->getVersion($path);
         self::assertSame($expected, $actual);
     }
 
-    private function getVersion(bool|int $value): string
+    private function getVersion(bool $useImageVersion): string
     {
-        if (\is_int($value)) {
-            return (string) $value;
-        }
-
-        return $value ? $this->imagesVersion : $this->defaultVersion;
+        return $useImageVersion ? $this->imagesVersion : $this->defaultVersion;
     }
 }

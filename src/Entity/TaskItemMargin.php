@@ -34,6 +34,7 @@ class TaskItemMargin extends AbstractEntity implements MarginInterface, ParentTi
     #[Assert\GreaterThan(propertyPath: 'minimum', message: 'margin.maximum_greater_minimum')]
     #[ORM\Column(type: FixedFloatType::NAME)]
     public float $maximum = 0.0 {
+        #[\Override]
         get => $this->maximum;
         set => $this->round($value);
     }
@@ -42,6 +43,7 @@ class TaskItemMargin extends AbstractEntity implements MarginInterface, ParentTi
     #[Assert\GreaterThanOrEqual(0)]
     #[ORM\Column(type: FixedFloatType::NAME)]
     public float $minimum = 0.0 {
+        #[\Override]
         get => $this->minimum;
         set => $this->round($value);
     }

@@ -70,14 +70,12 @@ final class AbstractMarginTest extends TestCase
     {
         $entity = new class extends AbstractMargin {
             public float $maximum = 0.0 {
-                get {
-                    return $this->maximum;
-                }
+                #[\Override]
+                get => $this->maximum;
             }
             public float $minimum = 0.0 {
-                get {
-                    return $this->minimum;
-                }
+                #[\Override]
+                get => $this->minimum;
             }
         };
 

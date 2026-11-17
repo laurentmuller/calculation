@@ -18,7 +18,7 @@ use Endroid\QrCode\Writer\Result\AbstractResult;
 use fpdf\Enums\PdfDestination;
 use fpdf\PdfDocument;
 
-final class PdfResult extends AbstractResult
+final class PdfDocumentResult extends AbstractResult
 {
     public function __construct(
         MatrixInterface $matrix,

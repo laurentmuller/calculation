@@ -20,6 +20,7 @@ return App::config([
         ],
         'web_profiler' => [
             'toolbar' => true,
+            'excluded_ajax_paths' => '^/((index|app(_[\w]+)?)\.php/)?_wdt|\.well-known/appspecific/com\.chrome\.devtools\.json',
         ],
     ],
     'when@test' => [

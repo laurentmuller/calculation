@@ -15,10 +15,10 @@ namespace App\Report;
 
 use App\Entity\Calculation;
 use App\Interfaces\DocumentHelperInterface;
-use App\Model\ImageData;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
+use App\Pdf\QrCode\PdfDocumentWriter;
 use App\Pdf\Traits\PdfMemoryImageTrait;
 use App\Report\Table\GroupsTable;
 use App\Report\Table\ItemsTable;
@@ -27,7 +27,6 @@ use App\Utils\StringUtils;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\Exception\ValidationException;
-use Endroid\QrCode\Writer\PngWriter;
 use fpdf\Enums\PdfMove;
 use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfBorder;
@@ -39,7 +38,7 @@ class CalculationReport extends AbstractReport
 {
     use PdfMemoryImageTrait;
 
-    private const float QR_CODE_SIZE = 38.0;
+    private const int QR_CODE_SIZE = 38;
 
     public function __construct(
         DocumentHelperInterface $helper,
@@ -124,29 +123,6 @@ class CalculationReport extends AbstractReport
     }
 
     /**
-     * Gets the QR code image data.
-     *
-     * @throws ValidationException
-     */
-    private function getQrCodeImageData(): ImageData
-    {
-        $builder = new Builder(
-            writer: new PngWriter(),
-            writerOptions: [PngWriter::WRITER_OPTION_NUMBER_OF_COLORS => 2],
-            data: $this->qrcode,
-            errorCorrectionLevel: ErrorCorrectionLevel::Medium,
-            size: (int) self::QR_CODE_SIZE,
-            margin: 0,
-        );
-        $result = $builder->build();
-
-        return ImageData::instance(
-            data: $result->getString(),
-            mimeType: $result->getMimeType()
-        );
-    }
-
-    /**
      * Return if the QR code must render.
      */
     private function isQrCode(): bool
@@ -213,10 +189,20 @@ class CalculationReport extends AbstractReport
             return;
         }
 
-        $data = $this->getQrCodeImageData();
-        $x = $this->getPageWidth() - $this->getRightMargin() - self::QR_CODE_SIZE;
-        $y = $this->getPageHeight() - ReportFooter::FOOTER_OFFSET - self::QR_CODE_SIZE;
-        $this->imageData($data, $x, $y, self::QR_CODE_SIZE, self::QR_CODE_SIZE, $this->qrcode);
+        $options = [
+            PdfDocumentWriter::WRITER_OPTION_DOCUMENT => $this,
+            PdfDocumentWriter::WRITER_OPTION_LINK => $this->qrcode,
+            PdfDocumentWriter::WRITER_OPTION_X => $this->getPageWidth() - $this->getRightMargin() - self::QR_CODE_SIZE + 3.0,
+            PdfDocumentWriter::WRITER_OPTION_Y => $this->getPageHeight() - ReportFooter::FOOTER_OFFSET - self::QR_CODE_SIZE,
+        ];
+        new Builder()->build(
+            writer: new PdfDocumentWriter(),
+            writerOptions: $options,
+            data: $this->qrcode,
+            errorCorrectionLevel: ErrorCorrectionLevel::Medium,
+            size: self::QR_CODE_SIZE,
+            margin: 0
+        );
     }
 
     private function renderTimestampable(Calculation $calculation): void

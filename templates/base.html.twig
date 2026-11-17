@@ -25,20 +25,20 @@
     {% endblock stylesheets %}
 </head>
 {# body #}
-{% if navigation_show %}
-    {% set body_attrs = {
+{%- set body_attrs = {'data-cookie-path': cookie_path} -%}
+{%- if navigation_show %}
+    {% set body_attrs = body_attrs|merge({
+        'data-show-menu': 'index.menu_show'|trans,
+        'data-hide-menu': 'index.menu_hide'|trans,
+        'data-vertical-url': path('navigation_vertical'),
+        'data-horizontal-url': path('navigation_horizontal'),
         class: [
             sidebar_show ? 'sidebar-show' : null,
             statusbar_show ? 'statusbar-show' : null,
         ],
-        'data-cookie-path': cookie_path,
-        'data-vertical-url': path('navigation_vertical'),
-        'data-horizontal-url': path('navigation_horizontal'),
-        'data-show-menu': 'index.menu_show'|trans,
-        'data-hide-menu': 'index.menu_hide'|trans,
-    } %}
+    }) -%}
 {% endif %}
-<body {{ html_attr(body_attrs|default({})) }}>
+<body {{ html_attr(body_attrs) }}>
 {# navigation #}
 {% if navigation_show %}
     {% if sidebar_show %}

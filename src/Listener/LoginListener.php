@@ -16,8 +16,11 @@ namespace App\Listener;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\ApplicationService;
+use App\Service\ThemeService;
 use App\Traits\TranslatorFlashMessageAwareTrait;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
@@ -27,8 +30,10 @@ class LoginListener implements ServiceSubscriberInterface
     use ServiceMethodsSubscriberTrait;
     use TranslatorFlashMessageAwareTrait;
 
-    public function __construct(private readonly UserRepository $repository)
-    {
+    public function __construct(
+        private readonly UserRepository $repository,
+        private readonly ThemeService $service,
+    ) {
     }
 
     #[AsEventListener]
@@ -39,6 +44,11 @@ class LoginListener implements ServiceSubscriberInterface
             $this->updateUser($user);
             $this->notify($user);
         }
+
+        $response = $event->getResponse();
+        if ($response instanceof Response) {
+            $this->saveTheme($event->getRequest(), $response);
+        }
     }
 
     private function notify(User $user): void
@@ -47,6 +57,12 @@ class LoginListener implements ServiceSubscriberInterface
             '%user_name%' => $user->getUserIdentifier(),
             '%app_name%' => ApplicationService::APP_FULL_NAME,
         ]);
+    }
+
+    private function saveTheme(Request $request, Response $response): void
+    {
+        $theme = $this->service->getTheme($request);
+        $this->service->saveTheme($response, $theme);
     }
 
     private function updateUser(User $user): void

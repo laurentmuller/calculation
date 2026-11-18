@@ -12,6 +12,20 @@
 {% macro side_bar_divider() %}
 <li><hr class="dropdown-divider border-top my-1"></li>
 {% endmacro side_bar_divider %}
+{% macro theme_attributes(name, icon) %}
+    {% set translated_name = ('theme.' ~ name ~ '.name')|trans %}
+    {% set input_attrs = {
+        'aria-label': translated_name,
+        'data-bs-html': true,
+        'data-bs-toggle': 'popover',
+        'data-bs-trigger': 'hover',
+        'data-bs-placement': 'top',
+        'data-bs-custom-class': 'theme-popover',
+        'data-bs-title': '<i class="me-1 ' ~ icon ~ '"></i>' ~ translated_name,
+        'data-bs-content': ('theme.' ~ name ~ '.help')|trans,
+    } %}
+    {{ html_attr(input_attrs) }}
+{% endmacro theme_attributes %}
 {# parameters #}
 {% set title = 'test.tree_view' %}
 {% set title_icon = 'fa-solid fa-folder-tree' %}
@@ -240,20 +254,36 @@
 </div>
 <div class="row">
     <div class="col-md-8 offset-md-2 my-2">
-        <div class="theme-pill theme-pill-sm bg-body-tertiary border rounded-pill p-1 d-inline-flex position-relative" role="radiogroup" aria-label="Color theme">
-            <input type="radio" class="theme-pill-start visually-hidden" name="bs-theme-pill" id="pill-light" value="light" tabindex="-1">
-            <label for="pill-light" title="Light mode" aria-label="Light mode">
-                <i class="fa-regular fa-sun" aria-hidden="true"></i>
+        <div class="three-state three-state-sm three-state-theme" role="radiogroup" aria-label="Color theme">
+            <input type="radio" class="three-state-start visually-hidden" name="bs-three-state" id="pill-light" value="light" tabindex="-1">
+            <label for="pill-light" {{ _self.theme_attributes('light', 'fa-regular fa-sun') }}>
+                <i class="fa-regular fa-sun"></i>
             </label>
-            <input type="radio" class="theme-pill-center visually-hidden" name="bs-theme-pill" id="pill-auto" value="auto" tabindex="0" checked>
-            <label for="pill-auto" title="System preference" aria-label="System preference">
-                <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+            <input type="radio" class="three-state-center visually-hidden" name="bs-three-state" id="pill-auto" value="auto" tabindex="0" checked>
+            <label for="pill-auto" {{ _self.theme_attributes('auto', 'fa-solid fa-circle-half-stroke') }}>
+                <i class="fa-solid fa-circle-half-stroke"></i>
             </label>
-            <input type="radio" class="theme-pill-end visually-hidden" name="bs-theme-pill" id="pill-dark" value="dark" tabindex="-1">
-            <label for="pill-dark" title="Dark mode" aria-label="Dark mode">
-                <i class="fa-regular fa-moon" aria-hidden="true"></i>
+            <input type="radio" class="three-state-end visually-hidden" name="bs-three-state" id="pill-dark" value="dark" tabindex="-1">
+            <label for="pill-dark" {{ _self.theme_attributes('dark', 'fa-regular fa-moon') }}>
+                <i class="fa-regular fa-moon"></i>
             </label>
-            <span class="theme-pill-slider rounded-pill" aria-hidden="true"></span>
+            <span class="three-state-slider"></span>
+        </div>
+
+        <div class="three-state" role="radiogroup" aria-label="Normal size">
+            <input type="radio" class="three-state-start visually-hidden" name="three-state-input" id="input-light" value="light-input" tabindex="-1">
+            <label for="input-light" {{ _self.theme_attributes('light', 'fa-regular fa-sun') }}>
+                <i class="fa-regular fa-sun"></i>
+            </label>
+            <input type="radio" class="three-state-center visually-hidden" name="three-state-input" id="input-auto" value="auto-input" tabindex="0" checked>
+            <label for="input-auto" {{ _self.theme_attributes('auto', 'fa-solid fa-circle-half-stroke') }}>
+                <i class="fa-solid fa-circle-half-stroke"></i>
+            </label>
+            <input type="radio" class="three-state-end visually-hidden" name="three-state-input" id="input-dark" value="dark-input" tabindex="-1">
+            <label for="input-dark" {{ _self.theme_attributes('dark', 'fa-regular fa-moon') }}>
+                <i class="fa-regular fa-moon"></i>
+            </label>
+            <span class="three-state-slider"></span>
         </div>
     </div>
 </div>
@@ -283,7 +313,7 @@
 {% block stylesheets -%}
     {{ asset_css('build/currency-flags/currency-flags.css') }}
     {{ asset_css('css/select2.css') }}
-    {{ asset_css('css/theme-pill.css') }}
+    {{ asset_css('css/three-state.css') }}
 {% endblock stylesheets %}
 {# javascripts #}
 {% block javascripts %}

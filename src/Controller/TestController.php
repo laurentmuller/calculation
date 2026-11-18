@@ -205,7 +205,7 @@ class TestController extends AbstractController
             return $this->json([$root]);
         }
 
-        return $this->render('test/tree_view.html.twig', [
+        return $this->render('test/treeview.html.twig', [
             'categories' => $this->getCategories($manager),
             'products' => $this->getProducts($manager),
             'states' => $this->getStates($manager),

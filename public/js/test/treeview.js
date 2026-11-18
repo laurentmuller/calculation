@@ -347,78 +347,98 @@ $(function () {
     });
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-    const pillGroup = document.querySelector('.theme-pill');
-    const radios = Array.from(pillGroup.querySelectorAll('input[type="radio"]'));
+/**
+ * @param {HTMLInputElement[]} radios
+ * @param {HTMLInputElement} targetRadio
+ * @param {boolean} moveFocus
+ */
+const selectRadio = (radios, targetRadio, moveFocus = false) => {
+    radios.forEach(radio => {
+        const isSelected = radio === targetRadio;
+        radio.checked = isSelected;
+        radio.setAttribute('tabindex', isSelected ? '0' : '-1');
+    });
+
+    if (moveFocus) {
+        targetRadio.focus();
+    }
+    targetRadio.dispatchEvent(new CustomEvent('three-state-change'));
+};
+
+const initializeThreeState = () => {
+    document.querySelectorAll('.three-state').forEach(function (parent) {
+        /** @type {HTMLInputElement[]} */
+        const radios = Array.from(parent.querySelectorAll('input[type="radio"]'));
+        radios.forEach(radio => {
+            radio.addEventListener('change', () => selectRadio(radios, radio, false));
+        });
+        parent.addEventListener('keydown', (e) => {
+                                                                                            const currentIndex = radios.findIndex(radio => radio === document.activeElement);
+                                                                                            if (currentIndex === -1) {
+                                                                                                return;
+            }
+            let nextIndex = null;
+            switch (e.key) {
+                case 'ArrowRight':
+                case 'ArrowDown':
+                    nextIndex = (currentIndex + 1) % radios.length;
+                    break;
+                case 'ArrowLeft':
+                case 'ArrowUp':
+                    nextIndex = (currentIndex - 1 + radios.length) % radios.length;
+                    break;
+                case 'Home':
+                    nextIndex = 0;
+                    break;
+                case 'End':
+                    nextIndex = radios.length - 1;
+                    break;
+            }
+            if (nextIndex !== null) {
+                e.preventDefault();
+                selectRadio(radios, radios[nextIndex], true);
+            }
+        });
+    });
+}
+
+const initThemeHandler = () => {
+    // initialize theme three-state
+    const THEME_AUTO = 'auto';
+    const THEME_LIGHT = 'light';
+    const THEME_DARK = 'dark';
+
+    const parent = document.querySelector('.three-state-theme');
+    const radios = Array.from(parent.querySelectorAll('input[type="radio"]'));
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
+    const savedTheme = localStorage.getItem('theme') || THEME_AUTO;
     const applyTheme = (theme) => {
-        const resolved = theme === 'auto' ? (mediaQuery.matches ? 'dark' : 'light') : theme;
+        const resolved = theme === THEME_AUTO ? (mediaQuery.matches ? THEME_DARK : THEME_LIGHT) : theme;
         document.documentElement.setAttribute('data-bs-theme', resolved);
     };
 
-    const selectRadio = (targetRadio, moveFocus = false) => {
-        radios.forEach(r => {
-            const isSelected = r === targetRadio;
-            r.checked = isSelected;
-            r.setAttribute('tabindex', isSelected ? '0' : '-1');
-        });
-
-        if (moveFocus) {
-            targetRadio.focus();
-        }
-
-        localStorage.setItem('theme', targetRadio.value);
-        applyTheme(targetRadio.value);
-    };
-
-    // 1. Initialize saved state
-    const savedTheme = localStorage.getItem('theme') || 'auto';
-    const initialRadio = radios.find(r => r.value === savedTheme) || radios[1];
-    selectRadio(initialRadio, false);
-
-    // 2. Handle mouse/touch clicks
+    // update theme
     radios.forEach(radio => {
-        radio.addEventListener('change', () => selectRadio(radio, false));
+        radio.addEventListener('three-state-change', () => {
+            localStorage.setItem('theme', radio.value);
+            applyTheme(radio.value);
+        });
     });
+    const initialRadio = radios.find(radio => radio.value === savedTheme) || radios[1];
+    // default selection
+    selectRadio(radios, initialRadio, false);
 
-    // 3. Handle explicit keyboard navigation
-    pillGroup.addEventListener('keydown', (e) => {
-        const currentIndex = radios.findIndex(r => r === document.activeElement);
-        if (currentIndex === -1) return;
-
-        let nextIndex = null;
-
-        switch (e.key) {
-            case 'ArrowRight':
-            case 'ArrowDown':
-                e.preventDefault();
-                nextIndex = (currentIndex + 1) % radios.length;
-                break;
-            case 'ArrowLeft':
-            case 'ArrowUp':
-                e.preventDefault();
-                nextIndex = (currentIndex - 1 + radios.length) % radios.length;
-                break;
-            case 'Home':
-                e.preventDefault();
-                nextIndex = 0;
-                break;
-            case 'End':
-                e.preventDefault();
-                nextIndex = radios.length - 1;
-                break;
-        }
-
-        if (nextIndex !== null) {
-            selectRadio(radios[nextIndex], true);
-        }
-    });
-
-    // 4. Sync with OS theme changes when set to 'auto'
+    // synchronize with OS theme changes when set to 'auto'
     mediaQuery.addEventListener('change', () => {
-        if ((localStorage.getItem('theme') || 'auto') === 'auto') {
-            applyTheme('auto');
+        if ((localStorage.getItem('theme') || THEME_AUTO) === THEME_AUTO) {
+            applyTheme(THEME_AUTO);
         }
     });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initializeThreeState();
+    initThemeHandler();
+    $('.three-state [data-bs-toggle="popover"]').popover();
 });

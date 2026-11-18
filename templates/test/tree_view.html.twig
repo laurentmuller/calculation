@@ -238,6 +238,25 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-md-8 offset-md-2 my-2">
+        <div class="theme-pill theme-pill-sm bg-body-tertiary border rounded-pill p-1 d-inline-flex position-relative" role="radiogroup" aria-label="Color theme">
+            <input type="radio" class="theme-pill-start visually-hidden" name="bs-theme-pill" id="pill-light" value="light" tabindex="-1">
+            <label for="pill-light" title="Light mode" aria-label="Light mode">
+                <i class="fa-regular fa-sun" aria-hidden="true"></i>
+            </label>
+            <input type="radio" class="theme-pill-center visually-hidden" name="bs-theme-pill" id="pill-auto" value="auto" tabindex="0" checked>
+            <label for="pill-auto" title="System preference" aria-label="System preference">
+                <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+            </label>
+            <input type="radio" class="theme-pill-end visually-hidden" name="bs-theme-pill" id="pill-dark" value="dark" tabindex="-1">
+            <label for="pill-dark" title="Dark mode" aria-label="Dark mode">
+                <i class="fa-regular fa-moon" aria-hidden="true"></i>
+            </label>
+            <span class="theme-pill-slider rounded-pill" aria-hidden="true"></span>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="dragModal" tabindex="-1" aria-labelledby="modal-drag-title" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -264,6 +283,7 @@
 {% block stylesheets -%}
     {{ asset_css('build/currency-flags/currency-flags.css') }}
     {{ asset_css('css/select2.css') }}
+    {{ asset_css('css/theme-pill.css') }}
 {% endblock stylesheets %}
 {# javascripts #}
 {% block javascripts %}

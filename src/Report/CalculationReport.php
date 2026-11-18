@@ -192,7 +192,7 @@ class CalculationReport extends AbstractReport
         $options = [
             PdfDocumentWriter::WRITER_OPTION_DOCUMENT => $this,
             PdfDocumentWriter::WRITER_OPTION_LINK => $this->qrcode,
-            PdfDocumentWriter::WRITER_OPTION_X => $this->getPageWidth() - $this->getRightMargin() - self::QR_CODE_SIZE + 3.0,
+            PdfDocumentWriter::WRITER_OPTION_X => $this->getPageWidth() - $this->getRightMargin() - self::QR_CODE_SIZE,
             PdfDocumentWriter::WRITER_OPTION_Y => $this->getPageHeight() - ReportFooter::FOOTER_OFFSET - self::QR_CODE_SIZE,
         ];
         new Builder()->build(

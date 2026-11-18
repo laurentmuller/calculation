@@ -346,3 +346,79 @@ $(function () {
         $this.css('--fa-rotate-angle', $this.data('rotate'));
     });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const pillGroup = document.querySelector('.theme-pill');
+    const radios = Array.from(pillGroup.querySelectorAll('input[type="radio"]'));
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+    const applyTheme = (theme) => {
+        const resolved = theme === 'auto' ? (mediaQuery.matches ? 'dark' : 'light') : theme;
+        document.documentElement.setAttribute('data-bs-theme', resolved);
+    };
+
+    const selectRadio = (targetRadio, moveFocus = false) => {
+        radios.forEach(r => {
+            const isSelected = r === targetRadio;
+            r.checked = isSelected;
+            r.setAttribute('tabindex', isSelected ? '0' : '-1');
+        });
+
+        if (moveFocus) {
+            targetRadio.focus();
+        }
+
+        localStorage.setItem('theme', targetRadio.value);
+        applyTheme(targetRadio.value);
+    };
+
+    // 1. Initialize saved state
+    const savedTheme = localStorage.getItem('theme') || 'auto';
+    const initialRadio = radios.find(r => r.value === savedTheme) || radios[1];
+    selectRadio(initialRadio, false);
+
+    // 2. Handle mouse/touch clicks
+    radios.forEach(radio => {
+        radio.addEventListener('change', () => selectRadio(radio, false));
+    });
+
+    // 3. Handle explicit keyboard navigation
+    pillGroup.addEventListener('keydown', (e) => {
+        const currentIndex = radios.findIndex(r => r === document.activeElement);
+        if (currentIndex === -1) return;
+
+        let nextIndex = null;
+
+        switch (e.key) {
+            case 'ArrowRight':
+            case 'ArrowDown':
+                e.preventDefault();
+                nextIndex = (currentIndex + 1) % radios.length;
+                break;
+            case 'ArrowLeft':
+            case 'ArrowUp':
+                e.preventDefault();
+                nextIndex = (currentIndex - 1 + radios.length) % radios.length;
+                break;
+            case 'Home':
+                e.preventDefault();
+                nextIndex = 0;
+                break;
+            case 'End':
+                e.preventDefault();
+                nextIndex = radios.length - 1;
+                break;
+        }
+
+        if (nextIndex !== null) {
+            selectRadio(radios[nextIndex], true);
+        }
+    });
+
+    // 4. Sync with OS theme changes when set to 'auto'
+    mediaQuery.addEventListener('change', () => {
+        if ((localStorage.getItem('theme') || 'auto') === 'auto') {
+            applyTheme('auto');
+        }
+    });
+});

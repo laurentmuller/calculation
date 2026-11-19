@@ -1671,28 +1671,27 @@
         },
         {
             "name": "google/recaptcha",
-            "version": "2.1.0",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/google/recaptcha.git",
-                "reference": "05a576b66e1a356c7a3ad8a3beff09ff91b50961"
+                "reference": "5dd511e6f1f586984066f932c7293ccd571d42cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/recaptcha/zipball/05a576b66e1a356c7a3ad8a3beff09ff91b50961",
-                "reference": "05a576b66e1a356c7a3ad8a3beff09ff91b50961",
+                "url": "https://api.github.com/repos/google/recaptcha/zipball/5dd511e6f1f586984066f932c7293ccd571d42cc",
+                "reference": "5dd511e6f1f586984066f932c7293ccd571d42cc",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.4"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.95.27",
-                "php-coveralls/php-coveralls": "^2.9.1",
-                "phpstan/phpstan": "^2.2.15",
-                "phpstan/phpstan-phpunit": "^2.0.18",
-                "phpstan/phpstan-strict-rules": "^2.0.12",
-                "phpunit/phpunit": "^13.3.4"
+                "friendsofphp/php-cs-fixer": "^3.95.32",
+                "phpstan/phpstan": "^2.3.6",
+                "phpstan/phpstan-phpunit": "^2.1.2",
+                "phpstan/phpstan-strict-rules": "^2.1.1",
+                "phpunit/phpunit": "^13.4.7"
             },
             "suggest": {
                 "ext-curl": "Recommended for sending requests via CurlPost",
@@ -1701,7 +1700,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "2.1.x-dev"
+                    "dev-main": "2.2.x-dev"
                 }
             },
             "autoload": {
@@ -1726,8 +1725,8 @@
                 "issues": "https://github.com/google/recaptcha/issues",
                 "source": "https://github.com/google/recaptcha"
             },
-            "time": "2026-09-23T21:32:33+00:00",
-            "published-time": "2026-09-23T21:34:22+00:00"
+            "time": "2026-11-19T11:21:43+00:00",
+            "published-time": "2026-11-19T11:22:55+00:00"
         },
         {
             "name": "imagine/imagine",
@@ -10070,16 +10069,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "13.4.7",
+            "version": "13.4.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "e6458d44279e3b4fc492d4c41fe8e677efed7a2c"
+                "reference": "291e66a76eb39f2fb8f880d38edc30dbd7acd9a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/e6458d44279e3b4fc492d4c41fe8e677efed7a2c",
-                "reference": "e6458d44279e3b4fc492d4c41fe8e677efed7a2c",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/291e66a76eb39f2fb8f880d38edc30dbd7acd9a2",
+                "reference": "291e66a76eb39f2fb8f880d38edc30dbd7acd9a2",
                 "shasum": ""
             },
             "require": {
@@ -10150,7 +10149,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/13.4.7"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/13.4.8"
             },
             "funding": [
                 {
@@ -10158,8 +10157,8 @@
                     "type": "other"
                 }
             ],
-            "time": "2026-11-13T11:10:10+00:00",
-            "published-time": "2026-11-13T11:11:23+00:00"
+            "time": "2026-11-19T12:17:15+00:00",
+            "published-time": "2026-11-19T12:18:28+00:00"
         },
         {
             "name": "sebastian/cli-parser",

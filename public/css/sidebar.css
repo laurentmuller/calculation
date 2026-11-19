@@ -60,12 +60,6 @@ body.sidebar-show .navbar-horizontal {
     padding-left: 0.5rem;
 }
 
-/*
-.navbar-vertical .nav-item {
-    padding-left: 0.25rem;
-}
-*/
-
 /* toggle menu with drop-down arrow on the right */
 .navbar-vertical .nav-link-toggle {
     display: flex;
@@ -135,7 +129,7 @@ html[data-bs-theme=dark] .navbar-vertical::-webkit-scrollbar-thumb {
     padding-right: 0.25rem;
     text-align: start;
     width: 100%;
-    column-gap: 0.15rem;
+    /*column-gap: 0.15rem;*/
 }
 
 .navbar-vertical ul:not(.dropdown-menu-default) .dropdown-item:active {
@@ -173,4 +167,10 @@ html[data-bs-theme=dark] .navbar-vertical::-webkit-scrollbar-thumb {
     .navbar-vertical .nav-link-toggle::after {
         transition: none;
     }
+}
+
+/* special case for the first level of dropdown item in test menu */
+#MENU_SIDEBAR_TEST > .dropdown-menu > li > .dropdown-item {
+    padding-left: .25rem;
+    margin-left: -.25rem;
 }

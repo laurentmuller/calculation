@@ -2,10 +2,9 @@
 {% from 'macros/_icons.html.twig' import icon %}
 {# body #}
 {% block body -%}
-    {% block start_card_container -%}
-        <div class="col{% block card_container_class %} col-xl-8 offset-xl-2{% endblock card_container_class -%}">
-    {% endblock start_card_container %}
-    {# card #}
+    <div class="col{% block card_container_class %} col-xl-8 offset-xl-2{% endblock card_container_class -%}">
+        {% block start_card_container %}{% endblock start_card_container %}
+        {# card #}
         <div class="card mb-3{% block card_class %}{% endblock card_class %}">
             {# card header #}
             <div class="card-header{% block card_header_class %}{% endblock card_header_class %}">
@@ -29,7 +28,6 @@
                 {% block card_footer -%}{%- endblock card_footer %}
             </div>
         </div>
-    {%- block end_card_container %}
-        </div>
-    {%- endblock end_card_container %}
+        {%- block end_card_container %}{% endblock end_card_container %}
+    </div>
 {%- endblock body %}

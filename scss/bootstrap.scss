@@ -19,6 +19,43 @@ $alert-link-font-weight: 400;
 // badge
 $badge-font-weight: 400;
 
+// // set the same colors as light mode for alerts, list groups and badges */
+//@import "../node_modules/bootstrap/scss/functions";
+//@import "../node_modules/bootstrap/scss/variables";
+//@import "../node_modules/bootstrap/scss/variables-dark";
+//
+//$primary-text-emphasis-dark: $primary-text-emphasis;
+//$primary-bg-subtle-dark: $primary-bg-subtle;
+//$primary-border-subtle-dark: $primary-border-subtle;
+//
+//$secondary-text-emphasis-dark: $secondary-text-emphasis;
+//$secondary-bg-subtle-dark: $secondary-bg-subtle;
+//$secondary-border-subtle-dark: $secondary-border-subtle;
+//
+//$success-text-emphasis-dark: $success-text-emphasis;
+//$success-bg-subtle-dark: $success-bg-subtle;
+//$success-border-subtle-dark: $success-border-subtle;
+//
+//$info-text-emphasis-dark: $info-text-emphasis;
+//$info-bg-subtle-dark: $info-bg-subtle;
+//$info-border-subtle-dark: $info-border-subtle;
+//
+//$warning-text-emphasis-dark: $warning-text-emphasis;
+//$warning-bg-subtle-dark: $warning-bg-subtle;
+//$warning-border-subtle-dark: $warning-border-subtle;
+//
+//$danger-text-emphasis-dark: $danger-text-emphasis;
+//$danger-bg-subtle-dark: $danger-bg-subtle;
+//$danger-border-subtle-dark: $danger-border-subtle;
+//
+//$light-text-emphasis-dark: $light-text-emphasis;
+//$light-bg-subtle-dark: $light-bg-subtle;
+//$light-border-subtle-dark: $light-border-subtle;
+//
+//$dark-text-emphasis-dark: $dark-text-emphasis;
+//$dark-bg-subtle-dark: $dark-bg-subtle;
+//$dark-border-subtle-dark: $dark-border-subtle;
+
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 // functions and methods

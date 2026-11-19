@@ -1,5 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
-{% from 'macros/_icons.html.twig' import button, homepage %}
+{% from 'macros/_icons.html.twig' import button, icon, homepage %}
 {% from 'macros/_button_themes.html.twig' import inline_theme %}
 {# macros #}
 {% macro button_notify(type, icon) -%}
@@ -72,7 +72,7 @@
 {%- endblock card_title %}
 {# body #}
 {% block card_body %}
-    <span class="form-label horizontal-line mb-3 ">Type de message</span>
+    <span class="form-label horizontal-line mb-3 "><i class="fa-regular fa-message me-1"></i>Type de message</span>
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-1">
         {{ _self.button_notify('success', 'fa-solid fa-check-circle') }}
         {{ _self.button_notify('warning', 'fa-solid fa-exclamation-circle') }}
@@ -82,7 +82,9 @@
         {{ _self.button_notify('secondary', 'fa-regular fa-bell') }}
         {{ _self.button_notify('dark', 'fa-regular fa-bell') }}
     </div>
-    <span class="form-label horizontal-line mt-3">Paramètres</span>
+    <span class="form-label horizontal-line mt-3">
+        {{ icon('fa-solid fa-sliders', 'parameters.title') }}
+    </span>
     <div class="row">
         <div class="col-md-6 col-lg-3 mb-3">
             {%- set selection = user_parameters.message.position %}
@@ -129,7 +131,9 @@
             </select>
         </div>
     </div>
-    <span class="form-label horizontal-line mb-3">{{ 'parameters.group_options'|trans }}</span>
+    <span class="form-label horizontal-line mb-3">
+        {{- icon('fa-solid fa-screwdriver-wrench', 'parameters.group_options') -}}
+    </span>
     <div class="d-flex-wrap-center">
         {{ _self.checkbox('title', 'parameters.fields.message_title', user_parameters.message.title) }}
         {{ _self.checkbox('icon', 'parameters.fields.message_icon', user_parameters.message.icon) }}

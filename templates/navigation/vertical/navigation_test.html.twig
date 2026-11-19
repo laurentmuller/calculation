@@ -5,13 +5,13 @@
 {% set toggle_class = expanded ? ' active' : '' %}
 {% set collapse_class = expanded ? ' show' : '' %}
 {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
-<li>{{ dropdownSeparator() }}</li>
+{{ dropdownSeparator() }}
 <li class="nav-item nav-item-dropdown">
     <button type="button" class="nav-link nav-link-toggle{{ toggle_class }}" data-bs-toggle="collapse" data-bs-target="#{{ id }}" aria-expanded="{{ expanded|json_encode }}" title="{{ toggle_title|trans }}">
         {{- icon('fa-solid fa-bug fa-fw', 'index.menu_test') -}}
     </button>
     <div class="collapse{{ collapse_class }}" id="{{ id }}">
-        <ul class="dropdown-menu d-block border-0 pt-0">
+        <ul class="dropdown-menu">
             {% set id = 'MENU_SIDEBAR_TEST_SERVICE' %}
             {% set expanded = app.request.cookies.boolean(id) %}
             {% set toggle_class = expanded ? ' active' : '' %}
@@ -22,7 +22,7 @@
                     {{- icon('fa-solid fa-bell-concierge fa-fw', 'index.menu_service') -}}
                 </button>
                 <div class="collapse{{ collapse_class }}" id="{{ id }}">
-                    <ul class="dropdown-menu d-block border-0 pt-0">
+                    <ul class="dropdown-menu">
                         {{ dropdownItem(path('openweather_weather'), 'openweather.current.title', 'fa-solid fa-cloud-sun') }}
                         {{ dropdownItem(path('exchange_display'), 'exchange_rate.title', 'fa-solid fa-comments-dollar') }}
                         {{ dropdownItem(path('test_translate'), 'translator.title', 'fa-solid fa-globe') }}
@@ -41,7 +41,7 @@
                     {{- icon('fa-solid fa-bug fa-fw', 'index.menu_tools') -}}
                 </button>
                 <div class="collapse{{ collapse_class }}" id="{{ id }}">
-                    <ul class="dropdown-menu d-block border-0 pt-0">
+                    <ul class="dropdown-menu">
                         {{ dropdownItemExternal(path('test_fontawesome'), 'test.fontawesome', 'fa-regular fa-font-awesome') }}
                         {{ dropdownItemExternal(path('test_pdf'), 'common.button_pdf', ICON_PDF) }}
                         {{ dropdownItemExternal(path('test_word'), 'common.button_export', ICON_WORD) }}
@@ -60,7 +60,7 @@
                     {{- icon('fa-solid fa-bug fa-fw', 'index.menu_admin') -}}
                 </button>
                 <div class="collapse{{ collapse_class }}" id="{{ id }}">
-                    <ul class="dropdown-menu d-block border-0 pt-0">
+                    <ul class="dropdown-menu">
                         {{ dropdownItem(path('schema_index'), 'schema.index.title', 'fa-solid fa-table') }}
                         {{ dropdownItem(path('diagram_index'), 'diagram.title', 'fa-solid fa-diagram-project') }}
                         {{ dropdownSeparator() }}
@@ -83,7 +83,7 @@
                     {{- icon('fa-solid fa-chart-area fa-fw', 'index.menu_graphics') -}}
                 </button>
                 <div class="collapse{{ collapse_class }}" id="{{ id }}">
-                    <ul class="dropdown-menu d-block border-0 pt-0">
+                    <ul class="dropdown-menu">
                         {{ dropdownItem(path('calculation_pivot_index'), 'pivot.title', 'fa-solid fa-table') }}
                         {{ dropdownItem(path('timeline_index'), 'timeline.title', 'fa-solid fa-stream') }}
                         {{ dropdownItem(path('calendar_year'), 'calendar.year_title', 'fa-regular fa-calendar-alt', {'%year%': 'now'|date('Y')}) }}
@@ -91,7 +91,7 @@
                 </div>
             </li>
 
-            <li>{{ dropdownSeparator() }}</li>
+            {{ dropdownSeparator() }}
             {{ dropdownItem(path('test_notifications'), 'test.notification', 'fa-regular fa-bell') }}
             {{ dropdownItem(path('test_password'), 'password.title', 'fa-solid fa-lock') }}
             {{ dropdownItem(path('test_recaptcha'), 'test.recaptcha', 'fa-brands fa-google') }}

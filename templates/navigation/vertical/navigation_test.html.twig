@@ -10,7 +10,7 @@
     <button type="button" class="nav-link nav-link-toggle{{ toggle_class }}" data-bs-toggle="collapse" data-bs-target="#{{ id }}" aria-expanded="{{ expanded|json_encode }}" title="{{ toggle_title|trans }}">
         {{- icon('fa-solid fa-bug fa-fw', 'index.menu_test') -}}
     </button>
-    <div class="collapse{{ collapse_class }}" id="{{ id }}">
+    <div class="collapse collapse-first-level {{ collapse_class }}" id="{{ id }}">
         <ul class="dropdown-menu">
             {% set id = 'MENU_SIDEBAR_TEST_SERVICE' %}
             {% set expanded = app.request.cookies.boolean(id) %}

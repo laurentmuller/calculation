@@ -100,7 +100,7 @@ final class CategoryControllerTest extends EntityControllerTestCase
 
         $text = $this->getService(TranslatorInterface::class)
             ->trans('common.button_back_list');
-        $button = $crawler->filter('.btn.btn-form.btn-primary');
+        $button = $crawler->filter('.btn.btn-form.btn-warning');
         self::assertCount(1, $button);
         self::assertSame($text, $button->text());
     }

@@ -373,9 +373,9 @@ const initializeThreeState = () => {
             radio.addEventListener('change', () => selectRadio(radios, radio, false));
         });
         parent.addEventListener('keydown', (e) => {
-                                                                                            const currentIndex = radios.findIndex(radio => radio === document.activeElement);
-                                                                                            if (currentIndex === -1) {
-                                                                                                return;
+            const currentIndex = radios.findIndex(radio => radio === document.activeElement);
+            if (currentIndex === -1) {
+                return;
             }
             let nextIndex = null;
             switch (e.key) {

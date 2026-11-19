@@ -85,10 +85,13 @@ class AjaxController extends AbstractController
      */
     #[IsUser]
     #[GetRoute(path: '/random/text', name: 'random_text')]
-    public function randomText(FakerService $service, #[MapQueryParameter] int $maxNbChars = 150): JsonResponse
+    public function randomText(FakerService $service, #[MapQueryParameter] int $paragraphs = 1): JsonResponse
     {
-        $content = $service->getGenerator()
-            ->realText($maxNbChars);
+        $prefix = '<p class="mb-2">';
+        $suffix = '</p>';
+        /** @var string[] $values */
+        $values = $service->getGenerator()->paragraphs($paragraphs);
+        $content = $prefix . \implode($suffix . $prefix, $values) . $suffix;
 
         return $this->jsonTrue(['content' => $content]);
     }

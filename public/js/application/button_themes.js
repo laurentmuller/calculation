@@ -4,8 +4,7 @@
  * Gets a value indicating if start view transition is supported.
  * @return {boolean} true if supported.
  */
-function supportTransition() {
-    'use strict';
+const supportTransition = () => {
     return document.startViewTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
@@ -13,15 +12,14 @@ function supportTransition() {
  * Gets the preferred theme.
  * @return {string} the preferred theme.
  */
-function getPreferredTheme() {
-    'use strict';
+const getPreferredTheme = () => {
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? THEME.DARK : THEME.LIGHT;
 }
 
 /**
  * Add the theme input handler.
  */
-function initThemeInput() {
+const initThemeInput = () => {
     $('.dropdown-theme-entry').on('click', function () {
         // get values
         const $this = $(this);
@@ -73,7 +71,7 @@ function initThemeInput() {
 /**
  * Handle theme changed event.
  */
-function initThemeChanged() {
+const initThemeChanged = () => {
     'use strict';
     $('body').on(THEME.EVENT, '.theme-switcher', function (e, theme) {
         $('.dropdown-theme-entry').each(function () {
@@ -91,8 +89,7 @@ function initThemeChanged() {
 /**
  * Initialize theme buttons.
  */
-function initThemeButtons() {
-    'use strict';
+const initThemeButtons = () => {
     initThemeInput();
     initThemeChanged();
 }

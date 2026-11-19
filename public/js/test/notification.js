@@ -13,12 +13,11 @@ function notify(type, title, options) {
     const $position = $('#position');
     const url = $position.data('random');
     const data = {
-        'maxNbChars': $('#maxNbChars').intVal()
+        'paragraphs': $('#paragraphs').intVal()
     };
     $.getJSON(url, data, function (response) {
-        if (response.result) {
-            const message = '<p class="m-0 p-0">{0}</p>'.format(response.content);
-            Toaster.notify(type, message, title, options);
+        if (response.result && response.content) {
+            Toaster.notify(type, response.content, title, options);
         } else {
             const message = $position.data('failure');
             Toaster.danger(message, $('.card-title').text(), options);
@@ -97,7 +96,7 @@ $(function () {
     });
 
     // display a notification when a value changes
-    $('#position, #timeout, #progress, #maxNbChars, .form-check-input-option').on('input', function () {
+    $('#position, #timeout, #progress, #paragraphs, .form-check-input-option').on('input', function () {
         random();
         const $this = $(this);
         if ($this.is(('#autohide'))) {

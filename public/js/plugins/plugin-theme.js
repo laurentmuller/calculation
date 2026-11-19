@@ -48,7 +48,7 @@ $(function () {
         destroy() {
             this.$element.removeData(ThemeListener.NAME);
             this.$element.off('click', this.clickProxy);
-            window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', this.changeProxy);
+            this.mediaQuery.removeEventListener('change', this.changeProxy);
             const modal = bootstrap.Modal.getInstance(this._getDialogId());
             if (modal) {
                 modal.dispose();
@@ -82,7 +82,8 @@ $(function () {
             this.clickProxy = () => this._click();
             this.changeProxy = () => this._change();
             this.$element.on('click', this.clickProxy);
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', this.changeProxy);
+            this.mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+            this.mediaQuery.addEventListener('change', this.changeProxy);
         }
 
         /**
@@ -344,7 +345,7 @@ $(function () {
          * @private
          */
         _getMediaTheme() {
-            return window.matchMedia('(prefers-color-scheme: dark)').matches ? THEME.DARK : THEME.LIGHT;
+            return this.mediaQuery.matches ? THEME.DARK : THEME.LIGHT;
         }
 
         /**

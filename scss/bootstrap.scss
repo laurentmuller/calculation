@@ -68,20 +68,23 @@ $badge-font-weight: 400;
     text-align: left;
 }
 
-/* themed popovers */
 @each $key, $value in $theme-colors {
+    /* #{$key} popover */
     .popover.popover-#{$key} {
         @include var-color(popover-header-bg, $key);
         @include var-color(popover-border-color, $key);
         @include contrast-color(popover-header-color, $value);
     }
+    /* #{$key} popover bottom arrow */
+    .popover.popover-#{$key}.bs-popover-bottom > .popover-arrow::before,
+    .popover.popover-#{$key}.bs-popover-bottom > .popover-arrow::after,
+    .popover.popover-#{$key}.bs-popover-auto[data-popper-placement^="bottom"] > .popover-arrow::before,
+    .popover.popover-#{$key}.bs-popover-auto[data-popper-placement^="bottom"] > .popover-arrow::after {
+        border-bottom-color: var(--bs-#{$key});
+    }
 }
 
-/* specific popover */
-.popover.popover-w-100 {
-    max-width: 100%;
-}
-
+/* popover body padding */
 @each $key, $value in $spacers {
     .popover.popover-p-#{$key} .popover-body {
         padding: $value;
@@ -96,6 +99,11 @@ $badge-font-weight: 400;
         padding-top: $value;
         padding-bottom: $value;
     }
+}
+
+/* specific popover */
+.popover.popover-w-100 {
+    max-width: 100%;
 }
 
 /* themed form-check */

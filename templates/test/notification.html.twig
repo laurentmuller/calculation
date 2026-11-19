@@ -19,6 +19,7 @@
                 'data-bs-trigger': 'hover',
                 'data-bs-toggle': 'popover',
                 'data-bs-placement': 'top',
+                'data-bs-fallback-placements': ['top', 'bottom', 'right', 'left'],
                 'data-bs-content': content,
                 'data-bs-custom-class': 'popover-' ~ type,
             }) }}
@@ -119,10 +120,10 @@
             </select>
         </div>
         <div class="col-md-6 col-lg-3 mb-3">
-            {%- set selection = 150 -%}
-            <label class="form-label" for="maxNbChars">Nombre de caractères</label>
-            <select id="maxNbChars" name="maxNbChars" data-default="{{ selection }}" class="form-select">
-                {% for i in range(50, 500, 50) %}
+            {%- set selection = 2 -%}
+            <label class="form-label" for="paragraphs">Paragraphes</label>
+            <select id="paragraphs" name="paragraphs" data-default="{{ selection }}" class="form-select">
+                {% for i in range(1, 5) %}
                     <option value="{{ i }}"{% if i == selection %} selected{% endif %}>{{ i }}</option>
                 {% endfor %}
             </select>

@@ -47,7 +47,7 @@ final class RightsTypeTest extends TypeTestCase
     public function testSubmitInvalidValue(): void
     {
         self::expectException(UnexpectedTypeException::class);
-        self::expectExceptionMessageIsOrContains('Expected argument of type "numeric", "string" given');
+        self::expectExceptionMessageIs('Expected argument of type "numeric", "string" given');
         $this->factory->create(RightsType::class, 'fake');
     }
 

@@ -127,7 +127,7 @@ final class EntityPermissionTest extends TestCase
     public function testFromNameThrowException(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessageIsOrContains('Invalid entity permission: "fake_entity".');
+        self::expectExceptionMessageIs('Invalid entity permission: "fake_entity".');
         EntityPermission::fromName('fake_entity');
     }
 

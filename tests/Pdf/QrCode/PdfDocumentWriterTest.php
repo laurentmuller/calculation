@@ -31,7 +31,7 @@ final class PdfDocumentWriterTest extends TestCase
     public function testInvalidBackground(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessageIsOrContains(PdfDocumentWriter::class . ' does not support alpha channels.');
+        self::expectExceptionMessageIs(PdfDocumentWriter::class . ' does not support alpha channels.');
         $this->build(backgroundColor: new Color(0, 0, 0, 127));
     }
 
@@ -41,7 +41,7 @@ final class PdfDocumentWriterTest extends TestCase
     public function testInvalidDocument(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessageIsOrContains('Invalid document option: "stdClass".');
+        self::expectExceptionMessageIs('Invalid document option: "stdClass".');
         $this->build(writerOptions: [PdfDocumentWriter::WRITER_OPTION_DOCUMENT => new \stdClass()]);
     }
 
@@ -51,7 +51,7 @@ final class PdfDocumentWriterTest extends TestCase
     public function testInvalidForeground(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessageIsOrContains(PdfDocumentWriter::class . ' does not support alpha channels.');
+        self::expectExceptionMessageIs(PdfDocumentWriter::class . ' does not support alpha channels.');
         $this->build(foregroundColor: new Color(0, 0, 0, 127));
     }
 
@@ -61,8 +61,18 @@ final class PdfDocumentWriterTest extends TestCase
     public function testInvalidLogo(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessageMatches('/Unable to read image size for logo:.*/');
+        self::expectExceptionMessageIs('Unable to read image size for logo: "' . __FILE__ . '".');
         $this->build(logoPath: __FILE__);
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    public function testInvalidNoPage(): void
+    {
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessageIs('No page added to the PdfDocument.');
+        $this->build(writerOptions: [PdfDocumentWriter::WRITER_OPTION_DOCUMENT => new PdfDocument()]);
     }
 
     /**
@@ -71,8 +81,22 @@ final class PdfDocumentWriterTest extends TestCase
     public function testInvalidUnit(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessageIsOrContains('Invalid unit option: "fake".');
+        self::expectExceptionMessageIs('Invalid unit option: "fake".');
         $this->build(writerOptions: [PdfDocumentWriter::WRITER_OPTION_UNIT => 'fake']);
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    public function testValidDocumentOptions(): void
+    {
+        $document = new PdfDocument()
+            ->addPage();
+        $result = $this->build(
+            writerOptions: [PdfDocumentWriter::WRITER_OPTION_DOCUMENT => $document]
+        );
+        self::assertInstanceOf(PdfDocumentResult::class, $result);
+        self::assertSame($document, $result->getPdfDocument());
     }
 
     /**

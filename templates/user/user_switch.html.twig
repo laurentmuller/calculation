@@ -3,7 +3,7 @@
     {% set id = app.user.id ?? 0 %}
     {% set current = app.token.user %}
     {% set original = app.token?.originalToken.user %}
-    <div class="alert alert-warning my-0" role="alert">
+    <div class="alert alert-warning" role="alert">
         <div class="d-flex-wrap-center">
             <span class="flex-fill">
                 {{- 'user.switch.connected'|trans({'%original%': original, '%current%': current})|raw -}}

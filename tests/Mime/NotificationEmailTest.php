@@ -77,7 +77,7 @@ final class NotificationEmailTest extends TestCase
     public function testImportanceInvalid(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessageIsOrContains('Invalid importance value: "fake".');
+        self::expectExceptionMessageIs('Invalid importance value: "fake".');
         $this->createNotificationEmail()
             ->importance('fake');
     }

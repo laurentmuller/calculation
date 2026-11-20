@@ -73,7 +73,7 @@ final class CountryFlagServiceTest extends TestCase
     {
         $alpha2Code = 'ZZ';
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessageIsOrContains('Invalid country code: "' . $alpha2Code . '".');
+        self::expectExceptionMessageIs('Invalid country code: "' . $alpha2Code . '".');
         $this->service->getFlag($alpha2Code);
     }
 

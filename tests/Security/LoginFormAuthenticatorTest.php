@@ -316,7 +316,7 @@ final class LoginFormAuthenticatorTest extends TestCase
     private function validateException(Request $request, LoginFormAuthenticator $authenticator, string $message): void
     {
         self::expectException(CustomUserMessageAuthenticationException::class);
-        self::expectExceptionMessageIsOrContains($message);
+        self::expectExceptionMessageIs($message);
         $authenticator->authenticate($request);
     }
 

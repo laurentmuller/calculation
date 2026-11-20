@@ -296,7 +296,7 @@ final class FileServiceTest extends TestCase
         $service = $this->createFileService();
         $path = __FILE__;
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessageIsOrContains('Path "' . $path . '" is not a directory.');
+        self::expectExceptionMessageIs('Path "' . $path . '" is not a directory.');
         $service->sizeAndFiles($path);
     }
 
@@ -305,7 +305,7 @@ final class FileServiceTest extends TestCase
         $service = $this->createFileService();
         $path = $this->getFakeFile();
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessageIsOrContains('Path "' . $path . '" does not exist.');
+        self::expectExceptionMessageIs('Path "' . $path . '" does not exist.');
         $service->sizeAndFiles($path);
     }
 

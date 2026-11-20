@@ -45,16 +45,16 @@ final class PdfTableTest extends TestCase
 
     public function testAddCellNoRowStarted(): void
     {
-        $this->expectException(PdfException::class);
-        $this->expectExceptionMessageIsOrContains('No row started.');
+        self::expectException(PdfException::class);
+        self::expectExceptionMessageIs('No row started.');
         $this->createTable()
             ->addCell(PdfCell::instance());
     }
 
     public function testAddCellsNoRowStarted(): void
     {
-        $this->expectException(PdfException::class);
-        $this->expectExceptionMessageIsOrContains('No row started.');
+        self::expectException(PdfException::class);
+        self::expectExceptionMessageIs('No row started.');
         $this->createTable()
             ->addValues(PdfCell::instance());
     }
@@ -243,16 +243,16 @@ final class PdfTableTest extends TestCase
 
     public function testCompleteRowNoRowStarted(): void
     {
-        $this->expectException(PdfException::class);
-        $this->expectExceptionMessageIsOrContains('No row started.');
+        self::expectException(PdfException::class);
+        self::expectExceptionMessageIs('No row started.');
         $this->createTable()
             ->completeRow();
     }
 
     public function testEndRowCellSpan(): void
     {
-        $this->expectException(PdfException::class);
-        $this->expectExceptionMessageIsOrContains('Invalid spanned cells: expected 1, 2 given.');
+        self::expectException(PdfException::class);
+        self::expectExceptionMessageIs('Invalid spanned cells: expected 1, 2 given.');
         $this->createTable()
             ->addColumn(PdfColumn::left(width: 25.0))
             ->startRow()
@@ -262,8 +262,8 @@ final class PdfTableTest extends TestCase
 
     public function testEndRowNoCell(): void
     {
-        $this->expectException(PdfException::class);
-        $this->expectExceptionMessageIsOrContains('No cell defined.');
+        self::expectException(PdfException::class);
+        self::expectExceptionMessageIs('No cell defined.');
         $this->createTable()
             ->endRow();
     }
@@ -320,7 +320,7 @@ final class PdfTableTest extends TestCase
     public function testImageCellInvalid(): void
     {
         self::expectException(PdfException::class);
-        self::expectExceptionMessageIsOrContains('The image "fake" does not exist.');
+        self::expectExceptionMessageIs('The image "fake" does not exist.');
         new PdfImageCell('fake');
     }
 
@@ -392,8 +392,8 @@ final class PdfTableTest extends TestCase
 
     public function testOutputHeadersNoColumn(): void
     {
-        $this->expectException(PdfException::class);
-        $this->expectExceptionMessageIsOrContains('No column defined.');
+        self::expectException(PdfException::class);
+        self::expectExceptionMessageIs('No column defined.');
         $this->createTable()
             ->outputHeaders();
     }
@@ -418,8 +418,8 @@ final class PdfTableTest extends TestCase
 
     public function testStartHeaderRowAlreadyStarted(): void
     {
-        $this->expectException(PdfException::class);
-        $this->expectExceptionMessageIsOrContains('Row already started.');
+        self::expectException(PdfException::class);
+        self::expectExceptionMessageIs('Row already started.');
         $this->createTable()
             ->startHeaderRow()
             ->startHeaderRow();
@@ -428,7 +428,7 @@ final class PdfTableTest extends TestCase
     public function testStartRowAlreadyStarted(): void
     {
         $this->expectException(PdfException::class);
-        $this->expectExceptionMessageIsOrContains('Row already started.');
+        $this->expectExceptionMessageIs('Row already started.');
         $this->createTable()
             ->startRow()
             ->startRow();

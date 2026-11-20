@@ -145,7 +145,7 @@ final class UserRepositoryTest extends AbstractRepositoryTestCase
     public function testRefreshUserException(): void
     {
         self::expectException(UnsupportedUserException::class);
-        self::expectExceptionMessageIsOrContains('Instances of "' . InMemoryUser::class . '" are not supported.');
+        self::expectExceptionMessageIs('Instances of "' . InMemoryUser::class . '" are not supported.');
         $user = new InMemoryUser('username', 'password', ['ROLE_USER']);
         $this->repository->refreshUser($user);
     }
@@ -188,7 +188,7 @@ final class UserRepositoryTest extends AbstractRepositoryTestCase
             }
         };
         self::expectException(UnsupportedUserException::class);
-        self::expectExceptionMessageIsOrContains('Instances of "' . PasswordAuthenticatedUserInterface::class . '@anonymous" are not supported.');
+        self::expectExceptionMessageIs('Instances of "' . PasswordAuthenticatedUserInterface::class . '@anonymous" are not supported.');
         $this->repository->upgradePassword($user, 'fake');
     }
 

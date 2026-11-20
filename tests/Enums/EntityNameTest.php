@@ -178,7 +178,7 @@ final class EntityNameTest extends TestCase
     public function testFromMixedThrowException(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessageIsOrContains('Invalid entity name "fake_entity".');
+        self::expectExceptionMessageIs('Invalid entity name "fake_entity".');
         EntityName::fromMixed('fake_entity');
     }
 

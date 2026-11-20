@@ -50,8 +50,8 @@ final class CheckSubClassTraitTest extends TestCase
     #[DataProvider('getInvalidSubClass')]
     public function testSubClassInvalid(string|object $source, string $target): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessageIsOrContains(\sprintf('%s expected, %s given.', $target, StringUtils::getDebugType($source)));
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessageIs(\sprintf('%s expected, %s given.', $target, StringUtils::getDebugType($source)));
         $this->checkSubClass($source, $target);
     }
 

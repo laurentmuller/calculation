@@ -89,7 +89,7 @@ final class DataQueryValueResolverTest extends TestCase
         $request = $this->createRequest(['invalidKey' => 'value']);
         $argument = $this->createArgumentMetadata();
         self::expectException(UnprocessableEntityHttpException::class);
-        self::expectExceptionMessageIsOrContains('Invalid parameter: "invalidKey".');
+        self::expectExceptionMessageIs('Invalid parameter: "invalidKey".');
         $resolver->resolve($request, $argument);
     }
 

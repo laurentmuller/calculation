@@ -38,7 +38,7 @@ final class ColumnFactoryTest extends TestCase
         $path = __DIR__ . '/../files/json/columns_empty.json';
         $message = 'The file "' . $path . '" contains no definition.';
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessageIsOrContains($message);
+        self::expectExceptionMessageIs($message);
         $table = $this->createTable();
         $factory = new ColumnFactory();
         $factory->load($table, $path);
@@ -48,7 +48,7 @@ final class ColumnFactoryTest extends TestCase
     {
         $path = __FILE__;
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessageIsOrContains('Unable to decode value.');
+        self::expectExceptionMessageIs('Unable to decode value.');
         $table = $this->createTable();
         $factory = new ColumnFactory();
         $factory->load($table, $path);
@@ -57,7 +57,7 @@ final class ColumnFactoryTest extends TestCase
     public function testFromJsonInvalidFormatter(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessageIsOrContains('Unable set the property "fieldFormatter".');
+        self::expectExceptionMessageIs('Unable set the property "fieldFormatter".');
         $path = __DIR__ . '/../files/json/columns_invalid_formatter.json';
         $table = $this->createTable();
         $factory = new ColumnFactory();

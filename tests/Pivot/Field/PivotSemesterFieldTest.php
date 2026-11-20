@@ -64,7 +64,7 @@ final class PivotSemesterFieldTest extends TestCase
     public function testInvalidValue(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessageIsOrContains('Invalid value: 5, allowed values [1..2].');
+        self::expectExceptionMessageIs('Invalid value: 5, allowed values [1..2].');
         $field = new PivotSemesterField('name');
         $field->getDisplayValue(5);
     }

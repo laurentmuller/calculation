@@ -20,11 +20,17 @@
 {# card_body #}
 {% block card_body -%}
     {{ parent() }}
-    {% if app.user %}
-        <p class="mb-0">{{ 'security.login.already_connect'|trans({'%user_name%': app.user})|raw }}</p>
-    {% endif %}
     <input type="hidden" name="{{ login_token }}" value="{{ csrf_token(authenticate_token) }}">
 {% endblock card_body %}
+{# end_card_container #}
+{% block end_card_container -%}
+    {{ parent() }}
+    {% if app.user %}
+        <div class="alert alert-warning text-center" role="alert">
+            {{ 'security.login.already_connect'|trans({'%user_name%': app.user})|raw }}
+        </div>
+    {% endif %}
+{%- endblock end_card_container %}
 {# actions #}
 {% block actions_form %}
     {{ parent() }}

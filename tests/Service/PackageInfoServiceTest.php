@@ -48,7 +48,7 @@ final class PackageInfoServiceTest extends TestCase
     public function testGetPackageNotFound(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessageIsOrContains('Unknown package name: "fake/fake".');
+        self::expectExceptionMessageIs('Unknown package name: "fake/fake".');
         $this->service->getPackage('fake/fake');
     }
 

@@ -68,7 +68,7 @@ final class ImageServiceTest extends TestCase
     {
         $file = FileUtils::normalize(__DIR__ . '/../files/images/example_invalid.png');
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessageIsOrContains('Unable to load image from "' . $file . '".');
+        self::expectExceptionMessageIs('Unable to load image from "' . $file . '".');
         @ImageService::fromFile($file);
     }
 
@@ -76,7 +76,7 @@ final class ImageServiceTest extends TestCase
     {
         $file = FileUtils::normalize(__FILE__);
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessageIsOrContains('Unsupported file image extension "' . $file . '".');
+        self::expectExceptionMessageIs('Unsupported file image extension "' . $file . '".');
         ImageService::fromFile($file);
     }
 

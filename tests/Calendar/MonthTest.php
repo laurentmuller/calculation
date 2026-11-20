@@ -79,7 +79,7 @@ final class MonthTest extends CalendarTestCase
     public function testInvalidNumber(): void
     {
         self::expectException(CalendarException::class);
-        self::expectExceptionMessageIsOrContains('The month number 0 is not between 1 and 12 inclusive.');
+        self::expectExceptionMessageIs('The month number 0 is not between 1 and 12 inclusive.');
         $calendar = $this->createCalendar();
         new Month($calendar, 0);
     }

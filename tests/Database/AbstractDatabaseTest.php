@@ -92,7 +92,7 @@ final class AbstractDatabaseTest extends TestCase
     public function testInvalidPragma(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessageIsOrContains('Invalid SQLite3 value: "?*".');
+        self::expectExceptionMessageIs('Invalid SQLite3 value: "?*".');
         $this->database->pragma('auto_vacuum', '?*');
     }
 
@@ -137,7 +137,7 @@ final class AbstractDatabaseTest extends TestCase
     public function testRecordsCountInvalidName(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessageIsOrContains('Invalid SQLite3 value: "?*".');
+        self::expectExceptionMessageIs('Invalid SQLite3 value: "?*".');
         $this->database->getRecordsCount('?*');
     }
 

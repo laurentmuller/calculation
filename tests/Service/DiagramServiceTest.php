@@ -46,7 +46,7 @@ final class DiagramServiceTest extends TestCase
     public function testGetDiagramNotFound(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessageIsOrContains('Unknown diagram name: "fake_name".');
+        self::expectExceptionMessageIs('Unknown diagram name: "fake_name".');
         $this->service->getDiagram('fake_name');
     }
 

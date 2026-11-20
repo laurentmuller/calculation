@@ -275,7 +275,7 @@ final class FileUtilsTest extends TestCase
     {
         $path = __FILE__;
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessageIsOrContains('Path "' . $path . '" is not a directory.');
+        self::expectExceptionMessageIs('Path "' . $path . '" is not a directory.');
         FileUtils::sizeAndFiles($path);
     }
 
@@ -283,7 +283,7 @@ final class FileUtilsTest extends TestCase
     {
         $path = $this->getFakeFile();
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessageIsOrContains('Path "' . $path . '" does not exist.');
+        self::expectExceptionMessageIs('Path "' . $path . '" does not exist.');
         FileUtils::sizeAndFiles($path);
     }
 

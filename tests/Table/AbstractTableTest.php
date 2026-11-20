@@ -43,7 +43,7 @@ final class AbstractTableTest extends TestCase
     public function testValidateSortThrowException(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessageIsOrContains('Invalid sorted field: "fake".');
+        self::expectExceptionMessageIs('Invalid sorted field: "fake".');
         $table = new FixtureTable();
         $query = new DataQuery();
         $query->sort = 'fake';

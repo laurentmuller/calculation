@@ -134,8 +134,8 @@ final class OpenWeatherServiceTest extends KernelServiceTestCase
 
     public function testGroupInvalidCount(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessageIsOrContains('Allowed cities: 20, 25 given.');
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessageIs('Allowed cities: 20, 25 given.');
         $this->service->group(\range(1, 25));
     }
 

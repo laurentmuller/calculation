@@ -45,33 +45,17 @@ final readonly class PdfDocumentWriter implements WriterInterface
         ?LabelInterface $label = null,
         array $options = []
     ): ResultInterface {
-        $matrixFactory = new MatrixFactory();
-        $matrix = $matrixFactory->create($qrCode);
-
-        $unit = PdfUnit::MILLIMETER;
-        if (isset($options[self::WRITER_OPTION_UNIT])) {
-            $value = $options[self::WRITER_OPTION_UNIT];
-            $unit = PdfUnit::tryFrom($value) ?? throw new \InvalidArgumentException(\sprintf('Invalid unit option: "%s".', $value));
-        }
+        $matrix = new MatrixFactory()
+            ->create($qrCode);
 
         $outerSize = $matrix->getOuterSize();
         $labelSpace = $label instanceof LabelInterface ? 30 : 0;
-        $foregroundColor = $this->convertColor($qrCode->getForegroundColor());
         $backgroundColor = $this->convertColor($qrCode->getBackgroundColor());
-
-        if (isset($options[self::WRITER_OPTION_DOCUMENT])) {
-            $document = $options[self::WRITER_OPTION_DOCUMENT];
-            if (!$document instanceof PdfDocument) {
-                throw new \InvalidArgumentException(\sprintf('Invalid document option: "%s".', \get_debug_type($document)));
-            }
-        } else {
-            $size = new PdfSize($outerSize, $outerSize + $labelSpace);
-            $document = new PdfDocument(unit: $unit, size: $size);
-            $document->addPage();
-        }
+        $foregroundColor = $this->convertColor($qrCode->getForegroundColor());
 
         $x = $options[self::WRITER_OPTION_X] ?? 0;
         $y = $options[self::WRITER_OPTION_Y] ?? 0;
+        $document = $this->getDocument($options, $outerSize, $outerSize + $labelSpace);
 
         $document->setFillColor($backgroundColor);
         $document->rect($x, $y, $outerSize, $outerSize, PdfRectangleStyle::FILL);
@@ -98,11 +82,7 @@ final readonly class PdfDocumentWriter implements WriterInterface
     {
         $document->setXY($x, $y);
         $document->setFont(PdfFontName::HELVETICA, PdfFontStyle::REGULAR, $label->getFont()->getSize());
-        $document->cell(
-            width: $width,
-            text: $label->getText(),
-            align: PdfTextAlignment::CENTER
-        );
+        $document->cell(width: $width, text: $label->getText(), align: PdfTextAlignment::CENTER);
     }
 
     private function addLogo(LogoInterface $logo, PdfDocument $document, float $x, float $y, float $size): void
@@ -133,7 +113,7 @@ final readonly class PdfDocumentWriter implements WriterInterface
 
     private function addMatrix(MatrixInterface $matrix, PdfDocument $document, float $x, float $y): void
     {
-        $blocSize = $matrix->getBlockSize();
+        $blockSize = $matrix->getBlockSize();
         $marginLeft = $matrix->getMarginLeft();
         $blockCount = $matrix->getBlockCount();
         for ($rowIndex = 0; $rowIndex < $blockCount; ++$rowIndex) {
@@ -142,10 +122,10 @@ final readonly class PdfDocumentWriter implements WriterInterface
                     continue;
                 }
                 $document->rect(
-                    $x + $marginLeft + ($blocSize * $columnIndex),
-                    $y + $marginLeft + ($blocSize * $rowIndex),
-                    $blocSize,
-                    $blocSize,
+                    $x + $marginLeft + ($blockSize * $columnIndex),
+                    $y + $marginLeft + ($blockSize * $rowIndex),
+                    $blockSize,
+                    $blockSize,
                     PdfRectangleStyle::FILL
                 );
             }
@@ -159,5 +139,36 @@ final readonly class PdfDocumentWriter implements WriterInterface
         }
 
         return PdfRgbColor::instance($color->getRed(), $color->getGreen(), $color->getBlue());
+    }
+
+    private function getDocument(array $options, float $width, float $height): PdfDocument
+    {
+        if (isset($options[self::WRITER_OPTION_DOCUMENT])) {
+            $document = $options[self::WRITER_OPTION_DOCUMENT];
+            if (!$document instanceof PdfDocument) {
+                throw new \InvalidArgumentException(\sprintf('Invalid document option: "%s".', \get_debug_type($document)));
+            }
+            if (0 === $document->getPage()) {
+                throw new \InvalidArgumentException('No page added to the PdfDocument.');
+            }
+
+            return $document;
+        }
+
+        $unit = $this->getUnit($options);
+        $size = new PdfSize($width, $height);
+
+        return new PdfDocument(unit: $unit, size: $size)
+            ->addPage();
+    }
+
+    private function getUnit(array $options): PdfUnit
+    {
+        $value = $options[self::WRITER_OPTION_UNIT] ?? null;
+        if (null === $value) {
+            return PdfUnit::MILLIMETER;
+        }
+
+        return PdfUnit::tryFrom($value) ?? throw new \InvalidArgumentException(\sprintf('Invalid unit option: "%s".', $value));
     }
 }

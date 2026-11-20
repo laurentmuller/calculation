@@ -129,7 +129,7 @@ final class PlainTypeTest extends TypeTestCase
     public function testInvalidDataValue(): void
     {
         self::expectException(TransformationFailedException::class);
-        self::expectExceptionMessageIsOrContains('Unable to map instance of "stdClass" to string.');
+        self::expectExceptionMessageIs('Unable to map instance of "stdClass" to string.');
         $this->factory->create(PlainType::class, new \stdClass())
             ->createView();
     }

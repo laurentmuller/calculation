@@ -3,16 +3,21 @@ version: 8.4
 preset: symfony2025
 monolithic: true
 finder:
-  exclude:
-    - "vendor"
-  name: "*.php"
+    exclude:
+        - "vendor"
+    name: "*.php"
+    not-name:
+        - AbstractEntity.php
+        - LogChannelTrait.php
+        - LogLevelTrait.php
+        - TimestampableTrait.php
 enabled:
-  - native_function_invocation
-  - concat_with_spaces
+    - native_function_invocation
+    - concat_with_spaces
 disabled:
-  - no_nullable_type_declarations
-  - native_function_invocation_symfony
-  - concat_without_spaces
-  - phpdoc_to_comment
-  - function_declaration
-  - symfony_braces
+    - no_nullable_type_declarations
+    - native_function_invocation_symfony
+    - concat_without_spaces
+    - phpdoc_to_comment
+    - function_declaration
+    - symfony_braces

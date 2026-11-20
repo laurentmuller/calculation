@@ -52,6 +52,6 @@ class AboutPolicyController extends AbstractAboutController
     #[\Override]
     protected function getView(): string
     {
-        return 'about/policy.html.twig';
+        return 'about/about_policy.html.twig';
     }
 }

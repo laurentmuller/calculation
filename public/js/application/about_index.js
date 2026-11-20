@@ -98,19 +98,17 @@
 
         /**
          * Load the content and display it in the modal dialog.
-         * @param {Event} e the source event.
-         * @param {string} attribute the attribute name.
          */
-        loadModalContent: function (e, attribute) {
-            e.preventDefault();
-            const $this = $(e.currentTarget);
+        loadModalContent: function () {
+            const $this = $(this);
+            const attribute = $this.data('attribute');
             const $dialog = $(`#${attribute}-modal`);
             const content = $this.data(attribute);
             if (content) {
                 $this.displayDialogContent($dialog, content);
                 return;
             }
-            const url = $this.attr('href');
+            const url = $this.data('href');
             $.getJSON(url, function (response) {
                 const content = response.result && response.content;
                 if (content) {
@@ -145,10 +143,10 @@
         }).on('click', '.modal-data a', function (e) {
             e.preventDefault();
             window.open(e.target.href, '_blank');
-        }).on('click', '.link-license', function (e) {
-            $(this).loadModalContent(e, 'license');
-        }).on('click', '.link-package', function (e) {
-            $(this).loadModalContent(e, 'package');
+        }).on('click', '.link-license', function () {
+            $(this).loadModalContent();
+        }).on('click', '.link-package', function () {
+            $(this).loadModalContent();
         });
 
         // PHP list spy
@@ -157,7 +155,7 @@
             phpListSpy.addEventListener('activate.bs.scrollspy', (e) => {
                 if (e.relatedTarget) {
                     e.relatedTarget.scrollIntoView({
-                       'block': 'nearest'
+                        'block': 'nearest'
                     });
                 }
             });

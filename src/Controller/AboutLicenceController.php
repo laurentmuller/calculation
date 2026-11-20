@@ -50,6 +50,6 @@ class AboutLicenceController extends AbstractAboutController
     #[\Override]
     protected function getView(): string
     {
-        return 'about/licence.html.twig';
+        return 'about/about_licence.html.twig';
     }
 }

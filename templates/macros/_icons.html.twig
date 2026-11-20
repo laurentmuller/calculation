@@ -92,12 +92,12 @@
     </li>
 {%- endmacro dropdownItemWithClass %}
 
-{% macro dropdownItemButton(text, icon, class = null, hidden = false, parameters = []) -%}
+{% macro dropdownItemButton(text, icon, class = null, hidden = false, parameters = [], attributes = {}) -%}
     {%- set attrs = {
         type: 'button',
         class: ['dropdown-item', 'rowlink-skip', class, hidden ? 'd-none' : null]} -%}
     <li>
-        <button {{ html_attr(attrs) }}>
+        <button {{ html_attr(attrs, attributes) }}>
             {{- _self.icon(
                 icon: icon ? icon ~ ' fa-fw' : null,
                 text: text,

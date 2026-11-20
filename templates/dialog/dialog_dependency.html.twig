@@ -1,5 +1,5 @@
 {% from 'macros/_icons.html.twig' import modal_title, modal_close_button, button_copy %}
-{% set dialog_id = 'package-modal' %}
+{% set dialog_id = 'dependency-modal' %}
 <div class="modal fade" id="{{ dialog_id }}" tabindex="-1" aria-labelledby="modal-package-title" aria-hidden="true"
      data-found-error="{{ 'about.package.not_found'|trans }}"
      data-load-error="{{ 'about.package.not_loaded'|trans }}">
@@ -7,7 +7,7 @@
         <div class="modal-content">
             {{- modal_title(
                 id: 'modal-package-title',
-                title_icon: 'fa-solid fa-file-code',
+                title_icon: 'fa-solid fa-diagram-predecessor',
                 title_text: 'about.package.title',
                 data_target: dialog_id) -}}
             <div class="modal-body">

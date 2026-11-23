@@ -87,7 +87,7 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group mb-3">
-                    <label class="form-label" for="state_single">Status (simple)</label>
+                    <label class="form-label" for="state_single">Statut (simple)</label>
                     <select id="state_single" class="form-select">
                         {% for key, group in states -%}
                             <optgroup label="{{ key|trans }}">
@@ -101,7 +101,7 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group mb-3">
-                    <label class="form-label" for="state">Status (multiple)</label>
+                    <label class="form-label" for="state">Statuts (multiple)</label>
                     <div class="input-group">
                         <select id="state" class="form-select" multiple data-delete="Supprimer le statut">
                             {% for key, group in states -%}
@@ -112,10 +112,10 @@
                                 </optgroup>
                             {%- endfor %}
                         </select>
-                        <button type="button" class="btn btn-outline-secondary btn-search" title="Ajouter un statut">
+                        <button type="button" class="btn btn-outline-secondary btn-tom-select-open" title="Ajouter un statut">
                             <i class="fa-solid fa-plus"></i>
                         </button>
-                        <button type="button" class="btn btn-outline-secondary btn-clear" title="Supprimer tous les statuts">
+                        <button type="button" class="btn btn-outline-secondary btn-tom-select-clear" title="Supprimer tous les statuts">
                             <i class="fa-regular fa-trash-alt"></i>
                         </button>
                     </div>
@@ -139,10 +139,10 @@
                                 </optgroup>
                             {%- endfor %}
                         </select>
-                        <button type="button" class="btn btn-outline-secondary btn-search" title="Ajouter une catégorie">
+                        <button type="button" class="btn btn-outline-secondary btn-tom-select-open" title="Ajouter une catégorie">
                             <i class="fa-solid fa-plus"></i>
                         </button>
-                        <button type="button" class="btn btn-outline-secondary btn-clear" title="Supprimer toutes les catégories">
+                        <button type="button" class="btn btn-outline-secondary btn-tom-select-clear" title="Supprimer toutes les catégories">
                             <i class="fa-regular fa-trash-alt"></i>
                         </button>
                     </div>
@@ -311,16 +311,16 @@
 {%- endblock body %}
 {# stylesheets #}
 {% block stylesheets -%}
+    {{ asset_css('build/tom-select/tom-select.bootstrap5.css') }}
     {{ asset_css('build/currency-flags/currency-flags.css') }}
-    {{ asset_css('css/select2.css') }}
+    {{ asset_css('css/tom-select.css') }}
     {{ asset_css('css/three-state.css') }}
 {% endblock stylesheets %}
 {# javascripts #}
 {% block javascripts %}
     {{ parent() }}
-    {{ asset_js('build/select2/js/select2.js') }}
-    {{ asset_js('build/select2/js/i18n/fr.js') }}
-    {{ asset_js('js/extensions/select2-extensions.js') }}
+    {{ asset_js('build/tom-select/tom-select.complete.js') }}
+    {{ asset_js('js/extensions/tom-select-extension.js') }}
     {{ asset_js('js/plugins/plugin-treeview.js') }}
     {{ asset_js('js/plugins/plugin-drag-modal.js') }}
     {{ asset_js('js/test/treeview.js') }}

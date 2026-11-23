@@ -80,20 +80,16 @@
             "to": "public/build/panzoom/"
         },
         {
-            "from": [
-                "node_modules/select2/dist/js/select2.js",
-                "node_modules/select2/dist/js/i18n/fr.js",
-                "node_modules/select2/dist/css/select2.css"
-            ],
-            "to": "public/build/select2/js/"
-        },
-        {
-            "from": "node_modules/select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.css",
-            "to": "public/build/select2/css/"
-        },
-        {
             "from": "node_modules/country-flag-icons/3x2/*",
             "to": "public/build/country-flags/"
+        },
+        {
+            "from": "node_modules/tom-select/dist/js/tom-select.complete.js",
+            "to": "public/build/tom-select/"
+        },
+        {
+            "from": "node_modules/tom-select/dist/css/tom-select.bootstrap5.css",
+            "to": "public/build/tom-select/"
         }
     ],
     "copyFilesSettings": {

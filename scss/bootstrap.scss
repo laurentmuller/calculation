@@ -75,6 +75,11 @@ $badge-font-weight: 400;
     #{prefix-property($property)}: #{color-contrast($value)};
 }
 
+/*
+ * ================================================
+ *              Customized part
+ * ================================================
+ */
 :root {
     /* default radius */
     @if $enable-rounded {

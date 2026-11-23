@@ -1,0 +1,33 @@
+@import 'style.css';
+@import '../build/tom-select/tom-select.bootstrap5.css';
+
+.ts-control {
+    border-radius: var(--bs-default-radius);
+}
+
+.ts-dropdown {
+    border-radius: var(--bs-default-radius);
+}
+
+.ts-dropdown [data-selectable] .highlight {
+    border-radius: var(--bs-default-radius);
+}
+
+.ts-wrapper .dropdown-header {
+    border-radius: var(--bs-default-radius);
+}
+
+.ts-dropdown,
+.ts-dropdown.form-control,
+.ts-dropdown.form-select {
+    border-radius: var(--bs-default-radius);
+}
+
+.plugin-dropdown_input.focus .ts-dropdown .dropdown-input
+{
+    position: relative;
+}
+
+.plugin-dropdown_input.required::after {
+    content: "" ;
+}

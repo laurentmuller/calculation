@@ -60,11 +60,11 @@
                             text: 'about.licence.title',
                             icon: 'fa-solid fa-book-open-reader',
                             class: 'link-license btn-default',
-                            attributes = {
+                            attributes: {
                                 'data-href': path('about_symfony_license', {name: package.name}),
-                                'data-attribute': 'license'
-                            }
-                        )}}
+                                'data-attribute': 'license',
+                            },
+                        ) }}
                     {% endif %}
                     {%- if is_homepage -%}
                         {{- dropdownItemExternal(
@@ -88,11 +88,11 @@
                             text: 'about.package.title',
                             icon: 'fa-solid fa-diagram-predecessor',
                             class: 'link-package',
-                            attributes = {
+                            attributes: {
                                 'data-href': path('about_symfony_dependency', {name: package.name}),
-                                'data-attribute': 'dependency'
-                            }
-                        )}}
+                                'data-attribute': 'dependency',
+                            },
+                        ) }}
                     {% endif %}
                 </ul>
             </td>

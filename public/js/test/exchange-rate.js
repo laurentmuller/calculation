@@ -1,4 +1,4 @@
-/* globals Toaster */
+/* globals Toaster, TomSelect */
 
 /**
  * Show an error message
@@ -90,20 +90,16 @@ function compute() {
 }
 
 /**
- * Format the currency entry.
- *
- * @param {Object} currency - the currency data.
- * @returns the formatted currency.
+ * Format a currency.
+ * @param {Object} currency
+ * @param {function} escape
  */
-function formatCurrency(currency) {
+function formatCurrency(currency, escape) {
     'use strict';
-    const id = currency.id;
-    const text = currency.text;
-    if (!id) {
-        return text;
-    }
+    const value = currency.value;
+    const text = escape(currency.text);
     const $flag = $('<span/>', {
-        'class': 'me-1 currency-flag currency-flag-' + id.toLowerCase(),
+        'class': 'me-1 currency-flag currency-flag-' + value.toLowerCase(),
     });
     const $text = $('<span/>', {
         'class': 'text-truncate',
@@ -117,17 +113,16 @@ function formatCurrency(currency) {
 
 /**
  * Handle swap button click event.
+ * @param {TomSelect} tsBaseCode
+ * @param {TomSelect} tsTargetCode
  */
-function swapCodes() {
+function swapCodes(tsBaseCode, tsTargetCode) {
     'use strict';
-    const $baseCode = $('#baseCode');
-    const $targetCode = $('#targetCode');
-    const temp = $baseCode.val();
-    if (temp) {
-        $baseCode.val($targetCode.val()).trigger('change');
-        $targetCode.val(temp).trigger('change');
-        compute();
-    }
+    const baseCode = tsBaseCode.getValue();
+    const targetCode = tsTargetCode.getValue();
+    tsBaseCode.setValue(targetCode, false);
+    tsTargetCode.setValue(baseCode, false);
+    compute();
 }
 
 /**
@@ -137,14 +132,22 @@ $(function () {
     'use strict';
 
     // initialize select
-    $('#baseCode, #targetCode').initSelect2({
-        templateSelection: formatCurrency,
-        templateResult: formatCurrency
+    const tsBaseCode = initSingleTomSelect('#baseCode', {
+        render: {
+            item: (data, escape) => formatCurrency(data, escape),
+            option: (data, escape) => formatCurrency(data, escape),
+        }
+    });
+    const tsTargetCode = initSingleTomSelect('#targetCode', {
+        render: {
+            item: (data, escape) => formatCurrency(data, escape),
+            option: (data, escape) => formatCurrency(data, escape),
+        }
     });
 
     // bind events
     $('.btn-swap').on('click', function () {
-        swapCodes();
+        swapCodes(tsBaseCode, tsTargetCode);
     });
     $('#baseCode, #targetCode, #amount').on('input', function () {
         $(this).updateTimer(compute, 250);
@@ -162,4 +165,8 @@ $(function () {
     $('#amount').trigger('select').trigger('focus');
     compute();
 
+    // update labels and inputs
+    updateTomSelectLabel('#baseCode');
+    updateTomSelectLabel('#targetCode');
+    updateTomSelectIdentifiers();
 });

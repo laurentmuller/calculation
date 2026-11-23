@@ -29,17 +29,16 @@ function handleError(response) {
     notify(Toaster.NotificationTypes.DANGER, message);
 }
 
-
 /**
  * Handle from and to input event.
  */
 function handleSelection() {
     'use strict';
     // update exchange button.
-    const from = $('#from').getSelectedOption().index();
-    const to = $('#to').getSelectedOption().index();
-    const state = from === 0 || from - 1 === to;
-    $('.btn-exchange').toggleDisabled(state);
+    const from = $('#from').val();
+    const to = $('#to').val();
+    const disabled = !from || from === to;
+    $('.btn-exchange').toggleDisabled(disabled);
 }
 
 /**
@@ -101,6 +100,7 @@ function translate(form, notification) {
                 if (data.from.tag && fromValue !== data.from.tag) {
                     $form.data('changing', true);
                     $from.val(data.from.tag).trigger('change');
+                    updateListSelection($from);
                     handleSelection();
                 }
             }
@@ -131,16 +131,23 @@ function translate(form, notification) {
 /**
  * Handle exchange click event.
  */
-function handleExchange() {
+function handleExchange(tsFrom, tsTo) {
     'use strict';
     // exchange from and to language.
-    const $from = $('#from');
-    const from = $from.val();
-    if (from) {
-        const $to = $('#to');
-        $from.val($to.val()).trigger('change');
-        $to.val(from).trigger('change');
-    }
+    const from = tsFrom.getValue();
+    const to = tsTo.getValue();
+    tsFrom.setValue(to, false);
+    tsTo.setValue(from, false);
+
+    // const $from = $('#from');
+    // const from = $from.val();
+    // if (from) {
+    //     const $to = $('#to');
+    //     $from.val($to.val()).trigger('change');
+    //     $to.val(from).trigger('change');
+    //     updateListSelection($from);
+    //     updateListSelection($to);
+    // }
 }
 
 /**
@@ -178,6 +185,21 @@ function getLocale() {
     'use strict';
     const locale = $('#edit-form').data('locale');
     return locale.split('_')[0];
+}
+
+/**
+ * @param {jQuery<HTMLInputElement>} $element
+ */
+function updateListSelection($element) {
+    'use strict';
+    if (!$element.length) {
+        return;
+    }
+    const tomSelect = $element[0].tomselect;
+    if (!tomSelect) {
+        return;
+    }
+    tomSelect.setValue($element.val(), false);
 }
 
 /**
@@ -222,9 +244,11 @@ function handleService() {
             // restore values
             if (!$to.val(oldTo).val() && !$to.val(getLocale()).val()) {
                 $to.selectFirstOption();
+                updateListSelection($to);
             }
             if (oldFrom && !$from.val(oldFrom).val()) {
                 $from.selectFirstOption();
+                updateListSelection($from);
             }
 
             // translate
@@ -245,14 +269,19 @@ $(function () {
     const $fromAndTo = $('#from, #to');
 
     // initialize select
-    $fromAndTo.initSelect2();
+    const tsFrom = initSingleTomSelect('#from', {
+        plugins: ['dropdown_input'],
+    });
+    const tsTo = initSingleTomSelect('#to', {
+        plugins: ['dropdown_input'],
+    });
 
     // clipboard
     $('.btn-copy').copyClipboard();
 
     // bind events
     $('.btn-exchange').on('click', function () {
-        handleExchange();
+        handleExchange(tsFrom, tsTo);
     });
     $fromAndTo.on('input', function () {
         handleSelection();
@@ -288,4 +317,9 @@ $(function () {
     };
     $('#edit-form').initValidator(options);
     $text.trigger('focus');
+
+    // update labels and inputs
+    updateTomSelectLabel('#from');
+    updateTomSelectLabel('#to');
+    updateTomSelectIdentifiers();
 });

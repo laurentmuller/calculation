@@ -1,21 +1,17 @@
-/* global bootstrap */
+/* global bootstrap, TomSelect */
 
 /**
  * Format the country entry.
  *
- * @param {Object} country - the country data.
- * @returns the formatted country.
+ * @param {Object} country
+ * @param {function} escape
  */
-function formatCountry(country) {
+function formatCountry(country, escape) {
     'use strict';
-    const id = country.id;
-    const text = country.text;
-    if (!id) {
-        return text;
-    }
-
+    const value = country.value;
+    const text = escape(country.text);
     const path = $('#country').data('path');
-    const src = `${path}${id.toUpperCase()}.svg`;
+    const src = `${path}${value.toUpperCase()}.svg`;
     const $img = $('<img/>', {
         class: 'country-flag me-1',
         alt: text,
@@ -29,18 +25,20 @@ function formatCountry(country) {
     const $text = $('<span/>', {
         class: 'text-truncate',
         text: text
-    });
-    return $text.prepend($img);
+    }).prepend($img);
+
+    return $('<div/>').append($text);
 }
 
-function formatState(state) {
+/**
+ * Format a state.
+ * @param {Object} state
+ * @param {function} escape
+ */
+function formatState(state, escape) {
     'use strict';
-    const id = state.id;
-    const text = state.text;
-    if (!id) {
-        return text;
-    }
-    const color = $(state.element).data('color');
+    const text = escape(state.text);
+    const color = $(state.$option).data('color');
     const $color = $('<span/>', {
         'class': 'border border-secondary me-1',
         'css': {
@@ -54,17 +52,18 @@ function formatState(state) {
         'class': 'text-truncate',
         'text': text
     });
-    return $text.prepend($color);
+    return $('<div/>').append($text.prepend($color));
 }
 
-function formatStateSelection(state) {
+/**
+ * Format a selected state.
+ * @param {Object} state
+ * @param {function} escape
+ */
+function formatStateSelection(state, escape) {
     'use strict';
-    const id = state.id;
-    const text = state.text;
-    if (!id) {
-        return text;
-    }
-    const color = $(state.element).data('color');
+    const text = escape(state.text);
+    const color = $(state.$option).data('color');
     const $color = $('<span/>', {
         'class': 'border border-secondary me-1',
         'css': {
@@ -81,15 +80,17 @@ function formatStateSelection(state) {
     return $text.prepend($color);
 }
 
-function formatCurrency(currency) {
+/**
+ * Format a currency.
+ * @param {Object} currency
+ * @param {function} escape
+ */
+function formatCurrency(currency, escape) {
     'use strict';
-    const id = currency.id;
-    const text = currency.text;
-    if (!id) {
-        return text;
-    }
+    const value = currency.value;
+    const text = escape(currency.text);
     const $flag = $('<span/>', {
-        'class': 'me-1 currency-flag currency-flag-' + id.toLowerCase(),
+        'class': 'me-1 currency-flag currency-flag-' + value.toLowerCase(),
     });
     const $text = $('<span/>', {
         'class': 'text-truncate',
@@ -101,13 +102,14 @@ function formatCurrency(currency) {
     return $div.append($flag).append($text);
 }
 
-function formatCategory(category) {
+/**
+ * Format a category.
+ * @param {Object} category
+ * @param {function} escape
+ */
+function formatCategory(category, escape) {
     'use strict';
-    const id = category.id;
-    const text = category.text;
-    if (!id) {
-        return text;
-    }
+    const text = escape(category.text);
     const $icon = $('<i/>', {
         'class': 'far fa-folder me-1',
     });
@@ -115,16 +117,17 @@ function formatCategory(category) {
         'class': 'text-truncate',
         'text': text
     });
-    return $text.prepend($icon);
+    return $('<div/>').append($text.prepend($icon));
 }
 
-function formatCategorySelection(category) {
+/**
+ * Format the selected category.
+ * @param {Object} category
+ * @param {function} escape
+ */
+function formatCategorySelection(category, escape) {
     'use strict';
-    const id = category.id;
-    const text = category.text;
-    if (!id) {
-        return text;
-    }
+    const text = escape(category.text);
     const $icon = $('<i/>', {
         'class': 'far fa-folder me-1',
     });
@@ -135,27 +138,27 @@ function formatCategorySelection(category) {
     return $text.prepend($icon);
 }
 
-function formatProduct(product) {
+/**
+ * Format a product.
+ * @param {Object} product
+ * @param {function} escape
+ */
+function formatProduct(product, escape) {
     'use strict';
-    const id = product.id;
-    let text = product.text;
-
-    if (!id) {
-        return text;
-    }
-
-    const price = $.parseFloat($(product.element).data('price'));
+    const text = escape(product.text);
+    const $option = $(product.$option);
+    const price = $.parseFloat($option.data('price'));
     const priceClass = price ? '' : 'text-danger';
     const priceText = $.formatFloat(price);
 
-    let unit = $(product.element).data('unit');
+    let unit = $option.data('unit');
     unit = unit ? `<span>&nbsp;/&nbsp;${unit}</span>` : '';
 
-    return $(`<div class="d-flex w-100">
+    return `<div class="d-flex w-100">
                 <span class="me-auto text-truncate">${text}</span>
                 <span class="${priceClass}">${priceText}</span>
                 ${unit}                            
-            </div>`);
+            </div>`;
 }
 
 function updatePosition($radio) {
@@ -206,48 +209,6 @@ $(function () {
         window.console.log('Expand to Level', e.level, e.items);
     }).on('togglegroup.bs.treeview', function (e) {
         window.console.log('Toggle Group', 'expanding:' + e.expanding, e.item);
-    });
-
-    // countries
-    $('#country').initSelect2({
-        templateResult: formatCountry,
-        templateSelection: formatCountry
-    }).val('CH').trigger('change');
-
-    // currency
-    $('#currency').initSelect2({
-        templateResult: formatCurrency,
-        templateSelection: formatCurrency
-    }).val('CHF').trigger('change');
-
-    // states
-    $('#state_single').initSelect2({
-        templateResult: formatState,
-        templateSelection: formatStateSelection,
-        minimumResultsForSearch: Infinity
-    });
-    $('#state').initSelect2({
-        templateResult: formatState,
-        templateSelection: formatStateSelection,
-    }).val([1, 5]).trigger('change');
-
-    // product
-    $('#product').initSelect2({
-        templateResult: formatProduct,
-        templateSelection: formatProduct,
-    });
-
-    // categories
-    $('#category').initSelect2({
-        templateResult: formatCategory,
-        templateSelection: formatCategorySelection
-    }).val([1, 2]).trigger('change');
-
-    $('.btn-search').on('click', function () {
-        $(this).parents('.form-group').find('select').select2('open');
-    });
-    $('.btn-clear').on('click', function () {
-        $(this).parents('.form-group').find('select').val('').trigger('change').focus();
     });
 
     // drag modal
@@ -345,6 +306,104 @@ $(function () {
         const $this = $(this);
         $this.css('--fa-rotate-angle', $this.data('rotate'));
     });
+
+    // country
+    initSingleTomSelect('#country', {
+        closeAfterSelect: true,
+        render: {
+            item: (data, escape) => formatCountry(data, escape),
+            option: (data, escape) => formatCountry(data, escape),
+        }
+    }).setValue('CH');
+
+    // product
+    initSingleTomSelect('#product', {
+        closeAfterSelect: true,
+        render: {
+            item: (data, escape) => formatProduct(data, escape),
+            option: (data, escape) => formatProduct(data, escape),
+        }
+    })
+
+    // currency
+    initSingleTomSelect('#currency', {
+        closeAfterSelect: true,
+        render: {
+            item: (data, escape) => formatCurrency(data, escape),
+            option: (data, escape) => formatCurrency(data, escape),
+        }
+    }).setValue('CHF');
+
+    // categories
+    initMultipleTomSelect('#category', {
+            render: {
+                item: (data, escape) => formatCategorySelection(data, escape),
+                option: (data, escape) => formatCategory(data, escape),
+            }
+        },
+        true,
+        'Supprimer la catégorie'
+    ).setValue([4, 6], false);
+
+    // states
+    initMultipleTomSelect('#state', {
+            render: {
+                item: (data, escape) => formatStateSelection(data, escape),
+                option: (data, escape) => formatState(data, escape),
+            }
+        },
+        false,
+        'Supprimer le statut'
+    ).setValue([1, 5], false);
+
+    initSingleTomSelect('#state_single', {
+        render: {
+            item: (data, escape) => formatStateSelection(data, escape),
+            option: (data, escape) => formatState(data, escape),
+        }
+    }, false);
+
+    // update labels and inputs
+    updateTomSelectLabel('country');
+    updateTomSelectLabel('product');
+    updateTomSelectLabel('currency');
+    updateTomSelectLabel('category');
+    updateTomSelectLabel('state');
+    updateTomSelectLabel('state_single');
+    updateTomSelectIdentifiers();
+
+    // open button
+    $('.btn-tom-select-open').on('click', function () {
+        const $input = $(this).siblings('select, input');
+        if (!$input.length) {
+            return;
+        }
+        const tomSelect = $input[0].tomselect;
+        if (!tomSelect) {
+            return;
+        }
+        tomSelect.open();
+    });
+    // clear button
+    $('.btn-tom-select-clear').on('click', function () {
+        const $input = $(this).siblings('select, input');
+        if (!$input.length) {
+            return;
+        }
+        const tomSelect = $input[0].tomselect;
+        if (!tomSelect) {
+            return;
+        }
+        tomSelect.clear(false);
+    });
+
+    // update labels and inputs
+    updateTomSelectLabel('#country');
+    updateTomSelectLabel('#currency');
+    updateTomSelectLabel('#state');
+    updateTomSelectLabel('#category');
+    updateTomSelectLabel('#product');
+    updateTomSelectIdentifiers();
 });
 
 /**

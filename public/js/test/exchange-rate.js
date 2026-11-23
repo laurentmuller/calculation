@@ -24,8 +24,7 @@ function updateDate($element, date) {
     'use strict';
     const source = $element.data('text');
     const text = source.replace('%date%', date);
-    $element.text(text);
-    return $element;
+    return $element.text(text);
 }
 
 /**
@@ -50,7 +49,7 @@ function formatValue(value, digits) {
  */
 function compute() {
     'use strict';
-    const $form = $('#edit-form');
+    const $form = $('#edit-form').validateForm();
     if (!$form.valid()) {
         return;
     }
@@ -96,19 +95,13 @@ function compute() {
  */
 function formatCurrency(currency, escape) {
     'use strict';
-    const value = currency.value;
     const text = escape(currency.text);
-    const $flag = $('<span/>', {
-        'class': 'me-1 currency-flag currency-flag-' + value.toLowerCase(),
-    });
-    const $text = $('<span/>', {
-        'class': 'text-truncate',
-        'text': text
-    });
-    const $div = $('<div/>', {
-        'class': 'd-inline-flex align-items-center w-100'
-    });
-    return $div.append($flag).append($text);
+    const value = currency.value.toLowerCase();
+
+    return `<div class="d-inline-flex align-items-center w-100">
+                <span class="me-1 currency-flag currency-flag-${value}"></span>
+                <span class="text-truncate">${text}</span>      
+            </div>`;
 }
 
 /**
@@ -157,16 +150,14 @@ $(function () {
     const options = {
         focus: false,
         showModification: false,
-        submitHandler: function () {
-            compute();
+        submitHandler: () => compute(),
+        rules: {
+            targetCode: {
+                notEqualTo: '#baseCode'
+            }
         }
     };
     $('#edit-form').initValidator(options);
     $('#amount').trigger('select').trigger('focus');
     compute();
-
-    // update labels and inputs
-    updateTomSelectLabel('#baseCode');
-    updateTomSelectLabel('#targetCode');
-    updateTomSelectIdentifiers();
 });

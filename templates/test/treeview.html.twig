@@ -53,7 +53,7 @@
         </div>
     </div>
     <div class="col-md-8 offset-md-2">
-        <div id="tree" class="list-group mb-3" role="tree" data-url="{{ path('test_tree') }}"
+        <div id="tree" name="tree" class="list-group mb-3" role="tree" data-url="{{ path('test_tree') }}"
              data-loading-text="{{ 'about.load.message'|trans }}"
              data-badge-class="bg-secondary" data-badge-count="true"></div>
     </div>
@@ -64,7 +64,7 @@
             <div class="col-md-6">
                 <div class="form-group mb-3">
                     <label class="form-label" for="country">Pays</label>
-                    <select id="country" class="form-select" data-path="{{ asset('build/country-flags/')|split('?')|first }}">
+                    <select id="country" name="country" class="form-select" autocomplete="off" data-path="{{ asset('build/country-flags/')|split('?')|first }}">
                         {% for key, value in countries -%}
                             <option value="{{ key }}">{{ value }}</option>
                         {%- endfor %}
@@ -74,7 +74,7 @@
             <div class="col-md-6">
                 <div class="form-group mb-3">
                     <label class="form-label required" for="currency">Monnaie</label>
-                    <select id="currency" class="form-select" required="required">
+                    <select id="currency" name="currency" class="form-select" required="required">
                         {% for currency in currencies -%}
                             <option value="{{ currency.code }}">{{ currency.name }}</option>
                         {%- endfor %}
@@ -87,8 +87,8 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group mb-3">
-                    <label class="form-label" for="state_single">Statut (simple)</label>
-                    <select id="state_single" class="form-select">
+                    <label class="form-label" for="state-single">Statut (simple)</label>
+                    <select id="state-single" name="state-single" class="form-select">
                         {% for key, group in states -%}
                             <optgroup label="{{ key|trans }}">
                                 {% for state in group -%}
@@ -103,7 +103,7 @@
                 <div class="form-group mb-3">
                     <label class="form-label" for="state">Statuts (multiple)</label>
                     <div class="input-group">
-                        <select id="state" class="form-select" multiple data-delete="Supprimer le statut">
+                        <select id="state" name="state" class="form-select" multiple data-delete="Supprimer le statut">
                             {% for key, group in states -%}
                                 <optgroup label="{{ key|trans }}">
                                     {% for state in group -%}
@@ -151,7 +151,7 @@
             <div class="col-md-6">
                 <div class="form-group mb-3">
                     <label class="form-label" for="product">Article</label>
-                    <select id="product">
+                    <select id="product" name="product" class="form-select">
                         {% for key, group in products -%}
                             <optgroup label="{{ key }}">
                                 {% for product in group -%}
@@ -206,13 +206,13 @@
             <div class="col-md-6 my-2">
                 <div class="dropdown-input">
                     <label for="first_name" class="form-label">First Name</label>
-                    <input type="text" class="form-control" id="first_name" name="first_name">
+                    <input type="text" class="form-control" id="first_name" name="first_name" autocomplete="off">
                 </div>
             </div>
             <div class="col-md-6 my-2">
                 <div class="form-group mb-3">
                     <label class="form-label" for="product-picker">Article</label>
-                    <select id="product-picker" class="form-select">
+                    <select id="product-picker" name="product-picker" class="form-select">
                         {% for key, group in products -%}
                             <optgroup label="{{ key }}">
                                 {% for product in group -%}
@@ -315,6 +315,9 @@
     {{ asset_css('build/currency-flags/currency-flags.css') }}
     {{ asset_css('css/tom-select.css') }}
     {{ asset_css('css/three-state.css') }}
+    <style nonce="{{ csp_nonce() }}">
+        {{- css_border() }}
+    </style>
 {% endblock stylesheets %}
 {# javascripts #}
 {% block javascripts %}

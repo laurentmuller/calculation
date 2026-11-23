@@ -37,22 +37,7 @@ function formatCountry(country, escape) {
  */
 function formatState(state, escape) {
     'use strict';
-    const text = escape(state.text);
-    const color = $(state.$option).data('color');
-    const $color = $('<span/>', {
-        'class': 'border border-secondary me-1',
-        'css': {
-            'background-color': color,
-            'display': 'inline-block',
-            'height': '0.75rem',
-            'width': '1rem'
-        }
-    });
-    const $text = $('<div/>', {
-        'class': 'text-truncate',
-        'text': text
-    });
-    return $('<div/>').append($text.prepend($color));
+    return $('<div/>').append(formatStateSelection(state, escape));
 }
 
 /**
@@ -62,22 +47,13 @@ function formatState(state, escape) {
  */
 function formatStateSelection(state, escape) {
     'use strict';
-    const text = escape(state.text);
-    const color = $(state.$option).data('color');
+    const value = state.value;
     const $color = $('<span/>', {
-        'class': 'border border-secondary me-1',
-        'css': {
-            'background-color': color,
-            'display': 'inline-block',
-            'height': '0.75rem',
-            'width': '1rem'
-        }
+        'class': `me-1 border border-secondary state-color state-background-${value}`,
     });
-    const $text = $('<span/>', {
-        'class': 'me-1',
-        'text': text
-    });
-    return $text.prepend($color);
+    return $('<span/>', {
+        'text': escape(state.text)
+    }).prepend($color);
 }
 
 /**
@@ -87,14 +63,13 @@ function formatStateSelection(state, escape) {
  */
 function formatCurrency(currency, escape) {
     'use strict';
-    const value = currency.value;
-    const text = escape(currency.text);
+    const value = currency.value.toLowerCase();
     const $flag = $('<span/>', {
-        'class': 'me-1 currency-flag currency-flag-' + value.toLowerCase(),
+        'class': 'me-1 currency-flag currency-flag-' + value,
     });
     const $text = $('<span/>', {
         'class': 'text-truncate',
-        'text': text
+        'text': escape(currency.text)
     });
     const $div = $('<div/>', {
         'class': 'd-inline-flex align-items-center w-100'
@@ -109,15 +84,7 @@ function formatCurrency(currency, escape) {
  */
 function formatCategory(category, escape) {
     'use strict';
-    const text = escape(category.text);
-    const $icon = $('<i/>', {
-        'class': 'far fa-folder me-1',
-    });
-    const $text = $('<span/>', {
-        'class': 'text-truncate',
-        'text': text
-    });
-    return $('<div/>').append($text.prepend($icon));
+    return $('<div/>').append(formatCategorySelection(category, escape));
 }
 
 /**
@@ -127,15 +94,13 @@ function formatCategory(category, escape) {
  */
 function formatCategorySelection(category, escape) {
     'use strict';
-    const text = escape(category.text);
     const $icon = $('<i/>', {
-        'class': 'far fa-folder me-1',
+        'class': 'far fa-folder me-1'
     });
-    const $text = $('<span/>', {
-        'text': text,
-        'class': 'mx-1'
-    });
-    return $text.prepend($icon);
+
+    return $('<span/>', {
+        'text': escape(category.text)
+    }).prepend($icon);
 }
 
 /**
@@ -146,18 +111,16 @@ function formatCategorySelection(category, escape) {
 function formatProduct(product, escape) {
     'use strict';
     const text = escape(product.text);
-    const $option = $(product.$option);
-    const price = $.parseFloat($option.data('price'));
+    const dataset = product.$option.dataset;
+    const price = $.parseFloat(dataset.price);
     const priceClass = price ? '' : 'text-danger';
     const priceText = $.formatFloat(price);
-
-    let unit = $option.data('unit');
-    unit = unit ? `<span>&nbsp;/&nbsp;${unit}</span>` : '';
+    const unit = dataset.unit ? `<span>&nbsp;/&nbsp;${dataset.unit}</span>` : '';
 
     return `<div class="d-flex w-100">
                 <span class="me-auto text-truncate">${text}</span>
                 <span class="${priceClass}">${priceText}</span>
-                ${unit}                            
+                <span>${unit}</span>                                            
             </div>`;
 }
 
@@ -309,16 +272,15 @@ $(function () {
 
     // country
     initSingleTomSelect('#country', {
-        closeAfterSelect: true,
+        items: ['CH'],
         render: {
             item: (data, escape) => formatCountry(data, escape),
             option: (data, escape) => formatCountry(data, escape),
         }
-    }).setValue('CH');
+    });
 
     // product
     initSingleTomSelect('#product', {
-        closeAfterSelect: true,
         render: {
             item: (data, escape) => formatProduct(data, escape),
             option: (data, escape) => formatProduct(data, escape),
@@ -327,50 +289,42 @@ $(function () {
 
     // currency
     initSingleTomSelect('#currency', {
-        closeAfterSelect: true,
+        items: ['CHF'],
         render: {
             item: (data, escape) => formatCurrency(data, escape),
             option: (data, escape) => formatCurrency(data, escape),
         }
-    }).setValue('CHF');
+    });
 
     // categories
     initMultipleTomSelect('#category', {
-            render: {
-                item: (data, escape) => formatCategorySelection(data, escape),
-                option: (data, escape) => formatCategory(data, escape),
-            }
-        },
-        true,
-        'Supprimer la catégorie'
-    ).setValue([4, 6], false);
+        items: [4, 6],
+        dropdownInput: true,
+        removeButton: 'Supprimer la catégorie',
+        render: {
+            item: (data, escape) => formatCategorySelection(data, escape),
+            option: (data, escape) => formatCategory(data, escape),
+        }
+    });
 
     // states
     initMultipleTomSelect('#state', {
-            render: {
-                item: (data, escape) => formatStateSelection(data, escape),
-                option: (data, escape) => formatState(data, escape),
-            }
-        },
-        false,
-        'Supprimer le statut'
-    ).setValue([1, 5], false);
-
-    initSingleTomSelect('#state_single', {
+        items: [1, 5],
+        dropdownInput: false,
+        removeButton: 'Supprimer le statut',
         render: {
             item: (data, escape) => formatStateSelection(data, escape),
             option: (data, escape) => formatState(data, escape),
         }
-    }, false);
+    });
 
-    // update labels and inputs
-    updateTomSelectLabel('country');
-    updateTomSelectLabel('product');
-    updateTomSelectLabel('currency');
-    updateTomSelectLabel('category');
-    updateTomSelectLabel('state');
-    updateTomSelectLabel('state_single');
-    updateTomSelectIdentifiers();
+    initSingleTomSelect('#state-single', {
+        dropdownInput: false,
+        render: {
+            item: (data, escape) => formatStateSelection(data, escape),
+            option: (data, escape) => formatState(data, escape),
+        }
+    });
 
     // open button
     $('.btn-tom-select-open').on('click', function () {
@@ -396,14 +350,6 @@ $(function () {
         }
         tomSelect.clear(false);
     });
-
-    // update labels and inputs
-    updateTomSelectLabel('#country');
-    updateTomSelectLabel('#currency');
-    updateTomSelectLabel('#state');
-    updateTomSelectLabel('#category');
-    updateTomSelectLabel('#product');
-    updateTomSelectIdentifiers();
 });
 
 /**

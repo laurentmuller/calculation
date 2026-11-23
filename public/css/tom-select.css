@@ -23,11 +23,12 @@
     border-radius: var(--bs-default-radius);
 }
 
-.plugin-dropdown_input.focus .ts-dropdown .dropdown-input
-{
+/* stylelint-disable-next-line selector-class-pattern */
+.plugin-dropdown_input.focus .ts-dropdown .dropdown-input {
     position: relative;
 }
 
+/* stylelint-disable-next-line selector-class-pattern */
 .plugin-dropdown_input.required::after {
-    content: "" ;
+    content: '';
 }

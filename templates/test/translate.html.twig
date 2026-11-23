@@ -41,7 +41,7 @@
         <div class="col-md-4">
             <div class="form-group mb-3">
                 <label for="to" class="form-label required">{{ 'translator.to_label'|trans }}</label>
-                <select id="to" name="to" class="form-select" required="required" notEqualTo="#from">
+                <select id="to" name="to" class="form-select" required="required">
                     {{ _self.fillLanguages(languages, language) }}
                 </select>
             </div>

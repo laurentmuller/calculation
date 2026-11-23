@@ -150,8 +150,8 @@
                  * password
                  */
                 passwordLevels: ['Très faible', 'Faible', 'Moyenne', 'Forte', 'Très forte'],
-                passwordFallback: 'Ce champ doit avoir une valeur {0} (valeur actuelle : \"{2}\").',
-                passwordLabel: 'Le champ {0} doit avoir une valeur \"{1}\" (valeur actuelle : \"{2}\").',
+                passwordFallback: 'Ce champ doit avoir une valeur {0} (valeur actuelle : {2}).',
+                passwordLabel: 'Le champ {0} doit avoir une valeur {1} (valeur actuelle : {2}).',
                 password: function (parameter, element) {
                     let current = $(element).findPasswordScore();
                     current = $.validator.messages.passwordLevels[current];
@@ -280,7 +280,7 @@
                  */
                 notEqualToFallback: 'Veuillez fournir une valeur différente, les valeurs ne doivent pas être identiques.',
                 notEqualToLabel: 'Le champ {0} doit être différent.',
-                notEqualToBoth: 'Le champ {0} doit être différent du champ \"{1}\".',
+                notEqualToBoth: 'Le champ {0} doit être différent du champ {1}.',
                 notEqualTo: function (parameters, element) {
                     const target = $(element).getLabelText();
                     const source = $(parameters).getLabelText();
@@ -298,7 +298,7 @@
                  */
                 greaterThanFallback: 'Veuillez fournir une valeur supérieure.',
                 greaterThanLabel: 'Le champ {0} doit avoir une valeur supérieure.',
-                greaterThanBoth: 'Le champ {0} doit avoir une valeur supérieure au champ \"{1}\".',
+                greaterThanBoth: 'Le champ {0} doit avoir une valeur supérieure au champ {1}.',
                 greaterThan: function (parameters, element) {
                     const target = $(element).getLabelText();
                     const source = $(parameters).getLabelText() || parameters;
@@ -325,7 +325,7 @@
                  */
                 greaterThanEqualFallback: 'Veuillez fournir une valeur égale ou supérieure.',
                 greaterThanEqualLabel: 'Le champ {0} doit avoir une valeur égale ou supérieure.',
-                greaterThanEqualBoth: 'Le champ {0} doit avoir une valeur égale ou supérieure au champ \"{1}\".',
+                greaterThanEqualBoth: 'Le champ {0} doit avoir une valeur égale ou supérieure au champ {1}.',
                 greaterThanEqual: function (parameters, element) {
                     const target = $(element).getLabelText();
                     const source = $(parameters).getLabelText();
@@ -351,8 +351,8 @@
                  * lessThan
                  */
                 lessThanFallback: 'Veuillez fournir une valeur inférieure.',
-                lessThanLabel: 'Le champ {0} doit avoir une valeur inférieure au champ \"{1}\".',
-                lessThanBoth: 'Le champ {0} doit avoir une valeur inférieure au champ \"{1}\".',
+                lessThanLabel: 'Le champ {0} doit avoir une valeur inférieure au champ {1}.',
+                lessThanBoth: 'Le champ {0} doit avoir une valeur inférieure au champ {1}.',
                 lessThan: function (parameters, element) {
                     const target = $(element).getLabelText();
                     const source = $(parameters).getLabelText();
@@ -379,7 +379,7 @@
                  */
                 lessThanEqualFallback: 'Veuillez fournir une valeur égale ou inférieure.',
                 lessThanEqualLabel: 'Le champ {0} doit avoir une valeur égale ou inférieure.',
-                lessThanEqualBoth: 'Le champ {0} doit avoir une valeur égale ou inférieure au champ \"{1}\".',
+                lessThanEqualBoth: 'Le champ {0} doit avoir une valeur égale ou inférieure au champ {1}.',
                 lessThanEqual: function (parameters, element) {
                     const target = $(element).getLabelText();
                     const source = $(parameters).getLabelText();

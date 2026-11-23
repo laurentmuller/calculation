@@ -49,8 +49,11 @@ function handleSelection() {
  */
 function translate(form, notification) {
     'use strict';
+    const $form = $(form).validateForm();
+    if (!$form.valid()) {
+        return;
+    }
     // in progress?
-    const $form = $(form);
     if ($form.data('changing')) {
         $form.removeData('changing');
         return;
@@ -270,10 +273,10 @@ $(function () {
 
     // initialize select
     const tsFrom = initSingleTomSelect('#from', {
-        plugins: ['dropdown_input'],
+        dropdownInput: true
     });
     const tsTo = initSingleTomSelect('#to', {
-        plugins: ['dropdown_input'],
+        dropdownInput: true
     });
 
     // clipboard
@@ -304,10 +307,11 @@ $(function () {
     const options = {
         focus: false,
         showModification: false,
-        submitHandler: function (form) {
-            translate(form, true);
-        },
+        submitHandler: (form) => translate(form, true),
         rules: {
+            to: {
+                notEqualTo: '#from'
+            },
             text: {
                 normalizer: function (value) {
                     return value.trim();
@@ -317,9 +321,4 @@ $(function () {
     };
     $('#edit-form').initValidator(options);
     $text.trigger('focus');
-
-    // update labels and inputs
-    updateTomSelectLabel('#from');
-    updateTomSelectLabel('#to');
-    updateTomSelectIdentifiers();
 });

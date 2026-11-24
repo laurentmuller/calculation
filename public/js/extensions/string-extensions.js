@@ -85,7 +85,9 @@ Object.defineProperty(String.prototype, 'startsWithIgnoreCase', {
 /* eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
 Object.defineProperty(String.prototype, 'snakeCase', {
     /**
-     * Returns this string as a snake-cased string.
+     * Returns this string as a snake_cased string.
+     *
+     * Example: UserName -> user_name
      */
     value: function () {
         'use strict';

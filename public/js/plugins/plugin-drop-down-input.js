@@ -134,13 +134,13 @@ $(function () {
             const $element = this.$element;
             const className = options.selectionClass;
             const $items = this.$menu.find('.dropdown-item').removeClass(className);
-            /** @type {JQuery<HTMLElement>|any} */
+            /** @type {jQuery<HTMLElement>|any} */
             const $iconElement = $element.find(options.iconClass);
-            /** @type {JQuery<HTMLElement>|any} */
+            /** @type {jQuery<HTMLElement>|any} */
             const $textElement = $element.findExists(options.textClass) || $element;
 
             // default values
-            /** @type {JQuery<HTMLSpanElement>|any} */
+            /** @type {jQuery<HTMLSpanElement>|any} */
             let $icon = $iconElement.find('i');
             if ($icon.length === 0 && $element.data('icon')) {
                 $icon = $($element.data('icon'));

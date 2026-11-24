@@ -58,7 +58,7 @@
     {# messages #}
     {{ include('flash_bag.html.twig') }}
     {# back to top #}
-    {{ include('back_to_top.html.twig') }}
+    {{ include_only('back_to_top.html.twig') }}
 </div>
 {# footer #}
 {% block footer -%}{% if statusbar_show %}{{ include('footer.html.twig') }}{% endif %}{%- endblock footer %}

@@ -16,8 +16,8 @@
     {%- else -%}
         {{ property('log.fields.message', item.message, 'text-break') }}
     {%- endif -%}
-    {{ property('log.fields.level', include('macros/_cell_log_level.html.twig', {log: item})) }}
-    {{ property('log.fields.channel', include('macros/_cell_log_channel.html.twig', {log: item})) }}
+    {{ property('log.fields.level', include_only('macros/_cell_log_level.html.twig', {log: item})) }}
+    {{ property('log.fields.channel', include_only('macros/_cell_log_channel.html.twig', {log: item})) }}
     {% if item.user %}
         {{ property('log.fields.user', item.user) }}
     {% endif %}

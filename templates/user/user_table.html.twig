@@ -83,5 +83,5 @@
 {# body #}
 {% block body %}
 {{ parent() }}
-{{ include('user/user_switch.html.twig') }}
+{{ include_only('user/user_switch.html.twig') }}
 {% endblock body %}

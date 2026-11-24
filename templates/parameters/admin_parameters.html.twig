@@ -6,15 +6,15 @@
 {# body #}
 {% block card_body -%}
     <div class="card card-parameter card-collapse border-0">
-        {{ include('parameters/_parameters_customer.html.twig', {form: form.customer}) }}
-        {{ include('parameters/_parameters_default.html.twig', {form: form.default}) }}
-        {{ include('parameters/_parameters_product.html.twig', {form: form.product}) }}
-        {{ include('parameters/_parameters_display.html.twig', {form: form.display, expanded: false}) }}
-        {{ include('parameters/_parameters_message.html.twig', {form: form.message}) }}
-        {{ include('parameters/_parameters_home_page.html.twig', {form: form.homePage}) }}
-        {{ include('parameters/_parameters_options.html.twig', {form: form.options}) }}
+        {{ include_only('parameters/_parameters_customer.html.twig', {form: form.customer}) }}
+        {{ include_only('parameters/_parameters_default.html.twig', {form: form.default}) }}
+        {{ include_only('parameters/_parameters_product.html.twig', {form: form.product}) }}
+        {{ include_only('parameters/_parameters_display.html.twig', {form: form.display, expanded: false}) }}
+        {{ include_only('parameters/_parameters_message.html.twig', {form: form.message}) }}
+        {{ include_only('parameters/_parameters_home_page.html.twig', {form: form.homePage}) }}
+        {{ include_only('parameters/_parameters_options.html.twig', {form: form.options}) }}
         {% if form.security ?? false %}
-            {{ include('parameters/_parameters_security.html.twig', {form: form.security}) }}
+            {{ include_only('parameters/_parameters_security.html.twig', {form: form.security}) }}
         {% endif %}
     </div>
     {{ parent() }}

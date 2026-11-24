@@ -9,7 +9,7 @@ $(function () {
     // ------------------------------------------
 
     /**
-     * @property {JQuery<HTMLInputElement>} $element
+     * @property {jQuery<HTMLInputElement>} $element
      */
     const InputNumberFormat = class {
         // -----------------------------

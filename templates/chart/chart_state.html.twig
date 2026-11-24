@@ -61,7 +61,7 @@
 {# body #}
 {% block body -%}
     {{ parent() }}
-    {{ include('chart/_state_tooltip.html.twig') }}
+    {{ include_only('chart/_state_tooltip.html.twig') }}
 {%- endblock body %}
 {# stylesheets #}
 {% block stylesheets -%}

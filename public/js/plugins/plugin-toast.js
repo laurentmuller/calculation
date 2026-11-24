@@ -211,7 +211,7 @@
             // handler when a toast is hidden
             onHide: null,
 
-            // the JQuery selector to get data options from
+            // the jQuery selector to get data options from
             dataset: '#flashes'
         },
 
@@ -293,7 +293,7 @@
          * Gets target container.
          *
          * @param {Object} options - The toast options.
-         * @returns {JQuery.Selector} The target container.
+         * @returns {jQuery.Selector} The target container.
          * @private
          */
         _getTarget: function (options) {
@@ -318,7 +318,7 @@
 
             // exist?
             if ($div.length === 0) {
-                /** @type {JQuery.Selector} */
+                /** @type {jQuery.Selector} */
                 const $target = this._getTarget(options);
                 return $('<div/>', {
                     id: id,

@@ -1,41 +1,36 @@
+{% from 'chart/chart_base.html.twig' import horizontal_line_row %}
 <template id="tooltip">
     <table class="m-1">
         <tr>
-            <th>{{ 'calculation.fields.state'|trans }}</th>
-            <th class="px-1">:</th>
-            <th class="text-calculation">
+            <th colspan="3">
                 <div class="d-flex-center">
-                    <span class="border chart-item state-background-{id} me-1"></span><span>{name}</span>
+                    <span class="border chart-item state-background-%id% me-1"></span>
+                    <span>%name%</span>
                 </div>
             </th>
-            <th class="text-calculation">&nbsp;</th>
         </tr>
-        <tr><td colspan="4"><hr class="my-1"></td></tr>
+        {{ horizontal_line_row() }}
         <tr>
             <td>{{ 'calculation.list.title'|trans }}</td>
-            <td class="px-1">:</td>
-            <td class="text-calculation">{count}</td>
-            <td class="text-calculation ps-3">{calculationsPercent}</td>
+            <td class="text-calculation">%count%</td>
+            <td class="text-calculation ps-3">%calculationsPercent%</td>
         </tr>
-        <tr><td colspan="4"><hr class="my-1"></td></tr>
+        {{ horizontal_line_row() }}
         <tr>
             <td>{{ 'calculationgroup.fields.amount'|trans }}</td>
-            <td class="px-1">:</td>
-            <td class="text-calculation">{items}</td>
+            <td class="text-calculation">%items%</td>
             <td class="text-calculation">&nbsp;</td>
         </tr>
         <tr>
             <td>{{ 'calculation.fields.margin'|trans }}</td>
-            <td class="px-1">:</td>
-            <td class="text-calculation">{marginAmount}</td>
-            <td class="text-calculation {marginClass}">{marginPercent}</td>
+            <td class="text-calculation">%marginAmount%</td>
+            <td class="text-calculation %marginClass%">%marginPercent%</td>
         </tr>
-        <tr><td colspan="4"><hr class="my-1"></td></tr>
+        {{ horizontal_line_row() }}
         <tr>
             <th>{{ 'calculation.fields.total'|trans }}</th>
-            <th class="px-1">:</th>
-            <th class="text-calculation">{totalAmount}</th>
-            <th class="text-calculation ps-3">{totalPercent}</th>
+            <th class="text-calculation">%totalAmount%</th>
+            <th class="text-calculation ps-3">%totalPercent%</th>
         </tr>
     </table>
 </template>

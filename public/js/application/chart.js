@@ -17,18 +17,24 @@ window.chartLoaded = function (e) {
     'use strict';
     /** @type {EventTarget&Chart} */
     const chart = e.target;
-    $('#data tbody tr.row-data').on('mouseenter', function () {
-        const $this = $(this);
-        if (!$this.hasClass('row-data-hidden')) {
-            $this.showTooltip(chart);
-        }
-    }).on('mouseleave', function () {
-        const $this = $(this);
-        if (!$this.hasClass('row-data-hidden')) {
-            $(this).hideTooltip(chart);
-        }
+    const selector = 'tr.row-data:not(.row-data-hidden)';
+    $('#data tbody').on('mouseenter', selector, function () {
+        $(this).showTooltip(chart);
+    }).on('mouseleave', selector, function () {
+        $(this).hideTooltip(chart);
     });
 };
+
+/**
+ * Gets the tooltip template.
+ * @return {string}
+ */
+window.getTooltipTemplate = function () {
+    if (!window.tooltipTemplate) {
+        window.tooltipTemplate = $('#tooltip').html().replace(/\s*\n\s*/g, '');
+    }
+    return window.tooltipTemplate;
+}
 
 /**
  * Render the HTML tooltip.
@@ -36,10 +42,9 @@ window.chartLoaded = function (e) {
  */
 window.renderTooltip = function (options) {
     'use strict';
-    /** @type {string} */
-    let html = $('#tooltip').html();
+    let html = window.getTooltipTemplate();
     Object.entries(options).forEach(([key, value]) => {
-        html = html.replace(`{${key}}`, value);
+        html = html.replaceAll(`%${key}%`, value);
     });
     return html;
 };
@@ -78,6 +83,10 @@ window.itemClicked = function (e) {
          */
         hideTooltip: function (chart) {
             chart.tooltip.hide();
+            chart.series.forEach(series => {
+                series.points.forEach(point => point.setState(''));
+                series.setState('');
+            });
         }
     });
 

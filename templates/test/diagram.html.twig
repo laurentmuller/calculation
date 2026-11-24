@@ -80,7 +80,7 @@
 {# body #}
 {% block body -%}
     {{ parent() }}
-    {{ include('dialog/dialog_diagram.html.twig') }}
+    {{ include_only('dialog/dialog_diagram.html.twig') }}
 {% endblock body %}
 {# card_body #}
 {% block card_body -%}

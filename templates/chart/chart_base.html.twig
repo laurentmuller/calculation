@@ -11,6 +11,9 @@
         title="{{ 'calculation.list.margin_below'|trans({'%margin%': margin, '%minimum%': min_margin}) }}"
     {% endif %}
 {%- endmacro margin_below_tooltip %}
+{% macro horizontal_line_row() -%}
+    <tr><td colspan="3"><hr class="my-1"></td></tr>
+{%- endmacro horizontal_line_row %}
 {# parameters #}
 {%- set title_icon = title_icon|default('fa-solid fa-area-chart') -%}
 {%- set list_path = 'calculation_index' -%}

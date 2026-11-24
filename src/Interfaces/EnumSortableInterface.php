@@ -16,12 +16,12 @@ namespace App\Interfaces;
 /**
  * Interface to get sorted enumerations.
  *
- * @template T of \UnitEnum&EnumSortableInterface
+ * @template T of \UnitEnum
  */
 interface EnumSortableInterface
 {
     /**
-     * Gets the sorted enumerations.
+     * Gets sorted enumerations.
      *
      * @return T[]
      */

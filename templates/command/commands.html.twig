@@ -24,7 +24,7 @@
         </select>
     </div>
 </div>
-{{ include('command/_command.htm.twig', {command: command, query: query}, with_context: false) }}
+{{ include_only('command/_command.htm.twig', {command: command, query: query}) }}
 {% endblock card_body %}
 {# footer #}
 {% block card_footer %}

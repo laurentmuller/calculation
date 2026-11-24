@@ -18,32 +18,32 @@ use Twig\Attribute\AsTwigFunction;
 use Twig\Error\RuntimeError;
 
 /**
- * Twig extension for enums.
+ * Twig extension for sorted enums.
  */
 class EnumExtension
 {
     /**
      * Gets sorted enumerations.
      *
-     * @template T of \UnitEnum&EnumSortableInterface
+     * @template T of \UnitEnum
      *
      * @param class-string<T> $enum the enumeration class name
      *
-     * @return EnumSortableInterface<T>[]
+     * @return T[]
      *
      * @throws RuntimeError if the given class name is not an enum or is not a sortable enum
      */
     #[AsTwigFunction(name: 'enum_sorted')]
-    public function sorted(string $enum): array
+    public static function sorted(string $enum): array
     {
         if (!\enum_exists($enum)) {
             throw new RuntimeError(\sprintf('"%s" is not an enum.', $enum));
         }
-        // @phpstan-ignore function.alreadyNarrowedType
-        if (!\is_subclass_of($enum, EnumSortableInterface::class)) {
+        if (!\is_a($enum, EnumSortableInterface::class, true)) {
             throw new RuntimeError(\sprintf('"%s" is not a sortable enum.', $enum));
         }
 
+        /** @phpstan-var T[] */
         return $enum::sorted();
     }
 }

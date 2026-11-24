@@ -55,6 +55,9 @@ class StateChart extends AbstractHighchart
             'events' => [
                 'itemClick' => ChartExpression::instance('function(e) {itemClicked(e);}'),
             ],
+            'squareSymbol' => false,
+            'symbolWidth' => 22,
+            'symbolRadius' => 0,
         ]);
 
         return parent::setLegendOptions();

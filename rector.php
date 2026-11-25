@@ -15,7 +15,6 @@ use Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector;
 use Rector\CodingStyle\Rector\ClassLike\NewlineBetweenClassLikeStmtsRector;
 use Rector\CodingStyle\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector;
 use Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector;
-use Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
 use Rector\Config\RectorConfig;
 use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
@@ -39,11 +38,8 @@ $skip = [
         __DIR__ . '/tests/Traits/CheckSubClassTraitTest.php',
     ],
     // not update method visibility
-    MakeInheritedMethodVisibilitySameAsParentRector::class => [
-        __DIR__ . '/tests/Fixture',
-    ],
+    MakeInheritedMethodVisibilitySameAsParentRector::class,
     // no space before or after statements
-    NewlineAfterStatementRector::class,
     NewlineBeforeNewAssignSetRector::class,
     // don't separate constants
     NewlineBetweenClassLikeStmtsRector::class,

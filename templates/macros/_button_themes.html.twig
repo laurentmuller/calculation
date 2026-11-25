@@ -1,7 +1,7 @@
 {# macro to output a drop-down buttons to select a theme #}
 {% macro inline_theme(include_dialog = false) %}
     {% from 'macros/_icons.html.twig' import icon, button %}
-    {% set current = theme(app.request) %}
+    {% set current = current_theme(app.request) %}
     {% set attrs = {
         type: 'button',
         class: 'btn btn-sm btn-link nav-link btn-theme-dropdown dropdown-toggle px-1 rounded',
@@ -14,7 +14,7 @@
         <i class="{{ current.icon }}"></i>
     </button>
     <ul class="dropdown-menu dropdown-menu-end">
-        {% for theme in themes() %}
+        {% for theme in enum_sorted('App\\Enums\\Theme') %}
             {% set attrs = {
                 type: 'button',
                 class: ['dropdown-item', 'dropdown-theme-entry', theme == current ? 'dropdown-item-checked-right' : null],

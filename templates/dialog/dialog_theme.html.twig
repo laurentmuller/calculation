@@ -29,7 +29,7 @@
     </div>
 {%- endmacro output_theme %}
 {% set dialog_id = 'theme_modal' %}
-{% set selection = theme(app.request) %}
+{% set selection = current_theme(app.request) %}
 <div class="modal fade" id="{{ dialog_id }}" tabindex="-1" aria-labelledby="theme-title" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -40,7 +40,7 @@
                 data_target: dialog_id) }}
             <div class="modal-body mx-3">
                 <span class="form-label mb-3">{{ 'theme.help'|trans }}</span>
-                {% for theme in themes() %}
+                {% for theme in enum_sorted('App\\Enums\\Theme') %}
                     {{ _self.output_theme(theme: theme, checked: theme == selection) }}
                 {% endfor %}
             </div>

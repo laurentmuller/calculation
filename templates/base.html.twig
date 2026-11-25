@@ -7,7 +7,7 @@
 {%- set statusbar_show = statusbar_show ?? (is_user and user_parameters.homePage.statusBar) -%}
 {%- set is_js_debug = app.debug -%}
 <!DOCTYPE html>
-<html lang="{{ app.request.locale|replace({_: '-'}) }}" data-bs-theme="{{ theme_value(app.request) }}">
+<html lang="{{ app.request.locale|replace({_: '-'}) }}" data-bs-theme="{{ current_theme(app.request).value }}">
 {# head #}
 <head>
     {# meta-data, icons and manifest #}

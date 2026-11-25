@@ -22,14 +22,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class ThemeServiceTest extends TestCase
 {
-    public static function getIsDarkTheme(): \Generator
-    {
-        yield [self::createRequest(), false];
-        yield [self::createRequest('auto'), false];
-        yield [self::createRequest('dark'), true];
-        yield [self::createRequest('light'), false];
-    }
-
     public static function getThemes(): \Generator
     {
         yield [self::createRequest(), Theme::DEFAULT];
@@ -38,42 +30,11 @@ final class ThemeServiceTest extends TestCase
         yield [self::createRequest('light'), Theme::LIGHT];
     }
 
-    public static function getThemeValues(): \Generator
-    {
-        yield [self::createRequest(), 'auto'];
-        yield [self::createRequest('auto'), 'auto'];
-        yield [self::createRequest('dark'), 'dark'];
-        yield [self::createRequest('light'), 'light'];
-    }
-
     #[DataProvider('getThemes')]
     public function testGetTheme(Request $request, Theme $expected): void
     {
         $service = new ThemeService('/');
         $value = $service->getTheme($request);
-        self::assertSame($expected, $value);
-    }
-
-    public function testGetThemes(): void
-    {
-        $service = new ThemeService('/');
-        $themes = $service->getThemes();
-        self::assertSame(Theme::sorted(), $themes);
-    }
-
-    #[DataProvider('getThemeValues')]
-    public function testGetThemeValue(Request $request, string $expected): void
-    {
-        $service = new ThemeService('/');
-        $value = $service->getThemeValue($request);
-        self::assertSame($expected, $value);
-    }
-
-    #[DataProvider('getIsDarkTheme')]
-    public function testIsDarkTheme(Request $request, bool $expected): void
-    {
-        $service = new ThemeService('/');
-        $value = $service->isDarkTheme($request);
         self::assertSame($expected, $value);
     }
 

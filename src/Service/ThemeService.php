@@ -39,39 +39,10 @@ class ThemeService
     /**
      * Gets the selected theme from cookies.
      */
-    #[AsTwigFunction(name: 'theme')]
+    #[AsTwigFunction(name: 'current_theme')]
     public function getTheme(Request $request): Theme
     {
         return $this->getCookieEnum($request, self::KEY_THEME, Theme::DEFAULT);
-    }
-
-    /**
-     * Gets the sorted themes.
-     *
-     * @return Theme[]
-     */
-    #[AsTwigFunction(name: 'themes')]
-    public function getThemes(): array
-    {
-        return Theme::sorted();
-    }
-
-    /**
-     * Gets the selected theme value.
-     */
-    #[AsTwigFunction(name: 'theme_value')]
-    public function getThemeValue(Request $request): string
-    {
-        return $this->getTheme($request)->value;
-    }
-
-    /**
-     * Returns if the dark theme is selected.
-     */
-    #[AsTwigFunction(name: 'is_dark_theme')]
-    public function isDarkTheme(Request $request): bool
-    {
-        return Theme::DARK === $this->getTheme($request);
     }
 
     /**

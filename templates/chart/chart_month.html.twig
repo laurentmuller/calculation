@@ -1,11 +1,13 @@
 {% extends 'chart/chart_base.html.twig' %}
 {% from 'macros/_icons.html.twig' import button %}
 {# add a month option #}
-{% macro month(value, selected) -%}
+{% macro month(count, checked) -%}
+    {%- set attrs = {
+        href: path('chart_month_index', {count: count}),
+        class: ['dropdown-item', checked ? 'dropdown-item-checked-right' : null]}
+    -%}
     <li>
-        <a href="{{ path('chart_month_index', {count: value}) }}" class="dropdown-item{% if selected %} active{% endif %}">
-            {{- 'counters.months'|trans({count: value}) -}}
-        </a>
+        <a {{ html_attr(attrs) }}>{{- 'counters.months'|trans({count: count}) -}}</a>
     </li>
 {%- endmacro month %}
 {# format the value with arrow #}
@@ -49,7 +51,7 @@
                     'aria-expanded': false,
                 })
             -}}
-            <ul class="dropdown-menu dropdown-menu-end">
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-checked-sm">
                 {% for value in allowedMonths %}
                     {{ _self.month(value, value == months) }}
                 {% endfor %}

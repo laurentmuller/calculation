@@ -937,7 +937,7 @@ tr.row-data.row-data-hidden td .state-color {
     z-index: 1031;
 }
 
-/* submit alert */
+/* used by validator-extensions.js/showSubmit */
 form:has(.alert-submit) {
     position: relative;
 }
@@ -947,11 +947,6 @@ form:has(.alert-submit) {
     transform: translate(-50%, -50%);
     position: absolute;
     z-index: 1000;
-}
-
-/* close button bug ? */
-html[data-bs-theme=dark] .btn-close {
-    filter: invert(1) grayscale(100%) brightness(200%) !important;
 }
 
 /* no JS script alert */

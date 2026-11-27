@@ -18,7 +18,6 @@ use App\Attribute\IndexRoute;
 use App\Attribute\IsWebmaster;
 use App\Service\TimelineService;
 use App\Utils\DateUtils;
-use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
@@ -95,14 +94,9 @@ class TimelineController extends AbstractController
         string $interval
     ): JsonResponse {
         $date = DateUtils::createDatePoint('today');
-        $parameters = $service->current($this->formatDate($date), $interval);
+        $parameters = $service->current(DateUtils::formatFormDate($date), $interval);
 
         return $this->renderContent($parameters);
-    }
-
-    private function formatDate(DatePoint $date): string
-    {
-        return $date->format(TimelineService::DATE_FORMAT);
     }
 
     /**
@@ -116,8 +110,8 @@ class TimelineController extends AbstractController
 
         return $this->jsonTrue([
             'date' => $parameters['date'],
-            'from' => $this->formatDate($parameters['from']),
-            'to' => $this->formatDate($parameters['to']),
+            'from' => DateUtils::formatFormDate($parameters['from']),
+            'to' => DateUtils::formatFormDate($parameters['to']),
             'previous' => $parameters['previous'],
             'next' => $parameters['next'],
             'content' => $content,

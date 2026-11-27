@@ -16,7 +16,7 @@
 {# data_rows #}
 {% block data_rows %}
     {% for item in data.items -%}
-        <tr class="row-data" title="{{ 'chart.state.row'|trans({'%name%': item.code}) }}">
+        <tr class="row-data" title="{{ 'chart.state.row_title'|trans({'%name%': item.code}) }}">
             <td class="text-nowrap">
                 <a class="d-flex-center" href="{{ path(list_path, {stateId: item.id}) }}">
                     <span class="border state-color state-background-{{ item.id }} me-1"></span>
@@ -56,7 +56,7 @@
 {# card_body #}
 {% block card_body %}
     {{ parent() }}
-    <p class="small mb-0 d-print-none">{{ 'chart.state.tooltip'|trans|raw }}</p>
+    <p class="small mb-0 d-print-none">{{ 'chart.state.note'|trans|raw }}</p>
 {%- endblock card_body %}
 {# body #}
 {% block body -%}

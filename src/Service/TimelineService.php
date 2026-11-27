@@ -40,9 +40,6 @@ readonly class TimelineService
 {
     use GroupByTrait;
 
-    /** The date format for HTML input. */
-    public const string DATE_FORMAT = 'Y-m-d';
-
     private const string DEFAULT_INTERVAL = 'P1W';
 
     public function __construct(private CalculationRepository $repository)
@@ -167,14 +164,14 @@ readonly class TimelineService
             'from' => $from,
             'to' => $to,
             'interval' => $interval,
-            'date' => $to->format(self::DATE_FORMAT),
+            'date' => DateUtils::formatFormDate($to),
 
             'min_date' => $min_date,
             'max_date' => $max_date,
 
-            'today' => $today?->format(self::DATE_FORMAT),
-            'previous' => $previous?->format(self::DATE_FORMAT),
-            'next' => $next?->format(self::DATE_FORMAT),
+            'today' => DateUtils::formatFormDate($today),
+            'previous' => DateUtils::formatFormDate($previous),
+            'next' => DateUtils::formatFormDate($next),
 
             'count' => $count,
             'data' => $calculations,

@@ -43,12 +43,6 @@ final class CalculationRepositoryTest extends AbstractRepositoryTestCase
         parent::tearDown();
     }
 
-    public function testCountDistinctMonths(): void
-    {
-        $actual = $this->repository->countDistinctMonths();
-        self::assertSame(0, $actual);
-    }
-
     public function testCountItemsBelow(): void
     {
         $actual = $this->repository->countItemsBelow(1.0);

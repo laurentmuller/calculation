@@ -13,19 +13,25 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\GetPostRoute;
 use App\Attribute\IndexRoute;
 use App\Attribute\IsUser;
 use App\Attribute\PdfRoute;
 use App\Chart\MonthChart;
 use App\Entity\Calculation;
 use App\Enums\EntityPermission;
+use App\Form\Type\MonthRangeType;
+use App\Model\MonthRange;
+use App\Model\TranslatableFlashMessage;
 use App\Report\CalculationByMonthReport;
 use App\Repository\CalculationRepository;
 use App\Response\PdfResponse;
 use App\Traits\RenderPdfDocumentTrait;
+use App\Utils\DateUtils;
+use Symfony\Component\Clock\DatePoint;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -38,35 +44,75 @@ class ChartMonthController extends AbstractController
 {
     use RenderPdfDocumentTrait;
 
-    private const string KEY_MONTHS = 'chart_months';
+    public function __construct(private readonly CalculationRepository $repository)
+    {
+    }
 
     #[IndexRoute]
     public function index(
         MonthChart $chart,
-        #[MapQueryParameter]
-        ?int $count = null
+        #[MapQueryString]
+        ?MonthRange $monthRange = null
     ): Response {
         $this->checkPermission(EntityPermission::LIST);
-        $count = $this->validateCount($count);
-        $parameters = $chart->generate($count);
-        $this->setSessionValue(self::KEY_MONTHS, $parameters['months']);
+
+        $dates = $this->getMinMaxDates();
+        $monthRange ??= $this->createMonthRange($dates);
+        $parameters = $chart->generate($monthRange);
+        $this->saveMonthRange($monthRange);
 
         return $this->render('chart/chart_month.html.twig', $parameters);
     }
 
     #[PdfRoute]
     public function pdf(
-        CalculationRepository $repository,
         UrlGeneratorInterface $generator,
-        #[MapQueryParameter]
-        ?int $count = null
+        #[MapQueryString]
+        ?MonthRange $monthRange = null
     ): PdfResponse {
         $this->checkPermission(EntityPermission::EXPORT);
-        $count = $this->validateCount($count);
-        $monthChartData = $repository->getMonthChartData($count);
+
+        $dates = $this->getMinMaxDates();
+        $monthRange ??= $this->createMonthRange($dates);
+        $monthChartData = $this->repository->getMonthChartData($monthRange);
         $report = new CalculationByMonthReport($this, $monthChartData, $generator);
+        $this->saveMonthRange($monthRange);
 
         return $this->renderPdfDocument($report);
+    }
+
+    #[GetPostRoute('/period', 'period')]
+    public function period(
+        Request $request,
+        #[MapQueryString]
+        ?MonthRange $monthRange = null
+    ): Response {
+        $this->checkPermission(EntityPermission::LIST);
+
+        $dates = $this->getMinMaxDates();
+        $monthRange ??= $this->createMonthRange($dates);
+        $form = $this->createForm(MonthRangeType::class, $monthRange, [
+            'min_date' => $dates[0],
+            'max_date' => $dates[1],
+            'from_label' => 'chart.period.fields.from',
+            'to_label' => 'chart.period.fields.to',
+        ]);
+        if ($this->handleRequestForm($request, $form)) {
+            $message = TranslatableFlashMessage::success('chart.period.success', [
+                '%from%' => MonthRangeType::formatDate($monthRange->from),
+                '%to%' => MonthRangeType::formatDate($monthRange->to),
+            ]);
+            $this->addFlash($message->getType(), $message);
+
+            return $this->redirectToRoute('chart_month_index', [
+                'from' => DateUtils::formatFormDate($monthRange->from),
+                'to' => DateUtils::formatFormDate($monthRange->to),
+            ]);
+        }
+
+        return $this->render('chart/chart_period.html.twig', [
+            'form' => $form,
+        ]);
     }
 
     private function checkPermission(EntityPermission $permission): void
@@ -75,15 +121,31 @@ class ChartMonthController extends AbstractController
     }
 
     /**
-     * @throws BadRequestHttpException
+     * @param array{0: DatePoint, 1: DatePoint} $dates
      */
-    private function validateCount(?int $count): int
+    private function createMonthRange(array $dates): MonthRange
     {
-        $count ??= $this->getSessionInt(self::KEY_MONTHS, 6);
-        if ($count <= 0) {
-            throw new BadRequestHttpException($this->trans('chart.month.error'));
-        }
+        $defaultFrom = $dates[1]->sub(new \DateInterval('P5M'));
+        $from = $this->getSessionDate('chart_months_from', $defaultFrom);
+        $to = $this->getSessionDate('chart_months_to', $dates[1]);
 
-        return $count;
+        return new MonthRange()
+            ->withFrom($from)
+            ->withTo($to);
+    }
+
+    /**
+     * @return array{0: DatePoint, 1: DatePoint}
+     */
+    private function getMinMaxDates(): array
+    {
+        /** @phpstan-var array{0: DatePoint, 1: DatePoint} */
+        return $this->repository->getMinMaxDates();
+    }
+
+    private function saveMonthRange(MonthRange $monthRange): void
+    {
+        $this->setSessionValue('chart_months_from', $monthRange->from);
+        $this->setSessionValue('chart_months_to', $monthRange->to);
     }
 }

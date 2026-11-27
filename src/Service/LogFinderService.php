@@ -15,6 +15,7 @@ namespace App\Service;
 
 use App\Model\LogFileEntry;
 use App\Traits\ComparableTrait;
+use App\Utils\DateUtils;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Finder\Finder;
@@ -26,7 +27,6 @@ class LogFinderService
 {
     use ComparableTrait;
 
-    private const string DATE_FORMAT = 'Y-m-d';
     private const string FILE_EXTENSION = '.log';
     private const array FILE_NAMES = [
         '{dev,test,prod}-????-??-??.log',
@@ -70,7 +70,7 @@ class LogFinderService
     private function getDate(string $name, int $default): DatePoint
     {
         try {
-            return DatePoint::createFromFormat(self::DATE_FORMAT, \substr($name, -10));
+            return DatePoint::createFromFormat(DateUtils::FORM_DATE_FORMAT, \substr($name, -10));
         } catch (\DateMalformedStringException) {
             return DatePoint::createFromTimestamp($default);
         }

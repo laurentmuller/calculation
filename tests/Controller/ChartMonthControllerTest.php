@@ -13,9 +13,13 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use App\Model\MonthChartData;
+use App\Repository\CalculationRepository;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\GlobalMarginTrait;
 use App\Tests\EntityTrait\ProductTrait;
+use Symfony\Component\Clock\DatePoint;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class ChartMonthControllerTest extends ControllerTestCase
@@ -30,6 +34,7 @@ final class ChartMonthControllerTest extends ControllerTestCase
         $routes = [
             '/chart/month',
             '/chart/month/pdf',
+            '/chart/month/period',
         ];
         foreach ($routes as $route) {
             foreach (self::DEFAULT_USERS as $user) {
@@ -41,16 +46,22 @@ final class ChartMonthControllerTest extends ControllerTestCase
         }
     }
 
-    public function testIndexInvalidMonth(): void
+    public function testPeriodSubmit(): void
     {
-        $route = 'chart/month?count=0';
-        $this->checkRoute($route, self::ROLE_USER, Response::HTTP_BAD_REQUEST);
-    }
+        $date = new DatePoint();
+        $data = new MonthChartData([]);
+        $repository = self::createStub(CalculationRepository::class);
+        $repository->method('getMinMaxDates')
+            ->willReturn([$date, $date]);
+        $repository->method('getMonthChartData')
+            ->willReturn($data);
+        $this->setService(CalculationRepository::class, $repository);
 
-    public function testPdfInvalidMonth(): void
-    {
-        $route = 'chart/month/pdf?count=0';
-        $this->checkRoute($route, self::ROLE_USER, Response::HTTP_BAD_REQUEST);
+        $this->checkForm(
+            uri: '/chart/month/period',
+            method: Request::METHOD_GET,
+            disableReboot: true,
+        );
     }
 
     #[\Override]

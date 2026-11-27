@@ -1,0 +1,36 @@
+{% extends 'cards/card_edit.html.twig' %}
+{% from 'macros/_icons.html.twig' import button %}
+{%- set title = 'chart.period.title' -%}
+{%- set title_icon = 'fa-regular fa-calendar-alt' -%}
+{%- set cancel_params = {from: app.request.query.string('from'), to: app.request.query.string('to')} -%}
+{%- set cancel_path = path('chart_month_index', cancel_params) -%}
+{%- set form_attr = form_attr|default({})|merge({
+    'data-error': 'month_range.end_date'|trans(domain: 'validators'),
+    'data-months': 'chart.period.months'|trans({'%months%': 0}),
+}) -%}
+{# body #}
+{% block card_body %}
+    <div class="row">
+        <div class="col-md-6">
+            {{ form_row(form.from) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_row(form.to) }}
+        </div>
+    </div>
+    <p id="months" class="mb-0 text-center">&nbsp;</p>
+    {{ parent() }}
+{% endblock card_body %}
+{% block actions_form -%}
+    {{ parent() }}
+    {{ button(
+        text: 'chart.period.default',
+        class: 'btn btn-outline-secondary btn-default',
+        icon: 'fa-solid fa-filter-circle-xmark')
+    }}
+{% endblock actions_form %}
+{# javascript #}
+{% block javascripts %}
+    {{ parent() }}
+    {{- asset_js('js/application/chart_period.js') -}}
+{%- endblock javascripts %}

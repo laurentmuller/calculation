@@ -1,5 +1,5 @@
 {% extends 'chart/chart_base.html.twig' %}
-{% from 'macros/_icons.html.twig' import button %}
+{% from 'macros/_icons.html.twig' import link, button %}
 {# add a month option #}
 {% macro month(count, checked) -%}
     {%- set attrs = {
@@ -33,7 +33,8 @@
 {%- set title = 'chart.month.title' -%}
 {%- set title_icon = 'fa-regular fa-calendar-alt' -%}
 {%- set pdf_route = 'chart_month_pdf' -%}
-{%- set pdf_params = {count: months} -%}
+{%- set pdf_params = {from: range.from|form_date, to: range.to|form_date} -%}
+{%- set title_description = 'chart.period.months'|trans({'%months%': range.months}) -%}
 {# class #}
 {% block card_container_class '' -%}
 {% block chart_class ' month' -%}
@@ -41,22 +42,13 @@
 {% block card_title %}
     <div class="d-flex-wrap-center">
         {{ parent() }}
-        {% if allowedMonths|length %}
-            {{- button(
-                text: 'chart.month.fields.period',
-                class: ['btn', 'btn-sm', 'btn-outline-secondary', 'dropdown-toggle'],
-                icon: 'fa-regular fa-calendar-days',
-                attributes: {
-                    'data-bs-toggle': 'dropdown',
-                    'aria-expanded': false,
-                })
-            -}}
-            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-checked-sm">
-                {% for value in allowedMonths %}
-                    {{ _self.month(value, value == months) }}
-                {% endfor %}
-            </ul>
-        {% endif %}
+        {{ link(
+            href: path('chart_month_period', pdf_params),
+            text: 'chart.month.fields.period',
+            class: 'btn btn-sm btn-outline-secondary',
+            icon: 'fa-regular fa-calendar-days',
+            title: 'chart.period.title')
+        }}
     </div>
 {%- endblock card_title %}
 {# header_row #}
@@ -82,7 +74,7 @@
     {% for item in data.items -%}
         {%- set month = item.date|locale_date('none', 'MMMM Y') -%}
         {%- set parameters = {search: item.date|locale_date('none', 'MM.Y')} -%}
-        <tr class="row-data" title="{{ 'chart.month.row'|trans({'%name%': month}) }}">
+        <tr class="row-data" title="{{ 'chart.month.row_title'|trans({'%name%': month}) }}">
             <td class="text-nowrap">
                 <a class="d-flex" href="{{ path(list_path, parameters) }}">{{ month }}</a>
             </td>
@@ -119,8 +111,7 @@
     <td class="text-currency">{{ total.count|integer }}</td>
     <td class="text-currency">{{ total.items|integer }}</td>
     <td class="text-currency">{{ total.marginAmount|integer }}</td>
-    <td class="text-percent{{ _self.margin_below_class(total.marginPercent, minMargin) }}"
-            {{- _self.margin_below_tooltip(total.marginPercent, minMargin) }}>
+    <td class="text-percent{{ _self.margin_below_class(total.marginPercent, minMargin) }}" {{- _self.margin_below_tooltip(total.marginPercent, minMargin) }}>
         {{ total.marginPercent|percent -}}
     </td>
     <td class="text-currency">{{ total.total|integer }}</td>
@@ -128,7 +119,7 @@
 {# card_body #}
 {% block card_body %}
     {{ parent() }}
-    <p class="small mb-0 d-print-none">{{ 'chart.month.tooltip'|trans|raw }}</p>
+    <p class="small mb-0 d-print-none">{{ 'chart.month.note'|trans|raw }}</p>
 {%- endblock card_body %}
 {# body #}
 {% block body -%}

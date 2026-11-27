@@ -79,6 +79,9 @@ recaptcha:
     timeout-or-duplicate: Le délai d'attente est atteint ou la validation a été appelée deux fois.
     unknown-error: Une erreur inconnue s'est produite durant de la validation.
     browser-error: Une erreur s’est produite sur le navigateur.
+# month_range:
+month_range:
+    end_date: La fin de la période doit être égale ou plus grande que le début de la période.
 # security
 The CSRF token is invalid. Please try to resubmit the form.: Le jeton de falsification de requête inter-sites (CSRF) est invalide. Veuillez essayer de renvoyer le formulaire.
 # Symfony\Component\Validator\Constraints\File

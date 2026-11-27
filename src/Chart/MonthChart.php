@@ -16,6 +16,7 @@ namespace App\Chart;
 use App\Entity\Calculation;
 use App\Model\MonthChartData;
 use App\Model\MonthChartDataItem;
+use App\Model\MonthRange;
 use App\Pdf\Html\HtmlColorName;
 use App\Repository\CalculationRepository;
 use App\Utils\FormatUtils;
@@ -33,20 +34,17 @@ class MonthChart extends AbstractHighchart
     public const HtmlColorName COLOR_MARGIN = HtmlColorName::INDIAN_RED;
 
     /**
-     * Generate the chart data.
+     * Generate the chart data for the given range.
      *
      * @return array{
      *     chart: MonthChart,
      *     data: MonthChartData,
-     *     months: int,
-     *     allowedMonths: int[],
+     *     range: MonthRange,
      *     minMargin: float}
      */
-    public function generate(int $months): array
+    public function generate(MonthRange $range): array
     {
-        $allowedMonths = $this->getAllowedMonths();
-        $months = $this->checkMonth($months, $allowedMonths);
-        $data = $this->getMonthChartData($months);
+        $data = $this->getMonthChartDataByRange($range);
         $this->setType(ChartType::TYPE_COLUMN)
             ->setSeries($data->items)
             ->setXAxis($data->items)
@@ -56,8 +54,7 @@ class MonthChart extends AbstractHighchart
         return [
             'chart' => $this,
             'data' => $data,
-            'months' => $months,
-            'allowedMonths' => $allowedMonths,
+            'range' => $range,
             'minMargin' => $this->getMinMargin(),
         ];
     }
@@ -76,37 +73,6 @@ class MonthChart extends AbstractHighchart
         $this->tooltip->merge(['formatter' => $this->getTooltipExpression()]);
 
         return parent::setTooltipOptions();
-    }
-
-    /**
-     * @param int[] $allowedMonths
-     */
-    private function checkMonth(int $count, array $allowedMonths): int
-    {
-        if (!\in_array($count, $allowedMonths, true)) {
-            return \in_array(6, $allowedMonths, true) ? 6 : $allowedMonths[0];
-        }
-
-        return \max(1, $count);
-    }
-
-    /**
-     * @return int[]
-     */
-    private function getAllowedMonths(): array
-    {
-        $step = 6;
-        $maxMonths = $this->getRepository()->countDistinctMonths();
-        if ($maxMonths <= $step) {
-            return [$maxMonths];
-        }
-
-        if ($maxMonths % $step > 0) {
-            $delta = $step % $maxMonths;
-            $maxMonths += $delta;
-        }
-
-        return \range($step, $maxMonths, $step);
     }
 
     /**
@@ -157,9 +123,9 @@ class MonthChart extends AbstractHighchart
         ], $items);
     }
 
-    private function getMonthChartData(int $months): MonthChartData
+    private function getMonthChartDataByRange(MonthRange $range): MonthChartData
     {
-        return $this->getRepository()->getMonthChartData($months);
+        return $this->getRepository()->getMonthChartData($range);
     }
 
     private function getRepository(): CalculationRepository

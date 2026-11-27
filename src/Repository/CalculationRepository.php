@@ -17,6 +17,7 @@ use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Model\MonthChartData;
 use App\Model\MonthChartDataItem;
+use App\Model\MonthRange;
 use App\Traits\MarginBelowFilterTrait;
 use App\Utils\DateUtils;
 use Doctrine\DBAL\Types\Types;
@@ -75,17 +76,6 @@ class CalculationRepository extends AbstractRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Calculation::class);
-    }
-
-    /**
-     * Returns the number of distinct years and months.
-     */
-    public function countDistinctMonths(): int
-    {
-        return (int) $this->createQueryBuilder('c')
-            ->select("COUNT (DISTINCT DATE_FORMAT(c.date, '%Y-%m'))")
-            ->getQuery()
-            ->getSingleScalarResult();
     }
 
     /**
@@ -532,33 +522,66 @@ class CalculationRepository extends AbstractRepository
         ];
     }
 
+    //    /**
+    //     * Gets the calculations grouped by years and months sorted by date in descending order.
+    //     *
+    //     * @param int $maxResults the maximum number of months to retrieve (the "limit")
+    //     */
+    //    public function getMonthChartDataByMonths(int $maxResults = 6): MonthChartData
+    //    {
+    //        $callback = static fn (QueryBuilder $builder): QueryBuilder => $builder->setMaxResults($maxResults);
+    //
+    //        return $this->getMonthChartData($callback);
+    //    }
+    //
+    //    /**
+    //     * Gets the calculations grouped by years and months sorted by date in descending order.
+    //     */
+    //    public function getMonthChartDataByRange(MonthRange $range): MonthChartData
+    //    {
+    //        $callback = static fn (QueryBuilder $builder): QueryBuilder => $builder->where('c.date >= :from')
+    //            ->andWhere('c.date <= :to')
+    //            ->setParameter('from', $range->from, DayPointType::NAME)
+    //            ->setParameter('to', $range->to, DayPointType::NAME);
+    //
+    //        return $this->getMonthChartData($callback);
+    //    }
+
     /**
      * Gets the calculations grouped by years and months sorted by date in descending order.
      *
-     * @param int $maxResults the maximum number of results to retrieve (the "limit")
+     * @param MonthRange|int $predicate a month range or a number of months to retrieve
      */
-    public function getMonthChartData(int $maxResults = 6): MonthChartData
+    public function getMonthChartData(MonthRange|int $predicate = 6): MonthChartData
     {
-        $query = $this->createQueryBuilder('c')
-            ->select('COUNT(c.id) as count')
-            ->addSelect('ROUND(SUM(c.itemsTotal), 2) as items')
-            ->addSelect('ROUND(SUM(c.overallTotal), 2) as total')
-            ->addSelect('YEAR(c.date) as year')
-            ->addSelect('MONTH(c.date) as month')
+        $builder = $this->createQueryBuilder('c')
+            ->select(\sprintf(
+                'NEW %s(
+                    COUNT(c.id),
+                    ROUND(SUM(c.itemsTotal), 2),
+                    ROUND(SUM(c.overallTotal), 2),
+                    YEAR(c.date),
+                    MONTH(c.date)
+                ),
+                YEAR(c.date)  AS HIDDEN year,
+                MONTH(c.date) AS HIDDEN month',
+                MonthChartDataItem::class
+            ))
             ->groupBy('year', 'month')
             ->orderBy('year', \SortDirection::Descending)
-            ->addOrderBy('month', \SortDirection::Descending)
-            ->setMaxResults($maxResults)
-            ->getQuery();
+            ->addOrderBy('month', \SortDirection::Descending);
 
-        $result = \array_reverse($query->getArrayResult());
-        $items = \array_map(static fn (array $row): MonthChartDataItem => new MonthChartDataItem(
-            count: $row['count'],
-            items: $row['items'],
-            total: $row['total'],
-            year: $row['year'],
-            month: $row['month']
-        ), $result);
+        if (\is_int($predicate)) {
+            $builder->setMaxResults($predicate);
+        } else {
+            $builder->where('c.date >= :from')
+                ->andWhere('c.date <= :to')
+                ->setParameter('from', $predicate->from, DayPointType::NAME)
+                ->setParameter('to', $predicate->to, DayPointType::NAME);
+        }
+
+        $array = $builder->getQuery()->getResult();
+        $items = \array_reverse($array);
 
         return new MonthChartData($items);
     }

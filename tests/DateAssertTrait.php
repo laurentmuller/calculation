@@ -22,35 +22,47 @@ use PHPUnit\Framework\TestCase;
  */
 trait DateAssertTrait
 {
-    protected static function assertDateEquals(\DateTimeInterface $expected, mixed $actual): void
+    protected static function assertDateEquals(\DateTimeInterface|string $expected, mixed $actual): void
     {
+        if ($expected instanceof \DateTimeInterface) {
+            $expected = $expected->format('Y-m-d');
+        }
         if ($actual instanceof \DateTimeInterface) {
             $actual = $actual->format('Y-m-d');
         }
-        self::assertSame($expected->format('Y-m-d'), $actual);
+        self::assertSame($expected, $actual);
     }
 
-    protected static function assertDateTimeEquals(\DateTimeInterface $expected, mixed $actual): void
+    protected static function assertDateTimeEquals(\DateTimeInterface|string $expected, mixed $actual): void
     {
+        if ($expected instanceof \DateTimeInterface) {
+            $expected = $expected->format('Y-m-d H:i:s');
+        }
         if ($actual instanceof \DateTimeInterface) {
             $actual = $actual->format('Y-m-d H:i:s');
         }
-        self::assertSame($expected->format('Y-m-d H:i:s'), $actual);
+        self::assertSame($expected, $actual);
     }
 
-    protected static function assertTimeEquals(\DateTimeInterface $expected, mixed $actual): void
+    protected static function assertTimeEquals(\DateTimeInterface|string $expected, mixed $actual): void
     {
+        if ($expected instanceof \DateTimeInterface) {
+            $expected = $expected->format('H:i:s');
+        }
         if ($actual instanceof \DateTimeInterface) {
             $actual = $actual->format('H:i:s');
         }
-        self::assertSame($expected->format('H:i:s'), $actual);
+        self::assertSame($expected, $actual);
     }
 
-    protected static function assertTimestampEquals(\DateTimeInterface $expected, mixed $actual, string $message = ''): void
+    protected static function assertTimestampEquals(\DateTimeInterface|int $expected, mixed $actual): void
     {
+        if ($expected instanceof \DateTimeInterface) {
+            $expected = $expected->getTimestamp();
+        }
         if ($actual instanceof \DateTimeInterface) {
             $actual = $actual->getTimestamp();
         }
-        self::assertSame($expected->getTimestamp(), $actual, $message);
+        self::assertSame($expected, $actual);
     }
 }

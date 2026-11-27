@@ -1562,19 +1562,27 @@ dialog_raw_data:
     tooltip: Afficher les données brutes
     empty: Aucune donnée brute à afficher.
 chart:
-    row_all: Afficher toutes les calculations
+    all_title: Afficher toutes les calculations
     month:
         title: Calculations par mois
-        row: Afficher les calculations pour %name%
-        tooltip: '<b>Note :</b> Cliquez sur une colonne du graphique ou sur une ligne de la table pour afficher les calculations correspondantes.'
+        row_title: Afficher les calculations pour %name%
+        note: '<b>Note :</b> Cliquez sur une colonne du graphique ou sur une ligne de la table pour afficher les calculations correspondantes.'
         error: Le nombre de mois à afficher doit être positif.
         fields:
             month: Mois
             period: Période
+    period:
+        title: Sélectionner la période à afficher
+        months: 'Intervalle : %months% mois'
+        success: La période de %from% à %to% a été sélectionnée avec succès.
+        default: Valeurs par défaut
+        fields:
+            from: Début de la période
+            to: Fin de la période
     state:
         title: Calculations par statut
-        row: Afficher les calculations pour le statut %name%
-        tooltip: '<b>Note :</b> Cliquez sur un secteur du graphique ou sur une ligne de la table pour afficher les calculations correspondantes.'
+        row_title: Afficher les calculations pour le statut %name%
+        note: '<b>Note :</b> Cliquez sur un secteur du graphique ou sur une ligne de la table pour afficher les calculations correspondantes.'
 command:
     list:
         title: Commandes

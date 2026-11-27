@@ -16,11 +16,13 @@ namespace App\Tests\Chart;
 use App\Chart\MonthChart;
 use App\Model\MonthChartData;
 use App\Model\MonthChartDataItem;
+use App\Model\MonthRange;
 use App\Parameter\ApplicationParameters;
 use App\Repository\CalculationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Translation\IdentityTranslator;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -43,37 +45,34 @@ final class MonthChartTest extends TestCase
 
     public function testWithElevenMonths(): void
     {
-        $this->repository->method('countDistinctMonths')
-            ->willReturn(11);
         $this->repository->method('getMonthChartData')
             ->willReturn($this->createEmptyCalculationsMonth());
 
         $chart = $this->createChart();
-        $actual = $chart->generate(1);
+        $range = $this->createMonthRange();
+        $actual = $chart->generate($range);
         self::assertCount(0, $actual['data']);
     }
 
     public function testWithOneMonth(): void
     {
-        $this->repository->method('countDistinctMonths')
-            ->willReturn(1);
         $this->repository->method('getMonthChartData')
             ->willReturn($this->createEmptyCalculationsMonth());
 
         $chart = $this->createChart();
-        $actual = $chart->generate(1);
+        $range = $this->createMonthRange();
+        $actual = $chart->generate($range);
         self::assertCount(0, $actual['data']);
     }
 
     public function testWithSeries(): void
     {
-        $this->repository->method('countDistinctMonths')
-            ->willReturn(6);
         $this->repository->method('getMonthChartData')
             ->willReturn($this->createCalculationsMonth());
 
         $chart = $this->createChart();
-        $actual = $chart->generate(6);
+        $range = $this->createMonthRange();
+        $actual = $chart->generate($range);
         self::assertCount(2, $actual['data']);
     }
 
@@ -115,5 +114,12 @@ final class MonthChartTest extends TestCase
     private function createEmptyCalculationsMonth(): MonthChartData
     {
         return new MonthChartData([]);
+    }
+
+    private function createMonthRange(): MonthRange
+    {
+        return new MonthRange()
+            ->withFrom(new DatePoint('2024-01-01'))
+            ->withTo(new DatePoint('2024-12-31'));
     }
 }

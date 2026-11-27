@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Utils;
 
 use Symfony\Component\Clock\DatePoint;
+use Twig\Attribute\AsTwigFilter;
 
 /**
  * Utility class for dates.
@@ -22,6 +23,9 @@ use Symfony\Component\Clock\DatePoint;
  */
 final class DateUtils
 {
+    /** The date format used for Symfony forms. */
+    public const string FORM_DATE_FORMAT = 'Y-m-d';
+
     /**
      * The month names.
      *
@@ -131,10 +135,13 @@ final class DateUtils
 
     /**
      * Format the given date point (if any) to use within a date type in forms.
+     *
+     * @phpstan-return ($date is null ? null : string)
      */
+    #[AsTwigFilter(name: 'form_date')]
     public static function formatFormDate(?DatePoint $date): ?string
     {
-        return $date?->format('Y-m-d');
+        return $date?->format(self::FORM_DATE_FORMAT);
     }
 
     /**
@@ -145,6 +152,14 @@ final class DateUtils
     public static function getDay(DatePoint $date = new DatePoint()): int
     {
         return (int) $date->format('j');
+    }
+
+    /**
+     * Gets the last day of the month.
+     */
+    public static function getEndOfMonth(DatePoint $date = new DatePoint()): DatePoint
+    {
+        return $date->modify('last day of this month 23:59:59');
     }
 
     /**
@@ -199,6 +214,14 @@ final class DateUtils
     public static function getShortWeekdays(string $firstDay = 'Monday'): array
     {
         return self::$shortWeekNames[$firstDay] ??= self::getDayNames('eee', $firstDay);
+    }
+
+    /**
+     * Gets the first day of the month.
+     */
+    public static function getStartOfMonth(DatePoint $date = new DatePoint()): DatePoint
+    {
+        return $date->modify('first day of this month 00:00:00');
     }
 
     /**

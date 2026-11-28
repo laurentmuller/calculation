@@ -70,19 +70,6 @@ final class DataQueryValueResolverTest extends TestCase
         self::assertSame('', $query->getStringParameter(SearchTable::PARAM_ENTITY));
     }
 
-    /**
-     * @throws \ReflectionException
-     */
-    public function testGetCookiePath(): void
-    {
-        $resolver = $this->createResolver();
-        $class = new \ReflectionClass($resolver);
-        $method = $class->getMethod('getCookiePath');
-        $expected = '/';
-        $actual = $method->invoke($resolver);
-        self::assertSame($expected, $actual);
-    }
-
     public function testInvalidKey(): void
     {
         $resolver = $this->createResolver();
@@ -288,7 +275,7 @@ final class DataQueryValueResolverTest extends TestCase
     {
         $validator = $this->createValidator($violationList);
 
-        return new DataQueryValueResolver('/', $validator);
+        return new DataQueryValueResolver($validator);
     }
 
     private function createValidator(?ConstraintViolationListInterface $violationList): ValidatorInterface

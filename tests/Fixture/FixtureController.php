@@ -55,12 +55,6 @@ class FixtureController extends AbstractController
     }
 
     #[\Override]
-    public function getCookiePath(): string
-    {
-        return parent::getCookiePath();
-    }
-
-    #[\Override]
     public function redirectToHomePage(TranslatableFlashMessage|string|null $message = null): RedirectResponse
     {
         return parent::redirectToHomePage();

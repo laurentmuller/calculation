@@ -71,11 +71,6 @@ trait CookieTrait
         return $request->cookies->getInt($this->getCookieName($key, $prefix), $default);
     }
 
-    /**
-     * Gets the cookie path.
-     */
-    abstract protected function getCookiePath(): string;
-
     protected function getCookieString(
         Request $request,
         string $key,
@@ -133,7 +128,6 @@ trait CookieTrait
     {
         $response->headers->clearCookie(
             name: $this->getCookieName($key, $prefix),
-            path: $this->getCookiePath(),
             httpOnly: $httpOnly
         );
     }
@@ -173,7 +167,6 @@ trait CookieTrait
             name: $this->getCookieName($key, $prefix),
             value: (string) $value,
             expire: $this->getCookieExpire(),
-            path: $this->getCookiePath(),
             httpOnly: $httpOnly
         );
         $response->headers->setCookie($cookie);

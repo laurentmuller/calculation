@@ -522,31 +522,6 @@ class CalculationRepository extends AbstractRepository
         ];
     }
 
-    //    /**
-    //     * Gets the calculations grouped by years and months sorted by date in descending order.
-    //     *
-    //     * @param int $maxResults the maximum number of months to retrieve (the "limit")
-    //     */
-    //    public function getMonthChartDataByMonths(int $maxResults = 6): MonthChartData
-    //    {
-    //        $callback = static fn (QueryBuilder $builder): QueryBuilder => $builder->setMaxResults($maxResults);
-    //
-    //        return $this->getMonthChartData($callback);
-    //    }
-    //
-    //    /**
-    //     * Gets the calculations grouped by years and months sorted by date in descending order.
-    //     */
-    //    public function getMonthChartDataByRange(MonthRange $range): MonthChartData
-    //    {
-    //        $callback = static fn (QueryBuilder $builder): QueryBuilder => $builder->where('c.date >= :from')
-    //            ->andWhere('c.date <= :to')
-    //            ->setParameter('from', $range->from, DayPointType::NAME)
-    //            ->setParameter('to', $range->to, DayPointType::NAME);
-    //
-    //        return $this->getMonthChartData($callback);
-    //    }
-
     /**
      * Gets the calculations grouped by years and months sorted by date in descending order.
      *

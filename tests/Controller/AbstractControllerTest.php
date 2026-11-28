@@ -47,13 +47,6 @@ final class AbstractControllerTest extends KernelTestCase
         );
     }
 
-    public function testCookiePath(): void
-    {
-        $controller = $this->createController();
-        $actual = $controller->getCookiePath();
-        self::assertStringStartsWith('/', $actual);
-    }
-
     public function testCreateFormHelper(): void
     {
         $controller = $this->createController();

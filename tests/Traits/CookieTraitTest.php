@@ -136,12 +136,6 @@ final class CookieTraitTest extends TestCase
         self::assertSame($value, $cookies[0]->getValue());
     }
 
-    #[\Override]
-    protected function getCookiePath(): string
-    {
-        return '/';
-    }
-
     private function createRequest(string|bool|int|float|\BackedEnum|null $value = null): Request
     {
         if (null === $value) {

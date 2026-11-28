@@ -33,16 +33,15 @@ final class ThemeServiceTest extends TestCase
     #[DataProvider('getThemes')]
     public function testGetTheme(Request $request, Theme $expected): void
     {
-        $service = new ThemeService('/');
+        $service = new ThemeService();
         $value = $service->getTheme($request);
         self::assertSame($expected, $value);
     }
 
     public function testSaveTheme(): void
     {
-        $path = '/';
         $theme = Theme::DARK;
-        $service = new ThemeService('/');
+        $service = new ThemeService();
         $response = new Response();
         $service->saveTheme($response, $theme);
 
@@ -52,7 +51,7 @@ final class ThemeServiceTest extends TestCase
         $cookie = $cookies[0];
         self::assertSame('THEME', $cookie->getName());
         self::assertSame($theme->value, $cookie->getValue());
-        self::assertSame($path, $cookie->getPath());
+        self::assertSame('/', $cookie->getPath());
         self::assertFalse($cookie->isHttpOnly());
     }
 

@@ -62,12 +62,6 @@ final class TableTraitTest extends TestCase
     }
 
     #[\Override]
-    public function getCookiePath(): string
-    {
-        return '/';
-    }
-
-    #[\Override]
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;

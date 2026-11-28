@@ -57,12 +57,6 @@ final class ParameterTraitTest extends TestCase
         self::assertSame('', $actual);
     }
 
-    #[\Override]
-    protected function getCookiePath(): string
-    {
-        return '/';
-    }
-
     private function createRequest(): Request
     {
         return new Request();

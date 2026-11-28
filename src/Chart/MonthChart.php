@@ -18,7 +18,6 @@ use App\Model\MonthChartData;
 use App\Model\MonthChartDataItem;
 use App\Model\MonthRange;
 use App\Pdf\Html\HtmlColorName;
-use App\Repository\CalculationRepository;
 use App\Utils\FormatUtils;
 use HighchartsBundle\Highcharts\ChartExpression;
 
@@ -44,7 +43,7 @@ class MonthChart extends AbstractHighchart
      */
     public function generate(MonthRange $range): array
     {
-        $data = $this->getMonthChartDataByRange($range);
+        $data = $this->getMonthChartData($range);
         $this->setType(ChartType::TYPE_COLUMN)
             ->setSeries($data->items)
             ->setXAxis($data->items)
@@ -123,14 +122,10 @@ class MonthChart extends AbstractHighchart
         ], $items);
     }
 
-    private function getMonthChartDataByRange(MonthRange $range): MonthChartData
+    private function getMonthChartData(MonthRange $range): MonthChartData
     {
-        return $this->getRepository()->getMonthChartData($range);
-    }
-
-    private function getRepository(): CalculationRepository
-    {
-        return $this->manager->getRepository(Calculation::class);
+        return $this->manager->getRepository(Calculation::class)
+            ->getMonthChartData($range);
     }
 
     private function getSeriesOptions(): array

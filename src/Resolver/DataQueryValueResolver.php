@@ -24,7 +24,6 @@ use App\Table\DataQuery;
 use App\Table\LogTable;
 use App\Table\SearchTable;
 use App\Traits\CookieTrait;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,8 +39,6 @@ final readonly class DataQueryValueResolver extends AbstractValueResolver
     use CookieTrait;
 
     public function __construct(
-        #[Autowire(param: 'cookie_path')]
-        private string $cookiePath,
         ValidatorInterface $validator
     ) {
         parent::__construct($validator);
@@ -63,12 +60,6 @@ final readonly class DataQueryValueResolver extends AbstractValueResolver
         $this->validate($query);
 
         return [$query];
-    }
-
-    #[\Override]
-    protected function getCookiePath(): string
-    {
-        return $this->cookiePath;
     }
 
     private function createQuery(ArgumentMetadata $argument): DataQuery

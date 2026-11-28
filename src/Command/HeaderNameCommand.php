@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Utils\FileUtils;
 use App\Utils\StringUtils;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -36,13 +35,10 @@ class HeaderNameCommand
         'twig' => '{# %path% #}',
     ];
 
-    private readonly string $projectDir;
-
     public function __construct(
         #[Autowire(param: 'kernel.project_dir')]
-        string $projectDir
+        private readonly string $projectDir
     ) {
-        $this->projectDir = FileUtils::normalize($projectDir);
     }
 
     /**

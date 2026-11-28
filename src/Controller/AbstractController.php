@@ -233,15 +233,6 @@ abstract class AbstractController extends BaseController implements DocumentHelp
     }
 
     /**
-     * Gets the cookie path.
-     */
-    protected function getCookiePath(): string
-    {
-        /** @phpstan-var string */
-        return $this->getParameter('cookie_path');
-    }
-
-    /**
      * Inspects the given request and calls submit() if the form was submitted.
      *
      * @template T of mixed
